@@ -5,16 +5,11 @@ export enum Color {
 }
 
 export default class TileData {
-  public readonly exists: boolean = true;
-  public readonly fixed: boolean = false;
-  public readonly color: Color = Color.None;
-  public readonly number?: number;
-
   public constructor(
-    exists: boolean,
-    fixed: boolean,
-    color: Color,
-    number?: number
+    public readonly exists: boolean,
+    public readonly fixed: boolean,
+    public readonly color: Color,
+    public readonly number?: number
   ) {
     this.exists = exists;
     this.fixed = fixed;

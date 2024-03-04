@@ -1,20 +1,23 @@
 import { useMemo } from 'react';
-import TileData, { Color } from '../data/tile';
+import TileData from '../data/tile';
 import { cn } from '../utils';
 import { useMouseContext } from './MouseContext';
+import { Color } from '../data/primitives';
+import TileConnections from '../data/tileConnections';
 
 export interface TileProps {
   size: number;
   data: TileData;
+  connections: TileConnections;
   onTileClick?: (target: Color) => void;
 }
 
 function bg(color: Color) {
   switch (color) {
     case Color.Black:
-      return 'bg-black hover:bg-gray-900';
+      return 'bg-black hover:bg-black';
     case Color.White:
-      return 'bg-white hover:bg-gray-100';
+      return 'bg-white hover:bg-white';
     case Color.None:
       return 'bg-gray-600 bg-opacity-50 hover:bg-gray-600 hover:bg-opacity-50';
   }
@@ -42,71 +45,124 @@ function color(buttons: number) {
   }
 }
 
-export default function Tile({ size, data, onTileClick }: TileProps) {
+function useTileParts(size: number, con: TileConnections) {
+  return useMemo<React.CSSProperties[]>(() => {
+    const parts: React.CSSProperties[] = [];
+    for (let y = -1; y <= 1; y++) {
+      for (let x = -1; x <= 1; x++) {
+        if (x === 0 && y === 0) {
+          parts.push({
+            width: `${(size * 18) / 20}px`,
+            height: `${(size * 18) / 20}px`,
+            margin: `${size / 20}px`,
+            borderTopLeftRadius: con.top || con.left ? 0 : `${size / 8}px`,
+            borderTopRightRadius: con.top || con.right ? 0 : `${size / 8}px`,
+            borderBottomLeftRadius:
+              con.bottom || con.left ? 0 : `${size / 8}px`,
+            borderBottomRightRadius:
+              con.bottom || con.right ? 0 : `${size / 8}px`,
+          });
+        } else if (con[x][y]) {
+          parts.push({
+            width: x === 0 ? `${(size * 18) / 20}px` : `${size / 20}px`,
+            height: y === 0 ? `${(size * 18) / 20}px` : `${size / 20}px`,
+            top: y === -1 ? 0 : y === 0 ? `${size / 20}px` : undefined,
+            bottom: y === 1 ? 0 : undefined,
+            left: x === -1 ? 0 : x === 0 ? `${size / 20}px` : undefined,
+            right: x === 1 ? 0 : undefined,
+            margin: 0,
+            borderRadius: 0,
+          });
+        }
+      }
+    }
+    return parts;
+  }, [size, con]);
+}
+
+export default function Tile({
+  size,
+  data,
+  connections,
+  onTileClick,
+}: TileProps) {
   const mouse = useMouseContext();
-  const tileStyle = useMemo(
+  const partStyles = useTileParts(size, connections);
+  const containerStyle = useMemo<React.CSSProperties>(
     () => ({
-      width: `${(size * 18) / 20}px`,
-      height: `${(size * 18) / 20}px`,
-      margin: `${size / 20}px`,
+      width: `${size}px`,
+      height: `${size}px`,
     }),
     [size]
   );
-  const textStyle = useMemo(
+  const textStyle = useMemo<React.CSSProperties>(
     () => ({
       fontSize: `${size * 0.75}px`,
     }),
     [size]
   );
   return (
-    <div className="relative" style={tileStyle}>
+    <div className="relative" style={containerStyle}>
       {data.exists && (
-        <button
-          className={cn(
-            'absolute btn shadow-lg w-full h-full p-0',
-            bg(data.color)
-          )}
-          onMouseDown={e => {
-            e.preventDefault();
-            let c = color(e.buttons);
-            if (!c) {
-              mouse.setColor(null);
-            } else {
-              if (data.fixed) return;
-              if (c === data.color) c = Color.None;
-              mouse.setColor(c);
-              onTileClick?.(c);
-            }
-          }}
-          onMouseUp={e => {
-            e.preventDefault();
-            mouse.setColor(null);
-          }}
-          onMouseEnter={e => {
-            e.preventDefault();
-            const c = color(e.buttons);
-            if (
-              !c ||
-              !mouse.color ||
-              (c !== mouse.color && mouse.color !== Color.None)
-            ) {
-              mouse.setColor(null);
-            } else {
-              if (data.fixed) return;
-              if (mouse.color === data.color) return;
-              onTileClick?.(mouse.color);
-            }
-          }}
-        >
-          {data.hasNumber && (
-            <span
-              className={cn('absolute m-auto', fg(data.color))}
-              style={textStyle}
-            >
-              {data.number}
-            </span>
-          )}
-        </button>
+        <>
+          {partStyles.map((style, i) => (
+            <button
+              key={i}
+              className={cn(
+                'absolute btn p-0 shadow-none min-h-0 border-0 z-0',
+                bg(data.color)
+              )}
+              style={style}
+              onMouseDown={e => {
+                e.preventDefault();
+                let c = color(e.buttons);
+                if (!c) {
+                  mouse.setColor(null);
+                } else {
+                  if (data.fixed) return;
+                  if (c === data.color) c = Color.None;
+                  mouse.setColor(c);
+                  onTileClick?.(c);
+                }
+              }}
+              onMouseUp={e => {
+                e.preventDefault();
+                mouse.setColor(null);
+              }}
+              onMouseEnter={e => {
+                e.preventDefault();
+                const c = color(e.buttons);
+                if (
+                  !c ||
+                  !mouse.color ||
+                  (c !== mouse.color && mouse.color !== Color.None)
+                ) {
+                  mouse.setColor(null);
+                } else {
+                  if (data.fixed) return;
+                  if (mouse.color === data.color) return;
+                  onTileClick?.(mouse.color);
+                }
+              }}
+            ></button>
+          ))}
+          <div
+            className={cn(
+              'absolute flex justify-center items-center w-full h-full pointer-events-none',
+              fg(data.color)
+            )}
+            style={textStyle}
+          >
+            {data.hasNumber && (
+              <span
+                className={cn('absolute m-auto', fg(data.color))}
+                style={textStyle}
+              >
+                {data.number}
+              </span>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

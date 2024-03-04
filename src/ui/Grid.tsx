@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import GridData from '../data/grid';
 import Tile from './Tile';
 import MouseContext from './MouseContext';
-import { Color } from '../data/tile';
+import { Color } from '../data/primitives';
 
 export interface GridProps {
   size: number;
@@ -30,6 +30,7 @@ export default function Grid({ size, data, onTileClick }: GridProps) {
               key={`${x},${y}`}
               size={tileSize}
               data={tile}
+              connections={data.connections.getForTile({ x, y })}
               onTileClick={target => onTileClick?.(x, y, target)}
             />
           ))

@@ -1,8 +1,4 @@
-export enum Color {
-  Black = 'black',
-  White = 'white',
-  None = 'none',
-}
+import { Color } from './primitives';
 
 export default class TileData {
   public constructor(

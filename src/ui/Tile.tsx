@@ -96,6 +96,12 @@ export default function Tile({
     }),
     [size]
   );
+  const cornerStyle = useMemo<React.CSSProperties>(
+    () => ({
+      margin: `${size / 20}px`,
+    }),
+    [size]
+  );
   return (
     <div className="relative" style={containerStyle}>
       {data.exists && (
@@ -141,6 +147,38 @@ export default function Tile({
               }}
             ></button>
           ))}
+          {data.fixed && !connections.top && !connections.left && (
+            <div
+              className={cn(
+                'absolute w-2 h-2 border-l-2 border-t-2 border-green-600 pointer-events-none'
+              )}
+              style={cornerStyle}
+            ></div>
+          )}
+          {data.fixed && !connections.top && !connections.right && (
+            <div
+              className={cn(
+                'absolute w-2 h-2 border-r-2 border-t-2 right-0 border-green-600 pointer-events-none'
+              )}
+              style={cornerStyle}
+            ></div>
+          )}
+          {data.fixed && !connections.bottom && !connections.left && (
+            <div
+              className={cn(
+                'absolute w-2 h-2 border-l-2 border-b-2 bottom-0 border-green-600 pointer-events-none'
+              )}
+              style={cornerStyle}
+            ></div>
+          )}
+          {data.fixed && !connections.bottom && !connections.right && (
+            <div
+              className={cn(
+                'absolute w-2 h-2 border-r-2 border-b-2 bottom-0 right-0 border-green-600 pointer-events-none'
+              )}
+              style={cornerStyle}
+            ></div>
+          )}
           {[...data.markups.values()].map(m => (
             <Markup
               key={m.id}

@@ -2,11 +2,18 @@ import Grid from './ui/Grid';
 import GridData from './data/grid';
 import { useState } from 'react';
 import NumberMarkup from './data/markups/number';
+import { Color } from './data/primitives';
 
 export default function App() {
   const [grid, setGrid] = useState(
     new GridData(10, 10)
       .setTile(1, 2, t => t.addMarkup(new NumberMarkup(6)))
+      .setTile(6, 7, t =>
+        t.withFixed(true).withColor(Color.Black).addMarkup(new NumberMarkup(3))
+      )
+      .setTile(7, 6, t =>
+        t.withFixed(true).withColor(Color.White).addMarkup(new NumberMarkup(12))
+      )
       .withConnections(c =>
         c
           .addEdge({ x1: 1, y1: 1, x2: 1, y2: 2 })

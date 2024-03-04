@@ -1,16 +1,20 @@
+import Markup from './markups/markup';
 import { Color } from './primitives';
 
+type MarkupMap = Map<string, Markup>;
+
 export default class TileData {
+  public readonly markups: MarkupMap;
   public constructor(
     public readonly exists: boolean,
     public readonly fixed: boolean,
     public readonly color: Color,
-    public readonly number?: number
+    markups: MarkupMap = new Map()
   ) {
     this.exists = exists;
     this.fixed = fixed;
     this.color = color;
-    this.number = number;
+    this.markups = markups;
   }
 
   public static empty(): TileData {
@@ -21,18 +25,18 @@ export default class TileData {
     exists,
     fixed,
     color,
-    number,
+    markups,
   }: {
     exists?: boolean;
     fixed?: boolean;
     color?: Color;
-    number?: number;
+    markups?: MarkupMap;
   }): TileData {
     return new TileData(
       exists ?? this.exists,
       fixed ?? this.fixed,
       color ?? this.color,
-      number ?? this.number
+      markups ?? this.markups
     );
   }
 
@@ -48,15 +52,27 @@ export default class TileData {
     return this.copyWith({ color });
   }
 
-  public withNumber(number: number): TileData {
-    return this.copyWith({ number });
+  public withMarkups(
+    markups: MarkupMap | ((markups: MarkupMap) => MarkupMap)
+  ): TileData {
+    return this.copyWith({
+      markups: markups instanceof Map ? markups : markups(this.markups),
+    });
+  }
+
+  public addMarkup(markup: Markup): TileData {
+    return this.copyWith({
+      markups: new Map(this.markups).set(markup.id, markup),
+    });
+  }
+
+  public removeMarkup(key: string): TileData {
+    const markups = new Map(this.markups);
+    markups.delete(key);
+    return this.copyWith({ markups });
   }
 
   public get isFixed(): boolean {
     return this.fixed;
-  }
-
-  public get hasNumber(): boolean {
-    return this.number !== undefined;
   }
 }

@@ -4,6 +4,7 @@ import { cn } from '../utils';
 import { useMouseContext } from './MouseContext';
 import { Color } from '../data/primitives';
 import TileConnections from '../data/tileConnections';
+import Markup from './markups/Markup';
 
 export interface TileProps {
   size: number;
@@ -15,9 +16,9 @@ export interface TileProps {
 function bg(color: Color) {
   switch (color) {
     case Color.Black:
-      return 'bg-black hover:bg-black';
+      return 'bg-black bg-opacity-60 hover:bg-black hover:bg-opacity-60';
     case Color.White:
-      return 'bg-white hover:bg-white';
+      return 'bg-white bg-opacity-80 hover:bg-white hover:bg-opacity-80';
     case Color.None:
       return 'bg-gray-600 bg-opacity-50 hover:bg-gray-600 hover:bg-opacity-50';
   }
@@ -95,12 +96,6 @@ export default function Tile({
     }),
     [size]
   );
-  const textStyle = useMemo<React.CSSProperties>(
-    () => ({
-      fontSize: `${size * 0.75}px`,
-    }),
-    [size]
-  );
   return (
     <div className="relative" style={containerStyle}>
       {data.exists && (
@@ -146,22 +141,14 @@ export default function Tile({
               }}
             ></button>
           ))}
-          <div
-            className={cn(
-              'absolute flex justify-center items-center w-full h-full pointer-events-none',
-              fg(data.color)
-            )}
-            style={textStyle}
-          >
-            {data.hasNumber && (
-              <span
-                className={cn('absolute m-auto', fg(data.color))}
-                style={textStyle}
-              >
-                {data.number}
-              </span>
-            )}
-          </div>
+          {[...data.markups.values()].map(m => (
+            <Markup
+              key={m.id}
+              size={size}
+              markup={m}
+              textClass={fg(data.color)}
+            />
+          ))}
         </>
       )}
     </div>

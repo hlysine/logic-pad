@@ -1,18 +1,18 @@
 import Grid from './ui/Grid';
 import GridData from './data/grid';
 import { useState } from 'react';
-import NumberMarkup from './data/markups/number';
+import NumberSymbol from './data/rules/number/numberSymbol';
 import { Color } from './data/primitives';
 
 export default function App() {
   const [grid, setGrid] = useState(
     new GridData(10, 10)
-      .setTile(1, 2, t => t.addMarkup(new NumberMarkup(6)))
+      .setTile(1, 2, t => t.addSymbol(new NumberSymbol(6)))
       .setTile(6, 7, t =>
-        t.withFixed(true).withColor(Color.Black).addMarkup(new NumberMarkup(3))
+        t.withFixed(true).withColor(Color.Black).addSymbol(new NumberSymbol(3))
       )
       .setTile(7, 6, t =>
-        t.withFixed(true).withColor(Color.White).addMarkup(new NumberMarkup(12))
+        t.withFixed(true).withColor(Color.White).addSymbol(new NumberSymbol(12))
       )
       .withConnections(c =>
         c

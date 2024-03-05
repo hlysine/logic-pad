@@ -10,6 +10,12 @@ export interface Edge {
   readonly y2: number;
 }
 
+export interface ErrorGroup {
+  readonly positions: readonly Position[];
+}
+
+export type Errors = readonly ErrorGroup[];
+
 export enum Color {
   Black = 'black',
   White = 'white',

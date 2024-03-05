@@ -1,20 +1,20 @@
-import Markup from './markups/markup';
 import { Color } from './primitives';
+import Symbol from './rules/symbol';
 
-type MarkupMap = Map<string, Markup>;
+type SymbolMap = Map<string, Symbol>;
 
 export default class TileData {
-  public readonly markups: MarkupMap;
+  public readonly symbols: SymbolMap;
   public constructor(
     public readonly exists: boolean,
     public readonly fixed: boolean,
     public readonly color: Color,
-    markups: MarkupMap = new Map()
+    symbols: SymbolMap = new Map()
   ) {
     this.exists = exists;
     this.fixed = fixed;
     this.color = color;
-    this.markups = markups;
+    this.symbols = symbols;
   }
 
   public static empty(): TileData {
@@ -25,18 +25,18 @@ export default class TileData {
     exists,
     fixed,
     color,
-    markups,
+    symbols,
   }: {
     exists?: boolean;
     fixed?: boolean;
     color?: Color;
-    markups?: MarkupMap;
+    symbols?: SymbolMap;
   }): TileData {
     return new TileData(
       exists ?? this.exists,
       fixed ?? this.fixed,
       color ?? this.color,
-      markups ?? this.markups
+      symbols ?? this.symbols
     );
   }
 
@@ -52,24 +52,24 @@ export default class TileData {
     return this.copyWith({ color });
   }
 
-  public withMarkups(
-    markups: MarkupMap | ((markups: MarkupMap) => MarkupMap)
+  public withSymbols(
+    symbols: SymbolMap | ((symbols: SymbolMap) => SymbolMap)
   ): TileData {
     return this.copyWith({
-      markups: markups instanceof Map ? markups : markups(this.markups),
+      symbols: symbols instanceof Map ? symbols : symbols(this.symbols),
     });
   }
 
-  public addMarkup(markup: Markup): TileData {
+  public addSymbol(symbol: Symbol): TileData {
     return this.copyWith({
-      markups: new Map(this.markups).set(markup.id, markup),
+      symbols: new Map(this.symbols).set(symbol.id, symbol),
     });
   }
 
-  public removeMarkup(key: string): TileData {
-    const markups = new Map(this.markups);
-    markups.delete(key);
-    return this.copyWith({ markups });
+  public removeSymbol(key: string): TileData {
+    const symbols = new Map(this.symbols);
+    symbols.delete(key);
+    return this.copyWith({ symbols });
   }
 
   public get isFixed(): boolean {

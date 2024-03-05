@@ -4,7 +4,7 @@ import { cn } from '../utils';
 import { useMouseContext } from './MouseContext';
 import { Color } from '../data/primitives';
 import TileConnections from '../data/tileConnections';
-import Markup from './markups/Markup';
+import Symbol from './rules/Symbol';
 
 export interface TileProps {
   size: number;
@@ -179,11 +179,11 @@ export default function Tile({
               style={cornerStyle}
             ></div>
           )}
-          {[...data.markups.values()].map(m => (
-            <Markup
+          {[...data.symbols.values()].map(m => (
+            <Symbol
               key={m.id}
               size={size}
-              markup={m}
+              symbol={m}
               textClass={fg(data.color)}
             />
           ))}

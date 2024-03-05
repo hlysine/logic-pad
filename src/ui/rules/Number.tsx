@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import NumberMarkup from '../../data/markups/number';
 import { cn } from '../../utils';
+import NumberSymbol from '../../data/rules/number/numberSymbol';
 
 export interface NumberProps {
   size: number;
   textClass: string;
-  markup: NumberMarkup;
+  symbol: NumberSymbol;
 }
 
-export default function Number({ size, textClass, markup }: NumberProps) {
+export default function Number({ size, textClass, symbol }: NumberProps) {
   const textStyle = useMemo<React.CSSProperties>(
     () => ({
       fontSize: `${size * 0.75}px`,
@@ -23,7 +23,7 @@ export default function Number({ size, textClass, markup }: NumberProps) {
       )}
     >
       <span className={cn('absolute m-auto', textClass)} style={textStyle}>
-        {markup.number}
+        {symbol.number}
       </span>
     </div>
   );

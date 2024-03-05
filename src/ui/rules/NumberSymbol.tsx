@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { cn } from '../../utils';
-import NumberSymbol from '../../data/rules/number/numberSymbol';
+import NumberSymbolData from '../../data/rules/number/numberSymbol';
 
 export interface NumberProps {
   size: number;
   textClass: string;
-  symbol: NumberSymbol;
+  symbol: NumberSymbolData;
 }
 
-export default function Number({ size, textClass, symbol }: NumberProps) {
+export default function NumberSymbol({ size, textClass, symbol }: NumberProps) {
   const textStyle = useMemo<React.CSSProperties>(
     () => ({
       fontSize: `${size * 0.75}px`,

@@ -1,5 +1,6 @@
 import SymbolData from '../../data/rules/symbol';
-import Number from './Number';
+import NumberSymbol from './NumberSymbol';
+import LetterSymbol from './LetterSymbol';
 
 export interface SymbolProps<T extends SymbolData> {
   size: number;
@@ -8,7 +9,8 @@ export interface SymbolProps<T extends SymbolData> {
 }
 
 const registry = new Map<string, (props: SymbolProps<any>) => JSX.Element>();
-registry.set('number', Number);
+registry.set('number', NumberSymbol);
+registry.set('letter', LetterSymbol);
 
 export default function Symbol({
   size,

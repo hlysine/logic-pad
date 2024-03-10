@@ -44,7 +44,7 @@ export default function Grid({ size, data, onTileClick }: GridProps) {
             ))
           )}
         </div>
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 pointer-events-none">
           {data.symbols.map(symbol => (
             <Symbol
               key={`${symbol.id}(${symbol.x},${symbol.y})`}

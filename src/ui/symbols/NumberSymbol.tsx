@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { cn } from '../../utils';
-import NumberSymbolData from '../../data/rules/number/numberSymbol';
+import NumberSymbolData from '../../data/symbols/numberSymbol';
 
 export interface NumberProps {
   size: number;

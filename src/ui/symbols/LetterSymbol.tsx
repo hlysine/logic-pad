@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { cn } from '../../utils';
-import LetterSymbolData from '../../data/rules/letter/letterSymbol';
+import LetterSymbolData from '../../data/symbols/letterSymbol';
 
 export interface LetterProps {
   size: number;

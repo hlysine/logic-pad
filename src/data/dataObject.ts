@@ -8,5 +8,5 @@ export default abstract class DataObject {
       .join('');
   }
 
-  public abstract copyWith(props: { [key: string]: any }): DataObject;
+  public abstract copyWith(props: { [key: string]: any }): this;
 }

@@ -4,46 +4,13 @@ import { cn } from '../utils';
 import { useMouseContext } from './MouseContext';
 import { Color } from '../data/primitives';
 import TileConnections from '../data/tileConnections';
-import Symbol from './rules/Symbol';
+import { bg, color } from './helper';
 
 export interface TileProps {
   size: number;
   data: TileData;
   connections: TileConnections;
   onTileClick?: (target: Color) => void;
-}
-
-function bg(color: Color) {
-  switch (color) {
-    case Color.Black:
-      return 'bg-black bg-opacity-60 hover:bg-black hover:bg-opacity-60';
-    case Color.White:
-      return 'bg-white bg-opacity-80 hover:bg-white hover:bg-opacity-80';
-    case Color.None:
-      return 'bg-gray-600 bg-opacity-50 hover:bg-gray-600 hover:bg-opacity-50';
-  }
-}
-
-function fg(color: Color) {
-  switch (color) {
-    case Color.Black:
-      return 'text-white';
-    case Color.White:
-      return 'text-black';
-    case Color.None:
-      return 'text-gray-900';
-  }
-}
-
-function color(buttons: number) {
-  switch (buttons) {
-    case 1:
-      return Color.Black;
-    case 2:
-      return Color.White;
-    default:
-      return undefined;
-  }
 }
 
 function useTileParts(size: number, con: TileConnections) {
@@ -179,14 +146,6 @@ export default function Tile({
               style={cornerStyle}
             ></div>
           )}
-          {[...data.symbols.values()].map(m => (
-            <Symbol
-              key={m.id}
-              size={size}
-              symbol={m}
-              textClass={fg(data.color)}
-            />
-          ))}
         </>
       )}
     </div>

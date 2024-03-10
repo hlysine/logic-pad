@@ -1,6 +1,7 @@
-import SymbolData from '../../data/rules/symbol';
+import SymbolData from '../../data/symbols/symbol';
 import NumberSymbol from './NumberSymbol';
 import LetterSymbol from './LetterSymbol';
+import { useMemo } from 'react';
 
 export interface SymbolProps<T extends SymbolData> {
   size: number;
@@ -17,9 +18,22 @@ export default function Symbol({
   textClass,
   symbol,
 }: SymbolProps<SymbolData>) {
+  const containerStyle = useMemo(
+    () => ({
+      width: `${size}px`,
+      height: `${size}px`,
+      top: `${symbol.y * size}px`,
+      left: `${symbol.x * size}px`,
+    }),
+    [size, symbol.x, symbol.y]
+  );
   const Component = registry.get(symbol.id);
   if (!Component) {
     throw new Error(`No component for symbol: ${symbol.id}`);
   }
-  return <Component size={size} textClass={textClass} symbol={symbol} />;
+  return (
+    <div className="absolute" style={containerStyle}>
+      <Component size={size} textClass={textClass} symbol={symbol} />
+    </div>
+  );
 }

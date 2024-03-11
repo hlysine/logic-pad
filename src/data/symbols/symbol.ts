@@ -1,8 +1,8 @@
-import DataObject from '../dataObject';
 import GridData from '../grid';
 import { Errors } from '../primitives';
+import Instruction from '../instruction';
 
-export default abstract class Symbol extends DataObject {
+export default abstract class Symbol extends Instruction {
   public constructor(
     public readonly x: number,
     public readonly y: number
@@ -13,8 +13,6 @@ export default abstract class Symbol extends DataObject {
   }
 
   public abstract validateSymbol(grid: GridData): Errors | null;
-
-  public abstract copyWith(props: { [key: string]: any }): this;
 
   public withX(x: number): this {
     return this.copyWith({ x });

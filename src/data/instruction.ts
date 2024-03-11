@@ -1,4 +1,6 @@
-export default abstract class DataObject {
+import GridData from './grid';
+
+export default abstract class Instruction {
   public abstract get id(): string;
 
   public get acryonym(): string {
@@ -7,6 +9,10 @@ export default abstract class DataObject {
       .map(word => word[0])
       .join('');
   }
+
+  public abstract get explanation(): string;
+
+  public abstract createExampleGrid(): GridData;
 
   public abstract copyWith(props: { [key: string]: any }): this;
 }

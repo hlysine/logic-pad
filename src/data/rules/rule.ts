@@ -1,9 +1,7 @@
 import GridData from '../grid';
 import { Errors } from '../primitives';
-import DataObject from '../dataObject';
+import Instruction from '../instruction';
 
-export default abstract class Rule extends DataObject {
+export default abstract class Rule extends Instruction {
   public abstract validateGrid(grid: GridData): Errors | null;
-
-  public abstract copyWith(props: { [key: string]: any }): this;
 }

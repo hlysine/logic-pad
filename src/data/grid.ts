@@ -1,4 +1,5 @@
 import GridConnections from './gridConnections';
+import Rule from './rules/rule';
 import Symbol from './symbols/symbol';
 import TileData from './tile';
 
@@ -6,13 +7,15 @@ export default class GridData {
   public readonly tiles: readonly (readonly TileData[])[];
   public readonly connections: GridConnections;
   public readonly symbols: readonly Symbol[];
+  public readonly rules: readonly Rule[];
 
   public constructor(
     public readonly width: number,
     public readonly height: number,
     tiles?: readonly (readonly TileData[])[],
     connections?: GridConnections,
-    symbols?: readonly Symbol[]
+    symbols?: readonly Symbol[],
+    rules?: readonly Rule[]
   ) {
     this.width = width;
     this.height = height;
@@ -23,6 +26,7 @@ export default class GridData {
       );
     this.connections = connections ?? new GridConnections();
     this.symbols = symbols ?? [];
+    this.rules = rules ?? [];
   }
 
   public copyWith({
@@ -31,19 +35,22 @@ export default class GridData {
     tiles,
     connections,
     symbols,
+    rules,
   }: {
     width?: number;
     height?: number;
     tiles?: readonly (readonly TileData[])[];
     connections?: GridConnections;
     symbols?: readonly Symbol[];
+    rules?: readonly Rule[];
   }): GridData {
     return new GridData(
       width ?? this.width,
       height ?? this.height,
       tiles ?? this.tiles,
       connections ?? this.connections,
-      symbols ?? this.symbols
+      symbols ?? this.symbols,
+      rules ?? this.rules
     );
   }
 
@@ -106,6 +113,22 @@ export default class GridData {
 
   public removeSymbol(symbol: string): GridData {
     return this.withSymbols(symbols => symbols.filter(s => s.id !== symbol));
+  }
+
+  public withRules(
+    rules: readonly Rule[] | ((value: readonly Rule[]) => readonly Rule[])
+  ): GridData {
+    return this.copyWith({
+      rules: typeof rules === 'function' ? rules(this.rules) : rules,
+    });
+  }
+
+  public addRule(rule: Rule): GridData {
+    return this.withRules(rules => [...rules, rule]);
+  }
+
+  public removeRule(rule: string): GridData {
+    return this.withRules(rules => rules.filter(r => r.id !== rule));
   }
 
   public resize(width: number, height: number): GridData {

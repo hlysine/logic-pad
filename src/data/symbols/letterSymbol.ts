@@ -15,6 +15,14 @@ export default class LetterSymbol extends Symbol {
     return `letter`;
   }
 
+  public get explanation(): string {
+    throw new Error('Method not implemented.');
+  }
+
+  public createExampleGrid(): GridData {
+    throw new Error('Method not implemented.');
+  }
+
   public validateSymbol(_grid: GridData): null {
     return null; // TODO: implement
   }

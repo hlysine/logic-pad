@@ -15,6 +15,14 @@ export default class NumberSymbol extends Symbol {
     return `number`;
   }
 
+  public get explanation(): string {
+    return `Area Numbers must equal region sizes`;
+  }
+
+  public createExampleGrid(): GridData {
+    throw new Error('Method not implemented.');
+  }
+
   public validateSymbol(_grid: GridData): null {
     return null; // TODO: implement
   }

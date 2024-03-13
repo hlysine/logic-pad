@@ -8,49 +8,53 @@ import { fg } from './helper';
 
 export interface GridProps {
   size: number;
-  data: GridData;
+  grid: GridData;
+  editable: boolean;
   onTileClick?: (x: number, y: number, target: Color) => void;
 }
 
-export default function Grid({ size, data, onTileClick }: GridProps) {
-  const tileSize = Math.floor(size / Math.max(data.width, data.height));
+export default function Grid({ size, grid, editable, onTileClick }: GridProps) {
   const containerStyle = useMemo(
     () => ({
-      width: `${size}px`,
-      height: `${size}px`,
+      width: `${size * grid.width}px`,
+      height: `${size * grid.height}px`,
     }),
-    [size]
+    [size, grid.width, grid.height]
   );
   const gridStyle = useMemo(
     () => ({
-      gridTemplateColumns: `repeat(${data.width}, ${tileSize}px)`,
-      gridTemplateRows: `repeat(${data.height}, ${tileSize}px)`,
+      gridTemplateColumns: `repeat(${grid.width}, ${size}px)`,
+      gridTemplateRows: `repeat(${grid.height}, ${size}px)`,
     }),
-    [data.width, data.height, tileSize]
+    [grid.width, grid.height, size]
   );
   return (
     <MouseContext>
       <div className="relative" style={containerStyle}>
-        <div className="grid absolute inset-0" style={gridStyle}>
-          {data.tiles.map((row, y) =>
+        <div
+          className="grid justify-center content-center absolute inset-0"
+          style={gridStyle}
+        >
+          {grid.tiles.map((row, y) =>
             row.map((tile, x) => (
               <Tile
                 key={`${x},${y}`}
-                size={tileSize}
+                size={size}
                 data={tile}
-                connections={data.connections.getForTile({ x, y })}
+                editable={editable}
+                connections={grid.connections.getForTile({ x, y })}
                 onTileClick={target => onTileClick?.(x, y, target)}
               />
             ))
           )}
         </div>
         <div className="absolute inset-0 pointer-events-none">
-          {data.symbols.map(symbol => (
+          {grid.symbols.map(symbol => (
             <Symbol
               key={`${symbol.id}(${symbol.x},${symbol.y})`}
-              size={tileSize}
+              size={size}
               textClass={fg(
-                data.getTile(Math.floor(symbol.x), Math.floor(symbol.y)).color
+                grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y)).color
               )}
               symbol={symbol}
             />

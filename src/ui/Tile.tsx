@@ -9,6 +9,7 @@ import { bg, color } from './helper';
 export interface TileProps {
   size: number;
   data: TileData;
+  editable: boolean;
   connections: TileConnections;
   onTileClick?: (target: Color) => void;
 }
@@ -51,6 +52,7 @@ function useTileParts(size: number, con: TileConnections) {
 export default function Tile({
   size,
   data,
+  editable,
   connections,
   onTileClick,
 }: TileProps) {
@@ -77,39 +79,51 @@ export default function Tile({
             <button
               key={i}
               className={cn(
-                'absolute btn p-0 shadow-none min-h-0 border-0 z-0',
-                bg(data.color)
+                'absolute btn duration-75 p-0 shadow-none min-h-0 border-0 z-0',
+                bg(data.color),
+                editable ? 'cursor-pointer' : 'cursor-default'
               )}
               style={style}
               onMouseDown={e => {
                 e.preventDefault();
+                if (!editable) return;
                 let c = color(e.buttons);
                 if (!c) {
-                  mouse.setColor(null);
+                  mouse.setColor(null, false);
                 } else {
                   if (data.fixed) return;
                   if (c === data.color) c = Color.None;
-                  mouse.setColor(c);
+                  mouse.setColor(
+                    c,
+                    c !== Color.None && data.color !== Color.None
+                  );
                   onTileClick?.(c);
                 }
               }}
               onMouseUp={e => {
                 e.preventDefault();
-                mouse.setColor(null);
+                if (!editable) return;
+                mouse.setColor(null, false);
               }}
               onMouseEnter={e => {
                 e.preventDefault();
+                if (!editable) return;
                 const c = color(e.buttons);
                 if (
                   !c ||
                   !mouse.color ||
                   (c !== mouse.color && mouse.color !== Color.None)
                 ) {
-                  mouse.setColor(null);
+                  mouse.setColor(null, false);
                 } else {
                   if (data.fixed) return;
                   if (mouse.color === data.color) return;
-                  onTileClick?.(mouse.color);
+                  if (
+                    mouse.color === Color.None ||
+                    data.color === Color.None ||
+                    mouse.replacing
+                  )
+                    onTileClick?.(mouse.color);
                 }
               }}
             ></button>

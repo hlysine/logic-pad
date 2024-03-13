@@ -1,4 +1,5 @@
 import GridConnections from './gridConnections';
+import { Color } from './primitives';
 import Rule from './rules/rule';
 import Symbol from './symbols/symbol';
 import TileData from './tile';
@@ -139,5 +140,22 @@ export default class GridData {
       }
     }
     return newGrid;
+  }
+
+  public static create(array: string[]): GridData {
+    const height = array.length;
+    const width = array.reduce((max, row) => Math.max(max, row.length), 0);
+    const tiles = array.map(row =>
+      Array.from({ length: width }, (_, x) => {
+        const char = row.charAt(x);
+        const lower = char.toLowerCase();
+        return new TileData(
+          char !== '.',
+          char !== lower,
+          lower === 'w' ? Color.White : lower === 'b' ? Color.Black : Color.None
+        );
+      })
+    );
+    return new GridData(width, height, tiles);
   }
 }

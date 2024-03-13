@@ -12,7 +12,7 @@ export default abstract class Instruction {
 
   public abstract get explanation(): string;
 
-  public abstract createExampleGrid(): GridData;
+  public abstract get exampleGrid(): GridData;
 
   public abstract copyWith(props: { [key: string]: any }): this;
 }

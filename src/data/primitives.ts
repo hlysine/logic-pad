@@ -21,9 +21,3 @@ export enum Color {
   White = 'white',
   None = 'none',
 }
-
-export enum Mode {
-  Readonly = 0,
-  Playable = 1,
-  Editable = 2,
-}

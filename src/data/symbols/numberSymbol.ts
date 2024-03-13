@@ -2,6 +2,15 @@ import GridData from '../grid';
 import Symbol from './symbol';
 
 export default class NumberSymbol extends Symbol {
+  private static EXAMPLE_GRID = GridData.create([
+    'wbbbb',
+    'wbbwb',
+    'bbwwb',
+    'bbbbb',
+  ])
+    .addSymbol(new NumberSymbol(2, 2, 3))
+    .addSymbol(new NumberSymbol(0, 1, 2));
+
   public constructor(
     public readonly x: number,
     public readonly y: number,
@@ -16,11 +25,11 @@ export default class NumberSymbol extends Symbol {
   }
 
   public get explanation(): string {
-    return `Area Numbers must equal region sizes`;
+    return `*Area Numbers* must equal region sizes`;
   }
 
-  public createExampleGrid(): GridData {
-    throw new Error('Method not implemented.');
+  public get exampleGrid(): GridData {
+    return NumberSymbol.EXAMPLE_GRID;
   }
 
   public validateSymbol(_grid: GridData): null {

@@ -3,11 +3,13 @@ import { Color } from '../data/primitives';
 
 interface MouseContext {
   color: Color | null;
-  setColor: React.Dispatch<React.SetStateAction<Color | null>>;
+  replacing: boolean;
+  setColor: (color: Color | null, replacing: boolean) => void;
 }
 
 const context = createContext<MouseContext>({
   color: null,
+  replacing: false,
   setColor: () => {},
 });
 
@@ -21,7 +23,19 @@ export default function MouseContext({
   children: React.ReactNode;
 }) {
   const [color, setColor] = useState(null as Color | null);
+  const [replacing, setReplacing] = useState(false);
   return (
-    <context.Provider value={{ color, setColor }}>{children}</context.Provider>
+    <context.Provider
+      value={{
+        color,
+        replacing,
+        setColor: (color, replacing) => {
+          setColor(color);
+          setReplacing(replacing);
+        },
+      }}
+    >
+      {children}
+    </context.Provider>
   );
 }

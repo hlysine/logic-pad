@@ -3,10 +3,16 @@ import GridData from './data/grid';
 import { useState } from 'react';
 import { Color } from './data/primitives';
 import LetterSymbol from './data/symbols/letterSymbol';
+import InstructionList from './ui/InstructionList';
+import NumberSymbol from './data/symbols/numberSymbol';
 
 export default function App() {
   const [grid, setGrid] = useState(
     new GridData(10, 10)
+      .addSymbol(new NumberSymbol(0, 0, 5))
+      .addSymbol(new NumberSymbol(0, 9, 5))
+      .addSymbol(new NumberSymbol(9, 0, 5))
+      .addSymbol(new NumberSymbol(9, 9, 5))
       .setTile(1, 0, t => t.withFixed(true).withColor(Color.Black))
       .setTile(3, 0, t => t.withFixed(true).withColor(Color.Black))
       .addSymbol(new LetterSymbol(3, 0, 'A'))
@@ -56,14 +62,19 @@ export default function App() {
   );
   return (
     <div className="h-dvh w-dvw overflow-scroll">
-      <div className="flex justify-center items-center min-h-full">
-        <Grid
-          size={600}
-          data={grid}
-          onTileClick={(x, y, target) =>
-            setGrid(grid => grid.setTile(x, y, t => t.withColor(target)))
-          }
-        />
+      <div className="flex justify-center items-center min-h-full w-full">
+        <div className="w-[320px]"></div>
+        <div className="flex-1 flex justify-center items-center">
+          <Grid
+            size={60}
+            grid={grid}
+            editable={true}
+            onTileClick={(x, y, target) =>
+              setGrid(grid => grid.setTile(x, y, t => t.withColor(target)))
+            }
+          />
+        </div>
+        <InstructionList data={grid} />
       </div>
     </div>
   );

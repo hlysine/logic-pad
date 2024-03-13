@@ -2,6 +2,20 @@ import GridData from '../grid';
 import Symbol from './symbol';
 
 export default class LetterSymbol extends Symbol {
+  private static EXAMPLE_GRID = GridData.create([
+    'bbbww',
+    'wwbbw',
+    'wwbbb',
+    'bwwww',
+  ])
+    .addSymbol(new LetterSymbol(0, 0, 'B'))
+    .addSymbol(new LetterSymbol(3, 0, 'A'))
+    .addSymbol(new LetterSymbol(4, 1, 'A'))
+    .addSymbol(new LetterSymbol(3, 2, 'B'))
+    .addSymbol(new LetterSymbol(1, 1, 'C'))
+    .addSymbol(new LetterSymbol(0, 2, 'C'))
+    .addSymbol(new LetterSymbol(4, 3, 'C'));
+
   public constructor(
     public readonly x: number,
     public readonly y: number,
@@ -16,11 +30,11 @@ export default class LetterSymbol extends Symbol {
   }
 
   public get explanation(): string {
-    throw new Error('Method not implemented.');
+    return '*Letters* must be sorted into one type per area';
   }
 
-  public createExampleGrid(): GridData {
-    throw new Error('Method not implemented.');
+  public get exampleGrid(): GridData {
+    return LetterSymbol.EXAMPLE_GRID;
   }
 
   public validateSymbol(_grid: GridData): null {

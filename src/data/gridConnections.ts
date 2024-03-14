@@ -106,4 +106,22 @@ export default class GridConnections {
     }
     return result;
   }
+
+  public static create(array: string[]): GridConnections {
+    const edges: Edge[] = [];
+    for (let y = 0; y < array.length; y++) {
+      for (let x = 0; x < array[y].length; x++) {
+        if (array[y][x] === '.') {
+          continue;
+        }
+        if (x > 0 && array[y][x - 1] === array[y][x]) {
+          edges.push({ x1: x - 1, y1: y, x2: x, y2: y });
+        }
+        if (y > 0 && array[y - 1][x] === array[y][x]) {
+          edges.push({ x1: x, y1: y - 1, x2: x, y2: y });
+        }
+      }
+    }
+    return new GridConnections(edges);
+  }
 }

@@ -7,6 +7,9 @@ import InstructionList from './ui/InstructionList';
 import NumberSymbol from './data/symbols/numberSymbol';
 import ConnectAllRule from './data/rules/connectAllRule';
 import { themeChange } from 'theme-change';
+import ViewpointSymbol from './data/symbols/viewpointSymbol';
+import BanPatternRule from './data/rules/banPatternRule';
+import GridConnections from './data/gridConnections';
 
 const SUPPORTED_THEMES = [
   'light',
@@ -50,84 +53,169 @@ export default function App() {
   }, []);
 
   const [grid, setGrid] = useState(
-    new GridData(10, 10)
-      .addRule(new ConnectAllRule(Color.Dark))
-      .addRule(new ConnectAllRule(Color.Light))
-      .addSymbol(new NumberSymbol(0, 0, 5))
-      .addSymbol(new NumberSymbol(0, 9, 5))
-      .addSymbol(new NumberSymbol(9, 0, 5))
-      .addSymbol(new NumberSymbol(9, 9, 5))
-      .setTile(1, 0, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(3, 0, t => t.withFixed(true).withColor(Color.Dark))
-      .addSymbol(new LetterSymbol(3, 0, 'A'))
-      .setTile(6, 0, t => t.withFixed(true).withColor(Color.Light))
-      .addSymbol(new LetterSymbol(6, 0, 'B'))
-      .setTile(1, 1, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(3, 1, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(5, 1, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(9, 1, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(2, 2, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(4, 2, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(6, 2, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(7, 2, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(0, 3, t => t.withFixed(true).withColor(Color.Light))
-      .addSymbol(new LetterSymbol(0, 3, 'C'))
-      .setTile(7, 3, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(9, 3, t => t.withFixed(true).withColor(Color.Dark))
-      .addSymbol(new LetterSymbol(9, 3, 'D'))
-      .setTile(1, 4, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(8, 4, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(1, 5, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(8, 5, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(0, 6, t => t.withFixed(true).withColor(Color.Dark))
-      .addSymbol(new LetterSymbol(0, 6, 'E'))
-      .setTile(2, 6, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(9, 6, t => t.withFixed(true).withColor(Color.Light))
-      .addSymbol(new LetterSymbol(9, 6, 'F'))
-      .setTile(2, 7, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(3, 7, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(5, 7, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(7, 7, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(0, 8, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(4, 8, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(6, 8, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(8, 8, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(3, 9, t => t.withFixed(true).withColor(Color.Light))
-      .addSymbol(new LetterSymbol(3, 9, 'G'))
-      .setTile(6, 9, t => t.withFixed(true).withColor(Color.Dark))
-      .addSymbol(new LetterSymbol(6, 9, 'H'))
-      .setTile(8, 9, t => t.withFixed(true).withColor(Color.Light))
-      .withConnections(con =>
-        con
-          .addEdge({ x1: 3, y1: 3, x2: 3, y2: 4 })
-          .addEdge({ x1: 3, y1: 3, x2: 4, y2: 3 })
-          .addEdge({ x1: 3, y1: 4, x2: 4, y2: 4 })
-          .addEdge({ x1: 4, y1: 3, x2: 4, y2: 4 })
-
-          .addEdge({ x1: 5, y1: 3, x2: 5, y2: 4 })
-          .addEdge({ x1: 5, y1: 3, x2: 6, y2: 3 })
-          .addEdge({ x1: 6, y1: 3, x2: 6, y2: 4 })
-          .addEdge({ x1: 5, y1: 4, x2: 6, y2: 4 })
-
-          .addEdge({ x1: 3, y1: 5, x2: 3, y2: 6 })
-          .addEdge({ x1: 3, y1: 5, x2: 4, y2: 5 })
-          .addEdge({ x1: 3, y1: 6, x2: 4, y2: 6 })
-          .addEdge({ x1: 4, y1: 5, x2: 4, y2: 6 })
-
-          .addEdge({ x1: 5, y1: 5, x2: 5, y2: 6 })
-          .addEdge({ x1: 5, y1: 5, x2: 6, y2: 5 })
-          .addEdge({ x1: 5, y1: 6, x2: 6, y2: 6 })
-          .addEdge({ x1: 6, y1: 5, x2: 6, y2: 6 })
-
-          .addEdge({ x1: 1, y1: 3, x2: 2, y2: 3 })
-          .addEdge({ x1: 2, y1: 3, x2: 2, y2: 4 })
-          .addEdge({ x1: 2, y1: 4, x2: 2, y2: 5 })
-
-          .addEdge({ x1: 7, y1: 4, x2: 7, y2: 5 })
-          .addEdge({ x1: 7, y1: 5, x2: 7, y2: 6 })
-          .addEdge({ x1: 7, y1: 6, x2: 8, y2: 6 })
+    GridData.create([
+      'WWWWWWWWWWWWWWWWWWWWWWWWWBBBW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
+      'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
+      'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
+      'WBBBWWWWWWWWWWWWWWWWWWWWWWWWW',
+    ])
+      .withConnections(
+        GridConnections.create([
+          '.............................',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.aaab.bcccd.deeef.fgggh.hiii.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.j.j...l.l...n.n...p.p...r.r.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.aaab.bcccd.deeef.fgggh.hiii.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.j.j...l.l...n.n...p.p...r.r.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.aaab.bcccd.deeef.fgggh.hiii.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.j.j...l.l...n.n...p.p...r.r.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.aaab.bcccd.deeef.fgggh.hiii.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.j.j...l.l...n.n...p.p...r.r.',
+          '.jjj...lll...nnn...ppp...rrr.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.aaab.bcccd.deeef.fgggh.hiii.',
+          '.aaabbbcccdddeeefffggghhhiii.',
+          '.............................',
+        ])
       )
+      .addRule(
+        new BanPatternRule(
+          GridData.create(['.bbb.', 'bb.bb', '.bbb.', '..b..'])
+        )
+      )
+      .addRule(
+        new BanPatternRule(
+          GridData.create(['.bbb.', 'wb.bw', '.bbb.', '..w..'])
+        )
+      )
+      .addRule(new ConnectAllRule(Color.Dark))
+      .addSymbol(new ViewpointSymbol(17, 5, 8))
+      .addSymbol(new ViewpointSymbol(23, 5, 6))
+      .addSymbol(new ViewpointSymbol(5, 11, 8))
+      .addSymbol(new ViewpointSymbol(11, 17, 6))
+      .addSymbol(new ViewpointSymbol(17, 17, 8))
+      .addSymbol(new ViewpointSymbol(23, 17, 7))
+      .addSymbol(new ViewpointSymbol(5, 23, 7))
+      .addSymbol(new ViewpointSymbol(11, 23, 6))
+      .addSymbol(new ViewpointSymbol(17, 23, 7))
+      .addSymbol(new ViewpointSymbol(23, 23, 7))
   );
+  // new GridData(10, 10)
+  //   .addRule(new ConnectAllRule(Color.Dark))
+  //   .addRule(new ConnectAllRule(Color.Light))
+  //   .addSymbol(new ViewpointSymbol(0, 0, 5))
+  //   .addSymbol(new NumberSymbol(0, 9, 5))
+  //   .addSymbol(new NumberSymbol(9, 0, 5))
+  //   .addSymbol(new NumberSymbol(9, 9, 5))
+  //   .setTile(1, 0, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(3, 0, t => t.withFixed(true).withColor(Color.Dark))
+  //   .addSymbol(new LetterSymbol(3, 0, 'A'))
+  //   .setTile(6, 0, t => t.withFixed(true).withColor(Color.Light))
+  //   .addSymbol(new LetterSymbol(6, 0, 'B'))
+  //   .setTile(1, 1, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(3, 1, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(5, 1, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(9, 1, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(2, 2, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(4, 2, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(6, 2, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(7, 2, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(0, 3, t => t.withFixed(true).withColor(Color.Light))
+  //   .addSymbol(new LetterSymbol(0, 3, 'C'))
+  //   .setTile(7, 3, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(9, 3, t => t.withFixed(true).withColor(Color.Dark))
+  //   .addSymbol(new LetterSymbol(9, 3, 'D'))
+  //   .setTile(1, 4, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(8, 4, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(1, 5, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(8, 5, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(0, 6, t => t.withFixed(true).withColor(Color.Dark))
+  //   .addSymbol(new LetterSymbol(0, 6, 'E'))
+  //   .setTile(2, 6, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(9, 6, t => t.withFixed(true).withColor(Color.Light))
+  //   .addSymbol(new LetterSymbol(9, 6, 'F'))
+  //   .setTile(2, 7, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(3, 7, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(5, 7, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(7, 7, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(0, 8, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(4, 8, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(6, 8, t => t.withFixed(true).withColor(Color.Light))
+  //   .setTile(8, 8, t => t.withFixed(true).withColor(Color.Dark))
+  //   .setTile(3, 9, t => t.withFixed(true).withColor(Color.Light))
+  //   .addSymbol(new LetterSymbol(3, 9, 'G'))
+  //   .setTile(6, 9, t => t.withFixed(true).withColor(Color.Dark))
+  //   .addSymbol(new LetterSymbol(6, 9, 'H'))
+  //   .setTile(8, 9, t => t.withFixed(true).withColor(Color.Light))
+  //   .withConnections(con =>
+  //     con
+  //       .addEdge({ x1: 3, y1: 3, x2: 3, y2: 4 })
+  //       .addEdge({ x1: 3, y1: 3, x2: 4, y2: 3 })
+  //       .addEdge({ x1: 3, y1: 4, x2: 4, y2: 4 })
+  //       .addEdge({ x1: 4, y1: 3, x2: 4, y2: 4 })
+
+  //       .addEdge({ x1: 5, y1: 3, x2: 5, y2: 4 })
+  //       .addEdge({ x1: 5, y1: 3, x2: 6, y2: 3 })
+  //       .addEdge({ x1: 6, y1: 3, x2: 6, y2: 4 })
+  //       .addEdge({ x1: 5, y1: 4, x2: 6, y2: 4 })
+
+  //       .addEdge({ x1: 3, y1: 5, x2: 3, y2: 6 })
+  //       .addEdge({ x1: 3, y1: 5, x2: 4, y2: 5 })
+  //       .addEdge({ x1: 3, y1: 6, x2: 4, y2: 6 })
+  //       .addEdge({ x1: 4, y1: 5, x2: 4, y2: 6 })
+
+  //       .addEdge({ x1: 5, y1: 5, x2: 5, y2: 6 })
+  //       .addEdge({ x1: 5, y1: 5, x2: 6, y2: 5 })
+  //       .addEdge({ x1: 5, y1: 6, x2: 6, y2: 6 })
+  //       .addEdge({ x1: 6, y1: 5, x2: 6, y2: 6 })
+
+  //       .addEdge({ x1: 1, y1: 3, x2: 2, y2: 3 })
+  //       .addEdge({ x1: 2, y1: 3, x2: 2, y2: 4 })
+  //       .addEdge({ x1: 2, y1: 4, x2: 2, y2: 5 })
+
+  //       .addEdge({ x1: 7, y1: 4, x2: 7, y2: 5 })
+  //       .addEdge({ x1: 7, y1: 5, x2: 7, y2: 6 })
+  //       .addEdge({ x1: 7, y1: 6, x2: 8, y2: 6 })
+  //   )
   return (
     <div className="h-dvh w-dvw overflow-scroll bg-neutral">
       <div className="flex flex-col items-stretch min-h-full w-full">
@@ -192,7 +280,7 @@ export default function App() {
           <div className="grow shrink flex justify-start items-center overflow-x-auto overflow-y-hidden p-0">
             <div className="flex shrink-0 grow justify-center items-center m-0 p-0 border-0">
               <Grid
-                size={60}
+                size={28}
                 grid={grid}
                 editable={true}
                 onTileClick={(x, y, target) =>

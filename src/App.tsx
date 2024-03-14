@@ -179,6 +179,7 @@ export default function App() {
               <li>Implement logic for rules and symbols</li>
               <li>Add undo and restart</li>
               <li>Add flood painting</li>
+              <li className="ml-4">Implement puzzle serialization</li>
               <li>Puzzle editor</li>
               <li className="ml-4">Add color, fix and merge tools</li>
               <li className="ml-4">Add a tool for each symbol type</li>
@@ -186,7 +187,6 @@ export default function App() {
               <li className="ml-4">Add configurations for each rule</li>
               <li className="ml-4">Hide rules behind search bar</li>
               <li className="ml-4">Add puzzle name and author fields</li>
-              <li className="ml-4">Add puzzle save/load</li>
             </ul>
           </div>
           <div className="grow shrink flex justify-start items-center overflow-x-auto overflow-y-hidden p-0">

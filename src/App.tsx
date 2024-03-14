@@ -2,9 +2,7 @@ import Grid from './ui/Grid';
 import GridData from './data/grid';
 import { useEffect, useState } from 'react';
 import { Color } from './data/primitives';
-import LetterSymbol from './data/symbols/letterSymbol';
 import InstructionList from './ui/InstructionList';
-import NumberSymbol from './data/symbols/numberSymbol';
 import ConnectAllRule from './data/rules/connectAllRule';
 import { themeChange } from 'theme-change';
 import ViewpointSymbol from './data/symbols/viewpointSymbol';
@@ -268,6 +266,7 @@ export default function App() {
               <li>Add undo and restart</li>
               <li>Add flood painting</li>
               <li>Implement puzzle serialization</li>
+              <li>Optimize performance</li>
               <li>Puzzle editor</li>
               <li className="ml-4">Add color, fix and merge tools</li>
               <li className="ml-4">Add a tool for each symbol type</li>

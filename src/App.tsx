@@ -9,6 +9,7 @@ import ViewpointSymbol from './data/symbols/viewpointSymbol';
 import BanPatternRule from './data/rules/banPatternRule';
 import GridConnections from './data/gridConnections';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const SUPPORTED_THEMES = [
   'light',
@@ -218,6 +219,7 @@ export default function App() {
   return (
     <div className="h-dvh w-dvw overflow-auto bg-neutral">
       <Analytics />
+      <SpeedInsights />
       <div className="flex flex-col items-stretch min-h-full w-full">
         <header className="flex justify-start items-center gap-4 p-4">
           <h1 className="text-3xl text-neutral-content">Logic Pad</h1>

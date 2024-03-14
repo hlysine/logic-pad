@@ -68,6 +68,9 @@ export default function Tile({
   const cornerStyle = useMemo<React.CSSProperties>(
     () => ({
       margin: `${size / 20}px`,
+      width: `${size / 8}px`,
+      height: `${size / 8}px`,
+      borderWidth: `${size / 30}px`,
     }),
     [size]
   );
@@ -131,7 +134,7 @@ export default function Tile({
           {data.fixed && !connections.top && !connections.left && (
             <div
               className={cn(
-                'absolute w-2 h-2 border-l-2 border-t-2 border-green-600 pointer-events-none'
+                'absolute !border-r-0 !border-b-0 border-green-600 pointer-events-none'
               )}
               style={cornerStyle}
             ></div>
@@ -139,7 +142,7 @@ export default function Tile({
           {data.fixed && !connections.top && !connections.right && (
             <div
               className={cn(
-                'absolute w-2 h-2 border-r-2 border-t-2 right-0 border-green-600 pointer-events-none'
+                'absolute !border-l-0 !border-b-0 right-0 border-green-600 pointer-events-none'
               )}
               style={cornerStyle}
             ></div>
@@ -147,7 +150,7 @@ export default function Tile({
           {data.fixed && !connections.bottom && !connections.left && (
             <div
               className={cn(
-                'absolute w-2 h-2 border-l-2 border-b-2 bottom-0 border-green-600 pointer-events-none'
+                'absolute !border-r-0 !border-t-0 bottom-0 border-green-600 pointer-events-none'
               )}
               style={cornerStyle}
             ></div>
@@ -155,7 +158,7 @@ export default function Tile({
           {data.fixed && !connections.bottom && !connections.right && (
             <div
               className={cn(
-                'absolute w-2 h-2 border-r-2 border-b-2 bottom-0 right-0 border-green-600 pointer-events-none'
+                'absolute !border-l-0 !border-t-0 bottom-0 right-0 border-green-600 pointer-events-none'
               )}
               style={cornerStyle}
             ></div>

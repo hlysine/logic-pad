@@ -12,7 +12,7 @@ export default class TileData {
   }
 
   public static empty(): TileData {
-    return new TileData(true, false, Color.None);
+    return new TileData(true, false, Color.Gray);
   }
 
   public copyWith({

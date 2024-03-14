@@ -17,7 +17,7 @@ export interface ErrorGroup {
 export type Errors = readonly ErrorGroup[];
 
 export enum Color {
-  Black = 'black',
-  White = 'white',
-  None = 'none',
+  Dark = 'dark',
+  Light = 'light',
+  Gray = 'gray',
 }

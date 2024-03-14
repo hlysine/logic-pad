@@ -18,6 +18,8 @@ export default function Grid({ size, grid, editable, onTileClick }: GridProps) {
     () => ({
       width: `${size * grid.width}px`,
       height: `${size * grid.height}px`,
+      minWidth: `${size * grid.width}px`,
+      minHeight: `${size * grid.height}px`,
     }),
     [size, grid.width, grid.height]
   );

@@ -1,33 +1,36 @@
 import { Color } from '../data/primitives';
+import { cn } from '../utils';
 
 export function bg(color: Color) {
   switch (color) {
-    case Color.Black:
-      return 'bg-black bg-opacity-60 hover:bg-black hover:bg-opacity-60';
-    case Color.White:
-      return 'bg-white bg-opacity-80 hover:bg-white hover:bg-opacity-80';
-    case Color.None:
-      return 'bg-gray-600 bg-opacity-50 hover:bg-gray-600 hover:bg-opacity-50';
+    case Color.Dark:
+      return cn('bg-black hover:bg-black');
+    case Color.Light:
+      return cn('bg-white hover:bg-white');
+    case Color.Gray:
+      return cn(
+        'bg-neutral-content bg-opacity-20 hover:bg-neutral-content hover:bg-opacity-20'
+      );
   }
 }
 
 export function fg(color: Color) {
   switch (color) {
-    case Color.Black:
-      return 'text-white';
-    case Color.White:
-      return 'text-black';
-    case Color.None:
-      return 'text-gray-900';
+    case Color.Dark:
+      return cn('text-white');
+    case Color.Light:
+      return cn('text-black');
+    case Color.Gray:
+      return cn('text-black');
   }
 }
 
 export function color(buttons: number) {
   switch (buttons) {
     case 1:
-      return Color.Black;
+      return Color.Dark;
     case 2:
-      return Color.White;
+      return Color.Light;
     default:
       return undefined;
   }

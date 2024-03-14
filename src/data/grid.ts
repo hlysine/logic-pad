@@ -152,7 +152,7 @@ export default class GridData {
         return new TileData(
           char !== '.',
           char !== lower,
-          lower === 'w' ? Color.White : lower === 'b' ? Color.Black : Color.None
+          lower === 'w' ? Color.Light : lower === 'b' ? Color.Dark : Color.Gray
         );
       })
     );

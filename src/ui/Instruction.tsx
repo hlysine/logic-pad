@@ -27,7 +27,7 @@ export default function Instruction({ instruction }: InstructionProps) {
   return (
     <div className="flex flex-col w-[320px] items-stretch">
       <div className="flex bg-primary bg-opacity-10 m-0 border-0 pr-2">
-        <div className="text-center py-1 px-4 flex justify-center items-center">
+        <div className="text-center py-1 px-4 flex justify-center items-center text-neutral-content">
           <AnnotatedText text={instruction.explanation} />
         </div>
         <div className="shrink-0">

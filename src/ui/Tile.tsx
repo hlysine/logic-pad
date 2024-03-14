@@ -92,10 +92,10 @@ export default function Tile({
                   mouse.setColor(null, false);
                 } else {
                   if (data.fixed) return;
-                  if (c === data.color) c = Color.None;
+                  if (c === data.color) c = Color.Gray;
                   mouse.setColor(
                     c,
-                    c !== Color.None && data.color !== Color.None
+                    c !== Color.Gray && data.color !== Color.Gray
                   );
                   onTileClick?.(c);
                 }
@@ -112,15 +112,15 @@ export default function Tile({
                 if (
                   !c ||
                   !mouse.color ||
-                  (c !== mouse.color && mouse.color !== Color.None)
+                  (c !== mouse.color && mouse.color !== Color.Gray)
                 ) {
                   mouse.setColor(null, false);
                 } else {
                   if (data.fixed) return;
                   if (mouse.color === data.color) return;
                   if (
-                    mouse.color === Color.None ||
-                    data.color === Color.None ||
+                    mouse.color === Color.Gray ||
+                    data.color === Color.Gray ||
                     mouse.replacing
                   )
                     onTileClick?.(mouse.color);

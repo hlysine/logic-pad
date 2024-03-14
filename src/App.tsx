@@ -215,7 +215,7 @@ export default function App() {
   //       .addEdge({ x1: 7, y1: 6, x2: 8, y2: 6 })
   //   )
   return (
-    <div className="h-dvh w-dvw overflow-scroll bg-neutral">
+    <div className="h-dvh w-dvw overflow-auto bg-neutral">
       <div className="flex flex-col items-stretch min-h-full w-full">
         <header className="flex justify-start items-center gap-4 p-4">
           <h1 className="text-3xl text-neutral-content">Logic Pad</h1>

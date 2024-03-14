@@ -72,22 +72,16 @@ export default function App() {
       .setTile(7, 2, t => t.withFixed(true).withColor(Color.Light))
       .setTile(0, 3, t => t.withFixed(true).withColor(Color.Light))
       .addSymbol(new LetterSymbol(0, 3, 'C'))
-      .setTile(6, 3, t => t.withFixed(true).withColor(Color.Light))
       .setTile(7, 3, t => t.withFixed(true).withColor(Color.Dark))
       .setTile(9, 3, t => t.withFixed(true).withColor(Color.Dark))
       .addSymbol(new LetterSymbol(9, 3, 'D'))
       .setTile(1, 4, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(4, 4, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(5, 4, t => t.withFixed(true).withColor(Color.Light))
       .setTile(8, 4, t => t.withFixed(true).withColor(Color.Dark))
       .setTile(1, 5, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(4, 5, t => t.withFixed(true).withColor(Color.Light))
-      .setTile(5, 5, t => t.withFixed(true).withColor(Color.Dark))
       .setTile(8, 5, t => t.withFixed(true).withColor(Color.Dark))
       .setTile(0, 6, t => t.withFixed(true).withColor(Color.Dark))
       .addSymbol(new LetterSymbol(0, 6, 'E'))
       .setTile(2, 6, t => t.withFixed(true).withColor(Color.Dark))
-      .setTile(3, 6, t => t.withFixed(true).withColor(Color.Light))
       .setTile(9, 6, t => t.withFixed(true).withColor(Color.Light))
       .addSymbol(new LetterSymbol(9, 6, 'F'))
       .setTile(2, 7, t => t.withFixed(true).withColor(Color.Light))
@@ -103,6 +97,36 @@ export default function App() {
       .setTile(6, 9, t => t.withFixed(true).withColor(Color.Dark))
       .addSymbol(new LetterSymbol(6, 9, 'H'))
       .setTile(8, 9, t => t.withFixed(true).withColor(Color.Light))
+      .withConnections(con =>
+        con
+          .addEdge({ x1: 3, y1: 3, x2: 3, y2: 4 })
+          .addEdge({ x1: 3, y1: 3, x2: 4, y2: 3 })
+          .addEdge({ x1: 3, y1: 4, x2: 4, y2: 4 })
+          .addEdge({ x1: 4, y1: 3, x2: 4, y2: 4 })
+
+          .addEdge({ x1: 5, y1: 3, x2: 5, y2: 4 })
+          .addEdge({ x1: 5, y1: 3, x2: 6, y2: 3 })
+          .addEdge({ x1: 6, y1: 3, x2: 6, y2: 4 })
+          .addEdge({ x1: 5, y1: 4, x2: 6, y2: 4 })
+
+          .addEdge({ x1: 3, y1: 5, x2: 3, y2: 6 })
+          .addEdge({ x1: 3, y1: 5, x2: 4, y2: 5 })
+          .addEdge({ x1: 3, y1: 6, x2: 4, y2: 6 })
+          .addEdge({ x1: 4, y1: 5, x2: 4, y2: 6 })
+
+          .addEdge({ x1: 5, y1: 5, x2: 5, y2: 6 })
+          .addEdge({ x1: 5, y1: 5, x2: 6, y2: 5 })
+          .addEdge({ x1: 5, y1: 6, x2: 6, y2: 6 })
+          .addEdge({ x1: 6, y1: 5, x2: 6, y2: 6 })
+
+          .addEdge({ x1: 1, y1: 3, x2: 2, y2: 3 })
+          .addEdge({ x1: 2, y1: 3, x2: 2, y2: 4 })
+          .addEdge({ x1: 2, y1: 4, x2: 2, y2: 5 })
+
+          .addEdge({ x1: 7, y1: 4, x2: 7, y2: 5 })
+          .addEdge({ x1: 7, y1: 5, x2: 7, y2: 6 })
+          .addEdge({ x1: 7, y1: 6, x2: 8, y2: 6 })
+      )
   );
   return (
     <div className="h-dvh w-dvw overflow-scroll bg-neutral">
@@ -141,7 +165,30 @@ export default function App() {
           </div>
         </header>
         <div className="flex flex-1 justify-center items-center flex-wrap">
-          <div className="w-[320px]"></div>
+          <div className="w-[320px] flex flex-col gap-2 p-4 text-neutral-content">
+            <div className="text-xl">Roadmap</div>
+            <ul className="list-disc pl-4">
+              <li className="line-through">Implement puzzle grid</li>
+              <li className="line-through">
+                Implement click and drag mouse input
+              </li>
+              <li className="line-through">Implement merged tiles</li>
+              <li className="line-through">Implement rules UI</li>
+              <li className="line-through">Implement color themes</li>
+              <li>Add missing rules and symbols</li>
+              <li>Implement logic for rules and symbols</li>
+              <li>Add undo and restart</li>
+              <li>Add flood painting</li>
+              <li>Puzzle editor</li>
+              <li className="ml-4">Add color, fix and merge tools</li>
+              <li className="ml-4">Add a tool for each symbol type</li>
+              <li className="ml-4">Hide tools behind search bar</li>
+              <li className="ml-4">Add configurations for each rule</li>
+              <li className="ml-4">Hide rules behind search bar</li>
+              <li className="ml-4">Add puzzle name and author fields</li>
+              <li className="ml-4">Add puzzle save/load</li>
+            </ul>
+          </div>
           <div className="grow shrink flex justify-start items-center overflow-x-auto overflow-y-hidden p-0">
             <div className="flex shrink-0 grow justify-center items-center m-0 p-0 border-0">
               <Grid

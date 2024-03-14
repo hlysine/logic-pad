@@ -107,7 +107,7 @@ export default function App() {
   return (
     <div className="h-dvh w-dvw overflow-scroll bg-neutral">
       <div className="flex flex-col items-stretch min-h-full w-full">
-        <header className="flex justify-between p-4">
+        <header className="flex justify-start items-center gap-4 p-4">
           <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn m-1">

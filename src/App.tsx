@@ -12,6 +12,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import ErrorOverlay from './ui/grid/ErrorOverlay';
 import SymbolOverlay from './ui/grid/SymbolOverlay';
+import GridRing from './ui/GridRing';
 
 const SUPPORTED_THEMES = [
   'light',
@@ -164,7 +165,7 @@ export default function App() {
       <Analytics />
       <SpeedInsights />
       <div className="flex flex-col items-stretch min-h-full w-full">
-        <header className="flex justify-start items-center gap-4 p-4">
+        <header className="flex justify-start items-center gap-4 px-8 py-2">
           <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn m-1">
@@ -224,33 +225,35 @@ export default function App() {
               <li className="ml-4">Add puzzle name and author fields</li>
             </ul>
           </div>
-          <div className="grow shrink flex justify-start items-center overflow-x-auto overflow-y-hidden p-0">
+          <div className="grow shrink flex justify-start items-center p-0">
             <div className="flex shrink-0 grow justify-center items-center m-0 p-0 border-0">
-              <Grid
-                size={28}
-                grid={grid}
-                editable={true}
-                onTileClick={(x, y, target) => {
-                  setGrid(grid => {
-                    const newGrid = grid.setTile(x, y, t =>
-                      t.withColor(target)
-                    );
-                    validateGrid(newGrid);
-                    return newGrid;
-                  });
-                }}
-              >
-                <SymbolOverlay size={28} grid={grid} state={state.symbols} />
-                {state.rules.map((rule, i) =>
-                  rule.state === State.Error ? (
-                    <ErrorOverlay
-                      key={i}
-                      size={28}
-                      positions={rule.positions}
-                    />
-                  ) : null
-                )}
-              </Grid>
+              <GridRing state={state}>
+                <Grid
+                  size={28}
+                  grid={grid}
+                  editable={true}
+                  onTileClick={(x, y, target) => {
+                    setGrid(grid => {
+                      const newGrid = grid.setTile(x, y, t =>
+                        t.withColor(target)
+                      );
+                      validateGrid(newGrid);
+                      return newGrid;
+                    });
+                  }}
+                >
+                  <SymbolOverlay size={28} grid={grid} state={state.symbols} />
+                  {state.rules.map((rule, i) =>
+                    rule.state === State.Error ? (
+                      <ErrorOverlay
+                        key={i}
+                        size={28}
+                        positions={rule.positions}
+                      />
+                    ) : null
+                  )}
+                </Grid>
+              </GridRing>
             </div>
           </div>
           <InstructionList data={grid} state={state} />

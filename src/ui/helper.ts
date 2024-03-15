@@ -48,3 +48,14 @@ export function instructionBg(state: State) {
       return cn('bg-primary/10');
   }
 }
+
+export function ringBorder(state: State) {
+  switch (state) {
+    case State.Satisfied:
+      return cn('border-success shadow-glow shadow-success');
+    case State.Error:
+      return cn('border-error/30');
+    default:
+      return cn('border-primary/10');
+  }
+}

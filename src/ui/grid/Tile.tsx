@@ -86,6 +86,13 @@ export default memo(function Tile({
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default'
               )}
+              tabIndex={
+                editable &&
+                !data.fixed &&
+                style.borderTopLeftRadius !== undefined
+                  ? 0
+                  : -1 // dirty hack to make only the central button focusable
+              }
               style={style}
               onMouseDown={e => {
                 e.preventDefault();

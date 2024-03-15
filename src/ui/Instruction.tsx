@@ -39,7 +39,7 @@ export default function Instruction({ instruction, state }: InstructionProps) {
       >
         <div
           className={cn(
-            'w-2 shrink-0 grow-0',
+            'w-1 shrink-0 grow-0',
             state === State.Incomplete
               ? 'bg-opacity-0'
               : state === State.Satisfied

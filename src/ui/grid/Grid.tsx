@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import GridData from '../../data/grid';
 import Tile from './Tile';
 import MouseContext from './MouseContext';
 import { Color } from '../../data/primitives';
+import { array } from '../../data/helper';
 
 export interface GridProps {
   size: number;
@@ -12,7 +13,7 @@ export interface GridProps {
   children?: React.ReactNode;
 }
 
-export default function Grid({
+export default memo(function Grid({
   size,
   grid,
   editable,
@@ -35,6 +36,22 @@ export default function Grid({
     }),
     [grid.width, grid.height, size]
   );
+  const tileConnections = useMemo(
+    () =>
+      array(grid.width, grid.height, (x, y) =>
+        grid.connections.getForTile({ x, y })
+      ),
+    [grid.connections, grid.width, grid.height]
+  );
+  const clickHandlers = useMemo(
+    () =>
+      array(
+        grid.width,
+        grid.height,
+        (x, y) => (target: Color) => onTileClick?.(x, y, target)
+      ),
+    [grid.width, grid.height, onTileClick]
+  );
   return (
     <MouseContext>
       <div className="relative" style={containerStyle}>
@@ -49,8 +66,8 @@ export default function Grid({
                 size={size}
                 data={tile}
                 editable={editable}
-                connections={grid.connections.getForTile({ x, y })}
-                onTileClick={target => onTileClick?.(x, y, target)}
+                connections={tileConnections[y][x]}
+                onTileClick={clickHandlers[y][x]}
               />
             ))
           )}
@@ -59,4 +76,4 @@ export default function Grid({
       </div>
     </MouseContext>
   );
-}
+});

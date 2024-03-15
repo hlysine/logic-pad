@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { Position } from '../../data/primitives';
 import GridOverlay from './GridOverlay';
 import { array } from '../../data/helper';
@@ -26,7 +26,10 @@ function positionsToGrid(positions: readonly Position[]) {
   return grid;
 }
 
-export default function ErrorOverlay({ size, positions }: ErrorOverlayProps) {
+export default memo(function ErrorOverlay({
+  size,
+  positions,
+}: ErrorOverlayProps) {
   const grid = useMemo(() => positionsToGrid(positions), [positions]);
   return (
     <GridOverlay>
@@ -56,4 +59,4 @@ export default function ErrorOverlay({ size, positions }: ErrorOverlayProps) {
       ))}
     </GridOverlay>
   );
-}
+});

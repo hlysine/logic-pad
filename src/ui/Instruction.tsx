@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import InstructionData from '../data/instruction';
 import { State } from '../data/primitives';
 import { cn } from '../utils';
@@ -29,7 +29,10 @@ function AnnotatedText({ text }: { text: string }) {
   );
 }
 
-export default function Instruction({ instruction, state }: InstructionProps) {
+export default memo(function Instruction({
+  instruction,
+  state,
+}: InstructionProps) {
   state = state ?? State.Incomplete;
   const exampleGrid = useMemo(() => instruction.exampleGrid, [instruction]);
   return (
@@ -61,4 +64,4 @@ export default function Instruction({ instruction, state }: InstructionProps) {
       <div className="h-[1px] bg-accent"></div>
     </div>
   );
-}
+});

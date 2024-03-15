@@ -1,7 +1,7 @@
 import SymbolData from '../../data/symbols/symbol';
 import NumberSymbol from './NumberSymbol';
 import LetterSymbol from './LetterSymbol';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import ViewpointSymbol from './ViewpointSymbol';
 
 export interface SymbolProps<T extends SymbolData> {
@@ -10,12 +10,15 @@ export interface SymbolProps<T extends SymbolData> {
   symbol: T;
 }
 
-const registry = new Map<string, (props: SymbolProps<any>) => JSX.Element>();
+const registry = new Map<
+  string,
+  React.NamedExoticComponent<SymbolProps<any>>
+>();
 registry.set('number', NumberSymbol);
 registry.set('letter', LetterSymbol);
 registry.set('viewpoint', ViewpointSymbol);
 
-export default function Symbol({
+export default memo(function Symbol({
   size,
   textClass,
   symbol,
@@ -38,4 +41,4 @@ export default function Symbol({
       <Component size={size} textClass={textClass} symbol={symbol} />
     </div>
   );
-}
+});

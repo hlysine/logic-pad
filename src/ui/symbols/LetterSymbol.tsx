@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { cn } from '../../utils';
 import LetterSymbolData from '../../data/symbols/letterSymbol';
 
@@ -8,7 +8,11 @@ export interface LetterProps {
   symbol: LetterSymbolData;
 }
 
-export default function LetterSymbol({ size, textClass, symbol }: LetterProps) {
+export default memo(function LetterSymbol({
+  size,
+  textClass,
+  symbol,
+}: LetterProps) {
   const textStyle = useMemo<React.CSSProperties>(
     () => ({
       fontSize: `${size * 0.75}px`,
@@ -27,4 +31,4 @@ export default function LetterSymbol({ size, textClass, symbol }: LetterProps) {
       </span>
     </div>
   );
-}
+});

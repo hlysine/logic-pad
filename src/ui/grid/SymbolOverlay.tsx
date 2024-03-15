@@ -3,6 +3,7 @@ import Symbol from '../symbols/Symbol';
 import { fg } from '../helper';
 import GridOverlay from './GridOverlay';
 import { GridState, State } from '../../data/primitives';
+import { memo } from 'react';
 
 export interface SymbolOverlayProps {
   size: number;
@@ -10,7 +11,7 @@ export interface SymbolOverlayProps {
   state?: GridState['symbols'];
 }
 
-export default function SymbolOverlay({
+export default memo(function SymbolOverlay({
   size,
   grid,
   state,
@@ -42,4 +43,4 @@ export default function SymbolOverlay({
       )}
     </GridOverlay>
   );
-}
+});

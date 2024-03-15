@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { cn } from '../../utils';
 import ViewpointSymbolData from '../../data/symbols/viewpointSymbol';
 import {
@@ -14,7 +14,7 @@ export interface ViewpointProps {
   symbol: ViewpointSymbolData;
 }
 
-export default function ViewpointSymbol({
+export default memo(function ViewpointSymbol({
   size,
   textClass,
   symbol,
@@ -55,4 +55,4 @@ export default function ViewpointSymbol({
       </div>
     </div>
   );
-}
+});

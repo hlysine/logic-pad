@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import TileData from '../../data/tile';
 import { cn } from '../../utils';
 import { useMouseContext } from './MouseContext';
@@ -49,7 +49,7 @@ function useTileParts(size: number, con: TileConnections) {
   }, [size, con]);
 }
 
-export default function Tile({
+export default memo(function Tile({
   size,
   data,
   editable,
@@ -82,7 +82,7 @@ export default function Tile({
             <button
               key={i}
               className={cn(
-                'absolute btn duration-75 p-0 shadow-none min-h-0 border-0 z-0',
+                'absolute btn duration-0 p-0 shadow-none min-h-0 border-0 z-0',
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default'
               )}
@@ -167,4 +167,4 @@ export default function Tile({
       )}
     </div>
   );
-}
+});

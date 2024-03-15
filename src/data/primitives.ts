@@ -16,6 +16,11 @@ export interface ErrorGroup {
 
 export type Errors = readonly ErrorGroup[];
 
+export interface ValidationResult {
+  rules: readonly (Errors | null | undefined)[];
+  symbols: ReadonlyMap<string, Errors | null | undefined>;
+}
+
 export enum Color {
   Dark = 'dark',
   Light = 'light',

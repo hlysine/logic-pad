@@ -7,7 +7,7 @@ import TileData from './tile';
 export default class GridData {
   public readonly tiles: readonly (readonly TileData[])[];
   public readonly connections: GridConnections;
-  public readonly symbols: readonly Symbol[];
+  public readonly symbols: ReadonlyMap<string, readonly Symbol[]>;
   public readonly rules: readonly Rule[];
 
   public constructor(
@@ -15,7 +15,7 @@ export default class GridData {
     public readonly height: number,
     tiles?: readonly (readonly TileData[])[],
     connections?: GridConnections,
-    symbols?: readonly Symbol[],
+    symbols?: ReadonlyMap<string, readonly Symbol[]>,
     rules?: readonly Rule[]
   ) {
     this.width = width;
@@ -26,7 +26,7 @@ export default class GridData {
         Array.from({ length: width }, () => TileData.empty())
       );
     this.connections = connections ?? new GridConnections();
-    this.symbols = symbols ?? [];
+    this.symbols = symbols ?? new Map();
     this.rules = rules ?? [];
   }
 
@@ -42,7 +42,7 @@ export default class GridData {
     height?: number;
     tiles?: readonly (readonly TileData[])[];
     connections?: GridConnections;
-    symbols?: readonly Symbol[];
+    symbols?: ReadonlyMap<string, readonly Symbol[]>;
     rules?: readonly Rule[];
   }): GridData {
     return new GridData(
@@ -100,20 +100,41 @@ export default class GridData {
 
   public withSymbols(
     symbols:
-      | readonly Symbol[]
-      | ((value: readonly Symbol[]) => readonly Symbol[])
+      | ReadonlyMap<string, readonly Symbol[]>
+      | ((
+          value: Map<string, readonly Symbol[]>
+        ) => ReadonlyMap<string, readonly Symbol[]>)
   ): GridData {
     return this.copyWith({
-      symbols: typeof symbols === 'function' ? symbols(this.symbols) : symbols,
+      symbols:
+        typeof symbols === 'function'
+          ? symbols(new Map(this.symbols))
+          : symbols,
     });
   }
 
   public addSymbol(symbol: Symbol): GridData {
-    return this.withSymbols(symbols => [...symbols, symbol]);
+    return this.withSymbols(map => {
+      if (map.has(symbol.id)) {
+        return map.set(symbol.id, [...map.get(symbol.id)!, symbol]);
+      } else {
+        return map.set(symbol.id, [symbol]);
+      }
+    });
   }
 
-  public removeSymbol(symbol: string): GridData {
-    return this.withSymbols(symbols => symbols.filter(s => s.id !== symbol));
+  public removeSymbol(symbol: Symbol): GridData {
+    return this.withSymbols(map => {
+      if (map.has(symbol.id)) {
+        const symbols = map.get(symbol.id)!.filter(s => s !== symbol);
+        if (symbols.length === 0) {
+          map.delete(symbol.id);
+        } else {
+          map.set(symbol.id, symbols);
+        }
+      }
+      return map;
+    });
   }
 
   public withRules(

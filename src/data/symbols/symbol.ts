@@ -12,7 +12,7 @@ export default abstract class Symbol extends Instruction {
     this.y = y;
   }
 
-  public abstract validateSymbol(grid: GridData): Errors | null;
+  public abstract validateSymbol(grid: GridData): Errors | null | undefined;
 
   public withX(x: number): this {
     return this.copyWith({ x });

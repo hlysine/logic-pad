@@ -28,7 +28,7 @@ export default class BanPatternRule extends Rule {
     return BanPatternRule.patternToGrid(this.pattern);
   }
 
-  public validateGrid(_grid: GridData): Errors | null {
+  public validateGrid(_grid: GridData): Errors | null | undefined {
     throw new Error('Method not implemented.');
   }
 

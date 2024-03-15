@@ -5,15 +5,23 @@ import MouseContext from './MouseContext';
 import { Color } from '../data/primitives';
 import Symbol from './symbols/Symbol';
 import { fg } from './helper';
+import GridOverlay from './GridOverlay';
 
 export interface GridProps {
   size: number;
   grid: GridData;
   editable: boolean;
   onTileClick?: (x: number, y: number, target: Color) => void;
+  children?: React.ReactNode;
 }
 
-export default function Grid({ size, grid, editable, onTileClick }: GridProps) {
+export default function Grid({
+  size,
+  grid,
+  editable,
+  onTileClick,
+  children,
+}: GridProps) {
   const containerStyle = useMemo(
     () => ({
       width: `${size * grid.width}px`,
@@ -29,6 +37,10 @@ export default function Grid({ size, grid, editable, onTileClick }: GridProps) {
       gridTemplateRows: `repeat(${grid.height}, ${size}px)`,
     }),
     [grid.width, grid.height, size]
+  );
+  const symbols = useMemo(
+    () => Array.from(grid.symbols.values()).flat(),
+    [grid.symbols]
   );
   return (
     <MouseContext>
@@ -50,8 +62,8 @@ export default function Grid({ size, grid, editable, onTileClick }: GridProps) {
             ))
           )}
         </div>
-        <div className="absolute inset-0 pointer-events-none">
-          {grid.symbols.map(symbol => (
+        <GridOverlay>
+          {symbols.map(symbol => (
             <Symbol
               key={`${symbol.id}(${symbol.x},${symbol.y})`}
               size={size}
@@ -61,7 +73,8 @@ export default function Grid({ size, grid, editable, onTileClick }: GridProps) {
               symbol={symbol}
             />
           ))}
-        </div>
+        </GridOverlay>
+        {children}
       </div>
     </MouseContext>
   );

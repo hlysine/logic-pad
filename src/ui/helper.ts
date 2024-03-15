@@ -35,3 +35,16 @@ export function color(buttons: number) {
       return undefined;
   }
 }
+
+export function instructionBg(success: boolean | null) {
+  switch (success) {
+    case true:
+      return cn(
+        'bg-gradient-to-r from-success/50 via-primary/10 to-primary/10'
+      );
+    case false:
+      return cn('bg-gradient-to-r from-error/50 via-primary/10 to-primary/10');
+    default:
+      return cn('bg-primary/10');
+  }
+}

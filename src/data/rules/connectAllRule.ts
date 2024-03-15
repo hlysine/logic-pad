@@ -36,7 +36,7 @@ export default class ConnectAllRule extends Rule {
       : ConnectAllRule.EXAMPLE_GRID_DARK;
   }
 
-  public validateGrid(_grid: GridData): Errors | null {
+  public validateGrid(_grid: GridData): Errors | null | undefined {
     throw new Error('Method not implemented.');
   }
 

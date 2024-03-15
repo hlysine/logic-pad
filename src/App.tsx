@@ -160,6 +160,9 @@ export default function App() {
     setState({ rules, symbols });
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => validateGrid(grid), []);
+
   return (
     <div className="h-dvh w-dvw overflow-auto bg-neutral">
       <Analytics />

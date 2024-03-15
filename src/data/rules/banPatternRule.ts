@@ -1,5 +1,5 @@
 import GridData from '../grid';
-import { Color, Errors } from '../primitives';
+import { Color, RuleState, State } from '../primitives';
 import TileData from '../tile';
 import Rule from './rule';
 
@@ -28,8 +28,8 @@ export default class BanPatternRule extends Rule {
     return BanPatternRule.patternToGrid(this.pattern);
   }
 
-  public validateGrid(_grid: GridData): Errors | null | undefined {
-    throw new Error('Method not implemented.');
+  public validateGrid(_grid: GridData): RuleState {
+    return { state: State.Incomplete };
   }
 
   public copyWith({ pattern }: { pattern?: Pattern | GridData }): this {

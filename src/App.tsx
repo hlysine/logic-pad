@@ -1,7 +1,7 @@
-import Grid from './ui/Grid';
+import Grid from './ui/grid/Grid';
 import GridData from './data/grid';
 import { useEffect, useState } from 'react';
-import { Color } from './data/primitives';
+import { Color, GridState, State } from './data/primitives';
 import InstructionList from './ui/InstructionList';
 import ConnectAllRule from './data/rules/connectAllRule';
 import { themeChange } from 'theme-change';
@@ -10,6 +10,8 @@ import BanPatternRule from './data/rules/banPatternRule';
 import GridConnections from './data/gridConnections';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import ErrorOverlay from './ui/grid/ErrorOverlay';
+import SymbolOverlay from './ui/grid/SymbolOverlay';
 
 const SUPPORTED_THEMES = [
   'light',
@@ -139,83 +141,24 @@ export default function App() {
       .addSymbol(new ViewpointSymbol(17, 23, 7))
       .addSymbol(new ViewpointSymbol(23, 23, 7))
   );
-  // new GridData(10, 10)
-  //   .addRule(new ConnectAllRule(Color.Dark))
-  //   .addRule(new ConnectAllRule(Color.Light))
-  //   .addSymbol(new ViewpointSymbol(0, 0, 5))
-  //   .addSymbol(new NumberSymbol(0, 9, 5))
-  //   .addSymbol(new NumberSymbol(9, 0, 5))
-  //   .addSymbol(new NumberSymbol(9, 9, 5))
-  //   .setTile(1, 0, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(3, 0, t => t.withFixed(true).withColor(Color.Dark))
-  //   .addSymbol(new LetterSymbol(3, 0, 'A'))
-  //   .setTile(6, 0, t => t.withFixed(true).withColor(Color.Light))
-  //   .addSymbol(new LetterSymbol(6, 0, 'B'))
-  //   .setTile(1, 1, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(3, 1, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(5, 1, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(9, 1, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(2, 2, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(4, 2, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(6, 2, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(7, 2, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(0, 3, t => t.withFixed(true).withColor(Color.Light))
-  //   .addSymbol(new LetterSymbol(0, 3, 'C'))
-  //   .setTile(7, 3, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(9, 3, t => t.withFixed(true).withColor(Color.Dark))
-  //   .addSymbol(new LetterSymbol(9, 3, 'D'))
-  //   .setTile(1, 4, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(8, 4, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(1, 5, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(8, 5, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(0, 6, t => t.withFixed(true).withColor(Color.Dark))
-  //   .addSymbol(new LetterSymbol(0, 6, 'E'))
-  //   .setTile(2, 6, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(9, 6, t => t.withFixed(true).withColor(Color.Light))
-  //   .addSymbol(new LetterSymbol(9, 6, 'F'))
-  //   .setTile(2, 7, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(3, 7, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(5, 7, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(7, 7, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(0, 8, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(4, 8, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(6, 8, t => t.withFixed(true).withColor(Color.Light))
-  //   .setTile(8, 8, t => t.withFixed(true).withColor(Color.Dark))
-  //   .setTile(3, 9, t => t.withFixed(true).withColor(Color.Light))
-  //   .addSymbol(new LetterSymbol(3, 9, 'G'))
-  //   .setTile(6, 9, t => t.withFixed(true).withColor(Color.Dark))
-  //   .addSymbol(new LetterSymbol(6, 9, 'H'))
-  //   .setTile(8, 9, t => t.withFixed(true).withColor(Color.Light))
-  //   .withConnections(con =>
-  //     con
-  //       .addEdge({ x1: 3, y1: 3, x2: 3, y2: 4 })
-  //       .addEdge({ x1: 3, y1: 3, x2: 4, y2: 3 })
-  //       .addEdge({ x1: 3, y1: 4, x2: 4, y2: 4 })
-  //       .addEdge({ x1: 4, y1: 3, x2: 4, y2: 4 })
 
-  //       .addEdge({ x1: 5, y1: 3, x2: 5, y2: 4 })
-  //       .addEdge({ x1: 5, y1: 3, x2: 6, y2: 3 })
-  //       .addEdge({ x1: 6, y1: 3, x2: 6, y2: 4 })
-  //       .addEdge({ x1: 5, y1: 4, x2: 6, y2: 4 })
+  const [state, setState] = useState<GridState>({
+    symbols: new Map(),
+    rules: [],
+  });
 
-  //       .addEdge({ x1: 3, y1: 5, x2: 3, y2: 6 })
-  //       .addEdge({ x1: 3, y1: 5, x2: 4, y2: 5 })
-  //       .addEdge({ x1: 3, y1: 6, x2: 4, y2: 6 })
-  //       .addEdge({ x1: 4, y1: 5, x2: 4, y2: 6 })
+  const validateGrid = (grid: GridData) => {
+    const rules = grid.rules.map(rule => rule.validateGrid(grid));
+    const symbols = new Map<string, State[]>();
+    grid.symbols.forEach((symbolList, id) =>
+      symbols.set(
+        id,
+        symbolList.map(s => s.validateSymbol(grid))
+      )
+    );
+    setState({ rules, symbols });
+  };
 
-  //       .addEdge({ x1: 5, y1: 5, x2: 5, y2: 6 })
-  //       .addEdge({ x1: 5, y1: 5, x2: 6, y2: 5 })
-  //       .addEdge({ x1: 5, y1: 6, x2: 6, y2: 6 })
-  //       .addEdge({ x1: 6, y1: 5, x2: 6, y2: 6 })
-
-  //       .addEdge({ x1: 1, y1: 3, x2: 2, y2: 3 })
-  //       .addEdge({ x1: 2, y1: 3, x2: 2, y2: 4 })
-  //       .addEdge({ x1: 2, y1: 4, x2: 2, y2: 5 })
-
-  //       .addEdge({ x1: 7, y1: 4, x2: 7, y2: 5 })
-  //       .addEdge({ x1: 7, y1: 5, x2: 7, y2: 6 })
-  //       .addEdge({ x1: 7, y1: 6, x2: 8, y2: 6 })
-  //   )
   return (
     <div className="h-dvh w-dvw overflow-auto bg-neutral">
       <Analytics />
@@ -287,16 +230,30 @@ export default function App() {
                 size={28}
                 grid={grid}
                 editable={true}
-                onTileClick={(x, y, target) =>
-                  setGrid(grid => grid.setTile(x, y, t => t.withColor(target)))
-                }
-              />
+                onTileClick={(x, y, target) => {
+                  setGrid(grid => {
+                    const newGrid = grid.setTile(x, y, t =>
+                      t.withColor(target)
+                    );
+                    validateGrid(newGrid);
+                    return newGrid;
+                  });
+                }}
+              >
+                <SymbolOverlay size={28} grid={grid} state={state.symbols} />
+                {state.rules.map((rule, i) =>
+                  rule.state === State.Error ? (
+                    <ErrorOverlay
+                      key={i}
+                      size={28}
+                      positions={rule.positions}
+                    />
+                  ) : null
+                )}
+              </Grid>
             </div>
           </div>
-          <InstructionList
-            data={grid}
-            validation={{ symbols: new Map(), rules: [] }}
-          />
+          <InstructionList data={grid} state={state} />
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import GridData from '../grid';
-import { Errors } from '../primitives';
+import { move } from '../helper';
+import { Color, DIRECTIONS, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class ViewpointSymbol extends Symbol {
@@ -31,8 +32,34 @@ export default class ViewpointSymbol extends Symbol {
     return ViewpointSymbol.EXAMPLE_GRID;
   }
 
-  public validateSymbol(_grid: GridData): Errors | null | undefined {
-    return null; // TODO: implement
+  public validateSymbol(grid: GridData): State {
+    const pos = { x: this.x, y: this.y };
+    const color = grid.getTile(this.x, this.y).color;
+    let minSize = color === Color.Gray ? 0 : 1;
+    let maxSize = 1;
+    for (const direction of DIRECTIONS) {
+      let continuous = true;
+      grid.iterateDirection(
+        move(pos, direction),
+        direction,
+        tile => tile.color === color || tile.color === Color.Gray,
+        tile => {
+          maxSize++;
+          if (tile.color === Color.Gray) {
+            continuous = false;
+          } else {
+            if (continuous) minSize++;
+          }
+        }
+      );
+    }
+    if (minSize > this.number || maxSize < this.number) {
+      return State.Error;
+    } else if (minSize === this.number && maxSize === this.number) {
+      return State.Satisfied;
+    } else {
+      return State.Incomplete;
+    }
   }
 
   public copyWith({

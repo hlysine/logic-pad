@@ -1,5 +1,6 @@
 import GridData from '../grid';
-import { Color, Errors } from '../primitives';
+import { array, minBy } from '../helper';
+import { Color, Position, RuleState, State } from '../primitives';
 import Rule from './rule';
 
 export default class ConnectAllRule extends Rule {
@@ -36,8 +37,37 @@ export default class ConnectAllRule extends Rule {
       : ConnectAllRule.EXAMPLE_GRID_DARK;
   }
 
-  public validateGrid(_grid: GridData): Errors | null | undefined {
-    throw new Error('Method not implemented.');
+  public validateGrid(grid: GridData): RuleState {
+    let complete = true;
+    const visited = array(grid.width, grid.height, () => false);
+    const islands: Position[][] = [];
+    while (true) {
+      const seed = grid.find(
+        (tile, x, y) => tile.color === this.color && !visited[y][x]
+      );
+      if (!seed) break;
+      const positions: Position[] = [];
+      grid.iterateArea(
+        seed,
+        tile => tile.color === this.color || tile.color === Color.Gray,
+        (tile, x, y) => {
+          visited[y][x] = true;
+          if (tile.color === Color.Gray) complete = false;
+          positions.push({ x, y });
+        }
+      );
+      islands.push(positions);
+    }
+    if (islands.length > 1) {
+      return {
+        state: State.Error,
+        positions: minBy(islands, island => island.length)!,
+      };
+    } else if (islands.length === 1) {
+      return { state: complete ? State.Satisfied : State.Incomplete };
+    } else {
+      return { state: State.Incomplete };
+    }
   }
 
   public copyWith({ color }: { color?: Color }): this {

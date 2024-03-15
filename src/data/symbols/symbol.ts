@@ -1,6 +1,6 @@
 import GridData from '../grid';
-import { Errors } from '../primitives';
 import Instruction from '../instruction';
+import { State } from '../primitives';
 
 export default abstract class Symbol extends Instruction {
   public constructor(
@@ -12,7 +12,7 @@ export default abstract class Symbol extends Instruction {
     this.y = y;
   }
 
-  public abstract validateSymbol(grid: GridData): Errors | null | undefined;
+  public abstract validateSymbol(grid: GridData): State;
 
   public withX(x: number): this {
     return this.copyWith({ x });

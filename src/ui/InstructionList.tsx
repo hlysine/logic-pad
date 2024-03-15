@@ -1,10 +1,11 @@
 import GridData from '../data/grid';
 import Instruction from './Instruction';
-import { ValidationResult } from '../data/primitives';
+import { GridState, State } from '../data/primitives';
+import { useMemo } from 'react';
 
 export interface InstructionListProps {
   data: GridData;
-  validation?: ValidationResult | undefined;
+  state?: GridState;
 }
 
 function Title({ children }: { children: React.ReactNode }) {
@@ -15,10 +16,21 @@ function Title({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function InstructionList({
-  data,
-  validation,
-}: InstructionListProps) {
+export default function InstructionList({ data, state }: InstructionListProps) {
+  const symbolMap = useMemo(() => {
+    const map = new Map<string, State>();
+    if (!state) return map;
+    for (const [key, value] of state.symbols) {
+      if (value.some(s => s === State.Error)) {
+        map.set(key, State.Error);
+      } else if (value.some(s => s === State.Incomplete)) {
+        map.set(key, State.Incomplete);
+      } else {
+        map.set(key, State.Satisfied);
+      }
+    }
+    return map;
+  }, [state]);
   return (
     <div className="flex flex-col items-end justify-center">
       {data.rules.length > 0 && <Title>Rules</Title>}
@@ -26,7 +38,7 @@ export default function InstructionList({
         <Instruction
           key={rule.id + i}
           instruction={rule}
-          errors={validation?.rules[i]}
+          state={state?.rules[i]?.state}
         />
       ))}
       {data.symbols.size > 0 && <Title>Symbols</Title>}
@@ -34,7 +46,7 @@ export default function InstructionList({
         <Instruction
           key={key}
           instruction={data.symbols.get(key)![0]}
-          errors={validation?.symbols.get(key)}
+          state={symbolMap.get(key)}
         />
       ))}
     </div>

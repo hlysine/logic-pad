@@ -1,8 +1,16 @@
 import GridConnections from './gridConnections';
-import { Color } from './primitives';
+import { array, move } from './helper';
+import { Color, Direction, Position } from './primitives';
 import Rule from './rules/rule';
 import Symbol from './symbols/symbol';
 import TileData from './tile';
+
+const NEIGHBOR_OFFSETS: Position[] = [
+  { x: -1, y: 0 },
+  { x: 1, y: 0 },
+  { x: 0, y: -1 },
+  { x: 0, y: 1 },
+];
 
 export default class GridData {
   public readonly tiles: readonly (readonly TileData[])[];
@@ -20,11 +28,7 @@ export default class GridData {
   ) {
     this.width = width;
     this.height = height;
-    this.tiles =
-      tiles ??
-      Array.from({ length: height }, () =>
-        Array.from({ length: width }, () => TileData.empty())
-      );
+    this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
     this.symbols = symbols ?? new Map();
     this.rules = rules ?? [];
@@ -178,5 +182,74 @@ export default class GridData {
       })
     );
     return new GridData(width, height, tiles);
+  }
+
+  public find(
+    predicate: (tile: TileData, x: number, y: number) => boolean
+  ): Position | undefined {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        if (predicate(this.getTile(x, y), x, y)) {
+          return { x, y };
+        }
+      }
+    }
+    return undefined;
+  }
+
+  public iterateArea(
+    position: Position,
+    predicate: (tile: TileData) => boolean,
+    callback: (tile: TileData, x: number, y: number) => void
+  ): void {
+    const tile = this.getTile(position.x, position.y);
+    if (!tile.exists || !predicate(tile)) {
+      return;
+    }
+    const visited = new Set<string>();
+    const stack = [position];
+    while (stack.length > 0) {
+      const { x, y } = stack.pop()!;
+      const key = `${x},${y}`;
+      if (visited.has(key)) {
+        continue;
+      }
+      visited.add(key);
+      callback(this.getTile(x, y), x, y);
+      for (const offset of NEIGHBOR_OFFSETS) {
+        const next = { x: x + offset.x, y: y + offset.y };
+        if (
+          next.x >= 0 &&
+          next.x < this.width &&
+          next.y >= 0 &&
+          next.y < this.height
+        ) {
+          const nextTile = this.getTile(next.x, next.y);
+          if (nextTile.exists && predicate(nextTile)) stack.push(next);
+        }
+      }
+    }
+  }
+
+  public iterateDirection(
+    position: Position,
+    direction: Direction,
+    predicate: (tile: TileData) => boolean,
+    callback: (tile: TileData, x: number, y: number) => void
+  ): void {
+    let current = position;
+    while (
+      current.x >= 0 &&
+      current.x < this.width &&
+      current.y >= 0 &&
+      current.y < this.height
+    ) {
+      const tile = this.getTile(current.x, current.y);
+      if (!tile.exists || !predicate(tile)) {
+        break;
+      }
+      callback(tile, current.x, current.y);
+      current = move(current, direction);
+    }
   }
 }

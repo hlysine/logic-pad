@@ -1,4 +1,4 @@
-import { Color } from '../data/primitives';
+import { Color, State } from '../data/primitives';
 import { cn } from '../utils';
 
 export function bg(color: Color) {
@@ -36,13 +36,13 @@ export function color(buttons: number) {
   }
 }
 
-export function instructionBg(success: boolean | null) {
-  switch (success) {
-    case true:
+export function instructionBg(state: State) {
+  switch (state) {
+    case State.Satisfied:
       return cn(
         'bg-gradient-to-r from-success/50 via-primary/10 to-primary/10'
       );
-    case false:
+    case State.Error:
       return cn('bg-gradient-to-r from-error/50 via-primary/10 to-primary/10');
     default:
       return cn('bg-primary/10');

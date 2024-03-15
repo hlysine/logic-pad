@@ -1,5 +1,5 @@
 import GridData from '../grid';
-import { Errors } from '../primitives';
+import { State } from '../primitives';
 import Symbol from './symbol';
 
 export default class NumberSymbol extends Symbol {
@@ -33,8 +33,8 @@ export default class NumberSymbol extends Symbol {
     return NumberSymbol.EXAMPLE_GRID;
   }
 
-  public validateSymbol(_grid: GridData): Errors | null | undefined {
-    return null; // TODO: implement
+  public validateSymbol(_grid: GridData): State {
+    return State.Incomplete; // TODO: implement
   }
 
   public copyWith({

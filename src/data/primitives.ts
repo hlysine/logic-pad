@@ -10,15 +10,27 @@ export interface Edge {
   readonly y2: number;
 }
 
-export interface ErrorGroup {
-  readonly positions: readonly Position[];
+export enum State {
+  Error = 'error',
+  Satisfied = 'satisfied',
+  Incomplete = 'incomplete',
 }
 
-export type Errors = readonly ErrorGroup[];
+export type RuleState =
+  | {
+      readonly state: State.Error;
+      readonly positions: readonly Position[];
+    }
+  | {
+      readonly state: State.Satisfied;
+    }
+  | {
+      readonly state: State.Incomplete;
+    };
 
-export interface ValidationResult {
-  rules: readonly (Errors | null | undefined)[];
-  symbols: ReadonlyMap<string, Errors | null | undefined>;
+export interface GridState {
+  rules: readonly RuleState[];
+  symbols: ReadonlyMap<string, State[]>;
 }
 
 export enum Color {
@@ -26,3 +38,17 @@ export enum Color {
   Light = 'light',
   Gray = 'gray',
 }
+
+export enum Direction {
+  Up = 'up',
+  Down = 'down',
+  Left = 'left',
+  Right = 'right',
+}
+
+export const DIRECTIONS: readonly Direction[] = [
+  Direction.Up,
+  Direction.Down,
+  Direction.Left,
+  Direction.Right,
+];

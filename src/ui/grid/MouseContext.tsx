@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { Color } from '../data/primitives';
+import { Color } from '../../data/primitives';
 
 interface MouseContext {
   color: Color | null;

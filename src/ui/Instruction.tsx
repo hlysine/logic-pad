@@ -1,12 +1,14 @@
+import { useMemo } from 'react';
 import InstructionData from '../data/instruction';
-import { Errors } from '../data/primitives';
+import { State } from '../data/primitives';
 import { cn } from '../utils';
-import Grid from './Grid';
+import Grid from './grid/Grid';
 import { instructionBg } from './helper';
+import SymbolOverlay from './grid/SymbolOverlay';
 
 export interface InstructionProps {
   instruction: InstructionData;
-  errors?: Errors | null | undefined;
+  state?: State;
 }
 
 function AnnotatedText({ text }: { text: string }) {
@@ -27,20 +29,33 @@ function AnnotatedText({ text }: { text: string }) {
   );
 }
 
-export default function Instruction({ instruction, errors }: InstructionProps) {
+export default function Instruction({ instruction, state }: InstructionProps) {
+  state = state ?? State.Incomplete;
+  const exampleGrid = useMemo(() => instruction.exampleGrid, [instruction]);
   return (
     <div className="flex flex-col w-[320px] items-stretch">
       <div
-        className={cn(
-          'relative flex m-0 border-0 pr-2',
-          instructionBg(errors === undefined ? null : !errors)
-        )}
+        className={cn('relative flex m-0 border-0 pr-2', instructionBg(state))}
       >
+        <div
+          className={cn(
+            'w-2',
+            state === State.Incomplete
+              ? 'bg-opacity-0'
+              : state === State.Satisfied
+                ? 'bg-success'
+                : 'bg-error'
+          )}
+        ></div>
         <div className="text-center py-1 px-4 flex justify-center items-center text-neutral-content">
           <AnnotatedText text={instruction.explanation} />
         </div>
         <div className="shrink-0">
-          <Grid size={28} grid={instruction.exampleGrid} editable={false} />
+          <Grid size={28} grid={exampleGrid} editable={false}>
+            {exampleGrid.symbols.size > 0 ? (
+              <SymbolOverlay size={28} grid={exampleGrid} />
+            ) : null}
+          </Grid>
         </div>
       </div>
       <div className="h-[1px] bg-accent"></div>

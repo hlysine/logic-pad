@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import TileData from '../data/tile';
-import { cn } from '../utils';
+import TileData from '../../data/tile';
+import { cn } from '../../utils';
 import { useMouseContext } from './MouseContext';
-import { Color } from '../data/primitives';
-import TileConnections from '../data/tileConnections';
-import { bg, color } from './helper';
+import { Color } from '../../data/primitives';
+import TileConnections from '../../data/tileConnections';
+import { bg, color } from '../helper';
 
 export interface TileProps {
   size: number;

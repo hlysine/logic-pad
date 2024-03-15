@@ -1,11 +1,8 @@
 import { useMemo } from 'react';
-import GridData from '../data/grid';
+import GridData from '../../data/grid';
 import Tile from './Tile';
 import MouseContext from './MouseContext';
-import { Color } from '../data/primitives';
-import Symbol from './symbols/Symbol';
-import { fg } from './helper';
-import GridOverlay from './GridOverlay';
+import { Color } from '../../data/primitives';
 
 export interface GridProps {
   size: number;
@@ -38,10 +35,6 @@ export default function Grid({
     }),
     [grid.width, grid.height, size]
   );
-  const symbols = useMemo(
-    () => Array.from(grid.symbols.values()).flat(),
-    [grid.symbols]
-  );
   return (
     <MouseContext>
       <div className="relative" style={containerStyle}>
@@ -62,18 +55,6 @@ export default function Grid({
             ))
           )}
         </div>
-        <GridOverlay>
-          {symbols.map(symbol => (
-            <Symbol
-              key={`${symbol.id}(${symbol.x},${symbol.y})`}
-              size={size}
-              textClass={fg(
-                grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y)).color
-              )}
-              symbol={symbol}
-            />
-          ))}
-        </GridOverlay>
         {children}
       </div>
     </MouseContext>

@@ -6,8 +6,8 @@ import GridContext from './ui/GridContext';
 import EditContext from './ui/EditContext';
 import SolveMode from './ui/modes/SolveMode';
 import { Mode } from './data/primitives';
-import { cn } from './utils';
 import CreateMode from './ui/modes/CreateMode';
+import ModeButton from './ui/modes/ModeButton';
 
 const SUPPORTED_THEMES = [
   'light',
@@ -62,20 +62,20 @@ export default function App() {
             <header className="flex justify-between items-center gap-4 px-8 py-2">
               <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
               <div role="tablist" className="tabs tabs-boxed tabs-lg">
-                <a
-                  role="tab"
-                  className={cn('tab', mode === Mode.Create && 'tab-active')}
-                  onClick={() => setMode(Mode.Create)}
+                <ModeButton
+                  active={mode === Mode.Create}
+                  mode={Mode.Create}
+                  onModeChange={setMode}
                 >
                   Create
-                </a>
-                <a
-                  role="tab"
-                  className={cn('tab', mode === Mode.Solve && 'tab-active')}
-                  onClick={() => setMode(Mode.Solve)}
+                </ModeButton>
+                <ModeButton
+                  active={mode === Mode.Solve}
+                  mode={Mode.Solve}
+                  onModeChange={setMode}
                 >
                   Solve
-                </a>
+                </ModeButton>
               </div>
               <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="btn m-1">

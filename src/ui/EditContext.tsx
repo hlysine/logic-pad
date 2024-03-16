@@ -30,13 +30,29 @@ export default function EditContext({
   const [redoStack, setRedoStack] = useState<GridData[]>([]);
   const [lastGrid, setLastGrid] = useState<GridData | null>(null);
 
+  const addToUndoStack = (grid: GridData) => {
+    setUndoStack(stack => {
+      if (stack[stack.length - 1] === grid) return stack;
+      if (stack.length > 200) stack.shift();
+      return [...stack, grid];
+    });
+  };
+
+  const addToRedoStack = (grid: GridData) => {
+    setRedoStack(stack => {
+      if (stack[stack.length - 1] === grid) return stack;
+      if (stack.length > 200) stack.shift();
+      return [...stack, grid];
+    });
+  };
+
   const recordEdit = (grid: GridData) => {
     if (lastGrid === null) {
       setLastGrid(grid);
       return;
     }
     if (lastGrid === grid) return;
-    setUndoStack([...undoStack, lastGrid]);
+    addToUndoStack(lastGrid);
     setLastGrid(grid);
     setRedoStack([]);
   };
@@ -44,7 +60,7 @@ export default function EditContext({
   const undo = (grid: GridData) => {
     const last = undoStack.pop();
     if (!last) return;
-    setRedoStack([...redoStack, grid]);
+    addToRedoStack(grid);
     setLastGrid(last);
     return last;
   };
@@ -52,7 +68,7 @@ export default function EditContext({
   const redo = (grid: GridData) => {
     const next = redoStack.pop();
     if (!next) return;
-    setUndoStack([...undoStack, grid]);
+    addToUndoStack(grid);
     setLastGrid(next);
     return next;
   };

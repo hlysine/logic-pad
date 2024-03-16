@@ -52,9 +52,9 @@ export function instructionBg(state: State) {
 export function ringBorder(state: State) {
   switch (state) {
     case State.Satisfied:
-      return cn('border-success shadow-glow shadow-success');
+      return cn('border-success shadow-glow-xl shadow-success');
     case State.Error:
-      return cn('border-error/30');
+      return cn('border-error/30 shadow-glow-md shadow-error');
     default:
       return cn('border-primary/10');
   }

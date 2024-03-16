@@ -4,7 +4,7 @@ import { extendTailwindMerge } from 'tailwind-merge';
 const twMerge = extendTailwindMerge({
   extend: {
     classGroups: {
-      shadow: [{ shadow: ['glow'] }],
+      shadow: [{ shadow: ['glow-md', 'glow-xl'] }],
     },
   },
 });

@@ -252,4 +252,10 @@ export default class GridData {
       current = move(current, direction);
     }
   }
+
+  public isComplete(): boolean {
+    return this.tiles.every(row =>
+      row.every(tile => !tile.exists || tile.color !== Color.Gray)
+    );
+  }
 }

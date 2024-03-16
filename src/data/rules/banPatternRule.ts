@@ -1,19 +1,92 @@
 import GridData from '../grid';
+import { array } from '../helper';
 import { Color, RuleState, State } from '../primitives';
-import TileData from '../tile';
 import Rule from './rule';
 
-export type Pattern = readonly (readonly Color[])[];
+interface CachedTile {
+  x: number;
+  y: number;
+  color: Color;
+}
+
+interface CachedPattern {
+  width: number;
+  height: number;
+  tiles: CachedTile[];
+}
+
+function recenterPattern(pattern: CachedPattern) {
+  let minX = Number.POSITIVE_INFINITY;
+  let minY = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  for (const tile of pattern.tiles) {
+    minX = Math.min(minX, tile.x);
+    minY = Math.min(minY, tile.y);
+    maxX = Math.max(maxX, tile.x);
+    maxY = Math.max(maxY, tile.y);
+  }
+  for (const tile of pattern.tiles) {
+    tile.x -= minX;
+    tile.y -= minY;
+  }
+  pattern.width = maxX - minX + 1;
+  pattern.height = maxY - minY + 1;
+}
+
+function generateCache(grid: GridData): CachedPattern[] {
+  const width = grid.width;
+  const height = grid.height;
+  const transform = [
+    grid.tiles,
+    array(height, width, (x, y) => grid.tiles[x][width - 1 - y]),
+    array(width, height, (x, y) => grid.tiles[height - 1 - y][width - 1 - x]),
+    array(height, width, (x, y) => grid.tiles[height - 1 - x][y]),
+    array(width, height, (x, y) => grid.tiles[y][width - 1 - x]),
+    array(width, height, (x, y) => grid.tiles[height - 1 - y][x]),
+    array(height, width, (x, y) => grid.tiles[x][y]),
+    array(height, width, (x, y) => grid.tiles[height - 1 - x][width - 1 - y]),
+  ];
+  const cache = transform.map(t => ({
+    width: 0,
+    height: 0,
+    tiles: t
+      .flatMap((row, y) =>
+        row.map((color, x) => ({ x, y, color: color.color }))
+      )
+      .filter(tile => tile.color !== Color.Gray),
+  }));
+  cache.forEach(recenterPattern);
+  // remove all duplicates in cache
+  const uniqueCache: CachedPattern[] = [];
+  for (const cachedPattern of cache) {
+    if (
+      !uniqueCache.some(
+        p =>
+          p.width === cachedPattern.width &&
+          p.height === cachedPattern.height &&
+          p.tiles.every(
+            (tile, i) =>
+              tile.color === cachedPattern.tiles[i].color &&
+              tile.x === cachedPattern.tiles[i].x &&
+              tile.y === cachedPattern.tiles[i].y
+          )
+      )
+    ) {
+      uniqueCache.push(cachedPattern);
+    }
+  }
+  return uniqueCache;
+}
 
 export default class BanPatternRule extends Rule {
-  public readonly pattern: Pattern;
+  public readonly pattern: GridData;
+  private readonly cache: CachedPattern[];
 
-  public constructor(pattern: Pattern | GridData) {
+  public constructor(pattern: GridData) {
     super();
-    this.pattern =
-      pattern instanceof GridData
-        ? BanPatternRule.gridToPattern(pattern)
-        : pattern;
+    this.pattern = pattern;
+    this.cache = generateCache(this.pattern);
   }
 
   public get id(): string {
@@ -25,37 +98,40 @@ export default class BanPatternRule extends Rule {
   }
 
   public get exampleGrid(): GridData {
-    return BanPatternRule.patternToGrid(this.pattern);
+    return this.pattern;
   }
 
-  public validateGrid(_grid: GridData): RuleState {
-    return { state: State.Incomplete };
+  public validateGrid(grid: GridData): RuleState {
+    for (const pattern of this.cache) {
+      for (let y = 0; y <= grid.height - pattern.height; y++) {
+        for (let x = 0; x <= grid.width - pattern.width; x++) {
+          let match = true;
+          for (const tile of pattern.tiles) {
+            if (grid.getTile(x + tile.x, y + tile.y).color !== tile.color) {
+              match = false;
+              break;
+            }
+          }
+          if (match) {
+            return {
+              state: State.Error,
+              positions: pattern.tiles.map(tile => ({
+                x: x + tile.x,
+                y: y + tile.y,
+              })),
+            };
+          }
+        }
+      }
+    }
+    return { state: grid.isComplete() ? State.Satisfied : State.Incomplete };
   }
 
-  public copyWith({ pattern }: { pattern?: Pattern | GridData }): this {
-    return new BanPatternRule(
-      (pattern instanceof GridData
-        ? BanPatternRule.gridToPattern(pattern)
-        : pattern) ?? this.pattern
-    ) as this;
+  public copyWith({ pattern }: { pattern?: GridData }): this {
+    return new BanPatternRule(pattern ?? this.pattern) as this;
   }
 
-  public withPattern(pattern: Pattern): this {
+  public withPattern(pattern: GridData): this {
     return this.copyWith({ pattern });
-  }
-
-  public static gridToPattern(grid: GridData): Pattern {
-    return grid.tiles.map(row =>
-      row.map(tile =>
-        tile.exists && tile.color !== Color.Gray ? tile.color : Color.Gray
-      )
-    );
-  }
-
-  public static patternToGrid(pattern: Pattern): GridData {
-    const tiles = pattern.map(row =>
-      row.map(color => new TileData(color !== Color.Gray, false, color))
-    );
-    return new GridData(pattern[0].length, pattern.length, tiles);
   }
 }

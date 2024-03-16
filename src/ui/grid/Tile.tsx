@@ -82,7 +82,7 @@ export default memo(function Tile({
             <button
               key={i}
               className={cn(
-                'absolute btn duration-0 p-0 shadow-none min-h-0 border-0 z-0',
+                'absolute btn no-animation transition-none duration-0 p-0 shadow-none min-h-0 border-0 z-0',
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default'
               )}

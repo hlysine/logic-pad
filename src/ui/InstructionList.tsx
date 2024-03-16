@@ -1,12 +1,7 @@
-import GridData from '../data/grid';
 import Instruction from './Instruction';
-import { GridState, State } from '../data/primitives';
+import { State } from '../data/primitives';
 import { memo, useMemo } from 'react';
-
-export interface InstructionListProps {
-  data: GridData;
-  state?: GridState;
-}
+import { useGrid } from './GridContext';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -16,10 +11,8 @@ function Title({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default memo(function InstructionList({
-  data,
-  state,
-}: InstructionListProps) {
+export default memo(function InstructionList() {
+  const { grid: data, state } = useGrid();
   const symbolMap = useMemo(() => {
     const map = new Map<string, State>();
     if (!state) return map;

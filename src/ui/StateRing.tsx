@@ -1,14 +1,15 @@
-import { useMemo } from 'react';
-import { GridState, State } from '../data/primitives';
+import { memo, useMemo } from 'react';
+import { State } from '../data/primitives';
 import { ringBorder } from './helper';
 import { cn } from '../utils';
+import { useGrid } from './GridContext';
 
 export interface GridRingProps {
   children?: React.ReactNode;
-  state: GridState;
 }
 
-export default function GridRing({ state, children }: GridRingProps) {
+export default memo(function StateRing({ children }: GridRingProps) {
+  const { state } = useGrid();
   const combinedState = useMemo(() => {
     if (state.rules.some(s => s.state === State.Error)) return State.Error;
     for (const [_, symbolList] of state.symbols) {
@@ -36,4 +37,4 @@ export default function GridRing({ state, children }: GridRingProps) {
       {children}
     </div>
   );
-}
+});

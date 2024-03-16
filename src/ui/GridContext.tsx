@@ -1,10 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import GridData from '../data/grid';
-import { Color, GridState, State } from '../data/primitives';
-import ConnectAllRule from '../data/rules/connectAllRule';
-import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import BanPatternRule from '../data/rules/banPatternRule';
-import GridConnections from '../data/gridConnections';
+import { GridState, State } from '../data/primitives';
 import { useEdit } from './EditContext';
 
 interface GridContext {
@@ -15,87 +11,7 @@ interface GridContext {
   setState: (value: GridState) => void;
 }
 
-const defaultGrid = GridData.create([
-  'WWWWWWWWWWWWWWWWWWWWWWWWWBBBW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'Wn.nWWWn.nWWWn.nWWWn.nWWWn.nW',
-  'WnnnWWWnnnWWWnnnWWWnnnWWWnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'Wnnnn.nnnnn.nnnnn.nnnnn.nnnnW',
-  'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
-  'WBBBWWWWWWWWWWWWWWWWWWWWWWWWW',
-])
-  .withConnections(
-    GridConnections.create([
-      '.............................',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.aaab.bcccd.deeef.fgggh.hiii.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.j.j...l.l...n.n...p.p...r.r.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.aaab.bcccd.deeef.fgggh.hiii.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.j.j...l.l...n.n...p.p...r.r.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.aaab.bcccd.deeef.fgggh.hiii.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.j.j...l.l...n.n...p.p...r.r.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.aaab.bcccd.deeef.fgggh.hiii.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.j.j...l.l...n.n...p.p...r.r.',
-      '.jjj...lll...nnn...ppp...rrr.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.aaab.bcccd.deeef.fgggh.hiii.',
-      '.aaabbbcccdddeeefffggghhhiii.',
-      '.............................',
-    ])
-  )
-  .addRule(
-    new BanPatternRule(GridData.create(['.bbb.', 'bb.bb', '.bbb.', '..b..']))
-  )
-  .addRule(
-    new BanPatternRule(GridData.create(['.bbb.', 'wb.bw', '.bbb.', '..w..']))
-  )
-  .addRule(new ConnectAllRule(Color.Dark))
-  .addSymbol(new ViewpointSymbol(17, 5, 8))
-  .addSymbol(new ViewpointSymbol(23, 5, 6))
-  .addSymbol(new ViewpointSymbol(5, 11, 8))
-  .addSymbol(new ViewpointSymbol(11, 17, 6))
-  .addSymbol(new ViewpointSymbol(17, 17, 8))
-  .addSymbol(new ViewpointSymbol(23, 17, 7))
-  .addSymbol(new ViewpointSymbol(5, 23, 7))
-  .addSymbol(new ViewpointSymbol(11, 23, 6))
-  .addSymbol(new ViewpointSymbol(17, 23, 7))
-  .addSymbol(new ViewpointSymbol(23, 23, 7));
+const defaultGrid = GridData.create([]);
 const defaultState: GridState = { rules: [], symbols: new Map() };
 
 const context = createContext<GridContext>({

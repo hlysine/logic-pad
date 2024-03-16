@@ -15,10 +15,9 @@ export interface MainGridProps {
 
 function computeTileSize(grid: GridData) {
   let newSize = 50;
-  const rect = document.body.getBoundingClientRect();
   newSize = Math.min(
-    (rect.width - 80 - 640) / grid.width,
-    (rect.height - 160) / grid.height
+    (window.innerWidth - 80 - 640) / grid.width,
+    (window.innerHeight - 160) / grid.height
   );
   return Math.max(25, Math.min(100, newSize));
 }
@@ -26,30 +25,56 @@ function computeTileSize(grid: GridData) {
 export default memo(function MainGrid({ editable, children }: MainGridProps) {
   const [_, startTransition] = useTransition();
   const { grid, state, setGrid } = useGrid();
-  const [tileSize, setTileSize] = useState(computeTileSize(grid));
+  const [tileConfig, setTileConfig] = useState<{
+    width: number;
+    height: number;
+    tileSize: number;
+  }>({ width: 0, height: 0, tileSize: 0 });
 
   useEffect(() => {
     const resizeHandler = debounce(() => {
-      startTransition(() => setTileSize(computeTileSize(grid)));
+      startTransition(() =>
+        setTileConfig({
+          width: grid.width,
+          height: grid.height,
+          tileSize: computeTileSize(grid),
+        })
+      );
     }, 150);
     window.addEventListener('resize', resizeHandler);
+    resizeHandler();
     return () => window.removeEventListener('resize', resizeHandler);
   }, [grid]);
+
+  if (
+    tileConfig.tileSize === 0 ||
+    tileConfig.width !== grid.width ||
+    tileConfig.height !== grid.height
+  )
+    return <span className="loading loading-bars loading-lg"></span>;
 
   return (
     <StateRing>
       <Grid
-        size={tileSize}
+        size={tileConfig.tileSize}
         grid={grid}
         editable={editable}
         onTileClick={(x, y, target) => {
           setGrid(grid.setTile(x, y, t => t.withColor(target)));
         }}
       >
-        <SymbolOverlay size={tileSize} grid={grid} state={state.symbols} />
+        <SymbolOverlay
+          size={tileConfig.tileSize}
+          grid={grid}
+          state={state.symbols}
+        />
         {state.rules.map((rule, i) =>
           rule.state === State.Error ? (
-            <ErrorOverlay key={i} size={tileSize} positions={rule.positions} />
+            <ErrorOverlay
+              key={i}
+              size={tileConfig.tileSize}
+              positions={rule.positions}
+            />
           ) : null
         )}
         {children}

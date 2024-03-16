@@ -3,6 +3,7 @@ import Instruction from '../instructions/Instruction';
 import InstructionList from '../instructions/InstructionList';
 import EditControls from '../EditControls';
 import MainGrid from '../grid/MainGrid';
+import TEMPTestPuzzles from './TEMPTestPuzzles';
 
 export default memo(function SolveMode() {
   return (
@@ -33,6 +34,8 @@ export default memo(function SolveMode() {
             <li className="ml-4">Hide rules behind search bar</li>
             <li className="ml-4">Add puzzle name and author fields</li>
           </ul>
+          <div className="text-xl">Puzzle selection</div>
+          <TEMPTestPuzzles />
         </div>
         <EditControls />
       </div>

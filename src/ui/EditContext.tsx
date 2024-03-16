@@ -7,6 +7,7 @@ interface EditContext {
   undo: (grid: GridData) => GridData | undefined;
   redo: (grid: GridData) => GridData | undefined;
   recordEdit: (grid: GridData) => void;
+  clearHistory: (grid: GridData) => void;
 }
 
 const context = createContext<EditContext>({
@@ -15,6 +16,7 @@ const context = createContext<EditContext>({
   undo: () => undefined,
   redo: () => undefined,
   recordEdit: () => {},
+  clearHistory: () => {},
 });
 
 export const useEdit = () => {
@@ -73,6 +75,12 @@ export default function EditContext({
     return next;
   };
 
+  const clearHistory = (grid: GridData) => {
+    setUndoStack([]);
+    setRedoStack([]);
+    setLastGrid(grid);
+  };
+
   return (
     <context.Provider
       value={{
@@ -81,6 +89,7 @@ export default function EditContext({
         undo,
         redo,
         recordEdit,
+        clearHistory,
       }}
     >
       {children}

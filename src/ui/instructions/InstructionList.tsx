@@ -34,7 +34,7 @@ export default memo(function InstructionList({
     return map;
   }, [state]);
   return (
-    <div className="flex flex-col items-end justify-center">
+    <div className="flex flex-col items-end justify-center w-[320px]">
       {data.rules.length > 0 && <Title>Rules</Title>}
       {data.rules.map((rule, i) => (
         <Instruction

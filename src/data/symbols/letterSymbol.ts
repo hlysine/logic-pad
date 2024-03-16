@@ -1,5 +1,6 @@
 import GridData from '../grid';
-import { State } from '../primitives';
+import { array } from '../helper';
+import { Color, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class LetterSymbol extends Symbol {
@@ -38,8 +39,28 @@ export default class LetterSymbol extends Symbol {
     return LetterSymbol.EXAMPLE_GRID;
   }
 
-  public validateSymbol(_grid: GridData): State {
-    return State.Incomplete; // TODO: implement
+  public validateSymbol(grid: GridData): State {
+    let complete = true;
+    const visited = array(grid.width, grid.height, () => false);
+    const color = grid.getTile(this.x, this.y).color;
+    grid.iterateArea(
+      { x: this.x, y: this.y },
+      tile => tile.color === Color.Gray || tile.color === color,
+      (tile, x, y) => {
+        visited[y][x] = true;
+        if (tile.color === Color.Gray) complete = false;
+      }
+    );
+    for (const symbol of grid.symbols.get(this.id) ?? []) {
+      if (symbol !== this && symbol instanceof LetterSymbol) {
+        if (symbol.letter === this.letter) {
+          if (!visited[symbol.y][symbol.x]) {
+            return State.Error;
+          }
+        }
+      }
+    }
+    return complete ? State.Satisfied : State.Incomplete;
   }
 
   public copyWith({

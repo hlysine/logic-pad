@@ -147,7 +147,7 @@ export default memo(function TEMPTestPuzzles() {
   }, []);
 
   return (
-    <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+    <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box text-base-content">
       {PUZZLES.map(puzzle => (
         <li
           key={puzzle.name}

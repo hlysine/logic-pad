@@ -20,7 +20,7 @@ export default memo(function SolveMode() {
             <li className="line-through">Implement color themes</li>
             <li>Add missing rules and symbols</li>
             <li>Implement logic for rules and symbols</li>
-            <li>Implement win confirmation</li>
+            <li className="line-through">Implement win confirmation</li>
             <li className="line-through">Add undo and restart</li>
             <li>Add flood painting</li>
             <li>Implement puzzle serialization</li>

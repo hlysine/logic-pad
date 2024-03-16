@@ -108,7 +108,7 @@ export default function App() {
                     <li>Add missing rules and symbols</li>
                     <li>Implement logic for rules and symbols</li>
                     <li>Implement win confirmation</li>
-                    <li>Add undo and restart</li>
+                    <li className="line-through">Add undo and restart</li>
                     <li>Add flood painting</li>
                     <li>Implement puzzle serialization</li>
                     <li>Optimize performance</li>

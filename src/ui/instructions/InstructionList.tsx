@@ -1,7 +1,11 @@
-import Instruction from './Instruction';
-import { State } from '../data/primitives';
+import { InstructionProps } from './Instruction';
+import { State } from '../../data/primitives';
 import { memo, useMemo } from 'react';
-import { useGrid } from './GridContext';
+import { useGrid } from '../GridContext';
+
+export interface InstructionListProps {
+  children: React.NamedExoticComponent<InstructionProps>;
+}
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -11,7 +15,9 @@ function Title({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default memo(function InstructionList() {
+export default memo(function InstructionList({
+  children: Instruction,
+}: InstructionListProps) {
   const { grid: data, state } = useGrid();
   const symbolMap = useMemo(() => {
     const map = new Map<string, State>();
@@ -34,6 +40,7 @@ export default memo(function InstructionList() {
         <Instruction
           key={rule.id + i}
           instruction={rule}
+          index={i}
           state={state?.rules[i]?.state}
         />
       ))}
@@ -42,6 +49,7 @@ export default memo(function InstructionList() {
         <Instruction
           key={key}
           instruction={data.symbols.get(key)![0]}
+          index={null}
           state={symbolMap.get(key)}
         />
       ))}

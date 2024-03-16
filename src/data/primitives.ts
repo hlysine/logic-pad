@@ -52,3 +52,8 @@ export const DIRECTIONS: readonly Direction[] = [
   Direction.Left,
   Direction.Right,
 ];
+
+export enum Mode {
+  Create = 'create',
+  Solve = 'solve',
+}

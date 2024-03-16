@@ -1,16 +1,13 @@
-import Grid from './ui/grid/Grid';
-import { useEffect } from 'react';
-import { State } from './data/primitives';
-import InstructionList from './ui/InstructionList';
+import { useEffect, useState } from 'react';
 import { themeChange } from 'theme-change';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
-import ErrorOverlay from './ui/grid/ErrorOverlay';
-import SymbolOverlay from './ui/grid/SymbolOverlay';
-import StateRing from './ui/StateRing';
-import GridContext, { GridConsumer } from './ui/GridContext';
-import EditControls from './ui/EditControls';
+import GridContext from './ui/GridContext';
 import EditContext from './ui/EditContext';
+import SolveMode from './ui/modes/SolveMode';
+import { Mode } from './data/primitives';
+import { cn } from './utils';
+import CreateMode from './ui/modes/CreateMode';
 
 const SUPPORTED_THEMES = [
   'light',
@@ -48,6 +45,8 @@ const SUPPORTED_THEMES = [
 ];
 
 export default function App() {
+  const [mode, setMode] = useState(Mode.Solve);
+
   useEffect(() => {
     themeChange(false);
     // 👆 false parameter is required for react project
@@ -62,6 +61,22 @@ export default function App() {
           <div className="flex flex-col items-stretch min-h-full w-full">
             <header className="flex justify-between items-center gap-4 px-8 py-2">
               <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
+              <div role="tablist" className="tabs tabs-boxed tabs-lg">
+                <a
+                  role="tab"
+                  className={cn('tab', mode === Mode.Create && 'tab-active')}
+                  onClick={() => setMode(Mode.Create)}
+                >
+                  Create
+                </a>
+                <a
+                  role="tab"
+                  className={cn('tab', mode === Mode.Solve && 'tab-active')}
+                  onClick={() => setMode(Mode.Solve)}
+                >
+                  Solve
+                </a>
+              </div>
               <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="btn m-1">
                   Theme
@@ -93,73 +108,7 @@ export default function App() {
                 </ul>
               </div>
             </header>
-            <div className="flex flex-1 justify-center items-center flex-wrap">
-              <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
-                <div className="flex flex-col gap-2">
-                  <div className="text-xl">Roadmap</div>
-                  <ul className="list-disc pl-4">
-                    <li className="line-through">Implement puzzle grid</li>
-                    <li className="line-through">
-                      Implement click and drag mouse input
-                    </li>
-                    <li className="line-through">Implement merged tiles</li>
-                    <li className="line-through">Implement rules UI</li>
-                    <li className="line-through">Implement color themes</li>
-                    <li>Add missing rules and symbols</li>
-                    <li>Implement logic for rules and symbols</li>
-                    <li>Implement win confirmation</li>
-                    <li className="line-through">Add undo and restart</li>
-                    <li>Add flood painting</li>
-                    <li>Implement puzzle serialization</li>
-                    <li>Optimize performance</li>
-                    <li>Puzzle editor</li>
-                    <li className="ml-4">Add color, fix and merge tools</li>
-                    <li className="ml-4">Add a tool for each symbol type</li>
-                    <li className="ml-4">Hide tools behind search bar</li>
-                    <li className="ml-4">Add configurations for each rule</li>
-                    <li className="ml-4">Hide rules behind search bar</li>
-                    <li className="ml-4">Add puzzle name and author fields</li>
-                  </ul>
-                </div>
-                <EditControls />
-              </div>
-              <div className="grow shrink flex justify-start items-center p-0">
-                <div className="flex shrink-0 grow justify-center items-center m-0 p-0 border-0">
-                  <StateRing>
-                    <GridConsumer>
-                      {({ grid, state, setGrid }) => (
-                        <Grid
-                          size={28}
-                          grid={grid}
-                          editable={true}
-                          onTileClick={(x, y, target) => {
-                            setGrid(
-                              grid.setTile(x, y, t => t.withColor(target))
-                            );
-                          }}
-                        >
-                          <SymbolOverlay
-                            size={28}
-                            grid={grid}
-                            state={state.symbols}
-                          />
-                          {state.rules.map((rule, i) =>
-                            rule.state === State.Error ? (
-                              <ErrorOverlay
-                                key={i}
-                                size={28}
-                                positions={rule.positions}
-                              />
-                            ) : null
-                          )}
-                        </Grid>
-                      )}
-                    </GridConsumer>
-                  </StateRing>
-                </div>
-              </div>
-              <InstructionList />
-            </div>
+            {mode === Mode.Create ? <CreateMode /> : <SolveMode />}
           </div>
         </div>
       </GridContext>

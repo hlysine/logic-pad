@@ -1,32 +1,16 @@
 import { memo, useMemo } from 'react';
-import InstructionData from '../data/instruction';
-import { State } from '../data/primitives';
-import { cn } from '../utils';
-import Grid from './grid/Grid';
-import { instructionBg } from './helper';
-import SymbolOverlay from './grid/SymbolOverlay';
+import InstructionData from '../../data/instruction';
+import { State } from '../../data/primitives';
+import { cn } from '../../utils';
+import Grid from '../grid/Grid';
+import { instructionBg } from '../helper';
+import SymbolOverlay from '../grid/SymbolOverlay';
+import AnnotatedText from './AnnotatedText';
 
 export interface InstructionProps {
   instruction: InstructionData;
+  index: number | null;
   state?: State;
-}
-
-function AnnotatedText({ text }: { text: string }) {
-  const parts = text.split('*');
-  return (
-    <span>
-      {parts.map((part, i) => {
-        if (i % 2 === 1) {
-          return (
-            <span key={i} className="text-accent font-bold">
-              {part}
-            </span>
-          );
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </span>
-  );
 }
 
 export default memo(function Instruction({

@@ -37,4 +37,8 @@ export default class UndercluedRule extends Rule {
   public copyWith({}: {}): this {
     return new UndercluedRule() as this;
   }
+
+  public get validateWithSolution(): boolean {
+    return true;
+  }
 }

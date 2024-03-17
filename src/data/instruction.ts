@@ -15,4 +15,11 @@ export default abstract class Instruction {
   public abstract get exampleGrid(): GridData;
 
   public abstract copyWith(props: { [key: string]: any }): this;
+
+  /**
+   * Indicates that validation by logic is not available and the solution must be used for validation
+   */
+  public get validateWithSolution(): boolean {
+    return false;
+  }
 }

@@ -29,6 +29,7 @@ export type RuleState =
     };
 
 export interface GridState {
+  final: State;
   rules: readonly RuleState[];
   symbols: ReadonlyMap<string, State[]>;
 }

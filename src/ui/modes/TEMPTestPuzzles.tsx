@@ -99,6 +99,7 @@ const PUZZLES = [
       .addSymbol(new ViewpointSymbol(11, 23, 6))
       .addSymbol(new ViewpointSymbol(17, 23, 7))
       .addSymbol(new ViewpointSymbol(23, 23, 7)),
+    solution: null,
   },
   {
     name: 'Flow',
@@ -133,6 +134,7 @@ const PUZZLES = [
       .addSymbol(new LetterSymbol(12, 16, 'F'))
       .addSymbol(new LetterSymbol(14, 16, 'C'))
       .addSymbol(new LetterSymbol(16, 16, 'E')),
+    solution: null,
   },
   {
     name: 'Underclued',
@@ -157,6 +159,18 @@ const PUZZLES = [
       .addSymbol(new NumberSymbol(3, 5, 2))
       .addSymbol(new NumberSymbol(1, 8, 2))
       .addSymbol(new NumberSymbol(4, 8, 2)),
+    solution: GridData.create([
+      'nnnnwwwwwn',
+      'nbwnnbbbnw',
+      'bWWbnwwWbw',
+      'nbbnwnbnnw',
+      'nnnbnbWnnn',
+      'nnnWnnnbnn',
+      'nnnnnnnnnn',
+      'nnnnnnbWnn',
+      'nWnnWnnbnn',
+      'nnnnnnnnnn',
+    ]),
   },
 ];
 
@@ -166,7 +180,7 @@ export default memo(function TEMPTestPuzzles() {
 
   useEffect(() => {
     if (grid.width === 0) {
-      setGrid(PUZZLES[0].grid);
+      setGrid(PUZZLES[0].grid, PUZZLES[0].solution);
       clearHistory(PUZZLES[0].grid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,7 +192,7 @@ export default memo(function TEMPTestPuzzles() {
         <li
           key={puzzle.name}
           onClick={() => {
-            setGrid(puzzle.grid);
+            setGrid(puzzle.grid, puzzle.solution);
             clearHistory(puzzle.grid);
           }}
         >

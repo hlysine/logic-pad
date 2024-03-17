@@ -49,7 +49,7 @@ const roadmap: RoadmapItem[] = [
 
 function renderString(item: string) {
   return (
-    <li className={cn(item.startsWith('~') && 'opacity-50')}>
+    <li key={item} className={cn(item.startsWith('~') && 'opacity-50')}>
       <a>{item.startsWith('~') ? item.substring(1) : item}</a>
     </li>
   );
@@ -61,7 +61,7 @@ function renderItem(item: RoadmapItem) {
   }
   const [title, ...subItems] = item;
   return (
-    <li>
+    <li key={title}>
       <details open>
         <summary className={cn(title.startsWith('~') && 'opacity-50')}>
           {title.startsWith('~') ? title.substring(1) : title}

@@ -35,6 +35,7 @@ export default class NumberSymbol extends Symbol {
 
   public validateSymbol(grid: GridData): State {
     const color = grid.getTile(this.x, this.y).color;
+    if (color === Color.Gray) return State.Incomplete;
     let completeCount = 0;
     let grayCount = 0;
     grid.iterateArea(

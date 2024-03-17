@@ -43,18 +43,28 @@ export default class LetterSymbol extends Symbol {
     let complete = true;
     const visited = array(grid.width, grid.height, () => false);
     const color = grid.getTile(this.x, this.y).color;
-    grid.iterateArea(
-      { x: this.x, y: this.y },
-      tile => tile.color === Color.Gray || tile.color === color,
-      (tile, x, y) => {
-        visited[y][x] = true;
-        if (tile.color === Color.Gray) complete = false;
-      }
-    );
+    if (color !== Color.Gray) {
+      grid.iterateArea(
+        { x: this.x, y: this.y },
+        tile => tile.color === Color.Gray || tile.color === color,
+        (tile, x, y) => {
+          visited[y][x] = true;
+          if (tile.color === Color.Gray) complete = false;
+        }
+      );
+    } else {
+      complete = false;
+    }
     for (const symbol of grid.symbols.get(this.id) ?? []) {
       if (symbol !== this && symbol instanceof LetterSymbol) {
         if (symbol.letter === this.letter) {
-          if (!visited[symbol.y][symbol.x]) {
+          const theirColor = grid.getTile(symbol.x, symbol.y).color;
+          if (
+            (color !== Color.Gray && !visited[symbol.y][symbol.x]) ||
+            (color !== Color.Gray &&
+              theirColor !== Color.Gray &&
+              theirColor !== color)
+          ) {
             return State.Error;
           }
         }

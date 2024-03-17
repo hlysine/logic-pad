@@ -1,5 +1,5 @@
 import GridData from '../grid';
-import { State } from '../primitives';
+import { Color, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class NumberSymbol extends Symbol {
@@ -33,8 +33,29 @@ export default class NumberSymbol extends Symbol {
     return NumberSymbol.EXAMPLE_GRID;
   }
 
-  public validateSymbol(_grid: GridData): State {
-    return State.Incomplete; // TODO: implement
+  public validateSymbol(grid: GridData): State {
+    const color = grid.getTile(this.x, this.y).color;
+    let completeCount = 0;
+    let grayCount = 0;
+    grid.iterateArea(
+      { x: this.x, y: this.y },
+      tile => tile.color === Color.Gray || tile.color === color,
+      () => {
+        grayCount++;
+      }
+    );
+    grid.iterateArea(
+      { x: this.x, y: this.y },
+      tile => tile.color === color,
+      () => {
+        completeCount++;
+      }
+    );
+    if (completeCount > this.number || grayCount < this.number)
+      return State.Error;
+    else if (completeCount === this.number && completeCount === grayCount)
+      return State.Satisfied;
+    return State.Incomplete;
   }
 
   public copyWith({

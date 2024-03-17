@@ -9,7 +9,7 @@ export interface GridProps {
   size: number;
   grid: GridData;
   editable: boolean;
-  onTileClick?: (x: number, y: number, target: Color) => void;
+  onTileClick?: (x: number, y: number, target: Color, flood: boolean) => void;
   children?: React.ReactNode;
 }
 
@@ -48,7 +48,8 @@ export default memo(function Grid({
       array(
         grid.width,
         grid.height,
-        (x, y) => (target: Color) => onTileClick?.(x, y, target)
+        (x, y) => (target: Color, flood: boolean) =>
+          onTileClick?.(x, y, target, flood)
       ),
     [grid.width, grid.height, onTileClick]
   );

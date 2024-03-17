@@ -26,7 +26,7 @@ const roadmap: RoadmapItem[] = [
   ],
   '~Add win confirmation',
   '~Add undo and restart',
-  'Add flood painting',
+  '~Add flood painting',
   'Add tile counting by holding Ctrl',
   'Implement puzzle serialization',
   [

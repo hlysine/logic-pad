@@ -11,7 +11,7 @@ export interface TileProps {
   data: TileData;
   editable: boolean;
   connections: TileConnections;
-  onTileClick?: (target: Color) => void;
+  onTileClick?: (target: Color, flood: boolean) => void;
 }
 
 function useTileParts(size: number, con: TileConnections) {
@@ -87,11 +87,7 @@ export default memo(function Tile({
                 editable ? 'cursor-pointer' : 'cursor-default'
               )}
               tabIndex={
-                editable &&
-                !data.fixed &&
-                style.borderTopLeftRadius !== undefined
-                  ? 0
-                  : -1 // dirty hack to make only the central button focusable
+                editable && style.borderTopLeftRadius !== undefined ? 0 : -1 // dirty hack to make only the central button focusable
               }
               style={style}
               onMouseDown={e => {
@@ -101,13 +97,12 @@ export default memo(function Tile({
                 if (!c) {
                   mouse.setColor(null, false);
                 } else {
-                  if (data.fixed) return;
                   if (c === data.color) c = Color.Gray;
                   mouse.setColor(
                     c,
                     c !== Color.Gray && data.color !== Color.Gray
                   );
-                  onTileClick?.(c);
+                  onTileClick?.(c, e.ctrlKey);
                 }
               }}
               onMouseUp={e => {
@@ -126,14 +121,13 @@ export default memo(function Tile({
                 ) {
                   mouse.setColor(null, false);
                 } else {
-                  if (data.fixed) return;
                   if (mouse.color === data.color) return;
                   if (
                     mouse.color === Color.Gray ||
                     data.color === Color.Gray ||
                     mouse.replacing
                   )
-                    onTileClick?.(mouse.color);
+                    onTileClick?.(mouse.color, e.ctrlKey);
                 }
               }}
             ></button>

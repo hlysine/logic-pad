@@ -4,7 +4,7 @@ import { useGrid } from '../GridContext';
 import Grid from './Grid';
 import SymbolOverlay from './SymbolOverlay';
 import ErrorOverlay from './ErrorOverlay';
-import { State } from '../../data/primitives';
+import { Color, State } from '../../data/primitives';
 import GridData from '../../data/grid';
 import debounce from 'lodash/debounce';
 
@@ -59,8 +59,17 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
         size={tileConfig.tileSize}
         grid={grid}
         editable={editable}
-        onTileClick={(x, y, target) => {
-          setGrid(grid.setTile(x, y, t => t.withColor(target)));
+        onTileClick={(x, y, target, flood) => {
+          const tile = grid.getTile(x, y);
+          console.log('tile', tile, target, flood);
+          if (flood && target === Color.Gray) {
+            // target is Color.Gray if the tile is already the target color
+            setGrid(grid.floodFillAll(Color.Gray, tile.color));
+          } else if (flood && !tile.fixed) {
+            setGrid(grid.floodFill({ x, y }, Color.Gray, target));
+          } else if (!tile.fixed) {
+            setGrid(grid.setTile(x, y, t => t.withColor(target)));
+          }
         }}
       >
         <SymbolOverlay

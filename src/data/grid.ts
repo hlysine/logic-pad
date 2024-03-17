@@ -268,4 +268,24 @@ export default class GridData {
       }
     }
   }
+
+  public floodFill(position: Position, from: Color, to: Color): GridData {
+    const tiles = array(this.width, this.height, (x, y) => this.getTile(x, y));
+    this.iterateArea(
+      position,
+      t => t.color === from,
+      (tile, x, y) => {
+        tiles[y][x] = tile.withColor(to);
+      }
+    );
+    return this.copyWith({ tiles });
+  }
+
+  public floodFillAll(from: Color, to: Color): GridData {
+    return this.copyWith({
+      tiles: this.tiles.map(row =>
+        row.map(tile => (tile.color === from ? tile.withColor(to) : tile))
+      ),
+    });
+  }
 }

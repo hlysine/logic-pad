@@ -10,6 +10,7 @@ import { useEdit } from '../EditContext';
 import LetterSymbol from '../../data/symbols/letterSymbol';
 import NumberSymbol from '../../data/symbols/numberSymbol';
 import UndercluedRule from '../../data/rules/undercluedRule';
+import CompletePatternRule from '../../data/rules/completePatternRule';
 
 const PUZZLES = [
   {
@@ -170,6 +171,19 @@ const PUZZLES = [
       'nnnnnnbWnn',
       'nWnnWnnbnn',
       'nnnnnnnnnn',
+    ]),
+  },
+  {
+    name: 'Pattern',
+    grid: GridData.create([
+      'BWB.WWB.BWW.nnn',
+      'WBB.BWB.WBB.nnn',
+      'WBW.WBB.BBW.nnn',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'BWB.WWB.BWW.WBW',
+      'WBB.BWB.WBB.WWB',
+      'WBW.WBB.BBW.BBB',
     ]),
   },
 ];

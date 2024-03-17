@@ -74,7 +74,7 @@ function renderItem(item: RoadmapItem) {
 
 export default memo(function Roadmap() {
   return (
-    <ul className="menu menu-vertical flex-nowrap bg-base-200 rounded-box overflow-y-auto overflow-x-visible basis-0 flex-1 justify-self-stretch">
+    <ul className="menu menu-vertical flex-nowrap bg-base-200 rounded-box overflow-y-auto overflow-x-visible basis-0 flex-1 justify-self-stretch text-base-content">
       {roadmap.map(renderItem)}
     </ul>
   );

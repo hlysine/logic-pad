@@ -1,7 +1,15 @@
 import GridData from '../grid';
-import { RuleState } from '../primitives';
+import { GridState, RuleState } from '../primitives';
 import Instruction from '../instruction';
 
 export default abstract class Rule extends Instruction {
   public abstract validateGrid(grid: GridData): RuleState;
+
+  public statusText(
+    _grid: GridData,
+    _solution: GridData | null,
+    _state: GridState
+  ): string | null {
+    return null;
+  }
 }

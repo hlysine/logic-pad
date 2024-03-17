@@ -258,4 +258,14 @@ export default class GridData {
       row.every(tile => !tile.exists || tile.color !== Color.Gray)
     );
   }
+
+  public forEach(
+    callback: (tile: TileData, x: number, y: number) => void
+  ): void {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        callback(this.getTile(x, y), x, y);
+      }
+    }
+  }
 }

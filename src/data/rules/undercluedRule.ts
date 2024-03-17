@@ -1,5 +1,5 @@
 import GridData from '../grid';
-import { RuleState, State } from '../primitives';
+import { Color, GridState, RuleState, State } from '../primitives';
 import NumberSymbol from '../symbols/numberSymbol';
 import QuestionMarkSign from '../symbols/signs/questionMarkSign';
 import Rule from './rule';
@@ -40,5 +40,22 @@ export default class UndercluedRule extends Rule {
 
   public get validateWithSolution(): boolean {
     return true;
+  }
+
+  public statusText(
+    grid: GridData,
+    solution: GridData | null,
+    _state: GridState
+  ): string | null {
+    if (solution === null) return null;
+    let solutionCount = 0;
+    let gridCount = 0;
+    grid.forEach(tile => {
+      if (!tile.fixed && tile.color !== Color.Gray) gridCount++;
+    });
+    solution.forEach(tile => {
+      if (!tile.fixed && tile.color !== Color.Gray) solutionCount++;
+    });
+    return `Tiles Remaining: ${solutionCount - gridCount}`;
   }
 }

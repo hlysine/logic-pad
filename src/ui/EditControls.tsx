@@ -40,7 +40,7 @@ export default memo(function EditControls() {
   useHotkeys('y', redo);
 
   return (
-    <ul className="menu menu-horizontal justify-center bg-base-200 text-base-content rounded-box w-full">
+    <ul className="menu menu-horizontal justify-center bg-base-100 shadow-md text-base-content rounded-box w-full">
       <li className={cn(undoStack.length === 0 && 'disabled')}>
         <a className="tooltip" data-tip="Undo (Z)" onClick={undo}>
           <FiCornerUpLeft />

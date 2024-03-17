@@ -65,7 +65,7 @@ export default memo(function InstructionList({
         ))}
       </div>
       {statusText.trim().length > 0 && (
-        <div className="card grow-0 shrink-0 card-side bg-base-100 shadow-xl m-4 ml-0 pl-4 self-stretch">
+        <div className="card grow-0 shrink-0 card-side bg-base-100 shadow-md m-4 ml-0 pl-4 self-stretch">
           <figure className="shrink-0">
             <HiOutlineLightBulb size={36} />
           </figure>

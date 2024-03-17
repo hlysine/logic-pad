@@ -61,7 +61,10 @@ export default function App() {
           <div className="flex flex-col items-stretch min-h-full w-full">
             <header className="flex flex-wrap justify-between items-center gap-4 px-8 py-2">
               <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
-              <div role="tablist" className="tabs tabs-boxed tabs-lg">
+              <div
+                role="tablist"
+                className="tabs tabs-boxed tabs-lg bg-base-100 shadow-lg"
+              >
                 <ModeButton
                   active={mode === Mode.Create}
                   mode={Mode.Create}

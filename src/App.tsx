@@ -50,7 +50,6 @@ export default function App() {
 
   useEffect(() => {
     themeChange(false);
-    // 👆 false parameter is required for react project
   }, []);
 
   return (

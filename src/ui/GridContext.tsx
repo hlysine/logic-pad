@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import GridData from '../data/grid';
 import { GridState, RuleState, State } from '../data/primitives';
 import { useEdit } from './EditContext';
@@ -110,12 +110,6 @@ export default function GridContext({
   const [grid, setGrid] = useState(defaultGrid);
   const [solution, setSolution] = useState<GridData | null>(null);
   const [state, setState] = useState(defaultState);
-
-  useEffect(() => {
-    setState(validateGrid(grid, solution));
-    recordEdit(grid);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const setGridRaw: GridContext['setGridRaw'] = (grid, sol) => {
     setGrid(grid);

@@ -21,7 +21,7 @@ export function fg(color: Color) {
     case Color.Light:
       return cn('text-black');
     case Color.Gray:
-      return cn('text-black');
+      return cn('text-neutral-content');
   }
 }
 

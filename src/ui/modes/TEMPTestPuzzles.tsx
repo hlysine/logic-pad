@@ -8,6 +8,8 @@ import GridData from '../../data/grid';
 import GridConnections from '../../data/gridConnections';
 import { useEdit } from '../EditContext';
 import LetterSymbol from '../../data/symbols/letterSymbol';
+import NumberSymbol from '../../data/symbols/numberSymbol';
+import UndercluedRule from '../../data/rules/undercluedRule';
 
 const PUZZLES = [
   {
@@ -131,6 +133,30 @@ const PUZZLES = [
       .addSymbol(new LetterSymbol(12, 16, 'F'))
       .addSymbol(new LetterSymbol(14, 16, 'C'))
       .addSymbol(new LetterSymbol(16, 16, 'E')),
+  },
+  {
+    name: 'Underclued',
+    grid: GridData.create([
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nWWnnnnWnn',
+      'nnnnnnnnnn',
+      'nnnnnnWnnn',
+      'nnnWnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnWnn',
+      'nWnnWnnnnn',
+      'nnnnnnnnnn',
+    ])
+      .addRule(new UndercluedRule())
+      .addSymbol(new LetterSymbol(2, 2, 'A'))
+      .addSymbol(new LetterSymbol(7, 7, 'A'))
+      .addSymbol(new NumberSymbol(1, 2, 20))
+      .addSymbol(new NumberSymbol(7, 2, 8))
+      .addSymbol(new NumberSymbol(6, 4, 2))
+      .addSymbol(new NumberSymbol(3, 5, 2))
+      .addSymbol(new NumberSymbol(1, 8, 2))
+      .addSymbol(new NumberSymbol(4, 8, 2)),
   },
 ];
 

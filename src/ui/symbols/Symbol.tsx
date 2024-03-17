@@ -3,6 +3,7 @@ import NumberSymbol from './NumberSymbol';
 import LetterSymbol from './LetterSymbol';
 import { memo, useMemo } from 'react';
 import ViewpointSymbol from './ViewpointSymbol';
+import QuestionMarkSign from './signs/QuestionMarkSign';
 
 export interface SymbolProps<T extends SymbolData> {
   size: number;
@@ -17,6 +18,7 @@ const registry = new Map<
 registry.set('number', NumberSymbol);
 registry.set('letter', LetterSymbol);
 registry.set('viewpoint', ViewpointSymbol);
+registry.set('question_mark', QuestionMarkSign);
 
 export default memo(function Symbol({
   size,

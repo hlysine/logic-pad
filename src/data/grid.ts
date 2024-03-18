@@ -197,11 +197,11 @@ export default class GridData {
     return undefined;
   }
 
-  public iterateArea(
+  public iterateArea<T>(
     position: Position,
     predicate: (tile: TileData) => boolean,
-    callback: (tile: TileData, x: number, y: number) => void
-  ): void {
+    callback: (tile: TileData, x: number, y: number) => undefined | T
+  ): T | undefined {
     const tile = this.getTile(position.x, position.y);
     if (!tile.exists || !predicate(tile)) {
       return;
@@ -215,7 +215,8 @@ export default class GridData {
         continue;
       }
       visited.add(key);
-      callback(this.getTile(x, y), x, y);
+      const ret = callback(this.getTile(x, y), x, y);
+      if (ret !== undefined) return ret;
       for (const offset of NEIGHBOR_OFFSETS) {
         const next = { x: x + offset.x, y: y + offset.y };
         if (
@@ -231,12 +232,12 @@ export default class GridData {
     }
   }
 
-  public iterateDirection(
+  public iterateDirection<T>(
     position: Position,
     direction: Direction,
     predicate: (tile: TileData) => boolean,
-    callback: (tile: TileData, x: number, y: number) => void
-  ): void {
+    callback: (tile: TileData, x: number, y: number) => T | undefined
+  ): T | undefined {
     let current = position;
     while (
       current.x >= 0 &&
@@ -248,7 +249,8 @@ export default class GridData {
       if (!tile.exists || !predicate(tile)) {
         break;
       }
-      callback(tile, current.x, current.y);
+      const ret = callback(tile, current.x, current.y);
+      if (ret !== undefined) return ret;
       current = move(current, direction);
     }
   }

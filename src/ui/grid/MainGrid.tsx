@@ -61,7 +61,6 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
         editable={editable}
         onTileClick={(x, y, target, flood) => {
           const tile = grid.getTile(x, y);
-          console.log('tile', tile, target, flood);
           if (flood && target === Color.Gray) {
             // target is Color.Gray if the tile is already the target color
             setGrid(grid.floodFillAll(Color.Gray, tile.color));

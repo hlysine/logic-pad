@@ -42,6 +42,7 @@ export default class LetterSymbol extends Symbol {
   public validateSymbol(grid: GridData): State {
     let complete = true;
     const visited = array(grid.width, grid.height, () => false);
+    const connected = array(grid.width, grid.height, () => false);
     const color = grid.getTile(this.x, this.y).color;
     if (color !== Color.Gray) {
       grid.iterateArea(
@@ -50,6 +51,13 @@ export default class LetterSymbol extends Symbol {
         (tile, x, y) => {
           visited[y][x] = true;
           if (tile.color === Color.Gray) complete = false;
+        }
+      );
+      grid.iterateArea(
+        { x: this.x, y: this.y },
+        tile => tile.color === color,
+        (_, x, y) => {
+          connected[y][x] = true;
         }
       );
     } else {
@@ -67,6 +75,8 @@ export default class LetterSymbol extends Symbol {
           ) {
             return State.Error;
           }
+        } else if (color !== Color.Gray && connected[symbol.y][symbol.x]) {
+          return State.Error;
         }
       }
     }

@@ -140,7 +140,8 @@ export default class BanPatternRule extends Rule {
         for (let x = 0; x <= grid.width - pattern.width; x++) {
           let match = true;
           for (const tile of pattern.tiles) {
-            if (grid.getTile(x + tile.x, y + tile.y).color !== tile.color) {
+            const t = grid.getTile(x + tile.x, y + tile.y);
+            if (!t.exists || t.color !== tile.color) {
               match = false;
               break;
             }

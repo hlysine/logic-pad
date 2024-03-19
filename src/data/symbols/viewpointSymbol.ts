@@ -20,8 +20,10 @@ export default class ViewpointSymbol extends Symbol {
     this.number = number;
   }
 
+  public static readonly id = `viewpoint`;
+
   public get id(): string {
-    return `viewpoint`;
+    return ViewpointSymbol.id;
   }
 
   public get explanation(): string {

@@ -1,24 +1,6 @@
+import allSymbols, { SymbolProps } from '../../allSymbols';
 import SymbolData from '../../data/symbols/symbol';
-import NumberSymbol from './NumberSymbol';
-import LetterSymbol from './LetterSymbol';
 import { memo, useMemo } from 'react';
-import ViewpointSymbol from './ViewpointSymbol';
-import QuestionMarkSign from './signs/QuestionMarkSign';
-
-export interface SymbolProps<T extends SymbolData> {
-  size: number;
-  textClass: string;
-  symbol: T;
-}
-
-const registry = new Map<
-  string,
-  React.NamedExoticComponent<SymbolProps<any>>
->();
-registry.set('number', NumberSymbol);
-registry.set('letter', LetterSymbol);
-registry.set('viewpoint', ViewpointSymbol);
-registry.set('question_mark', QuestionMarkSign);
 
 export default memo(function Symbol({
   size,
@@ -34,7 +16,7 @@ export default memo(function Symbol({
     }),
     [size, symbol.x, symbol.y]
   );
-  const Component = registry.get(symbol.id);
+  const Component = allSymbols.get(symbol.id);
   if (!Component) {
     throw new Error(`No component for symbol: ${symbol.id}`);
   }

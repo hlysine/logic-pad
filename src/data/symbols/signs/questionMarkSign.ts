@@ -11,8 +11,10 @@ export default class QuestionMarkSign extends Sign {
     .addSymbol(new QuestionMarkSign(1, 0))
     .addSymbol(new QuestionMarkSign(0, 1));
 
+  public static readonly id = `question_mark`;
+
   public get id(): string {
-    return `question_mark`;
+    return QuestionMarkSign.id;
   }
 
   public get explanation(): string {

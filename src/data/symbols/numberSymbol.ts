@@ -21,8 +21,10 @@ export default class NumberSymbol extends Symbol {
     this.number = number;
   }
 
+  public static readonly id = `number`;
+
   public get id(): string {
-    return `number`;
+    return NumberSymbol.id;
   }
 
   public get explanation(): string {

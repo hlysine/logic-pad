@@ -27,8 +27,10 @@ export default class LetterSymbol extends Symbol {
     this.letter = letter;
   }
 
+  public static readonly id = `letter`;
+
   public get id(): string {
-    return `letter`;
+    return LetterSymbol.id;
   }
 
   public get explanation(): string {

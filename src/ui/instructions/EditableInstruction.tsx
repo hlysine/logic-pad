@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import InstructionData from '../../data/instruction';
 import { State } from '../../data/primitives';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
@@ -18,19 +18,19 @@ export default memo(function EditableInstruction({
 }: InstructionProps) {
   const { grid, setGrid } = useGrid();
 
-  const display = useMemo(
-    () => (
-      <InstructionBase instruction={instruction} state={state}>
-        {instruction instanceof Rule && (
-          <div className="absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100">
-            <button className="btn btn-accent btn-square shadow-glow-md shadow-accent text-accent-content">
-              <MdOutlineDeleteOutline size={24} />
-            </button>
-          </div>
-        )}
-      </InstructionBase>
-    ),
-    [instruction, state]
+  const display = (
+    <InstructionBase instruction={instruction} state={state}>
+      {instruction instanceof Rule && (
+        <div className="absolute inset-0 flex justify-center items-center opacity-0 hover:opacity-100">
+          <button
+            className="btn btn-accent btn-square shadow-glow-md shadow-accent text-accent-content"
+            onClick={() => setGrid(grid.removeRule(instruction))}
+          >
+            <MdOutlineDeleteOutline size={24} />
+          </button>
+        </div>
+      )}
+    </InstructionBase>
   );
 
   if (instruction instanceof Rule) {

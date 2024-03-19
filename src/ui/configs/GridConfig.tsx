@@ -18,7 +18,7 @@ export default memo(function GridConfig({
 }: GridConfigProps) {
   const grid = instruction[
     config.field as keyof typeof instruction
-  ] as GridData;
+  ] as unknown as GridData;
   return (
     <div className="flex p-2 justify-between items-center">
       <span className="text-lg">{config.description}</span>

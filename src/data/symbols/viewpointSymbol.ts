@@ -28,7 +28,7 @@ export default class ViewpointSymbol extends Symbol {
     return '*Viewpoint Numbers* count visible cells in the four directions';
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return ViewpointSymbol.EXAMPLE_GRID;
   }
 

@@ -107,7 +107,7 @@ export default class BanPatternRule extends Rule {
     return `Don't make this pattern`;
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     let minX = Number.POSITIVE_INFINITY;
     let minY = Number.POSITIVE_INFINITY;
     let maxX = Number.NEGATIVE_INFINITY;

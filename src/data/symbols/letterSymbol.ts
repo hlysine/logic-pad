@@ -35,7 +35,7 @@ export default class LetterSymbol extends Symbol {
     return '*Letters* must be sorted into one type per area';
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return LetterSymbol.EXAMPLE_GRID;
   }
 

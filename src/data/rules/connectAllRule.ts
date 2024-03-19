@@ -42,7 +42,7 @@ export default class ConnectAllRule extends Rule {
     return `Connect all ${this.color} cells`;
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return this.color === Color.Light
       ? ConnectAllRule.EXAMPLE_GRID_LIGHT
       : ConnectAllRule.EXAMPLE_GRID_DARK;

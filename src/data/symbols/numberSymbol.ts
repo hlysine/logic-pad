@@ -29,7 +29,7 @@ export default class NumberSymbol extends Symbol {
     return `*Area Numbers* must equal region sizes`;
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return NumberSymbol.EXAMPLE_GRID;
   }
 

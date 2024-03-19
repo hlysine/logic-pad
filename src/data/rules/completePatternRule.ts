@@ -18,7 +18,7 @@ export default class CompletePatternRule extends Rule {
     return `Complete the pattern`;
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return CompletePatternRule.EXAMPLE_GRID;
   }
 

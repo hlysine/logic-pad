@@ -13,7 +13,7 @@ export default abstract class Instruction {
 
   public abstract get explanation(): string;
 
-  public abstract get exampleGrid(): GridData;
+  public abstract createExampleGrid(): GridData;
 
   public get configs(): readonly AnyConfig[] | null {
     return null;

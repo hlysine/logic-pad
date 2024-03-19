@@ -19,12 +19,12 @@ export default class QuestionMarkSign extends Sign {
     return `*Question Marks* indicate that a cell is uncertain`;
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return QuestionMarkSign.EXAMPLE_GRID;
   }
 
   // eslint-disable-next-line no-empty-pattern
-  public copyWith({}: {}): this {
-    return new QuestionMarkSign(this.x, this.y) as this;
+  public copyWith({ x, y }: { x?: number; y?: number }): this {
+    return new QuestionMarkSign(x ?? this.x, y ?? this.y) as this;
   }
 }

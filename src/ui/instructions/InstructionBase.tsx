@@ -19,7 +19,10 @@ export default memo(function Instruction({
   children,
 }: InstructionBaseProps) {
   state = state ?? State.Incomplete;
-  const exampleGrid = useMemo(() => instruction.exampleGrid, [instruction]);
+  const exampleGrid = useMemo(
+    () => instruction.createExampleGrid(),
+    [instruction]
+  );
   return (
     <div className="flex flex-col w-[320px] items-stretch">
       <div

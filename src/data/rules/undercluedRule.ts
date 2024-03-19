@@ -25,7 +25,7 @@ export default class UndercluedRule extends Rule {
     return `*Underclued Grid:* Mark only what is definitely true`;
   }
 
-  public get exampleGrid(): GridData {
+  public createExampleGrid(): GridData {
     return UndercluedRule.EXAMPLE_GRID;
   }
 

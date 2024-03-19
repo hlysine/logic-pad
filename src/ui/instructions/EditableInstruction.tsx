@@ -6,6 +6,7 @@ import Rule from '../../data/rules/rule';
 import InstructionBase from './InstructionBase';
 import { useGrid } from '../GridContext';
 import Config from '../configs/Config';
+import { cn } from '../../utils';
 
 export interface InstructionProps {
   instruction: InstructionData;
@@ -36,25 +37,35 @@ export default memo(function EditableInstruction({
   if (instruction instanceof Rule) {
     return (
       <div className="dropdown dropdown-left">
-        <div tabIndex={0} role="button" className="cursor-pointer">
-          {display}
-        </div>
         <div
           tabIndex={0}
-          className="p-4 m-2 dropdown-content z-[1] bg-secondary text-secondary-content shadow-xl rounded-box w-[320px]"
+          role="button"
+          className={cn(
+            instruction.configs !== null ? 'cursor-pointer' : 'cursor-default'
+          )}
         >
-          {instruction.configs?.map(config => (
-            <Config
-              key={`${config.field}: ${config.type}`}
-              instruction={instruction}
-              config={config}
-              setConfig={(field, value) => {
-                const newInstruction = instruction.copyWith({ [field]: value });
-                setGrid(grid.replaceRule(instruction, newInstruction));
-              }}
-            />
-          ))}
+          {display}
         </div>
+        {instruction.configs !== null && (
+          <div
+            tabIndex={0}
+            className="p-4 m-2 dropdown-content z-[1] bg-secondary text-secondary-content shadow-xl rounded-box w-[320px]"
+          >
+            {instruction.configs?.map(config => (
+              <Config
+                key={`${config.field}: ${config.type}`}
+                instruction={instruction}
+                config={config}
+                setConfig={(field, value) => {
+                  const newInstruction = instruction.copyWith({
+                    [field]: value,
+                  });
+                  setGrid(grid.replaceRule(instruction, newInstruction));
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   } else {

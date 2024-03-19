@@ -29,7 +29,7 @@ export default memo(function InstructionSearch() {
         <input
           type="text"
           tabIndex={0}
-          placeholder="Add a new rule"
+          placeholder="Add a new rule..."
           className="input w-full max-w-xs"
           value={search}
           onChange={e => setSearch(e.target.value)}

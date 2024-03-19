@@ -5,7 +5,7 @@ import QuestionMarkSign from '../symbols/signs/questionMarkSign';
 import Rule from './rule';
 
 export default class UndercluedRule extends Rule {
-  private static EXAMPLE_GRID = GridData.create([
+  private static readonly EXAMPLE_GRID = GridData.create([
     'nbnnn',
     'bwbnn',
     'nbnnn',
@@ -17,8 +17,14 @@ export default class UndercluedRule extends Rule {
     .addSymbol(new QuestionMarkSign(2, 2))
     .addSymbol(new QuestionMarkSign(3, 3));
 
+  public static readonly id = `underclued`;
+
+  public static readonly searchVariants = [
+    new UndercluedRule().searchVariant(),
+  ];
+
   public get id(): string {
-    return `underclued`;
+    return UndercluedRule.id;
   }
 
   public get explanation(): string {

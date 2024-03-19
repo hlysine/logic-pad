@@ -81,10 +81,17 @@ function generateCache(grid: GridData): CachedPattern[] {
 }
 
 export default class BanPatternRule extends Rule {
-  private static CONFIGS: readonly AnyConfig[] = [
+  private static readonly EXAMPLE_GRID = GridData.create([
+    'nnnnn',
+    'wwwwn',
+    'nnnnn',
+    'nnnnn',
+  ]);
+
+  private static readonly CONFIGS: readonly AnyConfig[] = [
     {
       type: ConfigType.Grid,
-      default: GridData.create(['nnnnn', 'wwwwn', 'nnnnn', 'nnnnn']),
+      default: BanPatternRule.EXAMPLE_GRID,
       field: 'pattern',
       description: 'Pattern',
     },
@@ -99,8 +106,14 @@ export default class BanPatternRule extends Rule {
     this.cache = generateCache(this.pattern);
   }
 
+  public static readonly id = `ban_pattern`;
+
+  public static readonly searchVariants = [
+    new BanPatternRule(BanPatternRule.EXAMPLE_GRID).searchVariant(),
+  ];
+
   public get id(): string {
-    return `ban_pattern`;
+    return BanPatternRule.id;
   }
 
   public get explanation(): string {

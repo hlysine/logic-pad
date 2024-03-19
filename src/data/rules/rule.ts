@@ -2,6 +2,11 @@ import GridData from '../grid';
 import { GridState, RuleState } from '../primitives';
 import Instruction from '../instruction';
 
+export interface SearchVariant {
+  description: string;
+  rule: Rule;
+}
+
 export default abstract class Rule extends Instruction {
   public abstract validateGrid(grid: GridData): RuleState;
 
@@ -11,5 +16,12 @@ export default abstract class Rule extends Instruction {
     _state: GridState
   ): string | null {
     return null;
+  }
+
+  public searchVariant(): SearchVariant {
+    return {
+      description: this.explanation,
+      rule: this,
+    };
   }
 }

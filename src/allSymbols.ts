@@ -23,16 +23,16 @@ const allSymbols = new Map<
   React.NamedExoticComponent<SymbolProps<any>>
 >();
 
-function registerSymbol<T extends SymbolData>(
+function register<T extends SymbolData>(
   constructor: SymbolConstructor<T>,
   component: React.NamedExoticComponent<SymbolProps<T>>
 ) {
   allSymbols.set(constructor.id, component);
 }
 
-registerSymbol(NumberSymbolData, NumberSymbolUI);
-registerSymbol(LetterSymbolData, LetterSymbolUI);
-registerSymbol(ViewpointSymbolData, ViewpointSymbolUI);
-registerSymbol(QuestionMarkSignData, QuestionMarkSignUI);
+register(NumberSymbolData, NumberSymbolUI);
+register(LetterSymbolData, LetterSymbolUI);
+register(ViewpointSymbolData, ViewpointSymbolUI);
+register(QuestionMarkSignData, QuestionMarkSignUI);
 
 export default allSymbols;

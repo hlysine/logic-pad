@@ -5,21 +5,21 @@ import { Color, Position, RuleState, State } from '../primitives';
 import Rule from './rule';
 
 export default class ConnectAllRule extends Rule {
-  private static EXAMPLE_GRID_LIGHT = GridData.create([
+  private static readonly EXAMPLE_GRID_LIGHT = GridData.create([
     'bwwwb',
     'bwbww',
     'wwwbb',
     'wbwww',
   ]);
 
-  private static EXAMPLE_GRID_DARK = GridData.create([
+  private static readonly EXAMPLE_GRID_DARK = GridData.create([
     'wbbbw',
     'wbwbb',
     'bbbww',
     'bwbbb',
   ]);
 
-  private static CONFIGS: readonly AnyConfig[] = [
+  private static readonly CONFIGS: readonly AnyConfig[] = [
     {
       type: ConfigType.Color,
       default: Color.Light,
@@ -34,8 +34,15 @@ export default class ConnectAllRule extends Rule {
     this.color = color;
   }
 
+  public static readonly id = `connect_all`;
+
+  public static readonly searchVariants = [
+    new ConnectAllRule(Color.Light).searchVariant(),
+    new ConnectAllRule(Color.Dark).searchVariant(),
+  ];
+
   public get id(): string {
-    return `connect_all`;
+    return ConnectAllRule.id;
   }
 
   public get explanation(): string {

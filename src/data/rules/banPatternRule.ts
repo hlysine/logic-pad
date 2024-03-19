@@ -1,3 +1,4 @@
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { array } from '../helper';
 import { Color, RuleState, State } from '../primitives';
@@ -80,6 +81,15 @@ function generateCache(grid: GridData): CachedPattern[] {
 }
 
 export default class BanPatternRule extends Rule {
+  private static CONFIGS: readonly AnyConfig[] = [
+    {
+      type: ConfigType.Grid,
+      default: GridData.create(['nnnnn', 'wwwwn', 'nnnnn', 'nnnnn']),
+      field: 'pattern',
+      description: 'Pattern',
+    },
+  ];
+
   public readonly pattern: GridData;
   private readonly cache: CachedPattern[];
 
@@ -98,7 +108,30 @@ export default class BanPatternRule extends Rule {
   }
 
   public get exampleGrid(): GridData {
-    return this.pattern;
+    let minX = Number.POSITIVE_INFINITY;
+    let minY = Number.POSITIVE_INFINITY;
+    let maxX = Number.NEGATIVE_INFINITY;
+    let maxY = Number.NEGATIVE_INFINITY;
+    this.pattern.forEach((tile, x, y) => {
+      if (tile.color !== Color.Gray && tile.exists) {
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    });
+    const width = maxX - minX + 1;
+    const height = maxY - minY + 1;
+    const tiles = array(width, height, (x, y) => {
+      const tile = this.pattern.getTile(x + minX, y + minY);
+      if (!tile.exists || tile.color !== Color.Gray) return tile;
+      return tile.withExists(false);
+    });
+    return new GridData(width, height, tiles);
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return BanPatternRule.CONFIGS;
   }
 
   public validateGrid(grid: GridData): RuleState {

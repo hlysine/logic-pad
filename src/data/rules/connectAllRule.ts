@@ -1,3 +1,4 @@
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { array, minBy } from '../helper';
 import { Color, Position, RuleState, State } from '../primitives';
@@ -18,6 +19,16 @@ export default class ConnectAllRule extends Rule {
     'bwbbb',
   ]);
 
+  private static CONFIGS: readonly AnyConfig[] = [
+    {
+      type: ConfigType.Color,
+      default: Color.Light,
+      allowGray: false,
+      field: 'color',
+      description: 'Color',
+    },
+  ];
+
   public constructor(public readonly color: Color) {
     super();
     this.color = color;
@@ -35,6 +46,10 @@ export default class ConnectAllRule extends Rule {
     return this.color === Color.Light
       ? ConnectAllRule.EXAMPLE_GRID_LIGHT
       : ConnectAllRule.EXAMPLE_GRID_DARK;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return ConnectAllRule.CONFIGS;
   }
 
   public validateGrid(grid: GridData): RuleState {

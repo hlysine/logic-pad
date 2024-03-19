@@ -1,3 +1,4 @@
+import { AnyConfig } from './config';
 import GridData from './grid';
 
 export default abstract class Instruction {
@@ -13,6 +14,10 @@ export default abstract class Instruction {
   public abstract get explanation(): string;
 
   public abstract get exampleGrid(): GridData;
+
+  public get configs(): readonly AnyConfig[] | null {
+    return null;
+  }
 
   public abstract copyWith(props: { [key: string]: any }): this;
 

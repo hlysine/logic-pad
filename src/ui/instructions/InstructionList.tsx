@@ -50,7 +50,6 @@ export default memo(function InstructionList({
           <Instruction
             key={rule.id + i}
             instruction={rule}
-            index={i}
             state={state?.rules[i]?.state}
           />
         ))}
@@ -59,7 +58,6 @@ export default memo(function InstructionList({
           <Instruction
             key={key}
             instruction={grid.symbols.get(key)![0]}
-            index={null}
             state={symbolMap.get(key)}
           />
         ))}

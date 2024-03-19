@@ -27,3 +27,7 @@
   min-width: 0;
   min-height: 0;
 }
+
+summary::marker {
+  content: '';
+}

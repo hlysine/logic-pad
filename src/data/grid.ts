@@ -153,8 +153,14 @@ export default class GridData {
     return this.withRules(rules => [...rules, rule]);
   }
 
-  public removeRule(rule: string): GridData {
-    return this.withRules(rules => rules.filter(r => r.id !== rule));
+  public removeRule(rule: Rule): GridData {
+    return this.withRules(rules => rules.filter(r => r !== rule));
+  }
+
+  public replaceRule(oldRule: Rule, newRule: Rule): GridData {
+    return this.withRules(rules =>
+      rules.map(r => (r === oldRule ? newRule : r))
+    );
   }
 
   public resize(width: number, height: number): GridData {

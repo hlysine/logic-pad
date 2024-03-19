@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import Instruction from '../instructions/Instruction';
 import InstructionList from '../instructions/InstructionList';
 import EditControls from '../EditControls';
 import MainGrid from '../grid/MainGrid';
+import EditableInstruction from '../instructions/EditableInstruction';
 
 export default memo(function CreateMode() {
   return (
@@ -15,10 +15,10 @@ export default memo(function CreateMode() {
       </div>
       <div className="grow shrink flex justify-start items-center p-0">
         <div className="flex shrink-0 grow justify-center items-center m-0 p-0 border-0">
-          <MainGrid editable={false} />
+          <MainGrid editable={true} />
         </div>
       </div>
-      <InstructionList>{Instruction}</InstructionList>
+      <InstructionList>{EditableInstruction}</InstructionList>
     </div>
   );
 });

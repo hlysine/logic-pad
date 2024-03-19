@@ -81,12 +81,12 @@ const PUZZLES = [
       )
       .addRule(
         new BanPatternRule(
-          GridData.create(['.bbb.', 'bb.bb', '.bbb.', '..b..'])
+          GridData.create(['nbbbn', 'bbnbb', 'nbbbn', 'nnbnn'])
         )
       )
       .addRule(
         new BanPatternRule(
-          GridData.create(['.bbb.', 'wb.bw', '.bbb.', '..w..'])
+          GridData.create(['nbbbn', 'wbnbw', 'nbbbn', 'nnwnn'])
         )
       )
       .addRule(new ConnectAllRule(Color.Dark))

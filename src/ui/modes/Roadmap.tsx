@@ -23,6 +23,7 @@ const roadmap: RoadmapItem[] = [
     'Spiral',
     'All ___ regions have area #',
     'Exactly # symbols per ___ region',
+    'All numbers are off by #',
   ],
   '~Add win confirmation',
   '~Add undo and restart',

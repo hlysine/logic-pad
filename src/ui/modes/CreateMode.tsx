@@ -5,6 +5,7 @@ import MainGrid from '../grid/MainGrid';
 import EditableInstruction from '../instructions/EditableInstruction';
 import RulerOverlay from '../grid/RulerOverlay';
 import { useGrid } from '../GridContext';
+import InstructionSearch from '../instructions/InstructionSearch';
 
 export default memo(function CreateMode() {
   const { grid } = useGrid();
@@ -23,7 +24,10 @@ export default memo(function CreateMode() {
           </MainGrid>
         </div>
       </div>
-      <InstructionList>{EditableInstruction}</InstructionList>
+      <div className="flex flex-col items-stretch self-stretch justify-center gap-4">
+        <InstructionSearch />
+        <InstructionList>{EditableInstruction}</InstructionList>
+      </div>
     </div>
   );
 });

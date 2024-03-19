@@ -12,6 +12,7 @@
   "dependencies": {
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
+    "fuzzysort": "^2.0.4",
     "lodash": "^4.17.21",
     "million": "^3.0.6",
     "react": "^18.2.0",

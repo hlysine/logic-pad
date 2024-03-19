@@ -38,7 +38,7 @@ export default memo(function Instruction({
         <div className="text-center py-1 px-4 flex justify-center items-center text-neutral-content">
           <AnnotatedText text={instruction.explanation} />
         </div>
-        <div className="shrink-0 relative">
+        <div className="shrink-0 relative min-h-[calc(28px*4)] flex items-center justify-center">
           <Grid size={28} grid={exampleGrid} editable={false}>
             {exampleGrid.symbols.size > 0 ? (
               <SymbolOverlay size={28} grid={exampleGrid} />

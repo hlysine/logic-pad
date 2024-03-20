@@ -20,7 +20,7 @@ const roadmap: RoadmapItem[] = [
     '~Viewpoint number',
     'Dart number',
     'Lotus',
-    'Spiral',
+    'Galaxy',
     'All ___ regions have area #',
     'Exactly # symbols per ___ region',
     'All numbers are off by #',

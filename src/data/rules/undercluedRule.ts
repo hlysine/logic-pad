@@ -39,8 +39,7 @@ export default class UndercluedRule extends Rule {
     return { state: State.Incomplete };
   }
 
-  // eslint-disable-next-line no-empty-pattern
-  public copyWith({}: {}): this {
+  public copyWith(_: object): this {
     return new UndercluedRule() as this;
   }
 

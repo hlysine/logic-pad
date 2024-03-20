@@ -9,7 +9,7 @@ interface RuleInfo {
   readonly searchVariants: SearchVariant[];
 }
 
-type RuleConstructor<T extends Rule> = (new (...args: any[]) => T) & RuleInfo;
+type RuleConstructor<T extends Rule> = (new (...args: never[]) => T) & RuleInfo;
 
 const allRules = new Map<string, RuleInfo>();
 

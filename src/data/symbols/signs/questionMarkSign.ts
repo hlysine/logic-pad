@@ -25,7 +25,6 @@ export default class QuestionMarkSign extends Sign {
     return QuestionMarkSign.EXAMPLE_GRID;
   }
 
-  // eslint-disable-next-line no-empty-pattern
   public copyWith({ x, y }: { x?: number; y?: number }): this {
     return new QuestionMarkSign(x ?? this.x, y ?? this.y) as this;
   }

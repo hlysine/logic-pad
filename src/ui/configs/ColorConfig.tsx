@@ -17,7 +17,7 @@ const ColorRadio = memo(function ColorRadio({
 }: {
   value: Color;
   setValue: (value: Color) => void;
-  color: string;
+  color: Color;
 }) {
   return (
     <input
@@ -33,7 +33,9 @@ const ColorRadio = memo(function ColorRadio({
       )}
       value={color}
       checked={value === color}
-      onChange={e => setValue(e.target.value as Color)}
+      onChange={e => {
+        setValue(e.target.value as Color);
+      }}
     />
   );
 });

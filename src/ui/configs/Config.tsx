@@ -12,6 +12,7 @@ export interface ConfigProps<T extends AnyConfig> {
 
 const registry = new Map<
   string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   React.NamedExoticComponent<ConfigProps<any>>
 >();
 registry.set(ConfigType.Color, ColorConfig);

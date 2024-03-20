@@ -32,8 +32,7 @@ export default class CompletePatternRule extends Rule {
     return { state: State.Incomplete };
   }
 
-  // eslint-disable-next-line no-empty-pattern
-  public copyWith({}: {}): this {
+  public copyWith(_: object): this {
     return new CompletePatternRule() as this;
   }
 

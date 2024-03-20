@@ -63,13 +63,6 @@ export default class GridData {
     return this.tiles[y][x];
   }
 
-  public setTile(x: number, y: number, tile: TileData): GridData;
-  public setTile(
-    x: number,
-    y: number,
-    transform: (tile: TileData) => TileData
-  ): GridData;
-
   public setTile(
     x: number,
     y: number,

@@ -14,13 +14,13 @@ export interface SymbolProps<T extends SymbolData> {
   symbol: T;
 }
 
-type SymbolConstructor<T extends SymbolData> = (new (...args: any[]) => T) & {
+type SymbolConstructor<T extends SymbolData> = (new (...args: never[]) => T) & {
   readonly id: string;
 };
 
 const allSymbols = new Map<
   string,
-  React.NamedExoticComponent<SymbolProps<any>>
+  React.NamedExoticComponent<SymbolProps<never>>
 >();
 
 function register<T extends SymbolData>(

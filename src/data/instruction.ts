@@ -19,7 +19,7 @@ export default abstract class Instruction {
     return null;
   }
 
-  public abstract copyWith(props: { [key: string]: any }): this;
+  public abstract copyWith(props: Record<string, unknown>): this;
 
   /**
    * Indicates that validation by logic is not available and the solution must be used for validation

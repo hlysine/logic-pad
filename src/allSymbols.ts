@@ -20,14 +20,17 @@ type SymbolConstructor<T extends SymbolData> = (new (...args: never[]) => T) & {
 
 const allSymbols = new Map<
   string,
-  React.NamedExoticComponent<SymbolProps<never>>
+  React.NamedExoticComponent<SymbolProps<SymbolData>>
 >();
 
 function register<T extends SymbolData>(
   constructor: SymbolConstructor<T>,
   component: React.NamedExoticComponent<SymbolProps<T>>
 ) {
-  allSymbols.set(constructor.id, component);
+  allSymbols.set(
+    constructor.id,
+    component as React.NamedExoticComponent<SymbolProps<SymbolData>>
+  );
 }
 
 register(NumberSymbolData, NumberSymbolUI);

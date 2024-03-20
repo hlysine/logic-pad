@@ -1,5 +1,4 @@
 import GridData from '../grid';
-import { array } from '../helper';
 import { Color, State } from '../primitives';
 import Symbol from './symbol';
 
@@ -41,7 +40,6 @@ export default class NumberSymbol extends Symbol {
     if (color === Color.Gray) return State.Incomplete;
     let completeCount = 0;
     let grayCount = 0;
-    const visited = array(grid.width, grid.height, () => false);
     grid.iterateArea(
       { x: this.x, y: this.y },
       tile => tile.color === Color.Gray || tile.color === color,
@@ -52,17 +50,10 @@ export default class NumberSymbol extends Symbol {
     grid.iterateArea(
       { x: this.x, y: this.y },
       tile => tile.color === color,
-      (_, x, y) => {
+      () => {
         completeCount++;
-        visited[y][x] = true;
       }
     );
-    for (const symbol of grid.symbols.get(this.id) ?? []) {
-      if (symbol !== this && symbol instanceof NumberSymbol) {
-        if (symbol.number !== this.number && visited[symbol.y][symbol.x])
-          return State.Error;
-      }
-    }
     if (completeCount > this.number || grayCount < this.number)
       return State.Error;
     else if (completeCount === this.number && completeCount === grayCount)

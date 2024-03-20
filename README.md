@@ -1,30 +1,29 @@
-# React + TypeScript + Vite
+# Logic Pad
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web app to create custom Logic Grid puzzles from Islands of Insight.
 
-Currently, two official plugins are available:
+This is intended as an unofficial companion to Islands of Insight, allowing you to create and play custom puzzles.
+It is not a replacement of the full game.
+You are strongly recommended to discover the grid rules in-game before using Logic Pad.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Note that this app is still early in development and major refactors are planned.
 
-## Expanding the ESLint configuration
+## Developing Logic Pad
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Node.js v18 is required for this project.
+I recommend using [Volta](https://volta.sh/) to set up your JS dev environment.
 
-- Configure the top-level `parserOptions` property like this:
+```bash
+# 1. Install yarn
+npm install -g yarn
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+# 2. Clone this repository
+git clone https://github.com/hlysine/logic-pad.git
+
+# 3. Restore dependencies
+cd logic-pad
+yarn
+
+# 4. Run the dev server
+yarn dev
 ```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list

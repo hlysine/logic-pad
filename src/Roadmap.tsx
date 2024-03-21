@@ -29,6 +29,7 @@ const roadmap: RoadmapItem[] = [
   '~Add undo and restart',
   '~Add flood painting',
   'Add tile counting by holding Ctrl',
+  'Isolate grids between solve and create modes',
   'Implement puzzle serialization',
   [
     'Optimizations',
@@ -41,9 +42,9 @@ const roadmap: RoadmapItem[] = [
     'Add color, fix and merge tools',
     'Add a tool for each symbol type',
     'Hide tools behind search bar',
-    'Add configurations for each rule',
-    'Hide rules behind search bar',
-    'Add puzzle name and author fields',
+    '~Set up rule configuration UI',
+    '~Hide rules behind search bar',
+    'Add puzzle metadata fields',
     'Add difficulty field',
   ],
 ];
@@ -73,6 +74,7 @@ function renderItem(item: RoadmapItem) {
   );
 }
 
+// million-ignore
 export default memo(function Roadmap() {
   return (
     <ul

@@ -9,6 +9,7 @@ import InstructionSearch from '../instructions/InstructionSearch';
 
 export default memo(function CreateMode() {
   const { grid } = useGrid();
+
   return (
     <div className="flex flex-1 justify-center items-center flex-wrap">
       <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">

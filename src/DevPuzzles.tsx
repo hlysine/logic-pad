@@ -213,6 +213,7 @@ export const DEV_PUZZLES = [
   },
 ];
 
+// million-ignore
 export default memo(function DevPuzzles() {
   const { grid, setGrid } = useGrid();
   const { clearHistory } = useEdit();

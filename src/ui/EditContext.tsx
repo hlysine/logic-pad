@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, memo, useContext, useState } from 'react';
 import GridData from '../data/grid';
 
 interface EditContext {
@@ -23,7 +23,7 @@ export const useEdit = () => {
   return useContext(context);
 };
 
-export default function EditContext({
+export default memo(function EditContext({
   children,
 }: {
   children: React.ReactNode;
@@ -95,4 +95,4 @@ export default function EditContext({
       {children}
     </context.Provider>
   );
-}
+});

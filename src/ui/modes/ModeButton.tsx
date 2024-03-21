@@ -19,7 +19,7 @@ export default memo(function ModeButton({
   return (
     <a
       role="tab"
-      className={cn('tab w-36', active && 'tab-active')}
+      className={cn('tab w-36 capitalize', active && 'tab-active')}
       onClick={() => startTransition(() => onModeChange(mode))}
     >
       {isPending ? (

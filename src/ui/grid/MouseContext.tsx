@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, memo, useContext, useState } from 'react';
 import { Color } from '../../data/primitives';
 
 interface MouseContext {
@@ -17,7 +17,7 @@ export const useMouseContext = () => {
   return useContext(context);
 };
 
-export default function MouseContext({
+export default memo(function MouseContext({
   children,
 }: {
   children: React.ReactNode;
@@ -38,4 +38,4 @@ export default function MouseContext({
       {children}
     </context.Provider>
   );
-}
+});

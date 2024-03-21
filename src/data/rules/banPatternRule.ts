@@ -83,6 +83,7 @@ function generateCache(grid: GridData): CachedPattern[] {
 export default class BanPatternRule extends Rule {
   private static readonly EXAMPLE_GRID = GridData.create([
     'nnnnn',
+    'nnnnn',
     'wwwwn',
     'nnnnn',
     'nnnnn',

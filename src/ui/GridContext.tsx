@@ -1,15 +1,18 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, memo, useContext, useState } from 'react';
 import GridData from '../data/grid';
 import { GridState, RuleState, State } from '../data/primitives';
 import { useEdit } from './EditContext';
+import { PuzzleMetadata } from '../data/puzzle';
 
 interface GridContext {
   grid: GridData;
   solution: GridData | null;
   state: GridState;
+  metadata: PuzzleMetadata;
   setGrid: (value: GridData, solution?: GridData | null) => void;
   setGridRaw: (value: GridData, solution?: GridData | null) => void;
   setState: (value: GridState) => void;
+  setMetadata: (value: PuzzleMetadata) => void;
 }
 
 const defaultGrid = GridData.create([]);
@@ -18,14 +21,23 @@ const defaultState: GridState = {
   rules: [],
   symbols: new Map(),
 };
+const defaultMetadata: PuzzleMetadata = {
+  title: '',
+  author: '',
+  description: '',
+  link: '',
+  difficulty: 0,
+};
 
 const context = createContext<GridContext>({
   grid: defaultGrid,
   solution: null,
   state: defaultState,
+  metadata: defaultMetadata,
   setGrid: () => {},
   setGridRaw: () => {},
   setState: () => {},
+  setMetadata: () => {},
 });
 
 export const useGrid = () => {
@@ -100,7 +112,7 @@ function validateGrid(grid: GridData, solution: GridData | null) {
   return { final: State.Satisfied, rules, symbols };
 }
 
-export default function GridContext({
+export default memo(function GridContext({
   children,
 }: {
   children: React.ReactNode;
@@ -110,6 +122,7 @@ export default function GridContext({
   const [grid, setGrid] = useState(defaultGrid);
   const [solution, setSolution] = useState<GridData | null>(null);
   const [state, setState] = useState(defaultState);
+  const [metadata, setMetadata] = useState<PuzzleMetadata>(defaultMetadata);
 
   const setGridRaw: GridContext['setGridRaw'] = (grid, sol) => {
     setGrid(grid);
@@ -123,15 +136,17 @@ export default function GridContext({
         grid,
         solution,
         state,
+        metadata,
         setGrid: (grid, sol) => {
           recordEdit(grid);
           setGridRaw(grid, sol);
         },
         setGridRaw,
         setState,
+        setMetadata,
       }}
     >
       {children}
     </context.Provider>
   );
-}
+});

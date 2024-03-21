@@ -147,7 +147,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     description: '',
   },
   {
-    title: 'Underclued',
+    title: 'Surrounded',
     grid: GridData.create([
       'nnnnnnnnnn',
       'nnnnnnnnnn',
@@ -187,7 +187,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     description: '',
   },
   {
-    title: 'Pattern',
+    title: 'Movement',
     grid: GridData.create([
       'BWB.WWB.BWW.nnn',
       'WBB.BWB.WBB.nnn',
@@ -204,7 +204,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     description: '',
   },
   {
-    title: 'Pattern 2',
+    title: 'Matrix',
     grid: GridData.create([
       'WWBWBBW.B',
       'BWWWBBW.B',

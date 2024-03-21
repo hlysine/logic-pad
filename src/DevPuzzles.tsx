@@ -11,10 +11,11 @@ import LetterSymbol from './data/symbols/letterSymbol';
 import NumberSymbol from './data/symbols/numberSymbol';
 import UndercluedRule from './data/rules/undercluedRule';
 import CompletePatternRule from './data/rules/completePatternRule';
+import Puzzle from './data/puzzle';
 
-export const DEV_PUZZLES = [
+export const DEV_PUZZLES: Puzzle[] = [
   {
-    name: 'Triangles',
+    title: 'Triangles',
     grid: GridData.create([
       'WWWWWWWWWWWWWWWWWWWWWWWWWBBBW',
       'WnnnnnnnnnnnnnnnnnnnnnnnnnnnW',
@@ -101,9 +102,13 @@ export const DEV_PUZZLES = [
       .addSymbol(new ViewpointSymbol(17, 23, 7))
       .addSymbol(new ViewpointSymbol(23, 23, 7)),
     solution: null,
+    difficulty: 7,
+    author: 'Lysine',
+    link: '',
+    description: '',
   },
   {
-    name: 'Flow',
+    title: 'Flow',
     grid: GridData.create([
       'nnnnnnnnnnnnnnnnn',
       'nBnBnBnBnBnBnBnBn',
@@ -136,9 +141,13 @@ export const DEV_PUZZLES = [
       .addSymbol(new LetterSymbol(14, 16, 'C'))
       .addSymbol(new LetterSymbol(16, 16, 'E')),
     solution: null,
+    difficulty: 5,
+    author: 'Lysine',
+    link: '',
+    description: '',
   },
   {
-    name: 'Underclued',
+    title: 'Underclued',
     grid: GridData.create([
       'nnnnnnnnnn',
       'nnnnnnnnnn',
@@ -172,9 +181,13 @@ export const DEV_PUZZLES = [
       'nWnnWnnbnn',
       'nnnnnnnnnn',
     ]),
+    difficulty: 6,
+    author: 'Lysine',
+    link: '',
+    description: '',
   },
   {
-    name: 'Pattern',
+    title: 'Pattern',
     grid: GridData.create([
       'BWB.WWB.BWW.nnn',
       'WBB.BWB.WBB.nnn',
@@ -185,9 +198,13 @@ export const DEV_PUZZLES = [
       'WBB.BWB.WBB.WWB',
       'WBW.WBB.BBW.BBB',
     ]),
+    difficulty: 9,
+    author: 'Lysine',
+    link: '',
+    description: '',
   },
   {
-    name: 'Pattern 2',
+    title: 'Pattern 2',
     grid: GridData.create([
       'WWBWBBW.B',
       'BWWWBBW.B',
@@ -210,17 +227,22 @@ export const DEV_PUZZLES = [
       '.........',
       'WBBBBWB..',
     ]),
+    difficulty: 8,
+    author: 'Lysine',
+    link: '',
+    description: '',
   },
 ];
 
 // million-ignore
 export default memo(function DevPuzzles() {
-  const { grid, setGrid } = useGrid();
+  const { grid, setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
 
   useEffect(() => {
     if (grid.width === 0) {
       setGrid(DEV_PUZZLES[0].grid, DEV_PUZZLES[0].solution);
+      setMetadata(DEV_PUZZLES[0]);
       clearHistory(DEV_PUZZLES[0].grid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -233,13 +255,14 @@ export default memo(function DevPuzzles() {
     >
       {DEV_PUZZLES.map(puzzle => (
         <li
-          key={puzzle.name}
+          key={puzzle.title}
           onClick={() => {
             setGrid(puzzle.grid, puzzle.solution);
+            setMetadata(puzzle);
             clearHistory(puzzle.grid);
           }}
         >
-          <a>{puzzle.name}</a>
+          <a>{puzzle.title}</a>
         </li>
       ))}
     </ul>

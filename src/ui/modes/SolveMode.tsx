@@ -3,12 +3,15 @@ import Instruction from '../instructions/Instruction';
 import InstructionList from '../instructions/InstructionList';
 import EditControls from '../EditControls';
 import MainGrid from '../grid/MainGrid';
+import Metadata from '../metadata/Metadata';
 
 export default memo(function SolveMode() {
   return (
     <div className="flex flex-1 justify-center items-center flex-wrap">
       <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
-        <div className="flex flex-col gap-2 justify-self-stretch flex-1"></div>
+        <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
+          <Metadata />
+        </div>
         <EditControls />
       </div>
       <div className="grow shrink flex justify-start items-center p-0">

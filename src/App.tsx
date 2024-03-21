@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { themeChange } from 'theme-change';
+import { useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import GridContext from './ui/GridContext';
@@ -8,51 +7,12 @@ import SolveMode from './ui/modes/SolveMode';
 import { Mode } from './data/primitives';
 import CreateMode from './ui/modes/CreateMode';
 import ModeButton from './ui/modes/ModeButton';
-import { FiChevronDown } from 'react-icons/fi';
 import Roadmap from './Roadmap';
 import DevPuzzles, { DEV_PUZZLES } from './DevPuzzles';
-
-const SUPPORTED_THEMES = [
-  'light',
-  'dark',
-  'cupcake',
-  'bumblebee',
-  'emerald',
-  'corporate',
-  'synthwave',
-  'retro',
-  'cyberpunk',
-  'valentine',
-  'halloween',
-  'garden',
-  'forest',
-  'aqua',
-  'lofi',
-  'pastel',
-  'fantasy',
-  'wireframe',
-  'black',
-  'luxury',
-  'dracula',
-  'cmyk',
-  'autumn',
-  'business',
-  'acid',
-  'lemonade',
-  'night',
-  'coffee',
-  'winter',
-  'dim',
-  'nord',
-  'sunset',
-];
+import ThemeSwitcher from './ThemeSwitcher';
 
 export default function App() {
   const [mode, setMode] = useState(Mode.Solve);
-
-  useEffect(() => {
-    themeChange(false);
-  }, []);
 
   return (
     <EditContext>
@@ -102,28 +62,7 @@ export default function App() {
                 </ModeButton>
               </div>
               <div className="flex lg:basis-[320px] grow shrink justify-end">
-                <div className="dropdown dropdown-end">
-                  <div tabIndex={0} role="button" className="btn m-1">
-                    Theme
-                    <FiChevronDown />
-                  </div>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52 max-h-[calc(100dvh-100px)] overflow-y-auto"
-                  >
-                    {SUPPORTED_THEMES.map(theme => (
-                      <li key={theme}>
-                        <input
-                          type="radio"
-                          name="theme-dropdown"
-                          className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
-                          aria-label={theme}
-                          value={theme}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <ThemeSwitcher />
               </div>
             </header>
             {mode === Mode.Create ? <CreateMode /> : <SolveMode />}

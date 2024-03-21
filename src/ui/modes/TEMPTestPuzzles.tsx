@@ -186,6 +186,31 @@ const PUZZLES = [
       'WBW.WBB.BBW.BBB',
     ]),
   },
+  {
+    name: 'Pattern 2',
+    grid: GridData.create([
+      'WWBWBBW.B',
+      'BWWWBBW.B',
+      'BWBBWBW.W',
+      'WWWnWWW.W',
+      'BWBnnBB.W',
+      'WWWBnnB.B',
+      'BBWBWnn.W',
+      '.........',
+      'WnBnBWB..',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'WWBWBBW.B',
+      'BWWWBBW.B',
+      'BWBBWBW.W',
+      'WWWWWWW.W',
+      'BWBWWBB.W',
+      'WWWBBWB.B',
+      'BBWBWWB.W',
+      '.........',
+      'WBBBBWB..',
+    ]),
+  },
 ];
 
 export default memo(function TEMPTestPuzzles() {

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { cn } from '../../utils';
+import { cn } from './utils';
 
 type RoadmapItem = string | [string, ...RoadmapItem[]];
 
@@ -75,7 +75,10 @@ function renderItem(item: RoadmapItem) {
 
 export default memo(function Roadmap() {
   return (
-    <ul className="menu menu-vertical flex-nowrap bg-base-200 rounded-box overflow-y-auto overflow-x-visible basis-0 flex-1 justify-self-stretch text-base-content">
+    <ul
+      tabIndex={0}
+      className="dropdown-content menu menu-vertical min-w-[300px] max-h-[calc(100vh-100px)] flex-nowrap bg-base-200 rounded-box overflow-y-auto overflow-x-visible text-base-content z-50"
+    >
       {roadmap.map(renderItem)}
     </ul>
   );

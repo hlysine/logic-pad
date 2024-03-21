@@ -1,18 +1,18 @@
 import { memo, useEffect } from 'react';
-import { useGrid } from '../GridContext';
-import ViewpointSymbol from '../../data/symbols/viewpointSymbol';
-import ConnectAllRule from '../../data/rules/connectAllRule';
-import { Color } from '../../data/primitives';
-import BanPatternRule from '../../data/rules/banPatternRule';
-import GridData from '../../data/grid';
-import GridConnections from '../../data/gridConnections';
-import { useEdit } from '../EditContext';
-import LetterSymbol from '../../data/symbols/letterSymbol';
-import NumberSymbol from '../../data/symbols/numberSymbol';
-import UndercluedRule from '../../data/rules/undercluedRule';
-import CompletePatternRule from '../../data/rules/completePatternRule';
+import { useGrid } from './ui/GridContext';
+import ViewpointSymbol from './data/symbols/viewpointSymbol';
+import ConnectAllRule from './data/rules/connectAllRule';
+import { Color } from './data/primitives';
+import BanPatternRule from './data/rules/banPatternRule';
+import GridData from './data/grid';
+import GridConnections from './data/gridConnections';
+import { useEdit } from './ui/EditContext';
+import LetterSymbol from './data/symbols/letterSymbol';
+import NumberSymbol from './data/symbols/numberSymbol';
+import UndercluedRule from './data/rules/undercluedRule';
+import CompletePatternRule from './data/rules/completePatternRule';
 
-const PUZZLES = [
+export const DEV_PUZZLES = [
   {
     name: 'Triangles',
     grid: GridData.create([
@@ -213,21 +213,24 @@ const PUZZLES = [
   },
 ];
 
-export default memo(function TEMPTestPuzzles() {
+export default memo(function DevPuzzles() {
   const { grid, setGrid } = useGrid();
   const { clearHistory } = useEdit();
 
   useEffect(() => {
     if (grid.width === 0) {
-      setGrid(PUZZLES[0].grid, PUZZLES[0].solution);
-      clearHistory(PUZZLES[0].grid);
+      setGrid(DEV_PUZZLES[0].grid, DEV_PUZZLES[0].solution);
+      clearHistory(DEV_PUZZLES[0].grid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box text-base-content">
-      {PUZZLES.map(puzzle => (
+    <ul
+      tabIndex={0}
+      className="dropdown-content menu menu-vertical min-w-[300px] bg-base-200 rounded-box text-base-content z-50"
+    >
+      {DEV_PUZZLES.map(puzzle => (
         <li
           key={puzzle.name}
           onClick={() => {

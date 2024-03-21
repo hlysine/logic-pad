@@ -37,7 +37,7 @@ export default memo(function RulerOverlay({
     [width]
   );
   return (
-    <GridOverlay className="z-50">
+    <GridOverlay className="z-10">
       {verticalRuler}
       {horizontalRuler}
     </GridOverlay>

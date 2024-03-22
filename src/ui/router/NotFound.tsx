@@ -1,6 +1,7 @@
 import { Link } from '@tanstack/react-router';
+import { memo } from 'react';
 
-export default function NotFound() {
+export default memo(function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center self-stretch flex-1 bg-neutral gap-4">
       <h1 className="text-4xl">Not found</h1>
@@ -9,4 +10,4 @@ export default function NotFound() {
       </Link>
     </div>
   );
-}
+});

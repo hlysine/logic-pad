@@ -4,7 +4,7 @@ import './index.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { routeTree } from './routeTree.gen';
+import { routeTree } from './ui/router/routeTree.gen';
 
 const router = createRouter({ routeTree });
 

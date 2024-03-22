@@ -1,12 +1,12 @@
-import Roadmap from '../Roadmap';
+import Roadmap from '../ui/Roadmap';
 import DevPuzzles, { DEV_PUZZLES } from '../ui/DevPuzzles';
-import ThemeSwitcher from '../ThemeSwitcher';
+import ThemeSwitcher from '../ui/ThemeSwitcher';
 import ModeSwitcher from '../ui/modes/ModeSwitcher';
 import EditContext from '../ui/EditContext';
 import GridContext from '../ui/GridContext';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import TanStackDevTools from '../TanStackDevTools';
-import NotFound from '../NotFound';
+import TanStackDevTools from '../ui/router/TanStackDevTools';
+import NotFound from '../ui/router/NotFound';
 
 export const Route = createRootRoute({
   component: () => (

@@ -227,7 +227,7 @@ export const DEV_PUZZLES: Puzzle[] = [
       '.........',
       'WBBBBWB..',
     ]),
-    difficulty: 8,
+    difficulty: 6,
     author: 'Lysine',
     link: '',
     description: '',

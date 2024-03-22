@@ -6,7 +6,6 @@ import EditContext from '../ui/EditContext';
 import GridContext from '../ui/GridContext';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import TanStackDevTools from '../ui/router/TanStackDevTools';
-import NotFound from '../ui/router/NotFound';
 
 export const Route = createRootRoute({
   component: () => (
@@ -47,5 +46,4 @@ export const Route = createRootRoute({
       </GridContext>
     </EditContext>
   ),
-  notFoundComponent: () => <NotFound />,
 });

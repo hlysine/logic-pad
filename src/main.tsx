@@ -5,8 +5,14 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './ui/router/routeTree.gen';
+import NotFound from './ui/router/NotFound';
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  defaultNotFoundComponent: NotFound,
+  defaultPreload: 'intent',
+  defaultPreloadStaleTime: 1000 * 60 * 5,
+});
 
 declare module '@tanstack/react-router' {
   interface Register {

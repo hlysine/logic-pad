@@ -206,7 +206,7 @@ export const DEV_PUZZLES: Puzzle[] = [
   {
     title: 'Matrix',
     grid: GridData.create([
-      'WWBWBBW.B',
+      'WBBWBBB.B',
       'BWWWBBW.B',
       'BWBBWBW.W',
       'WWWnWWW.W',
@@ -214,10 +214,10 @@ export const DEV_PUZZLES: Puzzle[] = [
       'WWWBnnB.B',
       'BBWBWnn.W',
       '.........',
-      'WnBnBWB..',
+      'WnBnBWW..',
     ]).addRule(new CompletePatternRule()),
     solution: GridData.create([
-      'WWBWBBW.B',
+      'WBBWBBB.B',
       'BWWWBBW.B',
       'BWBBWBW.W',
       'WWWWWWW.W',
@@ -225,7 +225,7 @@ export const DEV_PUZZLES: Puzzle[] = [
       'WWWBBWB.B',
       'BBWBWWB.W',
       '.........',
-      'WBBBBWB..',
+      'WWBBBWW..',
     ]),
     difficulty: 6,
     author: 'Lysine',

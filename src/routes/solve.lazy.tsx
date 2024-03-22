@@ -1,11 +1,11 @@
-import { memo } from 'react';
-import Instruction from '../instructions/Instruction';
-import InstructionList from '../instructions/InstructionList';
-import EditControls from '../EditControls';
-import MainGrid from '../grid/MainGrid';
-import Metadata from '../metadata/Metadata';
+import Instruction from '../ui/instructions/Instruction';
+import InstructionList from '../ui/instructions/InstructionList';
+import EditControls from '../ui/EditControls';
+import MainGrid from '../ui/grid/MainGrid';
+import Metadata from '../ui/metadata/Metadata';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export default memo(function SolveMode() {
+function SolveMode() {
   return (
     <div className="flex flex-1 justify-center items-center flex-wrap">
       <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
@@ -22,4 +22,8 @@ export default memo(function SolveMode() {
       <InstructionList>{Instruction}</InstructionList>
     </div>
   );
+}
+
+export const Route = createLazyFileRoute('/solve')({
+  component: SolveMode,
 });

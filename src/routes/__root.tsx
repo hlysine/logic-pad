@@ -1,20 +1,15 @@
-import { useState } from 'react';
-import { Mode } from './data/primitives';
-import Roadmap from './Roadmap';
-import DevPuzzles, { DEV_PUZZLES } from './DevPuzzles';
-import ThemeSwitcher from './ThemeSwitcher';
-import allModes from './allModes';
-import ModeSwitcher from './ui/modes/ModeSwitcher';
-import EditContext from './ui/EditContext';
-import GridContext from './ui/GridContext';
+import Roadmap from '../Roadmap';
+import DevPuzzles, { DEV_PUZZLES } from '../ui/DevPuzzles';
+import ThemeSwitcher from '../ThemeSwitcher';
+import ModeSwitcher from '../ui/modes/ModeSwitcher';
+import EditContext from '../ui/EditContext';
+import GridContext from '../ui/GridContext';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
+import TanStackDevTools from '../TanStackDevTools';
+import NotFound from '../NotFound';
 
-// million-ignore
-export default function App() {
-  const [mode, setMode] = useState(Mode.Solve);
-
-  const ActiveMode = allModes.get(mode)!;
-
-  return (
+export const Route = createRootRoute({
+  component: () => (
     <EditContext>
       <GridContext>
         <div className="h-dvh w-dvw overflow-auto bg-neutral">
@@ -40,15 +35,17 @@ export default function App() {
                   </li>
                 </ul>
               </div>
-              <ModeSwitcher mode={mode} onModeChange={setMode} />
+              <ModeSwitcher />
               <div className="flex lg:basis-[320px] grow shrink justify-end">
                 <ThemeSwitcher />
               </div>
             </header>
-            <ActiveMode />
+            <Outlet />
+            <TanStackDevTools />
           </div>
         </div>
       </GridContext>
     </EditContext>
-  );
-}
+  ),
+  notFoundComponent: () => <NotFound />,
+});

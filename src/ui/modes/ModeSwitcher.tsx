@@ -1,61 +1,25 @@
 import { memo } from 'react';
 import ModeButton from './ModeButton';
-import allModes from '../../allModes';
+import { useRouterState } from '@tanstack/react-router';
 import { Mode } from '../../data/primitives';
 
-// TODO: Buggy data transfer between modes
+const allModes = new Map([
+  [Mode.Create, '/create'],
+  [Mode.Solve, '/solve'],
+]);
 
-// const transferModePuzzle = (
-//   _from: Mode,
-//   _to: Mode,
-//   fromPuzzle: Puzzle,
-//   _toPuzzle: Puzzle
-// ): Puzzle => {
-//   return fromPuzzle;
-// };
-
-export interface ModeSwitcherProps {
-  mode: Mode;
-  onModeChange: (newMode: Mode) => void;
-}
-
-export default memo(function ModeSwitcher({
-  mode,
-  onModeChange,
-}: ModeSwitcherProps) {
-  // const { grid, solution, metadata, setGridRaw, setMetadata } = useGrid();
-  // const modePuzzles = useRef<Partial<Record<Mode, Puzzle | undefined>>>({});
-
-  const modeChangeHandler = (newMode: Mode) => {
-    if (newMode === mode) return;
-
-    // const oldPuzzle = { grid, solution, ...metadata };
-
-    // const newPuzzle = transferModePuzzle(
-    //   mode,
-    //   newMode,
-    //   oldPuzzle,
-    //   modePuzzles.current[newMode] ?? oldPuzzle
-    // );
-
-    // modePuzzles.current[mode] = oldPuzzle;
-    // modePuzzles.current[newMode] = newPuzzle;
-    // setGridRaw(newPuzzle.grid, newPuzzle.solution);
-    // setMetadata(newPuzzle);
-    onModeChange(newMode);
-  };
-
+export default memo(function ModeSwitcher() {
+  const state = useRouterState();
   return (
     <div
       role="tablist"
       className="tabs tabs-boxed tabs-lg bg-base-100 shadow-lg"
     >
-      {[...allModes.keys()].map(m => (
+      {[...allModes.entries()].map(([m, path]) => (
         <ModeButton
           key={m}
-          active={mode === m}
-          mode={m}
-          onModeChange={modeChangeHandler}
+          active={state.location.pathname === path}
+          link={path}
         >
           {m}
         </ModeButton>

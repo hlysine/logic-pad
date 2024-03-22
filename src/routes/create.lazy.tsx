@@ -1,13 +1,13 @@
-import { memo } from 'react';
-import InstructionList from '../instructions/InstructionList';
-import EditControls from '../EditControls';
-import MainGrid from '../grid/MainGrid';
-import EditableInstruction from '../instructions/EditableInstruction';
-import RulerOverlay from '../grid/RulerOverlay';
-import { useGrid } from '../GridContext';
-import InstructionSearch from '../instructions/InstructionSearch';
+import InstructionList from '../ui/instructions/InstructionList';
+import EditControls from '../ui/EditControls';
+import MainGrid from '../ui/grid/MainGrid';
+import EditableInstruction from '../ui/instructions/EditableInstruction';
+import RulerOverlay from '../ui/grid/RulerOverlay';
+import { useGrid } from '../ui/GridContext';
+import InstructionSearch from '../ui/instructions/InstructionSearch';
+import { createLazyFileRoute } from '@tanstack/react-router';
 
-export default memo(function CreateMode() {
+function CreateMode() {
   const { grid } = useGrid();
 
   return (
@@ -31,4 +31,8 @@ export default memo(function CreateMode() {
       </div>
     </div>
   );
+}
+
+export const Route = createLazyFileRoute('/create')({
+  component: CreateMode,
 });

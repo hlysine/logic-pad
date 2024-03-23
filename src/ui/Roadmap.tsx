@@ -33,7 +33,7 @@ const roadmap: RoadmapItem[] = [
   'Implement puzzle serialization',
   [
     'Optimizations',
-    'Optimize merged cells',
+    'Implement canvas rendering',
     '~Add transitions to laggy buttons',
     '~Memoize components',
   ],

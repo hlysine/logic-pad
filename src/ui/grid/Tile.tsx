@@ -14,11 +14,13 @@ export interface TileProps {
   onTileClick?: (target: Color, flood: boolean) => void;
 }
 
+const offsets = [-1, 1, 0]; // 0 has to be last because the center piece needs to be on top
+
 function useTileParts(con: TileConnections) {
   return useMemo<React.CSSProperties[]>(() => {
     const parts: React.CSSProperties[] = [];
-    for (let y = -1; y <= 1; y++) {
-      for (let x = -1; x <= 1; x++) {
+    for (const y of offsets) {
+      for (const x of offsets) {
         if (x === 0 && y === 0) {
           parts.push({
             fontSize: `1em`,

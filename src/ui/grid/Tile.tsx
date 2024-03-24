@@ -69,7 +69,7 @@ export default memo(function Tile({
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default',
                 style.borderTopLeftRadius !== undefined && data.fixed
-                  ? 'tile-fixed z-[1]'
+                  ? 'tile-fixed'
                   : 'border-0'
               )}
               tabIndex={

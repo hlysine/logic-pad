@@ -6,13 +6,11 @@ import { GridState, State } from '../../data/primitives';
 import { memo } from 'react';
 
 export interface SymbolOverlayProps {
-  size: number;
   grid: GridData;
   state?: GridState['symbols'];
 }
 
 export default memo(function SymbolOverlay({
-  size,
   grid,
   state,
 }: SymbolOverlayProps) {
@@ -25,7 +23,6 @@ export default memo(function SymbolOverlay({
           return (
             <Symbol
               key={`${symbol.id}(${symbol.x},${symbol.y})`}
-              size={size}
               textClass={
                 symbolState === State.Error
                   ? 'text-error'

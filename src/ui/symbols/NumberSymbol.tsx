@@ -1,24 +1,13 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { cn } from '../../utils';
 import NumberSymbolData from '../../data/symbols/numberSymbol';
 
 export interface NumberProps {
-  size: number;
   textClass: string;
   symbol: NumberSymbolData;
 }
 
-export default memo(function NumberSymbol({
-  size,
-  textClass,
-  symbol,
-}: NumberProps) {
-  const textStyle = useMemo<React.CSSProperties>(
-    () => ({
-      fontSize: `${size * 0.75}px`,
-    }),
-    [size]
-  );
+export default memo(function NumberSymbol({ textClass, symbol }: NumberProps) {
   return (
     <div
       className={cn(
@@ -26,7 +15,7 @@ export default memo(function NumberSymbol({
         textClass
       )}
     >
-      <span className={cn('absolute m-auto', textClass)} style={textStyle}>
+      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
         {symbol.number}
       </span>
     </div>

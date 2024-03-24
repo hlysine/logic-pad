@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { cn } from '../../utils';
 import ViewpointSymbolData from '../../data/symbols/viewpointSymbol';
 import {
@@ -9,28 +9,14 @@ import {
 } from 'react-icons/fi';
 
 export interface ViewpointProps {
-  size: number;
   textClass: string;
   symbol: ViewpointSymbolData;
 }
 
 export default memo(function ViewpointSymbol({
-  size,
   textClass,
   symbol,
 }: ViewpointProps) {
-  const textStyle = useMemo<React.CSSProperties>(
-    () => ({
-      fontSize: `${size * 0.6}px`,
-    }),
-    [size]
-  );
-  const arrowStyle = useMemo<React.CSSProperties>(
-    () => ({
-      margin: `${-size * 0.05}px`,
-    }),
-    [size]
-  );
   return (
     <div
       className={cn(
@@ -38,20 +24,20 @@ export default memo(function ViewpointSymbol({
         textClass
       )}
     >
-      <span className={cn('absolute m-auto', textClass)} style={textStyle}>
+      <span className={cn('absolute m-auto text-[0.6em]', textClass)}>
         {symbol.number}
       </span>
-      <div className="absolute mx-auto top-0 mb-auto" style={arrowStyle}>
-        <FiChevronUp size={size * 0.4} />
+      <div className="absolute mx-auto top-0 mb-auto -m-[0.05em]">
+        <FiChevronUp size={'0.4em'} />
       </div>
-      <div className="absolute mx-auto bottom-0 mt-auto" style={arrowStyle}>
-        <FiChevronDown size={size * 0.4} />
+      <div className="absolute mx-auto bottom-0 mt-auto -m-[0.05em]">
+        <FiChevronDown size={'0.4em'} />
       </div>
-      <div className="absolute my-auto left-0 mr-auto" style={arrowStyle}>
-        <FiChevronLeft size={size * 0.4} />
+      <div className="absolute my-auto left-0 mr-auto -m-[0.05em]">
+        <FiChevronLeft size={'0.4em'} />
       </div>
-      <div className="absolute my-auto right-0 ml-auto" style={arrowStyle}>
-        <FiChevronRight size={size * 0.4} />
+      <div className="absolute my-auto right-0 ml-auto -m-[0.05em]">
+        <FiChevronRight size={'0.4em'} />
       </div>
     </div>
   );

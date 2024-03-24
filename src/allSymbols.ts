@@ -9,7 +9,6 @@ import ViewpointSymbolUI from './ui/symbols/ViewpointSymbol';
 import QuestionMarkSignUI from './ui/symbols/signs/QuestionMarkSign';
 
 export interface SymbolProps<T extends SymbolData> {
-  size: number;
   textClass: string;
   symbol: T;
 }

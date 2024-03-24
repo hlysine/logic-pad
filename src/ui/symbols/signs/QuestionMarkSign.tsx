@@ -1,23 +1,15 @@
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { cn } from '../../../utils';
 import QuestionMarkSignData from '../../../data/symbols/signs/questionMarkSign';
 
 export interface QuestionMarkProps {
-  size: number;
   textClass: string;
   symbol?: QuestionMarkSignData;
 }
 
 export default memo(function QuestionMarkSign({
-  size,
   textClass,
 }: QuestionMarkProps) {
-  const textStyle = useMemo<React.CSSProperties>(
-    () => ({
-      fontSize: `${size * 0.75}px`,
-    }),
-    [size]
-  );
   return (
     <div
       className={cn(
@@ -25,9 +17,7 @@ export default memo(function QuestionMarkSign({
         textClass
       )}
     >
-      <span className={cn('absolute m-auto', textClass)} style={textStyle}>
-        ?
-      </span>
+      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>?</span>
     </div>
   );
 });

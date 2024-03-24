@@ -3,26 +3,23 @@ import SymbolData from '../../data/symbols/symbol';
 import { memo, useMemo } from 'react';
 
 export default memo(function Symbol({
-  size,
   textClass,
   symbol,
 }: SymbolProps<SymbolData>) {
   const containerStyle = useMemo(
     () => ({
-      width: `${size}px`,
-      height: `${size}px`,
-      top: `${symbol.y * size}px`,
-      left: `${symbol.x * size}px`,
+      top: `calc(${symbol.y} * 1em)`,
+      left: `calc(${symbol.x} * 1em)`,
     }),
-    [size, symbol.x, symbol.y]
+    [symbol.x, symbol.y]
   );
   const Component = allSymbols.get(symbol.id);
   if (!Component) {
     throw new Error(`No component for symbol: ${symbol.id}`);
   }
   return (
-    <div className="absolute" style={containerStyle}>
-      <Component size={size} textClass={textClass} symbol={symbol} />
+    <div className="absolute w-[1em] h-[1em]" style={containerStyle}>
+      <Component textClass={textClass} symbol={symbol} />
     </div>
   );
 });

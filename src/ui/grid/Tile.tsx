@@ -7,37 +7,36 @@ import TileConnections from '../../data/tileConnections';
 import { bg, color } from '../helper';
 
 export interface TileProps {
-  size: number;
   data: TileData;
   editable: boolean;
   connections: TileConnections;
   onTileClick?: (target: Color, flood: boolean) => void;
 }
 
-function useTileParts(size: number, con: TileConnections) {
+function useTileParts(con: TileConnections) {
   return useMemo<React.CSSProperties[]>(() => {
     const parts: React.CSSProperties[] = [];
     for (let y = -1; y <= 1; y++) {
       for (let x = -1; x <= 1; x++) {
         if (x === 0 && y === 0) {
           parts.push({
-            width: `${(size * 18) / 20}px`,
-            height: `${(size * 18) / 20}px`,
-            margin: `${size / 20}px`,
-            borderTopLeftRadius: con.top || con.left ? 0 : `${size / 8}px`,
-            borderTopRightRadius: con.top || con.right ? 0 : `${size / 8}px`,
-            borderBottomLeftRadius:
-              con.bottom || con.left ? 0 : `${size / 8}px`,
-            borderBottomRightRadius:
-              con.bottom || con.right ? 0 : `${size / 8}px`,
+            fontSize: `1em`,
+            width: `0.9em`,
+            height: `0.9em`,
+            margin: `0.05em`,
+            borderTopLeftRadius: con.top || con.left ? 0 : `0.125em`,
+            borderTopRightRadius: con.top || con.right ? 0 : `0.125em`,
+            borderBottomLeftRadius: con.bottom || con.left ? 0 : `0.125em`,
+            borderBottomRightRadius: con.bottom || con.right ? 0 : `0.125em`,
           });
         } else if (con[x][y]) {
           parts.push({
-            width: x === 0 ? `${(size * 18) / 20}px` : `${size / 20}px`,
-            height: y === 0 ? `${(size * 18) / 20}px` : `${size / 20}px`,
-            top: y === -1 ? 0 : y === 0 ? `${size / 20}px` : undefined,
+            fontSize: `1em`,
+            width: x === 0 ? `0.9em` : `0.05em`,
+            height: y === 0 ? `0.9em` : `0.05em`,
+            top: y === -1 ? 0 : y === 0 ? `0.05em` : undefined,
             bottom: y === 1 ? 0 : undefined,
-            left: x === -1 ? 0 : x === 0 ? `${size / 20}px` : undefined,
+            left: x === -1 ? 0 : x === 0 ? `0.05em` : undefined,
             right: x === 1 ? 0 : undefined,
             margin: 0,
             borderRadius: 0,
@@ -46,36 +45,19 @@ function useTileParts(size: number, con: TileConnections) {
       }
     }
     return parts;
-  }, [size, con]);
+  }, [con]);
 }
 
 export default memo(function Tile({
-  size,
   data,
   editable,
   connections,
   onTileClick,
 }: TileProps) {
   const mouse = useMouseContext();
-  const partStyles = useTileParts(size, connections);
-  const containerStyle = useMemo<React.CSSProperties>(
-    () => ({
-      width: `${size}px`,
-      height: `${size}px`,
-    }),
-    [size]
-  );
-  const cornerStyle = useMemo<React.CSSProperties>(
-    () => ({
-      margin: `${size / 20}px`,
-      width: `${size / 8}px`,
-      height: `${size / 8}px`,
-      borderWidth: `${size / 30}px`,
-    }),
-    [size]
-  );
+  const partStyles = useTileParts(connections);
   return (
-    <div className="relative" style={containerStyle}>
+    <div className="relative w-[1em] h-[1em]">
       {data.exists && (
         <>
           {partStyles.map((style, i) => (
@@ -135,33 +117,29 @@ export default memo(function Tile({
           {data.fixed && !connections.top && !connections.left && (
             <div
               className={cn(
-                'absolute !border-r-0 !border-b-0 border-green-600 pointer-events-none'
+                'absolute !border-r-0 !border-b-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
               )}
-              style={cornerStyle}
             ></div>
           )}
           {data.fixed && !connections.top && !connections.right && (
             <div
               className={cn(
-                'absolute !border-l-0 !border-b-0 right-0 border-green-600 pointer-events-none'
+                'absolute !border-l-0 !border-b-0 right-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
               )}
-              style={cornerStyle}
             ></div>
           )}
           {data.fixed && !connections.bottom && !connections.left && (
             <div
               className={cn(
-                'absolute !border-r-0 !border-t-0 bottom-0 border-green-600 pointer-events-none'
+                'absolute !border-r-0 !border-t-0 bottom-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
               )}
-              style={cornerStyle}
             ></div>
           )}
           {data.fixed && !connections.bottom && !connections.right && (
             <div
               className={cn(
-                'absolute !border-l-0 !border-t-0 bottom-0 right-0 border-green-600 pointer-events-none'
+                'absolute !border-l-0 !border-t-0 bottom-0 right-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
               )}
-              style={cornerStyle}
             ></div>
           )}
         </>

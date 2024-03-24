@@ -4,7 +4,6 @@ import GridOverlay from './GridOverlay';
 import { array } from '../../data/helper';
 
 export interface ErrorOverlayProps {
-  size: number;
   positions: readonly Position[];
 }
 
@@ -26,34 +25,29 @@ function positionsToGrid(positions: readonly Position[]) {
   return grid;
 }
 
-export default memo(function ErrorOverlay({
-  size,
-  positions,
-}: ErrorOverlayProps) {
+export default memo(function ErrorOverlay({ positions }: ErrorOverlayProps) {
   const grid = useMemo(() => positionsToGrid(positions), [positions]);
   return (
     <GridOverlay>
       {positions.map(({ x, y }) => (
         <div
           key={`${x},${y}`}
-          className="absolute bg-transparent pointer-events-none border-error"
+          className="absolute bg-transparent pointer-events-none border-error w-[1em] h-[1em]"
           style={{
-            left: `${x * size}px`,
-            top: `${y * size}px`,
-            width: `${size}px`,
-            height: `${size}px`,
+            left: `calc(${x} * 1em)`,
+            top: `calc(${y} * 1em)`,
             borderTopWidth: grid[y - 1]
               ? grid[y - 1][x]
                 ? '0'
-                : `${size / 8}px`
-              : `${size / 8}px`,
-            borderRightWidth: grid[y][x + 1] ? '0' : `${size / 8}px`,
+                : `0.125em`
+              : `0.125em`,
+            borderRightWidth: grid[y][x + 1] ? '0' : `0.125em`,
             borderBottomWidth: grid[y + 1]
               ? grid[y + 1][x]
                 ? '0'
-                : `${size / 8}px`
-              : `${size / 8}px`,
-            borderLeftWidth: grid[y][x - 1] ? '0' : `${size / 8}px`,
+                : `0.125em`
+              : `0.125em`,
+            borderLeftWidth: grid[y][x - 1] ? '0' : `0.125em`,
           }}
         />
       ))}

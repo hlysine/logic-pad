@@ -26,6 +26,7 @@ export default memo(function Grid({
       height: `${size * grid.height}px`,
       minWidth: `${size * grid.width}px`,
       minHeight: `${size * grid.height}px`,
+      fontSize: `${size}px`,
     }),
     [size, grid.width, grid.height]
   );
@@ -64,7 +65,6 @@ export default memo(function Grid({
             row.map((tile, x) => (
               <Tile
                 key={`${x},${y}`}
-                size={size}
                 data={tile}
                 editable={editable}
                 connections={tileConnections[y][x]}

@@ -1,0 +1,8 @@
+.tile-fixed {
+  border-style: solid;
+  border-image-slice: 24 24 24 24;
+  border-image-outset: 0.025em 0.025em 0.025em 0.025em;
+  border-image-width: 0.05em 0.05em 0.05em 0.05em;
+  border-image-repeat: stretch stretch;
+  border-image-source: url("data:image/svg+xml,%3csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='200' height='200' fill='none' stroke='%2316a34a' stroke-width='50' stroke-dasharray='30%2c 140%2c 30%2c 0' stroke-dashoffset='0' stroke-linecap='round'/%3e%3c/svg%3e");
+}

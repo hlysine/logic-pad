@@ -5,6 +5,7 @@ import { useMouseContext } from './MouseContext';
 import { Color } from '../../data/primitives';
 import TileConnections from '../../data/tileConnections';
 import { bg, color } from '../helper';
+import './tile.css';
 
 export interface TileProps {
   data: TileData;
@@ -64,9 +65,12 @@ export default memo(function Tile({
             <button
               key={i}
               className={cn(
-                'absolute btn no-animation transition-none duration-0 p-0 shadow-none min-h-0 border-0 z-0',
+                'absolute btn no-animation transition-none duration-0 p-0 shadow-none min-h-0',
                 bg(data.color),
-                editable ? 'cursor-pointer' : 'cursor-default'
+                editable ? 'cursor-pointer' : 'cursor-default',
+                style.borderTopLeftRadius !== undefined && data.fixed
+                  ? 'tile-fixed z-[1]'
+                  : 'border-0'
               )}
               tabIndex={
                 editable && style.borderTopLeftRadius !== undefined ? 0 : -1 // dirty hack to make only the central button focusable
@@ -114,34 +118,6 @@ export default memo(function Tile({
               }}
             ></button>
           ))}
-          {data.fixed && !connections.top && !connections.left && (
-            <div
-              className={cn(
-                'absolute !border-r-0 !border-b-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
-              )}
-            ></div>
-          )}
-          {data.fixed && !connections.top && !connections.right && (
-            <div
-              className={cn(
-                'absolute !border-l-0 !border-b-0 right-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
-              )}
-            ></div>
-          )}
-          {data.fixed && !connections.bottom && !connections.left && (
-            <div
-              className={cn(
-                'absolute !border-r-0 !border-t-0 bottom-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
-              )}
-            ></div>
-          )}
-          {data.fixed && !connections.bottom && !connections.right && (
-            <div
-              className={cn(
-                'absolute !border-l-0 !border-t-0 bottom-0 right-0 border-green-600 pointer-events-none w-[0.167em] h-[0.167em] border-[0.05em] m-[0.05em]'
-              )}
-            ></div>
-          )}
         </>
       )}
     </div>

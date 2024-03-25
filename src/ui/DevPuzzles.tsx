@@ -270,7 +270,7 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nbbbbbnnnnnw',
       'BnWwwwwwwwww',
     ]),
-    difficulty: 4,
+    difficulty: 5,
     author: 'Lysine',
     link: '',
     description: '',

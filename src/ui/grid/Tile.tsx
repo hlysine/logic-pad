@@ -330,6 +330,7 @@ export default memo(function Tile({
     return styles;
   }, [connections]);
   let fixed = false;
+  let focused = false;
   return (
     <div className="relative w-[1em] h-[1em]">
       {data.exists && (
@@ -346,7 +347,9 @@ export default memo(function Tile({
                   : 'border-0'
               )}
               tabIndex={
-                editable && focusable ? 0 : -1 // dirty hack to make only the central button focusable
+                editable && !data.fixed && focusable && !focused
+                  ? ((focused = true), 0)
+                  : -1 // dirty hack to make only the central button focusable
               }
               style={style}
               onMouseDown={e => {

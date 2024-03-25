@@ -285,25 +285,31 @@ function getEm(id: 0 | 1 | 2) {
 }
 
 const tileStyles = new Map<string, TileStyles>(
-  [...tileShapes.entries()].map(([key, shape]) => [
-    key,
-    shape.map(part => ({
-      style: {
-        top: getEm(part.t) + 'em',
-        left: getEm(part.l) + 'em',
-        bottom: getEm(part.b) + 'em',
-        right: getEm(part.r) + 'em',
-        width: `${1 - getEm(part.l) - getEm(part.r)}em`,
-        height: `${1 - getEm(part.t) - getEm(part.b)}em`,
-        borderTopLeftRadius: part.corners & TL ? '0.125em' : 0,
-        borderTopRightRadius: part.corners & TR ? '0.125em' : 0,
-        borderBottomLeftRadius: part.corners & BL ? '0.125em' : 0,
-        borderBottomRightRadius: part.corners & BR ? '0.125em' : 0,
-      },
-      fixable: part.b === 1 && part.l === 1 && part.r === 1 && part.t === 1,
-      focusable: part.t <= 1 && part.r <= 1 && part.b <= 1 && part.l <= 1,
-    })),
-  ])
+  [...tileShapes.entries()].map(([key, shape]) => {
+    let focused = false;
+    return [
+      key,
+      shape.map(part => ({
+        style: {
+          top: getEm(part.t) + 'em',
+          left: getEm(part.l) + 'em',
+          bottom: getEm(part.b) + 'em',
+          right: getEm(part.r) + 'em',
+          width: `${1 - getEm(part.l) - getEm(part.r)}em`,
+          height: `${1 - getEm(part.t) - getEm(part.b)}em`,
+          borderTopLeftRadius: part.corners & TL ? '0.125em' : 0,
+          borderTopRightRadius: part.corners & TR ? '0.125em' : 0,
+          borderBottomLeftRadius: part.corners & BL ? '0.125em' : 0,
+          borderBottomRightRadius: part.corners & BR ? '0.125em' : 0,
+        },
+        fixable: part.b === 1 && part.l === 1 && part.r === 1 && part.t === 1,
+        focusable:
+          !focused && part.t <= 1 && part.r <= 1 && part.b <= 1 && part.l <= 1
+            ? (focused = true)
+            : false,
+      })),
+    ];
+  })
 );
 
 export default memo(function Tile({
@@ -330,7 +336,6 @@ export default memo(function Tile({
     return styles;
   }, [connections]);
   let fixed = false;
-  let focused = false;
   return (
     <div className="relative w-[1em] h-[1em]">
       {data.exists && (
@@ -347,9 +352,7 @@ export default memo(function Tile({
                   : 'border-0'
               )}
               tabIndex={
-                editable && !data.fixed && focusable && !focused
-                  ? ((focused = true), 0)
-                  : -1 // dirty hack to make only the central button focusable
+                editable && !data.fixed && focusable ? 0 : -1 // dirty hack to make only the central button focusable
               }
               style={style}
               onMouseDown={e => {

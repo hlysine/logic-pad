@@ -32,8 +32,8 @@ const roadmap: RoadmapItem[] = [
   'Isolate grids between solve and create modes',
   'Implement puzzle serialization',
   [
-    'Optimizations',
-    'Optimize merged tiles',
+    '~Optimizations',
+    '~Optimize merged tiles',
     '~Optimize grid resizing',
     '~Optimize fixed tiles',
     '~Add transitions to laggy buttons',

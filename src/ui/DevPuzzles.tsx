@@ -232,6 +232,49 @@ export const DEV_PUZZLES: Puzzle[] = [
     link: '',
     description: '',
   },
+  {
+    title: 'Barricaded',
+    grid: GridData.create([
+      'WnnnnnnnnnnB',
+      'nnnnnnnnnnnn',
+      'nnnnnnnnnnnW',
+      'nnnnnnnnnnnn',
+      'nnnnnnnnnWnW',
+      'nnnnnnnnnnnn',
+      'nnnnnnnnnnnn',
+      'nnWnnnnnnnnn',
+      'nnnnnnnnnnnn',
+      'nnnnnnnnnnnn',
+      'nnnnnnnnnnnn',
+      'BnWnnnnnnnnn',
+    ])
+      .addRule(new UndercluedRule())
+      .addRule(new ConnectAllRule(Color.Dark))
+      .addSymbol(new LetterSymbol(0, 0, 'A'))
+      .addSymbol(new LetterSymbol(9, 4, 'A'))
+      .addSymbol(new LetterSymbol(11, 2, 'B'))
+      .addSymbol(new LetterSymbol(2, 7, 'B'))
+      .addSymbol(new LetterSymbol(11, 4, 'C'))
+      .addSymbol(new LetterSymbol(2, 11, 'C')),
+    solution: GridData.create([
+      'WnnnnnnnnnnB',
+      'wnnnnnnnnnnn',
+      'wnnnnnnnnnnW',
+      'wnnnnnnnnnbb',
+      'wnnnnnnnnWbW',
+      'wnnnnnnnnnbw',
+      'wbnnnnnnnnnw',
+      'wbWnnnnnnnnw',
+      'wbbbnnnnnnnw',
+      'wwwwwnnnnnnw',
+      'nbbbbbnnnnnw',
+      'BnWwwwwwwwww',
+    ]),
+    difficulty: 4,
+    author: 'Lysine',
+    link: '',
+    description: '',
+  },
 ];
 
 // million-ignore

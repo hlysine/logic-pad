@@ -4,6 +4,7 @@ export const Route = createFileRoute('/')({
   loader: () => {
     redirect({
       to: '/solve',
+      search: {},
       throw: true,
     });
   },

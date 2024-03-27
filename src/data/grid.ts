@@ -283,4 +283,18 @@ export default class GridData {
       ),
     });
   }
+
+  public resetTiles(): GridData {
+    let changed = false;
+    const newTiles = array(this.width, this.height, (x, y) => {
+      const tile = this.getTile(x, y);
+      if (tile.exists && !tile.fixed && tile.color !== Color.Gray) {
+        changed = true;
+        return tile.withColor(Color.Gray);
+      }
+      return tile;
+    });
+    if (!changed) return this;
+    return this.copyWith({ tiles: newTiles });
+  }
 }

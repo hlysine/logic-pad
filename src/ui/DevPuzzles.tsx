@@ -12,6 +12,9 @@ import NumberSymbol from '../data/symbols/numberSymbol';
 import UndercluedRule from '../data/rules/undercluedRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import Puzzle from '../data/puzzle';
+import { useNavigate, useRouterState } from '@tanstack/react-router';
+import { array, compress } from '../data/helper';
+import Serializer from '../data/serializer';
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
@@ -381,6 +384,8 @@ const defaultSelection = 8;
 export default memo(function DevPuzzles() {
   const { grid, setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
+  const navigate = useNavigate();
+  const state = useRouterState();
 
   useEffect(() => {
     if (grid.width === 0) {
@@ -403,9 +408,37 @@ export default memo(function DevPuzzles() {
         <li
           key={puzzle.title}
           onClick={() => {
-            setGrid(puzzle.grid, puzzle.solution);
-            setMetadata(puzzle);
-            clearHistory(puzzle.grid);
+            let grid = puzzle.grid;
+            if (puzzle.solution !== null) {
+              const tiles = array(
+                puzzle.grid.width,
+                puzzle.grid.height,
+                (x, y) => {
+                  const tile = puzzle.grid.tiles[y][x];
+                  return tile.exists && tile.color === Color.Gray
+                    ? tile.copyWith({
+                        color: puzzle.solution!.tiles[y][x].color,
+                      })
+                    : tile;
+                }
+              );
+              grid = puzzle.grid.copyWith({ tiles });
+            }
+            compress(
+              JSON.stringify({
+                ...puzzle,
+                grid: Serializer.stringifyGrid(grid),
+              })
+            )
+              .then(d =>
+                navigate({
+                  to: state.location.pathname,
+                  search: {
+                    d,
+                  },
+                })
+              )
+              .catch(console.log);
           }}
         >
           <a className="text-md">

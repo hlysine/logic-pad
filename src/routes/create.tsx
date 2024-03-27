@@ -5,15 +5,19 @@ import EditableInstruction from '../ui/instructions/EditableInstruction';
 import RulerOverlay from '../ui/grid/RulerOverlay';
 import { useGrid } from '../ui/GridContext';
 import InstructionSearch from '../ui/instructions/InstructionSearch';
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
+import LinkLoader, { validateSearch } from '../ui/router/LinkLoader';
 
-export const Route = createLazyFileRoute('/create')({
+export const Route = createFileRoute('/create')({
+  validateSearch,
   component: memo(function CreateMode() {
     const { grid } = useGrid();
+    const params = Route.useSearch();
 
     return (
       <div className="flex flex-1 justify-center items-center flex-wrap">
+        <LinkLoader params={params} />
         <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
           <div className="flex flex-col gap-2">
             <div className="text-xl">Puzzle editor coming soon...</div>

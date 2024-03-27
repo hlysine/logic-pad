@@ -100,7 +100,11 @@ const Serializer = {
     const configs = instruction.configs;
     if (configs == null) return instruction.copyWith({});
     return instruction.copyWith(
-      Object.fromEntries(entries.map(entry => this.parseConfig(configs, entry)))
+      Object.fromEntries(
+        entries
+          .filter(entry => entry !== '')
+          .map(entry => this.parseConfig(configs, entry))
+      )
     );
   },
   parseSymbol(str: string): Symbol {

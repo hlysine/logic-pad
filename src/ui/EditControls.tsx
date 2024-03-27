@@ -1,8 +1,6 @@
 import { memo } from 'react';
 import { FiCornerUpLeft, FiCornerUpRight, FiRefreshCcw } from 'react-icons/fi';
 import { useGrid } from './GridContext';
-import { array } from '../data/helper';
-import { Color } from '../data/primitives';
 import { cn } from '../utils';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useEdit } from './EditContext';
@@ -22,17 +20,9 @@ export default memo(function EditControls() {
   };
 
   const restart = () => {
-    let changed = false;
-    const newTiles = array(grid.width, grid.height, (x, y) => {
-      const tile = grid.getTile(x, y);
-      if (tile.exists && !tile.fixed && tile.color !== Color.Gray) {
-        changed = true;
-        return tile.withColor(Color.Gray);
-      }
-      return tile;
-    });
-    if (!changed) return;
-    setGrid(grid.copyWith({ tiles: newTiles }));
+    const reset = grid.resetTiles();
+    if (reset === grid) return;
+    setGrid(reset);
   };
 
   useHotkeys('z', undo);

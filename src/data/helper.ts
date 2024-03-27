@@ -79,3 +79,30 @@ export function unescape(text: string) {
   }
   return result + text.substring(index);
 }
+
+/* eslint-disable @typescript-eslint/no-floating-promises */
+export const compress = async (string: string) => {
+  const blobToBase64 = (blob: Blob) =>
+    new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve((reader.result as string).split(',')[1]);
+      reader.readAsDataURL(blob);
+    });
+  const byteArray = new TextEncoder().encode(string);
+  const cs = new CompressionStream('gzip');
+  const writer = cs.writable.getWriter();
+  writer.write(byteArray);
+  writer.close();
+  return new Response(cs.readable).blob().then(blobToBase64);
+};
+
+export const decompress = async (base64string: string) => {
+  const bytes = Uint8Array.from(atob(base64string), c => c.charCodeAt(0));
+  const cs = new DecompressionStream('gzip');
+  const writer = cs.writable.getWriter();
+  writer.write(bytes);
+  writer.close();
+  return new Response(cs.readable).arrayBuffer().then(function (arrayBuffer) {
+    return new TextDecoder().decode(arrayBuffer);
+  });
+};

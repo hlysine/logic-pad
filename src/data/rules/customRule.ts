@@ -39,7 +39,7 @@ export default class CustomRule extends Rule {
   }
 
   public get id(): string {
-    return `underclued`;
+    return `custom`;
   }
 
   public get explanation(): string {

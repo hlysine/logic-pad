@@ -326,6 +326,45 @@ export const DEV_PUZZLES: Puzzle[] = [
     description: '',
   },
   {
+    title: 'Offsetted rotation',
+    grid: GridData.create([
+      'BWWBBWBWWBW.W',
+      'WWWWBBBBBWW.B',
+      'BBBBBBWBWWW.B',
+      'BWBWBWWBBWB.W',
+      'WWWWWWBWBWW.B',
+      'WWWBBWWBWWW.W',
+      'BBBWBBWBWWB.W',
+      'BWBBWBWBBWW.B',
+      'WBBWWWBWWWW.n',
+      'BWWWBWBWBBB.n',
+      'WWBBWBBWWBW.n',
+      'BWBBBWBBBWW.n',
+      'BBWWBWWWWWW.n',
+      'BBBBBBBBBnn.B',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'BWWBBWBWWBW.W',
+      'WWWWBBBBBWW.B',
+      'BBBBBBWBWWW.B',
+      'BWBWBWWBBWB.W',
+      'WWWWWWBWBWW.B',
+      'WWWBBWWBWWW.W',
+      'BBBWBBWBWWB.W',
+      'BWBBWBWBBWW.B',
+      'WBBWWWBWWWW.B',
+      'BWWWBWBWBBB.W',
+      'WWBBWBBWWBW.W',
+      'BWBBBWBBBWW.W',
+      'BBWWBWWWWWW.B',
+      'BBBBBBBBBWW.B',
+    ]),
+    difficulty: 8,
+    author: 'AZURE',
+    link: '',
+    description: '',
+  },
+  {
     title: 'Scratch Pad',
     grid: new GridData(12, 12),
     solution: null,
@@ -336,7 +375,7 @@ export const DEV_PUZZLES: Puzzle[] = [
   },
 ];
 
-const defaultSelection = 7;
+const defaultSelection = 8;
 
 // million-ignore
 export default memo(function DevPuzzles() {

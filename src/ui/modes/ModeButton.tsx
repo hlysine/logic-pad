@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../utils';
-import { Link, useRouterState } from '@tanstack/react-router';
+import { Link, useRouterState, useSearch } from '@tanstack/react-router';
 
 export interface ModeButtonProps {
   active: boolean;
@@ -14,10 +14,12 @@ export default memo(function ModeButton({
   children,
 }: ModeButtonProps) {
   const state = useRouterState();
+  const search = useSearch({ from: undefined, strict: false });
   return (
     <Link
       to={link}
       role="tab"
+      search={search}
       className={cn('tab w-36 capitalize', active && 'tab-active')}
     >
       {state.isTransitioning ? (

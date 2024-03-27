@@ -275,6 +275,31 @@ export const DEV_PUZZLES: Puzzle[] = [
     link: '',
     description: '',
   },
+  {
+    title: 'Around The Pot',
+    grid: GridData.create([
+      'BWBBWWB',
+      'BBnWnWB',
+      'BnWWBnB',
+      'nWBBBBn',
+      'BWBBBBn',
+      'WnBBBnW',
+      'WWnnnBB',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'BWBBWWB',
+      'BBWWWWB',
+      'BWWWBWB',
+      'BWBBBBW',
+      'BWBBBBW',
+      'WWBBBBW',
+      'WWWBBBB',
+    ]),
+    difficulty: 10,
+    author: 'romain22222',
+    link: '',
+    description: '',
+  },
 ];
 
 // million-ignore

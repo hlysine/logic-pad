@@ -188,7 +188,7 @@ const Serializer = {
   },
 
   stringifyTiles(tiles: readonly (readonly TileData[])[]): string {
-    return `T${tiles[0].length}:${tiles.map(row => row.map(tile => this.stringifyTile(tile)).join('')).join('')}`;
+    return `T${tiles[0]?.length ?? 0}:${tiles.map(row => row.map(tile => this.stringifyTile(tile)).join('')).join('')}`;
   },
   parseTiles(input: string): TileData[][] {
     if (!input.startsWith('T')) {

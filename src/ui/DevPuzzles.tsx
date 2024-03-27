@@ -300,7 +300,18 @@ export const DEV_PUZZLES: Puzzle[] = [
     link: '',
     description: '',
   },
+  {
+    title: 'Scratch Pad',
+    grid: new GridData(12, 12),
+    solution: null,
+    difficulty: 1,
+    author: 'Lysine',
+    link: '',
+    description: 'An empty grid for you to design your next puzzle.',
+  },
 ];
+
+const defaultSelection = 6;
 
 // million-ignore
 export default memo(function DevPuzzles() {
@@ -309,9 +320,12 @@ export default memo(function DevPuzzles() {
 
   useEffect(() => {
     if (grid.width === 0) {
-      setGrid(DEV_PUZZLES[0].grid, DEV_PUZZLES[0].solution);
-      setMetadata(DEV_PUZZLES[0]);
-      clearHistory(DEV_PUZZLES[0].grid);
+      setGrid(
+        DEV_PUZZLES[defaultSelection].grid,
+        DEV_PUZZLES[defaultSelection].solution
+      );
+      setMetadata(DEV_PUZZLES[defaultSelection]);
+      clearHistory(DEV_PUZZLES[defaultSelection].grid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -408,7 +408,12 @@ export default memo(function DevPuzzles() {
             clearHistory(puzzle.grid);
           }}
         >
-          <a>{puzzle.title}</a>
+          <a className="text-md">
+            {puzzle.title}
+            <span className="badge badge-secondary badge-sm rounded-lg">
+              {puzzle.author}
+            </span>
+          </a>
         </li>
       ))}
     </ul>

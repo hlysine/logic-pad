@@ -46,4 +46,16 @@ export default class TileData {
   public get isFixed(): boolean {
     return this.fixed;
   }
+
+  public static create(char: string): TileData {
+    const exists = char !== '.';
+    const fixed = char.toUpperCase() === char;
+    const color =
+      char.toLowerCase() === 'n'
+        ? Color.Gray
+        : char.toLowerCase() === 'b'
+          ? Color.Dark
+          : Color.Light;
+    return new TileData(exists, fixed, color);
+  }
 }

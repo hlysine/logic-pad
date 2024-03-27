@@ -14,6 +14,7 @@ export interface Config<T> {
   readonly field: string;
   readonly description: string;
   readonly default: T;
+  readonly configurable: boolean;
 }
 
 export interface NumberConfig extends Config<number> {

@@ -1,23 +1,18 @@
 import GridData from '../grid';
 import { RuleState, State } from '../primitives';
-import Rule from './rule';
+import Rule, { SearchVariant } from './rule';
 
 export default class CompletePatternRule extends Rule {
-  private static readonly EXAMPLE_GRID = GridData.create([
-    'wbwbw',
-    'bwbwb',
-    'wbwbw',
-    'bwbwb',
-  ]);
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['wbwbw', 'bwbwb', 'wbwbw', 'bwbwb'])
+  );
 
-  public static readonly id = `complete_pattern`;
-
-  public static readonly searchVariants = [
+  private static readonly SEARCH_VARIANTS = [
     new CompletePatternRule().searchVariant(),
   ];
 
   public get id(): string {
-    return CompletePatternRule.id;
+    return `complete_pattern`;
   }
 
   public get explanation(): string {
@@ -26,6 +21,10 @@ export default class CompletePatternRule extends Rule {
 
   public createExampleGrid(): GridData {
     return CompletePatternRule.EXAMPLE_GRID;
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return CompletePatternRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(_grid: GridData): RuleState {

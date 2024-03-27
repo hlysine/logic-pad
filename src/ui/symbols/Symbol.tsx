@@ -13,7 +13,7 @@ export default memo(function Symbol({
     }),
     [symbol.x, symbol.y]
   );
-  const Component = allSymbols.get(symbol.id);
+  const Component = allSymbols.get(symbol.id)?.component;
   if (!Component) {
     throw new Error(`No component for symbol: ${symbol.id}`);
   }

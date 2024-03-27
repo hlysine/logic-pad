@@ -1,22 +1,44 @@
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { array } from '../helper';
 import { Color, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class LetterSymbol extends Symbol {
-  private static EXAMPLE_GRID = GridData.create([
-    'bbbww',
-    'wwbbw',
-    'wwbbb',
-    'bwwww',
-  ])
-    .addSymbol(new LetterSymbol(0, 0, 'B'))
-    .addSymbol(new LetterSymbol(3, 0, 'A'))
-    .addSymbol(new LetterSymbol(4, 1, 'A'))
-    .addSymbol(new LetterSymbol(3, 2, 'B'))
-    .addSymbol(new LetterSymbol(1, 1, 'C'))
-    .addSymbol(new LetterSymbol(0, 2, 'C'))
-    .addSymbol(new LetterSymbol(4, 3, 'C'));
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['bbbww', 'wwbbw', 'wwbbb', 'bwwww'])
+      .addSymbol(new LetterSymbol(0, 0, 'B'))
+      .addSymbol(new LetterSymbol(3, 0, 'A'))
+      .addSymbol(new LetterSymbol(4, 1, 'A'))
+      .addSymbol(new LetterSymbol(3, 2, 'B'))
+      .addSymbol(new LetterSymbol(1, 1, 'C'))
+      .addSymbol(new LetterSymbol(0, 2, 'C'))
+      .addSymbol(new LetterSymbol(4, 3, 'C'))
+  );
+
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'x',
+      description: 'X',
+      configurable: false,
+    },
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'y',
+      description: 'Y',
+      configurable: false,
+    },
+    {
+      type: ConfigType.String,
+      default: 'A',
+      field: 'letter',
+      description: 'Letter',
+      configurable: true,
+    },
+  ]);
 
   public constructor(
     public readonly x: number,
@@ -27,10 +49,8 @@ export default class LetterSymbol extends Symbol {
     this.letter = letter;
   }
 
-  public static readonly id = `letter`;
-
   public get id(): string {
-    return LetterSymbol.id;
+    return `letter`;
   }
 
   public get explanation(): string {
@@ -39,6 +59,10 @@ export default class LetterSymbol extends Symbol {
 
   public createExampleGrid(): GridData {
     return LetterSymbol.EXAMPLE_GRID;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return LetterSymbol.CONFIGS;
   }
 
   public validateSymbol(grid: GridData): State {

@@ -2,7 +2,7 @@ import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { array } from '../helper';
 import { Color, RuleState, State } from '../primitives';
-import Rule from './rule';
+import Rule, { SearchVariant } from './rule';
 
 interface CachedTile {
   x: number;
@@ -81,21 +81,22 @@ function generateCache(grid: GridData): CachedPattern[] {
 }
 
 export default class BanPatternRule extends Rule {
-  private static readonly EXAMPLE_GRID = GridData.create([
-    'nnnnn',
-    'nnnnn',
-    'wwwwn',
-    'nnnnn',
-    'nnnnn',
-  ]);
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['nnnnn', 'nnnnn', 'wwwwn', 'nnnnn', 'nnnnn'])
+  );
 
-  private static readonly CONFIGS: readonly AnyConfig[] = [
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Grid,
       default: BanPatternRule.EXAMPLE_GRID,
       field: 'pattern',
       description: 'Pattern',
+      configurable: true,
     },
+  ]);
+
+  private static readonly SEARCH_VARIANTS = [
+    new BanPatternRule(BanPatternRule.EXAMPLE_GRID).searchVariant(),
   ];
 
   public readonly pattern: GridData;
@@ -107,14 +108,8 @@ export default class BanPatternRule extends Rule {
     this.cache = generateCache(this.pattern);
   }
 
-  public static readonly id = `ban_pattern`;
-
-  public static readonly searchVariants = [
-    new BanPatternRule(BanPatternRule.EXAMPLE_GRID).searchVariant(),
-  ];
-
   public get id(): string {
-    return BanPatternRule.id;
+    return `ban_pattern`;
   }
 
   public get explanation(): string {
@@ -146,6 +141,10 @@ export default class BanPatternRule extends Rule {
 
   public get configs(): readonly AnyConfig[] | null {
     return BanPatternRule.CONFIGS;
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return BanPatternRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(grid: GridData): RuleState {

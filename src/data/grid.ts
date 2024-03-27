@@ -171,13 +171,7 @@ export default class GridData {
     const width = array.reduce((max, row) => Math.max(max, row.length), 0);
     const tiles = array.map(row =>
       Array.from({ length: width }, (_, x) => {
-        const char = row.charAt(x);
-        const lower = char.toLowerCase();
-        return new TileData(
-          char !== '.',
-          char !== lower,
-          lower === 'w' ? Color.Light : lower === 'b' ? Color.Dark : Color.Gray
-        );
+        return TileData.create(row.charAt(x));
       })
     );
     return new GridData(width, height, tiles);

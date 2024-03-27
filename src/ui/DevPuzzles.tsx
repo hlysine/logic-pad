@@ -12,6 +12,7 @@ import NumberSymbol from '../data/symbols/numberSymbol';
 import UndercluedRule from '../data/rules/undercluedRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import Puzzle from '../data/puzzle';
+import Serializer from '../data/serializer';
 
 export const DEV_PUZZLES: Puzzle[] = [
   {

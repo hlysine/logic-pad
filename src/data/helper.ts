@@ -48,3 +48,34 @@ export function maxBy<T>(values: readonly T[], mapper: (element: T) => number) {
   }
   return result;
 }
+
+const escapeCharacters = '=,:|';
+
+export function escape(text: string) {
+  let result = '';
+  for (const char of text) {
+    if (escapeCharacters.includes(char) || char === '&') {
+      result += `&#${char.charCodeAt(0)};`;
+    } else {
+      result += char;
+    }
+  }
+  return result;
+}
+
+export function unescape(text: string) {
+  let result = '';
+  const matches = text.matchAll(/&#([0-9]+);/g);
+  let index = 0;
+  for (const match of matches) {
+    result += text.substring(index, match.index);
+    const char = String.fromCharCode(parseInt(match[1], 10));
+    if (escapeCharacters.includes(char) || char === '&') {
+      result += char;
+    } else {
+      result += match[0];
+    }
+    index = match.index! + match[0].length;
+  }
+  return result + text.substring(index);
+}

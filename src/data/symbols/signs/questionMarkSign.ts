@@ -1,20 +1,18 @@
+import { AnyConfig } from '../../config';
 import GridData from '../../grid';
 import Sign from './sign';
 
 export default class QuestionMarkSign extends Sign {
-  private static EXAMPLE_GRID = GridData.create([
-    'nnnnn',
-    'nnnnn',
-    'nnnnn',
-    'nnnnn',
-  ])
-    .addSymbol(new QuestionMarkSign(1, 0))
-    .addSymbol(new QuestionMarkSign(0, 1));
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['nnnnn', 'nnnnn', 'nnnnn', 'nnnnn'])
+      .addSymbol(new QuestionMarkSign(1, 0))
+      .addSymbol(new QuestionMarkSign(0, 1))
+  );
 
-  public static readonly id = `question_mark`;
+  private static readonly CONFIGS = null;
 
   public get id(): string {
-    return QuestionMarkSign.id;
+    return `question_mark`;
   }
 
   public get explanation(): string {
@@ -23,6 +21,10 @@ export default class QuestionMarkSign extends Sign {
 
   public createExampleGrid(): GridData {
     return QuestionMarkSign.EXAMPLE_GRID;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return QuestionMarkSign.CONFIGS;
   }
 
   public copyWith({ x, y }: { x?: number; y?: number }): this {

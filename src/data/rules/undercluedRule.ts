@@ -2,29 +2,24 @@ import GridData from '../grid';
 import { Color, GridState, RuleState, State } from '../primitives';
 import NumberSymbol from '../symbols/numberSymbol';
 import QuestionMarkSign from '../symbols/signs/questionMarkSign';
-import Rule from './rule';
+import Rule, { SearchVariant } from './rule';
 
 export default class UndercluedRule extends Rule {
-  private static readonly EXAMPLE_GRID = GridData.create([
-    'nbnnn',
-    'bwbnn',
-    'nbnnn',
-    'wwwnn',
-  ])
-    .addSymbol(new NumberSymbol(1, 1, 1))
-    .addSymbol(new NumberSymbol(0, 3, 4))
-    .addSymbol(new QuestionMarkSign(0, 2))
-    .addSymbol(new QuestionMarkSign(2, 2))
-    .addSymbol(new QuestionMarkSign(3, 3));
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['nbnnn', 'bwbnn', 'nbnnn', 'wwwnn'])
+      .addSymbol(new NumberSymbol(1, 1, 1))
+      .addSymbol(new NumberSymbol(0, 3, 4))
+      .addSymbol(new QuestionMarkSign(0, 2))
+      .addSymbol(new QuestionMarkSign(2, 2))
+      .addSymbol(new QuestionMarkSign(3, 3))
+  );
 
-  public static readonly id = `underclued`;
-
-  public static readonly searchVariants = [
+  private static readonly SEARCH_VARIANTS = [
     new UndercluedRule().searchVariant(),
   ];
 
   public get id(): string {
-    return UndercluedRule.id;
+    return `underclued`;
   }
 
   public get explanation(): string {
@@ -33,6 +28,10 @@ export default class UndercluedRule extends Rule {
 
   public createExampleGrid(): GridData {
     return UndercluedRule.EXAMPLE_GRID;
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return UndercluedRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(_grid: GridData): RuleState {

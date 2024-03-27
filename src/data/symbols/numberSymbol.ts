@@ -1,16 +1,38 @@
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { Color, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class NumberSymbol extends Symbol {
-  private static EXAMPLE_GRID = GridData.create([
-    'wbbbb',
-    'wbbwb',
-    'bbwwb',
-    'bbbbb',
-  ])
-    .addSymbol(new NumberSymbol(2, 2, 3))
-    .addSymbol(new NumberSymbol(0, 1, 2));
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['wbbbb', 'wbbwb', 'bbwwb', 'bbbbb'])
+      .addSymbol(new NumberSymbol(2, 2, 3))
+      .addSymbol(new NumberSymbol(0, 1, 2))
+  );
+
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'x',
+      description: 'X',
+      configurable: false,
+    },
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'y',
+      description: 'Y',
+      configurable: false,
+    },
+    {
+      type: ConfigType.Number,
+      default: 1,
+      field: 'number',
+      description: 'Number',
+      configurable: true,
+    },
+  ]);
 
   public constructor(
     public readonly x: number,
@@ -21,10 +43,8 @@ export default class NumberSymbol extends Symbol {
     this.number = number;
   }
 
-  public static readonly id = `number`;
-
   public get id(): string {
-    return NumberSymbol.id;
+    return `number`;
   }
 
   public get explanation(): string {
@@ -33,6 +53,10 @@ export default class NumberSymbol extends Symbol {
 
   public createExampleGrid(): GridData {
     return NumberSymbol.EXAMPLE_GRID;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return NumberSymbol.CONFIGS;
   }
 
   public validateSymbol(grid: GridData): State {

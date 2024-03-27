@@ -1,29 +1,32 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { RuleState, State } from '../primitives';
-import Rule from './rule';
+import Rule, { SearchVariant } from './rule';
 
 export default class CustomRule extends Rule {
-  private static readonly EXAMPLE_GRID = GridData.create([
-    'wwwww',
-    'wwwww',
-    'wwwww',
-    'wwwww',
-  ]);
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
+  );
 
-  private static readonly CONFIGS: readonly AnyConfig[] = [
+  public static readonly configs: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.String,
       default: 'A *custom* rule',
       field: 'description',
       description: 'Description',
+      configurable: true,
     },
     {
       type: ConfigType.Grid,
       default: CustomRule.EXAMPLE_GRID,
       field: 'grid',
       description: 'Thumbnail Grid',
+      configurable: true,
     },
+  ]);
+
+  private static readonly SEARCH_VARIANTS = [
+    new CustomRule('A *custom* rule', CustomRule.EXAMPLE_GRID).searchVariant(),
   ];
 
   public constructor(
@@ -35,14 +38,8 @@ export default class CustomRule extends Rule {
     this.grid = grid;
   }
 
-  public static readonly id = `underclued`;
-
-  public static readonly searchVariants = [
-    new CustomRule('A *custom* rule', CustomRule.EXAMPLE_GRID).searchVariant(),
-  ];
-
   public get id(): string {
-    return CustomRule.id;
+    return `underclued`;
   }
 
   public get explanation(): string {
@@ -54,7 +51,11 @@ export default class CustomRule extends Rule {
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return CustomRule.CONFIGS;
+    return CustomRule.configs;
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return CustomRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(_grid: GridData): RuleState {

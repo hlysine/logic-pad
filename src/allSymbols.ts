@@ -13,28 +13,26 @@ export interface SymbolProps<T extends SymbolData> {
   symbol: T;
 }
 
-type SymbolConstructor<T extends SymbolData> = (new (...args: never[]) => T) & {
-  readonly id: string;
-};
-
-const allSymbols = new Map<
-  string,
-  React.NamedExoticComponent<SymbolProps<SymbolData>>
->();
-
-function register<T extends SymbolData>(
-  constructor: SymbolConstructor<T>,
-  component: React.NamedExoticComponent<SymbolProps<T>>
-) {
-  allSymbols.set(
-    constructor.id,
-    component as React.NamedExoticComponent<SymbolProps<SymbolData>>
-  );
+interface SymbolInfo {
+  readonly component: React.NamedExoticComponent<SymbolProps<SymbolData>>;
+  readonly prototype: SymbolData;
 }
 
-register(NumberSymbolData, NumberSymbolUI);
-register(LetterSymbolData, LetterSymbolUI);
-register(ViewpointSymbolData, ViewpointSymbolUI);
-register(QuestionMarkSignData, QuestionMarkSignUI);
+const allSymbols = new Map<string, SymbolInfo>();
+
+function register<T extends SymbolData>(
+  prototype: T,
+  component: React.NamedExoticComponent<SymbolProps<T>>
+) {
+  allSymbols.set(prototype.id, {
+    component: component as React.NamedExoticComponent<SymbolProps<SymbolData>>,
+    prototype,
+  });
+}
+
+register(new NumberSymbolData(0, 0, 1), NumberSymbolUI);
+register(new LetterSymbolData(0, 0, 'A'), LetterSymbolUI);
+register(new ViewpointSymbolData(0, 0, 1), ViewpointSymbolUI);
+register(new QuestionMarkSignData(0, 0), QuestionMarkSignUI);
 
 export default allSymbols;

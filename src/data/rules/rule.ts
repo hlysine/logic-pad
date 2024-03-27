@@ -18,6 +18,8 @@ export default abstract class Rule extends Instruction {
     return null;
   }
 
+  public abstract get searchVariants(): SearchVariant[];
+
   public searchVariant(): SearchVariant {
     return {
       description: this.explanation,

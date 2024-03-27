@@ -1,15 +1,39 @@
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { move } from '../helper';
 import { Color, DIRECTIONS, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class ViewpointSymbol extends Symbol {
-  private static EXAMPLE_GRID = GridData.create([
-    'bbbbb',
-    'wwwwb',
-    'bwwbb',
-    'bbwww',
-  ]).addSymbol(new ViewpointSymbol(1, 1, 5));
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['bbbbb', 'wwwwb', 'bwwbb', 'bbwww']).addSymbol(
+      new ViewpointSymbol(1, 1, 5)
+    )
+  );
+
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'x',
+      description: 'X',
+      configurable: false,
+    },
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'y',
+      description: 'Y',
+      configurable: false,
+    },
+    {
+      type: ConfigType.Number,
+      default: 1,
+      field: 'number',
+      description: 'Number',
+      configurable: true,
+    },
+  ]);
 
   public constructor(
     public readonly x: number,
@@ -20,10 +44,8 @@ export default class ViewpointSymbol extends Symbol {
     this.number = number;
   }
 
-  public static readonly id = `viewpoint`;
-
   public get id(): string {
-    return ViewpointSymbol.id;
+    return `viewpoint`;
   }
 
   public get explanation(): string {
@@ -32,6 +54,10 @@ export default class ViewpointSymbol extends Symbol {
 
   public createExampleGrid(): GridData {
     return ViewpointSymbol.EXAMPLE_GRID;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return ViewpointSymbol.CONFIGS;
   }
 
   public validateSymbol(grid: GridData): State {

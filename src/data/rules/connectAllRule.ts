@@ -2,31 +2,31 @@ import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { array, minBy } from '../helper';
 import { Color, Position, RuleState, State } from '../primitives';
-import Rule from './rule';
+import Rule, { SearchVariant } from './rule';
 
 export default class ConnectAllRule extends Rule {
-  private static readonly EXAMPLE_GRID_LIGHT = GridData.create([
-    'bwwwb',
-    'bwbww',
-    'wwwbb',
-    'wbwww',
-  ]);
+  private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
+    GridData.create(['bwwwb', 'bwbww', 'wwwbb', 'wbwww'])
+  );
 
-  private static readonly EXAMPLE_GRID_DARK = GridData.create([
-    'wbbbw',
-    'wbwbb',
-    'bbbww',
-    'bwbbb',
-  ]);
+  private static readonly EXAMPLE_GRID_DARK = Object.freeze(
+    GridData.create(['wbbbw', 'wbwbb', 'bbbww', 'bwbbb'])
+  );
 
-  private static readonly CONFIGS: readonly AnyConfig[] = [
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Color,
       default: Color.Light,
       allowGray: false,
       field: 'color',
       description: 'Color',
+      configurable: true,
     },
+  ]);
+
+  private static readonly SEARCH_VARIANTS = [
+    new ConnectAllRule(Color.Light).searchVariant(),
+    new ConnectAllRule(Color.Dark).searchVariant(),
   ];
 
   public constructor(public readonly color: Color) {
@@ -34,15 +34,8 @@ export default class ConnectAllRule extends Rule {
     this.color = color;
   }
 
-  public static readonly id = `connect_all`;
-
-  public static readonly searchVariants = [
-    new ConnectAllRule(Color.Light).searchVariant(),
-    new ConnectAllRule(Color.Dark).searchVariant(),
-  ];
-
   public get id(): string {
-    return ConnectAllRule.id;
+    return `connect_all`;
   }
 
   public get explanation(): string {
@@ -57,6 +50,10 @@ export default class ConnectAllRule extends Rule {
 
   public get configs(): readonly AnyConfig[] | null {
     return ConnectAllRule.CONFIGS;
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return ConnectAllRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(grid: GridData): RuleState {

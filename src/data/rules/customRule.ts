@@ -14,7 +14,7 @@ export default class CustomRule extends Rule {
   private static readonly CONFIGS: readonly AnyConfig[] = [
     {
       type: ConfigType.String,
-      default: 'A *custom* rule.',
+      default: 'A *custom* rule',
       field: 'description',
       description: 'Description',
     },
@@ -22,7 +22,7 @@ export default class CustomRule extends Rule {
       type: ConfigType.Grid,
       default: CustomRule.EXAMPLE_GRID,
       field: 'grid',
-      description: 'Example Grid',
+      description: 'Thumbnail Grid',
     },
   ];
 
@@ -38,7 +38,7 @@ export default class CustomRule extends Rule {
   public static readonly id = `underclued`;
 
   public static readonly searchVariants = [
-    new CustomRule('A *custom* rule.', CustomRule.EXAMPLE_GRID).searchVariant(),
+    new CustomRule('A *custom* rule', CustomRule.EXAMPLE_GRID).searchVariant(),
   ];
 
   public get id(): string {

@@ -38,7 +38,7 @@ export default memo(function Instruction({
                 : 'bg-error'
           )}
         ></div>
-        <div className="text-center py-1 px-4 flex justify-center items-center text-neutral-content">
+        <div className="text-center py-1 px-4 flex grow justify-center items-center text-neutral-content">
           <AnnotatedText text={instruction.explanation} />
         </div>
         <div className="shrink-0 relative min-h-[calc(28px*4)] min-w-[calc(28px*5)] flex items-center justify-center">

@@ -1,6 +1,7 @@
 import BanPatternRule from './data/rules/banPatternRule';
 import CompletePatternRule from './data/rules/completePatternRule';
 import ConnectAllRule from './data/rules/connectAllRule';
+import CustomRule from './data/rules/customRule';
 import Rule, { SearchVariant } from './data/rules/rule';
 import UndercluedRule from './data/rules/undercluedRule';
 
@@ -24,5 +25,6 @@ register(BanPatternRule);
 register(CompletePatternRule);
 register(ConnectAllRule);
 register(UndercluedRule);
+register(CustomRule);
 
 export default allRules;

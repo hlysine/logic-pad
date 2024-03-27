@@ -301,6 +301,31 @@ export const DEV_PUZZLES: Puzzle[] = [
     description: '',
   },
   {
+    title: 'Around The Pot v2',
+    grid: GridData.create([
+      'BnnnnnB',
+      'nBnnnBn',
+      'nWBBBnn',
+      'nWWBWnn',
+      'nWBBWnn',
+      'nBBBBWn',
+      'BnnnnnW',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'BBBBBBB',
+      'WBBBBBW',
+      'WWBBBWW',
+      'WWWBWWW',
+      'WWBBWWW',
+      'WBBBBWW',
+      'BBBBBBW',
+    ]),
+    difficulty: 7,
+    author: 'romain22222',
+    link: '',
+    description: '',
+  },
+  {
     title: 'Scratch Pad',
     grid: new GridData(12, 12),
     solution: null,
@@ -311,7 +336,7 @@ export const DEV_PUZZLES: Puzzle[] = [
   },
 ];
 
-const defaultSelection = 6;
+const defaultSelection = 7;
 
 // million-ignore
 export default memo(function DevPuzzles() {

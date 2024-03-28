@@ -51,19 +51,21 @@ export default memo(function EditableInstruction({
             tabIndex={0}
             className="p-4 m-2 dropdown-content z-[1] bg-secondary text-secondary-content shadow-xl rounded-box w-[400px]"
           >
-            {instruction.configs?.map(config => (
-              <Config
-                key={`${config.field}: ${config.type}`}
-                instruction={instruction}
-                config={config}
-                setConfig={(field, value) => {
-                  const newInstruction = instruction.copyWith({
-                    [field]: value,
-                  });
-                  setGrid(grid.replaceRule(instruction, newInstruction));
-                }}
-              />
-            ))}
+            {instruction.configs
+              ?.filter(config => config.configurable)
+              .map(config => (
+                <Config
+                  key={`${config.field}: ${config.type}`}
+                  instruction={instruction}
+                  config={config}
+                  setConfig={(field, value) => {
+                    const newInstruction = instruction.copyWith({
+                      [field]: value,
+                    });
+                    setGrid(grid.replaceRule(instruction, newInstruction));
+                  }}
+                />
+              ))}
           </div>
         )}
       </div>

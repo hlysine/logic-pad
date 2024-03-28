@@ -1,12 +1,16 @@
 import { minBy } from '../../helper';
 import CompressorBase from './compressorBase';
 import GzipCompressor from './gzipCompressor';
+import DeflateCompressor from './deflateCompressor';
 
 const allCompressors = new Map<string, CompressorBase>();
 
 function register<T extends CompressorBase>(prototype: T) {
   allCompressors.set(prototype.id, prototype);
 }
+
+const activeCompressors = [new DeflateCompressor()];
+activeCompressors.forEach(register);
 
 register(new GzipCompressor());
 
@@ -17,7 +21,7 @@ class MasterCompressor extends CompressorBase {
 
   public async compress(input: string): Promise<string> {
     const compressed = await Promise.all(
-      [...allCompressors.values()].map(
+      activeCompressors.map(
         async compressor =>
           `${compressor.id}_${await compressor.compress(input)}`
       )
@@ -26,8 +30,13 @@ class MasterCompressor extends CompressorBase {
   }
 
   public async decompress(input: string): Promise<string> {
-    let [compressorId, compressed] = input.split('_', 2);
-    if (!allCompressors.has(compressorId)) {
+    const match = input.match(/^([^_]+?)_(.+)$/);
+    let compressorId: string;
+    let compressed: string;
+    if (match) {
+      compressorId = match[1];
+      compressed = match[2];
+    } else {
       compressorId = 'gzip';
       compressed = input;
     }

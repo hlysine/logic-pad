@@ -14,12 +14,17 @@ export default memo(function Metadata() {
         {metadata.author}
       </div>
       {metadata.link.trim().length > 0 && (
-        <button className="btn btn-ghost justify-start flex-nowrap">
-          <span className="whitespace-nowrap text-ellipsis overflow-hidden">
+        <a
+          className="btn btn-ghost justify-start flex-nowrap flex"
+          href={metadata.link}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span className="whitespace-nowrap text-ellipsis grow overflow-x-clip">
             {metadata.link}
           </span>
           <FiExternalLink size={24} />
-        </button>
+        </a>
       )}
       <div>{metadata.description}</div>
     </div>

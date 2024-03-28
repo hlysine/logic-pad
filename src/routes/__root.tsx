@@ -7,6 +7,7 @@ import GridContext from '../ui/GridContext';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import TanStackDevTools from '../ui/router/TanStackDevTools';
 import { memo } from 'react';
+import { FaGithub } from 'react-icons/fa';
 
 export const Route = createRootRoute({
   component: memo(function Root() {
@@ -37,8 +38,16 @@ export const Route = createRootRoute({
                   </ul>
                 </div>
                 <ModeSwitcher />
-                <div className="flex lg:basis-[320px] grow shrink justify-end">
+                <div className="flex lg:basis-[320px] grow shrink justify-end items-center">
                   <ThemeSwitcher />
+                  <a
+                    className="btn btn-square"
+                    href="https://github.com/hlysine/logic-pad"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FaGithub size={24} />
+                  </a>
                 </div>
               </header>
               <Outlet />

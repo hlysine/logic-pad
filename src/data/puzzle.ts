@@ -8,10 +8,6 @@ export interface PuzzleMetadata {
   difficulty: number;
 }
 
-export interface SerializedPuzzle extends PuzzleMetadata {
-  grid: string;
-}
-
 export default interface Puzzle extends PuzzleMetadata {
   grid: GridData;
   solution: GridData | null;

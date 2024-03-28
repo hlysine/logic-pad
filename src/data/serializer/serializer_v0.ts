@@ -1,14 +1,16 @@
-import GridData from './grid';
-import GridConnections from './gridConnections';
-import Rule from './rules/rule';
-import TileData from './tile';
-import Symbol from './symbols/symbol';
-import Instruction from './instruction';
-import { AnyConfig, ConfigType } from './config';
-import { Color, Direction, Edge } from './primitives';
-import { array, escape, unescape } from './helper';
-import allRules from '../allRules';
-import allSymbols from '../allSymbols';
+import GridData from '../grid';
+import GridConnections from '../gridConnections';
+import Rule from '../rules/rule';
+import TileData from '../tile';
+import Symbol from '../symbols/symbol';
+import Instruction from '../instruction';
+import { AnyConfig, ConfigType } from '../config';
+import { Color, Direction, Edge } from '../primitives';
+import { array, escape, unescape } from '../helper';
+import allRules from '../../allRules';
+import allSymbols from '../../allSymbols';
+import SerializerBase from './serializerBase';
+import Puzzle, { PuzzleMetadata } from '../puzzle';
 
 const OFFSETS = [
   { x: 0, y: -1 },
@@ -17,18 +19,21 @@ const OFFSETS = [
   { x: 0, y: 1 },
 ];
 
-const Serializer = {
-  stringifyTile(tile: TileData): string {
+export default class SerializerV0 extends SerializerBase {
+  public readonly version = 0;
+
+  public stringifyTile(tile: TileData): string {
     if (!tile.exists) return '.';
     const char =
       tile.color === Color.Gray ? 'n' : tile.color === Color.Dark ? 'b' : 'w';
     return tile.fixed ? char.toUpperCase() : char;
-  },
-  parseTile(str: string): TileData {
-    return TileData.create(str);
-  },
+  }
 
-  stringifyConfig(instruction: Instruction, config: AnyConfig): string {
+  public parseTile(str: string): TileData {
+    return TileData.create(str);
+  }
+
+  public stringifyConfig(instruction: Instruction, config: AnyConfig): string {
     switch (config.type) {
       case ConfigType.Number:
       case ConfigType.Color:
@@ -60,8 +65,12 @@ const Serializer = {
           )
         );
     }
-  },
-  parseConfig(configs: readonly AnyConfig[], entry: string): [string, unknown] {
+  }
+
+  public parseConfig(
+    configs: readonly AnyConfig[],
+    entry: string
+  ): [string, unknown] {
     const [key, value] = entry.split('=');
     const config = configs.find(x => x.field === key);
     if (!config) throw new Error(`Unknown config: ${key}`);
@@ -82,18 +91,21 @@ const Serializer = {
         ];
       }
     }
-  },
+  }
 
-  stringifyInstruction(instruction: Instruction): string {
+  public stringifyInstruction(instruction: Instruction): string {
     return `${instruction.id},${instruction.configs?.map(config => this.stringifyConfig(instruction, config)).join(',') ?? ''}`;
-  },
-  stringifyRule(rule: Rule): string {
+  }
+
+  public stringifyRule(rule: Rule): string {
     return this.stringifyInstruction(rule);
-  },
-  stringifySymbol(symbol: Symbol): string {
+  }
+
+  public stringifySymbol(symbol: Symbol): string {
     return this.stringifyInstruction(symbol);
-  },
-  parseRule(str: string): Rule {
+  }
+
+  public parseRule(str: string): Rule {
     const [id, ...entries] = str.split(',');
     const instruction = allRules.get(id);
     if (!instruction) throw new Error(`Unknown symbol: ${id}`);
@@ -106,8 +118,9 @@ const Serializer = {
           .map(entry => this.parseConfig(configs, entry))
       )
     );
-  },
-  parseSymbol(str: string): Symbol {
+  }
+
+  public parseSymbol(str: string): Symbol {
     const [id, ...entries] = str.split(',');
     const instruction = allSymbols.get(id);
     if (!instruction) throw new Error(`Unknown symbol: ${id}`);
@@ -116,9 +129,9 @@ const Serializer = {
     return instruction.prototype.copyWith(
       Object.fromEntries(entries.map(entry => this.parseConfig(configs, entry)))
     );
-  },
+  }
 
-  stringifyConnections(connections: GridConnections): string {
+  public stringifyConnections(connections: GridConnections): string {
     const maxX = connections.edges.reduce(
       (max, edge) => Math.max(max, edge.x1, edge.x2),
       0
@@ -158,8 +171,9 @@ const Serializer = {
       /\.+$/,
       ''
     );
-  },
-  parseConnections(input: string): GridConnections {
+  }
+
+  public parseConnections(input: string): GridConnections {
     if (!input.startsWith('C')) {
       throw new Error('Invalid grid connections\n' + input);
     }
@@ -185,12 +199,13 @@ const Serializer = {
       }
     }
     return new GridConnections(result);
-  },
+  }
 
-  stringifyTiles(tiles: readonly (readonly TileData[])[]): string {
+  public stringifyTiles(tiles: readonly (readonly TileData[])[]): string {
     return `T${tiles[0]?.length ?? 0}:${tiles.map(row => row.map(tile => this.stringifyTile(tile)).join('')).join('')}`;
-  },
-  parseTiles(input: string): TileData[][] {
+  }
+
+  public parseTiles(input: string): TileData[][] {
     if (!input.startsWith('T')) {
       throw new Error('Invalid grid data\n' + input);
     }
@@ -199,12 +214,13 @@ const Serializer = {
     return array(width, Math.ceil(data.length / width), (x, y) =>
       this.parseTile(data.charAt(y * width + x))
     );
-  },
+  }
 
-  stringifyRules(rules: readonly Rule[]): string {
+  public stringifyRules(rules: readonly Rule[]): string {
     return `R${rules.map(rule => this.stringifyRule(rule)).join(':')}`;
-  },
-  parseRules(input: string): Rule[] {
+  }
+
+  public parseRules(input: string): Rule[] {
     if (!input.startsWith('R')) {
       throw new Error('Invalid rules\n' + input);
     }
@@ -213,15 +229,18 @@ const Serializer = {
       .split(':')
       .filter(rule => rule !== '')
       .map(rule => this.parseRule(rule));
-  },
+  }
 
-  stringifySymbols(symbols: ReadonlyMap<string, readonly Symbol[]>): string {
+  public stringifySymbols(
+    symbols: ReadonlyMap<string, readonly Symbol[]>
+  ): string {
     return `S${Array.from(symbols.values())
       .flat()
       .map(symbol => this.stringifySymbol(symbol))
       .join(':')}`;
-  },
-  parseSymbols(input: string): Map<string, Symbol[]> {
+  }
+
+  public parseSymbols(input: string): Map<string, Symbol[]> {
     if (!input.startsWith('S')) {
       throw new Error('Invalid symbols\n' + input);
     }
@@ -239,9 +258,9 @@ const Serializer = {
         }
       });
     return symbols;
-  },
+  }
 
-  stringifyGrid(grid: GridData): string {
+  public stringifyGrid(grid: GridData): string {
     const data = [
       this.stringifyTiles(grid.tiles),
       this.stringifyConnections(grid.connections),
@@ -249,8 +268,9 @@ const Serializer = {
       this.stringifyRules(grid.rules),
     ];
     return `${grid.width}x${grid.height}|${data.join('|')}`;
-  },
-  parseGrid(input: string): GridData {
+  }
+
+  public parseGrid(input: string): GridData {
     const [size, ...data] = input.split('|');
     const [width, height] = size.split('x').map(Number);
     let tiles: TileData[][] | undefined;
@@ -271,7 +291,41 @@ const Serializer = {
       }
     }
     return new GridData(width, height, tiles, connections, symbols, rules);
-  },
-};
+  }
 
-export default Serializer;
+  public stringifyPuzzle(puzzle: Puzzle): string {
+    let grid = puzzle.grid;
+    if (puzzle.solution !== null) {
+      const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
+        const tile = puzzle.grid.tiles[y][x];
+        return tile.exists && tile.color === Color.Gray
+          ? tile.copyWith({
+              color: puzzle.solution!.tiles[y][x].color,
+            })
+          : tile;
+      });
+      grid = puzzle.grid.copyWith({ tiles });
+    }
+    return JSON.stringify({
+      title: puzzle.title,
+      grid: this.stringifyGrid(grid),
+      difficulty: puzzle.difficulty,
+      link: puzzle.link,
+      author: puzzle.author,
+      description: puzzle.description,
+    });
+  }
+
+  public parsePuzzle(input: string): Puzzle {
+    const { grid: gridString, ...metadata } = JSON.parse(
+      input
+    ) as PuzzleMetadata & { grid: string };
+    const grid = this.parseGrid(gridString);
+    const reset = grid.resetTiles();
+    return {
+      ...metadata,
+      grid: reset,
+      solution: grid,
+    };
+  }
+}

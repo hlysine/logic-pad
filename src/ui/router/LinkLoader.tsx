@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import { useGrid } from '../GridContext';
 import { useEdit } from '../EditContext';
-import Serializer from '../../data/serializer';
-import { SerializedPuzzle } from '../../data/puzzle';
-import { decompress } from '../../data/helper';
+import Compressor from '../../data/serializer/compressor/allCompressors';
+import Serializer from '../../data/serializer/allSerializers';
 
 export interface PuzzleParams {
   d?: string;
@@ -26,17 +25,12 @@ export default function LinkLoader({ params }: LinkLoaderProps) {
   const { clearHistory } = useEdit();
   useEffect(() => {
     if (params.d) {
-      decompress(params.d)
+      Compressor.decompress(params.d)
         .then(data => {
-          const { grid: gridString, ...metadata } = JSON.parse(
-            data
-          ) as SerializedPuzzle;
-          console.log('Loading puzzle by data', metadata, gridString);
-          const grid = Serializer.parseGrid(gridString);
-          const reset = grid.resetTiles();
-          setGrid(reset, grid);
+          const { grid, solution, ...metadata } = Serializer.parsePuzzle(data);
+          setGrid(grid, solution);
           setMetadata(metadata);
-          clearHistory(reset);
+          clearHistory(grid);
         })
         .catch(console.log);
     }

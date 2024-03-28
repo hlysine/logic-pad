@@ -14,8 +14,8 @@ import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
 import Puzzle from '../data/puzzle';
-import { array, compress } from '../data/helper';
-import Serializer from '../data/serializer';
+import Compressor from '../data/serializer/compressor/allCompressors';
+import Serializer from '../data/serializer/allSerializers';
 
 const enclosure = [
   ['GridData', GridData],
@@ -61,24 +61,7 @@ export default memo(function SourceCodeEditor() {
         // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
         const func = new Function(...enclosure.map(([name]) => name), value);
         const puzzle = func(...enclosure.map(([, value]) => value)) as Puzzle;
-        let grid = puzzle.grid;
-        if (puzzle.solution !== null) {
-          const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
-            const tile = puzzle.grid.tiles[y][x];
-            return tile.exists && tile.color === Color.Gray
-              ? tile.copyWith({
-                  color: puzzle.solution!.tiles[y][x].color,
-                })
-              : tile;
-          });
-          grid = puzzle.grid.copyWith({ tiles });
-        }
-        compress(
-          JSON.stringify({
-            ...puzzle,
-            grid: Serializer.stringifyGrid(grid),
-          })
-        )
+        Compressor.compress(Serializer.stringifyPuzzle(puzzle))
           .then(d =>
             navigate({
               to: state.location.pathname,

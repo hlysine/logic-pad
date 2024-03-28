@@ -21,15 +21,17 @@ class MasterCompressor extends CompressorBase {
 
   public async compress(input: string): Promise<string> {
     const compressed = await Promise.all(
-      activeCompressors.map(
-        async compressor =>
+      activeCompressors.map(async compressor =>
+        encodeURIComponent(
           `${compressor.id}_${await compressor.compress(input)}`
+        )
       )
     );
     return minBy(compressed, c => c.length) ?? '';
   }
 
   public async decompress(input: string): Promise<string> {
+    input = decodeURIComponent(input);
     const match = input.match(/^([^_]+?)_(.+)$/);
     let compressorId: string;
     let compressed: string;

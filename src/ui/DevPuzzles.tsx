@@ -368,6 +368,40 @@ export const DEV_PUZZLES: Puzzle[] = [
     description: '',
   },
   {
+    title: 'Chain reaction',
+    grid: GridData.create([
+      '.nnnnnnnn.',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      'nnnnnnnnnn',
+      '.nnnnnnnn.',
+    ])
+      .addRule(
+        new BanPatternRule(
+          GridData.create(['nnnnn', 'nnnnn', 'nnnnn', 'nnnnn', 'nWWnn'])
+        )
+      )
+      .addSymbol(new NumberSymbol(7, 9, 3))
+      .addSymbol(new NumberSymbol(4, 9, 8))
+      .addSymbol(new NumberSymbol(0, 7, 6))
+      .addSymbol(new NumberSymbol(0, 2, 4))
+      .addSymbol(new NumberSymbol(1, 0, 8))
+      .addSymbol(new NumberSymbol(4, 3, 8))
+      .addSymbol(new NumberSymbol(7, 2, 5))
+      .addSymbol(new NumberSymbol(9, 3, 4))
+      .addSymbol(new NumberSymbol(7, 6, 8)),
+    solution: null,
+    difficulty: 5,
+    author: 'AZURE',
+    link: '',
+    description: '',
+  },
+  {
     title: 'Scratch Pad',
     grid: new GridData(12, 12),
     solution: null,

@@ -1,5 +1,5 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { memo, useRef } from 'react';
+import { memo, useRef, useState } from 'react';
 import Editor from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import GridData from '../data/grid';
@@ -48,41 +48,51 @@ export default memo(function SourceCodeEditor() {
   const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
   };
+  const [toast, setToast] = useState<{
+    message: string;
+    handle: number;
+  } | null>(null);
 
   const parseJs = () => {
     if (editorRef.current) {
       const value = editorRef.current.getValue();
       window.localStorage.setItem('sourceCode', value);
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
-      const func = new Function(...enclosure.map(([name]) => name), value);
-      const puzzle = func(...enclosure.map(([, value]) => value)) as Puzzle;
-      let grid = puzzle.grid;
-      if (puzzle.solution !== null) {
-        const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
-          const tile = puzzle.grid.tiles[y][x];
-          return tile.exists && tile.color === Color.Gray
-            ? tile.copyWith({
-                color: puzzle.solution!.tiles[y][x].color,
-              })
-            : tile;
-        });
-        grid = puzzle.grid.copyWith({ tiles });
-      }
-      compress(
-        JSON.stringify({
-          ...puzzle,
-          grid: Serializer.stringifyGrid(grid),
-        })
-      )
-        .then(d =>
-          navigate({
-            to: state.location.pathname,
-            search: {
-              d,
-            },
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
+        const func = new Function(...enclosure.map(([name]) => name), value);
+        const puzzle = func(...enclosure.map(([, value]) => value)) as Puzzle;
+        let grid = puzzle.grid;
+        if (puzzle.solution !== null) {
+          const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
+            const tile = puzzle.grid.tiles[y][x];
+            return tile.exists && tile.color === Color.Gray
+              ? tile.copyWith({
+                  color: puzzle.solution!.tiles[y][x].color,
+                })
+              : tile;
+          });
+          grid = puzzle.grid.copyWith({ tiles });
+        }
+        compress(
+          JSON.stringify({
+            ...puzzle,
+            grid: Serializer.stringifyGrid(grid),
           })
         )
-        .catch(console.log);
+          .then(d =>
+            navigate({
+              to: state.location.pathname,
+              search: {
+                d,
+              },
+            })
+          )
+          .catch(console.log);
+      } catch (error) {
+        if (toast !== null) clearTimeout(toast.handle);
+        const handle = setTimeout(() => setToast(null), 5000);
+        setToast({ message: (error as Error).message, handle });
+      }
     }
   };
 
@@ -107,6 +117,13 @@ export default memo(function SourceCodeEditor() {
         <button className="btn btn-primary w-full" onClick={parseJs}>
           Load puzzle
         </button>
+      </div>
+      <div className="toast toast-start mb-40 z-50">
+        {toast && (
+          <div className="alert alert-error w-[290px]">
+            <span>{toast.message}</span>
+          </div>
+        )}
       </div>
     </>
   );

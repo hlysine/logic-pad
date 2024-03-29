@@ -1,15 +1,7 @@
 import { memo, useEffect } from 'react';
 import { useGrid } from './GridContext';
-import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import ConnectAllRule from '../data/rules/connectAllRule';
-import { Color } from '../data/primitives';
-import BanPatternRule from '../data/rules/banPatternRule';
 import GridData from '../data/grid';
-import GridConnections from '../data/gridConnections';
 import { useEdit } from './EditContext';
-import LetterSymbol from '../data/symbols/letterSymbol';
-import NumberSymbol from '../data/symbols/numberSymbol';
-import UndercluedRule from '../data/rules/undercluedRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import Puzzle from '../data/puzzle';
 import { useNavigate, useRouterState } from '@tanstack/react-router';

@@ -40,6 +40,43 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 2
   },
   {
+    id: "penguin",
+    title: 'Penguin',
+    description: 'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to see your smile.. and hear.. "I love you".',
+    grid: GridData.create([
+      'nnnnnnnnnnnnnn',
+      'nnnnnBBnnnnnnn',
+      'nnnnBWWnnnnnnn',
+      'nnnBWWWnnnnnnn',
+      'nnnBWBWnnnnnnn',
+      'nnnBWWWnnnnnnn',
+      'nBBBWBBnnnnnnn',
+      'nnBBWWBnnnnnnn',
+      'nnnBWWWnnnnnnn',
+      'nnnnBWWnnnnnnn',
+      'nnnnWBBnnnnnnn',
+      'nnnWWWnnnnnnnn',
+      'nnnnnnnnnnnnnn',
+    ])
+    .addRule(new CompletePatternRule()),
+   solution: GridData.create([
+      'nnnnnnnnnnnnnn',
+      'nnnnnBBBBnnnnn',
+      'nnnnBWWWWBnnnn',
+      'nnnBWWWWWWBnnn',
+      'nnnBWBWWBWBnnn',
+      'nnnBWWWWWWBnnn',
+      'nBBBWBBBBWBBBn',
+      'nnBBWWBBWWBBnn',
+      'nnnBWWWWWWBnnn',
+      'nnnnBWWWWBnnnn',
+      'nnnnWBBBBWnnnn',
+      'nnnWWWnnWWWnnn',
+      'nnnnnnnnnnnnnn',
+    ]),
+    difficulty: 3,
+  },
+  {
     id: "cactus",
     title: 'Cactus',
     description:
@@ -86,43 +123,6 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
     difficulty: 3,
   },
-  {
-    id: "penguin",
-    title: 'Penguin',
-    description: 'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to see your smile.. and hear.. "I love you".',
-    grid: GridData.create([
-      'nnnnnnnnnnnnnn',
-      'nnnnnBBnnnnnnn',
-      'nnnnBWWnnnnnnn',
-      'nnnBWWWnnnnnnn',
-      'nnnBWBWnnnnnnn',
-      'nnnBWWWnnnnnnn',
-      'nBBBWBBnnnnnnn',
-      'nnBBWWBnnnnnnn',
-      'nnnBWWWnnnnnnn',
-      'nnnnBWWnnnnnnn',
-      'nnnnWBBnnnnnnn',
-      'nnnWWWnnnnnnnn',
-      'nnnnnnnnnnnnnn',
-    ])
-    .addRule(new CompletePatternRule()),
-   solution: GridData.create([
-      'nnnnnnnnnnnnnn',
-      'nnnnnBBBBnnnnn',
-      'nnnnBWWWWBnnnn',
-      'nnnBWWWWWWBnnn',
-      'nnnBWBWWBWBnnn',
-      'nnnBWWWWWWBnnn',
-      'nBBBWBBBBWBBBn',
-      'nnBBWWBBWWBBnn',
-      'nnnBWWWWWWBnnn',
-      'nnnnBWWWWBnnnn',
-      'nnnnWBBBBWnnnn',
-      'nnnWWWnnWWWnnn',
-      'nnnnnnnnnnnnnn',
-    ]),
-    difficulty: 3,
-  }
 ];
 
 const defaultSelection = 0;

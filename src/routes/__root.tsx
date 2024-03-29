@@ -38,7 +38,7 @@ export const Route = createRootRoute({
                   </ul>
                 </div>
                 <ModeSwitcher />
-                <div className="flex lg:basis-[320px] grow shrink justify-end items-center">
+                <div className="flex xl:basis-[320px] grow shrink justify-end items-center">
                   <ThemeSwitcher />
                   <a
                     className="btn btn-square"

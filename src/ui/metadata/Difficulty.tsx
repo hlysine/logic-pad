@@ -25,7 +25,7 @@ export default memo(function Difficulty({
             !readonly && i >= 5 && 'mask-star-2 scale-105',
             readonly && value > 5 && 'mask-star-2 scale-105',
             readonly && 'pointer-events-none',
-            readonly && i > (value - 1) % 5 && 'opacity-0'
+            readonly && i > (value - 1) % 5 && 'bg-black',
           )}
           checked={readonly ? (value - 1) % 5 === i : value === i + 1}
           onChange={() => !readonly && onChange?.(i + 1)}

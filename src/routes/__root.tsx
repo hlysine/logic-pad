@@ -22,36 +22,14 @@ export const Route = createRootRoute({
                   <ul className="menu menu-horizontal bg-base-200 rounded-box">
                     <li className="dropdown dropdown-bottom">
                       <div tabIndex={0} role="button">
-                        Dev Puzzles{' '}
-                        <span className="badge badge-accent">
-                          {DEV_PUZZLES.length}
-                        </span>
+                        Levels
                       </div>
                       <DevPuzzles />
                     </li>
-                    <li className="dropdown dropdown-bottom">
-                      <div tabIndex={0} role="button">
-                        Roadmap
-                      </div>
-                      <Roadmap />
-                    </li>
                   </ul>
-                </div>
-                <ModeSwitcher />
-                <div className="flex xl:basis-[320px] grow shrink justify-end items-center">
-                  <ThemeSwitcher />
-                  <a
-                    className="btn btn-square"
-                    href="https://github.com/hlysine/logic-pad"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <FaGithub size={24} />
-                  </a>
                 </div>
               </header>
               <Outlet />
-              <TanStackDevTools />
             </div>
           </div>
         </GridContext>

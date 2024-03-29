@@ -8,7 +8,7 @@ import BanPatternRule from '../data/rules/banPatternRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import ConnectAllRule from '../data/rules/connectAllRule';
 import CustomRule from '../data/rules/customRule';
-import { Color, Direction } from '../data/primitives';
+import { Color } from '../data/primitives';
 import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
@@ -18,18 +18,41 @@ import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
 
 const enclosure = [
-  ['GridData', GridData],
-  ['GridConnections', GridConnections],
-  ['Color', Color],
-  ['Direction', Direction],
-  ['BanPatternRule', BanPatternRule],
-  ['CompletePatternRule', CompletePatternRule],
-  ['ConnectAllRule', ConnectAllRule],
-  ['CustomRule', CustomRule],
-  ['UndercluedRule', UndercluedRule],
-  ['LetterSymbol', LetterSymbol],
-  ['NumberSymbol', NumberSymbol],
-  ['ViewpointSymbol', ViewpointSymbol],
+  ['GridData', GridData, `GridData.create(['nnnnn', 'nnnnn'])`],
+  [
+    'GridConnections',
+    GridConnections,
+    `.withConnections(\n  GridConnections.create(['..aa.', '..aa.'])\n)`,
+  ],
+  [
+    'BanPatternRule',
+    BanPatternRule,
+    '.addRule(new BanPatternRule(GridData.create([])))',
+  ],
+  [
+    'CompletePatternRule',
+    CompletePatternRule,
+    '.addRule(new CompletePatternRule())',
+  ],
+  [
+    'ConnectAllRule',
+    ConnectAllRule,
+    '.addRule(new ConnectAllRule(Color.Dark))',
+  ],
+  [
+    'CustomRule',
+    CustomRule,
+    `.addRule(new CustomRule('Description', GridData.create([])))`,
+  ],
+  ['UndercluedRule', UndercluedRule, '.addRule(new UndercluedRule())'],
+  ['LetterSymbol', LetterSymbol, '.addSymbol(new LetterSymbol(1, 1, "A"))'],
+  ['NumberSymbol', NumberSymbol, '.addSymbol(new NumberSymbol(1, 1, 3))'],
+  [
+    'ViewpointSymbol',
+    ViewpointSymbol,
+    '.addSymbol(new ViewpointSymbol(1, 1, 3))',
+  ],
+  ['Color', Color, 'Color.Dark\nColor.Light\nColor.Gray'],
 ] as const;
 
 const options: editor.IStandaloneEditorConstructionOptions = {
@@ -81,7 +104,7 @@ export default memo(function SourceCodeEditor() {
 
   return (
     <>
-      <div className="justify-self-stretch">
+      <div className="justify-self-stretch dropdown dropdown-right">
         <Editor
           height="70vh"
           defaultLanguage="javascript"
@@ -92,6 +115,17 @@ export default memo(function SourceCodeEditor() {
           options={options}
           onMount={handleEditorDidMount}
         />
+        <div
+          tabIndex={0}
+          className="dropdown-content menu shadow-xl bg-base-300 rounded-box flex flex-col gap-2 z-50 ml-4 p-4 w-[500px]"
+        >
+          <h3 className="text-lg">Quick reference</h3>
+          {enclosure.map(([_, __, example]) => (
+            <pre key={example} className="text-xs text-base-content">
+              {example}
+            </pre>
+          ))}
+        </div>
       </div>
       <div
         className="tooltip w-full"

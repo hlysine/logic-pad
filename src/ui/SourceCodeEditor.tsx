@@ -128,14 +128,16 @@ export default memo(function SourceCodeEditor() {
         />
         <div
           tabIndex={0}
-          className="dropdown-content menu shadow-xl bg-base-300 rounded-box flex flex-col gap-2 z-50 ml-4 p-4 w-[500px]"
+          className="dropdown-content shadow-xl bg-base-300 rounded-box z-50 ml-4 p-4 w-[500px] h-[70vh] overflow-y-auto"
         >
-          <h3 className="text-lg">Quick reference</h3>
-          {enclosure.map(([_, __, example]) => (
-            <pre key={example} className="text-xs text-base-content">
-              {example}
-            </pre>
-          ))}
+          <div className="flex flex-col flex-nowrap gap-2">
+            <h3 className="text-lg">Quick reference</h3>
+            {enclosure.map(([_, __, example]) => (
+              <pre key={example} className="text-xs text-base-content">
+                {example}
+              </pre>
+            ))}
+          </div>
         </div>
       </div>
       <div

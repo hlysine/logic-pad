@@ -5,7 +5,7 @@ import TileData from '../tile';
 import Symbol from '../symbols/symbol';
 import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
-import { Color, Direction, Edge } from '../primitives';
+import { Color, Direction } from '../primitives';
 import { array, escape, unescape } from '../helper';
 import allRules from '../../allRules';
 import allSymbols from '../../allSymbols';
@@ -151,12 +151,19 @@ export default class SerializerV0 extends SerializerBase {
           continue;
         }
         const existingChars: string[] = [];
-        for (const { x: dx, y: dy } of OFFSETS) {
-          if (x + dx > maxX || y + dy > maxY || x + dx < 0 || y + dy < 0) {
-            continue;
+        for (const { x: tx, y: ty } of tiles) {
+          for (const { x: dx, y: dy } of OFFSETS) {
+            if (
+              tx + dx > maxX ||
+              ty + dy > maxY ||
+              tx + dx < 0 ||
+              ty + dy < 0
+            ) {
+              continue;
+            }
+            if (result[ty + dy][tx + dx] !== '.')
+              existingChars.push(result[ty + dy][tx + dx]);
           }
-          if (result[y + dy][x + dx] !== '.')
-            existingChars.push(result[y + dy][x + dx]);
         }
         let char = 'A';
         while (existingChars.includes(char)) {
@@ -184,21 +191,7 @@ export default class SerializerV0 extends SerializerBase {
       Math.ceil(data.length / width),
       (x, y) => data[y * width + x]
     );
-    const result: Edge[] = [];
-    for (let y = 0; y < tiles.length; y++) {
-      for (let x = 0; x < width; x++) {
-        if (tiles[y][x] === '.') {
-          continue;
-        }
-        if (x > 0 && tiles[y][x - 1] === tiles[y][x]) {
-          result.push({ x1: x - 1, y1: y, x2: x, y2: y });
-        }
-        if (y > 0 && tiles[y - 1][x] === tiles[y][x]) {
-          result.push({ x1: x, y1: y - 1, x2: x, y2: y });
-        }
-      }
-    }
-    return new GridConnections(result);
+    return GridConnections.create(tiles.map(row => row.join('')));
   }
 
   public stringifyTiles(tiles: readonly (readonly TileData[])[]): string {

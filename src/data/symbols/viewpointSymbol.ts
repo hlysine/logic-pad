@@ -63,7 +63,8 @@ export default class ViewpointSymbol extends Symbol {
   public validateSymbol(grid: GridData): State {
     const pos = { x: this.x, y: this.y };
     const color = grid.getTile(this.x, this.y).color;
-    let minSize = color === Color.Gray ? 0 : 1;
+    if (color === Color.Gray) return State.Incomplete;
+    let minSize = 1;
     let maxSize = 1;
     for (const direction of DIRECTIONS) {
       let continuous = true;

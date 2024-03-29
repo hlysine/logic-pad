@@ -1,7 +1,7 @@
 export default class TileConnections {
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
-  [x: number]: {
-    [y: number]: boolean;
+  [y: number]: {
+    [x: number]: boolean;
   };
 
   public constructor() {
@@ -22,27 +22,27 @@ export default class TileConnections {
   }
 
   public get top(): boolean {
-    return this[0][-1];
-  }
-
-  public set top(value: boolean) {
-    this[0][-1] = value;
-  }
-
-  public get topRight(): boolean {
-    return this[1][-1];
-  }
-
-  public set topRight(value: boolean) {
-    this[1][-1] = value;
-  }
-
-  public get left(): boolean {
     return this[-1][0];
   }
 
-  public set left(value: boolean) {
+  public set top(value: boolean) {
     this[-1][0] = value;
+  }
+
+  public get topRight(): boolean {
+    return this[-1][1];
+  }
+
+  public set topRight(value: boolean) {
+    this[-1][1] = value;
+  }
+
+  public get left(): boolean {
+    return this[0][-1];
+  }
+
+  public set left(value: boolean) {
+    this[0][-1] = value;
   }
 
   public get center(): boolean {
@@ -54,27 +54,27 @@ export default class TileConnections {
   }
 
   public get right(): boolean {
-    return this[1][0];
-  }
-
-  public set right(value: boolean) {
-    this[1][0] = value;
-  }
-
-  public get bottomLeft(): boolean {
-    return this[-1][1];
-  }
-
-  public set bottomLeft(value: boolean) {
-    this[-1][1] = value;
-  }
-
-  public get bottom(): boolean {
     return this[0][1];
   }
 
-  public set bottom(value: boolean) {
+  public set right(value: boolean) {
     this[0][1] = value;
+  }
+
+  public get bottomLeft(): boolean {
+    return this[1][-1];
+  }
+
+  public set bottomLeft(value: boolean) {
+    this[1][-1] = value;
+  }
+
+  public get bottom(): boolean {
+    return this[1][0];
+  }
+
+  public set bottom(value: boolean) {
+    this[1][0] = value;
   }
 
   public get bottomRight(): boolean {

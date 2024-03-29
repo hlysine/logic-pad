@@ -41,13 +41,16 @@ export default class GridConnections {
 
     // Get all connections within 2 steps of the tile
     const edges = this.getConnectionsAt({ x, y });
-    const edges2 = edges.flatMap(edge => {
-      if (edge.x1 === x && edge.y1 === y) {
-        return this.getConnectionsAt({ x: edge.x2, y: edge.y2 });
-      } else {
-        return this.getConnectionsAt({ x: edge.x1, y: edge.y1 });
-      }
-    });
+    const edges2 = [
+      ...edges,
+      ...edges.flatMap(edge => {
+        if (edge.x1 === x && edge.y1 === y) {
+          return this.getConnectionsAt({ x: edge.x2, y: edge.y2 });
+        } else {
+          return this.getConnectionsAt({ x: edge.x1, y: edge.y1 });
+        }
+      }),
+    ];
 
     // Fill in the connections
     for (const edge of edges2) {
@@ -55,14 +58,14 @@ export default class GridConnections {
         const offsetX = edge.x1 - x;
         const offsetY = edge.y1 - y;
         if (offsetX >= -1 && offsetX <= 1 && offsetY >= -1 && offsetY <= 1) {
-          result[offsetX][offsetY] = true;
+          result[offsetY][offsetX] = true;
         }
       }
       if (edge.x2 !== x || edge.y2 !== y) {
         const offsetX = edge.x2 - x;
         const offsetY = edge.y2 - y;
         if (offsetX >= -1 && offsetX <= 1 && offsetY >= -1 && offsetY <= 1) {
-          result[offsetX][offsetY] = true;
+          result[offsetY][offsetX] = true;
         }
       }
     }
@@ -95,12 +98,12 @@ export default class GridConnections {
       }
       visited.add(`${current.x},${current.y}`);
       result.push(current);
-      const connections = this.getForTile(current);
-      for (let offsetX = -1; offsetX <= 1; offsetX++) {
-        for (let offsetY = -1; offsetY <= 1; offsetY++) {
-          if (connections[offsetX][offsetY]) {
-            queue.push({ x: current.x + offsetX, y: current.y + offsetY });
-          }
+      const edges = this.getConnectionsAt(current);
+      for (const edge of edges) {
+        if (edge.x1 === current.x && edge.y1 === current.y) {
+          queue.push({ x: edge.x2, y: edge.y2 });
+        } else {
+          queue.push({ x: edge.x1, y: edge.y1 });
         }
       }
     }

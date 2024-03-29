@@ -327,12 +327,7 @@ export default memo(function Tile({
     let key = '';
     for (let y = -1; y <= 1; y++) {
       for (let x = -1; x <= 1; x++) {
-        if (y !== 0 && x !== 0)
-          key +=
-            connections[x][y] && connections[x][0] && connections[0][y]
-              ? '1'
-              : '0';
-        else key += connections[x][y] ? '1' : '0';
+        key += connections[y][x] ? '1' : '0';
       }
     }
     const styles = tileStyles.get(key);

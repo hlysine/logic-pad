@@ -16,6 +16,7 @@ import ViewpointSymbol from '../data/symbols/viewpointSymbol';
 import Puzzle, { PuzzleSchema } from '../data/puzzle';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
+import RegionAreaRule from '../data/rules/regionAreaRule';
 import { ZodError } from 'zod';
 
 const enclosure = [
@@ -39,6 +40,11 @@ const enclosure = [
     'ConnectAllRule',
     ConnectAllRule,
     '.addRule(new ConnectAllRule(Color.Dark))',
+  ],
+  [
+    'RegionAreaRule',
+    RegionAreaRule,
+    '.addRule(new RegionAreaRule(Color.Dark, 2))',
   ],
   [
     'CustomRule',

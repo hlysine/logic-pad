@@ -4,6 +4,7 @@ import ColorConfig from './ColorConfig';
 import Instruction from '../../data/instruction';
 import GridConfig from './GridConfig';
 import StringConfig from './StringConfig';
+import NumberConfig from './NumberConfig';
 
 export interface ConfigProps<T extends AnyConfig> {
   instruction: Instruction;
@@ -19,6 +20,7 @@ const registry = new Map<
 registry.set(ConfigType.Color, ColorConfig);
 registry.set(ConfigType.Grid, GridConfig);
 registry.set(ConfigType.String, StringConfig);
+registry.set(ConfigType.Number, NumberConfig);
 
 export default memo(function Config({
   instruction,

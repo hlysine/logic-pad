@@ -4,6 +4,7 @@ import BanPatternRule from './data/rules/banPatternRule';
 import CompletePatternRule from './data/rules/completePatternRule';
 import ConnectAllRule from './data/rules/connectAllRule';
 import CustomRule from './data/rules/customRule';
+import RegionAreaRule from './data/rules/regionAreaRule';
 import Rule from './data/rules/rule';
 import UndercluedRule from './data/rules/undercluedRule';
 
@@ -16,6 +17,7 @@ function register<T extends Rule>(prototype: T) {
 register(new BanPatternRule(GridData.create([])));
 register(new CompletePatternRule());
 register(new ConnectAllRule(Color.Dark));
+register(new RegionAreaRule(Color.Dark, 2));
 register(new UndercluedRule());
 register(new CustomRule('', GridData.create([])));
 

@@ -300,11 +300,10 @@ export default class SerializerV0 extends SerializerBase {
       grid = puzzle.grid.copyWith({ tiles });
     }
     return JSON.stringify({
+      id: puzzle.id,
       title: puzzle.title,
       grid: this.stringifyGrid(grid),
       difficulty: puzzle.difficulty,
-      link: puzzle.link,
-      author: puzzle.author,
       description: puzzle.description,
     });
   }

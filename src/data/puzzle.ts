@@ -3,13 +3,13 @@ import GridData from './grid';
 
 export interface PuzzleMetadata {
   title: string;
-  author: string;
   description: string;
-  link: string;
   difficulty: number;
+  id: string;
 }
 
 export const PuzzleSchema = z.object({
+  id: z.string().min(1),
   title: z.string().min(1),
   author: z.string().min(1),
   description: z.string(),

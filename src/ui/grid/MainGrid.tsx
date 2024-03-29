@@ -22,12 +22,32 @@ function computeTileSize(grid: GridData) {
 }
 
 export default memo(function MainGrid({ editable, children }: MainGridProps) {
-  const { grid, state, setGrid } = useGrid();
+  const { grid, state, setGrid, metadata, setState } = useGrid();
+
+  if(state.final === State.Satisfied) {
+    const finishes = JSON.parse(localStorage.getItem('finishes') ?? '[]');
+    if(!finishes.includes(metadata.id)) {
+      finishes.push(metadata.id);
+      localStorage.setItem('finishes', JSON.stringify(finishes));
+    }
+  }
+
   const [tileConfig, setTileConfig] = useState<{
     width: number;
     height: number;
     tileSize: number;
   }>({ width: 0, height: 0, tileSize: 0 });
+
+  useEffect(() => {
+    const finishes = JSON.parse(localStorage.getItem('finishes') ?? '[]');
+    console.log(metadata);
+    if(finishes.includes(metadata.id)) {
+      setState({
+        ...state,
+        final: State.Satisfied
+      })
+    }
+  }, [metadata]);
 
   useEffect(() => {
     const resizeHandler = () =>

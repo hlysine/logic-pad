@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { useGrid } from '../GridContext';
-import { FiExternalLink } from 'react-icons/fi';
 import Difficulty from './Difficulty';
 import { State } from '../../data/primitives';
 
@@ -29,19 +28,6 @@ export default memo(function Metadata() {
 
       <Difficulty value={metadata.difficulty} />
       <h1 className="text-4xl">{metadata.title}</h1>
-      {metadata.link.trim().length > 0 && (
-        <a
-          className="btn btn-ghost justify-start flex-nowrap flex"
-          href={metadata.link}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="whitespace-nowrap text-ellipsis grow overflow-x-clip">
-            {metadata.link}
-          </span>
-          <FiExternalLink size={24} />
-        </a>
-      )}
       <div className="flex flex-col gap-2">
         {state.final !== State.Satisfied && (
           <p className='mb-4'>Complete the puzzle to win, and reveal the text that's hidden below.</p>

@@ -22,10 +22,9 @@ const defaultState: GridState = {
   symbols: new Map(),
 };
 const defaultMetadata: PuzzleMetadata = {
+  id: 'unknown',
   title: '',
-  author: '',
   description: '',
-  link: '',
   difficulty: 0,
 };
 

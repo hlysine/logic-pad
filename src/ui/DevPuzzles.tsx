@@ -11,6 +11,7 @@ import Difficulty from './metadata/Difficulty';
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
+    id: "heart",
     title: 'Heart',
     description:
       'You are the missing half of my heart,{BR}if you are a painter, I am your art.{BR}You bring the peace I could never find,{BR}pure heart, pure soul, pure mind.',
@@ -36,11 +37,10 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnBBnnnn',
       'nnnnnnnnnn',
     ]),
-    difficulty: 2,
-    author: '',
-    link: '',
+    difficulty: 2
   },
   {
+    id: "cactus",
     title: 'Cactus',
     description:
       "There ain't love garden without a cactus.{BR}We cannot succeed without a practice.{BR}We cannot be happy without some pain.{BR}Pull the thorn out, and try again.",
@@ -85,10 +85,9 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnBBBBnnnnn',
     ]),
     difficulty: 3,
-    author: '',
-    link: '',
   },
   {
+    id: "penguin",
     title: 'Penguin',
     description: 'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to see your smile.. and hear.. "I love you".',
     grid: GridData.create([
@@ -123,8 +122,6 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnnnnnn',
     ]),
     difficulty: 3,
-    author: '',
-    link: ''
   }
 ];
 

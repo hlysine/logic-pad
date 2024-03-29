@@ -14,7 +14,7 @@ export const Route = createFileRoute('/solve')({
     return (
       <div className="flex flex-1 justify-center items-center flex-wrap">
         <LinkLoader params={params} />
-        <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
+        <div className="w-[350px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
           <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
             <Metadata />
           </div>

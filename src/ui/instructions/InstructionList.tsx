@@ -43,7 +43,7 @@ export default memo(function InstructionList({
     [grid, solution, state]
   );
   return (
-    <div className="flex flex-col items-end w-[320px] self-stretch">
+    <div className="flex flex-col items-end w-[350px] self-stretch">
       <div className="flex flex-col flex-1 items-end justify-center">
         {grid.rules.length > 0 && <Title>Rules</Title>}
         {grid.rules.map((rule, i) => (

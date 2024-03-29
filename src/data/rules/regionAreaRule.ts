@@ -62,7 +62,7 @@ export default class RegionAreaRule extends Rule {
     {
       type: ConfigType.Color,
       default: Color.Dark,
-      allowGray: true,
+      allowGray: false,
       field: 'color',
       description: 'Color',
       configurable: true,

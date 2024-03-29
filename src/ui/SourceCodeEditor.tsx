@@ -13,9 +13,10 @@ import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import Puzzle from '../data/puzzle';
+import Puzzle, { PuzzleSchema } from '../data/puzzle';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
+import { ZodError } from 'zod';
 
 const enclosure = [
   ['GridData', GridData, `GridData.create(['nnnnn', 'nnnnn'])`],
@@ -83,7 +84,9 @@ export default memo(function SourceCodeEditor() {
       try {
         // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
         const func = new Function(...enclosure.map(([name]) => name), value);
-        const puzzle = func(...enclosure.map(([, value]) => value)) as Puzzle;
+        const puzzle: Puzzle = PuzzleSchema.parse(
+          func(...enclosure.map(([, value]) => value))
+        );
         Compressor.compress(Serializer.stringifyPuzzle(puzzle))
           .then(d =>
             navigate({
@@ -97,7 +100,15 @@ export default memo(function SourceCodeEditor() {
       } catch (error) {
         if (toast !== null) clearTimeout(toast.handle);
         const handle = setTimeout(() => setToast(null), 5000);
-        setToast({ message: (error as Error).message, handle });
+        if (error instanceof ZodError) {
+          setToast({
+            message:
+              error.errors[0].path.join('.') + ': ' + error.errors[0].message,
+            handle,
+          });
+        } else if (error instanceof Error) {
+          setToast({ message: error.message, handle });
+        }
       }
     }
   };
@@ -137,7 +148,7 @@ export default memo(function SourceCodeEditor() {
       </div>
       <div className="toast toast-start mb-40 z-50">
         {toast && (
-          <div className="alert alert-error w-[290px]">
+          <div className="alert alert-error w-[290px] whitespace-normal">
             <span>{toast.message}</span>
           </div>
         )}

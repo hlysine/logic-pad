@@ -12,7 +12,7 @@ import { FiCheck } from "react-icons/fi";
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
-    id: "heart",
+    id: 'heart',
     title: 'Heart',
     description:
       'You are the missing half of my heart,{BR}if you are a painter, I am your art.{BR}You bring the peace I could never find,{BR}pure heart, pure soul, pure mind.',
@@ -38,12 +38,13 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnBBnnnn',
       'nnnnnnnnnn',
     ]),
-    difficulty: 1
+    difficulty: 1,
   },
   {
-    id: "penguin",
+    id: 'penguin',
     title: 'Penguin',
-    description: 'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to see your smile.. and hear.. "I love you".',
+    description:
+      'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to see your smile.. and hear.. "I love you".',
     grid: GridData.create([
       'nnnnnnnnnnnnnn',
       'nnnnnBBnnnnnnn',
@@ -58,9 +59,8 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnWBBnnnnnnn',
       'nnnWWWnnnnnnnn',
       'nnnnnnnnnnnnnn',
-    ])
-    .addRule(new CompletePatternRule()),
-   solution: GridData.create([
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
       'nnnnnnnnnnnnnn',
       'nnnnnBBBBnnnnn',
       'nnnnBWWWWBnnnn',
@@ -78,7 +78,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 2,
   },
   {
-    id: "cactus",
+    id: 'cactus',
     title: 'Cactus',
     description:
       "There ain't love garden without a cactus.{BR}We cannot succeed without a practice.{BR}We cannot be happy without some pain.{BR}Pull the thorn out, and try again.",
@@ -127,10 +127,11 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 2,
   },
   {
-    id: "panda",
+    id: 'panda',
     title: 'Panda',
     difficulty: 4,
-    description: 'From dusk till dawn, the Monday was ours.{BR}No flowers, we watched movie at weird hour.{BR}Kung Fu Panda was nice, but what\'s the best,{BR}cinema was empty. We got blessed.',
+    description:
+      "From dusk till dawn, the Monday was ours.{BR}No flowers, we watched movie at weird hour.{BR}Kung Fu Panda was nice, but what's the best,{BR}cinema was empty. We got blessed.",
     grid: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnn',
       'nnBBBBnnBBBnnnnnnnnnnn',
@@ -158,9 +159,8 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnBBBBBnnnnnnnnnnnn',
       'nnnnnBBBBBnnnnnnnnnnnn',
       'nnnnnnnnnnnnnnnnnnnnnn',
-    ])
-    .addRule(new CompletePatternRule()),
-   solution: GridData.create([
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnn',
       'nnBBBBnnBBBBBBnnBBBBnn',
       'nBBBBBBBWWWWWWBBBBBBBn',
@@ -189,7 +189,7 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnnnnnnnnnnnnnn',
     ]),
   },
-  ({
+  {
     id: "sunflower",
     title: 'Sunflower',
     difficulty: 4,
@@ -247,7 +247,73 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnBBBBnnnBBBBnnnnnnn',
       'nnnnnnnnnnnnnnnnnnnnnnnnn',
     ]),
-  })
+  },
+  {
+    id: 'ring',
+    title: 'Ring',
+    difficulty: 4,
+    description: 'What is a true meaning of ring?{BR}The memories it\'s supposed to bring?{BR}Does it define a queen and her king?{BR}Or is it just a meaningless thing?',
+    grid: GridData.create([
+      'nnnnnnnnnnnnnnnnnnn',
+      'nnnnnnnBBBnnnnnnnnn',
+      'nnnnnBBWWWnnnnnnnnn',
+      'nnnnBWWWWWnnnnnnnnn',
+      'nnnBWWWWWWnnnnnnnnn',
+      'nnnBWWWWWWnnnnnnnnn',
+      'nnnnBWWWWWnnnnnnnnn',
+      'nnnnnBWWWWnnnnnnnnn',
+      'nnnnnnBWWWnnnnnnnnn',
+      'nnnnnnnBWWnnnnnnnnn',
+      'nnnnnnBBBBnnnnnnnnn',
+      'nnnnBBWWWWnnnnnnnnn',
+      'nnnBWWWWWWnnnnnnnnn',
+      'nnBWWWWBBBnnnnnnnnn',
+      'nnBWWWBnnnnnnnnnnnn',
+      'nBWWWBnnnnnnnnnnnnn',
+      'nBWWBnnnnnnnnnnnnnn',
+      'nBWWBnnnnnnnnnnnnnn',
+      'nBWWBnnnnnnnnnnnnnn',
+      'nBWWBnnnnnnnnnnnnnn',
+      'nBWWBnnnnnnnnnnnnnn',
+      'nBWWWBnnnnnnnnnnnnn',
+      'nnBWWWBnnnnnnnnnnnn',
+      'nnBWWWWBBBnnnnnnnnn',
+      'nnnBWWWWWWnnnnnnnnn',
+      'nnnnBBWWWWnnnnnnnnn',
+      'nnnnnnBBBBnnnnnnnnn',
+      'nnnnnnnnnnnnnnnnnnn',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'nnnnnnnnnnnnnnnnnnn',
+      'nnnnnnnBBBBBnnnnnnn',
+      'nnnnnBBWWWWWBBnnnnn',
+      'nnnnBWWWWWWWWWBnnnn',
+      'nnnBWWWWWWWWWWWBnnn',
+      'nnnBWWWWWWWWWWWBnnn',
+      'nnnnBWWWWWWWWWBnnnn',
+      'nnnnnBWWWWWWWBnnnnn',
+      'nnnnnnBWWWWWBnnnnnn',
+      'nnnnnnnBWWWBnnnnnnn',
+      'nnnnnnBBBBBBBnnnnnn',
+      'nnnnBBWWWWWWWBBnnnn',
+      'nnnBWWWWWWWWWWWBnnn',
+      'nnBWWWWBBBBBWWWWBnn',
+      'nnBWWWBnnnnnBWWWBnn',
+      'nBWWWBnnnnnnnBWWWBn',
+      'nBWWBnnnnnnnnnBWWBn',
+      'nBWWBnnnnnnnnnBWWBn',
+      'nBWWBnnnnnnnnnBWWBn',
+      'nBWWBnnnnnnnnnBWWBn',
+      'nBWWBnnnnnnnnnBWWBn',
+      'nBWWWBnnnnnnnBWWWBn',
+      'nnBWWWBnnnnnBWWWBnn',
+      'nnBWWWWBBBBBWWWWBnn',
+      'nnnBWWWWWWWWWWWBnnn',
+      'nnnnBBWWWWWWWBBnnnn',
+      'nnnnnnBBBBBBBnnnnnn',
+      'nnnnnnnnnnnnnnnnnnn',
+    ]),
+  }
 ];
 
 const defaultSelection = 0;

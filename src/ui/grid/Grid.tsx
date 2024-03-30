@@ -54,13 +54,47 @@ export default memo(function Grid({
       ),
     [grid.width, grid.height, onTileClick]
   );
+
+  let totalWidth = grid.tiles[0].length;
+  let center = [];
+
+  if (totalWidth % 2 === 0) {
+    center.push(totalWidth / 2);
+    center.push(totalWidth / 2 + 1);
+  } else {
+    center.push(Math.ceil(totalWidth / 2));
+  }
+  const header = [];
+
+  console.log(center);
+  
+  for (let i = 1; i <= totalWidth; i++) {
+    if (center.includes(i)) {
+      header.push('C');
+    } else {
+      header.push('');
+    }
+  }
+
   return (
     <MouseContext>
       <div className="relative" style={containerStyle}>
+      <div style={{
+        ...gridStyle,
+        'gridTemplateRows': 'auto !important'
+      }} className='absolute bottom-full left-0 grid justify-center content-center'>
+            {header.map((l) =>
+              <div className='relative w-[0.7em] h-[0.2em] mx-[0.15em] z-[999] transform translate-y-[0.15em] rounded-full bg-white' style={{
+                opacity: l === 'C' ? '100%' : '0%'
+              }}></div>
+            )}
+          </div>
+              
         <div
           className="grid justify-center content-center absolute inset-0"
           style={gridStyle}
         >
+         
           {grid.tiles.map((row, y) =>
             row.map((tile, x) => (
               <Tile

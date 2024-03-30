@@ -8,6 +8,7 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import Serializer from '../data/serializer/allSerializers';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Difficulty from './metadata/Difficulty';
+import { FiCheck } from "react-icons/fi";
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
@@ -189,6 +190,65 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
   },
   {
+    id: "sunflower",
+    title: 'Sunflower',
+    difficulty: 4,
+    description: 'Each flower has a meaning that it brings.{BR}Sunflower can mean a lot of things.{BR}You are a sunflower of my emotions.{BR}Optimism, Happiness, and devotion.',
+    grid: GridData.create([
+      'nnnnnnnnnnnnnnnnnnnnnnnnn',
+      'nnnnnnnBBBBnnnnnnnnnnnnnn',
+      'nnnnnnBWWWWBnnnnnnnnnnnnn',
+      'nnnnnBWWWWWWBnnnnnnnnnnnn',
+      'nnnnnBWWWWWWBnnnnnnnnnnnn',
+      'nnnnnBWWWWWWBnnnnnnnnnnnn',
+      'nnnBBBWWWWWWBnnnnnnnnnnnn',
+      'nnBWWWBWWWBBBnnnnnnnnnnnn',
+      'nBWWWWWBWBWWWnnnnnnnnnnnn',
+      'nBWWWWWWBWWWWnnnnnnnnnnnn',
+      'nBWWWWWBWWWWWnnnnnnnnnnnn',
+      'nnBWWWWBWWWBBnnnnnnnnnnnn',
+      'nnnBBBBBWWBBBnnnnnnnnnnnn',
+      'nnBWWWWBWWWBBnnnnnnnnnnnn',
+      'nBWWWWWBWWWWWnnnnnnnnnnnn',
+      'nBWWWWWWBWWWWnnnnnnnnnnnn',
+      'nBWWWWWBWBWWWnnnnnnnnnnnn',
+      'nnBWWWBWWWBBBnnnnnnnnnnnn',
+      'nnnBBBWWWWWWBnnnnnnnnnnnn',
+      'nnnnnBWWWWWWBnnnnnnnnnnnn',
+      'nnnnnBWWWWWWBnnnnnnnnnnnn',
+      'nnnnnnBWWWWBnnnnnnnnnnnnn',
+      'nnnnnnnBBBBnnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnnnnnnnnnnnnn',
+    ])
+    .addRule(new CompletePatternRule()),
+   solution: GridData.create([
+      'nnnnnnnnnnnnnnnnnnnnnnnnn',
+      'nnnnnnnBBBBnnnBBBBnnnnnnn',
+      'nnnnnnBWWWWBnBWWWWBnnnnnn',
+      'nnnnnBWWWWWWBWWWWWWBnnnnn',
+      'nnnnnBWWWWWWBWWWWWWBnnnnn',
+      'nnnnnBWWWWWWBWWWWWWBnnnnn',
+      'nnnBBBWWWWWWBWWWWWWBBBnnn',
+      'nnBWWWBWWWBBBBBWWWBWWWBnn',
+      'nBWWWWWBWBWWWWWBWBWWWWWBn',
+      'nBWWWWWWBWWWWWWWBWWWWWWBn',
+      'nBWWWWWBWWWWWWWWWBWWWWWBn',
+      'nnBWWWWBWWWBBBWWWBWWWWBnn',
+      'nnnBBBBBWWBBBBBWWBBBBBnnn',
+      'nnBWWWWBWWWBBBWWWBWWWWBnn',
+      'nBWWWWWBWWWWWWWWWBWWWWWBn',
+      'nBWWWWWWBWWWWWWWBWWWWWWBn',
+      'nBWWWWWBWBWWWWWBWBWWWWWBn',
+      'nnBWWWBWWWBBBBBWWWBWWWBnn',
+      'nnnBBBWWWWWWBWWWWWWBBBnnn',
+      'nnnnnBWWWWWWBWWWWWWBnnnnn',
+      'nnnnnBWWWWWWBWWWWWWBnnnnn',
+      'nnnnnnBWWWWBnBWWWWBnnnnnn',
+      'nnnnnnnBBBBnnnBBBBnnnnnnn',
+      'nnnnnnnnnnnnnnnnnnnnnnnnn',
+    ]),
+  },
+  {
     id: 'ring',
     title: 'Ring',
     difficulty: 4,
@@ -253,7 +313,7 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnBBBBBBBnnnnnn',
       'nnnnnnnnnnnnnnnnnnn',
     ]),
-  },
+  }
 ];
 
 const defaultSelection = 0;
@@ -277,6 +337,11 @@ export default memo(function DevPuzzles() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function isComplete(id: string) {
+    const finishes = JSON.parse(localStorage.getItem('finishes') ?? '[]');
+    return finishes.includes(id);
+  }
+
   return (
     <ul
       tabIndex={0}
@@ -299,7 +364,12 @@ export default memo(function DevPuzzles() {
           }}
         >
           <a className="text-md w-full flex items-center justify-between">
-            {puzzle.title}
+            <div className='flex items-center gap-2'>
+              {puzzle.title}
+              {isComplete(puzzle.id) && (
+                <FiCheck className='text-green-500' />
+              )}
+            </div>
             <Difficulty value={puzzle.difficulty} />
           </a>
         </li>

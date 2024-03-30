@@ -34,6 +34,13 @@ export default class NumberSymbol extends Symbol {
     },
   ]);
 
+  /**
+   * **Area Numbers must equal region sizes**
+   *
+   * @param x - The x-coordinate of the symbol.
+   * @param y - The y-coordinate of the symbol.
+   * @param number - The area number.
+   */
   public constructor(
     public readonly x: number,
     public readonly y: number,

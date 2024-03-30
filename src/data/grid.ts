@@ -178,6 +178,16 @@ export default class GridData {
     return newGrid;
   }
 
+  /**
+   * Create a new {@link GridData} object from a string array.
+   *
+   * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+   * - Capitalize the letter to make the tile fixed.
+   * - Use `.` to represent empty space.
+   *
+   * @param array - The string array to create the grid from.
+   * @returns The created grid.
+   */
   public static create(array: string[]): GridData {
     const height = array.length;
     const width = array.reduce((max, row) => Math.max(max, row.length), 0);

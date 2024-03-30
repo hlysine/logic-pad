@@ -18,6 +18,15 @@ export default class UndercluedRule extends Rule {
     new UndercluedRule().searchVariant(),
   ];
 
+  /**
+   * **Underclued Grid: Mark only what is definitely true**
+   *
+   * This rule validates answers based on the provided solution.
+   */
+  public constructor() {
+    super();
+  }
+
   public get id(): string {
     return `underclued`;
   }

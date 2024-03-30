@@ -29,6 +29,14 @@ export default class CustomRule extends Rule {
     new CustomRule('A *custom* rule', CustomRule.EXAMPLE_GRID).searchVariant(),
   ];
 
+  /**
+   * A custom rule with a description and thumbnail grid.
+   *
+   * This rule validates answers based on the provided solution.
+   *
+   * @param description - The description of the rule.
+   * @param grid - The thumbnail grid of the rule, preferably 5x4 in size
+   */
   public constructor(
     public readonly description: string,
     public readonly grid: GridData

@@ -67,6 +67,16 @@ export class GridData {
     removeRule(rule: Rule): GridData;
     replaceRule(oldRule: Rule, newRule: Rule): GridData;
     resize(width: number, height: number): GridData;
+    /**
+      * Create a new {@link GridData} object from a string array.
+      *
+      * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+      * - Capitalize the letter to make the tile fixed.
+      * - Use `.` to represent empty space.
+      *
+      * @param array - The string array to create the grid from.
+      * @returns The created grid.
+      */
     static create(array: string[]): GridData;
     find(predicate: (tile: TileData, x: number, y: number) => boolean): Position | undefined;
     iterateArea<T>(position: Position, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => undefined | T): T | undefined;
@@ -87,6 +97,15 @@ export class GridConnections {
     getConnectionsAt({ x, y }: Position): readonly Edge[];
     getForTile({ x, y }: Position): TileConnections;
     getConnectedTiles({ x, y }: Position): readonly Position[];
+    /**
+      * Create new {@link GridConnections} from a string array.
+      *
+      * - Use `.` for cells that don't connect to anything.
+      * - Use any other character for cells that connect to the same character.
+      *
+      * @param array - The string array to create the connections from.
+      * @returns The created connections. You can apply this to a {@link GridData} object using {@link GridData.withConnections}.
+      */
     static create(array: string[]): GridConnections;
 }
 
@@ -196,6 +215,11 @@ export interface Puzzle extends PuzzleMetadata {
 
 export class BanPatternRule extends Rule {
     readonly pattern: GridData;
+    /**
+      * **Don't make this pattern**
+      *
+      * @param pattern - {@link GridData} representing the banned pattern. Only non-gray tiles are considered.
+      */
     constructor(pattern: GridData);
     get id(): string;
     get explanation(): string;
@@ -210,6 +234,12 @@ export class BanPatternRule extends Rule {
 }
 
 export class CompletePatternRule extends Rule {
+    /**
+      * **Complete the pattern**
+      *
+      * This rule validates answers based on the provided solution.
+      */
+    constructor();
     get id(): string;
     get explanation(): string;
     createExampleGrid(): GridData;
@@ -221,6 +251,11 @@ export class CompletePatternRule extends Rule {
 
 export class ConnectAllRule extends Rule {
     readonly color: Color;
+    /**
+      * **Connect all &lt;color&gt; cells**
+      *
+      * @param color - The color of the cells to connect.
+      */
     constructor(color: Color);
     get id(): string;
     get explanation(): string;
@@ -238,6 +273,14 @@ export class CustomRule extends Rule {
     readonly description: string;
     readonly grid: GridData;
     static readonly configs: readonly AnyConfig[];
+    /**
+      * A custom rule with a description and thumbnail grid.
+      *
+      * This rule validates answers based on the provided solution.
+      *
+      * @param description - The description of the rule.
+      * @param grid - The thumbnail grid of the rule, preferably 5x4 in size
+      */
     constructor(description: string, grid: GridData);
     get id(): string;
     get explanation(): string;
@@ -255,6 +298,12 @@ export class CustomRule extends Rule {
 export class RegionAreaRule extends Rule {
     readonly color: Color;
     readonly size: number;
+    /**
+      * **All &lt;color&gt; regions have area &lt;size&gt;**
+      *
+      * @param color - The color of the regions.
+      * @param size - The area of the regions.
+      */
     constructor(color: Color, size: number);
     get id(): string;
     get explanation(): string;
@@ -282,6 +331,12 @@ export abstract class Rule extends Instruction {
 }
 
 export class UndercluedRule extends Rule {
+    /**
+      * **Underclued Grid: Mark only what is definitely true**
+      *
+      * This rule validates answers based on the provided solution.
+      */
+    constructor();
     get id(): string;
     get explanation(): string;
     createExampleGrid(): GridData;
@@ -381,6 +436,13 @@ export class LetterSymbol extends Symbol {
     readonly x: number;
     readonly y: number;
     readonly letter: string;
+    /**
+      * **Letters must be sorted into one type per area**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param letter - The letter of the symbol.
+      */
     constructor(x: number, y: number, letter: string);
     get id(): string;
     get explanation(): string;
@@ -399,6 +461,13 @@ export class NumberSymbol extends Symbol {
     readonly x: number;
     readonly y: number;
     readonly number: number;
+    /**
+      * **Area Numbers must equal region sizes**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param number - The area number.
+      */
     constructor(x: number, y: number, number: number);
     get id(): string;
     get explanation(): string;
@@ -446,6 +515,12 @@ export class ViewpointSymbol extends Symbol {
     readonly x: number;
     readonly y: number;
     readonly number: number;
+    /**
+      * **Viewpoint Numbers count visible cells in the four directions**
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param number - The viewpoint number.
+      */
     constructor(x: number, y: number, number: number);
     get id(): string;
     get explanation(): string;

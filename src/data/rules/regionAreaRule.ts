@@ -83,6 +83,12 @@ export default class RegionAreaRule extends Rule {
     new RegionAreaRule(Color.Gray, 2).searchVariant(),
   ];
 
+  /**
+   * **All &lt;color&gt; regions have area &lt;size&gt;**
+   *
+   * @param color - The color of the regions.
+   * @param size - The area of the regions.
+   */
   public constructor(
     public readonly color: Color,
     public readonly size: number

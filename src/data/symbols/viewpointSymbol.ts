@@ -35,6 +35,12 @@ export default class ViewpointSymbol extends Symbol {
     },
   ]);
 
+  /**
+   * **Viewpoint Numbers count visible cells in the four directions**
+   * @param x - The x-coordinate of the symbol.
+   * @param y - The y-coordinate of the symbol.
+   * @param number - The viewpoint number.
+   */
   public constructor(
     public readonly x: number,
     public readonly y: number,

@@ -40,6 +40,13 @@ export default class LetterSymbol extends Symbol {
     },
   ]);
 
+  /**
+   * **Letters must be sorted into one type per area**
+   *
+   * @param x - The x-coordinate of the symbol.
+   * @param y - The y-coordinate of the symbol.
+   * @param letter - The letter of the symbol.
+   */
   public constructor(
     public readonly x: number,
     public readonly y: number,

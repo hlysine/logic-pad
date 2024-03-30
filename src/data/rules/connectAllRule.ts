@@ -29,6 +29,11 @@ export default class ConnectAllRule extends Rule {
     new ConnectAllRule(Color.Dark).searchVariant(),
   ];
 
+  /**
+   * **Connect all &lt;color&gt; cells**
+   *
+   * @param color - The color of the cells to connect.
+   */
   public constructor(public readonly color: Color) {
     super();
     this.color = color;

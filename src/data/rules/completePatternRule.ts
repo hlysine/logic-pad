@@ -11,6 +11,15 @@ export default class CompletePatternRule extends Rule {
     new CompletePatternRule().searchVariant(),
   ];
 
+  /**
+   * **Complete the pattern**
+   *
+   * This rule validates answers based on the provided solution.
+   */
+  public constructor() {
+    super();
+  }
+
   public get id(): string {
     return `complete_pattern`;
   }

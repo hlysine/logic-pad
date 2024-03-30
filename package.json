@@ -8,7 +8,7 @@
     "build": "yarn build-types && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "build-types": "rimraf types/temp && rimraf types/temp/logic-pad.d.ts && tsc --declaration --emitDeclarationOnly --noEmit false --outDir types/temp && dts-bundle --name logic-pad --main types/temp/data/**/*.d.ts --outputAsModuleFolder --out ../../logic-pad.d.ts && ts-node --esm --project tsconfig.node.json ./types/postprocess.ts ./types/logic-pad.d.ts && rimraf types/temp"
+    "build-types": "rimraf types/temp && rimraf types/temp/logic-pad.d.ts && tsc --declaration --emitDeclarationOnly --noEmit false --outDir types/temp && dts-bundle --name logic-pad --main types/temp/data/**/*.d.ts --outputAsModuleFolder --out ../../logic-pad.d.ts && node ./types/postprocess.js ./types/logic-pad.d.ts && rimraf types/temp"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
@@ -57,7 +57,6 @@
     "rimraf": "^5.0.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.4.3",
     "vite": "^5.1.4"
   }

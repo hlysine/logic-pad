@@ -2,10 +2,27 @@ import { z } from 'zod';
 import GridData from './grid';
 
 export interface PuzzleMetadata {
+  /**
+   * The title of the puzzle. (required)
+   */
   title: string;
+  /**
+   * The author of the puzzle. (required)
+   */
   author: string;
+  /**
+   * A description of the puzzle. (can be empty)
+   */
   description: string;
+  /**
+   * A link to a place to discuss this puzzle. (can be empty)
+   */
   link: string;
+  /**
+   * The difficulty of the puzzle, from 1 to 10. (required)
+   *
+   * 6-10 represent star difficulties.
+   */
   difficulty: number;
 }
 
@@ -20,6 +37,18 @@ export const PuzzleSchema = z.object({
 });
 
 export default interface Puzzle extends PuzzleMetadata {
+  /**
+   * The grid of the puzzle. (required)
+   *
+   * You must fix all given cells in the grid. The rest of the cells will be cleared.
+   */
   grid: GridData;
+  /**
+   * The solution to the puzzle. (optional)
+   *
+   * You should provide a solution if a rule requires it. Otherwise, the rule can never be satisfied.
+   *
+   * If there are no rules that require a solution, this field will be ignored.
+   */
   solution: GridData | null;
 }

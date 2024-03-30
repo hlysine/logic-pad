@@ -177,40 +177,69 @@ export enum Mode {
 }
 
 export interface PuzzleMetadata {
-    title: string;
-    author: string;
-    description: string;
-    link: string;
-    difficulty: number;
+        /**
+            * The title of the puzzle. (required)
+            */
+        title: string;
+        /**
+            * The author of the puzzle. (required)
+            */
+        author: string;
+        /**
+            * A description of the puzzle. (can be empty)
+            */
+        description: string;
+        /**
+            * A link to a place to discuss this puzzle. (can be empty)
+            */
+        link: string;
+        /**
+            * The difficulty of the puzzle, from 1 to 10. (required)
+            *
+            * 6-10 represent star difficulties.
+            */
+        difficulty: number;
 }
 export const PuzzleSchema: z.ZodObject<{
-    title: z.ZodString;
-    author: z.ZodString;
-    description: z.ZodString;
-    link: z.ZodString;
-    difficulty: z.ZodNumber;
-    grid: z.ZodType<GridData, z.ZodTypeDef, GridData>;
-    solution: z.ZodNullable<z.ZodType<GridData, z.ZodTypeDef, GridData>>;
+        title: z.ZodString;
+        author: z.ZodString;
+        description: z.ZodString;
+        link: z.ZodString;
+        difficulty: z.ZodNumber;
+        grid: z.ZodType<GridData, z.ZodTypeDef, GridData>;
+        solution: z.ZodNullable<z.ZodType<GridData, z.ZodTypeDef, GridData>>;
 }, "strip", z.ZodTypeAny, {
-    grid: GridData;
-    description: string;
-    link: string;
-    title: string;
-    author: string;
-    difficulty: number;
-    solution: GridData | null;
+        grid: GridData;
+        description: string;
+        link: string;
+        title: string;
+        author: string;
+        difficulty: number;
+        solution: GridData | null;
 }, {
-    grid: GridData;
-    description: string;
-    link: string;
-    title: string;
-    author: string;
-    difficulty: number;
-    solution: GridData | null;
+        grid: GridData;
+        description: string;
+        link: string;
+        title: string;
+        author: string;
+        difficulty: number;
+        solution: GridData | null;
 }>;
 export interface Puzzle extends PuzzleMetadata {
-    grid: GridData;
-    solution: GridData | null;
+        /**
+            * The grid of the puzzle. (required)
+            *
+            * You must fix all given cells in the grid. The rest of the cells will be cleared.
+            */
+        grid: GridData;
+        /**
+            * The solution to the puzzle. (optional)
+            *
+            * You should provide a solution if a rule requires it. Otherwise, the rule can never be satisfied.
+            *
+            * If there are no rules that require a solution, this field will be ignored.
+            */
+        solution: GridData | null;
 }
 
 export class BanPatternRule extends Rule {

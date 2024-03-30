@@ -21,7 +21,8 @@ import { ZodError } from 'zod';
 import Tile from './grid/Tile';
 import TileConnections from '../data/tileConnections';
 
-const defaultCode = `({
+const defaultCode = `/** @type Puzzle */
+({
   title: '',
   grid: GridData.create([]),
   solution: null,
@@ -189,17 +190,20 @@ export default memo(function SourceCodeEditor({
             defaultValue={(() => {
               let saved = window.localStorage.getItem('sourceCode');
               if (!saved || saved.length === 0) saved = defaultCode;
-              else if (
-                /^return\s+/.test(saved.trim()) &&
-                /;\s*$/.test(saved.trim())
-              ) {
+              else if (/^return\s+/.test(saved.trim())) {
                 saved =
-                  '(' +
+                  '/** @type Puzzle */\n(' +
                   saved
                     .trim()
                     .replace(/^return\s+/, '')
                     .replace(/;\s*$/, '') +
                   ')';
+              } else if (
+                !/^\s*\/\*\*\s+(?:\*\s+)*@type\s+Puzzle\s+(?:\*\s+)*\*\//s.test(
+                  saved.trim()
+                )
+              ) {
+                saved = '/** @type Puzzle */\n' + saved;
               }
               return saved;
             })()}

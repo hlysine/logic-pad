@@ -191,8 +191,8 @@ export const DEV_PUZZLES: Puzzle[] = [
   {
     id: 'ring',
     title: 'Ring',
-    difficulty: 1,
-    description: 'TODO Text',
+    difficulty: 4,
+    description: 'What is a true meaning of ring?{BR}The memories it\'s supposed to bring?{BR}Does it define a queen and her king?{BR}Or is it just a meaningless thing?',
     grid: GridData.create([
       'nnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBnnnnnnnnn',

@@ -32,7 +32,6 @@ export default {
         lofi: {
           ...themes['lofi'],
           neutral: '#101010',
-          'base-100': '#333',
           accent: '#999',
         },
       },

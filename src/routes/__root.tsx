@@ -1,13 +1,13 @@
 import Roadmap from '../ui/Roadmap';
 import DevPuzzles, { DEV_PUZZLES } from '../ui/DevPuzzles';
-import ThemeSwitcher from '../ui/ThemeSwitcher';
 import ModeSwitcher from '../ui/modes/ModeSwitcher';
 import EditContext from '../ui/EditContext';
 import GridContext from '../ui/GridContext';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
 import TanStackDevTools from '../ui/router/TanStackDevTools';
-import { memo } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import { FaGithub } from 'react-icons/fa';
+const ThemeSwitcher = lazy(() => import('../ui/ThemeSwitcher'));
 
 export const Route = createRootRoute({
   component: memo(function Root() {
@@ -39,7 +39,9 @@ export const Route = createRootRoute({
                 </div>
                 <ModeSwitcher />
                 <div className="flex xl:basis-[320px] grow shrink justify-end items-center">
-                  <ThemeSwitcher />
+                  <Suspense>
+                    <ThemeSwitcher />
+                  </Suspense>
                   <a
                     className="btn btn-square"
                     href="https://github.com/hlysine/logic-pad"

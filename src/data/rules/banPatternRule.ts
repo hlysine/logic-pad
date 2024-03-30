@@ -53,7 +53,11 @@ function generateCache(grid: GridData): CachedPattern[] {
     height: 0,
     tiles: t
       .flatMap((row, y) =>
-        row.map((color, x) => ({ x, y, color: color.color }))
+        row.map((color, x) => ({
+          x,
+          y,
+          color: color.exists ? color.color : Color.Gray,
+        }))
       )
       .filter(tile => tile.color !== Color.Gray),
   }));

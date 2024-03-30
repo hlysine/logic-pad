@@ -124,7 +124,7 @@ export default memo(function SourceCodeEditor() {
       <div className="justify-self-stretch dropdown dropdown-right">
         <div
           tabIndex={0}
-          className="h-full w-full overflow-x-hidden focus-within:w-[200%]"
+          className="h-full w-full overflow-x-hidden focus-within:w-[200%] transition-[width] duration-75"
         >
           <Editor
             height="70vh"

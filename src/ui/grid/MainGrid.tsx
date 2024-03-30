@@ -6,6 +6,7 @@ import SymbolOverlay from './SymbolOverlay';
 import ErrorOverlay from './ErrorOverlay';
 import { Color, State } from '../../data/primitives';
 import GridData from '../../data/grid';
+import Loading from '../Loading';
 
 export interface MainGridProps {
   editable: boolean;
@@ -46,7 +47,7 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
     tileConfig.width !== grid.width ||
     tileConfig.height !== grid.height
   )
-    return <span className="loading loading-bars loading-lg"></span>;
+    return <Loading />;
 
   return (
     <StateRing>

@@ -178,16 +178,13 @@ export default memo(function SourceCodeEditor({
 
   return (
     <>
-      <div className="justify-self-stretch dropdown dropdown-right">
-        <div
-          tabIndex={0}
-          className="h-full w-full overflow-x-hidden focus-within:overflow-x-visible focus-within:w-[200%] transition-[width] duration-75"
-        >
+      <div className="basis-0 grow shrink self-stretch dropdown dropdown-right">
+        <div className="w-full h-full focus-within:w-[600px] transition-[width] duration-75">
           <Editor
             loading={loading}
-            height="70vh"
-            width="600px"
-            className="z-50"
+            width="100%"
+            height="100%"
+            className="focus-within:z-30"
             defaultLanguage="javascript"
             defaultValue={(() => {
               let saved = window.localStorage.getItem('sourceCode');
@@ -213,7 +210,7 @@ export default memo(function SourceCodeEditor({
             onMount={handleEditorDidMount}
           />
         </div>
-        <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-10 ml-[calc(300px+1rem)] p-4 w-[400px] h-[70vh] overflow-y-auto">
+        <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-10 ml-[calc(300px+1rem)] p-4 w-[400px] h-full overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg">Quick reference</h3>
             {enclosure.map(

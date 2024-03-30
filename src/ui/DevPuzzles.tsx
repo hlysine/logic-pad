@@ -192,7 +192,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     id: "sunflower",
     title: 'Sunflower',
     difficulty: 4,
-    description: 'TODO Description',
+    description: 'Each flower has a meaning that it brings.{BR}Sunflower can mean a lot of things.{BR}You are a sunflower of my emotions.{BR}Optimism, Happiness, and devotion.',
     grid: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBBnnnnnnnnnnnnnn',

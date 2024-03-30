@@ -21,6 +21,17 @@ import { ZodError } from 'zod';
 import Tile from './grid/Tile';
 import TileConnections from '../data/tileConnections';
 
+const defaultCode = `({
+  title: '',
+  grid: GridData.create([]),
+  solution: null,
+  difficulty: 1,
+  author: '',
+  link: '',
+  description: ''
+})
+`;
+
 const enclosure = [
   ['GridData', GridData, `GridData.create(['nnnnn', 'nnnnn'])`],
   [
@@ -99,9 +110,23 @@ export default memo(function SourceCodeEditor({
   const monaco = useMonaco();
 
   useEffect(() => {
+    if (!monaco) return;
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: false,
+      noSyntaxValidation: false,
+    });
+
+    // compiler options
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2020,
+      allowNonTsExtensions: true,
+      allowJs: true,
+      checkJs: true,
+    });
+
     import('../../types/logic-pad.d.ts?raw')
       .then(({ default: def }) => {
-        monaco?.languages.typescript.javascriptDefaults.addExtraLib(
+        monaco.languages.typescript.javascriptDefaults.addExtraLib(
           def,
           'file:///logic-pad.d.ts'
         );
@@ -115,7 +140,10 @@ export default memo(function SourceCodeEditor({
       window.localStorage.setItem('sourceCode', value);
       try {
         // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
-        const func = new Function(...enclosure.map(([name]) => name), value);
+        const func = new Function(
+          ...enclosure.map(([name]) => name),
+          `return (() => ${value})()`
+        );
         const puzzle: Puzzle = PuzzleSchema.parse(
           func(...enclosure.map(([, value]) => value))
         );
@@ -158,10 +186,23 @@ export default memo(function SourceCodeEditor({
             width="600px"
             className="z-50"
             defaultLanguage="javascript"
-            defaultValue={
-              window.localStorage.getItem('sourceCode') ??
-              "return {\n  title: '',\n  grid: GridData.create([]),\n  solution: null,\n  difficulty: 1,\n  author: '',\n  link: '',\n  description: ''\n};"
-            }
+            defaultValue={(() => {
+              let saved = window.localStorage.getItem('sourceCode');
+              if (!saved || saved.length === 0) saved = defaultCode;
+              else if (
+                /^return\s+/.test(saved.trim()) &&
+                /;\s*$/.test(saved.trim())
+              ) {
+                saved =
+                  '(' +
+                  saved
+                    .trim()
+                    .replace(/^return\s+/, '')
+                    .replace(/;\s*$/, '') +
+                  ')';
+              }
+              return saved;
+            })()}
             options={options}
             onMount={handleEditorDidMount}
           />

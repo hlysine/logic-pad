@@ -49,7 +49,7 @@ const enclosure = [
   [
     'CustomRule',
     CustomRule,
-    `.addRule(new CustomRule('Description', GridData.create([])))`,
+    `.addRule(new CustomRule(\n  'Description',\n  GridData.create([])\n))`,
   ],
   ['UndercluedRule', UndercluedRule, '.addRule(new UndercluedRule())'],
   ['LetterSymbol', LetterSymbol, '.addSymbol(new LetterSymbol(1, 1, "A"))'],
@@ -122,20 +122,24 @@ export default memo(function SourceCodeEditor() {
   return (
     <>
       <div className="justify-self-stretch dropdown dropdown-right">
-        <Editor
-          height="70vh"
-          defaultLanguage="javascript"
-          defaultValue={
-            window.localStorage.getItem('sourceCode') ??
-            "return {\n  title: '',\n  grid: GridData.create([]),\n  solution: null,\n  difficulty: 1,\n  author: '',\n  link: '',\n  description: ''\n};"
-          }
-          options={options}
-          onMount={handleEditorDidMount}
-        />
         <div
           tabIndex={0}
-          className="dropdown-content shadow-xl bg-base-300 rounded-box z-50 ml-4 p-4 w-[500px] h-[70vh] overflow-y-auto"
+          className="h-full w-full overflow-x-hidden focus-within:w-[200%]"
         >
+          <Editor
+            height="70vh"
+            width="600px"
+            className="z-50"
+            defaultLanguage="javascript"
+            defaultValue={
+              window.localStorage.getItem('sourceCode') ??
+              "return {\n  title: '',\n  grid: GridData.create([]),\n  solution: null,\n  difficulty: 1,\n  author: '',\n  link: '',\n  description: ''\n};"
+            }
+            options={options}
+            onMount={handleEditorDidMount}
+          />
+        </div>
+        <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-50 ml-[calc(300px+0.5rem)] p-4 w-[400px] h-[70vh] overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg">Quick reference</h3>
             {enclosure.map(([_, __, example]) => (

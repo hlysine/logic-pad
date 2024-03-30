@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "yarn build-types && tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-types": "rimraf types/temp && rimraf types/temp/logic-pad.d.ts && tsc --declaration --emitDeclarationOnly --noEmit false --outDir types/temp && dts-bundle --name logic-pad --main types/temp/data/**/*.d.ts --outputAsModuleFolder --out ../../logic-pad.d.ts && ts-node --esm ./types/postprocess.ts ./types/logic-pad.d.ts && rimraf types/temp"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
@@ -30,6 +31,7 @@
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.20.5",
     "@types/lodash": "^4.17.0",
+    "@types/node": "^20.11.30",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
@@ -38,6 +40,7 @@
     "autoprefixer": "^10.4.18",
     "clsx": "^2.1.0",
     "daisyui": "^4.7.2",
+    "dts-bundle": "^0.7.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
@@ -51,9 +54,11 @@
     "eslint-plugin-standard": "^5.0.0",
     "postcss": "^8.4.35",
     "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.2.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3",
     "vite": "^5.1.4"
   }
 }

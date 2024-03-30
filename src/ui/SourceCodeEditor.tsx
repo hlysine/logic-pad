@@ -1,6 +1,6 @@
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { memo, useRef, useState } from 'react';
-import Editor from '@monaco-editor/react';
+import { memo, useEffect, useRef, useState } from 'react';
+import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import GridData from '../data/grid';
 import GridConnections from '../data/gridConnections';
@@ -18,6 +18,8 @@ import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
 import RegionAreaRule from '../data/rules/regionAreaRule';
 import { ZodError } from 'zod';
+import Tile from './grid/Tile';
+import TileConnections from '../data/tileConnections';
 
 const enclosure = [
   ['GridData', GridData, `GridData.create(['nnnnn', 'nnnnn'])`],
@@ -26,6 +28,8 @@ const enclosure = [
     GridConnections,
     `.withConnections(\n  GridConnections.create(['..aa.', '..aa.'])\n)`,
   ],
+  ['TileConnections', TileConnections, null],
+  ['Tile', Tile, null],
   [
     'BanPatternRule',
     BanPatternRule,
@@ -86,6 +90,18 @@ export default memo(function SourceCodeEditor() {
     message: string;
     handle: number;
   } | null>(null);
+  const monaco = useMonaco();
+
+  useEffect(() => {
+    import('../../types/logic-pad.d.ts?raw')
+      .then(({ default: def }) => {
+        monaco?.languages.typescript.javascriptDefaults.addExtraLib(
+          (console.log(def), def),
+          'file:///logic-pad.d.ts'
+        );
+      })
+      .catch(console.log);
+  }, [monaco]);
 
   const parseJs = () => {
     if (editorRef.current) {
@@ -109,7 +125,7 @@ export default memo(function SourceCodeEditor() {
           .catch(console.log);
       } catch (error) {
         if (toast !== null) clearTimeout(toast.handle);
-        const handle = setTimeout(() => setToast(null), 5000);
+        const handle = window.setTimeout(() => setToast(null), 5000);
         if (error instanceof ZodError) {
           setToast({
             message:
@@ -146,11 +162,14 @@ export default memo(function SourceCodeEditor() {
         <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-50 ml-[calc(300px+0.5rem)] p-4 w-[400px] h-[70vh] overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg">Quick reference</h3>
-            {enclosure.map(([_, __, example]) => (
-              <pre key={example} className="text-xs text-base-content">
-                {example}
-              </pre>
-            ))}
+            {enclosure.map(
+              ([_, __, example]) =>
+                example && (
+                  <pre key={example} className="text-xs text-base-content">
+                    {example}
+                  </pre>
+                )
+            )}
           </div>
         </div>
       </div>

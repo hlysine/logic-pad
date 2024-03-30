@@ -3,7 +3,7 @@ import GridConnections from '../gridConnections';
 import Rule from '../rules/rule';
 import TileData from '../tile';
 import Symbol from '../symbols/symbol';
-import Puzzle from '../puzzle';
+import { Puzzle } from '../puzzle';
 
 export default abstract class SerializerBase {
   public abstract get version(): number;

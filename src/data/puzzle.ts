@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import GridData from './grid';
 
-export interface PuzzleMetadata {
+export type PuzzleMetadata = {
   /**
    * The title of the puzzle. (required)
    */
@@ -24,19 +24,21 @@ export interface PuzzleMetadata {
    * 6-10 represent star difficulties.
    */
   difficulty: number;
-}
+};
 
-export const PuzzleSchema = z.object({
-  title: z.string().min(1),
-  author: z.string().min(1),
-  description: z.string(),
-  link: z.string(),
-  difficulty: z.number().int().min(1).max(10),
-  grid: z.instanceof(GridData),
-  solution: z.instanceof(GridData).nullable(),
-});
+export const PuzzleSchema = z
+  .object({
+    title: z.string().min(1),
+    author: z.string().min(1),
+    description: z.string(),
+    link: z.string(),
+    difficulty: z.number().int().min(1).max(10),
+    grid: z.instanceof(GridData),
+    solution: z.instanceof(GridData).nullable(),
+  })
+  .strict();
 
-export default interface Puzzle extends PuzzleMetadata {
+export type Puzzle = PuzzleMetadata & {
   /**
    * The grid of the puzzle. (required)
    *
@@ -51,4 +53,4 @@ export default interface Puzzle extends PuzzleMetadata {
    * If there are no rules that require a solution, this field will be ignored.
    */
   solution: GridData | null;
-}
+};

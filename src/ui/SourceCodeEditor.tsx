@@ -13,7 +13,7 @@ import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import Puzzle, { PuzzleSchema } from '../data/puzzle';
+import { Puzzle, PuzzleSchema } from '../data/puzzle';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
 import RegionAreaRule from '../data/rules/regionAreaRule';

@@ -11,7 +11,7 @@ import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import UndercluedRule from '../data/rules/undercluedRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
-import Puzzle from '../data/puzzle';
+import { Puzzle } from '../data/puzzle';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import Serializer from '../data/serializer/allSerializers';
 import Compressor from '../data/serializer/compressor/allCompressors';

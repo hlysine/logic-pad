@@ -10,7 +10,7 @@ import { array, escape, unescape } from '../helper';
 import allRules from '../../allRules';
 import allSymbols from '../../allSymbols';
 import SerializerBase from './serializerBase';
-import Puzzle, { PuzzleMetadata } from '../puzzle';
+import { Puzzle, PuzzleMetadata } from '../puzzle';
 
 const OFFSETS = [
   { x: 0, y: -1 },

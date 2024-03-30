@@ -176,7 +176,7 @@ export enum Mode {
     Solve = "solve"
 }
 
-export interface PuzzleMetadata {
+export type PuzzleMetadata = {
         /**
             * The title of the puzzle. (required)
             */
@@ -199,7 +199,7 @@ export interface PuzzleMetadata {
             * 6-10 represent star difficulties.
             */
         difficulty: number;
-}
+};
 export const PuzzleSchema: z.ZodObject<{
         title: z.ZodString;
         author: z.ZodString;
@@ -208,7 +208,7 @@ export const PuzzleSchema: z.ZodObject<{
         difficulty: z.ZodNumber;
         grid: z.ZodType<GridData, z.ZodTypeDef, GridData>;
         solution: z.ZodNullable<z.ZodType<GridData, z.ZodTypeDef, GridData>>;
-}, "strip", z.ZodTypeAny, {
+}, "strict", z.ZodTypeAny, {
         grid: GridData;
         description: string;
         link: string;
@@ -225,7 +225,7 @@ export const PuzzleSchema: z.ZodObject<{
         difficulty: number;
         solution: GridData | null;
 }>;
-export interface Puzzle extends PuzzleMetadata {
+export type Puzzle = PuzzleMetadata & {
         /**
             * The grid of the puzzle. (required)
             *
@@ -240,7 +240,7 @@ export interface Puzzle extends PuzzleMetadata {
             * If there are no rules that require a solution, this field will be ignored.
             */
         solution: GridData | null;
-}
+};
 
 export class BanPatternRule extends Rule {
     readonly pattern: GridData;

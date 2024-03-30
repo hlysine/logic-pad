@@ -51,5 +51,6 @@ module.exports = {
       'error',
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
+    '@typescript-eslint/consistent-type-definitions': 'off',
   },
 };

@@ -1,4 +1,4 @@
-import Puzzle from '../puzzle';
+import { Puzzle } from '../puzzle';
 import SerializerV0 from './serializer_v0';
 import SerializerBase from './serializerBase';
 

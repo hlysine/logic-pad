@@ -59,7 +59,7 @@ export class GridData {
     getTile(x: number, y: number): TileData;
     setTile(x: number, y: number, tile: TileData | ((tile: TileData) => TileData)): GridData;
     withConnections(connections: GridConnections | ((value: GridConnections) => GridConnections)): GridData;
-    withSymbols(symbols: ReadonlyMap<string, readonly Symbol[]> | ((value: Map<string, readonly Symbol[]>) => ReadonlyMap<string, readonly Symbol[]>)): GridData;
+    withSymbols(symbols: readonly Symbol[] | ReadonlyMap<string, readonly Symbol[]> | ((value: Map<string, readonly Symbol[]>) => ReadonlyMap<string, readonly Symbol[]>)): GridData;
     addSymbol(symbol: Symbol): GridData;
     removeSymbol(symbol: Symbol): GridData;
     withRules(rules: readonly Rule[] | ((value: readonly Rule[]) => readonly Rule[])): GridData;

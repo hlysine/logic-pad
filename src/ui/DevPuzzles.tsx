@@ -83,27 +83,27 @@ export const DEV_PUZZLES: Puzzle[] = [
           '.............................',
         ])
       )
-      .addRule(
+      .withRules([
         new BanPatternRule(
           GridData.create(['nnnnn', 'nbbbn', 'bbnbb', 'nbbbn', 'nnbnn'])
-        )
-      )
-      .addRule(
+        ),
         new BanPatternRule(
           GridData.create(['nnnnn', 'nbbbn', 'wbnbw', 'nbbbn', 'nnwnn'])
-        )
-      )
-      .addRule(new ConnectAllRule(Color.Dark))
-      .addSymbol(new ViewpointSymbol(17, 5, 8))
-      .addSymbol(new ViewpointSymbol(23, 5, 6))
-      .addSymbol(new ViewpointSymbol(5, 11, 8))
-      .addSymbol(new ViewpointSymbol(11, 17, 6))
-      .addSymbol(new ViewpointSymbol(17, 17, 8))
-      .addSymbol(new ViewpointSymbol(23, 17, 7))
-      .addSymbol(new ViewpointSymbol(5, 23, 7))
-      .addSymbol(new ViewpointSymbol(11, 23, 6))
-      .addSymbol(new ViewpointSymbol(17, 23, 7))
-      .addSymbol(new ViewpointSymbol(23, 23, 7)),
+        ),
+        new ConnectAllRule(Color.Dark),
+      ])
+      .withSymbols([
+        new ViewpointSymbol(17, 5, 8),
+        new ViewpointSymbol(23, 5, 6),
+        new ViewpointSymbol(5, 11, 8),
+        new ViewpointSymbol(11, 17, 6),
+        new ViewpointSymbol(17, 17, 8),
+        new ViewpointSymbol(23, 17, 7),
+        new ViewpointSymbol(5, 23, 7),
+        new ViewpointSymbol(11, 23, 6),
+        new ViewpointSymbol(17, 23, 7),
+        new ViewpointSymbol(23, 23, 7),
+      ]),
     solution: null,
     difficulty: 7,
     author: 'Lysine',
@@ -130,19 +130,20 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnnnnnnnnn',
       'nBnBnBnBnBnBnBnBn',
       'nnnnnnnnWnWnWnWnW',
-    ])
-      .addSymbol(new LetterSymbol(2, 2, 'A'))
-      .addSymbol(new LetterSymbol(14, 2, 'F'))
-      .addSymbol(new LetterSymbol(6, 4, 'D'))
-      .addSymbol(new LetterSymbol(14, 4, 'E'))
-      .addSymbol(new LetterSymbol(12, 6, 'D'))
-      .addSymbol(new LetterSymbol(8, 8, 'C'))
-      .addSymbol(new LetterSymbol(4, 12, 'B'))
-      .addSymbol(new LetterSymbol(8, 16, 'B'))
-      .addSymbol(new LetterSymbol(10, 16, 'A'))
-      .addSymbol(new LetterSymbol(12, 16, 'F'))
-      .addSymbol(new LetterSymbol(14, 16, 'C'))
-      .addSymbol(new LetterSymbol(16, 16, 'E')),
+    ]).withSymbols([
+      new LetterSymbol(2, 2, 'A'),
+      new LetterSymbol(14, 2, 'F'),
+      new LetterSymbol(6, 4, 'D'),
+      new LetterSymbol(14, 4, 'E'),
+      new LetterSymbol(12, 6, 'D'),
+      new LetterSymbol(8, 8, 'C'),
+      new LetterSymbol(4, 12, 'B'),
+      new LetterSymbol(8, 16, 'B'),
+      new LetterSymbol(10, 16, 'A'),
+      new LetterSymbol(12, 16, 'F'),
+      new LetterSymbol(14, 16, 'C'),
+      new LetterSymbol(16, 16, 'E'),
+    ]),
     solution: null,
     difficulty: 5,
     author: 'Lysine',
@@ -164,14 +165,16 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnn',
     ])
       .addRule(new UndercluedRule())
-      .addSymbol(new LetterSymbol(2, 2, 'A'))
-      .addSymbol(new LetterSymbol(7, 7, 'A'))
-      .addSymbol(new NumberSymbol(1, 2, 20))
-      .addSymbol(new NumberSymbol(7, 2, 8))
-      .addSymbol(new NumberSymbol(6, 4, 2))
-      .addSymbol(new NumberSymbol(3, 5, 2))
-      .addSymbol(new NumberSymbol(1, 8, 2))
-      .addSymbol(new NumberSymbol(4, 8, 2)),
+      .withSymbols([
+        new LetterSymbol(2, 2, 'A'),
+        new LetterSymbol(7, 7, 'A'),
+        new NumberSymbol(1, 2, 20),
+        new NumberSymbol(7, 2, 8),
+        new NumberSymbol(6, 4, 2),
+        new NumberSymbol(3, 5, 2),
+        new NumberSymbol(1, 8, 2),
+        new NumberSymbol(4, 8, 2),
+      ]),
     solution: GridData.create([
       'nnnnwwwwwn',
       'nbwnnbbbnw',
@@ -251,14 +254,15 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnnnn',
       'BnWnnnnnnnnn',
     ])
-      .addRule(new UndercluedRule())
-      .addRule(new ConnectAllRule(Color.Dark))
-      .addSymbol(new LetterSymbol(0, 0, 'A'))
-      .addSymbol(new LetterSymbol(9, 4, 'A'))
-      .addSymbol(new LetterSymbol(11, 2, 'B'))
-      .addSymbol(new LetterSymbol(2, 7, 'B'))
-      .addSymbol(new LetterSymbol(11, 4, 'C'))
-      .addSymbol(new LetterSymbol(2, 11, 'C')),
+      .withRules([new UndercluedRule(), new ConnectAllRule(Color.Dark)])
+      .withSymbols([
+        new LetterSymbol(0, 0, 'A'),
+        new LetterSymbol(9, 4, 'A'),
+        new LetterSymbol(11, 2, 'B'),
+        new LetterSymbol(2, 7, 'B'),
+        new LetterSymbol(11, 4, 'C'),
+        new LetterSymbol(2, 11, 'C'),
+      ]),
     solution: GridData.create([
       'WnnnnnnnnnnB',
       'wnnnnnnnnnnn',
@@ -386,15 +390,17 @@ export const DEV_PUZZLES: Puzzle[] = [
           GridData.create(['nnnnn', 'nnnnn', 'nnnnn', 'nnnnn', 'nWWnn'])
         )
       )
-      .addSymbol(new NumberSymbol(7, 9, 3))
-      .addSymbol(new NumberSymbol(4, 9, 8))
-      .addSymbol(new NumberSymbol(0, 7, 6))
-      .addSymbol(new NumberSymbol(0, 2, 4))
-      .addSymbol(new NumberSymbol(1, 0, 8))
-      .addSymbol(new NumberSymbol(4, 3, 8))
-      .addSymbol(new NumberSymbol(7, 2, 5))
-      .addSymbol(new NumberSymbol(9, 3, 4))
-      .addSymbol(new NumberSymbol(7, 6, 8)),
+      .withSymbols([
+        new NumberSymbol(7, 9, 3),
+        new NumberSymbol(4, 9, 8),
+        new NumberSymbol(0, 7, 6),
+        new NumberSymbol(0, 2, 4),
+        new NumberSymbol(1, 0, 8),
+        new NumberSymbol(4, 3, 8),
+        new NumberSymbol(7, 2, 5),
+        new NumberSymbol(9, 3, 4),
+        new NumberSymbol(7, 6, 8),
+      ]),
     solution: null,
     difficulty: 5,
     author: 'AZURE',

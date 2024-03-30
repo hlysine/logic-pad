@@ -97,11 +97,23 @@ export default class GridData {
 
   public withSymbols(
     symbols:
+      | readonly Symbol[]
       | ReadonlyMap<string, readonly Symbol[]>
       | ((
           value: Map<string, readonly Symbol[]>
         ) => ReadonlyMap<string, readonly Symbol[]>)
   ): GridData {
+    if (symbols instanceof Array) {
+      const map = new Map<string, Symbol[]>();
+      for (const symbol of symbols) {
+        if (map.has(symbol.id)) {
+          map.set(symbol.id, [...map.get(symbol.id)!, symbol]);
+        } else {
+          map.set(symbol.id, [symbol]);
+        }
+      }
+      return this.copyWith({ symbols: map });
+    }
     return this.copyWith({
       symbols:
         typeof symbols === 'function'

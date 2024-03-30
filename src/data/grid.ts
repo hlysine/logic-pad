@@ -179,7 +179,7 @@ export default class GridData {
   }
 
   /**
-   * Create a new {@link GridData} object from a string array.
+   * Create a new GridData object from a string array.
    *
    * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
    * - Capitalize the letter to make the tile fixed.

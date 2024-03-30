@@ -105,7 +105,7 @@ export default class BanPatternRule extends Rule {
   /**
    * **Don't make this pattern**
    *
-   * @param pattern - {@link GridData} representing the banned pattern. Only non-gray tiles are considered.
+   * @param pattern - GridData representing the banned pattern. Only non-gray tiles are considered.
    */
   public constructor(pattern: GridData) {
     super();

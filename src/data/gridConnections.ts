@@ -111,13 +111,13 @@ export default class GridConnections {
   }
 
   /**
-   * Create new {@link GridConnections} from a string array.
+   * Create new GridConnections from a string array.
    *
    * - Use `.` for cells that don't connect to anything.
    * - Use any other character for cells that connect to the same character.
    *
    * @param array - The string array to create the connections from.
-   * @returns The created connections. You can apply this to a {@link GridData} object using {@link GridData.withConnections}.
+   * @returns The created connections. You can apply this to a GridData object using GridData.withConnections.
    */
   public static create(array: string[]): GridConnections {
     const edges: Edge[] = [];

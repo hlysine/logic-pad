@@ -68,7 +68,7 @@ export class GridData {
     replaceRule(oldRule: Rule, newRule: Rule): GridData;
     resize(width: number, height: number): GridData;
     /**
-      * Create a new {@link GridData} object from a string array.
+      * Create a new GridData object from a string array.
       *
       * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
       * - Capitalize the letter to make the tile fixed.
@@ -98,13 +98,13 @@ export class GridConnections {
     getForTile({ x, y }: Position): TileConnections;
     getConnectedTiles({ x, y }: Position): readonly Position[];
     /**
-      * Create new {@link GridConnections} from a string array.
+      * Create new GridConnections from a string array.
       *
       * - Use `.` for cells that don't connect to anything.
       * - Use any other character for cells that connect to the same character.
       *
       * @param array - The string array to create the connections from.
-      * @returns The created connections. You can apply this to a {@link GridData} object using {@link GridData.withConnections}.
+      * @returns The created connections. You can apply this to a GridData object using GridData.withConnections.
       */
     static create(array: string[]): GridConnections;
 }
@@ -218,7 +218,7 @@ export class BanPatternRule extends Rule {
     /**
       * **Don't make this pattern**
       *
-      * @param pattern - {@link GridData} representing the banned pattern. Only non-gray tiles are considered.
+      * @param pattern - GridData representing the banned pattern. Only non-gray tiles are considered.
       */
     constructor(pattern: GridData);
     get id(): string;

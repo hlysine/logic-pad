@@ -1,3 +1,5 @@
+import themes from 'daisyui/src/theming/themes';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
@@ -26,12 +28,29 @@ export default {
       'garden',
       'forest',
       'aqua',
-      'lofi',
+      {
+        lofi: {
+          ...themes['lofi'],
+          neutral: '#101010',
+          'base-100': '#333',
+          accent: '#999',
+        },
+      },
       'pastel',
       'fantasy',
       'wireframe',
-      'black',
-      'luxury',
+      {
+        black: {
+          ...themes['black'],
+          accent: '#999',
+        },
+      },
+      {
+        luxury: {
+          ...themes['luxury'],
+          accent: '#946573',
+        },
+      },
       'dracula',
       'cmyk',
       'autumn',

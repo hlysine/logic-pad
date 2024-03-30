@@ -79,7 +79,13 @@ const options: editor.IStandaloneEditorConstructionOptions = {
   formatOnType: true,
 };
 
-export default memo(function SourceCodeEditor() {
+export interface SourceCodeEditorProps {
+  loading?: React.ReactNode;
+}
+
+export default memo(function SourceCodeEditor({
+  loading,
+}: SourceCodeEditorProps) {
   const navigate = useNavigate();
   const state = useRouterState();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
@@ -147,6 +153,7 @@ export default memo(function SourceCodeEditor() {
           className="h-full w-full overflow-x-hidden focus-within:overflow-x-visible focus-within:w-[200%] transition-[width] duration-75"
         >
           <Editor
+            loading={loading}
             height="70vh"
             width="600px"
             className="z-50"

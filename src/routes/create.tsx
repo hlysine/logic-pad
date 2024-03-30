@@ -6,9 +6,9 @@ import RulerOverlay from '../ui/grid/RulerOverlay';
 import { useGrid } from '../ui/GridContext';
 import InstructionSearch from '../ui/instructions/InstructionSearch';
 import { createFileRoute } from '@tanstack/react-router';
-import { memo } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import LinkLoader, { validateSearch } from '../ui/router/LinkLoader';
-import SourceCodeEditor from '../ui/SourceCodeEditor';
+const SourceCodeEditor = lazy(() => import('../ui/SourceCodeEditor'));
 
 export const Route = createFileRoute('/create')({
   validateSearch,
@@ -20,7 +20,17 @@ export const Route = createFileRoute('/create')({
       <div className="flex flex-1 justify-center items-center flex-wrap">
         <LinkLoader params={params} />
         <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
-          <SourceCodeEditor />
+          <Suspense
+            fallback={
+              <span className="loading loading-bars loading-lg h-[70vh] self-center"></span>
+            }
+          >
+            <SourceCodeEditor
+              loading={
+                <span className="loading loading-bars loading-lg absolute top-1/2 left-[25%] -translate-x-1/2"></span>
+              }
+            />
+          </Suspense>
           <EditControls />
         </div>
         <div className="grow shrink flex justify-start items-center p-0">

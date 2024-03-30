@@ -124,6 +124,7 @@ export default memo(function SourceCodeEditor({
       allowJs: true,
       checkJs: true,
       noLib: true,
+      strict: true,
     });
 
     import('../../types/logic-pad.d.ts?raw')
@@ -144,7 +145,7 @@ export default memo(function SourceCodeEditor({
         // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
         const func = new Function(
           ...enclosure.map(([name]) => name),
-          `return (() => ${value})()`
+          `"use strict";\nreturn (() => ${value})()`
         );
         const puzzle: Puzzle = PuzzleSchema.parse(
           func(...enclosure.map(([, value]) => value))

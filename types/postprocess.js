@@ -5,7 +5,8 @@ const filePath = process.argv[2];
 
 let file = readFileSync(filePath, 'utf-8');
 
-file = `declare global {
+if (!file.startsWith('declare global'))
+  file = `declare global {
 ${file.replace(/^export default /gm, 'export ')}
 }
 export {};

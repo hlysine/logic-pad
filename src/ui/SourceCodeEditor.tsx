@@ -69,6 +69,10 @@ const options: editor.IStandaloneEditorConstructionOptions = {
   folding: false,
   lineDecorationsWidth: 5,
   lineNumbersMinChars: 0,
+  wrappingIndent: 'indent',
+  wrappingStrategy: 'advanced',
+  wordWrap: 'on',
+  formatOnType: true,
 };
 
 export default memo(function SourceCodeEditor() {

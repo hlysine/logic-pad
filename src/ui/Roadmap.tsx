@@ -24,6 +24,7 @@ const roadmap: RoadmapItem[] = [
     '~All ___ regions have area #',
     'Exactly # symbols per ___ region',
     'All numbers are off by #',
+    'There are # ___ cells in total',
     'Mystery puzzle: violate the rules (Hidden)',
     'Prefilled tiles',
     '# prefilled tiles are wrong',

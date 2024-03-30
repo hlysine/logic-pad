@@ -14,7 +14,7 @@ register((defaultSerializer = new SerializerV0()));
 
 const Serializer = {
   stringifyPuzzle(puzzle: Puzzle): string {
-    return defaultSerializer.stringifyPuzzle(puzzle);
+    return `${defaultSerializer.version}_${defaultSerializer.stringifyPuzzle(puzzle)}`;
   },
   parsePuzzle(input: string): Puzzle {
     const match = input.match(/^(\d+)_/);

@@ -123,6 +123,7 @@ export default memo(function SourceCodeEditor({
       allowNonTsExtensions: true,
       allowJs: true,
       checkJs: true,
+      noLib: true,
     });
 
     import('../../types/logic-pad.d.ts?raw')

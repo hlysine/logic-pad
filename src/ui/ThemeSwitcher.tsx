@@ -46,6 +46,28 @@ export default memo(function ThemeSwitcher() {
 
   const monaco = useMonaco();
 
+  const switchTheme = (editorTheme: string) => {
+    if (monaco && editorTheme) {
+      import(`../../node_modules/monaco-themes/themes/${editorTheme}.json`)
+        .then(data => {
+          monaco.editor.defineTheme(
+            editorTheme,
+            data as editor.IStandaloneThemeData
+          );
+          monaco.editor.setTheme(editorTheme);
+        })
+        .catch(() => {
+          monaco.editor.setTheme(editorTheme);
+        })
+        .catch(console.log);
+    }
+  };
+
+  useEffect(() => {
+    switchTheme('Dracula');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [monaco]);
+
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn m-1">
@@ -64,24 +86,7 @@ export default memo(function ThemeSwitcher() {
               className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
               aria-label={theme}
               value={theme}
-              onChange={() => {
-                if (monaco && editorTheme) {
-                  import(
-                    `../../node_modules/monaco-themes/themes/${editorTheme}.json`
-                  )
-                    .then(data => {
-                      monaco.editor.defineTheme(
-                        editorTheme,
-                        data as editor.IStandaloneThemeData
-                      );
-                      monaco.editor.setTheme(editorTheme);
-                    })
-                    .catch(() => {
-                      monaco.editor.setTheme(editorTheme);
-                    })
-                    .catch(console.log);
-                }
-              }}
+              onChange={() => switchTheme(editorTheme)}
             />
           </li>
         ))}

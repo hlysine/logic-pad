@@ -8,6 +8,7 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import Serializer from '../data/serializer/allSerializers';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Difficulty from './metadata/Difficulty';
+import { FiCheck } from "react-icons/fi";
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
@@ -211,6 +212,11 @@ export default memo(function DevPuzzles() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function isComplete(id: string) {
+    const finishes = JSON.parse(localStorage.getItem('finishes') ?? '[]');
+    return finishes.includes(id);
+  }
+
   return (
     <ul
       tabIndex={0}
@@ -233,7 +239,12 @@ export default memo(function DevPuzzles() {
           }}
         >
           <a className="text-md w-full flex items-center justify-between">
-            {puzzle.title}
+            <div className='flex items-center gap-2'>
+              {puzzle.title}
+              {isComplete(puzzle.id) && (
+                <FiCheck className='text-green-500' />
+              )}
+            </div>
             <Difficulty value={puzzle.difficulty} />
           </a>
         </li>

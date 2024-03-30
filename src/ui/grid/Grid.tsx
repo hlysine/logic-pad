@@ -83,7 +83,7 @@ export default memo(function Grid({
         ...gridStyle,
         'gridTemplateRows': 'auto !important'
       }} className='absolute bottom-full left-0 grid justify-center content-center'>
-            {header.map((l, y) =>
+            {header.map((l) =>
               <div className='relative w-[0.7em] h-[0.2em] mx-[0.15em] z-[999] transform translate-y-[0.15em] rounded-full bg-white' style={{
                 opacity: l === 'C' ? '100%' : '0%'
               }}></div>

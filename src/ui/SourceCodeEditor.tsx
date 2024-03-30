@@ -228,7 +228,7 @@ export default memo(function SourceCodeEditor({
         </div>
       </div>
       <div
-        className="tooltip w-full"
+        className="tooltip w-full tooltip-right"
         data-tip="Source code is NOT saved in the puzzle link! Remember to back up your code."
       >
         <button className="btn btn-primary w-full" onClick={parseJs}>

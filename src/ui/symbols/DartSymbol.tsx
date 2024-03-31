@@ -14,30 +14,51 @@ export interface DartProps {
   symbol: DartSymbolData;
 }
 
+const orientations = {
+  [Direction.Up]: {
+    arrowIcon: HiMiniArrowLongUp,
+    arrowStitch: {
+      right: 0,
+      marginLeft: 'auto',
+    },
+    numberDisplacement: {
+      transform: 'translateX(-0.20em)',
+    },
+  },
+  [Direction.Left]: {
+    arrowIcon: HiMiniArrowLongLeft,
+    arrowStitch: {
+      top: 0,
+      marginBottom: 'auto',
+    },
+    numberDisplacement: {
+      transform: 'translateY(0.20em)',
+    },
+  },
+  [Direction.Down]: {
+    arrowIcon: HiMiniArrowLongDown,
+    arrowStitch: {
+      left: 0,
+      marginRight: 'auto',
+    },
+    numberDisplacement: {
+      transform: 'translateX(0.20em)',
+    },
+  },
+  [Direction.Right]: {
+    arrowIcon: HiMiniArrowLongRight,
+    arrowStitch: {
+      bottom: 0,
+      marginTop: 'auto',
+    },
+    numberDisplacement: {
+      transform: 'translateY(-0.20em)',
+    },
+  },
+};
+
 export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
   const direction = symbol.orientation;
-  const arrowIcon = {
-    [Direction.Up]: HiMiniArrowLongUp,
-    [Direction.Left]: HiMiniArrowLongLeft,
-    [Direction.Down]: HiMiniArrowLongDown,
-    [Direction.Right]: HiMiniArrowLongRight,
-  };
-  const arrowStitch = {
-    [Direction.Left]: 'top-0 mb-auto',
-    [Direction.Up]: 'right-0 ml-auto',
-    [Direction.Right]: 'bottom-0 mt-auto',
-    [Direction.Down]: 'left-0 mr-auto',
-  };
-  // const numberDisplacement = '';
-  const numberDisplacement =
-    '-' +
-    {
-      [Direction.Left]: 'bottom',
-      [Direction.Up]: 'left',
-      [Direction.Right]: 'top',
-      [Direction.Down]: 'right',
-    }[direction] +
-    '-[0.10em]';
   return (
     <div
       className={cn(
@@ -46,19 +67,18 @@ export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
       )}
     >
       <span
-        className={cn('absolute text-[0.5em]', textClass, numberDisplacement)}
+        className={cn('absolute text-[0.55em]', textClass)}
+        style={orientations[direction].numberDisplacement}
       >
         {symbol.number}
       </span>
       <div
-        className={cn(
-          'absolute',
-          textClass,
-          arrowStitch[direction],
-          '-m-[0.10em]'
-        )}
+        className={cn('absolute', textClass, '-m-[0.10em]')}
+        style={orientations[direction].arrowStitch}
       >
-        {React.createElement(arrowIcon[direction], { size: '0.7em' })}
+        {React.createElement(orientations[direction].arrowIcon, {
+          size: '0.7em',
+        })}
       </div>
     </div>
   );

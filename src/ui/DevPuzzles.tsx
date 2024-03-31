@@ -44,7 +44,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     id: 'penguin',
     title: 'Penguin',
     description:
-      'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to see your smile.. and hear.. "I love you".',
+      'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to love you, and be loved too.',
     grid: GridData.create([
       'nnnnnnnnnnnnnn',
       'nnnnnBBnnnnnnn',

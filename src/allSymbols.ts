@@ -9,6 +9,7 @@ import LetterSymbolUI from './ui/symbols/LetterSymbol';
 import ViewpointSymbolUI from './ui/symbols/ViewpointSymbol';
 import DartSymbolUI from './ui/symbols/DartSymbol';
 import QuestionMarkSignUI from './ui/symbols/signs/QuestionMarkSign';
+import { Direction } from './data/primitives';
 
 export interface SymbolProps<T extends SymbolData> {
   textClass: string;
@@ -35,7 +36,7 @@ function register<T extends SymbolData>(
 register(new NumberSymbolData(0, 0, 1), NumberSymbolUI);
 register(new LetterSymbolData(0, 0, 'A'), LetterSymbolUI);
 register(new ViewpointSymbolData(0, 0, 1), ViewpointSymbolUI);
-register(new DartSymbolData(0, 0, 1), DartSymbolUI);
+register(new DartSymbolData(0, 0, 1, Direction.Down), DartSymbolUI);
 register(new QuestionMarkSignData(0, 0), QuestionMarkSignUI);
 
 export default allSymbols;

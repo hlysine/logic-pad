@@ -467,14 +467,14 @@ export class DartSymbol extends Symbol {
     readonly number: number;
     readonly orientation: Direction;
     /**
-      * **Area Numbers must equal region sizes**
+      * **Darts count opposite color cells in that direction**
       *
       * @param x - The x-coordinate of the symbol.
       * @param y - The y-coordinate of the symbol.
       * @param number - The number seen by the symbol.
       * @param orientation - The orientation of the symbol.
       */
-    constructor(x: number, y: number, number: number, orientation?: Direction);
+    constructor(x: number, y: number, number: number, orientation: Direction);
     get id(): string;
     get explanation(): string;
     createExampleGrid(): GridData;

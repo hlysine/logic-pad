@@ -13,7 +13,7 @@ import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import DartSymbol from "../data/symbols/dartSymbol.ts";
+import DartSymbol from '../data/symbols/dartSymbol.ts';
 import { Puzzle, PuzzleSchema } from '../data/puzzle';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
@@ -82,8 +82,12 @@ const enclosure = [
     '.addSymbol(new DartSymbol(1, 1, 2, Direction.Up))',
   ],
   ['Color', Color, 'Color.Dark\nColor.Light\nColor.Gray'],
-  ['Direction', Direction, 'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right']
-  ] as const;
+  [
+    'Direction',
+    Direction,
+    'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right',
+  ],
+] as const;
 
 const options: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },

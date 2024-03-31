@@ -1,7 +1,7 @@
-import {AnyConfig, ConfigType} from '../config';
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import {move} from '../helper';
-import {Color, Direction, State} from '../primitives';
+import { move } from '../helper';
+import { Color, Direction, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class DartSymbol extends Symbol {
@@ -45,7 +45,7 @@ export default class DartSymbol extends Symbol {
   ]);
 
   /**
-   * **Area Numbers must equal region sizes**
+   * **Darts count opposite color cells in that direction**
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
@@ -53,10 +53,10 @@ export default class DartSymbol extends Symbol {
    * @param orientation - The orientation of the symbol.
    */
   public constructor(
-	  public readonly x: number,
-	  public readonly y: number,
-	  public readonly number: number,
-	  public readonly orientation: Direction = Direction.Down
+    public readonly x: number,
+    public readonly y: number,
+    public readonly number: number,
+    public readonly orientation: Direction
   ) {
     super(x, y);
     this.number = number;
@@ -84,20 +84,30 @@ export default class DartSymbol extends Symbol {
     if (color === Color.Gray) return State.Incomplete;
     let maxPossible = 0;
     let stillGray = false;
-    let isVertical = this.orientation === Direction.Up || this.orientation === Direction.Down;
-    let isForward = this.orientation === Direction.Down || this.orientation === Direction.Right;
-    let stopCondition = !isForward ? (i: number) => i >= 0
-        : this.orientation === Direction.Down ? (i: number) => i < grid.height : (i: number) => i < grid.width;
+    const isVertical =
+      this.orientation === Direction.Up || this.orientation === Direction.Down;
+    const isForward =
+      this.orientation === Direction.Down ||
+      this.orientation === Direction.Right;
+    const stopCondition = !isForward
+      ? (i: number) => i >= 0
+      : this.orientation === Direction.Down
+        ? (i: number) => i < grid.height
+        : (i: number) => i < grid.width;
     let pos = { x: this.x, y: this.y };
     while (stopCondition(isVertical ? pos.y : pos.x)) {
-      let tile = grid.getTile(pos.x, pos.y);
+      const tile = grid.getTile(pos.x, pos.y);
       if (tile.exists && tile.color !== color) {
         maxPossible++;
         if (tile.color === Color.Gray) stillGray = true;
       }
       pos = move(pos, this.orientation);
     }
-    return stillGray ? State.Incomplete : maxPossible === this.number ? State.Satisfied : State.Error;
+    return stillGray
+      ? State.Incomplete
+      : maxPossible === this.number
+        ? State.Satisfied
+        : State.Error;
   }
 
   public copyWith({
@@ -111,7 +121,12 @@ export default class DartSymbol extends Symbol {
     number?: number;
     orientation?: Direction;
   }): this {
-    return new DartSymbol(x ?? this.x, y ?? this.y, number ?? this.number, orientation ?? this.orientation) as this;
+    return new DartSymbol(
+      x ?? this.x,
+      y ?? this.y,
+      number ?? this.number,
+      orientation ?? this.orientation
+    ) as this;
   }
 
   public withNumber(number: number): this {

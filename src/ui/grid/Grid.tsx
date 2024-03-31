@@ -65,8 +65,6 @@ export default memo(function Grid({
     center.push(Math.ceil(totalWidth / 2));
   }
   const header = [];
-
-  console.log(center);
   
   for (let i = 1; i <= totalWidth; i++) {
     if (center.includes(i)) {

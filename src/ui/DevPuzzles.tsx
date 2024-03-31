@@ -18,7 +18,7 @@ function getGrid(solution: GridData) {
         .map((e, i) => (i < t.length / 2 ? e : 'n'))
         .join('');
     })
-  );  
+  ).addRule(new CompletePatternRule());
 }
 
 export const DEV_PUZZLES: Puzzle[] = [
@@ -293,7 +293,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 4,
     description:
       'There is a star giving infinite heat.{BR}You are my sun I was lucky to meet.{BR}A sunshine I never knew I need,{BR}An energy of power to grow a seed.',
-    grid: GridData.create([]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
       'nnnnnnnnnnnnnnBnnnnnnnnnnnnnn',
@@ -332,32 +332,32 @@ export const DEV_PUZZLES: Puzzle[] = [
     title: 'Crown',
     difficulty: 4,
     description:
-      'Tinder bio appear, drama queen.{BR}What the hell does that even mean.{BR}Jelousy and fights, should I fear?{BR}Please don\'t break my heart, and disappear.',
+      "Tinder bio appear, drama queen.{BR}What the hell does that even mean.{BR}Jelousy and fights, should I fear?{BR}Please don't break my heart, and disappear.",
     grid: GridData.create([]),
     solution: GridData.create([
-      "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
-      "nnnnnnnnBBnnnnnnnnnnnnBBnnnnnnnn",
-      "nnBBnnnBBBBnnnnnnnnnnBBBBnnnBBnn",
-      "nBBBBnnBBBBnnnnBBnnnnBBBBnnBBBBn",
-      "nBBBBnnnBBnnnnBBBBnnnnBBnnnBBBBn",
-      "nnBBnnnBWWBnnnBBBBnnnBWWBnnnBBnn",
-      "nBWWBnnBWWBnnnnBBnnnnBWWBnnBWWBn",
-      "nBWWBnBWWWWBnnBWWBnnBWWWWBnBWWBn",
-      "nBWWWBWWWWWWBnBWWBnBWWWWWWBWWWBn",
-      "nBWWWBWWWWWWWBWWWWBWWWWWWWBWWWBn",
-      "nBWWWWBWWWWWBWWWWWWBWWWWWBWWWWBn",
-      "nBWWWWWBBBBBWWWWWWWWBBBBBWWWWWBn",
-      "nBWWWWWWWWWWWWWWWWWWWWWWWWWWWWBn",
-      "nBWWWWWWWWWWWWWBBWWWWWWWWWWWWWBn",
-      "nBWWWWWWWWWWWWBBBBWWWWWWWWWWWWBn",
-      "nBWWWWWBBWWWWBBBBBBWWWWBBWWWWWBn",
-      "nBWWWWBBBBWWWBBBBBBWWWBBBBWWWWBn",
-      "nBWWWWBBBBWWWBBBBBBWWWBBBBWWWWBn",
-      "nBWWWWWBBWWWWWBBBBWWWWWBBWWWWWBn",
-      "nnBWWWWWWWWWWWWBBWWWWWWWWWWWWBnn",
-      "nnnBBWWWWWWWWWWWWWWWWWWWWWWBBnnn",
-      "nnnnnBBBBBBBBBBBBBBBBBBBBBBnnnnn",
-      "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+      'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
+      'nnnnnnnnBBnnnnnnnnnnnnBBnnnnnnnn',
+      'nnBBnnnBBBBnnnnnnnnnnBBBBnnnBBnn',
+      'nBBBBnnBBBBnnnnBBnnnnBBBBnnBBBBn',
+      'nBBBBnnnBBnnnnBBBBnnnnBBnnnBBBBn',
+      'nnBBnnnBWWBnnnBBBBnnnBWWBnnnBBnn',
+      'nBWWBnnBWWBnnnnBBnnnnBWWBnnBWWBn',
+      'nBWWBnBWWWWBnnBWWBnnBWWWWBnBWWBn',
+      'nBWWWBWWWWWWBnBWWBnBWWWWWWBWWWBn',
+      'nBWWWBWWWWWWWBWWWWBWWWWWWWBWWWBn',
+      'nBWWWWBWWWWWBWWWWWWBWWWWWBWWWWBn',
+      'nBWWWWWBBBBBWWWWWWWWBBBBBWWWWWBn',
+      'nBWWWWWWWWWWWWWWWWWWWWWWWWWWWWBn',
+      'nBWWWWWWWWWWWWWBBWWWWWWWWWWWWWBn',
+      'nBWWWWWWWWWWWWBBBBWWWWWWWWWWWWBn',
+      'nBWWWWWBBWWWWBBBBBBWWWWBBWWWWWBn',
+      'nBWWWWBBBBWWWBBBBBBWWWBBBBWWWWBn',
+      'nBWWWWBBBBWWWBBBBBBWWWBBBBWWWWBn',
+      'nBWWWWWBBWWWWWBBBBWWWWWBBWWWWWBn',
+      'nnBWWWWWWWWWWWWBBWWWWWWWWWWWWBnn',
+      'nnnBBWWWWWWWWWWWWWWWWWWWWWWBBnnn',
+      'nnnnnBBBBBBBBBBBBBBBBBBBBBBnnnnn',
+      'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
     ]),
   },
 ];
@@ -383,6 +383,8 @@ export default memo(function DevPuzzles() {
       );
       setMetadata(DEV_PUZZLES[defaultSelection]);
       clearHistory(DEV_PUZZLES[defaultSelection].grid);
+
+      console.log(DEV_PUZZLES[defaultSelection].solution);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -397,11 +399,11 @@ export default memo(function DevPuzzles() {
       tabIndex={0}
       className="dropdown-content menu menu-vertical min-w-[300px] bg-base-200 rounded-box text-base-content z-50"
     >
-      {DEV_PUZZLES.filter((p) => {
+      {DEV_PUZZLES.filter(p => {
         const urlParams = new URLSearchParams(window.location.search);
         const showHidden = urlParams.get('hidden');
 
-        if(showHidden) {
+        if (showHidden) {
           return true;
         }
 

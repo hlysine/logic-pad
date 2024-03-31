@@ -40,7 +40,6 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
 
   useEffect(() => {
     const finishes = JSON.parse(localStorage.getItem('finishes') ?? '[]');
-    console.log(metadata);
     if(finishes.includes(metadata.id)) {
       setState({
         ...state,

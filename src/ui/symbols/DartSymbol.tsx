@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { cn } from '../../utils';
-import DartSymbolData from '../../data/symbols/dartSymbol.ts';
-import { Direction } from '../../data/primitives.ts';
+import DartSymbolData from '../../data/symbols/dartSymbol';
+import { Direction } from '../../data/primitives';
 import {
   HiMiniArrowLongDown,
   HiMiniArrowLongLeft,

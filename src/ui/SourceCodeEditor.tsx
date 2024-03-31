@@ -8,12 +8,12 @@ import BanPatternRule from '../data/rules/banPatternRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import ConnectAllRule from '../data/rules/connectAllRule';
 import CustomRule from '../data/rules/customRule';
-import { Color, Direction } from '../data/primitives';
+import { Color, Direction, Orientation } from '../data/primitives';
 import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import DartSymbol from '../data/symbols/dartSymbol.ts';
+import DartSymbol from '../data/symbols/dartSymbol';
 import { Puzzle, PuzzleSchema } from '../data/puzzle';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
@@ -21,6 +21,8 @@ import RegionAreaRule from '../data/rules/regionAreaRule';
 import { ZodError } from 'zod';
 import Tile from './grid/Tile';
 import TileConnections from '../data/tileConnections';
+import LotusSymbol from '../data/symbols/lotusSymbol';
+import GalaxySymbol from '../data/symbols/galaxySymbol';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -81,11 +83,22 @@ const enclosure = [
     DartSymbol,
     '.addSymbol(new DartSymbol(1, 1, 2, Direction.Up))',
   ],
+  [
+    'LotusSymbol',
+    LotusSymbol,
+    '.addSymbol(new LotusSymbol(1, 1, Orientation.Up))',
+  ],
+  ['GalaxySymbol', GalaxySymbol, '.addSymbol(new GalaxySymbol(1, 1))'],
   ['Color', Color, 'Color.Dark\nColor.Light\nColor.Gray'],
   [
     'Direction',
     Direction,
     'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right',
+  ],
+  [
+    'Orientation',
+    Orientation,
+    'Orientation.Up\nOrientation.UpRight\nOrientation.Right\nOrientation.DownRight\nOrientation.Down\nOrientation.DownLeft\nOrientation.Left\nOrientation.UpLeft',
   ],
 ] as const;
 

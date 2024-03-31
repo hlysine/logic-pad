@@ -333,4 +333,8 @@ export default class GridData {
     if (!changed) return this;
     return this.copyWith({ tiles: newTiles });
   }
+
+  isPositionOutOfBounds(c: Position) {
+    return c.x < 0 || c.x >= this.width || c.y < 0 || c.y >= this.height;
+  }
 }

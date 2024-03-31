@@ -10,6 +10,7 @@ export enum ConfigType {
     String = "string",
     Color = "color",
     Direction = "direction",
+    Orientation = "orientation",
     Grid = "grid"
 }
 export interface Config<T> {
@@ -35,10 +36,13 @@ export interface ColorConfig extends Config<Color> {
 export interface DirectionConfig extends Config<Direction> {
     readonly type: ConfigType.Direction;
 }
+export interface OrientationConfig extends Config<Orientation> {
+    readonly type: ConfigType.Orientation;
+}
 export interface GridConfig extends Config<GridData> {
     readonly type: ConfigType.Grid;
 }
-export type AnyConfig = NumberConfig | StringConfig | ColorConfig | DirectionConfig | GridConfig;
+export type AnyConfig = NumberConfig | StringConfig | ColorConfig | DirectionConfig | OrientationConfig | GridConfig;
 
 export class GridData {
     readonly width: number;
@@ -87,6 +91,7 @@ export class GridData {
     floodFill(position: Position, from: Color, to: Color): GridData;
     floodFillAll(from: Color, to: Color): GridData;
     resetTiles(): GridData;
+    isPositionOutOfBounds(c: Position): boolean;
 }
 
 export class GridConnections {
@@ -172,6 +177,17 @@ export enum Direction {
     Right = "right"
 }
 export const DIRECTIONS: readonly Direction[];
+export enum Orientation {
+    Up = "up",
+    UpRight = "up-right",
+    Right = "right",
+    DownRight = "down-right",
+    Down = "down",
+    DownLeft = "down-left",
+    Left = "left",
+    UpLeft = "up-left"
+}
+export const ORIENTATIONS: readonly Orientation[];
 export enum Mode {
     Create = "create",
     Solve = "solve"
@@ -490,6 +506,52 @@ export class DartSymbol extends Symbol {
     withNumber(number: number): this;
 }
 
+export type DirectionLinkerMap = {
+    [key in Direction]: Direction;
+};
+export class DirectionLinkerSymbol extends Symbol {
+    readonly x: number;
+    readonly y: number;
+    /**
+      * **Darts count opposite color cells in that direction**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      */
+    constructor(x: number, y: number);
+    changeDirections(linkedDirections: DirectionLinkerMap): this;
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    validateSymbol(grid: GridData): State;
+    copyWith({ x, y }: {
+        x?: number;
+        y?: number;
+    }): this;
+}
+
+export class GalaxySymbol extends DirectionLinkerSymbol {
+    readonly x: number;
+    readonly y: number;
+    /**
+      * **Galaxies are centers of rotational symmetry**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      */
+    constructor(x: number, y: number);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    validateSymbol(grid: GridData): State;
+    copyWith({ x, y }: {
+        x?: number;
+        y?: number;
+    }): this;
+}
+
 export class LetterSymbol extends Symbol {
     readonly x: number;
     readonly y: number;
@@ -513,6 +575,30 @@ export class LetterSymbol extends Symbol {
         letter?: string;
     }): this;
     withLetter(letter: string): this;
+}
+
+export class LotusSymbol extends DirectionLinkerSymbol {
+    readonly x: number;
+    readonly y: number;
+    readonly orientation: Orientation;
+    /**
+      * **Areas containing this symbol must be symmetrical**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param orientation - The orientation of the symbol.
+      */
+    constructor(x: number, y: number, orientation: Orientation);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    validateSymbol(grid: GridData): State;
+    copyWith({ x, y, orientation, }: {
+        x?: number;
+        y?: number;
+        orientation?: Orientation;
+    }): this;
 }
 
 export class NumberSymbol extends Symbol {

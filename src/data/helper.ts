@@ -75,7 +75,7 @@ export function unescape(text: string) {
     } else {
       result += match[0];
     }
-    index = match.index! + match[0].length;
+    index = match.index + match[0].length;
   }
   return result + text.substring(index);
 }

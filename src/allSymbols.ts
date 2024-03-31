@@ -8,8 +8,14 @@ import NumberSymbolUI from './ui/symbols/NumberSymbol';
 import LetterSymbolUI from './ui/symbols/LetterSymbol';
 import ViewpointSymbolUI from './ui/symbols/ViewpointSymbol';
 import DartSymbolUI from './ui/symbols/DartSymbol';
+import LotusSymbolUI from './ui/symbols/LotusSymbol';
+import GalaxySymbolUI from './ui/symbols/GalaxySymbol';
+import DirectionLinkerSymbolUI from './ui/symbols/DirectionLinkerSymbol';
 import QuestionMarkSignUI from './ui/symbols/signs/QuestionMarkSign';
-import { Direction } from './data/primitives';
+import { Direction, Orientation } from './data/primitives';
+import LotusSymbol from './data/symbols/lotusSymbol';
+import GalaxySymbol from './data/symbols/galaxySymbol';
+import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol';
 
 export interface SymbolProps<T extends SymbolData> {
   textClass: string;
@@ -37,6 +43,9 @@ register(new NumberSymbolData(0, 0, 1), NumberSymbolUI);
 register(new LetterSymbolData(0, 0, 'A'), LetterSymbolUI);
 register(new ViewpointSymbolData(0, 0, 1), ViewpointSymbolUI);
 register(new DartSymbolData(0, 0, 1, Direction.Down), DartSymbolUI);
+register(new LotusSymbol(0, 0, Orientation.Up), LotusSymbolUI);
+register(new GalaxySymbol(0, 0), GalaxySymbolUI);
+register(new DirectionLinkerSymbol(0, 0), DirectionLinkerSymbolUI);
 register(new QuestionMarkSignData(0, 0), QuestionMarkSignUI);
 
 export default allSymbols;

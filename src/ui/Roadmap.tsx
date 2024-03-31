@@ -18,7 +18,7 @@ const roadmap: RoadmapItem[] = [
     '~Connect all ___ cells',
     '~Underclued grid',
     '~Viewpoint number',
-    'Dart number',
+    '~Dart number',
     'Lotus',
     'Galaxy',
     '~All ___ regions have area #',

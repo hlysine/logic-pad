@@ -1,6 +1,5 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import { move } from '../helper';
 import { Color, Direction, State } from '../primitives';
 import Symbol from './symbol';
 
@@ -82,32 +81,22 @@ export default class DartSymbol extends Symbol {
   public validateSymbol(grid: GridData): State {
     const color = grid.getTile(this.x, this.y).color;
     if (color === Color.Gray) return State.Incomplete;
-    let maxPossible = 0;
-    let stillGray = false;
-    const isVertical =
-      this.orientation === Direction.Up || this.orientation === Direction.Down;
-    const isForward =
-      this.orientation === Direction.Down ||
-      this.orientation === Direction.Right;
-    const stopCondition = !isForward
-      ? (i: number) => i >= 0
-      : this.orientation === Direction.Down
-        ? (i: number) => i < grid.height
-        : (i: number) => i < grid.width;
-    let pos = { x: this.x, y: this.y };
-    while (stopCondition(isVertical ? pos.y : pos.x)) {
-      const tile = grid.getTile(pos.x, pos.y);
-      if (tile.exists && tile.color !== color) {
-        maxPossible++;
-        if (tile.color === Color.Gray) stillGray = true;
+    let gray = 0;
+    let opposite = 0;
+    grid.iterateDirectionAll(
+      { x: this.x, y: this.y },
+      this.orientation,
+      () => true,
+      tile => {
+        if (!tile.exists) return;
+        if (tile.color === Color.Gray) gray++;
+        else if (tile.color !== color) opposite++;
       }
-      pos = move(pos, this.orientation);
-    }
-    return stillGray
-      ? State.Incomplete
-      : maxPossible === this.number
-        ? State.Satisfied
-        : State.Error;
+    );
+    if (opposite > this.number || opposite + gray < this.number)
+      return State.Error;
+    else if (gray > 0) return State.Incomplete;
+    else return State.Satisfied;
   }
 
   public copyWith({

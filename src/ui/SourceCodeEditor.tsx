@@ -147,7 +147,6 @@ export default memo(function SourceCodeEditor({
       allowNonTsExtensions: true,
       allowJs: true,
       checkJs: true,
-      noLib: true,
       strict: true,
     });
 

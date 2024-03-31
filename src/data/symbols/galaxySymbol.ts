@@ -12,7 +12,7 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
   };
 
   /**
-   * **Darts count opposite color cells in that direction**
+   * **Galaxies are centers of rotational symmetry**
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.

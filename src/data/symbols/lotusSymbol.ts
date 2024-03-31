@@ -60,7 +60,7 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
   };
 
   /**
-   * **Darts count opposite color cells in that direction**
+   * **Areas containing this symbol must be symmetrical**
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.

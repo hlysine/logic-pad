@@ -121,7 +121,10 @@ export default class DirectionLinkerSymbol extends Symbol {
       this.x,
       this.y
     );
-    const queue: Turtle[] = JSON.parse(JSON.stringify(checkedCouples)) as Turtle[];
+    const queue: Turtle[] = checkedCouples.map(([p1, p2]) => [
+      { ...p1 },
+      { ...p2 },
+    ]);
 
     let grayFound = false;
 

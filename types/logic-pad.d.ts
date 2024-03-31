@@ -187,6 +187,7 @@ export enum Orientation {
     Left = "left",
     UpLeft = "up-left"
 }
+export const ORIENTATIONS: readonly Orientation[];
 export enum Mode {
     Create = "create",
     Solve = "solve"
@@ -524,7 +525,7 @@ export class DirectionLinkerSymbol extends Symbol {
     createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
     validateSymbol(grid: GridData): State;
-    copyWith({ x, y, }: {
+    copyWith({ x, y }: {
         x?: number;
         y?: number;
     }): this;
@@ -534,7 +535,7 @@ export class GalaxySymbol extends DirectionLinkerSymbol {
     readonly x: number;
     readonly y: number;
     /**
-      * **Darts count opposite color cells in that direction**
+      * **Galaxies are centers of rotational symmetry**
       *
       * @param x - The x-coordinate of the symbol.
       * @param y - The y-coordinate of the symbol.
@@ -545,7 +546,7 @@ export class GalaxySymbol extends DirectionLinkerSymbol {
     createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
     validateSymbol(grid: GridData): State;
-    copyWith({ x, y, }: {
+    copyWith({ x, y }: {
         x?: number;
         y?: number;
     }): this;
@@ -581,7 +582,7 @@ export class LotusSymbol extends DirectionLinkerSymbol {
     readonly y: number;
     readonly orientation: Orientation;
     /**
-      * **Darts count opposite color cells in that direction**
+      * **Areas containing this symbol must be symmetrical**
       *
       * @param x - The x-coordinate of the symbol.
       * @param y - The y-coordinate of the symbol.

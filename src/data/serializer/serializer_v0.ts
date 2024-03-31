@@ -5,7 +5,7 @@ import TileData from '../tile';
 import Symbol from '../symbols/symbol';
 import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
-import { Color, Direction } from '../primitives';
+import {Color, Direction, Orientation} from '../primitives';
 import { array, escape, unescape } from '../helper';
 import allRules from '../../allRules';
 import allSymbols from '../../allSymbols';
@@ -38,6 +38,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Number:
       case ConfigType.Color:
       case ConfigType.Direction:
+      case ConfigType.Orientation:
         return (
           config.field +
           '=' +
@@ -81,6 +82,8 @@ export default class SerializerV0 extends SerializerBase {
         return [config.field, value as Color];
       case ConfigType.Direction:
         return [config.field, value as Direction];
+      case ConfigType.Orientation:
+        return [config.field, value as Orientation];
       case ConfigType.String:
         return [config.field, unescape(value)];
       case ConfigType.Grid: {

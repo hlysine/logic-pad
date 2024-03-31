@@ -1,11 +1,12 @@
 import GridData from './grid';
-import { Color, Direction } from './primitives';
+import {Color, Direction, Orientation} from './primitives';
 
 export enum ConfigType {
   Number = 'number',
   String = 'string',
   Color = 'color',
   Direction = 'direction',
+  Orientation = 'orientation',
   Grid = 'grid',
 }
 
@@ -37,6 +38,10 @@ export interface DirectionConfig extends Config<Direction> {
   readonly type: ConfigType.Direction;
 }
 
+export interface OrientationConfig extends Config<Orientation> {
+  readonly type: ConfigType.Orientation;
+}
+
 export interface GridConfig extends Config<GridData> {
   readonly type: ConfigType.Grid;
 }
@@ -46,4 +51,5 @@ export type AnyConfig =
   | StringConfig
   | ColorConfig
   | DirectionConfig
+  | OrientationConfig
   | GridConfig;

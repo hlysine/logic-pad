@@ -54,6 +54,17 @@ export const DIRECTIONS: readonly Direction[] = [
   Direction.Right,
 ];
 
+export enum Orientation {
+  Up = 'up',
+  UpRight = 'up-right',
+  Right = 'right',
+  DownRight = 'down-right',
+  Down = 'down',
+  DownLeft = 'down-left',
+  Left = 'left',
+  UpLeft = 'up-left',
+}
+
 export enum Mode {
   Create = 'create',
   Solve = 'solve',

@@ -81,6 +81,7 @@ export class GridData {
     find(predicate: (tile: TileData, x: number, y: number) => boolean): Position | undefined;
     iterateArea<T>(position: Position, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => undefined | T): T | undefined;
     iterateDirection<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
+    iterateDirectionAll<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
     isComplete(): boolean;
     forEach(callback: (tile: TileData, x: number, y: number) => void): void;
     floodFill(position: Position, from: Color, to: Color): GridData;
@@ -471,7 +472,7 @@ export class DartSymbol extends Symbol {
       *
       * @param x - The x-coordinate of the symbol.
       * @param y - The y-coordinate of the symbol.
-      * @param number - The number seen by the symbol.
+      * @param number - The number of cells seen by the symbol.
       * @param orientation - The orientation of the symbol.
       */
     constructor(x: number, y: number, number: number, orientation: Direction);

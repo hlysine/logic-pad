@@ -48,7 +48,7 @@ export default class DartSymbol extends Symbol {
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
-   * @param number - The number seen by the symbol.
+   * @param number - The number of cells seen by the symbol.
    * @param orientation - The orientation of the symbol.
    */
   public constructor(

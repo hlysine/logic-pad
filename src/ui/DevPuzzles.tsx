@@ -8,7 +8,7 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import Serializer from '../data/serializer/allSerializers';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Difficulty from './metadata/Difficulty';
-import { FiCheck } from "react-icons/fi";
+import { FiCheck } from 'react-icons/fi';
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
@@ -124,7 +124,7 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnBBBBnnnnn',
       'nnnnnnnnnnnnnn',
     ]),
-    difficulty: 2,
+    difficulty: 3,
   },
   {
     id: 'panda',
@@ -190,10 +190,11 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
   },
   {
-    id: "sunflower",
+    id: 'sunflower',
     title: 'Sunflower',
     difficulty: 4,
-    description: 'Each flower has a meaning that it brings.{BR}Sunflower can mean a lot of things.{BR}You are a sunflower of my emotions.{BR}Optimism, Happiness, and devotion.',
+    description:
+      'Each flower has a meaning that it brings.{BR}Sunflower can mean a lot of things.{BR}You are a sunflower of my emotions.{BR}Optimism, Happiness, and devotion.',
     grid: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBBnnnnnnnnnnnnnn',
@@ -219,9 +220,8 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnBWWWWBnnnnnnnnnnnnn',
       'nnnnnnnBBBBnnnnnnnnnnnnnn',
       'nnnnnnnnnnnnnnnnnnnnnnnnn',
-    ])
-    .addRule(new CompletePatternRule()),
-   solution: GridData.create([
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBBnnnBBBBnnnnnnn',
       'nnnnnnBWWWWBnBWWWWBnnnnnn',
@@ -252,7 +252,8 @@ export const DEV_PUZZLES: Puzzle[] = [
     id: 'ring',
     title: 'Ring',
     difficulty: 4,
-    description: 'What is a true meaning of ring?{BR}The memories it\'s supposed to bring?{BR}Does it define a queen and her king?{BR}Or is it just a meaningless thing?',
+    description:
+      "What is a true meaning of ring?{BR}The memories it's supposed to bring?{BR}Does it define a queen and her king?{BR}Or is it just a meaningless thing?",
     grid: GridData.create([
       'nnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBnnnnnnnnn',
@@ -313,7 +314,50 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnBBBBBBBnnnnnn',
       'nnnnnnnnnnnnnnnnnnn',
     ]),
-  }
+  },
+  {
+    id: 'cupcake',
+    title: 'Cupcake',
+    difficulty: 3,
+    description:
+      "Yummy as cupcake, Sweet as candy.{BR}That tasty ass will come in handy.{BR}Out of eight points, she is a nine,{BR}Still can't believe she became mine.",
+    grid: GridData.create([
+      'nnnnnnnnnnnnnnnnn',
+      'nnnnnnnBBnnnnnnnn',
+      'nnnnnBBWWnnnnnnnn',
+      'nnnnBWWWWnnnnnnnn',
+      'nnnBWWWWWnnnnnnnn',
+      'nnBWWBWWWnnnnnnnn',
+      'nnBWWWWWWnnnnnnnn',
+      'nnBBBWWBWnnnnnnnn',
+      'nBWWBBBWBnnnnnnnn',
+      'nnBWBWWWBnnnnnnnn',
+      'nnBWBWWWBnnnnnnnn',
+      'nnnBWBWWBnnnnnnnn',
+      'nnnBWBWWBnnnnnnnn',
+      'nnnnBBWWBnnnnnnnn',
+      'nnnnnBBBBnnnnnnnn',
+      'nnnnnnnnnnnnnnnnn',
+    ]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'nnnnnnnnnnnnnnnnn',
+      'nnnnnnnBBBnnnnnnn',
+      'nnnnnBBWWWBBnnnnn',
+      'nnnnBWWWWWWWBnnnn',
+      'nnnBWWWWWWWWWBnnn',
+      'nnBWWBWWWWWBWWBnn',
+      'nnBWWWWWWWWWWWBnn',
+      'nnBBBWWBWBWWBBBnn',
+      'nBWWBBBWBWBBBWWBn',
+      'nnBWBWWWBWWWBWBnn',
+      'nnBWBWWWBWWWBWBnn',
+      'nnnBWBWWBWWBWBnnn',
+      'nnnBWBWWBWWBWBnnn',
+      'nnnnBBWWBWWBBnnnn',
+      'nnnnnBBBBBBBnnnnn',
+      'nnnnnnnnnnnnnnnnn',
+    ]),
+  },
 ];
 
 const defaultSelection = 0;
@@ -364,11 +408,9 @@ export default memo(function DevPuzzles() {
           }}
         >
           <a className="text-md w-full flex items-center justify-between">
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               {puzzle.title}
-              {isComplete(puzzle.id) && (
-                <FiCheck className='text-green-500' />
-              )}
+              {isComplete(puzzle.id) && <FiCheck className="text-green-500" />}
             </div>
             <Difficulty value={puzzle.difficulty} />
           </a>

@@ -124,10 +124,8 @@ export default class DirectionLinkerSymbol extends Symbol {
     const queue: Turtle[] = JSON.parse(JSON.stringify(checkedCouples)) as Turtle[];
 
     let grayFound = false;
-    console.log(JSON.parse(JSON.stringify(queue)));
 
     while (queue.length > 0) {
-      console.log(JSON.parse(JSON.stringify(queue)));
       const turtle = queue.shift()!;
       const [c1, c2] = turtle;
       const color1 = this.getColor(c1, grid);
@@ -152,13 +150,6 @@ export default class DirectionLinkerSymbol extends Symbol {
             this.deltaCoordinate(c1, direction),
             this.deltaCoordinate(c2, this.linkedDirections[direction]),
           ];
-          console.log(
-            c1,
-            c2,
-            newTurtle,
-            direction,
-            this.linkedDirections[direction]
-          );
           if (
             checkedCouples.some(
               ([c1, c2]) =>

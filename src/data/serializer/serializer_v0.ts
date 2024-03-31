@@ -55,12 +55,10 @@ export default class SerializerV0 extends SerializerBase {
           config.field +
           '=' +
           escape(
-            this.stringifyTiles(
-              (
-                instruction[
-                  config.field as keyof Instruction
-                ] as unknown as GridData
-              ).tiles
+            this.stringifyGrid(
+              instruction[
+                config.field as keyof Instruction
+              ] as unknown as GridData
             )
           )
         );
@@ -84,11 +82,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.String:
         return [config.field, unescape(value)];
       case ConfigType.Grid: {
-        const tiles = this.parseTiles(unescape(value));
-        return [
-          config.field,
-          new GridData(tiles[0].length, tiles.length, tiles),
-        ];
+        return [config.field, this.parseGrid(unescape(value))];
       }
     }
   }
@@ -264,14 +258,17 @@ export default class SerializerV0 extends SerializerBase {
   }
 
   public parseGrid(input: string): GridData {
-    const [size, ...data] = input.split('|');
-    const [width, height] = size.split('x').map(Number);
+    const data = input.split('|');
+    let width: number | undefined;
+    let height: number | undefined;
     let tiles: TileData[][] | undefined;
     let connections: GridConnections | undefined;
     let symbols: Map<string, Symbol[]> | undefined;
     let rules: Rule[] | undefined;
     for (const d of data) {
-      if (d.startsWith('T')) {
+      if (/^\d+x\d+$/.test(d)) {
+        [width, height] = d.split('x').map(Number);
+      } else if (d.startsWith('T')) {
         tiles = this.parseTiles(d);
       } else if (d.startsWith('C')) {
         connections = this.parseConnections(d);
@@ -283,7 +280,14 @@ export default class SerializerV0 extends SerializerBase {
         throw new Error(`Invalid data: ${d}`);
       }
     }
-    return new GridData(width, height, tiles, connections, symbols, rules);
+    return new GridData(
+      width ?? tiles?.[0].length ?? 0,
+      height ?? tiles?.length ?? 0,
+      tiles,
+      connections,
+      symbols,
+      rules
+    );
   }
 
   public stringifyPuzzle(puzzle: Puzzle): string {

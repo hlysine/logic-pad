@@ -1,5 +1,5 @@
 import GridData from './grid';
-import {Color, Direction, Orientation} from './primitives';
+import { Color, Direction, Orientation } from './primitives';
 
 export enum ConfigType {
   Number = 'number',

@@ -1,6 +1,6 @@
-import {AnyConfig, ConfigType} from '../config';
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import {Direction, State} from '../primitives';
+import { Direction, State } from '../primitives';
 import DirectionLinkerSymbol from './directionLinkerSymbol';
 
 export default class GalaxySymbol extends DirectionLinkerSymbol {
@@ -35,8 +35,9 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
 
   public createExampleGrid(): GridData {
     return Object.freeze(
-      GridData.create(['wbbbb', 'wbwww', 'bbwbb', 'wwwbb'])
-        .addSymbol(new GalaxySymbol(2, 2))
+      GridData.create(['wbbbb', 'wbwww', 'bbwbb', 'wwwbb']).addSymbol(
+        new GalaxySymbol(2, 2)
+      )
     );
   }
 
@@ -55,7 +56,7 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
         field: 'y',
         description: 'Y',
         configurable: false,
-      }
+      },
     ]);
   }
 
@@ -63,16 +64,7 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
     return super.validateSymbol(grid);
   }
 
-  public copyWith({
-    x,
-    y,
-  }: {
-    x?: number;
-    y?: number;
-  }): this {
-    return new GalaxySymbol(
-      x ?? this.x,
-      y ?? this.y,
-    ) as this;
+  public copyWith({ x, y }: { x?: number; y?: number }): this {
+    return new GalaxySymbol(x ?? this.x, y ?? this.y) as this;
   }
 }

@@ -7,7 +7,9 @@ export interface DirectionLinkerProps {
   symbol: DirectionLinkerSymbolData;
 }
 
-export default memo(function DirectionLinkerSymbol({ textClass }: DirectionLinkerProps) {
+export default memo(function DirectionLinkerSymbol({
+  textClass,
+}: DirectionLinkerProps) {
   return (
     <div
       className={cn(
@@ -16,7 +18,7 @@ export default memo(function DirectionLinkerSymbol({ textClass }: DirectionLinke
       )}
     >
       <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
-        {"D"}
+        {'D'}
       </span>
     </div>
   );

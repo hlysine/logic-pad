@@ -1,10 +1,11 @@
-import {AnyConfig, ConfigType} from '../config';
+import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import {Direction, Orientation, State} from '../primitives';
-import DirectionLinkerSymbol, {DirectionLinkerMap} from './directionLinkerSymbol';
+import { Direction, Orientation, State } from '../primitives';
+import DirectionLinkerSymbol, {
+  DirectionLinkerMap,
+} from './directionLinkerSymbol';
 
 export default class LotusSymbol extends DirectionLinkerSymbol {
-
   private static readonly linkedDirectionsFromOrientation: {
     [key in Orientation]: DirectionLinkerMap;
   } = {
@@ -38,7 +39,7 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
       [Direction.Right]: Direction.Left,
       [Direction.Down]: Direction.Down,
     },
-     [Orientation.DownLeft]: {
+    [Orientation.DownLeft]: {
       [Direction.Left]: Direction.Down,
       [Direction.Up]: Direction.Right,
       [Direction.Right]: Direction.Up,
@@ -71,7 +72,9 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
     public readonly orientation: Orientation
   ) {
     super(x, y);
-    super.changeDirections(LotusSymbol.linkedDirectionsFromOrientation[orientation]);
+    super.changeDirections(
+      LotusSymbol.linkedDirectionsFromOrientation[orientation]
+    );
   }
 
   public get id(): string {
@@ -84,8 +87,9 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
 
   public createExampleGrid(): GridData {
     return Object.freeze(
-      GridData.create(['wwbww', 'bwbwb', 'bwwwb', 'bwwwb'])
-        .addSymbol(new LotusSymbol(2, 2, Orientation.Up))
+      GridData.create(['wwbww', 'bwbwb', 'bwwwb', 'bwwwb']).addSymbol(
+        new LotusSymbol(2, 2, Orientation.Up)
+      )
     );
   }
 
@@ -111,7 +115,7 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
         field: 'orientation',
         description: 'Orientation',
         configurable: false,
-      }
+      },
     ]);
   }
 
@@ -131,7 +135,7 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
     return new LotusSymbol(
       x ?? this.x,
       y ?? this.y,
-      orientation ?? this.orientation,
+      orientation ?? this.orientation
     ) as this;
   }
 }

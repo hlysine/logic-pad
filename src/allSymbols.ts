@@ -12,7 +12,7 @@ import LotusSymbolUI from './ui/symbols/LotusSymbol';
 import GalaxySymbolUI from './ui/symbols/GalaxySymbol';
 import DirectionLinkerSymbolUI from './ui/symbols/DirectionLinkerSymbol';
 import QuestionMarkSignUI from './ui/symbols/signs/QuestionMarkSign';
-import {Direction, Orientation} from './data/primitives';
+import { Direction, Orientation } from './data/primitives';
 import LotusSymbol from './data/symbols/lotusSymbol';
 import GalaxySymbol from './data/symbols/galaxySymbol';
 import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol';

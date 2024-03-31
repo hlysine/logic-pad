@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import {Color, Direction, Position, State} from '../primitives';
+import { Color, Direction, Position, State } from '../primitives';
 import Symbol from './symbol';
 
 export type DirectionLinkerMap = {
@@ -36,12 +36,13 @@ export default class DirectionLinkerSymbol extends Symbol {
     [Direction.Down]: { dx: 0, dy: 1 },
     [Direction.Left]: { dx: -1, dy: 0 },
     [Direction.Right]: { dx: 1, dy: 0 },
-  }
+  };
+
   private linkedDirections: {
     [Direction.Left]: Direction;
     [Direction.Up]: Direction;
     [Direction.Right]: Direction;
-    [Direction.Down]: Direction
+    [Direction.Down]: Direction;
   } = {
     [Direction.Left]: Direction.Left,
     [Direction.Up]: Direction.Up,
@@ -57,7 +58,7 @@ export default class DirectionLinkerSymbol extends Symbol {
    */
   public constructor(
     public readonly x: number,
-    public readonly y: number,
+    public readonly y: number
   ) {
     super(x, y);
   }
@@ -108,19 +109,25 @@ export default class DirectionLinkerSymbol extends Symbol {
     // If no turtle remains, go to final state
     // Final state is State.Satisfied if no gray cell is found, State.Incomplete otherwise
 
-    const baseColor = grid.getTile(Math.round(this.x), Math.round(this.y)).color;
+    const baseColor = grid.getTile(
+      Math.round(this.x),
+      Math.round(this.y)
+    ).color;
     if (baseColor === Color.Gray) {
       return State.Incomplete;
     }
 
-    const checkedCouples: Turtle[] = this.getInitialCheckedCouples(this.x, this.y);
-    const queue: Turtle[] = JSON.parse(JSON.stringify(checkedCouples));
+    const checkedCouples: Turtle[] = this.getInitialCheckedCouples(
+      this.x,
+      this.y
+    );
+    const queue: Turtle[] = JSON.parse(JSON.stringify(checkedCouples)) as Turtle[];
 
     let grayFound = false;
-    console.log(JSON.parse(JSON.stringify(queue)))
+    console.log(JSON.parse(JSON.stringify(queue)));
 
     while (queue.length > 0) {
-      console.log(JSON.parse(JSON.stringify(queue)))
+      console.log(JSON.parse(JSON.stringify(queue)));
       const turtle = queue.shift()!;
       const [c1, c2] = turtle;
       const color1 = this.getColor(c1, grid);
@@ -141,10 +148,30 @@ export default class DirectionLinkerSymbol extends Symbol {
       if (color1 === baseColor) {
         const directions = Object.keys(this.linkedDirections) as Direction[];
         for (const direction of directions) {
-          const newTurtle: Turtle = [this.deltaCoordinate(c1, direction), this.deltaCoordinate(c2, this.linkedDirections[direction])];
-          console.log(c1, c2, newTurtle, direction, this.linkedDirections[direction])
-          if (checkedCouples.some(([c1, c2]) => c1.x === newTurtle[0].x && c1.y === newTurtle[0].y && c2.x === newTurtle[1].x && c2.y === newTurtle[1].y)
-            || c1.x === newTurtle[1].x && c1.y === newTurtle[1].y && c2.x === newTurtle[0].x && c2.y === newTurtle[0].y) {
+          const newTurtle: Turtle = [
+            this.deltaCoordinate(c1, direction),
+            this.deltaCoordinate(c2, this.linkedDirections[direction]),
+          ];
+          console.log(
+            c1,
+            c2,
+            newTurtle,
+            direction,
+            this.linkedDirections[direction]
+          );
+          if (
+            checkedCouples.some(
+              ([c1, c2]) =>
+                c1.x === newTurtle[0].x &&
+                c1.y === newTurtle[0].y &&
+                c2.x === newTurtle[1].x &&
+                c2.y === newTurtle[1].y
+            ) ||
+            (c1.x === newTurtle[1].x &&
+              c1.y === newTurtle[1].y &&
+              c2.x === newTurtle[0].x &&
+              c2.y === newTurtle[0].y)
+          ) {
             continue;
           }
           checkedCouples.push([newTurtle[0], newTurtle[1]]);
@@ -156,63 +183,109 @@ export default class DirectionLinkerSymbol extends Symbol {
     return grayFound ? State.Incomplete : State.Satisfied;
   }
 
-  public copyWith({
-    x,
-    y,
-  }: {
-    x?: number;
-    y?: number;
-  }): this {
-    return new DirectionLinkerSymbol(
-      x ?? this.x,
-      y ?? this.y,
-    ) as this;
+  public copyWith({ x, y }: { x?: number; y?: number }): this {
+    return new DirectionLinkerSymbol(x ?? this.x, y ?? this.y) as this;
   }
 
   private getInitialCheckedCouples(x: number, y: number): Turtle[] {
-
     // 1x1
     if (x % 1 === 0 && y % 1 === 0) {
       return [
-        [{x,y}, {x,y}]
-      ]
+        [
+          { x, y },
+          { x, y },
+        ],
+      ];
     }
 
     // 1x2
     if (x % 1 === 0) {
       return [
-        [{x,y:y-0.5}, {x,y:y + (this.linkedDirections[Direction.Up] === Direction.Up && this.linkedDirections[Direction.Down] === Direction.Down ? -0.5 : 0.5)}]
-      ]
+        [
+          { x, y: y - 0.5 },
+          {
+            x,
+            y:
+              y +
+              (this.linkedDirections[Direction.Up] === Direction.Up &&
+              this.linkedDirections[Direction.Down] === Direction.Down
+                ? -0.5
+                : 0.5),
+          },
+        ],
+      ];
     }
 
     // 2x1
     if (y % 1 === 0) {
       return [
-        [{x:x-0.5,y}, {x:x + (this.linkedDirections[Direction.Left] === Direction.Left && this.linkedDirections[Direction.Right] === Direction.Right ? -0.5 : 0.5),y}]
-      ]
+        [
+          { x: x - 0.5, y },
+          {
+            x:
+              x +
+              (this.linkedDirections[Direction.Left] === Direction.Left &&
+              this.linkedDirections[Direction.Right] === Direction.Right
+                ? -0.5
+                : 0.5),
+            y,
+          },
+        ],
+      ];
     }
 
     // 2x2
-    if (this.linkedDirections[Direction.Left] === Direction.Left && this.linkedDirections[Direction.Right] === Direction.Right) {
+    if (
+      this.linkedDirections[Direction.Left] === Direction.Left &&
+      this.linkedDirections[Direction.Right] === Direction.Right
+    ) {
       return [
-        [{x:x - 0.5,y:y - 0.5}, {x:x - 0.5,y:y + 0.5}],
-        [{x:x + 0.5,y:y - 0.5}, {x:x + 0.5,y:y + 0.5}]
-      ]
+        [
+          { x: x - 0.5, y: y - 0.5 },
+          { x: x - 0.5, y: y + 0.5 },
+        ],
+        [
+          { x: x + 0.5, y: y - 0.5 },
+          { x: x + 0.5, y: y + 0.5 },
+        ],
+      ];
     }
-    if (this.linkedDirections[Direction.Up] === Direction.Up && this.linkedDirections[Direction.Down] === Direction.Down) {
+    if (
+      this.linkedDirections[Direction.Up] === Direction.Up &&
+      this.linkedDirections[Direction.Down] === Direction.Down
+    ) {
       return [
-        [{x:x - 0.5,y:y - 0.5}, {x:x + 0.5,y:y - 0.5}],
-        [{x:x - 0.5,y:y + 0.5}, {x:x + 0.5,y:y + 0.5}]
-      ]
-    } else if (this.linkedDirections[Direction.Up] === Direction.Left && this.linkedDirections[Direction.Left] === Direction.Up
-      || this.linkedDirections[Direction.Up] === Direction.Right && this.linkedDirections[Direction.Right] === Direction.Up) {
+        [
+          { x: x - 0.5, y: y - 0.5 },
+          { x: x + 0.5, y: y - 0.5 },
+        ],
+        [
+          { x: x - 0.5, y: y + 0.5 },
+          { x: x + 0.5, y: y + 0.5 },
+        ],
+      ];
+    } else if (
+      (this.linkedDirections[Direction.Up] === Direction.Left &&
+        this.linkedDirections[Direction.Left] === Direction.Up) ||
+      (this.linkedDirections[Direction.Up] === Direction.Right &&
+        this.linkedDirections[Direction.Right] === Direction.Up)
+    ) {
       return [
-        [{x:x - 0.5,y:y - 0.5}, {x:x - 0.5,y:y - 0.5}]
-      ]
+        [
+          { x: x - 0.5, y: y - 0.5 },
+          { x: x - 0.5, y: y - 0.5 },
+        ],
+      ];
     }
     return [
-      [{x:x - 0.5,y:y - 0.5}, {x:x + 0.5,y:y + 0.5}],
-      [{x:x - 0.5,y:y + 0.5}, {x:x + 0.5,y:y - 0.5}]
-    ]
+      [
+        { x: x - 0.5, y: y - 0.5 },
+        { x: x + 0.5, y: y + 0.5 },
+      ],
+      [
+        { x: x - 0.5, y: y + 0.5 },
+        { x: x + 0.5, y: y - 0.5 },
+      ],
+    ];
   }
 }

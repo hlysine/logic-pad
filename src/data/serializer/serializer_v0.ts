@@ -5,7 +5,7 @@ import TileData from '../tile';
 import Symbol from '../symbols/symbol';
 import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
-import {Color, Direction, Orientation} from '../primitives';
+import { Color, Direction, Orientation } from '../primitives';
 import { array, escape, unescape } from '../helper';
 import allRules from '../../allRules';
 import allSymbols from '../../allSymbols';

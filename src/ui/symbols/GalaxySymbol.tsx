@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { cn } from '../../utils';
 import GalaxySymbolData from '../../data/symbols/galaxySymbol';
-import {TbGalaxy} from 'react-icons/tb';
+import { TbGalaxy } from 'react-icons/tb';
 
 export interface GalaxyProps {
   textClass: string;

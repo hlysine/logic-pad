@@ -8,7 +8,7 @@ import BanPatternRule from '../data/rules/banPatternRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import ConnectAllRule from '../data/rules/connectAllRule';
 import CustomRule from '../data/rules/customRule';
-import {Color, Direction, Orientation} from '../data/primitives';
+import { Color, Direction, Orientation } from '../data/primitives';
 import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
@@ -88,18 +88,18 @@ const enclosure = [
     LotusSymbol,
     '.addSymbol(new LotusSymbol(1, 1, Orientation.Up))',
   ],
-  [
-    'GalaxySymbol',
-    GalaxySymbol,
-    '.addSymbol(new GalaxySymbol(1, 1))',
-  ],
+  ['GalaxySymbol', GalaxySymbol, '.addSymbol(new GalaxySymbol(1, 1))'],
   ['Color', Color, 'Color.Dark\nColor.Light\nColor.Gray'],
   [
     'Direction',
     Direction,
     'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right',
   ],
-  ['Orientation', Orientation, 'Orientation.Up\nOrientation.UpRight\nOrientation.Right\nOrientation.DownRight\nOrientation.Down\nOrientation.DownLeft\nOrientation.Left\nOrientation.UpLeft'],
+  [
+    'Orientation',
+    Orientation,
+    'Orientation.Up\nOrientation.UpRight\nOrientation.Right\nOrientation.DownRight\nOrientation.Down\nOrientation.DownLeft\nOrientation.Left\nOrientation.UpLeft',
+  ],
 ] as const;
 
 const options: editor.IStandaloneEditorConstructionOptions = {

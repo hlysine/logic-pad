@@ -26,4 +26,10 @@ yarn
 
 # 4. Run the dev server
 yarn dev
+
+# You can now develop with hot module reload
 ```
+
+In addition to the bundled JS code, the code editor also requires a TS type declaration file to 
+display documentation and type info. If you have modified anything in `src/data`, you should
+regenerate the type definition with `yarn build-types`

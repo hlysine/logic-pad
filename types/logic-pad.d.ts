@@ -461,6 +461,34 @@ export abstract class SerializerBase {
     abstract parsePuzzle(input: string): Puzzle;
 }
 
+export class DartSymbol extends Symbol {
+    readonly x: number;
+    readonly y: number;
+    readonly number: number;
+    readonly orientation: Direction;
+    /**
+      * **Darts count opposite color cells in that direction**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param number - The number seen by the symbol.
+      * @param orientation - The orientation of the symbol.
+      */
+    constructor(x: number, y: number, number: number, orientation: Direction);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    validateSymbol(grid: GridData): State;
+    copyWith({ x, y, number, orientation, }: {
+        x?: number;
+        y?: number;
+        number?: number;
+        orientation?: Direction;
+    }): this;
+    withNumber(number: number): this;
+}
+
 export class LetterSymbol extends Symbol {
     readonly x: number;
     readonly y: number;

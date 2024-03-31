@@ -8,11 +8,12 @@ import BanPatternRule from '../data/rules/banPatternRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import ConnectAllRule from '../data/rules/connectAllRule';
 import CustomRule from '../data/rules/customRule';
-import { Color } from '../data/primitives';
+import { Color, Direction } from '../data/primitives';
 import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
 import NumberSymbol from '../data/symbols/numberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
+import DartSymbol from '../data/symbols/dartSymbol.ts';
 import { Puzzle, PuzzleSchema } from '../data/puzzle';
 import Compressor from '../data/serializer/compressor/allCompressors';
 import Serializer from '../data/serializer/allSerializers';
@@ -75,7 +76,17 @@ const enclosure = [
     ViewpointSymbol,
     '.addSymbol(new ViewpointSymbol(1, 1, 3))',
   ],
+  [
+    'DartSymbol',
+    DartSymbol,
+    '.addSymbol(new DartSymbol(1, 1, 2, Direction.Up))',
+  ],
   ['Color', Color, 'Color.Dark\nColor.Light\nColor.Gray'],
+  [
+    'Direction',
+    Direction,
+    'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right',
+  ],
 ] as const;
 
 const options: editor.IStandaloneEditorConstructionOptions = {

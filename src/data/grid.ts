@@ -253,6 +253,20 @@ export default class GridData {
     predicate: (tile: TileData) => boolean,
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {
+    return this.iterateDirectionAll(
+      position,
+      direction,
+      tile => tile.exists && predicate(tile),
+      callback
+    );
+  }
+
+  public iterateDirectionAll<T>(
+    position: Position,
+    direction: Direction,
+    predicate: (tile: TileData) => boolean,
+    callback: (tile: TileData, x: number, y: number) => T | undefined
+  ): T | undefined {
     let current = position;
     while (
       current.x >= 0 &&
@@ -261,7 +275,7 @@ export default class GridData {
       current.y < this.height
     ) {
       const tile = this.getTile(current.x, current.y);
-      if (!tile.exists || !predicate(tile)) {
+      if (!predicate(tile)) {
         break;
       }
       const ret = callback(tile, current.x, current.y);

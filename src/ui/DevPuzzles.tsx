@@ -10,23 +10,24 @@ import Compressor from '../data/serializer/compressor/allCompressors';
 import Difficulty from './metadata/Difficulty';
 import { FiCheck } from 'react-icons/fi';
 
+function getGrid(solution: GridData) {
+  return GridData.create(
+    solution.tiles.map(t => {
+      return t
+        .map(e => (e.color === 'gray' ? 'n' : e.color === 'dark' ? 'B' : 'W'))
+        .map((e, i) => (i < t.length / 2 ? e : 'n'))
+        .join('');
+    })
+  );  
+}
+
 export const DEV_PUZZLES: Puzzle[] = [
   {
     id: 'heart',
     title: 'Heart',
     description:
       'You are the missing half of my heart,{BR}if you are a painter, I am your art.{BR}You bring the peace I could never find,{BR}pure heart, pure soul, pure mind.',
-    grid: GridData.create([
-      'nnnnnnnnnn',
-      'nnBBnnnnnn',
-      'nBWWBnnnnn',
-      'nBWWWnnnnn',
-      'nBWWWnnnnn',
-      'nnBWWnnnnn',
-      'nnnBWnnnnn',
-      'nnnnBnnnnn',
-      'nnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnn',
       'nnBBnnBBnn',
@@ -45,21 +46,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     title: 'Penguin',
     description:
       'Your love can make a pengiun fly.{BR}Try, take off, and reach the sky.{BR}There is nothing this pengiun would not do,{BR}to love you, and be loved too.',
-    grid: GridData.create([
-      'nnnnnnnnnnnnnn',
-      'nnnnnBBnnnnnnn',
-      'nnnnBWWnnnnnnn',
-      'nnnBWWWnnnnnnn',
-      'nnnBWBWnnnnnnn',
-      'nnnBWWWnnnnnnn',
-      'nBBBWBBnnnnnnn',
-      'nnBBWWBnnnnnnn',
-      'nnnBWWWnnnnnnn',
-      'nnnnBWWnnnnnnn',
-      'nnnnWBBnnnnnnn',
-      'nnnWWWnnnnnnnn',
-      'nnnnnnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnn',
       'nnnnnBBBBnnnnn',
@@ -82,27 +69,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     title: 'Cactus',
     description:
       "There ain't love garden without a cactus.{BR}We cannot succeed without a practice.{BR}We cannot be happy without some pain.{BR}Pull the thorn out, and try again.",
-    grid: GridData.create([
-      'nnnnnnnnnnnnnn',
-      'nnnnnnBnnnnnnn',
-      'nnnnnBWnnnnnnn',
-      'nnnnnBWnnnnnnn',
-      'nnnnnBWnnnnnnn',
-      'nnBnnBWnnnnnnn',
-      'nBWBnBWnnnnnnn',
-      'nBWBnBWnnnnnnn',
-      'nBWWBWWnnnnnnn',
-      'nBWWWWWnnnnnnn',
-      'nnBBBWWnnnnnnn',
-      'nnnnnBWnnnnnnn',
-      'nnnnnBWnnnnnnn',
-      'nnnBBBBnnnnnnn',
-      'nnnnBWWnnnnnnn',
-      'nnnnBWBnnnnnnn',
-      'nnnnBWWnnnnnnn',
-      'nnnnnBBnnnnnnn',
-      'nnnnnnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnn',
       'nnnnnnBBnnnnnn',
@@ -132,34 +99,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 4,
     description:
       "From dusk till dawn, the Monday was ours.{BR}No flowers, we watched movie at weird hour.{BR}Kung Fu Panda was nice, but what's the best,{BR}cinema was empty. We got blessed.",
-    grid: GridData.create([
-      'nnnnnnnnnnnnnnnnnnnnnn',
-      'nnBBBBnnBBBnnnnnnnnnnn',
-      'nBBBBBBBWWWnnnnnnnnnnn',
-      'nBBBBWWWWWWnnnnnnnnnnn',
-      'nBBBWWWWWWWnnnnnnnnnnn',
-      'nBBWWWWWWWWnnnnnnnnnnn',
-      'nnBWWWWWWWWnnnnnnnnnnn',
-      'nnnBWWWWWWWnnnnnnnnnnn',
-      'nnnBWWBBBWWnnnnnnnnnnn',
-      'nnnBWBBBWBWnnnnnnnnnnn',
-      'nnnBWBBWBBWnnnnnnnnnnn',
-      'nnnBWWBBBWWnnnnnnnnnnn',
-      'nnnBWWWWWWBnnnnnnnnnnn',
-      'nnnnBWWWWWBnnnnnnnnnnn',
-      'nnnBBBWWWWWnnnnnnnnnnn',
-      'nnBBBBBBBBBnnnnnnnnnnn',
-      'nBBBBBBBBBBnnnnnnnnnnn',
-      'nBBBBWWWWWWnnnnnnnnnnn',
-      'nnBBWWBBWWBnnnnnnnnnnn',
-      'nnnnBWWWBBWnnnnnnnnnnn',
-      'nnnnBWBBWWBnnnnnnnnnnn',
-      'nnnnnBWWWWWnnnnnnnnnnn',
-      'nnnnnBBBBBBnnnnnnnnnnn',
-      'nnnnnBBBBBnnnnnnnnnnnn',
-      'nnnnnBBBBBnnnnnnnnnnnn',
-      'nnnnnnnnnnnnnnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnn',
       'nnBBBBnnBBBBBBnnBBBBnn',
@@ -195,32 +135,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 4,
     description:
       'Each flower has a meaning that it brings.{BR}Sunflower can mean a lot of things.{BR}You are a sunflower of my emotions.{BR}Optimism, Happiness, and devotion.',
-    grid: GridData.create([
-      'nnnnnnnnnnnnnnnnnnnnnnnnn',
-      'nnnnnnnBBBBnnnnnnnnnnnnnn',
-      'nnnnnnBWWWWBnnnnnnnnnnnnn',
-      'nnnnnBWWWWWWBnnnnnnnnnnnn',
-      'nnnnnBWWWWWWBnnnnnnnnnnnn',
-      'nnnnnBWWWWWWBnnnnnnnnnnnn',
-      'nnnBBBWWWWWWBnnnnnnnnnnnn',
-      'nnBWWWBWWWBBBnnnnnnnnnnnn',
-      'nBWWWWWBWBWWWnnnnnnnnnnnn',
-      'nBWWWWWWBWWWWnnnnnnnnnnnn',
-      'nBWWWWWBWWWWWnnnnnnnnnnnn',
-      'nnBWWWWBWWWBBnnnnnnnnnnnn',
-      'nnnBBBBBWWBBBnnnnnnnnnnnn',
-      'nnBWWWWBWWWBBnnnnnnnnnnnn',
-      'nBWWWWWBWWWWWnnnnnnnnnnnn',
-      'nBWWWWWWBWWWWnnnnnnnnnnnn',
-      'nBWWWWWBWBWWWnnnnnnnnnnnn',
-      'nnBWWWBWWWBBBnnnnnnnnnnnn',
-      'nnnBBBWWWWWWBnnnnnnnnnnnn',
-      'nnnnnBWWWWWWBnnnnnnnnnnnn',
-      'nnnnnBWWWWWWBnnnnnnnnnnnn',
-      'nnnnnnBWWWWBnnnnnnnnnnnnn',
-      'nnnnnnnBBBBnnnnnnnnnnnnnn',
-      'nnnnnnnnnnnnnnnnnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBBnnnBBBBnnnnnnn',
@@ -254,36 +169,7 @@ export const DEV_PUZZLES: Puzzle[] = [
     difficulty: 4,
     description:
       "What is a true meaning of ring?{BR}The memories it's supposed to bring?{BR}Does it define a queen and her king?{BR}Or is it just a meaningless thing?",
-    grid: GridData.create([
-      'nnnnnnnnnnnnnnnnnnn',
-      'nnnnnnnBBBnnnnnnnnn',
-      'nnnnnBBWWWnnnnnnnnn',
-      'nnnnBWWWWWnnnnnnnnn',
-      'nnnBWWWWWWnnnnnnnnn',
-      'nnnBWWWWWWnnnnnnnnn',
-      'nnnnBWWWWWnnnnnnnnn',
-      'nnnnnBWWWWnnnnnnnnn',
-      'nnnnnnBWWWnnnnnnnnn',
-      'nnnnnnnBWWnnnnnnnnn',
-      'nnnnnnBBBBnnnnnnnnn',
-      'nnnnBBWWWWnnnnnnnnn',
-      'nnnBWWWWWWnnnnnnnnn',
-      'nnBWWWWBBBnnnnnnnnn',
-      'nnBWWWBnnnnnnnnnnnn',
-      'nBWWWBnnnnnnnnnnnnn',
-      'nBWWBnnnnnnnnnnnnnn',
-      'nBWWBnnnnnnnnnnnnnn',
-      'nBWWBnnnnnnnnnnnnnn',
-      'nBWWBnnnnnnnnnnnnnn',
-      'nBWWBnnnnnnnnnnnnnn',
-      'nBWWWBnnnnnnnnnnnnn',
-      'nnBWWWBnnnnnnnnnnnn',
-      'nnBWWWWBBBnnnnnnnnn',
-      'nnnBWWWWWWnnnnnnnnn',
-      'nnnnBBWWWWnnnnnnnnn',
-      'nnnnnnBBBBnnnnnnnnn',
-      'nnnnnnnnnnnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBBBnnnnnnn',
@@ -316,29 +202,13 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
   },
   {
+    hidden: true,
     id: 'cupcake',
     title: 'Cupcake',
     difficulty: 3,
     description:
       "Yummy as cupcake, Sweet as candy.{BR}That tasty ass will come in handy.{BR}Out of eight points, she is a nine,{BR}Still can't believe she became mine.",
-    grid: GridData.create([
-      'nnnnnnnnnnnnnnnnn',
-      'nnnnnnnBBnnnnnnnn',
-      'nnnnnBBWWnnnnnnnn',
-      'nnnnBWWWWnnnnnnnn',
-      'nnnBWWWWWnnnnnnnn',
-      'nnBWWBWWWnnnnnnnn',
-      'nnBWWWWWWnnnnnnnn',
-      'nnBBBWWBWnnnnnnnn',
-      'nBWWBBBWBnnnnnnnn',
-      'nnBWBWWWBnnnnnnnn',
-      'nnBWBWWWBnnnnnnnn',
-      'nnnBWBWWBnnnnnnnn',
-      'nnnBWBWWBnnnnnnnn',
-      'nnnnBBWWBnnnnnnnn',
-      'nnnnnBBBBnnnnnnnn',
-      'nnnnnnnnnnnnnnnnn',
-    ]).addRule(new CompletePatternRule()),
+    grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnn',
       'nnnnnnnBBBnnnnnnn',
@@ -358,7 +228,143 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnnnnnnnnn',
     ]),
   },
+  {
+    hidden: true,
+    id: 'boo',
+    title: 'Boo',
+    difficulty: 3,
+    description:
+      "You need a nickname, what about kitty?{BR}Heck, I just wanted to say you are pretty.{BR}Can I call you chick? You hate that too?{BR}Okay fine, I'll call you my baby boo.",
+    grid: GridData.create([]),
+    solution: GridData.create([
+      'nnnnnnnnnnnnnnnnn',
+      'nnnnnnBBBBBnnnnnn',
+      'nnnnBBWWWWWBBnnnn',
+      'nnnBWWWWWWWWWBnnn',
+      'nnnBWWWWWWWWWBnnn',
+      'nnBWWWWWWWWWWWBnn',
+      'nnBWWWBWWWBWWWBnn',
+      'nnBWWWBWWWBWWWBnn',
+      'nnBWWWBWWWBWWWBnn',
+      'nBWWWWWWWWWWWWWBn',
+      'nBWWWWWWWWWWWWWBn',
+      'nBWWWBWBWBWBWWWBn',
+      'nBWWWWBWBWBWWWWBn',
+      'nBWWWWWWWWWWWWWBn',
+      'nBWWWWWWWWWWWWWBn',
+      'nBWWBBWWWWWBBWWBn',
+      'nBWBnnBWWWBnnBWBn',
+      'nBBnnnnBBBnnnnBBn',
+      'nnnnnnnnnnnnnnnnn',
+    ]),
+  },
+  {
+    hidden: true,
+    id: 'bee',
+    title: 'Bee',
+    difficulty: 3,
+    description:
+      'Bond even stronger than ten bees.{BR}Till death do us apart. Maybe.{BR}She starts my day like AB,{BR}see, that can only be my bby.',
+    grid: GridData.create([]),
+    solution: GridData.create([
+      'nnnnnnnnnnnnnnnnnn',
+      'nnnnnnnBnnBnnnnnnn',
+      'nnnnnnnnBBnnnnnnnn',
+      'nnnnnnnBBBBnnnnnnn',
+      'nnnnnnBBBBBBnnnnnn',
+      'nnnnnnBBBBBBnnnnnn',
+      'nnnnBBBBBBBBBBnnnn',
+      'nnnBWBWWWWWWBWBnnn',
+      'nnBWWBBBBBBBBWWBnn',
+      'nBWWWBWWWWWWBWWWBn',
+      'nBWWWBBBBBBBBWWWBn',
+      'nBWWWBWWWWWWBWWWBn',
+      'nnBBBnBBBBBBnBBBnn',
+      'nnnnnnBWWWWBnnnnnn',
+      'nnnnnnnBBBBnnnnnnn',
+      'nnnnnnnnBBnnnnnnnn',
+      'nnnnnnnnnnnnnnnnnn',
+    ]),
+  },
+  {
+    hidden: true,
+    id: 'sun',
+    title: 'Sun',
+    difficulty: 4,
+    description:
+      'There is a star giving infinite heat.{BR}You are my sun I was lucky to meet.{BR}A sunshine I never knew I need,{BR}An energy of power to grow a seed.',
+    grid: GridData.create([]).addRule(new CompletePatternRule()),
+    solution: GridData.create([
+      'nnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnnBnnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnBWBnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnBWBnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnBWWWBnnnnnnnnnnnn',
+      'nnnnnBBBnnnnBWWWBnnnnBBBnnnnn',
+      'nnnnnBWBBBnBWWWWWBnBBBWBnnnnn',
+      'nnnnnBBWWBBBWWWWWBBBWWBBnnnnn',
+      'nnnnnnBWWWWBBBBBBBWWWWBnnnnnn',
+      'nnnnnnBBWWBWWWWWWWBWWBBnnnnnn',
+      'nnnnnnnBWBWWWWWWWWWBWBnnnnnnn',
+      'nnnnnnBBBWWWWWWWWWWWBBBnnnnnn',
+      'nnnnBBWWBWWWBWWWBWWWBWWBBnnnn',
+      'nnBBWWWWBWWWBWWWBWWWBWWWWBBnn',
+      'nBWWWWWWBWWWWWWWWWWWBWWWWWWBn',
+      'nnBBWWWWBWWWWWWWWWWWBWWWWBBnn',
+      'nnnnBBWWBWWBWWWWWBWWBWWBBnnnn',
+      'nnnnnnBBBWWWBBBBBWWWBBBnnnnnn',
+      'nnnnnnnBWBWWWWWWWWWBWBnnnnnnn',
+      'nnnnnnBBWWBWWWWWWWBWWBBnnnnnn',
+      'nnnnnnBWWWWBBBBBBBWWWWBnnnnnn',
+      'nnnnnBBWWBBBWWWWWBBBWWBBnnnnn',
+      'nnnnnBWBBBnBWWWWWBnBBBWBnnnnn',
+      'nnnnnBBBnnnnBWWWBnnnnBBBnnnnn',
+      'nnnnnnnnnnnnBWWWBnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnBWBnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnBWBnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnnBnnnnnnnnnnnnnn',
+      'nnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
+    ]),
+  },
+  {
+    hidden: true,
+    id: 'crown',
+    title: 'Crown',
+    difficulty: 4,
+    description:
+      'Tinder bio appear, drama queen.{BR}What the hell does that even mean.{BR}Jelousy and fights, should I fear?{BR}Please don\'t break my heart, and disappear.',
+    grid: GridData.create([]),
+    solution: GridData.create([
+      "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+      "nnnnnnnnBBnnnnnnnnnnnnBBnnnnnnnn",
+      "nnBBnnnBBBBnnnnnnnnnnBBBBnnnBBnn",
+      "nBBBBnnBBBBnnnnBBnnnnBBBBnnBBBBn",
+      "nBBBBnnnBBnnnnBBBBnnnnBBnnnBBBBn",
+      "nnBBnnnBWWBnnnBBBBnnnBWWBnnnBBnn",
+      "nBWWBnnBWWBnnnnBBnnnnBWWBnnBWWBn",
+      "nBWWBnBWWWWBnnBWWBnnBWWWWBnBWWBn",
+      "nBWWWBWWWWWWBnBWWBnBWWWWWWBWWWBn",
+      "nBWWWBWWWWWWWBWWWWBWWWWWWWBWWWBn",
+      "nBWWWWBWWWWWBWWWWWWBWWWWWBWWWWBn",
+      "nBWWWWWBBBBBWWWWWWWWBBBBBWWWWWBn",
+      "nBWWWWWWWWWWWWWWWWWWWWWWWWWWWWBn",
+      "nBWWWWWWWWWWWWWBBWWWWWWWWWWWWWBn",
+      "nBWWWWWWWWWWWWBBBBWWWWWWWWWWWWBn",
+      "nBWWWWWBBWWWWBBBBBBWWWWBBWWWWWBn",
+      "nBWWWWBBBBWWWBBBBBBWWWBBBBWWWWBn",
+      "nBWWWWBBBBWWWBBBBBBWWWBBBBWWWWBn",
+      "nBWWWWWBBWWWWWBBBBWWWWWBBWWWWWBn",
+      "nnBWWWWWWWWWWWWBBWWWWWWWWWWWWBnn",
+      "nnnBBWWWWWWWWWWWWWWWWWWWWWWBBnnn",
+      "nnnnnBBBBBBBBBBBBBBBBBBBBBBnnnnn",
+      "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn"
+    ]),
+  },
 ];
+
+for (const puzzle of DEV_PUZZLES) {
+  puzzle.grid = getGrid(puzzle.solution ?? GridData.create([]));
+}
 
 const defaultSelection = 0;
 
@@ -391,7 +397,16 @@ export default memo(function DevPuzzles() {
       tabIndex={0}
       className="dropdown-content menu menu-vertical min-w-[300px] bg-base-200 rounded-box text-base-content z-50"
     >
-      {DEV_PUZZLES.map(puzzle => (
+      {DEV_PUZZLES.filter((p) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const showHidden = urlParams.get('hidden');
+
+        if(showHidden) {
+          return true;
+        }
+
+        return p.hidden !== true;
+      }).map(puzzle => (
         <li
           key={puzzle.title}
           onClick={() => {

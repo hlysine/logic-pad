@@ -1,5 +1,3 @@
-import Instruction from '../ui/instructions/Instruction';
-import InstructionList from '../ui/instructions/InstructionList';
 import EditControls from '../ui/EditControls';
 import MainGrid from '../ui/grid/MainGrid';
 import Metadata from '../ui/metadata/Metadata';
@@ -14,8 +12,8 @@ export const Route = createFileRoute('/solve')({
     return (
       <div className="flex flex-1 justify-center items-center flex-wrap">
         <LinkLoader params={params} />
-        <div className="w-[350px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
-          <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
+        <div className="w-[450px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
+          <div className="flex flex-col gap-2 p-10 justify-self-stretch flex-1 justify-center">
             <Metadata />
           </div>
           <EditControls />
@@ -25,7 +23,6 @@ export const Route = createFileRoute('/solve')({
             <MainGrid editable={true} />
           </div>
         </div>
-        <InstructionList>{Instruction}</InstructionList>
       </div>
     );
   }),

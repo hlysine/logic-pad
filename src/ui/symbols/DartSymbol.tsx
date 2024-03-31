@@ -1,8 +1,13 @@
-import {memo} from 'react';
+import React, {memo} from 'react';
 import {cn} from '../../utils';
 import DartSymbolData from "../../data/symbols/dartSymbol.ts";
 import {Direction} from "../../data/primitives.ts";
-import {FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp} from "react-icons/fi";
+import {
+    HiMiniArrowLongDown,
+    HiMiniArrowLongLeft,
+    HiMiniArrowLongRight,
+    HiMiniArrowLongUp,
+} from "react-icons/hi2";
 
 export interface DartProps {
   textClass: string;
@@ -10,33 +15,40 @@ export interface DartProps {
 }
 
 export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
-  return [Direction.Up, Direction.Down].includes(symbol.orientation) ? (
-    <div
-      className={cn(
-        'absolute flex justify-center items-center w-full h-full pointer-events-none',
-        textClass
-      )}
-    >
-        <span className={cn('absolute m-auto text-[0.6em]', textClass)}>
-            {symbol.number}
-        </span>
-        <div className="absolute my-auto left-0 mr-auto -m-[0.05em]">
-            {symbol.orientation === Direction.Up ? <FiArrowUp size={'0.4em'} /> : <FiArrowDown size={'0.4em'} />}
+    const direction = symbol.orientation;
+    const arrowIcon = {
+        [Direction.Up]: HiMiniArrowLongUp,
+        [Direction.Left]: HiMiniArrowLongLeft,
+        [Direction.Down]: HiMiniArrowLongDown,
+        [Direction.Right]: HiMiniArrowLongRight,
+    };
+    const arrowStitch = {
+        [Direction.Left]: 'top-0 mb-auto',
+        [Direction.Up]: 'right-0 ml-auto',
+        [Direction.Right]: 'bottom-0 mt-auto',
+        [Direction.Down]: 'left-0 mr-auto',
+    };
+    // const numberDisplacement = '';
+    const numberDisplacement = '-' + {
+        [Direction.Left]: 'bottom',
+        [Direction.Up]: 'left',
+        [Direction.Right]: 'top',
+        [Direction.Down]: 'right',
+    }[direction] + '-[0.10em]';
+    return (
+        <div
+            className={cn(
+                'absolute flex justify-center items-center w-full h-full pointer-events-none',
+                textClass
+            )}
+        >
+            <span className={cn('absolute text-[0.5em]', textClass, numberDisplacement)}>
+                {symbol.number}
+            </span>
+            <div className={cn('absolute', textClass, arrowStitch[direction], '-m-[0.10em]')}>
+                {React.createElement(arrowIcon[direction], {size: '0.7em'})}
+            </div>
         </div>
-    </div>
-  ) : (
-      <div
-          className={cn(
-              'absolute flex justify-center items-center w-full h-full pointer-events-none',
-              textClass
-          )}
-      >
-        <span className={cn('absolute m-auto text-[0.6em]', textClass)}>
-            {symbol.number}
-        </span>
-        <div className="absolute mx-auto bottom-0 mt-auto -m-[0.05em]">
-          {symbol.orientation === Direction.Left ? <FiArrowLeft size={'0.4em'} /> : <FiArrowRight size={'0.4em'} />}
-        </div>
-      </div>
-  );
+    );
+
 });

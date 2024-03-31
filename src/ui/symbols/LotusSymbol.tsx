@@ -16,14 +16,13 @@ export default memo(function LotusSymbol({ textClass, symbol }: LotusProps) {
         'absolute flex justify-center items-center w-full h-full pointer-events-none',
         textClass
       )}
+      style={{
+        transform: `rotate(${45 * ORIENTATIONS.indexOf(symbol.orientation)}deg)`,
+      }}
     >
-      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
-        <PiFlowerLotusThin
-          style={{
-            transform: `rotate(${45 * ORIENTATIONS.indexOf(symbol.orientation)}deg)`,
-          }}
-        />
-      </span>
+      <div className="absolute w-0 h-[0.16em] border border-current mx-auto top-[0.1em]"></div>
+      <PiFlowerLotusThin className="absolute m-auto" size={48} />
+      <div className="absolute w-0 h-[0.2em] border border-current mx-auto bottom-[0.1em]"></div>
     </div>
   );
 });

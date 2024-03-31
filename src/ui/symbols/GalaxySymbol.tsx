@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { cn } from '../../utils';
 import GalaxySymbolData from '../../data/symbols/galaxySymbol';
+import {TbGalaxy} from 'react-icons/tb';
 
 export interface GalaxyProps {
   textClass: string;
@@ -16,7 +17,7 @@ export default memo(function GalaxySymbol({ textClass }: GalaxyProps) {
       )}
     >
       <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
-        {"G"}
+        <TbGalaxy />
       </span>
     </div>
   );

@@ -1,13 +1,15 @@
 import { memo } from 'react';
 import { cn } from '../../utils';
 import LotusSymbolData from '../../data/symbols/lotusSymbol';
+import {ORIENTATIONS} from '../../data/primitives.ts';
+import {PiFlowerLotusThin} from 'react-icons/pi';
 
 export interface LotusProps {
   textClass: string;
   symbol: LotusSymbolData;
 }
 
-export default memo(function LotusSymbol({ textClass }: LotusProps) {
+export default memo(function LotusSymbol({ textClass, symbol }: LotusProps) {
   return (
     <div
       className={cn(
@@ -16,7 +18,7 @@ export default memo(function LotusSymbol({ textClass }: LotusProps) {
       )}
     >
       <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
-        {"L"}
+        <PiFlowerLotusThin  style={{transform:`rotate(${45 * ORIENTATIONS.indexOf(symbol.orientation)}deg)`}} />
       </span>
     </div>
   );

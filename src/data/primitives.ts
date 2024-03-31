@@ -65,6 +65,17 @@ export enum Orientation {
   UpLeft = 'up-left',
 }
 
+export const ORIENTATIONS: readonly Orientation[] = [
+  Orientation.Up,
+  Orientation.UpRight,
+  Orientation.Right,
+  Orientation.DownRight,
+  Orientation.Down,
+  Orientation.DownLeft,
+  Orientation.Left,
+  Orientation.UpLeft,
+];
+
 export enum Mode {
   Create = 'create',
   Solve = 'solve',

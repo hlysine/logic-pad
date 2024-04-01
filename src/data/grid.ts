@@ -388,12 +388,7 @@ export default class GridData {
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {
     let current = position;
-    while (
-      current.x >= 0 &&
-      current.x < this.width &&
-      current.y >= 0 &&
-      current.y < this.height
-    ) {
+    while (this.isPositionValid(current.x, current.y)) {
       const tile = this.getTile(current.x, current.y);
       if (!predicate(tile)) {
         break;
@@ -484,6 +479,36 @@ export default class GridData {
       return tile;
     });
     if (!changed) return this;
+    return this.copyWith({ tiles: newTiles });
+  }
+
+  /**
+   * Copy the tiles in the given region to a new grid.
+   *
+   * @param origin The top-left corner of the region to copy.
+   * @param width The width of the region to copy.
+   * @param height The height of the region to copy.
+   * @returns The new grid with the copied tiles.
+   */
+  public copyTiles(origin: Position, width: number, height: number): GridData {
+    const newTiles = array(width, height, (x, y) =>
+      this.getTile(origin.x + x, origin.y + y)
+    );
+    return new GridData(width, height, newTiles);
+  }
+
+  /**
+   * Paste the tiles from the given grid to the current grid at the given position.
+   * @param origin The top-left corner of the region to paste the tiles to.
+   * @param grid The grid to paste the tiles from.
+   * @returns The new grid with the pasted tiles.
+   */
+  public pasteTiles(origin: Position, grid: GridData): GridData {
+    const newTiles = this.tiles.map(row => [...row]);
+    grid.forEach((tile, x, y) => {
+      if (this.isPositionValid(origin.x + x, origin.y + y))
+        newTiles[origin.y + y][origin.x + x] = tile;
+    });
     return this.copyWith({ tiles: newTiles });
   }
 }

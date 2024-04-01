@@ -239,6 +239,22 @@ export class GridData {
             * @returns The new grid with all non-fixed tiles reset to gray.
             */
         resetTiles(): GridData;
+        /**
+            * Copy the tiles in the given region to a new grid.
+            *
+            * @param origin The top-left corner of the region to copy.
+            * @param width The width of the region to copy.
+            * @param height The height of the region to copy.
+            * @returns The new grid with the copied tiles.
+            */
+        copyTiles(origin: Position, width: number, height: number): GridData;
+        /**
+            * Paste the tiles from the given grid to the current grid at the given position.
+            * @param origin The top-left corner of the region to paste the tiles to.
+            * @param grid The grid to paste the tiles from.
+            * @returns The new grid with the pasted tiles.
+            */
+        pasteTiles(origin: Position, grid: GridData): GridData;
 }
 
 export class GridConnections {

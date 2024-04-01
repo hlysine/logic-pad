@@ -19,7 +19,10 @@ function computeTileSize(grid: GridData) {
     (window.innerWidth - 80 - 640) / grid.width,
     (window.innerHeight - 160) / grid.height
   );
-  return Math.max(25, Math.min(80, newSize));
+  return Math.max(
+    25,
+    Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize)
+  );
 }
 
 export default memo(function MainGrid({ editable, children }: MainGridProps) {

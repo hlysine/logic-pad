@@ -207,7 +207,7 @@ export default memo(function SourceCodeEditor({
 
   return (
     <>
-      <div className="basis-0 grow shrink self-stretch dropdown dropdown-right">
+      <div className="basis-0 grow shrink min-h-[300px] self-stretch dropdown dropdown-right">
         <div className="w-full h-full focus-within:w-[600px] transition-[width] duration-75">
           <Editor
             loading={loading}

@@ -66,7 +66,7 @@ function aggregateState(rules: RuleState[], symbols: Map<string, State[]>) {
 
 function validateGrid(grid: GridData, solution: GridData | null) {
   let requireSolution = false;
-  const rules = grid.rules.map(rule => {
+  const ruleStates = grid.rules.map(rule => {
     if (rule.validateWithSolution) requireSolution = true;
     return rule.validateGrid(grid);
   });
@@ -79,17 +79,18 @@ function validateGrid(grid: GridData, solution: GridData | null) {
   ): State => {
     const [rule, ...rest] = rules;
     if (rule) {
-      return rule.overrideSymbolValidation(grid, symbol, grid =>
+      const result = rule.overrideSymbolValidation(grid, symbol, grid =>
         applySymbolOverrides(grid, rest, symbol, () => validator(grid))
       );
+      return result;
     } else {
       return validator(grid);
     }
   };
 
-  const symbols = new Map<string, State[]>();
+  const symbolStates = new Map<string, State[]>();
   grid.symbols.forEach((symbolList, id) =>
-    symbols.set(
+    symbolStates.set(
       id,
       symbolList.map(s => {
         if (s.validateWithSolution) requireSolution = true;
@@ -99,7 +100,7 @@ function validateGrid(grid: GridData, solution: GridData | null) {
       })
     )
   );
-  const final = aggregateState(rules, symbols);
+  const final = aggregateState(ruleStates, symbolStates);
   if (
     final !== State.Incomplete ||
     !requireSolution ||
@@ -107,22 +108,26 @@ function validateGrid(grid: GridData, solution: GridData | null) {
     solution.width !== grid.width ||
     solution.height !== grid.height
   ) {
-    return { final, rules, symbols };
+    return { final, rules: ruleStates, symbols: symbolStates };
   }
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
       if (grid.getTile(x, y).color !== solution.getTile(x, y).color) {
-        return { final: State.Incomplete, rules, symbols };
+        return {
+          final: State.Incomplete,
+          rules: ruleStates,
+          symbols: symbolStates,
+        };
       }
     }
   }
   grid.rules.forEach((rule, i) => {
     if (rule.validateWithSolution) {
-      rules[i] = { ...rules[i], state: State.Satisfied };
+      ruleStates[i] = { ...ruleStates[i], state: State.Satisfied };
     }
   });
   grid.symbols.forEach((_, id) => {
-    const symbolList = symbols.get(id)!;
+    const symbolList = symbolStates.get(id)!;
     symbolList.forEach((_, i) => {
       const symbol = grid.symbols.get(id)![i];
       if (symbol.validateWithSolution) {
@@ -130,7 +135,7 @@ function validateGrid(grid: GridData, solution: GridData | null) {
       }
     });
   });
-  return { final: State.Satisfied, rules, symbols };
+  return { final: State.Satisfied, rules: ruleStates, symbols: symbolStates };
 }
 
 export default memo(function GridContext({

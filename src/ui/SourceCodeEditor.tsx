@@ -23,6 +23,7 @@ import Tile from './grid/Tile';
 import TileConnections from '../data/tileConnections';
 import LotusSymbol from '../data/symbols/lotusSymbol';
 import GalaxySymbol from '../data/symbols/galaxySymbol';
+import OffByXRule from '../data/rules/offByXRule';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -65,6 +66,7 @@ const enclosure = [
     RegionAreaRule,
     '.addRule(new RegionAreaRule(Color.Dark, 2))',
   ],
+  ['OffByXRule', OffByXRule, '.addRule(new OffByXRule(1))'],
   [
     'CustomRule',
     CustomRule,

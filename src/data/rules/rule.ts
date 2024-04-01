@@ -28,6 +28,16 @@ export default abstract class Rule extends Instruction {
     };
   }
 
+  /**
+   * Allows this rule to override the validation of symbols.
+   *
+   * You can return a different validation result, or call the original validation logic with a modified grid.
+   *
+   * @param grid - The grid to validate.
+   * @param _symbol - The symbol to validate.
+   * @param validator - The original validation logic for the symbol.
+   * @returns The state of the symbol after validation.
+   */
   public overrideSymbolValidation(
     grid: GridData,
     _symbol: Symbol,

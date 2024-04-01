@@ -2,6 +2,9 @@ import GridData from '../grid';
 import { State } from '../primitives';
 import Symbol from './symbol';
 
+/**
+ * All symbols which contain a number should extend this class to be compatible with off by X rules.
+ */
 export default abstract class NumberSymbol extends Symbol {
   public constructor(
     public readonly x: number,

@@ -341,6 +341,27 @@ export class CustomRule extends Rule {
     get validateWithSolution(): boolean;
 }
 
+export class OffByXRule extends Rule {
+    readonly number: number;
+    /**
+      * **All numbers are off by &lt;number&gt;**
+      *
+      * @param number - The number that all cells are off by.
+      */
+    constructor(number: number);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_grid: GridData): RuleState;
+    overrideSymbolValidation(grid: GridData, symbol: Symbol, validator: (grid: GridData) => State): State;
+    copyWith({ number }: {
+        number?: number;
+    }): this;
+    withNumber(number: number): this;
+}
+
 export class RegionAreaRule extends Rule {
     readonly color: Color;
     readonly size: number;
@@ -374,6 +395,16 @@ export abstract class Rule extends Instruction {
     statusText(_grid: GridData, _solution: GridData | null, _state: GridState): string | null;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
+    /**
+      * Allows this rule to override the validation of symbols.
+      *
+      * You can return a different validation result, or call the original validation logic with a modified grid.
+      *
+      * @param grid - The grid to validate.
+      * @param _symbol - The symbol to validate.
+      * @param validator - The original validation logic for the symbol.
+      * @returns The state of the symbol after validation.
+      */
     overrideSymbolValidation(grid: GridData, _symbol: Symbol, validator: (grid: GridData) => State): State;
 }
 
@@ -627,6 +658,9 @@ export class LotusSymbol extends DirectionLinkerSymbol {
     }): this;
 }
 
+/**
+  * All symbols which contain a number should extend this class to be compatible with off by X rules.
+  */
 export abstract class NumberSymbol extends Symbol {
     readonly x: number;
     readonly y: number;

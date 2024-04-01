@@ -18,6 +18,15 @@ export default class GridData {
   public readonly symbols: ReadonlyMap<string, readonly Symbol[]>;
   public readonly rules: readonly Rule[];
 
+  /**
+   * Create a new grid with tiles, connections, symbols and rules.
+   * @param width The width of the grid.
+   * @param height The height of the grid.
+   * @param tiles The tiles of the grid.
+   * @param connections The connections of the grid, which determines which tiles are merged.
+   * @param symbols The symbols in the grid.
+   * @param rules The rules of the grid.
+   */
   public constructor(
     public readonly width: number,
     public readonly height: number,
@@ -34,6 +43,11 @@ export default class GridData {
     this.rules = rules ?? [];
   }
 
+  /**
+   * Copy the current grid while modifying the provided properties.
+   * @param param0 The properties to modify.
+   * @returns The new grid with the modified properties.
+   */
   public copyWith({
     width,
     height,
@@ -59,10 +73,31 @@ export default class GridData {
     );
   }
 
+  public isPositionValid(x: number, y: number) {
+    return x >= 0 && x < this.width && y >= 0 && y < this.height;
+  }
+
+  /**
+   * Safely get the tile at the given position.
+   * @param x The x-coordinate of the tile.
+   * @param y The y-coordinate of the tile.
+   * @returns The tile at the given position, or a non-existent tile if the position is invalid.
+   */
   public getTile(x: number, y: number): TileData {
+    if (!this.isPositionValid(x, y)) return TileData.doesNotExist();
     return this.tiles[y][x];
   }
 
+  /**
+   * Safely set the tile at the given position.
+   * If the position is invalid, the grid is returned unchanged.
+   * If the tile is merged with other tiles, the colors of all connected tiles are changed.
+   *
+   * @param x The x-coordinate of the tile.
+   * @param y The y-coordinate of the tile.
+   * @param tile The new tile to set.
+   * @returns The new grid with the tile set at the given position.
+   */
   public setTile(
     x: number,
     y: number,
@@ -84,6 +119,11 @@ export default class GridData {
     return this.copyWith({ tiles });
   }
 
+  /**
+   * Add or modify the connections in the grid.
+   * @param connections The new connections to add or modify.
+   * @returns The new grid with the new connections.
+   */
   public withConnections(
     connections: GridConnections | ((value: GridConnections) => GridConnections)
   ): GridData {
@@ -95,6 +135,11 @@ export default class GridData {
     });
   }
 
+  /**
+   * Add or modify the symbols in the grid.
+   * @param symbols The new symbols to add or modify.
+   * @returns The new grid with the new symbols.
+   */
   public withSymbols(
     symbols:
       | readonly Symbol[]
@@ -122,6 +167,11 @@ export default class GridData {
     });
   }
 
+  /**
+   * Add a new symbol to the grid.
+   * @param symbol The symbol to add.
+   * @returns The new grid with the new symbol.
+   */
   public addSymbol(symbol: Symbol): GridData {
     return this.withSymbols(map => {
       if (map.has(symbol.id)) {
@@ -132,6 +182,11 @@ export default class GridData {
     });
   }
 
+  /**
+   * Remove an instance of the symbol from the grid.
+   * @param symbol The symbol to remove.
+   * @returns The new grid with the symbol removed.
+   */
   public removeSymbol(symbol: Symbol): GridData {
     return this.withSymbols(map => {
       if (map.has(symbol.id)) {
@@ -146,6 +201,11 @@ export default class GridData {
     });
   }
 
+  /**
+   * Add or modify the rules in the grid.
+   * @param rules The new rules to add or modify.
+   * @returns The new grid with the new rules.
+   */
   public withRules(
     rules: readonly Rule[] | ((value: readonly Rule[]) => readonly Rule[])
   ): GridData {
@@ -154,20 +214,42 @@ export default class GridData {
     });
   }
 
+  /**
+   * Add a new rule to the grid.
+   * @param rule The rule to add.
+   * @returns The new grid with the new rule.
+   */
   public addRule(rule: Rule): GridData {
     return this.withRules(rules => [...rules, rule]);
   }
 
+  /**
+   * Remove an instance of the rule from the grid.
+   * @param rule The rule to remove.
+   * @returns The new grid with the rule removed.
+   */
   public removeRule(rule: Rule): GridData {
     return this.withRules(rules => rules.filter(r => r !== rule));
   }
 
+  /**
+   * Replace an existing rule with a new rule.
+   * @param oldRule The rule to replace.
+   * @param newRule The new rule to replace with.
+   * @returns The new grid with the rule replaced.
+   */
   public replaceRule(oldRule: Rule, newRule: Rule): GridData {
     return this.withRules(rules =>
       rules.map(r => (r === oldRule ? newRule : r))
     );
   }
 
+  /**
+   * Resize the grid to the new width and height. Common tiles are kept, and new tiles are empty.
+   * @param width The new width of the grid.
+   * @param height The new height of the grid.
+   * @returns The new grid with the new dimensions.
+   */
   public resize(width: number, height: number): GridData {
     const newGrid = new GridData(width, height, undefined, this.connections);
     for (let y = 0; y < Math.min(this.height, height); y++) {
@@ -199,6 +281,12 @@ export default class GridData {
     return new GridData(width, height, tiles);
   }
 
+  /**
+   * Find a tile in the grid that satisfies the predicate.
+   *
+   * @param predicate The predicate to test each tile with.
+   * @returns The position of the first tile that satisfies the predicate, or undefined if no tile is found.
+   */
   public find(
     predicate: (tile: TileData, x: number, y: number) => boolean
   ): Position | undefined {
@@ -212,6 +300,16 @@ export default class GridData {
     return undefined;
   }
 
+  /**
+   * Iterate over all tiles in the same region as the given position that satisfy the predicate.
+   * The iteration stops when the callback returns a value that is not undefined.
+   * Non-existent tiles are not included in the iteration.
+   *
+   * @param position The position to start the iteration from. This position is included in the iteration.
+   * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
+   * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+   * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+   */
   public iterateArea<T>(
     position: Position,
     predicate: (tile: TileData) => boolean,
@@ -247,6 +345,17 @@ export default class GridData {
     }
   }
 
+  /**
+   * Iterate over all tiles in a straight line from the given position in the given direction that satisfy the predicate.
+   * The iteration stops when the callback returns a value that is not undefined.
+   * Non-existent tiles break the iteration.
+   *
+   * @param position The position to start the iteration from. This position is included in the iteration.
+   * @param direction The direction to iterate in.
+   * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
+   * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+   * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+   */
   public iterateDirection<T>(
     position: Position,
     direction: Direction,
@@ -261,6 +370,17 @@ export default class GridData {
     );
   }
 
+  /**
+   * Iterate over all tiles in a straight line from the given position in the given direction that satisfy the predicate.
+   * The iteration stops when the callback returns a value that is not undefined.
+   * Non-existent tiles are included in the iteration.
+   *
+   * @param position The position to start the iteration from. This position is included in the iteration.
+   * @param direction The direction to iterate in.
+   * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
+   * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+   * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+   */
   public iterateDirectionAll<T>(
     position: Position,
     direction: Direction,
@@ -284,12 +404,24 @@ export default class GridData {
     }
   }
 
+  /**
+   * Check if every tile in the grid is filled with a color other than gray.
+   *
+   * @returns True if every tile is filled with a color other than gray, false otherwise.
+   */
   public isComplete(): boolean {
     return this.tiles.every(row =>
       row.every(tile => !tile.exists || tile.color !== Color.Gray)
     );
   }
 
+  /**
+   * Iterate over all tiles in the grid.
+   * The iteration stops when the callback returns a value that is not undefined.
+   *
+   * @param callback The callback to call for each tile.
+   * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+   */
   public forEach<T>(
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {
@@ -301,6 +433,14 @@ export default class GridData {
     }
   }
 
+  /**
+   * Flood fill a continuous region starting from the given position with the given color.
+   *
+   * @param position The position to start the flood fill from.
+   * @param from The color of the tiles to fill.
+   * @param to The color to fill the tiles with.
+   * @returns The new grid with the region filled with the new color.
+   */
   public floodFill(position: Position, from: Color, to: Color): GridData {
     const tiles = array(this.width, this.height, (x, y) => this.getTile(x, y));
     this.iterateArea(
@@ -313,6 +453,13 @@ export default class GridData {
     return this.copyWith({ tiles });
   }
 
+  /**
+   * Flood fill all tiles with the given color to a new color, even if they are not connected.
+   *
+   * @param from The color of the tiles to fill.
+   * @param to The color to fill the tiles with.
+   * @returns The new grid with all tiles filled with the new color.
+   */
   public floodFillAll(from: Color, to: Color): GridData {
     return this.copyWith({
       tiles: this.tiles.map(row =>
@@ -321,6 +468,11 @@ export default class GridData {
     });
   }
 
+  /**
+   * Reset all non-fixed tiles to gray.
+   *
+   * @returns The new grid with all non-fixed tiles reset to gray.
+   */
   public resetTiles(): GridData {
     let changed = false;
     const newTiles = array(this.width, this.height, (x, y) => {
@@ -333,9 +485,5 @@ export default class GridData {
     });
     if (!changed) return this;
     return this.copyWith({ tiles: newTiles });
-  }
-
-  isPositionOutOfBounds(c: Position) {
-    return c.x < 0 || c.x >= this.width || c.y < 0 || c.y >= this.height;
   }
 }

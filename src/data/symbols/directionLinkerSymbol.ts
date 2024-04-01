@@ -85,7 +85,7 @@ export default class DirectionLinkerSymbol extends Symbol {
   }
 
   private getColor(c: Position, grid: GridData): Color | null {
-    if (grid.isPositionOutOfBounds(c) || !grid.getTile(c.x, c.y).exists) {
+    if (!grid.isPositionValid(c.x, c.y) || !grid.getTile(c.x, c.y).exists) {
       return null;
     }
     return grid.getTile(c.x, c.y).color;

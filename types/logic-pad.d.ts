@@ -45,53 +45,200 @@ export interface GridConfig extends Config<GridData> {
 export type AnyConfig = NumberConfig | StringConfig | ColorConfig | DirectionConfig | OrientationConfig | GridConfig;
 
 export class GridData {
-    readonly width: number;
-    readonly height: number;
-    readonly tiles: readonly (readonly TileData[])[];
-    readonly connections: GridConnections;
-    readonly symbols: ReadonlyMap<string, readonly Symbol[]>;
-    readonly rules: readonly Rule[];
-    constructor(width: number, height: number, tiles?: readonly (readonly TileData[])[], connections?: GridConnections, symbols?: ReadonlyMap<string, readonly Symbol[]>, rules?: readonly Rule[]);
-    copyWith({ width, height, tiles, connections, symbols, rules, }: {
-        width?: number;
-        height?: number;
-        tiles?: readonly (readonly TileData[])[];
-        connections?: GridConnections;
-        symbols?: ReadonlyMap<string, readonly Symbol[]>;
-        rules?: readonly Rule[];
-    }): GridData;
-    getTile(x: number, y: number): TileData;
-    setTile(x: number, y: number, tile: TileData | ((tile: TileData) => TileData)): GridData;
-    withConnections(connections: GridConnections | ((value: GridConnections) => GridConnections)): GridData;
-    withSymbols(symbols: readonly Symbol[] | ReadonlyMap<string, readonly Symbol[]> | ((value: Map<string, readonly Symbol[]>) => ReadonlyMap<string, readonly Symbol[]>)): GridData;
-    addSymbol(symbol: Symbol): GridData;
-    removeSymbol(symbol: Symbol): GridData;
-    withRules(rules: readonly Rule[] | ((value: readonly Rule[]) => readonly Rule[])): GridData;
-    addRule(rule: Rule): GridData;
-    removeRule(rule: Rule): GridData;
-    replaceRule(oldRule: Rule, newRule: Rule): GridData;
-    resize(width: number, height: number): GridData;
-    /**
-      * Create a new GridData object from a string array.
-      *
-      * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
-      * - Capitalize the letter to make the tile fixed.
-      * - Use `.` to represent empty space.
-      *
-      * @param array - The string array to create the grid from.
-      * @returns The created grid.
-      */
-    static create(array: string[]): GridData;
-    find(predicate: (tile: TileData, x: number, y: number) => boolean): Position | undefined;
-    iterateArea<T>(position: Position, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => undefined | T): T | undefined;
-    iterateDirection<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
-    iterateDirectionAll<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
-    isComplete(): boolean;
-    forEach<T>(callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
-    floodFill(position: Position, from: Color, to: Color): GridData;
-    floodFillAll(from: Color, to: Color): GridData;
-    resetTiles(): GridData;
-    isPositionOutOfBounds(c: Position): boolean;
+        readonly width: number;
+        readonly height: number;
+        readonly tiles: readonly (readonly TileData[])[];
+        readonly connections: GridConnections;
+        readonly symbols: ReadonlyMap<string, readonly Symbol[]>;
+        readonly rules: readonly Rule[];
+        /**
+            * Create a new grid with tiles, connections, symbols and rules.
+            * @param width The width of the grid.
+            * @param height The height of the grid.
+            * @param tiles The tiles of the grid.
+            * @param connections The connections of the grid, which determines which tiles are merged.
+            * @param symbols The symbols in the grid.
+            * @param rules The rules of the grid.
+            */
+        constructor(width: number, height: number, tiles?: readonly (readonly TileData[])[], connections?: GridConnections, symbols?: ReadonlyMap<string, readonly Symbol[]>, rules?: readonly Rule[]);
+        /**
+            * Copy the current grid while modifying the provided properties.
+            * @param param0 The properties to modify.
+            * @returns The new grid with the modified properties.
+            */
+        copyWith({ width, height, tiles, connections, symbols, rules, }: {
+                width?: number;
+                height?: number;
+                tiles?: readonly (readonly TileData[])[];
+                connections?: GridConnections;
+                symbols?: ReadonlyMap<string, readonly Symbol[]>;
+                rules?: readonly Rule[];
+        }): GridData;
+        isPositionValid(x: number, y: number): boolean;
+        /**
+            * Safely get the tile at the given position.
+            * @param x The x-coordinate of the tile.
+            * @param y The y-coordinate of the tile.
+            * @returns The tile at the given position, or a non-existent tile if the position is invalid.
+            */
+        getTile(x: number, y: number): TileData;
+        /**
+            * Safely set the tile at the given position.
+            * If the position is invalid, the grid is returned unchanged.
+            * If the tile is merged with other tiles, the colors of all connected tiles are changed.
+            *
+            * @param x The x-coordinate of the tile.
+            * @param y The y-coordinate of the tile.
+            * @param tile The new tile to set.
+            * @returns The new grid with the tile set at the given position.
+            */
+        setTile(x: number, y: number, tile: TileData | ((tile: TileData) => TileData)): GridData;
+        /**
+            * Add or modify the connections in the grid.
+            * @param connections The new connections to add or modify.
+            * @returns The new grid with the new connections.
+            */
+        withConnections(connections: GridConnections | ((value: GridConnections) => GridConnections)): GridData;
+        /**
+            * Add or modify the symbols in the grid.
+            * @param symbols The new symbols to add or modify.
+            * @returns The new grid with the new symbols.
+            */
+        withSymbols(symbols: readonly Symbol[] | ReadonlyMap<string, readonly Symbol[]> | ((value: Map<string, readonly Symbol[]>) => ReadonlyMap<string, readonly Symbol[]>)): GridData;
+        /**
+            * Add a new symbol to the grid.
+            * @param symbol The symbol to add.
+            * @returns The new grid with the new symbol.
+            */
+        addSymbol(symbol: Symbol): GridData;
+        /**
+            * Remove an instance of the symbol from the grid.
+            * @param symbol The symbol to remove.
+            * @returns The new grid with the symbol removed.
+            */
+        removeSymbol(symbol: Symbol): GridData;
+        /**
+            * Add or modify the rules in the grid.
+            * @param rules The new rules to add or modify.
+            * @returns The new grid with the new rules.
+            */
+        withRules(rules: readonly Rule[] | ((value: readonly Rule[]) => readonly Rule[])): GridData;
+        /**
+            * Add a new rule to the grid.
+            * @param rule The rule to add.
+            * @returns The new grid with the new rule.
+            */
+        addRule(rule: Rule): GridData;
+        /**
+            * Remove an instance of the rule from the grid.
+            * @param rule The rule to remove.
+            * @returns The new grid with the rule removed.
+            */
+        removeRule(rule: Rule): GridData;
+        /**
+            * Replace an existing rule with a new rule.
+            * @param oldRule The rule to replace.
+            * @param newRule The new rule to replace with.
+            * @returns The new grid with the rule replaced.
+            */
+        replaceRule(oldRule: Rule, newRule: Rule): GridData;
+        /**
+            * Resize the grid to the new width and height. Common tiles are kept, and new tiles are empty.
+            * @param width The new width of the grid.
+            * @param height The new height of the grid.
+            * @returns The new grid with the new dimensions.
+            */
+        resize(width: number, height: number): GridData;
+        /**
+            * Create a new GridData object from a string array.
+            *
+            * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+            * - Capitalize the letter to make the tile fixed.
+            * - Use `.` to represent empty space.
+            *
+            * @param array - The string array to create the grid from.
+            * @returns The created grid.
+            */
+        static create(array: string[]): GridData;
+        /**
+            * Find a tile in the grid that satisfies the predicate.
+            *
+            * @param predicate The predicate to test each tile with.
+            * @returns The position of the first tile that satisfies the predicate, or undefined if no tile is found.
+            */
+        find(predicate: (tile: TileData, x: number, y: number) => boolean): Position | undefined;
+        /**
+            * Iterate over all tiles in the same region as the given position that satisfy the predicate.
+            * The iteration stops when the callback returns a value that is not undefined.
+            * Non-existent tiles are not included in the iteration.
+            *
+            * @param position The position to start the iteration from. This position is included in the iteration.
+            * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
+            * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+            * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+            */
+        iterateArea<T>(position: Position, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => undefined | T): T | undefined;
+        /**
+            * Iterate over all tiles in a straight line from the given position in the given direction that satisfy the predicate.
+            * The iteration stops when the callback returns a value that is not undefined.
+            * Non-existent tiles break the iteration.
+            *
+            * @param position The position to start the iteration from. This position is included in the iteration.
+            * @param direction The direction to iterate in.
+            * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
+            * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+            * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+            */
+        iterateDirection<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
+        /**
+            * Iterate over all tiles in a straight line from the given position in the given direction that satisfy the predicate.
+            * The iteration stops when the callback returns a value that is not undefined.
+            * Non-existent tiles are included in the iteration.
+            *
+            * @param position The position to start the iteration from. This position is included in the iteration.
+            * @param direction The direction to iterate in.
+            * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
+            * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+            * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+            */
+        iterateDirectionAll<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
+        /**
+            * Check if every tile in the grid is filled with a color other than gray.
+            *
+            * @returns True if every tile is filled with a color other than gray, false otherwise.
+            */
+        isComplete(): boolean;
+        /**
+            * Iterate over all tiles in the grid.
+            * The iteration stops when the callback returns a value that is not undefined.
+            *
+            * @param callback The callback to call for each tile.
+            * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
+            */
+        forEach<T>(callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
+        /**
+            * Flood fill a continuous region starting from the given position with the given color.
+            *
+            * @param position The position to start the flood fill from.
+            * @param from The color of the tiles to fill.
+            * @param to The color to fill the tiles with.
+            * @returns The new grid with the region filled with the new color.
+            */
+        floodFill(position: Position, from: Color, to: Color): GridData;
+        /**
+            * Flood fill all tiles with the given color to a new color, even if they are not connected.
+            *
+            * @param from The color of the tiles to fill.
+            * @param to The color to fill the tiles with.
+            * @returns The new grid with all tiles filled with the new color.
+            */
+        floodFillAll(from: Color, to: Color): GridData;
+        /**
+            * Reset all non-fixed tiles to gray.
+            *
+            * @returns The new grid with all non-fixed tiles reset to gray.
+            */
+        resetTiles(): GridData;
 }
 
 export class GridConnections {
@@ -800,21 +947,28 @@ export class ViewpointSymbol extends NumberSymbol {
 }
 
 export class TileData {
-    readonly exists: boolean;
-    readonly fixed: boolean;
-    readonly color: Color;
-    constructor(exists: boolean, fixed: boolean, color: Color);
-    static empty(): TileData;
-    copyWith({ exists, fixed, color, }: {
-        exists?: boolean;
-        fixed?: boolean;
-        color?: Color;
-    }): this;
-    withExists(exists: boolean): this;
-    withFixed(fixed: boolean): this;
-    withColor(color: Color): this;
-    get isFixed(): boolean;
-    static create(char: string): TileData;
+        readonly exists: boolean;
+        readonly fixed: boolean;
+        readonly color: Color;
+        constructor(exists: boolean, fixed: boolean, color: Color);
+        /**
+            * Create a gray tile.
+            */
+        static empty(): TileData;
+        /**
+            * Create a non-existent tile.
+            */
+        static doesNotExist(): TileData;
+        copyWith({ exists, fixed, color, }: {
+                exists?: boolean;
+                fixed?: boolean;
+                color?: Color;
+        }): this;
+        withExists(exists: boolean): this;
+        withFixed(fixed: boolean): this;
+        withColor(color: Color): this;
+        get isFixed(): boolean;
+        static create(char: string): TileData;
 }
 
 export class TileConnections {

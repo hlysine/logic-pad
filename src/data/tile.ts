@@ -11,8 +11,18 @@ export default class TileData {
     this.color = color;
   }
 
+  /**
+   * Create a gray tile.
+   */
   public static empty(): TileData {
     return new TileData(true, false, Color.Gray);
+  }
+
+  /**
+   * Create a non-existent tile.
+   */
+  public static doesNotExist(): TileData {
+    return new TileData(false, false, Color.Gray);
   }
 
   public copyWith({

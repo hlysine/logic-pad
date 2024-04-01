@@ -115,15 +115,55 @@ export class GridConnections {
     static create(array: string[]): GridConnections;
 }
 
-export function move(position: Position, direction: Direction): {
-    x: number;
-    y: number;
+/**
+    * Offset the given position by a given step in the given direction.
+    * @param position The position to offset.
+    * @param direction The direction to offset in.
+    * @param step The distance to offset by.
+    * @returns The offset position.
+    */
+export function move(position: Position, direction: Direction, step?: number): {
+        x: number;
+        y: number;
 };
+/**
+    * Create a new 2D array with the given dimensions and values.
+    * @param width The width of the array.
+    * @param height The height of the array.
+    * @param value A function that returns the value for each x,y coordinate.
+    * @returns The 2D array.
+    */
 export function array<T>(width: number, height: number, value: (x: number, y: number) => T): T[][];
+/**
+    * Return the first element of the array which has the minimum mapped value.
+    *
+    * @param values The array of values.
+    * @param mapper The function to map each value to a number.
+    * @returns The first element with the minimum mapped value.
+    */
 export function minBy<T>(values: readonly T[], mapper: (element: T) => number): T | undefined;
+/**
+    * Return the first element of the array which has the maximum mapped value.
+    *
+    * @param values The array of values.
+    * @param mapper The function to map each value to a number.
+    * @returns The first element with the maximum mapped value.
+    */
 export function maxBy<T>(values: readonly T[], mapper: (element: T) => number): T | undefined;
-export function escape(text: string): string;
-export function unescape(text: string): string;
+/**
+    * Escape the given text by replacing the specified characters with HTML escape sequences.
+    * @param text The text to escape.
+    * @param escapeCharacters The characters to escape.
+    * @returns The escaped text.
+    */
+export function escape(text: string, escapeCharacters?: string): string;
+/**
+    * Unescape the given text by replacing HTML escape sequences with the corresponding characters.
+    * @param text The text to unescape.
+    * @param escapeCharacters The characters to unescape. This should match the characters escaped by the `escape` function.
+    * @returns The unescaped text.
+    */
+export function unescape(text: string, escapeCharacters?: string): string;
 
 export abstract class Instruction {
     abstract get id(): string;
@@ -425,12 +465,33 @@ export class UndercluedRule extends Rule {
     statusText(grid: GridData, solution: GridData | null, _state: GridState): string | null;
 }
 
+/**
+    * The master serializer for puzzles.
+    *
+    * It uses the default serializer when stringifying puzzles, and select the correct deserializer when parsing puzzles.
+    */
 const Serializer: {
-    stringifyPuzzle(puzzle: Puzzle): string;
-    parsePuzzle(input: string): Puzzle;
+        /**
+            * Convert a puzzle to a string.
+            * @param puzzle The puzzle to convert.
+            * @returns The string representation of the puzzle.
+            */
+        stringifyPuzzle(puzzle: Puzzle): string;
+        /**
+            * Parse a puzzle from a string.
+            * @param input The string to parse.
+            * @returns The parsed puzzle.
+            */
+        parsePuzzle(input: string): Puzzle;
 };
 export Serializer;
 
+/**
+  * The master compressor for compressing and decompressing strings.
+  *
+  * It compares the output of multiple compressors and selects the one with the smallest size (slow),
+  * and selects the correct decompressor when decompressing.
+  */
 class MasterCompressor extends CompressorBase {
     get id(): string;
     compress(input: string): Promise<string>;
@@ -440,9 +501,20 @@ const Compressor: MasterCompressor;
 export Compressor;
 
 export abstract class CompressorBase {
-    abstract get id(): string;
-    abstract compress(input: string): Promise<string>;
-    abstract decompress(input: string): Promise<string>;
+        /**
+            * The unique identifier for this compressor.
+            */
+        abstract get id(): string;
+        /**
+            * Compress the given input string into URL-safe compressed string.
+            * @param input The input string to compress.
+            */
+        abstract compress(input: string): Promise<string>;
+        /**
+            * Decompress the given compressed string back into the original string.
+            * @param input The compressed string to decompress.
+            */
+        abstract decompress(input: string): Promise<string>;
 }
 
 export class DeflateCompressor extends StreamCompressor {

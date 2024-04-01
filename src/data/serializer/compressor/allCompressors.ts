@@ -14,6 +14,12 @@ activeCompressors.forEach(register);
 
 register(new GzipCompressor());
 
+/**
+ * The master compressor for compressing and decompressing strings.
+ *
+ * It compares the output of multiple compressors and selects the one with the smallest size (slow),
+ * and selects the correct decompressor when decompressing.
+ */
 class MasterCompressor extends CompressorBase {
   public get id(): string {
     return `compressor`;

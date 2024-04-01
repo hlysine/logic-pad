@@ -135,53 +135,38 @@ export const enclosure: EnclosureEntry[] = [
   {
     name: 'move',
     value: move,
-    example: null,
+    example: 'move({ x: 1, y: 1 }, Direction.Up, 2)',
   },
   {
     name: 'array',
     value: array,
-    example: null,
+    example: 'array(3, 3, (x, y) => x + y)',
   },
   {
     name: 'minBy',
     value: minBy,
-    example: null,
+    example: 'minBy([1, 2, 3], (x) => x % 2)',
   },
   {
     name: 'maxBy',
     value: maxBy,
-    example: null,
+    example: 'maxBy([1, 2, 3], (x) => x % 2)',
   },
   {
     name: 'escape',
     value: escape,
-    example: null,
+    example: 'escape("Hello, world!", ",!")',
   },
   {
     name: 'unescape',
     value: unescape,
-    example: null,
+    example: 'unescape("Hello&#44; world&#33;", ",!")',
   },
   /* === enums === */
-  {
-    name: 'ConfigType',
-    value: ConfigType,
-    example: null,
-  },
   {
     name: 'Color',
     value: Color,
     example: 'Color.Dark\nColor.Light\nColor.Gray',
-  },
-  {
-    name: 'State',
-    value: State,
-    example: null,
-  },
-  {
-    name: 'Mode',
-    value: Mode,
-    example: null,
   },
   {
     name: 'Direction',
@@ -202,6 +187,21 @@ export const enclosure: EnclosureEntry[] = [
   {
     name: 'ORIENTATIONS',
     value: ORIENTATIONS,
+    example: null,
+  },
+  {
+    name: 'ConfigType',
+    value: ConfigType,
+    example: null,
+  },
+  {
+    name: 'State',
+    value: State,
+    example: null,
+  },
+  {
+    name: 'Mode',
+    value: Mode,
     example: null,
   },
   /* === misc === */

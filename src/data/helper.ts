@@ -1,18 +1,32 @@
 import { Direction, Position } from './primitives';
 
-export function move(position: Position, direction: Direction) {
+/**
+ * Offset the given position by a given step in the given direction.
+ * @param position The position to offset.
+ * @param direction The direction to offset in.
+ * @param step The distance to offset by.
+ * @returns The offset position.
+ */
+export function move(position: Position, direction: Direction, step = 1) {
   switch (direction) {
     case Direction.Up:
-      return { x: position.x, y: position.y - 1 };
+      return { x: position.x, y: position.y - step };
     case Direction.Down:
-      return { x: position.x, y: position.y + 1 };
+      return { x: position.x, y: position.y + step };
     case Direction.Left:
-      return { x: position.x - 1, y: position.y };
+      return { x: position.x - step, y: position.y };
     case Direction.Right:
-      return { x: position.x + 1, y: position.y };
+      return { x: position.x + step, y: position.y };
   }
 }
 
+/**
+ * Create a new 2D array with the given dimensions and values.
+ * @param width The width of the array.
+ * @param height The height of the array.
+ * @param value A function that returns the value for each x,y coordinate.
+ * @returns The 2D array.
+ */
 export function array<T>(
   width: number,
   height: number,
@@ -23,6 +37,13 @@ export function array<T>(
   );
 }
 
+/**
+ * Return the first element of the array which has the minimum mapped value.
+ *
+ * @param values The array of values.
+ * @param mapper The function to map each value to a number.
+ * @returns The first element with the minimum mapped value.
+ */
 export function minBy<T>(values: readonly T[], mapper: (element: T) => number) {
   let min = Number.POSITIVE_INFINITY;
   let result: T | undefined;
@@ -36,6 +57,13 @@ export function minBy<T>(values: readonly T[], mapper: (element: T) => number) {
   return result;
 }
 
+/**
+ * Return the first element of the array which has the maximum mapped value.
+ *
+ * @param values The array of values.
+ * @param mapper The function to map each value to a number.
+ * @returns The first element with the maximum mapped value.
+ */
 export function maxBy<T>(values: readonly T[], mapper: (element: T) => number) {
   let max = Number.NEGATIVE_INFINITY;
   let result: T | undefined;
@@ -49,9 +77,13 @@ export function maxBy<T>(values: readonly T[], mapper: (element: T) => number) {
   return result;
 }
 
-const escapeCharacters = '=,:|';
-
-export function escape(text: string) {
+/**
+ * Escape the given text by replacing the specified characters with HTML escape sequences.
+ * @param text The text to escape.
+ * @param escapeCharacters The characters to escape.
+ * @returns The escaped text.
+ */
+export function escape(text: string, escapeCharacters = '=,:|') {
   let result = '';
   for (const char of text) {
     if (escapeCharacters.includes(char) || char === '&') {
@@ -63,7 +95,13 @@ export function escape(text: string) {
   return result;
 }
 
-export function unescape(text: string) {
+/**
+ * Unescape the given text by replacing HTML escape sequences with the corresponding characters.
+ * @param text The text to unescape.
+ * @param escapeCharacters The characters to unescape. This should match the characters escaped by the `escape` function.
+ * @returns The unescaped text.
+ */
+export function unescape(text: string, escapeCharacters = '=,:|') {
   let result = '';
   const matches = text.matchAll(/&#([0-9]+);/g);
   let index = 0;

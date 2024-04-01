@@ -12,10 +12,25 @@ let defaultSerializer: SerializerBase;
 
 register((defaultSerializer = new SerializerV0()));
 
+/**
+ * The master serializer for puzzles.
+ *
+ * It uses the default serializer when stringifying puzzles, and select the correct deserializer when parsing puzzles.
+ */
 const Serializer = {
+  /**
+   * Convert a puzzle to a string.
+   * @param puzzle The puzzle to convert.
+   * @returns The string representation of the puzzle.
+   */
   stringifyPuzzle(puzzle: Puzzle): string {
     return `${defaultSerializer.version}_${defaultSerializer.stringifyPuzzle(puzzle)}`;
   },
+  /**
+   * Parse a puzzle from a string.
+   * @param input The string to parse.
+   * @returns The parsed puzzle.
+   */
   parsePuzzle(input: string): Puzzle {
     const match = input.match(/^(\d+)_/);
     const version = match ? parseInt(match[1]) : 0;

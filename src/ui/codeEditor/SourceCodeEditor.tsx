@@ -2,28 +2,11 @@ import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { memo, useEffect, useRef, useState } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import GridData from '../data/grid';
-import GridConnections from '../data/gridConnections';
-import BanPatternRule from '../data/rules/banPatternRule';
-import CompletePatternRule from '../data/rules/completePatternRule';
-import ConnectAllRule from '../data/rules/connectAllRule';
-import CustomRule from '../data/rules/customRule';
-import { Color, Direction, Orientation } from '../data/primitives';
-import UndercluedRule from '../data/rules/undercluedRule';
-import LetterSymbol from '../data/symbols/letterSymbol';
-import AreaNumberSymbol from '../data/symbols/areaNumberSymbol';
-import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import DartSymbol from '../data/symbols/dartSymbol';
-import { Puzzle, PuzzleSchema } from '../data/puzzle';
-import Compressor from '../data/serializer/compressor/allCompressors';
-import Serializer from '../data/serializer/allSerializers';
-import RegionAreaRule from '../data/rules/regionAreaRule';
+import { Puzzle, PuzzleSchema } from '../../data/puzzle';
+import Compressor from '../../data/serializer/compressor/allCompressors';
+import Serializer from '../../data/serializer/allSerializers';
 import { ZodError } from 'zod';
-import Tile from './grid/Tile';
-import TileConnections from '../data/tileConnections';
-import LotusSymbol from '../data/symbols/lotusSymbol';
-import GalaxySymbol from '../data/symbols/galaxySymbol';
-import OffByXRule from '../data/rules/offByXRule';
+import evaluate, { enclosure } from './evaluator';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -36,77 +19,6 @@ const defaultCode = `/** @type Puzzle */
   description: ''
 })
 `;
-
-const enclosure = [
-  ['GridData', GridData, `GridData.create(['nnnnn', 'nnnnn'])`],
-  [
-    'GridConnections',
-    GridConnections,
-    `.withConnections(\n  GridConnections.create(['..aa.', '..aa.'])\n)`,
-  ],
-  ['TileConnections', TileConnections, null],
-  ['Tile', Tile, null],
-  [
-    'BanPatternRule',
-    BanPatternRule,
-    '.addRule(new BanPatternRule(GridData.create([])))',
-  ],
-  [
-    'CompletePatternRule',
-    CompletePatternRule,
-    '.addRule(new CompletePatternRule())',
-  ],
-  [
-    'ConnectAllRule',
-    ConnectAllRule,
-    '.addRule(new ConnectAllRule(Color.Dark))',
-  ],
-  [
-    'RegionAreaRule',
-    RegionAreaRule,
-    '.addRule(new RegionAreaRule(Color.Dark, 2))',
-  ],
-  ['OffByXRule', OffByXRule, '.addRule(new OffByXRule(1))'],
-  [
-    'CustomRule',
-    CustomRule,
-    `.addRule(new CustomRule(\n  'Description',\n  GridData.create([])\n))`,
-  ],
-  ['UndercluedRule', UndercluedRule, '.addRule(new UndercluedRule())'],
-  ['LetterSymbol', LetterSymbol, '.addSymbol(new LetterSymbol(1, 1, "A"))'],
-  [
-    'AreaNumberSymbol',
-    AreaNumberSymbol,
-    '.addSymbol(new AreaNumberSymbol(1, 1, 3))',
-  ],
-  [
-    'ViewpointSymbol',
-    ViewpointSymbol,
-    '.addSymbol(new ViewpointSymbol(1, 1, 3))',
-  ],
-  [
-    'DartSymbol',
-    DartSymbol,
-    '.addSymbol(new DartSymbol(1, 1, 2, Direction.Up))',
-  ],
-  [
-    'LotusSymbol',
-    LotusSymbol,
-    '.addSymbol(new LotusSymbol(1, 1, Orientation.Up))',
-  ],
-  ['GalaxySymbol', GalaxySymbol, '.addSymbol(new GalaxySymbol(1, 1))'],
-  ['Color', Color, 'Color.Dark\nColor.Light\nColor.Gray'],
-  [
-    'Direction',
-    Direction,
-    'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right',
-  ],
-  [
-    'Orientation',
-    Orientation,
-    'Orientation.Up\nOrientation.UpRight\nOrientation.Right\nOrientation.DownRight\nOrientation.Down\nOrientation.DownLeft\nOrientation.Left\nOrientation.UpLeft',
-  ],
-] as const;
 
 const options: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
@@ -156,7 +68,7 @@ export default memo(function SourceCodeEditor({
       strict: true,
     });
 
-    import('../../types/logic-pad.d.ts?raw')
+    import('../../../types/logic-pad.d.ts?raw')
       .then(({ default: def }) => {
         monaco.languages.typescript.javascriptDefaults.addExtraLib(
           def,
@@ -171,13 +83,8 @@ export default memo(function SourceCodeEditor({
       const value = editorRef.current.getValue();
       window.localStorage.setItem('sourceCode', value);
       try {
-        // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func
-        const func = new Function(
-          ...enclosure.map(([name]) => name),
-          `"use strict";\nreturn (() => ${value})()`
-        );
         const puzzle: Puzzle = PuzzleSchema.parse(
-          func(...enclosure.map(([, value]) => value))
+          evaluate(`"use strict";\n${value}`)
         );
         Compressor.compress(Serializer.stringifyPuzzle(puzzle))
           .then(d =>
@@ -227,12 +134,6 @@ export default memo(function SourceCodeEditor({
                     .replace(/^return\s+/, '')
                     .replace(/;\s*$/, '') +
                   ')';
-              } else if (
-                !/^\s*\/\*\*\s+(?:\*\s+)*@type\s+Puzzle\s+(?:\*\s+)*\*\//s.test(
-                  saved.trim()
-                )
-              ) {
-                saved = '/** @type Puzzle */\n' + saved;
               }
               return saved;
             })()}
@@ -244,7 +145,7 @@ export default memo(function SourceCodeEditor({
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg">Quick reference</h3>
             {enclosure.map(
-              ([_, __, example]) =>
+              ({ example }) =>
                 example && (
                   <pre key={example} className="text-xs text-base-content">
                     {example}

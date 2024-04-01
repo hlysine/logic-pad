@@ -9,7 +9,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Suspense, lazy, memo } from 'react';
 import LinkLoader, { validateSearch } from '../ui/router/LinkLoader';
 import Loading from '../ui/Loading';
-const SourceCodeEditor = lazy(() => import('../ui/SourceCodeEditor'));
+const SourceCodeEditor = lazy(
+  () => import('../ui/codeEditor/SourceCodeEditor')
+);
 
 export const Route = createFileRoute('/create')({
   validateSearch,

@@ -6,6 +6,7 @@ import Metadata from '../ui/metadata/Metadata';
 import { createFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import LinkLoader, { validateSearch } from '../ui/router/LinkLoader';
+import StupidGrid from '../ui/StupidGrid';
 
 export const Route = createFileRoute('/solve')({
   validateSearch,
@@ -17,6 +18,7 @@ export const Route = createFileRoute('/solve')({
         <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
           <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
             <Metadata />
+            <StupidGrid />
           </div>
           <EditControls />
         </div>

@@ -290,12 +290,13 @@ export default class GridData {
     );
   }
 
-  public forEach(
-    callback: (tile: TileData, x: number, y: number) => void
-  ): void {
+  public forEach<T>(
+    callback: (tile: TileData, x: number, y: number) => T | undefined
+  ): T | undefined {
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
-        callback(this.getTile(x, y), x, y);
+        const ret = callback(this.getTile(x, y), x, y);
+        if (ret !== undefined) return ret;
       }
     }
   }

@@ -1,15 +1,13 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import { Color, Direction } from '../primitives';
+import { Color } from '../primitives';
 import NumberSymbol from './numberSymbol';
 
-export default class DartSymbol extends NumberSymbol {
+export default class AreaNumberSymbol extends NumberSymbol {
   private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwbbw', 'wwwww', 'wbwbb', 'wwwww'])
-      .addSymbol(new DartSymbol(1, 0, 1, Direction.Down))
-      .addSymbol(new DartSymbol(4, 0, 2, Direction.Left))
-      .addSymbol(new DartSymbol(3, 1, 1, Direction.Down))
-      .addSymbol(new DartSymbol(0, 2, 3, Direction.Right))
+    GridData.create(['wbbbb', 'wbbwb', 'bbwwb', 'bbbbb'])
+      .addSymbol(new AreaNumberSymbol(2, 2, 3))
+      .addSymbol(new AreaNumberSymbol(0, 1, 2))
   );
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
@@ -34,84 +32,71 @@ export default class DartSymbol extends NumberSymbol {
       description: 'Number',
       configurable: true,
     },
-    {
-      type: ConfigType.Direction,
-      default: Direction.Down,
-      field: 'orientation',
-      description: 'Orientation',
-      configurable: true,
-    },
   ]);
 
   /**
-   * **Darts count opposite color cells in that direction**
+   * **Area Numbers must equal region sizes**
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
-   * @param number - The number of cells seen by the symbol.
-   * @param orientation - The orientation of the symbol.
+   * @param number - The area number.
    */
-  public constructor(
-    x: number,
-    y: number,
-    number: number,
-    public readonly orientation: Direction
-  ) {
+  public constructor(x: number, y: number, number: number) {
     super(x, y, number);
-    this.orientation = orientation;
   }
 
   public get id(): string {
-    return `dart`;
+    return `number`;
   }
 
   public get explanation(): string {
-    return `*Darts* count opposite color cells in that direction`;
+    return `*Area Numbers* must equal region sizes`;
   }
 
   public createExampleGrid(): GridData {
-    return DartSymbol.EXAMPLE_GRID;
+    return AreaNumberSymbol.EXAMPLE_GRID;
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return DartSymbol.CONFIGS;
+    return AreaNumberSymbol.CONFIGS;
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {
     const color = grid.getTile(this.x, this.y).color;
     if (color === Color.Gray)
       return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
-    let gray = 0;
-    let opposite = 0;
-    grid.iterateDirectionAll(
+    let completeCount = 0;
+    let grayCount = 0;
+    grid.iterateArea(
       { x: this.x, y: this.y },
-      this.orientation,
-      () => true,
-      tile => {
-        if (!tile.exists) return;
-        if (tile.color === Color.Gray) gray++;
-        else if (tile.color !== color) opposite++;
+      tile => tile.color === Color.Gray || tile.color === color,
+      () => {
+        grayCount++;
       }
     );
-    return { completed: opposite, possible: opposite + gray };
+    grid.iterateArea(
+      { x: this.x, y: this.y },
+      tile => tile.color === color,
+      () => {
+        completeCount++;
+      }
+    );
+    return { completed: completeCount, possible: grayCount };
   }
 
   public copyWith({
     x,
     y,
     number,
-    orientation,
   }: {
     x?: number;
     y?: number;
     number?: number;
-    orientation?: Direction;
   }): this {
-    return new DartSymbol(
+    return new AreaNumberSymbol(
       x ?? this.x,
       y ?? this.y,
-      number ?? this.number,
-      orientation ?? this.orientation
+      number ?? this.number
     ) as this;
   }
 

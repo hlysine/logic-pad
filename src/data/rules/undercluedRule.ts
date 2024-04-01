@@ -1,14 +1,14 @@
 import GridData from '../grid';
 import { Color, GridState, RuleState, State } from '../primitives';
-import NumberSymbol from '../symbols/numberSymbol';
+import AreaNumberSymbol from '../symbols/areaNumberSymbol';
 import QuestionMarkSign from '../symbols/signs/questionMarkSign';
 import Rule, { SearchVariant } from './rule';
 
 export default class UndercluedRule extends Rule {
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['nbnnn', 'bwbnn', 'nbnnn', 'wwwnn'])
-      .addSymbol(new NumberSymbol(1, 1, 1))
-      .addSymbol(new NumberSymbol(0, 3, 4))
+      .addSymbol(new AreaNumberSymbol(1, 1, 1))
+      .addSymbol(new AreaNumberSymbol(0, 3, 4))
       .addSymbol(new QuestionMarkSign(0, 2))
       .addSymbol(new QuestionMarkSign(2, 2))
       .addSymbol(new QuestionMarkSign(3, 3))

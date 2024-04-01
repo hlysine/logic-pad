@@ -1,10 +1,10 @@
-import NumberSymbolData from './data/symbols/numberSymbol';
+import AreaNumberSymbolData from './data/symbols/areaNumberSymbol';
 import LetterSymbolData from './data/symbols/letterSymbol';
 import ViewpointSymbolData from './data/symbols/viewpointSymbol';
 import DartSymbolData from './data/symbols/dartSymbol';
 import QuestionMarkSignData from './data/symbols/signs/questionMarkSign';
 import SymbolData from './data/symbols/symbol';
-import NumberSymbolUI from './ui/symbols/NumberSymbol';
+import AreaNumberSymbolUI from './ui/symbols/AreaNumberSymbol';
 import LetterSymbolUI from './ui/symbols/LetterSymbol';
 import ViewpointSymbolUI from './ui/symbols/ViewpointSymbol';
 import DartSymbolUI from './ui/symbols/DartSymbol';
@@ -39,7 +39,7 @@ function register<T extends SymbolData>(
   });
 }
 
-register(new NumberSymbolData(0, 0, 1), NumberSymbolUI);
+register(new AreaNumberSymbolData(0, 0, 1), AreaNumberSymbolUI);
 register(new LetterSymbolData(0, 0, 'A'), LetterSymbolUI);
 register(new ViewpointSymbolData(0, 0, 1), ViewpointSymbolUI);
 register(new DartSymbolData(0, 0, 1, Direction.Down), DartSymbolUI);

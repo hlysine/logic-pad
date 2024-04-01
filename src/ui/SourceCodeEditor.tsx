@@ -11,7 +11,7 @@ import CustomRule from '../data/rules/customRule';
 import { Color, Direction, Orientation } from '../data/primitives';
 import UndercluedRule from '../data/rules/undercluedRule';
 import LetterSymbol from '../data/symbols/letterSymbol';
-import NumberSymbol from '../data/symbols/numberSymbol';
+import AreaNumberSymbol from '../data/symbols/areaNumberSymbol';
 import ViewpointSymbol from '../data/symbols/viewpointSymbol';
 import DartSymbol from '../data/symbols/dartSymbol';
 import { Puzzle, PuzzleSchema } from '../data/puzzle';
@@ -72,7 +72,11 @@ const enclosure = [
   ],
   ['UndercluedRule', UndercluedRule, '.addRule(new UndercluedRule())'],
   ['LetterSymbol', LetterSymbol, '.addSymbol(new LetterSymbol(1, 1, "A"))'],
-  ['NumberSymbol', NumberSymbol, '.addSymbol(new NumberSymbol(1, 1, 3))'],
+  [
+    'AreaNumberSymbol',
+    AreaNumberSymbol,
+    '.addSymbol(new AreaNumberSymbol(1, 1, 3))',
+  ],
   [
     'ViewpointSymbol',
     ViewpointSymbol,

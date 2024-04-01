@@ -1,10 +1,10 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { move } from '../helper';
-import { Color, DIRECTIONS, State } from '../primitives';
-import Symbol from './symbol';
+import { Color, DIRECTIONS } from '../primitives';
+import NumberSymbol from './numberSymbol';
 
-export default class ViewpointSymbol extends Symbol {
+export default class ViewpointSymbol extends NumberSymbol {
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['bbbbb', 'wwwwb', 'bwwbb', 'bbwww']).addSymbol(
       new ViewpointSymbol(1, 1, 5)
@@ -41,13 +41,8 @@ export default class ViewpointSymbol extends Symbol {
    * @param y - The y-coordinate of the symbol.
    * @param number - The viewpoint number.
    */
-  public constructor(
-    public readonly x: number,
-    public readonly y: number,
-    public readonly number: number
-  ) {
-    super(x, y);
-    this.number = number;
+  public constructor(x: number, y: number, number: number) {
+    super(x, y, number);
   }
 
   public get id(): string {
@@ -66,10 +61,11 @@ export default class ViewpointSymbol extends Symbol {
     return ViewpointSymbol.CONFIGS;
   }
 
-  public validateSymbol(grid: GridData): State {
+  public countTiles(grid: GridData): { completed: number; possible: number } {
     const pos = { x: this.x, y: this.y };
     const color = grid.getTile(this.x, this.y).color;
-    if (color === Color.Gray) return State.Incomplete;
+    if (color === Color.Gray)
+      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
     let minSize = 1;
     let maxSize = 1;
     for (const direction of DIRECTIONS) {
@@ -88,13 +84,7 @@ export default class ViewpointSymbol extends Symbol {
         }
       );
     }
-    if (minSize > this.number || maxSize < this.number) {
-      return State.Error;
-    } else if (minSize === this.number && maxSize === this.number) {
-      return State.Satisfied;
-    } else {
-      return State.Incomplete;
-    }
+    return { completed: minSize, possible: maxSize };
   }
 
   public copyWith({

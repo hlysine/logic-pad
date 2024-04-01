@@ -1,13 +1,16 @@
 import { memo } from 'react';
 import { cn } from '../../utils';
-import NumberSymbolData from '../../data/symbols/numberSymbol';
+import AreaNumberSymbolData from '../../data/symbols/areaNumberSymbol';
 
-export interface NumberProps {
+export interface AreaNumberProps {
   textClass: string;
-  symbol: NumberSymbolData;
+  symbol: AreaNumberSymbolData;
 }
 
-export default memo(function NumberSymbol({ textClass, symbol }: NumberProps) {
+export default memo(function AreaNumberSymbol({
+  textClass,
+  symbol,
+}: AreaNumberProps) {
   return (
     <div
       className={cn(

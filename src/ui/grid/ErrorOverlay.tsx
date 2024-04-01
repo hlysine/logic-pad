@@ -27,6 +27,7 @@ function positionsToGrid(positions: readonly Position[]) {
 
 export default memo(function ErrorOverlay({ positions }: ErrorOverlayProps) {
   const grid = useMemo(() => positionsToGrid(positions), [positions]);
+  if (positions.length === 0) return null;
   return (
     <GridOverlay>
       {positions.map(({ x, y }) => (

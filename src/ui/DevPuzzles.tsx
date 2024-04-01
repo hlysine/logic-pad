@@ -8,7 +8,7 @@ import GridData from '../data/grid';
 import GridConnections from '../data/gridConnections';
 import { useEdit } from './EditContext';
 import LetterSymbol from '../data/symbols/letterSymbol';
-import NumberSymbol from '../data/symbols/numberSymbol';
+import AreaNumberSymbol from '../data/symbols/areaNumberSymbol';
 import UndercluedRule from '../data/rules/undercluedRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import { Puzzle } from '../data/puzzle';
@@ -168,12 +168,12 @@ export const DEV_PUZZLES: Puzzle[] = [
       .withSymbols([
         new LetterSymbol(2, 2, 'A'),
         new LetterSymbol(7, 7, 'A'),
-        new NumberSymbol(1, 2, 20),
-        new NumberSymbol(7, 2, 8),
-        new NumberSymbol(6, 4, 2),
-        new NumberSymbol(3, 5, 2),
-        new NumberSymbol(1, 8, 2),
-        new NumberSymbol(4, 8, 2),
+        new AreaNumberSymbol(1, 2, 20),
+        new AreaNumberSymbol(7, 2, 8),
+        new AreaNumberSymbol(6, 4, 2),
+        new AreaNumberSymbol(3, 5, 2),
+        new AreaNumberSymbol(1, 8, 2),
+        new AreaNumberSymbol(4, 8, 2),
       ]),
     solution: GridData.create([
       'nnnnwwwwwn',
@@ -391,15 +391,15 @@ export const DEV_PUZZLES: Puzzle[] = [
         )
       )
       .withSymbols([
-        new NumberSymbol(7, 9, 3),
-        new NumberSymbol(4, 9, 8),
-        new NumberSymbol(0, 7, 6),
-        new NumberSymbol(0, 2, 4),
-        new NumberSymbol(1, 0, 8),
-        new NumberSymbol(4, 3, 8),
-        new NumberSymbol(7, 2, 5),
-        new NumberSymbol(9, 3, 4),
-        new NumberSymbol(7, 6, 8),
+        new AreaNumberSymbol(7, 9, 3),
+        new AreaNumberSymbol(4, 9, 8),
+        new AreaNumberSymbol(0, 7, 6),
+        new AreaNumberSymbol(0, 2, 4),
+        new AreaNumberSymbol(1, 0, 8),
+        new AreaNumberSymbol(4, 3, 8),
+        new AreaNumberSymbol(7, 2, 5),
+        new AreaNumberSymbol(9, 3, 4),
+        new AreaNumberSymbol(7, 6, 8),
       ]),
     solution: null,
     difficulty: 5,

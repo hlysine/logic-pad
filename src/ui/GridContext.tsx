@@ -3,6 +3,8 @@ import GridData from '../data/grid';
 import { GridState, RuleState, State } from '../data/primitives';
 import { useEdit } from './EditContext';
 import { PuzzleMetadata } from '../data/puzzle';
+import Rule from '../data/rules/rule';
+import Symbol from '../data/symbols/symbol';
 
 interface GridContext {
   grid: GridData;
@@ -68,13 +70,32 @@ function validateGrid(grid: GridData, solution: GridData | null) {
     if (rule.validateWithSolution) requireSolution = true;
     return rule.validateGrid(grid);
   });
+
+  const applySymbolOverrides = (
+    grid: GridData,
+    rules: readonly Rule[],
+    symbol: Symbol,
+    validator: (grid: GridData) => State
+  ): State => {
+    const [rule, ...rest] = rules;
+    if (rule) {
+      return rule.overrideSymbolValidation(grid, symbol, grid =>
+        applySymbolOverrides(grid, rest, symbol, () => validator(grid))
+      );
+    } else {
+      return validator(grid);
+    }
+  };
+
   const symbols = new Map<string, State[]>();
   grid.symbols.forEach((symbolList, id) =>
     symbols.set(
       id,
       symbolList.map(s => {
         if (s.validateWithSolution) requireSolution = true;
-        return s.validateSymbol(grid);
+        return applySymbolOverrides(grid, grid.rules, s, g =>
+          s.validateSymbol(g)
+        );
       })
     )
   );

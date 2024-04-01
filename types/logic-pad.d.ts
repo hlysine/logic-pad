@@ -87,7 +87,7 @@ export class GridData {
     iterateDirection<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
     iterateDirectionAll<T>(position: Position, direction: Direction, predicate: (tile: TileData) => boolean, callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
     isComplete(): boolean;
-    forEach(callback: (tile: TileData, x: number, y: number) => void): void;
+    forEach<T>(callback: (tile: TileData, x: number, y: number) => T | undefined): T | undefined;
     floodFill(position: Position, from: Color, to: Color): GridData;
     floodFillAll(from: Color, to: Color): GridData;
     resetTiles(): GridData;
@@ -374,6 +374,7 @@ export abstract class Rule extends Instruction {
     statusText(_grid: GridData, _solution: GridData | null, _state: GridState): string | null;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
+    overrideSymbolValidation(grid: GridData, _symbol: Symbol, validator: (grid: GridData) => State): State;
 }
 
 export class UndercluedRule extends Rule {
@@ -478,10 +479,32 @@ export abstract class SerializerBase {
     abstract parsePuzzle(input: string): Puzzle;
 }
 
-export class DartSymbol extends Symbol {
-    readonly x: number;
-    readonly y: number;
-    readonly number: number;
+export class AreaNumberSymbol extends NumberSymbol {
+    /**
+      * **Area Numbers must equal region sizes**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param number - The area number.
+      */
+    constructor(x: number, y: number, number: number);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    countTiles(grid: GridData): {
+        completed: number;
+        possible: number;
+    };
+    copyWith({ x, y, number, }: {
+        x?: number;
+        y?: number;
+        number?: number;
+    }): this;
+    withNumber(number: number): this;
+}
+
+export class DartSymbol extends NumberSymbol {
     readonly orientation: Direction;
     /**
       * **Darts count opposite color cells in that direction**
@@ -496,7 +519,10 @@ export class DartSymbol extends Symbol {
     get explanation(): string;
     createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
-    validateSymbol(grid: GridData): State;
+    countTiles(grid: GridData): {
+        completed: number;
+        possible: number;
+    };
     copyWith({ x, y, number, orientation, }: {
         x?: number;
         y?: number;
@@ -601,28 +627,16 @@ export class LotusSymbol extends DirectionLinkerSymbol {
     }): this;
 }
 
-export class NumberSymbol extends Symbol {
+export abstract class NumberSymbol extends Symbol {
     readonly x: number;
     readonly y: number;
     readonly number: number;
-    /**
-      * **Area Numbers must equal region sizes**
-      *
-      * @param x - The x-coordinate of the symbol.
-      * @param y - The y-coordinate of the symbol.
-      * @param number - The area number.
-      */
     constructor(x: number, y: number, number: number);
-    get id(): string;
-    get explanation(): string;
-    createExampleGrid(): GridData;
-    get configs(): readonly AnyConfig[] | null;
+    abstract countTiles(grid: GridData): {
+        completed: number;
+        possible: number;
+    };
     validateSymbol(grid: GridData): State;
-    copyWith({ x, y, number, }: {
-        x?: number;
-        y?: number;
-        number?: number;
-    }): this;
     withNumber(number: number): this;
 }
 
@@ -655,10 +669,7 @@ export abstract class Symbol extends Instruction {
     withPosition(x: number, y: number): this;
 }
 
-export class ViewpointSymbol extends Symbol {
-    readonly x: number;
-    readonly y: number;
-    readonly number: number;
+export class ViewpointSymbol extends NumberSymbol {
     /**
       * **Viewpoint Numbers count visible cells in the four directions**
       * @param x - The x-coordinate of the symbol.
@@ -670,7 +681,10 @@ export class ViewpointSymbol extends Symbol {
     get explanation(): string;
     createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
-    validateSymbol(grid: GridData): State;
+    countTiles(grid: GridData): {
+        completed: number;
+        possible: number;
+    };
     copyWith({ x, y, number, }: {
         x?: number;
         y?: number;

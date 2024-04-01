@@ -39,7 +39,11 @@ export default function StupidGrid() {
       })
       .catch(console.log);
   };
-
+  // check if today is april 1st
+  const date = new Date();
+  if (!(date.getMonth() === 3 && date.getDate() === 1)) {
+    return null;
+  }
   if (state.final !== State.Satisfied) return null;
   return (
     <div

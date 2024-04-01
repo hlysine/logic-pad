@@ -23,7 +23,7 @@ const roadmap: RoadmapItem[] = [
     '~Galaxy',
     '~All ___ regions have area #',
     'Exactly # symbols per ___ region',
-    'All numbers are off by #',
+    '~All numbers are off by #',
     'There are # ___ cells in total',
     'Mystery puzzle: violate the rules (Hidden)',
     'Prefilled tiles',
@@ -36,6 +36,7 @@ const roadmap: RoadmapItem[] = [
   '~Add flood painting',
   'Add tile counting by holding Ctrl',
   'Isolate grids between solve and create modes',
+  'Support mobile input',
   '~Implement puzzle serialization',
   [
     '~Optimizations',

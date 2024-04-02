@@ -511,4 +511,25 @@ export default class GridData {
     });
     return this.copyWith({ tiles: newTiles });
   }
+
+  /**
+   * Check if this grid is equal to another grid in terms of size and tile colors.
+   * Rules, symbols, and connections are not compared.
+   *
+   * @param grid The grid to compare with.
+   * @returns True if the grids are equal in size and tile colors, false otherwise.
+   */
+  public colorEqual(grid: GridData): boolean {
+    return (
+      this.width === grid.width &&
+      this.height === grid.height &&
+      this.tiles.every((row, y) =>
+        row.every(
+          (tile, x) =>
+            (!tile.exists && !grid.getTile(x, y).exists) ||
+            tile.color === grid.getTile(x, y).color
+        )
+      )
+    );
+  }
 }

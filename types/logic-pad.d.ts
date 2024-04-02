@@ -255,6 +255,14 @@ export class GridData {
             * @returns The new grid with the pasted tiles.
             */
         pasteTiles(origin: Position, grid: GridData): GridData;
+        /**
+            * Check if this grid is equal to another grid in terms of size and tile colors.
+            * Rules, symbols, and connections are not compared.
+            *
+            * @param grid The grid to compare with.
+            * @returns True if the grids are equal in size and tile colors, false otherwise.
+            */
+        colorEqual(grid: GridData): boolean;
 }
 
 export class GridConnections {

@@ -280,6 +280,26 @@ export default class GridData {
   }
 
   /**
+   * Create a new mutable TileData array from a string array.
+   *
+   * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+   * - Capitalize the letter to make the tile fixed.
+   * - Use `.` to represent empty space.
+   *
+   * @param array - The string array to create the tiles from.
+   * @returns The created tile array.
+   */
+  public static createTiles(array: string[]): TileData[][] {
+    const width = array.reduce((max, row) => Math.max(max, row.length), 0);
+    const tiles = array.map(row =>
+      Array.from({ length: width }, (_, x) => {
+        return TileData.create(row.charAt(x));
+      })
+    );
+    return tiles;
+  }
+
+  /**
    * Create a new GridData object from a string array.
    *
    * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
@@ -290,14 +310,8 @@ export default class GridData {
    * @returns The created grid.
    */
   public static create(array: string[]): GridData {
-    const height = array.length;
-    const width = array.reduce((max, row) => Math.max(max, row.length), 0);
-    const tiles = array.map(row =>
-      Array.from({ length: width }, (_, x) => {
-        return TileData.create(row.charAt(x));
-      })
-    );
-    return new GridData(width, height, tiles);
+    const tiles = GridData.createTiles(array);
+    return new GridData(tiles[0].length, tiles.length, tiles);
   }
 
   /**

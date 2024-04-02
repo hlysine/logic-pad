@@ -166,6 +166,17 @@ export class GridData {
             */
         resize(width: number, height: number): GridData;
         /**
+            * Create a new mutable TileData array from a string array.
+            *
+            * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+            * - Capitalize the letter to make the tile fixed.
+            * - Use `.` to represent empty space.
+            *
+            * @param array - The string array to create the tiles from.
+            * @returns The created tile array.
+            */
+        static createTiles(array: string[]): TileData[][];
+        /**
             * Create a new GridData object from a string array.
             *
             * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.

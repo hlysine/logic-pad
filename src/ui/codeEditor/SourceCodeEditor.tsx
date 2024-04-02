@@ -22,11 +22,11 @@ const defaultCode = `/** @type Puzzle */
 
 const options: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
-  lineNumbers: 'off',
+  lineNumbers: 'on',
   glyphMargin: false,
-  folding: false,
+  folding: true,
   lineDecorationsWidth: 5,
-  lineNumbersMinChars: 0,
+  lineNumbersMinChars: 3,
   wrappingIndent: 'indent',
   wrappingStrategy: 'advanced',
   wordWrap: 'on',
@@ -45,6 +45,9 @@ export default memo(function SourceCodeEditor({
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
+    const saved = window.localStorage.getItem('viewState');
+    if (saved)
+      editor.restoreViewState(JSON.parse(saved) as editor.ICodeEditorViewState);
   };
   const [toast, setToast] = useState<{
     message: string;
@@ -82,6 +85,10 @@ export default memo(function SourceCodeEditor({
     if (editorRef.current) {
       const value = editorRef.current.getValue();
       window.localStorage.setItem('sourceCode', value);
+      window.localStorage.setItem(
+        'viewState',
+        JSON.stringify(editorRef.current.saveViewState())
+      );
       try {
         const puzzle: Puzzle = PuzzleSchema.parse(
           evaluate(`"use strict";\n${value}`)
@@ -115,7 +122,7 @@ export default memo(function SourceCodeEditor({
   return (
     <>
       <div className="basis-0 grow shrink min-h-[300px] self-stretch dropdown dropdown-right">
-        <div className="w-full h-full focus-within:w-[600px] transition-[width] duration-75">
+        <div className="w-full h-full focus-within:w-[min(800px,50vw)] transition-[width] duration-75">
           <Editor
             loading={loading}
             theme="Dracula"
@@ -141,7 +148,7 @@ export default memo(function SourceCodeEditor({
             onMount={handleEditorDidMount}
           />
         </div>
-        <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-10 ml-[calc(300px+1rem)] p-4 w-[400px] h-full overflow-y-auto">
+        <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-10 ml-[calc(min(800px,50vw)-300px+1rem)] p-4 w-[400px] h-full overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg">Quick reference</h3>
             {enclosure.map(

@@ -120,6 +120,25 @@ export default class GridData {
   }
 
   /**
+   * Replace or modify all tiles in the grid.
+   *
+   * @param tiles The new tile array or a function to mutate the existing tile array.
+   * @returns The new grid with the new tiles.
+   */
+  public withTiles(
+    tiles:
+      | readonly (readonly TileData[])[]
+      | ((value: TileData[][]) => readonly (readonly TileData[])[])
+  ): GridData {
+    return this.copyWith({
+      tiles:
+        typeof tiles === 'function'
+          ? tiles(this.tiles.map(row => row.slice()))
+          : tiles,
+    });
+  }
+
+  /**
    * Add or modify the connections in the grid.
    * @param connections The new connections to add or modify.
    * @returns The new grid with the new connections.

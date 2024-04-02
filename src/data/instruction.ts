@@ -1,4 +1,4 @@
-import { AnyConfig } from './config';
+import { AnyConfig, configEquals } from './config';
 import GridData from './grid';
 
 export default abstract class Instruction {
@@ -19,5 +19,26 @@ export default abstract class Instruction {
    */
   public get validateWithSolution(): boolean {
     return false;
+  }
+
+  /**
+   * Check if this instruction is equal to another instruction by comparing their IDs and configs.
+   *
+   * @param other The other instruction to compare to.
+   * @returns Whether the two instructions are equal.
+   */
+  public equals(other: Instruction): boolean {
+    if (this.id !== other.id) return false;
+    for (const config of this.configs ?? []) {
+      if (
+        !configEquals(
+          config.type,
+          this[config.field as keyof Instruction] as AnyConfig['default'],
+          other[config.field as keyof Instruction] as AnyConfig['default']
+        )
+      )
+        return false;
+    }
+    return true;
   }
 }

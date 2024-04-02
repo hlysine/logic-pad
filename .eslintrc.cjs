@@ -52,5 +52,6 @@ module.exports = {
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
     ],
     '@typescript-eslint/consistent-type-definitions': 'off',
+    '@typescript-eslint/unified-signatures': 'off',
   },
 };

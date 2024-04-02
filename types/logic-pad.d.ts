@@ -43,6 +43,15 @@ export interface GridConfig extends Config<GridData> {
     readonly type: ConfigType.Grid;
 }
 export type AnyConfig = NumberConfig | StringConfig | ColorConfig | DirectionConfig | OrientationConfig | GridConfig;
+/**
+  * Compare two config values for equality, using an appropriate method for the config type.
+  *
+  * @param type The type of the config.
+  * @param a The first value to compare.
+  * @param b The second value to compare.
+  * @returns Whether the two values are equal.
+  */
+export function configEquals<C extends AnyConfig>(type: C['type'], a: C['default'], b: C['default']): boolean;
 
 export class GridData {
         readonly width: number;
@@ -241,6 +250,8 @@ export class GridData {
         resetTiles(): GridData;
         /**
             * Copy the tiles in the given region to a new grid.
+            * All connections and symbols within the selected region are copied.
+            * All rules are included as well.
             *
             * @param origin The top-left corner of the region to copy.
             * @param width The width of the region to copy.
@@ -250,11 +261,21 @@ export class GridData {
         copyTiles(origin: Position, width: number, height: number): GridData;
         /**
             * Paste the tiles from the given grid to the current grid at the given position.
+            * All connections, symbols, and rules are merged.
+            *
             * @param origin The top-left corner of the region to paste the tiles to.
             * @param grid The grid to paste the tiles from.
             * @returns The new grid with the pasted tiles.
             */
         pasteTiles(origin: Position, grid: GridData): GridData;
+        /**
+            * Paste the tiles from the given array to the current grid at the given position.
+            *
+            * @param origin The top-left corner of the region to paste the tiles to.
+            * @param tile The array of tiles to paste.
+            * @returns The new grid with the pasted tiles.
+            */
+        pasteTiles(origin: Position, tile: readonly (readonly TileData[])[]): GridData;
         /**
             * Check if this grid is equal to another grid in terms of size and tile colors.
             * Rules, symbols, and connections are not compared.
@@ -262,28 +283,61 @@ export class GridData {
             * @param grid The grid to compare with.
             * @returns True if the grids are equal in size and tile colors, false otherwise.
             */
-        colorEqual(grid: GridData): boolean;
+        colorEquals(grid: GridData): boolean;
+        /**
+            * Check if this grid is equal to another grid in terms of size, tile colors, connections, symbols, and rules.
+            *
+            * @param other The grid to compare with.
+            * @returns True if the grids are equal, false otherwise.
+            */
+        equals(other: GridData): boolean;
+        /**
+            * Deduplicate the rules in the given list.
+            *
+            * @param rules The list of rules to deduplicate.
+            * @returns The deduplicated list of rules.
+            */
+        static deduplicateRules(rules: readonly Rule[]): readonly Rule[];
+        /**
+            * Deduplicate the symbols in the given map.
+            *
+            * @param symbols The map of symbols to deduplicate.
+            * @returns The deduplicated map of symbols.
+            */
+        static deduplicateSymbols(symbols: ReadonlyMap<string, readonly Symbol[]>): ReadonlyMap<string, readonly Symbol[]>;
 }
 
 export class GridConnections {
-    readonly edges: readonly Edge[];
-    constructor(edges?: readonly Edge[]);
-    addEdge(edge: Edge): GridConnections;
-    removeEdge(edge: Edge): GridConnections;
-    isConnected(edge: Edge): boolean;
-    getConnectionsAt({ x, y }: Position): readonly Edge[];
-    getForTile({ x, y }: Position): TileConnections;
-    getConnectedTiles({ x, y }: Position): readonly Position[];
-    /**
-      * Create new GridConnections from a string array.
-      *
-      * - Use `.` for cells that don't connect to anything.
-      * - Use any other character for cells that connect to the same character.
-      *
-      * @param array - The string array to create the connections from.
-      * @returns The created connections. You can apply this to a GridData object using GridData.withConnections.
-      */
-    static create(array: string[]): GridConnections;
+        readonly edges: readonly Edge[];
+        constructor(edges?: readonly Edge[]);
+        addEdge(edge: Edge): GridConnections;
+        removeEdge(edge: Edge): GridConnections;
+        isConnected(edge: Edge): boolean;
+        getConnectionsAt({ x, y }: Position): readonly Edge[];
+        getForTile({ x, y }: Position): TileConnections;
+        getConnectedTiles({ x, y }: Position): readonly Position[];
+        /**
+            * Create new GridConnections from a string array.
+            *
+            * - Use `.` for cells that don't connect to anything.
+            * - Use any other character for cells that connect to the same character.
+            *
+            * @param array - The string array to create the connections from.
+            * @returns The created connections. You can apply this to a GridData object using GridData.withConnections.
+            */
+        static create(array: string[]): GridConnections;
+        /**
+            * Check if two GridConnections objects are equal.
+            * @param other The other GridConnections object to compare to.
+            * @returns Whether the two objects are equal.
+            */
+        equals(other: GridConnections): boolean;
+        /**
+            * Deduplicate an array of edges.
+            * @param edges The array of edges to deduplicate.
+            * @returns The deduplicated array of edges.
+            */
+        static deduplicateEdges(edges: readonly Edge[]): readonly Edge[];
 }
 
 /**
@@ -337,15 +391,22 @@ export function escape(text: string, escapeCharacters?: string): string;
 export function unescape(text: string, escapeCharacters?: string): string;
 
 export abstract class Instruction {
-    abstract get id(): string;
-    abstract get explanation(): string;
-    abstract createExampleGrid(): GridData;
-    get configs(): readonly AnyConfig[] | null;
-    abstract copyWith(props: Record<string, unknown>): this;
-    /**
-      * Indicates that validation by logic is not available and the solution must be used for validation
-      */
-    get validateWithSolution(): boolean;
+        abstract get id(): string;
+        abstract get explanation(): string;
+        abstract createExampleGrid(): GridData;
+        get configs(): readonly AnyConfig[] | null;
+        abstract copyWith(props: Record<string, unknown>): this;
+        /**
+            * Indicates that validation by logic is not available and the solution must be used for validation
+            */
+        get validateWithSolution(): boolean;
+        /**
+            * Check if this instruction is equal to another instruction by comparing their IDs and configs.
+            *
+            * @param other The other instruction to compare to.
+            * @returns Whether the two instructions are equal.
+            */
+        equals(other: Instruction): boolean;
 }
 
 export interface Position {

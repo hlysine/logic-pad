@@ -53,3 +53,22 @@ export type AnyConfig =
   | DirectionConfig
   | OrientationConfig
   | GridConfig;
+
+/**
+ * Compare two config values for equality, using an appropriate method for the config type.
+ *
+ * @param type The type of the config.
+ * @param a The first value to compare.
+ * @param b The second value to compare.
+ * @returns Whether the two values are equal.
+ */
+export function configEquals<C extends AnyConfig>(
+  type: C['type'],
+  a: C['default'],
+  b: C['default']
+): boolean {
+  if (type === ConfigType.Grid) {
+    return (a as GridData).equals(b as GridData);
+  }
+  return a === b;
+}

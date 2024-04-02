@@ -12,7 +12,7 @@ export default class GridConnections {
   public readonly edges: readonly Edge[];
 
   public constructor(edges?: readonly Edge[]) {
-    this.edges = edges ?? [];
+    this.edges = GridConnections.deduplicateEdges(edges ?? []);
   }
 
   public addEdge(edge: Edge): GridConnections {
@@ -135,5 +135,29 @@ export default class GridConnections {
       }
     }
     return new GridConnections(edges);
+  }
+
+  /**
+   * Check if two GridConnections objects are equal.
+   * @param other The other GridConnections object to compare to.
+   * @returns Whether the two objects are equal.
+   */
+  public equals(other: GridConnections): boolean {
+    if (this.edges.length !== other.edges.length) return false;
+    for (const edge of this.edges) {
+      if (!other.isConnected(edge)) return false;
+    }
+    return true;
+  }
+
+  /**
+   * Deduplicate an array of edges.
+   * @param edges The array of edges to deduplicate.
+   * @returns The deduplicated array of edges.
+   */
+  public static deduplicateEdges(edges: readonly Edge[]): readonly Edge[] {
+    return edges.filter(
+      (edge, index) => edges.findIndex(e => isSameEdge(e, edge)) === index
+    );
   }
 }

@@ -39,8 +39,8 @@ export default class GridData {
     this.height = height;
     this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
-    this.symbols = symbols ?? new Map();
-    this.rules = rules ?? [];
+    this.symbols = GridData.deduplicateSymbols(symbols ?? new Map());
+    this.rules = GridData.deduplicateRules(rules ?? []);
   }
 
   /**
@@ -484,6 +484,8 @@ export default class GridData {
 
   /**
    * Copy the tiles in the given region to a new grid.
+   * All connections and symbols within the selected region are copied.
+   * All rules are included as well.
    *
    * @param origin The top-left corner of the region to copy.
    * @param width The width of the region to copy.
@@ -494,22 +496,104 @@ export default class GridData {
     const newTiles = array(width, height, (x, y) =>
       this.getTile(origin.x + x, origin.y + y)
     );
-    return new GridData(width, height, newTiles);
+    const connections = new GridConnections(
+      this.connections.edges
+        .filter(
+          edge =>
+            edge.x1 >= origin.x &&
+            edge.y1 >= origin.y &&
+            edge.x2 >= origin.x &&
+            edge.y2 >= origin.y &&
+            edge.x1 < origin.x + width &&
+            edge.y1 < origin.y + height &&
+            edge.x2 < origin.x + width &&
+            edge.y2 < origin.y + height
+        )
+        .map(edge => ({
+          x1: edge.x1 - origin.x,
+          y1: edge.y1 - origin.y,
+          x2: edge.x2 - origin.x,
+          y2: edge.y2 - origin.y,
+        }))
+    );
+    const symbols = new Map<string, Symbol[]>();
+    for (const [id, symbolList] of this.symbols) {
+      const newSymbolList = symbolList.filter(
+        symbol =>
+          symbol.x >= origin.x &&
+          symbol.y >= origin.y &&
+          symbol.x < origin.x + width &&
+          symbol.y < origin.y + height
+      );
+      if (newSymbolList.length > 0) symbols.set(id, newSymbolList);
+    }
+    return new GridData(
+      width,
+      height,
+      newTiles,
+      connections,
+      symbols,
+      this.rules
+    );
   }
 
   /**
    * Paste the tiles from the given grid to the current grid at the given position.
+   * All connections, symbols, and rules are merged.
+   *
    * @param origin The top-left corner of the region to paste the tiles to.
    * @param grid The grid to paste the tiles from.
    * @returns The new grid with the pasted tiles.
    */
-  public pasteTiles(origin: Position, grid: GridData): GridData {
+  public pasteTiles(origin: Position, grid: GridData): GridData;
+  /**
+   * Paste the tiles from the given array to the current grid at the given position.
+   *
+   * @param origin The top-left corner of the region to paste the tiles to.
+   * @param tile The array of tiles to paste.
+   * @returns The new grid with the pasted tiles.
+   */
+  public pasteTiles(
+    origin: Position,
+    tile: readonly (readonly TileData[])[]
+  ): GridData;
+
+  public pasteTiles(
+    origin: Position,
+    grid: GridData | readonly (readonly TileData[])[]
+  ): GridData {
+    if (!(grid instanceof GridData))
+      return this.pasteTiles(
+        origin,
+        new GridData(grid[0].length, grid.length, grid)
+      );
     const newTiles = this.tiles.map(row => [...row]);
     grid.forEach((tile, x, y) => {
       if (this.isPositionValid(origin.x + x, origin.y + y))
         newTiles[origin.y + y][origin.x + x] = tile;
     });
-    return this.copyWith({ tiles: newTiles });
+    const connections = new GridConnections([
+      ...this.connections.edges,
+      ...grid.connections.edges.map(edge => ({
+        x1: edge.x1 + origin.x,
+        y1: edge.y1 + origin.y,
+        x2: edge.x2 + origin.x,
+        y2: edge.y2 + origin.y,
+      })),
+    ]);
+    const symbols = new Map(this.symbols);
+    for (const [id, sourceList] of grid.symbols) {
+      const symbolList = sourceList.map(symbol =>
+        symbol.copyWith({ x: symbol.x + origin.x, y: symbol.y + origin.y })
+      );
+      if (symbols.has(id)) {
+        symbols.set(id, [...symbols.get(id)!, ...symbolList]);
+      } else {
+        symbols.set(id, symbolList);
+      }
+    }
+    const rules = [...this.rules, ...grid.rules];
+    return this.copyWith({ tiles: newTiles, connections, symbols, rules });
   }
 
   /**
@@ -519,7 +603,7 @@ export default class GridData {
    * @param grid The grid to compare with.
    * @returns True if the grids are equal in size and tile colors, false otherwise.
    */
-  public colorEqual(grid: GridData): boolean {
+  public colorEquals(grid: GridData): boolean {
     return (
       this.width === grid.width &&
       this.height === grid.height &&
@@ -531,5 +615,63 @@ export default class GridData {
         )
       )
     );
+  }
+
+  /**
+   * Check if this grid is equal to another grid in terms of size, tile colors, connections, symbols, and rules.
+   *
+   * @param other The grid to compare with.
+   * @returns True if the grids are equal, false otherwise.
+   */
+  public equals(other: GridData): boolean {
+    if (!this.colorEquals(other)) return false;
+    if (!this.connections.equals(other.connections)) return false;
+    if (this.symbols.size !== other.symbols.size) return false;
+    for (const [id, symbols] of this.symbols) {
+      const otherSymbols = other.symbols.get(id);
+      if (!otherSymbols || symbols.length !== otherSymbols.length) return false;
+      for (const symbol of symbols) {
+        if (!otherSymbols.some(s => symbol.equals(s))) return false;
+      }
+    }
+    if (this.rules.length !== other.rules.length) return false;
+    for (const rule of this.rules) {
+      if (!other.rules.some(r => rule.equals(r))) return false;
+    }
+    return true;
+  }
+
+  /**
+   * Deduplicate the rules in the given list.
+   *
+   * @param rules The list of rules to deduplicate.
+   * @returns The deduplicated list of rules.
+   */
+  public static deduplicateRules(rules: readonly Rule[]): readonly Rule[] {
+    return rules.filter(
+      (rule, index, self) => self.findIndex(r => r.equals(rule)) === index
+    );
+  }
+
+  /**
+   * Deduplicate the symbols in the given map.
+   *
+   * @param symbols The map of symbols to deduplicate.
+   * @returns The deduplicated map of symbols.
+   */
+  public static deduplicateSymbols(
+    symbols: ReadonlyMap<string, readonly Symbol[]>
+  ): ReadonlyMap<string, readonly Symbol[]> {
+    const map = new Map<string, Symbol[]>();
+    for (const [id, symbolList] of symbols) {
+      map.set(
+        id,
+        symbolList.filter(
+          (symbol, index, self) =>
+            self.findIndex(s => symbol.equals(s)) === index
+        )
+      );
+    }
+    return map;
   }
 }

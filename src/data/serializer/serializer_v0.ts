@@ -325,7 +325,7 @@ export default class SerializerV0 extends SerializerBase {
     return {
       ...metadata,
       grid: reset,
-      solution: grid.colorEqual(reset) ? null : grid,
+      solution: grid.colorEquals(reset) ? null : grid,
     };
   }
 }

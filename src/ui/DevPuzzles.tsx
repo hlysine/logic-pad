@@ -5,8 +5,6 @@ import { useEdit } from './EditContext';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import Puzzle from '../data/puzzle';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import Serializer from '../data/serializer/allSerializers';
-import Compressor from '../data/serializer/compressor/allCompressors';
 import Difficulty from './metadata/Difficulty';
 import { FiCheck } from 'react-icons/fi';
 
@@ -366,7 +364,16 @@ for (const puzzle of DEV_PUZZLES) {
   puzzle.grid = getGrid(puzzle.solution ?? GridData.create([]));
 }
 
-const defaultSelection = 0;
+let defaultSelection = 0;
+
+const urlParams = new URLSearchParams(window.location.search);
+const customId = urlParams.get('id');
+
+if(customId) {
+  defaultSelection = DEV_PUZZLES.findIndex((p) => p.id === customId);
+}
+
+defaultSelection = defaultSelection === -1 ? 0 : defaultSelection;
 
 // million-ignore
 export default memo(function DevPuzzles() {
@@ -412,16 +419,12 @@ export default memo(function DevPuzzles() {
         <li
           key={puzzle.title}
           onClick={() => {
-            Compressor.compress(Serializer.stringifyPuzzle(puzzle))
-              .then(d =>
-                navigate({
-                  to: state.location.pathname,
-                  search: {
-                    d,
-                  },
-                })
-              )
-              .catch(console.log);
+            navigate({
+              to: state.location.pathname,
+              search: {
+                id: puzzle.id
+              },
+            })
           }}
         >
           <a className="text-md w-full flex items-center justify-between">

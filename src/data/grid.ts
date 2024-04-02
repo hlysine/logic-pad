@@ -311,7 +311,7 @@ export default class GridData {
    */
   public static create(array: string[]): GridData {
     const tiles = GridData.createTiles(array);
-    return new GridData(tiles[0].length, tiles.length, tiles);
+    return new GridData(tiles?.[0].length ?? 0, tiles.length, tiles);
   }
 
   /**

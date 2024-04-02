@@ -23,7 +23,7 @@ import TileConnections from '../../data/tileConnections';
 import LotusSymbol from '../../data/symbols/lotusSymbol';
 import GalaxySymbol from '../../data/symbols/galaxySymbol';
 import OffByXRule from '../../data/rules/offByXRule';
-import { ConfigType } from '../../data/config';
+import { ConfigType, configEquals } from '../../data/config';
 import { array, escape, maxBy, minBy, move, unescape } from '../../data/helper';
 import { PuzzleSchema } from '../../data/puzzle';
 import Serializer from '../../data/serializer/allSerializers';
@@ -161,6 +161,11 @@ export const enclosure: EnclosureEntry[] = [
     name: 'unescape',
     value: unescape,
     example: 'unescape("Hello&#44; world&#33;", ",!")',
+  },
+  {
+    name: 'configEquals',
+    value: configEquals,
+    example: 'configEquals(ConfigType.Number, 1, 2)',
   },
   /* === enums === */
   {

@@ -64,7 +64,7 @@ export default class SymbolsPerRegionRule extends Rule {
   }
 
   public get explanation(): string {
-    return `Exactly ${this.count} symbols in each ${this.color} region`;
+    return `Exactly ${this.count} symbol${this.count === 1 ? '' : 's'} per ${this.color} area`;
   }
 
   public get configs(): readonly AnyConfig[] | null {

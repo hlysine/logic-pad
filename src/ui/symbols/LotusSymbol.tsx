@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { cn } from '../../utils';
 import LotusSymbolData from '../../data/symbols/lotusSymbol';
-import { ORIENTATIONS } from '../../data/primitives.ts';
+import { ORIENTATIONS } from '../../data/primitives';
 import { PiFlowerLotusThin } from 'react-icons/pi';
 
 export interface LotusProps {

@@ -9,6 +9,7 @@ import OffByXRule from './data/rules/offByXRule';
 import RegionAreaRule from './data/rules/regionAreaRule';
 import Rule from './data/rules/rule';
 import UndercluedRule from './data/rules/undercluedRule';
+import XSymbolsByColorRegion from './data/rules/XSymbolsByColorRegion';
 
 const allRules = new Map<string, Rule>();
 
@@ -23,6 +24,7 @@ register(new RegionAreaRule(Color.Dark, 2));
 register(new OffByXRule(1));
 register(new CellCountRule(Color.Dark, 10));
 register(new UndercluedRule());
+register(new XSymbolsByColorRegion(1, Color.Dark));
 register(new CustomRule('', GridData.create([])));
 
 export default allRules;

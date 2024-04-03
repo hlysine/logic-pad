@@ -739,6 +739,30 @@ export class UndercluedRule extends Rule {
     statusText(grid: GridData, solution: GridData | null, _state: GridState): string | null;
 }
 
+export class XSymbolsByColorRegion extends Rule {
+    readonly number: number;
+    readonly color: Color;
+    /**
+      * **Don't make this pattern**
+      *
+      * @param number - Number of symbols to have in each region
+      * @param color - Color of the region affected by the rule
+      */
+    constructor(number: number, color: Color);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    get searchVariants(): SearchVariant[];
+    createExampleGrid(): GridData;
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ number, color }: {
+        number?: number;
+        color?: Color;
+    }): this;
+    withColor(color: Color): this;
+    withNumber(number: number): this;
+}
+
 /**
     * The master serializer for puzzles.
     *

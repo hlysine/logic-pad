@@ -124,6 +124,7 @@ export default class SymbolsPerRegionRule extends Rule {
       let nbSymbolsOut = 0;
       if (this.color === Color.Gray) {
         gray.push(...completed);
+        nbSymbolsOut = nbSymbolsIn;
       } else {
         grid.iterateArea(
           { x: seed.x, y: seed.y },

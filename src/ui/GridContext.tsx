@@ -79,13 +79,11 @@ function validateGrid(grid: GridData, solution: GridData | null) {
   ): State => {
     const [rule, ...rest] = rules;
     if (rule) {
-      const result = rule.overrideSymbolValidation(grid, symbol, grid =>
+      return rule.overrideSymbolValidation(grid, symbol, grid =>
         applySymbolOverrides(grid, rest, symbol, () => validator(grid))
       );
-      return result;
-    } else {
-      return validator(grid);
     }
+    return validator(grid);
   };
 
   const symbolStates = new Map<string, State[]>();

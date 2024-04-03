@@ -14,8 +14,7 @@ export interface MainGridProps {
 }
 
 function computeTileSize(grid: GridData) {
-  let newSize = 50;
-  newSize = Math.min(
+  const newSize = Math.min(
     (window.innerWidth - 80 - 640) / grid.width,
     (window.innerHeight - 160) / grid.height
   );

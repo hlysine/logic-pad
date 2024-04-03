@@ -200,7 +200,6 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
   },
   {
-    hidden: true,
     id: 'cupcake',
     title: 'Cupcake',
     difficulty: 3,

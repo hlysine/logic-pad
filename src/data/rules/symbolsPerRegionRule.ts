@@ -45,7 +45,7 @@ export default class SymbolsPerRegionRule extends Rule {
   ];
 
   /**
-   * **Exactly &lt;count&gt; symbols in each &lt;color&gt; region**
+   * **Exactly &lt;count&gt; symbols per &lt;color&gt; area**
    *
    * @param color - Color of the region affected by the rule
    * @param count - Number of symbols to have in each region

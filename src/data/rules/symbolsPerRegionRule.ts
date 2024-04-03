@@ -7,8 +7,7 @@ import LetterSymbol from '../symbols/letterSymbol';
 import Symbol from '../symbols/symbol';
 import GridConnections from '../gridConnections';
 
-export default class XSymbolsByColorRegion extends Rule {
-
+export default class SymbolsPerRegionRule extends Rule {
   private static readonly EXAMPLE_GRIDS = {
     [Color.Dark]: GridData.create(['wwwww', 'wbbbw', 'wbbww', 'wwwww']),
     [Color.Light]: GridData.create(['bbbbb', 'bwwwb', 'bwwbb', 'bbbbb']),
@@ -21,14 +20,14 @@ export default class XSymbolsByColorRegion extends Rule {
     { x: 2, y: 1 },
     { x: 3, y: 1 },
     { x: 1, y: 2 },
-  ]
+  ];
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
       default: 1,
-      field: 'number',
-      description: 'Number',
+      field: 'count',
+      description: 'Count',
       configurable: true,
     },
     {
@@ -38,54 +37,61 @@ export default class XSymbolsByColorRegion extends Rule {
       description: 'Color',
       configurable: true,
       allowGray: true,
-    }
+    },
   ]);
 
   private static readonly SEARCH_VARIANTS = [
-    new XSymbolsByColorRegion(1, Color.Light).searchVariant(),
+    new SymbolsPerRegionRule(Color.Light, 1).searchVariant(),
   ];
 
   /**
-   * **Don't make this pattern**
+   * **Exactly &lt;count&gt; symbols in each &lt;color&gt; region**
    *
-   * @param number - Number of symbols to have in each region
    * @param color - Color of the region affected by the rule
+   * @param count - Number of symbols to have in each region
    */
-  public constructor(public readonly number: number, public readonly color: Color) {
+  public constructor(
+    public readonly color: Color,
+    public readonly count: number
+  ) {
     super();
-    this.number = number;
     this.color = color;
+    this.count = count;
   }
 
   public get id(): string {
-    return `x_symbols_by_color_region`;
+    return `symbols_per_region`;
   }
 
   public get explanation(): string {
-    return `Exactly ${this.number} symbols in each ${this.color} region`;
+    return `Exactly ${this.count} symbols in each ${this.color} region`;
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return XSymbolsByColorRegion.CONFIGS;
+    return SymbolsPerRegionRule.CONFIGS;
   }
 
   public get searchVariants(): SearchVariant[] {
-    return XSymbolsByColorRegion.SEARCH_VARIANTS;
+    return SymbolsPerRegionRule.SEARCH_VARIANTS;
   }
 
   public createExampleGrid(): GridData {
-    if (this.number > XSymbolsByColorRegion.SYMBOL_POSITIONS.length) {
-      const symbol = new LetterSymbol(1.5, 1.5, `${this.number}S`);
-      return XSymbolsByColorRegion.EXAMPLE_GRIDS[this.color]
-        .copyWith({symbols: new Map([["letter",[symbol]]])})
-        .withConnections(GridConnections.create(['.....','.aa..','.aa..','.....']));
+    if (this.count > SymbolsPerRegionRule.SYMBOL_POSITIONS.length) {
+      const symbol = new LetterSymbol(1.5, 1.5, `${this.count}X`);
+      return SymbolsPerRegionRule.EXAMPLE_GRIDS[this.color]
+        .copyWith({ symbols: new Map([['letter', [symbol]]]) })
+        .withConnections(
+          GridConnections.create(['.....', '.aa..', '.aa..', '.....'])
+        );
     }
     const symbols: Symbol[] = [];
-    for (let i = 0; i < this.number; i++) {
-      const { x, y } = XSymbolsByColorRegion.SYMBOL_POSITIONS[i];
+    for (let i = 0; i < this.count; i++) {
+      const { x, y } = SymbolsPerRegionRule.SYMBOL_POSITIONS[i];
       symbols.push(new LetterSymbol(x, y, 'X'));
     }
-    return XSymbolsByColorRegion.EXAMPLE_GRIDS[this.color].copyWith({symbols: new Map([["letter",symbols]])});
+    return SymbolsPerRegionRule.EXAMPLE_GRIDS[this.color].copyWith({
+      symbols: new Map([['letter', symbols]]),
+    });
   }
 
   public validateGrid(grid: GridData): RuleState {
@@ -105,10 +111,14 @@ export default class XSymbolsByColorRegion extends Rule {
         (_, x, y) => {
           completed.push({ x, y });
           visited[y][x] = true;
-          nbSymbolsIn += XSymbolsByColorRegion.countAllSymbolsOfPosition(grid, x, y);
+          nbSymbolsIn += SymbolsPerRegionRule.countAllSymbolsOfPosition(
+            grid,
+            x,
+            y
+          );
         }
       );
-      if (nbSymbolsIn > this.number) {
+      if (nbSymbolsIn > this.count) {
         return { state: State.Error, positions: completed };
       }
       let nbSymbolsOut = 0;
@@ -120,35 +130,44 @@ export default class XSymbolsByColorRegion extends Rule {
           tile => tile.color === Color.Gray || tile.color === this.color,
           (_, x, y) => {
             gray.push({ x, y });
-            nbSymbolsOut += XSymbolsByColorRegion.countAllSymbolsOfPosition(grid, x, y);
+            nbSymbolsOut += SymbolsPerRegionRule.countAllSymbolsOfPosition(
+              grid,
+              x,
+              y
+            );
           }
         );
       }
-      if (nbSymbolsOut < this.number) {
+      if (nbSymbolsOut < this.count) {
         return { state: State.Error, positions: gray };
       }
-      if (
-        gray.length !== completed.length
-      ) {
+      if (gray.length !== completed.length) {
         complete = false;
       }
     }
     return complete ? { state: State.Satisfied } : { state: State.Incomplete };
   }
 
-  public copyWith({ number, color }: { number?: number; color?: Color }): this {
-    return new XSymbolsByColorRegion(number ?? this.number, color ?? this.color) as this;
+  public copyWith({ count, color }: { count?: number; color?: Color }): this {
+    return new SymbolsPerRegionRule(
+      color ?? this.color,
+      count ?? this.count
+    ) as this;
   }
 
   public withColor(color: Color): this {
     return this.copyWith({ color });
   }
 
-  public withNumber(number: number): this {
-    return this.copyWith({ number });
+  public withCount(count: number): this {
+    return this.copyWith({ count });
   }
 
-  private static countAllSymbolsOfPosition(grid: GridData, x: number, y: number) {
+  private static countAllSymbolsOfPosition(
+    grid: GridData,
+    x: number,
+    y: number
+  ) {
     let count = 0;
     for (const symbolKind of grid.symbols.values()) {
       if (symbolKind.some(symbol => symbol.x === x && symbol.y === y)) {

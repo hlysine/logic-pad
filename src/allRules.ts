@@ -1,6 +1,7 @@
 import GridData from './data/grid';
 import { Color } from './data/primitives';
 import BanPatternRule from './data/rules/banPatternRule';
+import CellCountRule from './data/rules/cellCountRule';
 import CompletePatternRule from './data/rules/completePatternRule';
 import ConnectAllRule from './data/rules/connectAllRule';
 import CustomRule from './data/rules/customRule';
@@ -20,6 +21,7 @@ register(new CompletePatternRule());
 register(new ConnectAllRule(Color.Dark));
 register(new RegionAreaRule(Color.Dark, 2));
 register(new OffByXRule(1));
+register(new CellCountRule(Color.Dark, 10));
 register(new UndercluedRule());
 register(new CustomRule('', GridData.create([])));
 

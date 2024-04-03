@@ -30,6 +30,7 @@ import Serializer from '../../data/serializer/allSerializers';
 import Compressor from '../../data/serializer/compressor/allCompressors';
 import QuestionMarkSign from '../../data/symbols/signs/questionMarkSign';
 import TileData from '../../data/tile';
+import CellCountRule from '../../data/rules/cellCountRule';
 
 export interface EnclosureEntry {
   name: string;
@@ -84,6 +85,11 @@ export const enclosure: EnclosureEntry[] = [
     name: 'OffByXRule',
     value: OffByXRule,
     example: '.addRule(new OffByXRule(1))',
+  },
+  {
+    name: 'CellCountRule',
+    value: CellCountRule,
+    example: '.addRule(new CellCountRule(Color.Dark, 10))',
   },
   {
     name: 'CustomRule',

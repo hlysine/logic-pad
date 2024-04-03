@@ -569,6 +569,30 @@ export class BanPatternRule extends Rule {
     withPattern(pattern: GridData): this;
 }
 
+export class CellCountRule extends Rule {
+    readonly color: Color;
+    readonly count: number;
+    /**
+      * **There are &lt;count&gt; &lt;color&gt; cells in total**
+      *
+      * @param color - The color of the cells to count.
+      * @param count - The total number of cells of the given color.
+      */
+    constructor(color: Color, count: number);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color, count }: {
+        color?: Color;
+        count?: number;
+    }): this;
+    withColor(color: Color): this;
+    withCount(count: number): this;
+}
+
 export class CompletePatternRule extends Rule {
     /**
       * **Complete the pattern**

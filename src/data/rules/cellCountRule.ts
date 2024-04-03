@@ -5,6 +5,52 @@ import AreaNumberSymbol from '../symbols/areaNumberSymbol';
 import Rule, { SearchVariant } from './rule';
 
 export default class CellCountRule extends Rule {
+  private static readonly EXAMPLE_GRID_LIGHT = Object.freeze([
+    GridData.create(['bbbbb', 'bbbbb', 'bbbbb', 'bbbbb']),
+    GridData.create(['bbbbb', 'bbbbb', 'bwbbb', 'bbbbb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 1),
+    ]),
+    GridData.create(['bbbbb', 'bbbbb', 'bwwbb', 'bbbbb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 2),
+    ]),
+    GridData.create(['bbbbb', 'bwbbb', 'bwwbb', 'bbbbb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 3),
+    ]),
+    GridData.create(['bbbbb', 'bwwbb', 'bwwbb', 'bbbbb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 4),
+    ]),
+    GridData.create(['bbbbb', 'bwwbb', 'bwwwb', 'bbbbb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 5),
+    ]),
+    GridData.create(['bbbbb', 'bwwwb', 'bwwwb', 'bbbbb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 6),
+    ]),
+    GridData.create(['bbbbb', 'bbbbb', 'wwwbb', 'wwwwb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 7),
+    ]),
+    GridData.create(['bbbbb', 'wbbbb', 'wwwbb', 'wwwwb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 8),
+    ]),
+    GridData.create(['bbbbb', 'wwbbb', 'wwwbb', 'wwwwb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 9),
+    ]),
+    GridData.create(['wbbbb', 'wwbbb', 'wwwbb', 'wwwwb']).withSymbols([
+      new AreaNumberSymbol(1, 2, 10),
+    ]),
+  ]);
+
+  private static readonly EXAMPLE_GRID_DARK = Object.freeze(
+    CellCountRule.EXAMPLE_GRID_LIGHT.map(grid =>
+      grid.withTiles(tiles =>
+        tiles.map(row =>
+          row.map(tile =>
+            tile.withColor(tile.color === Color.Dark ? Color.Light : Color.Dark)
+          )
+        )
+      )
+    )
+  );
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Color,
@@ -53,11 +99,18 @@ export default class CellCountRule extends Rule {
   }
 
   public createExampleGrid(): GridData {
-    const grid = GridData.create(['wbbbb', 'wwbbb', 'wwwbb', 'wwwwb']);
-    if (this.color === Color.Light) {
-      return grid.addSymbol(new AreaNumberSymbol(0, 3, this.count));
+    if (this.count < CellCountRule.EXAMPLE_GRID_LIGHT.length) {
+      if (this.color === Color.Light) {
+        return CellCountRule.EXAMPLE_GRID_LIGHT[this.count];
+      } else {
+        return CellCountRule.EXAMPLE_GRID_DARK[this.count];
+      }
     } else {
-      return grid.addSymbol(new AreaNumberSymbol(4, 0, this.count));
+      const grid =
+        this.color === Color.Light
+          ? GridData.create(['wbbbb', 'wwbbb', 'wwwbb', 'wwwwb'])
+          : GridData.create(['bwwww', 'bbwww', 'bbbww', 'bbbbw']);
+      return grid.addSymbol(new AreaNumberSymbol(1, 2, this.count));
     }
   }
 

@@ -5,30 +5,29 @@ import MainGrid from '../ui/grid/MainGrid';
 import Metadata from '../ui/metadata/Metadata';
 import { createFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
-import LinkLoader, { validateSearch } from '../ui/router/LinkLoader';
+import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
 import StupidGrid from '../ui/StupidGrid';
+import HorizontalLayout from '../ui/HorizontalLayout';
 
 export const Route = createFileRoute('/solve')({
   validateSearch,
   component: memo(function SolveMode() {
     const params = Route.useSearch();
+    useLinkLoader(params);
     return (
-      <div className="flex flex-1 justify-center items-center flex-wrap">
-        <LinkLoader params={params} />
-        <div className="w-[320px] flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
-          <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
-            <Metadata />
-            <StupidGrid />
-          </div>
-          <EditControls />
-        </div>
-        <div className="grow shrink flex justify-start items-center p-0">
-          <div className="flex shrink-0 grow justify-center items-center m-0 p-0 border-0">
-            <MainGrid editable={true} />
-          </div>
-        </div>
-        <InstructionList>{Instruction}</InstructionList>
-      </div>
+      <HorizontalLayout
+        left={
+          <>
+            <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
+              <Metadata />
+              <StupidGrid />
+            </div>
+            <EditControls />
+          </>
+        }
+        center={<MainGrid editable={true} />}
+        right={<InstructionList>{Instruction}</InstructionList>}
+      />
     );
   }),
 });

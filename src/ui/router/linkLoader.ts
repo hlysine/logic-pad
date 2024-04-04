@@ -20,7 +20,7 @@ export interface LinkLoaderProps {
   params: PuzzleParams;
 }
 
-export default function LinkLoader({ params }: LinkLoaderProps) {
+export default function useLinkLoader(params: PuzzleParams) {
   const { setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
   useEffect(() => {
@@ -36,5 +36,4 @@ export default function LinkLoader({ params }: LinkLoaderProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params]);
-  return null;
 }

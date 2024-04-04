@@ -160,7 +160,8 @@ const tileShapes = Object.freeze(
       '010111010',
       [
         { t: 0, r: 1, b: 0, l: 1, corners: 0 },
-        { t: 1, r: 0, b: 1, l: 0, corners: 0 },
+        { t: 1, r: 0, b: 1, l: 2, corners: 0 },
+        { t: 1, r: 2, b: 1, l: 0, corners: 0 },
       ],
     ], // center + left + right + top + bottom
     [
@@ -213,14 +214,16 @@ const tileShapes = Object.freeze(
       '110111011',
       [
         { t: 0, r: 1, b: 1, l: 0, corners: 0 },
-        { t: 1, r: 0, b: 0, l: 1, corners: 0 },
+        { t: 1, r: 0, b: 1, l: 2, corners: 0 },
+        { t: 2, r: 0, b: 0, l: 1, corners: 0 },
       ],
     ], // center + left + right + top + bottom + TL + BR
     [
       '011111110',
       [
         { t: 0, r: 0, b: 1, l: 1, corners: 0 },
-        { t: 1, r: 1, b: 0, l: 0, corners: 0 },
+        { t: 1, r: 2, b: 1, l: 0, corners: 0 },
+        { t: 2, r: 1, b: 0, l: 0, corners: 0 },
       ],
     ], // center + left + right + top + bottom + TR + BL
     [

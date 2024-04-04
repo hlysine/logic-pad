@@ -29,7 +29,14 @@ export default abstract class Instruction {
    */
   public equals(other: Instruction): boolean {
     if (this.id !== other.id) return false;
-    for (const config of this.configs ?? []) {
+    const configs = this.configs;
+    if (configs === null) return true;
+
+    // this is only possible when an instruction is instantiated before the class itself is completely defined
+    // in this case, we can only compare the instances themselves
+    if (configs === undefined) return this === other;
+
+    for (const config of this.configs!) {
       if (
         !configEquals(
           config.type,

@@ -722,6 +722,30 @@ export abstract class Rule extends Instruction {
     overrideSymbolValidation(grid: GridData, _symbol: Symbol, validator: (grid: GridData) => State): State;
 }
 
+export class SymbolsPerRegionRule extends Rule {
+    readonly color: Color;
+    readonly count: number;
+    /**
+      * **Exactly &lt;count&gt; symbols per &lt;color&gt; area**
+      *
+      * @param color - Color of the region affected by the rule
+      * @param count - Number of symbols to have in each region
+      */
+    constructor(color: Color, count: number);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    get searchVariants(): SearchVariant[];
+    createExampleGrid(): GridData;
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ count, color }: {
+        count?: number;
+        color?: Color;
+    }): this;
+    withColor(color: Color): this;
+    withCount(count: number): this;
+}
+
 export class UndercluedRule extends Rule {
     /**
       * **Underclued Grid: Mark only what is definitely true**

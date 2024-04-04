@@ -31,6 +31,7 @@ import Compressor from '../../data/serializer/compressor/allCompressors';
 import QuestionMarkSign from '../../data/symbols/signs/questionMarkSign';
 import TileData from '../../data/tile';
 import CellCountRule from '../../data/rules/cellCountRule';
+import SymbolsPerRegionRule from '../../data/rules/symbolsPerRegionRule.ts';
 
 export interface EnclosureEntry {
   name: string;
@@ -100,6 +101,11 @@ export const enclosure: EnclosureEntry[] = [
     name: 'UndercluedRule',
     value: UndercluedRule,
     example: '.addRule(new UndercluedRule())',
+  },
+  {
+    name: 'SymbolsPerRegionRule',
+    value: SymbolsPerRegionRule,
+    example: '.addRule(new SymbolsPerRegionRule(Color.Light, 1))',
   },
   /* === symbols === */
   {

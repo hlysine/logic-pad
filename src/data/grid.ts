@@ -291,12 +291,11 @@ export default class GridData {
    */
   public static createTiles(array: string[]): TileData[][] {
     const width = array.reduce((max, row) => Math.max(max, row.length), 0);
-    const tiles = array.map(row =>
+    return array.map(row =>
       Array.from({ length: width }, (_, x) => {
         return TileData.create(row.charAt(x));
       })
     );
-    return tiles;
   }
 
   /**

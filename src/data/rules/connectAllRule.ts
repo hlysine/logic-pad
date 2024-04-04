@@ -63,11 +63,11 @@ export default class ConnectAllRule extends Rule {
 
   public validateGrid(grid: GridData): RuleState {
     let complete = true;
-    const visited = array(grid.width, grid.height, () => false);
+    const visited = array(grid.width, grid.height, (i, j) => !(grid.getTile(i, j).exists && grid.getTile(i, j).color === this.color));
     const islands: Position[][] = [];
     while (true) {
       const seed = grid.find(
-        (tile, x, y) => tile.color === this.color && !visited[y][x]
+        (_tile, x, y) => !visited[y][x]
       );
       if (!seed) break;
       const positions: Position[] = [];

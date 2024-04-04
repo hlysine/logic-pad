@@ -26,7 +26,7 @@ const roadmap: RoadmapItem[] = isAprilFools
         '~Lotus',
         '~Galaxy',
         '~All ___ regions have area #',
-        'Exactly # symbols per ___ region',
+        '~Exactly # symbols per ___ region',
         '~All numbers are off by #',
         '~There are # ___ cells in total',
         'Mystery puzzle: violate the rules (Hidden)',

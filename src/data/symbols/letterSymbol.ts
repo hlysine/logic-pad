@@ -73,13 +73,15 @@ export default class LetterSymbol extends Symbol {
   }
 
   public validateSymbol(grid: GridData): State {
+    const thisX = Math.floor(this.x);
+    const thisY = Math.floor(this.y);
     let complete = true;
     const visited = array(grid.width, grid.height, () => false);
     const connected = array(grid.width, grid.height, () => false);
-    const color = grid.getTile(this.x, this.y).color;
+    const color = grid.getTile(thisX, thisY).color;
     if (color !== Color.Gray) {
       grid.iterateArea(
-        { x: this.x, y: this.y },
+        { x: thisX, y: thisY },
         tile => tile.color === Color.Gray || tile.color === color,
         (tile, x, y) => {
           visited[y][x] = true;
@@ -87,7 +89,7 @@ export default class LetterSymbol extends Symbol {
         }
       );
       grid.iterateArea(
-        { x: this.x, y: this.y },
+        { x: thisX, y: thisY },
         tile => tile.color === color,
         (_, x, y) => {
           connected[y][x] = true;
@@ -98,17 +100,19 @@ export default class LetterSymbol extends Symbol {
     }
     for (const symbol of grid.symbols.get(this.id) ?? []) {
       if (symbol !== this && symbol instanceof LetterSymbol) {
+        const symbolX = Math.floor(symbol.x);
+        const symbolY = Math.floor(symbol.y);
         if (symbol.letter === this.letter) {
-          const theirColor = grid.getTile(symbol.x, symbol.y).color;
+          const theirColor = grid.getTile(symbolX, symbolY).color;
           if (
-            (color !== Color.Gray && !visited[symbol.y][symbol.x]) ||
+            (color !== Color.Gray && !visited[symbolY][symbolX]) ||
             (color !== Color.Gray &&
               theirColor !== Color.Gray &&
               theirColor !== color)
           ) {
             return State.Error;
           }
-        } else if (color !== Color.Gray && connected[symbol.y][symbol.x]) {
+        } else if (color !== Color.Gray && connected[symbolY][symbolX]) {
           return State.Error;
         }
       }

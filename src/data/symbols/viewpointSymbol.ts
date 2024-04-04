@@ -62,6 +62,8 @@ export default class ViewpointSymbol extends NumberSymbol {
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {
+    if (Math.floor(this.x) !== this.x || Math.floor(this.y) !== this.y)
+      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
     const pos = { x: this.x, y: this.y };
     const color = grid.getTile(this.x, this.y).color;
     if (color === Color.Gray)

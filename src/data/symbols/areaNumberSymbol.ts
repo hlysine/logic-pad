@@ -62,20 +62,22 @@ export default class AreaNumberSymbol extends NumberSymbol {
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {
-    const color = grid.getTile(this.x, this.y).color;
+    const thisX = Math.floor(this.x);
+    const thisY = Math.floor(this.y);
+    const color = grid.getTile(thisX, thisY).color;
     if (color === Color.Gray)
       return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
     let completeCount = 0;
     let grayCount = 0;
     grid.iterateArea(
-      { x: this.x, y: this.y },
+      { x: thisX, y: thisY },
       tile => tile.color === Color.Gray || tile.color === color,
       () => {
         grayCount++;
       }
     );
     grid.iterateArea(
-      { x: this.x, y: this.y },
+      { x: thisX, y: thisY },
       tile => tile.color === color,
       () => {
         completeCount++;

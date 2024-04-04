@@ -34,6 +34,7 @@ const roadmap: RoadmapItem[] = isAprilFools
         '# prefilled tiles are wrong',
         '~Custom rule',
         'Custom symbol',
+        'Music Grid (as a grid rule)',
       ],
       '~Add win confirmation',
       '~Add undo and restart',

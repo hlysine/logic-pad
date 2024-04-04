@@ -125,6 +125,10 @@ export default class BanPatternRule extends Rule {
     return `Don't make this pattern`;
   }
 
+  public get configs(): readonly AnyConfig[] | null {
+    return BanPatternRule.CONFIGS;
+  }
+
   public createExampleGrid(): GridData {
     let minX = Number.POSITIVE_INFINITY;
     let minY = Number.POSITIVE_INFINITY;
@@ -146,10 +150,6 @@ export default class BanPatternRule extends Rule {
       return tile.withExists(false);
     });
     return new GridData(width, height, tiles);
-  }
-
-  public get configs(): readonly AnyConfig[] | null {
-    return BanPatternRule.CONFIGS;
   }
 
   public get searchVariants(): SearchVariant[] {

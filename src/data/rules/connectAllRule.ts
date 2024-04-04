@@ -5,14 +5,6 @@ import { Color, Position, RuleState, State } from '../primitives';
 import Rule, { SearchVariant } from './rule';
 
 export default class ConnectAllRule extends Rule {
-  private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
-    GridData.create(['bwwwb', 'bwbww', 'wwwbb', 'wbwww'])
-  );
-
-  private static readonly EXAMPLE_GRID_DARK = Object.freeze(
-    GridData.create(['wbbbw', 'wbwbb', 'bbbww', 'bwbbb'])
-  );
-
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Color,
@@ -23,6 +15,14 @@ export default class ConnectAllRule extends Rule {
       configurable: true,
     },
   ]);
+
+  private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
+    GridData.create(['bwwwb', 'bwbww', 'wwwbb', 'wbwww'])
+  );
+
+  private static readonly EXAMPLE_GRID_DARK = Object.freeze(
+    GridData.create(['wbbbw', 'wbwbb', 'bbbww', 'bwbbb'])
+  );
 
   private static readonly SEARCH_VARIANTS = [
     new ConnectAllRule(Color.Light).searchVariant(),
@@ -47,14 +47,14 @@ export default class ConnectAllRule extends Rule {
     return `Connect all ${this.color} cells`;
   }
 
+  public get configs(): readonly AnyConfig[] | null {
+    return ConnectAllRule.CONFIGS;
+  }
+
   public createExampleGrid(): GridData {
     return this.color === Color.Light
       ? ConnectAllRule.EXAMPLE_GRID_LIGHT
       : ConnectAllRule.EXAMPLE_GRID_DARK;
-  }
-
-  public get configs(): readonly AnyConfig[] | null {
-    return ConnectAllRule.CONFIGS;
   }
 
   public get searchVariants(): SearchVariant[] {

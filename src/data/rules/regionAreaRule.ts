@@ -6,6 +6,25 @@ import TileData from '../tile';
 import Rule, { SearchVariant } from './rule';
 
 export default class RegionAreaRule extends Rule {
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Color,
+      default: Color.Dark,
+      allowGray: false,
+      field: 'color',
+      description: 'Color',
+      configurable: true,
+    },
+    {
+      type: ConfigType.Number,
+      default: 2,
+      min: 0,
+      field: 'size',
+      description: 'Region Size',
+      configurable: true,
+    },
+  ]);
+
   private static readonly EXAMPLE_GRID_DARK = Object.freeze([
     GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww']),
     GridData.create(['bwwbw', 'wbwwb', 'bwbww', 'wbwwb']),
@@ -58,25 +77,6 @@ export default class RegionAreaRule extends Rule {
     )
   );
 
-  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
-    {
-      type: ConfigType.Color,
-      default: Color.Dark,
-      allowGray: false,
-      field: 'color',
-      description: 'Color',
-      configurable: true,
-    },
-    {
-      type: ConfigType.Number,
-      default: 2,
-      min: 0,
-      field: 'size',
-      description: 'Region Size',
-      configurable: true,
-    },
-  ]);
-
   private static readonly SEARCH_VARIANTS = [
     new RegionAreaRule(Color.Dark, 2).searchVariant(),
     new RegionAreaRule(Color.Light, 2).searchVariant(),
@@ -104,6 +104,10 @@ export default class RegionAreaRule extends Rule {
 
   public get explanation(): string {
     return `All ${this.color} regions have area ${this.size}`;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return RegionAreaRule.CONFIGS;
   }
 
   public createExampleGrid(): GridData {
@@ -136,10 +140,6 @@ export default class RegionAreaRule extends Rule {
       });
       return new GridData(5, 4, tiles);
     }
-  }
-
-  public get configs(): readonly AnyConfig[] | null {
-    return RegionAreaRule.CONFIGS;
   }
 
   public get searchVariants(): SearchVariant[] {

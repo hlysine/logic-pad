@@ -8,12 +8,6 @@ import Symbol from '../symbols/symbol';
 import GridConnections from '../gridConnections';
 
 export default class SymbolsPerRegionRule extends Rule {
-  private static readonly EXAMPLE_GRIDS = {
-    [Color.Dark]: GridData.create(['wwwww', 'wbbbw', 'wbbww', 'wwwww']),
-    [Color.Light]: GridData.create(['bbbbb', 'bwwwb', 'bwwbb', 'bbbbb']),
-    [Color.Gray]: GridData.create(['bwbwb', 'wnnnw', 'bnnwb', 'wbwbw']),
-  };
-
   private static readonly SYMBOL_POSITIONS = [
     { x: 1, y: 1 },
     { x: 2, y: 2 },
@@ -39,6 +33,12 @@ export default class SymbolsPerRegionRule extends Rule {
       allowGray: true,
     },
   ]);
+
+  private static readonly EXAMPLE_GRIDS = {
+    [Color.Dark]: GridData.create(['wwwww', 'wbbbw', 'wbbww', 'wwwww']),
+    [Color.Light]: GridData.create(['bbbbb', 'bwwwb', 'bwwbb', 'bbbbb']),
+    [Color.Gray]: GridData.create(['bwbwb', 'wnnnw', 'bnnwb', 'wbwbw']),
+  };
 
   private static readonly SEARCH_VARIANTS = [
     new SymbolsPerRegionRule(Color.Light, 1).searchVariant(),
@@ -71,10 +71,6 @@ export default class SymbolsPerRegionRule extends Rule {
     return SymbolsPerRegionRule.CONFIGS;
   }
 
-  public get searchVariants(): SearchVariant[] {
-    return SymbolsPerRegionRule.SEARCH_VARIANTS;
-  }
-
   public createExampleGrid(): GridData {
     if (this.count > SymbolsPerRegionRule.SYMBOL_POSITIONS.length) {
       const symbol = new LetterSymbol(1.5, 1.5, `${this.count}X`);
@@ -92,6 +88,10 @@ export default class SymbolsPerRegionRule extends Rule {
     return SymbolsPerRegionRule.EXAMPLE_GRIDS[this.color].copyWith({
       symbols: new Map([['letter', symbols]]),
     });
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return SymbolsPerRegionRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(grid: GridData): RuleState {

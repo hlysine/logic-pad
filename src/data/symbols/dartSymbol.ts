@@ -4,14 +4,6 @@ import { Color, Direction } from '../primitives';
 import NumberSymbol from './numberSymbol';
 
 export default class DartSymbol extends NumberSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwbbw', 'wwwww', 'wbwbb', 'wwwww'])
-      .addSymbol(new DartSymbol(1, 0, 1, Direction.Down))
-      .addSymbol(new DartSymbol(4, 0, 2, Direction.Left))
-      .addSymbol(new DartSymbol(3, 1, 1, Direction.Down))
-      .addSymbol(new DartSymbol(0, 2, 3, Direction.Right))
-  );
-
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -43,6 +35,14 @@ export default class DartSymbol extends NumberSymbol {
     },
   ]);
 
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['wwbbw', 'wwwww', 'wbwbb', 'wwwww'])
+      .addSymbol(new DartSymbol(1, 0, 1, Direction.Down))
+      .addSymbol(new DartSymbol(4, 0, 2, Direction.Left))
+      .addSymbol(new DartSymbol(3, 1, 1, Direction.Down))
+      .addSymbol(new DartSymbol(0, 2, 3, Direction.Right))
+  );
+
   /**
    * **Darts count opposite color cells in that direction**
    *
@@ -69,12 +69,12 @@ export default class DartSymbol extends NumberSymbol {
     return `*Darts* count opposite color cells in that direction`;
   }
 
-  public createExampleGrid(): GridData {
-    return DartSymbol.EXAMPLE_GRID;
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return DartSymbol.CONFIGS;
+  }
+
+  public createExampleGrid(): GridData {
+    return DartSymbol.EXAMPLE_GRID;
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {

@@ -7,6 +7,17 @@ import Symbol from '../symbols/symbol';
 import Rule, { SearchVariant } from './rule';
 
 export default class OffByXRule extends Rule {
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Number,
+      default: 1,
+      min: 1,
+      field: 'number',
+      description: 'Number',
+      configurable: true,
+    },
+  ]);
+
   private static readonly EXAMPLE_GRID = Object.freeze([
     GridData.create(['bbbbb', 'bwbwb', 'bbwwb', 'bbbbb']).withSymbols([
       new AreaNumberSymbol(1, 1, 2),
@@ -42,17 +53,6 @@ export default class OffByXRule extends Rule {
     ]),
   ]);
 
-  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
-    {
-      type: ConfigType.Number,
-      default: 1,
-      min: 1,
-      field: 'number',
-      description: 'Number',
-      configurable: true,
-    },
-  ]);
-
   private static readonly SEARCH_VARIANTS = [new OffByXRule(1).searchVariant()];
 
   /**
@@ -73,6 +73,10 @@ export default class OffByXRule extends Rule {
     return `All numbers are off by ${this.number}`;
   }
 
+  public get configs(): readonly AnyConfig[] | null {
+    return OffByXRule.CONFIGS;
+  }
+
   public createExampleGrid(): GridData {
     if (this.number < 1 || this.number >= OffByXRule.EXAMPLE_GRID.length) {
       return GridData.create(['bbbbb', 'bbwbb', 'bbbbb', 'bbbbb']).addSymbol(
@@ -80,10 +84,6 @@ export default class OffByXRule extends Rule {
       );
     }
     return OffByXRule.EXAMPLE_GRID[this.number - 1];
-  }
-
-  public get configs(): readonly AnyConfig[] | null {
-    return OffByXRule.CONFIGS;
   }
 
   public get searchVariants(): SearchVariant[] {

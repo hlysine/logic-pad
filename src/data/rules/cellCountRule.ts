@@ -5,6 +5,25 @@ import AreaNumberSymbol from '../symbols/areaNumberSymbol';
 import Rule, { SearchVariant } from './rule';
 
 export default class CellCountRule extends Rule {
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Color,
+      default: Color.Light,
+      allowGray: false,
+      field: 'color',
+      description: 'Color',
+      configurable: true,
+    },
+    {
+      type: ConfigType.Number,
+      default: 10,
+      min: 0,
+      field: 'count',
+      description: 'Count',
+      configurable: true,
+    },
+  ]);
+
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze([
     GridData.create(['bbbbb', 'bbbbb', 'bbbbb', 'bbbbb']),
     GridData.create(['bbbbb', 'bbbbb', 'bwbbb', 'bbbbb']).withSymbols([
@@ -51,25 +70,6 @@ export default class CellCountRule extends Rule {
     )
   );
 
-  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
-    {
-      type: ConfigType.Color,
-      default: Color.Light,
-      allowGray: false,
-      field: 'color',
-      description: 'Color',
-      configurable: true,
-    },
-    {
-      type: ConfigType.Number,
-      default: 10,
-      min: 0,
-      field: 'count',
-      description: 'Count',
-      configurable: true,
-    },
-  ]);
-
   private static readonly SEARCH_VARIANTS = [
     new CellCountRule(Color.Light, 10).searchVariant(),
     new CellCountRule(Color.Dark, 10).searchVariant(),
@@ -98,6 +98,10 @@ export default class CellCountRule extends Rule {
     return `There are ${this.count} ${this.color} cell${this.count === 1 ? '' : 's'} *in total*`;
   }
 
+  public get configs(): readonly AnyConfig[] | null {
+    return CellCountRule.CONFIGS;
+  }
+
   public createExampleGrid(): GridData {
     if (this.count < CellCountRule.EXAMPLE_GRID_LIGHT.length) {
       if (this.color === Color.Light) {
@@ -112,10 +116,6 @@ export default class CellCountRule extends Rule {
           : GridData.create(['bwwww', 'bbwww', 'bbbww', 'bbbbw']);
       return grid.addSymbol(new AreaNumberSymbol(1, 2, this.count));
     }
-  }
-
-  public get configs(): readonly AnyConfig[] | null {
-    return CellCountRule.CONFIGS;
   }
 
   public get searchVariants(): SearchVariant[] {

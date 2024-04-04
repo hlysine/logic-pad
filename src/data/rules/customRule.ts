@@ -54,12 +54,12 @@ export default class CustomRule extends Rule {
     return this.description;
   }
 
-  public createExampleGrid(): GridData {
-    return this.grid;
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return CustomRule.configs;
+  }
+
+  public createExampleGrid(): GridData {
+    return this.grid;
   }
 
   public get searchVariants(): SearchVariant[] {

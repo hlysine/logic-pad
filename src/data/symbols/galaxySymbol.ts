@@ -33,14 +33,6 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
     return `*Galaxies* are centers of rotational symmetry`;
   }
 
-  public createExampleGrid(): GridData {
-    return Object.freeze(
-      GridData.create(['wbbbb', 'wbwww', 'bbwbb', 'wwwbb']).addSymbol(
-        new GalaxySymbol(2, 2)
-      )
-    );
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return Object.freeze([
       {
@@ -58,6 +50,14 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
         configurable: false,
       },
     ]);
+  }
+
+  public createExampleGrid(): GridData {
+    return Object.freeze(
+      GridData.create(['wbbbb', 'wbwww', 'bbwbb', 'wwwbb']).addSymbol(
+        new GalaxySymbol(2, 2)
+      )
+    );
   }
 
   public validateSymbol(grid: GridData): State {

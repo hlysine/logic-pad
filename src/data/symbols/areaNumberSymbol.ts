@@ -4,12 +4,6 @@ import { Color } from '../primitives';
 import NumberSymbol from './numberSymbol';
 
 export default class AreaNumberSymbol extends NumberSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wbbbb', 'wbbwb', 'bbwwb', 'bbbbb'])
-      .addSymbol(new AreaNumberSymbol(2, 2, 3))
-      .addSymbol(new AreaNumberSymbol(0, 1, 2))
-  );
-
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -34,6 +28,12 @@ export default class AreaNumberSymbol extends NumberSymbol {
     },
   ]);
 
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['wbbbb', 'wbbwb', 'bbwwb', 'bbbbb'])
+      .addSymbol(new AreaNumberSymbol(2, 2, 3))
+      .addSymbol(new AreaNumberSymbol(0, 1, 2))
+  );
+
   /**
    * **Area Numbers must equal region sizes**
    *
@@ -53,12 +53,12 @@ export default class AreaNumberSymbol extends NumberSymbol {
     return `*Area Numbers* must equal region sizes`;
   }
 
-  public createExampleGrid(): GridData {
-    return AreaNumberSymbol.EXAMPLE_GRID;
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return AreaNumberSymbol.CONFIGS;
+  }
+
+  public createExampleGrid(): GridData {
+    return AreaNumberSymbol.EXAMPLE_GRID;
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {

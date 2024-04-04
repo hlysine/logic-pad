@@ -5,12 +5,6 @@ import { Color, DIRECTIONS } from '../primitives';
 import NumberSymbol from './numberSymbol';
 
 export default class ViewpointSymbol extends NumberSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['bbbbb', 'wwwwb', 'bwwbb', 'bbwww']).addSymbol(
-      new ViewpointSymbol(1, 1, 5)
-    )
-  );
-
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -35,6 +29,12 @@ export default class ViewpointSymbol extends NumberSymbol {
     },
   ]);
 
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['bbbbb', 'wwwwb', 'bwwbb', 'bbwww']).addSymbol(
+      new ViewpointSymbol(1, 1, 5)
+    )
+  );
+
   /**
    * **Viewpoint Numbers count visible cells in the four directions**
    * @param x - The x-coordinate of the symbol.
@@ -53,12 +53,12 @@ export default class ViewpointSymbol extends NumberSymbol {
     return '*Viewpoint Numbers* count visible cells in the four directions';
   }
 
-  public createExampleGrid(): GridData {
-    return ViewpointSymbol.EXAMPLE_GRID;
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return ViewpointSymbol.CONFIGS;
+  }
+
+  public createExampleGrid(): GridData {
+    return ViewpointSymbol.EXAMPLE_GRID;
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {

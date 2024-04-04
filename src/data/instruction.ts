@@ -6,11 +6,11 @@ export default abstract class Instruction {
 
   public abstract get explanation(): string;
 
-  public abstract createExampleGrid(): GridData;
-
   public get configs(): readonly AnyConfig[] | null {
     return null;
   }
+
+  public abstract createExampleGrid(): GridData;
 
   public abstract copyWith(props: Record<string, unknown>): this;
 

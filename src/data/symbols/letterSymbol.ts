@@ -5,17 +5,6 @@ import { Color, State } from '../primitives';
 import Symbol from './symbol';
 
 export default class LetterSymbol extends Symbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['bbbww', 'wwbbw', 'wwbbb', 'bwwww'])
-      .addSymbol(new LetterSymbol(0, 0, 'B'))
-      .addSymbol(new LetterSymbol(3, 0, 'A'))
-      .addSymbol(new LetterSymbol(4, 1, 'A'))
-      .addSymbol(new LetterSymbol(3, 2, 'B'))
-      .addSymbol(new LetterSymbol(1, 1, 'C'))
-      .addSymbol(new LetterSymbol(0, 2, 'C'))
-      .addSymbol(new LetterSymbol(4, 3, 'C'))
-  );
-
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -39,6 +28,17 @@ export default class LetterSymbol extends Symbol {
       configurable: true,
     },
   ]);
+
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['bbbww', 'wwbbw', 'wwbbb', 'bwwww'])
+      .addSymbol(new LetterSymbol(0, 0, 'B'))
+      .addSymbol(new LetterSymbol(3, 0, 'A'))
+      .addSymbol(new LetterSymbol(4, 1, 'A'))
+      .addSymbol(new LetterSymbol(3, 2, 'B'))
+      .addSymbol(new LetterSymbol(1, 1, 'C'))
+      .addSymbol(new LetterSymbol(0, 2, 'C'))
+      .addSymbol(new LetterSymbol(4, 3, 'C'))
+  );
 
   /**
    * **Letters must be sorted into one type per area**
@@ -64,12 +64,12 @@ export default class LetterSymbol extends Symbol {
     return '*Letters* must be sorted into one type per area';
   }
 
-  public createExampleGrid(): GridData {
-    return LetterSymbol.EXAMPLE_GRID;
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return LetterSymbol.CONFIGS;
+  }
+
+  public createExampleGrid(): GridData {
+    return LetterSymbol.EXAMPLE_GRID;
   }
 
   public validateSymbol(grid: GridData): State {

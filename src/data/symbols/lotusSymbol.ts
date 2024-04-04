@@ -85,14 +85,6 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
     return `Areas containing this symbol must be *symmetrical*`;
   }
 
-  public createExampleGrid(): GridData {
-    return Object.freeze(
-      GridData.create(['wwbww', 'bwbwb', 'bwwwb', 'bwwwb']).addSymbol(
-        new LotusSymbol(2, 2, Orientation.Up)
-      )
-    );
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return Object.freeze([
       {
@@ -117,6 +109,14 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
         configurable: false,
       },
     ]);
+  }
+
+  public createExampleGrid(): GridData {
+    return Object.freeze(
+      GridData.create(['wwbww', 'bwbwb', 'bwwwb', 'bwwwb']).addSymbol(
+        new LotusSymbol(2, 2, Orientation.Up)
+      )
+    );
   }
 
   public validateSymbol(grid: GridData): State {

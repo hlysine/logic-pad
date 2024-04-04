@@ -10,10 +10,6 @@ export type DirectionLinkerMap = {
 type Turtle = [Position, Position];
 
 export default class DirectionLinkerSymbol extends Symbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwbbw', 'wwwww', 'wwwww', 'wwwww'])
-  );
-
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -30,6 +26,10 @@ export default class DirectionLinkerSymbol extends Symbol {
       configurable: false,
     },
   ]);
+
+  private static readonly EXAMPLE_GRID = Object.freeze(
+    GridData.create(['wwbbw', 'wwwww', 'wwwww', 'wwwww'])
+  );
 
   private static readonly directionDeltas = {
     [Direction.Up]: { dx: 0, dy: -1 },
@@ -76,12 +76,12 @@ export default class DirectionLinkerSymbol extends Symbol {
     return `Direction pointed by this symbol should *behave* the same.`;
   }
 
-  public createExampleGrid(): GridData {
-    return DirectionLinkerSymbol.EXAMPLE_GRID;
-  }
-
   public get configs(): readonly AnyConfig[] | null {
     return DirectionLinkerSymbol.CONFIGS;
+  }
+
+  public createExampleGrid(): GridData {
+    return DirectionLinkerSymbol.EXAMPLE_GRID;
   }
 
   private getColor(c: Position, grid: GridData): Color | null {

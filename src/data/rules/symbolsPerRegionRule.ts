@@ -95,7 +95,12 @@ export default class SymbolsPerRegionRule extends Rule {
   }
 
   public validateGrid(grid: GridData): RuleState {
-    const visited = array(grid.width, grid.height, (i, j) => !(grid.getTile(i, j).exists && grid.getTile(i, j).color === this.color));
+    const visited = array(
+      grid.width,
+      grid.height,
+      (i, j) =>
+        !(grid.getTile(i, j).exists && grid.getTile(i, j).color === this.color)
+    );
     let complete = true;
     while (true) {
       const seed = grid.find((_tile, x, y) => !visited[y][x]);

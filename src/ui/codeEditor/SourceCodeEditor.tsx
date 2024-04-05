@@ -150,7 +150,7 @@ export default memo(function SourceCodeEditor({
         </div>
         <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-10 ml-[calc(min(800px,50vw)-300px+1rem)] p-4 w-[400px] h-full overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
-            <h3 className="text-lg">Quick reference</h3>
+            <h3 className="text-lg text-base-content">Quick reference</h3>
             {enclosure.map(
               ({ example }) =>
                 example && (

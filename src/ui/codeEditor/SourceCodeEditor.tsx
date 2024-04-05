@@ -125,7 +125,7 @@ export default memo(function SourceCodeEditor({
         <div className="w-full h-full focus-within:w-[min(800px,50vw)] transition-[width] duration-75">
           <Editor
             loading={loading}
-            theme="Dracula"
+            theme="vs-dark"
             width="100%"
             height="100%"
             className="focus-within:z-30"

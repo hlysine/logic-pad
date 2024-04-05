@@ -43,7 +43,7 @@ const SUPPORTED_THEMES = [
 
 export default memo(function ThemeSwitcher() {
   const [selectedTheme, setSelectedTheme] = useState(
-    () => localStorage.getItem(themeKey) ?? 'dracula'
+    () => localStorage.getItem(themeKey) ?? 'dark'
   );
 
   useEffect(() => {

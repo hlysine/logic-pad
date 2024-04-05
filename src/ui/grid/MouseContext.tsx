@@ -1,41 +1,40 @@
-import { createContext, memo, useContext, useState } from 'react';
 import { Color } from '../../data/primitives';
 
-interface MouseContext {
+class MouseContext {
   color: Color | null;
   replacing: boolean;
-  setColor: (color: Color | null, replacing: boolean) => void;
+  inverted: boolean;
+
+  constructor() {
+    this.color = null;
+    this.replacing = false;
+    this.inverted = false;
+  }
+
+  setColor(color: Color | null, replacing: boolean) {
+    this.color = color;
+    this.replacing = replacing;
+  }
+
+  setInverted(inverted: boolean) {
+    this.inverted = inverted;
+  }
+
+  getColorForButtons(buttons: number) {
+    if (this.inverted) {
+      buttons = 3 - buttons;
+    }
+    switch (buttons) {
+      case 1:
+        return Color.Dark;
+      case 2:
+        return Color.Light;
+      default:
+        return undefined;
+    }
+  }
 }
 
-const context = createContext<MouseContext>({
-  color: null,
-  replacing: false,
-  setColor: () => {},
-});
+const mouseContext = new MouseContext();
 
-export const useMouseContext = () => {
-  return useContext(context);
-};
-
-export default memo(function MouseContext({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [color, setColor] = useState(null as Color | null);
-  const [replacing, setReplacing] = useState(false);
-  return (
-    <context.Provider
-      value={{
-        color,
-        replacing,
-        setColor: (color, replacing) => {
-          setColor(color);
-          setReplacing(replacing);
-        },
-      }}
-    >
-      {children}
-    </context.Provider>
-  );
-});
+export default mouseContext;

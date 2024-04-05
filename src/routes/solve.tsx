@@ -8,6 +8,7 @@ import { memo } from 'react';
 import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
 import StupidGrid from '../ui/StupidGrid';
 import HorizontalLayout from '../ui/HorizontalLayout';
+import TouchControls from '../ui/TouchControls';
 
 export const Route = createFileRoute('/solve')({
   validateSearch,
@@ -22,6 +23,7 @@ export const Route = createFileRoute('/solve')({
               <Metadata />
               <StupidGrid />
             </div>
+            <TouchControls />
             <EditControls />
           </>
         }

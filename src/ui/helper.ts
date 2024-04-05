@@ -25,17 +25,6 @@ export function fg(color: Color) {
   }
 }
 
-export function color(buttons: number) {
-  switch (buttons) {
-    case 1:
-      return Color.Dark;
-    case 2:
-      return Color.Light;
-    default:
-      return undefined;
-  }
-}
-
 export function instructionBg(state: State) {
   switch (state) {
     case State.Satisfied:

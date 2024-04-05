@@ -1,10 +1,10 @@
 import { memo, useMemo } from 'react';
 import TileData from '../../data/tile';
 import { cn } from '../../utils';
-import { useMouseContext } from './MouseContext';
+import mouseContext from './MouseContext';
 import { Color } from '../../data/primitives';
 import TileConnections from '../../data/tileConnections';
-import { bg, color } from '../helper';
+import { bg } from '../helper';
 import './tile.css';
 
 export interface TileProps {
@@ -325,7 +325,6 @@ export default memo(function Tile({
   connections,
   onTileClick,
 }: TileProps) {
-  const mouse = useMouseContext();
   const partStyles = useMemo(() => {
     let key = '';
     for (let y = -1; y <= 1; y++) {
@@ -338,6 +337,7 @@ export default memo(function Tile({
     return styles;
   }, [connections]);
   let fixed = false;
+
   return (
     <div className="relative w-[1em] h-[1em]">
       {data.exists && (
@@ -357,44 +357,54 @@ export default memo(function Tile({
                 editable && !data.fixed && focusable ? 0 : -1 // dirty hack to make only the central button focusable
               }
               style={style}
-              onMouseDown={e => {
+              onPointerDown={e => {
                 e.preventDefault();
                 if (!editable) return;
-                let c = color(e.buttons);
-                if (!c) {
-                  mouse.setColor(null, false);
-                } else {
-                  if (c === data.color) c = Color.Gray;
-                  mouse.setColor(
-                    c,
-                    c !== Color.Gray && data.color !== Color.Gray
-                  );
-                  onTileClick?.(c, e.ctrlKey);
+                if (e.pointerType === 'mouse') {
+                  let c = mouseContext.getColorForButtons(e.buttons);
+                  if (!c) {
+                    mouseContext.setColor(null, false);
+                  } else {
+                    if (c === data.color) c = Color.Gray;
+                    mouseContext.setColor(
+                      c,
+                      c !== Color.Gray && data.color !== Color.Gray
+                    );
+                    onTileClick?.(c, e.ctrlKey);
+                  }
                 }
               }}
-              onMouseUp={e => {
+              onPointerUp={e => {
                 e.preventDefault();
                 if (!editable) return;
-                mouse.setColor(null, false);
+                mouseContext.setColor(null, false);
+                if (e.pointerType !== 'mouse') {
+                  let c = mouseContext.getColorForButtons(1);
+                  if (c) {
+                    if (c === data.color) c = Color.Gray;
+                    onTileClick?.(c, e.ctrlKey);
+                  }
+                }
               }}
-              onMouseEnter={e => {
+              onPointerEnter={e => {
                 e.preventDefault();
                 if (!editable) return;
-                const c = color(e.buttons);
+                const c = mouseContext.getColorForButtons(e.buttons);
                 if (
                   !c ||
-                  !mouse.color ||
-                  (c !== mouse.color && mouse.color !== Color.Gray)
+                  !mouseContext.color ||
+                  (c !== mouseContext.color &&
+                    mouseContext.color !== Color.Gray)
                 ) {
-                  mouse.setColor(null, false);
+                  mouseContext.setColor(null, false);
                 } else {
-                  if (mouse.color === data.color) return;
+                  if (mouseContext.color === data.color) return;
                   if (
-                    mouse.color === Color.Gray ||
+                    mouseContext.color === Color.Gray ||
                     data.color === Color.Gray ||
-                    mouse.replacing
+                    mouseContext.replacing
                   )
-                    onTileClick?.(mouse.color, e.ctrlKey);
+                    onTileClick?.(mouseContext.color, e.ctrlKey);
                 }
               }}
             ></button>

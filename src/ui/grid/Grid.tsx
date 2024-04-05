@@ -1,7 +1,6 @@
 import { memo, useMemo } from 'react';
 import GridData from '../../data/grid';
 import Tile from './Tile';
-import MouseContext from './MouseContext';
 import { Color } from '../../data/primitives';
 import { array } from '../../data/helper';
 
@@ -55,26 +54,24 @@ export default memo(function Grid({
     [grid.width, grid.height, onTileClick]
   );
   return (
-    <MouseContext>
-      <div className="relative" style={containerStyle}>
-        <div
-          className="grid justify-center content-center absolute inset-0"
-          style={gridStyle}
-        >
-          {grid.tiles.map((row, y) =>
-            row.map((tile, x) => (
-              <Tile
-                key={`${x},${y}`}
-                data={tile}
-                editable={editable}
-                connections={tileConnections[y][x]}
-                onTileClick={clickHandlers[y][x]}
-              />
-            ))
-          )}
-        </div>
-        {children}
+    <div className="relative" style={containerStyle}>
+      <div
+        className="grid justify-center content-center absolute inset-0"
+        style={gridStyle}
+      >
+        {grid.tiles.map((row, y) =>
+          row.map((tile, x) => (
+            <Tile
+              key={`${x},${y}`}
+              data={tile}
+              editable={editable}
+              connections={tileConnections[y][x]}
+              onTileClick={clickHandlers[y][x]}
+            />
+          ))
+        )}
       </div>
-    </MouseContext>
+      {children}
+    </div>
   );
 });

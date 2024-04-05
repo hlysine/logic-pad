@@ -1,8 +1,13 @@
 import { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
-import { themeChange } from 'theme-change';
+import { cn } from '../utils';
+
+export const themeKey = 'theme';
+
+const savedTheme = localStorage.getItem(themeKey) ?? 'dracula';
+document.documentElement.dataset.theme = savedTheme;
 
 const SUPPORTED_THEMES = [
   ['light', 'vs'],
@@ -40,13 +45,18 @@ const SUPPORTED_THEMES = [
 ];
 
 export default memo(function ThemeSwitcher() {
+  const [selectedTheme, setSelectedTheme] = useState(savedTheme);
+
   useEffect(() => {
-    themeChange(false);
-  }, []);
+    document.documentElement.dataset.theme = selectedTheme;
+  }, [selectedTheme]);
 
   const monaco = useMonaco();
 
-  const switchTheme = (editorTheme: string) => {
+  const switchTheme = (theme: string) => {
+    setSelectedTheme(theme);
+    localStorage.setItem(themeKey, theme);
+    const editorTheme = SUPPORTED_THEMES.find(([t]) => t === theme)?.[1];
     if (monaco && editorTheme) {
       import(`../../node_modules/monaco-themes/themes/${editorTheme}.json`)
         .then(data => {
@@ -64,7 +74,7 @@ export default memo(function ThemeSwitcher() {
   };
 
   useEffect(() => {
-    switchTheme('Dracula');
+    switchTheme(selectedTheme);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monaco]);
 
@@ -78,15 +88,20 @@ export default memo(function ThemeSwitcher() {
         tabIndex={0}
         className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52 max-h-[calc(100dvh-100px)] overflow-y-auto"
       >
-        {SUPPORTED_THEMES.map(([theme, editorTheme]) => (
+        {SUPPORTED_THEMES.map(([theme]) => (
           <li key={theme}>
             <input
               type="radio"
               name="theme-dropdown"
-              className="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+              className={cn(
+                'theme-controller btn btn-sm btn-block btn-ghost justify-start',
+                {
+                  'btn-primary': selectedTheme === theme,
+                }
+              )}
               aria-label={theme}
               value={theme}
-              onChange={() => switchTheme(editorTheme)}
+              onChange={e => switchTheme(e.target.value)}
             />
           </li>
         ))}

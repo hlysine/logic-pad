@@ -42,7 +42,7 @@ const roadmap: RoadmapItem[] = isAprilFools
       'Add tile counting by holding Ctrl',
       'Isolate grids between solve and create modes',
       'Support mobile input',
-      'Use custom theme system',
+      '~Use custom theme system',
       '~Implement puzzle serialization',
       [
         '~Optimizations',

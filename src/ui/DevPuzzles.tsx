@@ -226,12 +226,11 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
   },
   {
-    hidden: true,
     id: 'boo',
     title: 'Boo',
     difficulty: 3,
     description:
-      "You need a nickname, what about kitty?{BR}Heck, I just wanted to say you are pretty.{BR}Can I call you chick? You hate that too?{BR}Okay fine, I'll call you my baby boo.",
+      "You need a nickname, what about kitty?{BR}Sorry! I wanted to say that you are pretty.{BR}Can I call you chick? You hate that too?{BR}Okay fine, I'll call you my baby boo.",
     grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnn',

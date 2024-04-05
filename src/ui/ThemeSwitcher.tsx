@@ -6,9 +6,6 @@ import { cn } from '../utils';
 
 export const themeKey = 'theme';
 
-const savedTheme = localStorage.getItem(themeKey) ?? 'dracula';
-document.documentElement.dataset.theme = savedTheme;
-
 const SUPPORTED_THEMES = [
   ['light', 'vs'],
   ['dark', 'vs-dark'],
@@ -45,7 +42,9 @@ const SUPPORTED_THEMES = [
 ];
 
 export default memo(function ThemeSwitcher() {
-  const [selectedTheme, setSelectedTheme] = useState(savedTheme);
+  const [selectedTheme, setSelectedTheme] = useState(
+    () => localStorage.getItem(themeKey) ?? 'dracula'
+  );
 
   useEffect(() => {
     document.documentElement.dataset.theme = selectedTheme;
@@ -94,10 +93,8 @@ export default memo(function ThemeSwitcher() {
               type="radio"
               name="theme-dropdown"
               className={cn(
-                'theme-controller btn btn-sm btn-block btn-ghost justify-start',
-                {
-                  'btn-primary': selectedTheme === theme,
-                }
+                'theme-controller btn btn-sm btn-block btn-ghost justify-start capitalize',
+                selectedTheme === theme && 'btn-primary'
               )}
               aria-label={theme}
               value={theme}

@@ -36,3 +36,19 @@ summary::marker {
 .tooltip::after {
   z-index: 100;
 }
+
+.bg-smart {
+  @apply relative;
+}
+
+.bg-smart::before {
+  content: '';
+  @apply block absolute w-full h-full
+    opacity-0 transition-opacity duration-[3s] ease-in
+    bg-radient-circle-c from-transparent to-success/15
+    z-[1000] pointer-events-none;
+}
+
+.bg-smart:has(.bg-smart-success)::before {
+  @apply opacity-100;
+}

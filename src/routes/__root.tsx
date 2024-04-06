@@ -14,7 +14,7 @@ export const Route = createRootRoute({
     return (
       <EditContext>
         <GridContext>
-          <div className="h-dvh w-dvw overflow-auto bg-neutral">
+          <div className="h-dvh w-dvw overflow-auto bg-neutral bg-smart">
             <div className="flex flex-col items-stretch min-h-full w-full">
               <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2">
                 <div className="flex flex-wrap grow shrink items-center gap-4">

@@ -24,7 +24,7 @@ export default memo(function StateRing({
         targets: '.logic-animated .logic-tile',
         scale: [
           { value: 0.7, easing: 'easeOutSine', duration: 100 },
-          { value: 1, easing: 'easeOutSine', duration: 100 },
+          { value: 1, easing: 'easeOutQuad', duration: 500 },
         ],
         delay: anime.stagger(20, { grid: [width, height], from: 'center' }),
       });

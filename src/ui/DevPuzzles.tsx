@@ -355,10 +355,24 @@ export const DEV_PUZZLES: Puzzle[] = [
       'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',
     ]),
   },
+  // {
+  //   hidden: true,
+  //   complex: true,
+  //   id: 'mosaic',
+  //   title: 'Mosaic',
+  //   difficulty: 5,
+  //   description: 'TODO',
+  //   grid: GridData.create([
+  //   ]).addRule(new CompletePatternRule()),
+  //   solution: GridData.create([
+  //   ]),
+  // },
 ];
 
 for (const puzzle of DEV_PUZZLES) {
-  puzzle.grid = getGrid(puzzle.solution ?? GridData.create([]));
+  if (puzzle.grid.tiles.length <= 0) {
+    puzzle.grid = getGrid(puzzle.solution ?? GridData.create([]));
+  }
 }
 
 let defaultSelection = 0;
@@ -366,8 +380,8 @@ let defaultSelection = 0;
 const urlParams = new URLSearchParams(window.location.search);
 const customId = urlParams.get('id');
 
-if(customId) {
-  defaultSelection = DEV_PUZZLES.findIndex((p) => p.id === customId);
+if (customId) {
+  defaultSelection = DEV_PUZZLES.findIndex(p => p.id === customId);
 }
 
 defaultSelection = defaultSelection === -1 ? 0 : defaultSelection;
@@ -419,9 +433,9 @@ export default memo(function DevPuzzles() {
             navigate({
               to: state.location.pathname,
               search: {
-                id: puzzle.id
+                id: puzzle.id,
               },
-            })
+            });
           }}
         >
           <a className="text-md w-full flex items-center justify-between">

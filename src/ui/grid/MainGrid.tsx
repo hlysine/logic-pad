@@ -70,6 +70,7 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
   return (
     <StateRing>
       <Grid
+        metadata={metadata}
         size={tileConfig.tileSize}
         grid={grid}
         editable={editable}

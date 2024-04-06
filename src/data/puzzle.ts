@@ -7,6 +7,7 @@ export interface PuzzleMetadata {
   difficulty: number;
   id: string;
   hidden?: boolean;
+  complex?: boolean;
 }
 
 export const PuzzleSchema = z.object({

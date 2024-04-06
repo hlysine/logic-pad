@@ -34,7 +34,7 @@ export default memo(function StateRing({
   return (
     <div
       className={cn(
-        'w-fit h-fit border-4 p-4 rounded-xl transition-shadow delay-150 duration-150 ease-out logic-animated',
+        'w-fit h-fit border-4 p-4 rounded-xl transition-all delay-150 duration-150 ease-out logic-animated',
         ringBorder(state.final),
         state.final === State.Satisfied
           ? 'first:*:opacity-100 first:*:duration-[1.5s]'

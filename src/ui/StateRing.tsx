@@ -20,7 +20,7 @@ export default memo(function StateRing({ children }: GridRingProps) {
           : 'first:*:opacity-0 first:*:duration-[0.5s]'
       )}
     >
-      <div className="block fixed inset-0 transition-all ease-in-out bg-radient-circle-c from-transparent to-success/15 z-[1000] pointer-events-none"></div>
+      <div className="block fixed inset-0 transition-all ease-in-out bg-radient-circle-c from-transparent to-success/10 z-[1000] pointer-events-none"></div>
       {children}
     </div>
   );

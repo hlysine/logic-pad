@@ -255,12 +255,11 @@ export const DEV_PUZZLES: Puzzle[] = [
     ]),
   },
   {
-    hidden: true,
     id: 'bee',
     title: 'Bee',
     difficulty: 3,
     description:
-      'Bond even stronger than ten bees.{BR}Till death do us apart. Maybe.{BR}She starts my day like AB,{BR}see, that can only be my bby.',
+      'Brand new gentleman, and his lady.{BR}Till death do us apart. Maybe.{BR}She starts my day like AB,{BR}see, that can only be my bby.',
     grid: GridData.create([]),
     solution: GridData.create([
       'nnnnnnnnnnnnnnnnnn',

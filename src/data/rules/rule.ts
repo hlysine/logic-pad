@@ -39,10 +39,10 @@ export default abstract class Rule extends Instruction {
    * @returns The state of the symbol after validation.
    */
   public overrideSymbolValidation(
-    grid: GridData,
+    _grid: GridData,
     _symbol: Symbol,
-    validator: (grid: GridData) => State
-  ): State {
-    return validator(grid);
+    _validator: (grid: GridData) => State
+  ): State | undefined {
+    return undefined;
   }
 }

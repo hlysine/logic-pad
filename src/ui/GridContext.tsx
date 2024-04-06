@@ -71,6 +71,8 @@ function validateGrid(grid: GridData, solution: GridData | null) {
     return rule.validateGrid(grid);
   });
 
+  const symbolOverrideStates: State[][] = ruleStates.map(() => []);
+
   const applySymbolOverrides = (
     grid: GridData,
     rules: readonly Rule[],
@@ -79,9 +81,16 @@ function validateGrid(grid: GridData, solution: GridData | null) {
   ): State => {
     const [rule, ...rest] = rules;
     if (rule) {
-      return rule.overrideSymbolValidation(grid, symbol, grid =>
-        applySymbolOverrides(grid, rest, symbol, () => validator(grid))
-      );
+      const newValidator = (grid: GridData) =>
+        applySymbolOverrides(grid, rest, symbol, () => validator(grid));
+      let result = rule.overrideSymbolValidation(grid, symbol, newValidator);
+      if (result === undefined) {
+        result = newValidator(grid);
+      } else {
+        const index = grid.rules.indexOf(rule);
+        symbolOverrideStates[index].push(result);
+      }
+      return result;
     }
     return validator(grid);
   };
@@ -98,6 +107,16 @@ function validateGrid(grid: GridData, solution: GridData | null) {
       })
     )
   );
+
+  console.log(JSON.parse(JSON.stringify(symbolOverrideStates)));
+  symbolOverrideStates.forEach((states, i) => {
+    if (ruleStates[i].state !== State.Incomplete) return;
+    if (states.some(s => s === State.Error))
+      ruleStates[i] = { state: State.Error, positions: [] };
+    else if (states.length > 0 && states.every(s => s === State.Satisfied))
+      ruleStates[i] = { state: State.Satisfied };
+  });
+
   const final = aggregateState(ruleStates, symbolStates);
   if (
     final !== State.Incomplete ||

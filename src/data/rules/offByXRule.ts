@@ -98,7 +98,7 @@ export default class OffByXRule extends Rule {
     grid: GridData,
     symbol: Symbol,
     validator: (grid: GridData) => State
-  ): State {
+  ): State | undefined {
     if (symbol instanceof NumberSymbol) {
       const counts = symbol.countTiles(grid);
       if (

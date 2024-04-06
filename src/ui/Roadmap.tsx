@@ -38,6 +38,7 @@ const roadmap: RoadmapItem[] = [
   'Add tile counting by holding Ctrl',
   'Isolate grids between solve and create modes',
   'Support mobile input',
+  'Implement symbol stacking',
   '~Use custom theme system',
   '~Implement puzzle serialization',
   [

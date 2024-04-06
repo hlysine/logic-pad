@@ -339,7 +339,7 @@ export default memo(function Tile({
   let fixed = false;
 
   return (
-    <div className="relative w-[1em] h-[1em]">
+    <div className="relative w-[1em] h-[1em] logic-tile">
       {data.exists && (
         <>
           {partStyles.map(({ style, fixable, focusable }, i) => (

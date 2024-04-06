@@ -52,7 +52,7 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
     return <Loading />;
 
   return (
-    <StateRing>
+    <StateRing width={grid.width} height={grid.height}>
       <Grid
         size={tileConfig.tileSize}
         grid={grid}

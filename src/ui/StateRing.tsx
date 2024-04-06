@@ -16,11 +16,11 @@ export default memo(function StateRing({ children }: GridRingProps) {
         'w-fit h-fit border-4 p-4 rounded-xl transition-shadow',
         ringBorder(state.final),
         state.final === State.Satisfied
-          ? 'first:*:opacity-100'
-          : 'first:*:opacity-0'
+          ? 'first:*:opacity-100 first:*:duration-[1.5s]'
+          : 'first:*:opacity-0 first:*:duration-[0.5s]'
       )}
     >
-      <div className="block fixed inset-0 transition-all duration-[3s] ease-in bg-radient-circle-c from-transparent to-success/15 z-[1000] pointer-events-none"></div>
+      <div className="block fixed inset-0 transition-all ease-in-out bg-radient-circle-c from-transparent to-success/15 z-[1000] pointer-events-none"></div>
       {children}
     </div>
   );

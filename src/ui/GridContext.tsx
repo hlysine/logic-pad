@@ -1,6 +1,6 @@
 import { createContext, memo, useContext, useState } from 'react';
 import GridData from '../data/grid';
-import { GridState, RuleState, State } from '../data/primitives';
+import { Color, GridState, RuleState, State } from '../data/primitives';
 import { useEdit } from './EditContext';
 import { PuzzleMetadata } from '../data/puzzle';
 import Rule from '../data/rules/rule';
@@ -66,11 +66,14 @@ function aggregateState(rules: RuleState[], symbols: Map<string, State[]>) {
 
 function validateGrid(grid: GridData, solution: GridData | null) {
   let requireSolution = false;
+
+  // validate all rules with self-contained logic
   const ruleStates = grid.rules.map(rule => {
     if (rule.validateWithSolution) requireSolution = true;
     return rule.validateGrid(grid);
   });
 
+  // validate all symbols with symbol overrides
   const symbolOverrideStates: State[][] = ruleStates.map(() => []);
 
   const applySymbolOverrides = (
@@ -108,6 +111,7 @@ function validateGrid(grid: GridData, solution: GridData | null) {
     )
   );
 
+  // apply the result of symbol overrides to the rules that provided them
   symbolOverrideStates.forEach((states, i) => {
     if (ruleStates[i].state !== State.Incomplete) return;
     if (states.some(s => s === State.Error))
@@ -116,7 +120,18 @@ function validateGrid(grid: GridData, solution: GridData | null) {
       ruleStates[i] = { state: State.Satisfied };
   });
 
-  const final = aggregateState(ruleStates, symbolStates);
+  let final = aggregateState(ruleStates, symbolStates);
+
+  // in addition to satisfying all rules and symbols, a solution must also fill the grid completely
+  if (!requireSolution && final === State.Satisfied) {
+    final = grid.forEach(tile =>
+      tile.exists && tile.color === Color.Gray ? true : undefined
+    )
+      ? State.Incomplete
+      : State.Satisfied;
+  }
+
+  // return early if there is no need to validate against a solution
   if (
     final !== State.Incomplete ||
     !requireSolution ||
@@ -126,6 +141,8 @@ function validateGrid(grid: GridData, solution: GridData | null) {
   ) {
     return { final, rules: ruleStates, symbols: symbolStates };
   }
+
+  // validate against the solution
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
       if (grid.getTile(x, y).color !== solution.getTile(x, y).color) {
@@ -137,6 +154,8 @@ function validateGrid(grid: GridData, solution: GridData | null) {
       }
     }
   }
+
+  // mark all rules and symbols that are satisfied by the solution
   grid.rules.forEach((rule, i) => {
     if (rule.validateWithSolution) {
       ruleStates[i] = { ...ruleStates[i], state: State.Satisfied };

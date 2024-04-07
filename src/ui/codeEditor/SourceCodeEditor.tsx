@@ -91,7 +91,7 @@ export default memo(function SourceCodeEditor({
       );
       try {
         const puzzle: Puzzle = PuzzleSchema.parse(
-          evaluate(`"use strict";\n${value}`)
+          evaluate(`"use strict";${value}`)
         );
         Compressor.compress(Serializer.stringifyPuzzle(puzzle))
           .then(d =>
@@ -112,8 +112,22 @@ export default memo(function SourceCodeEditor({
               error.errors[0].path.join('.') + ': ' + error.errors[0].message,
             handle,
           });
+          console.error('Validation error thrown from code editor:', error);
         } else if (error instanceof Error) {
           setToast({ message: error.message, handle });
+          if (error.stack) {
+            const match = error.stack.match(/<anonymous>:(\d+):(\d+)/);
+            if (match) {
+              const [_, line, column] = match;
+              editorRef.current.focus();
+              editorRef.current.revealLineInCenter(parseInt(line));
+              editorRef.current.setPosition({
+                lineNumber: parseInt(line),
+                column: parseInt(column),
+              });
+            }
+          }
+          console.error('Error thrown from code editor:', error);
         }
       }
     }

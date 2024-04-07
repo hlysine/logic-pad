@@ -7,12 +7,15 @@ import Puzzle from '../data/puzzle';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import Difficulty from './metadata/Difficulty';
 import { FiCheck } from 'react-icons/fi';
+import { ColorToChar } from '../data/primitives';
 
 function getGrid(solution: GridData) {
   return GridData.create(
     solution.tiles.map(t => {
       return t
-        .map(e => (e.color === 'gray' ? 'n' : e.color === 'dark' ? 'B' : 'W'))
+        .map(e => {
+          return ColorToChar[e.color] ?? 'n';
+        })
         .map((e, i) => (i < t.length / 2 ? e : 'n'))
         .join('');
     })
@@ -20,6 +23,18 @@ function getGrid(solution: GridData) {
 }
 
 export const DEV_PUZZLES: Puzzle[] = [
+  {
+    id: 'dev',
+    title: 'Dev',
+    hidden: true,
+    description:
+      'Dev',
+    grid: GridData.create([]),
+    solution: GridData.create([
+      'RRRR',
+    ]),
+    difficulty: 1,
+  },
   {
     id: 'heart',
     title: 'Heart',

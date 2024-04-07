@@ -6,6 +6,7 @@ import { Color } from '../../data/primitives';
 import TileConnections from '../../data/tileConnections';
 import { bg, color } from '../helper';
 import './tile.css';
+import { useCursor } from '../CursorContext';
 
 export interface TileProps {
   data: TileData;
@@ -322,6 +323,7 @@ export default memo(function Tile({
   connections,
   onTileClick,
 }: TileProps) {
+  const { left, right } = useCursor();
   const mouse = useMouseContext();
   const partStyles = useMemo(() => {
     let key = '';
@@ -358,6 +360,12 @@ export default memo(function Tile({
                 e.preventDefault();
                 if (!editable) return;
                 let c = color(e.buttons);
+                if(c === 'dark') {
+                  c = left;
+                } else if(c === 'light') {
+                  c = right;
+                }
+
                 if (!c) {
                   mouse.setColor(null, false);
                 } else {
@@ -377,7 +385,12 @@ export default memo(function Tile({
               onMouseEnter={e => {
                 e.preventDefault();
                 if (!editable) return;
-                const c = color(e.buttons);
+                let c = color(e.buttons);
+                if(c === 'dark') {
+                  c = left;
+                } else if(c === 'light') {
+                  c = right;
+                }
                 if (
                   !c ||
                   !mouse.color ||

@@ -38,8 +38,8 @@ export default memo(function Metadata() {
             width: 'fit-content',
             padding: '4px 6px',
             lineHeight: 1.4,
-            color: "#0d281f",
-            backgroundColor: "#0d281f",
+            color: "#242530",
+            backgroundColor: "#242530",
             borderRadius: '4px',
             boxDecorationBreak: 'clone',
             filter: "url('#instagram')"

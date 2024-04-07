@@ -1,4 +1,4 @@
-import { Color } from './primitives';
+import { CharToColor, Color } from './primitives';
 
 export default class TileData {
   public constructor(
@@ -50,12 +50,10 @@ export default class TileData {
   public static create(char: string): TileData {
     const exists = char !== '.';
     const fixed = char.toUpperCase() === char;
-    const color =
-      char.toLowerCase() === 'n'
-        ? Color.Gray
-        : char.toLowerCase() === 'b'
-          ? Color.Dark
-          : Color.Light;
+
+    const ch = char.toLowerCase();
+    const color = CharToColor[ch] ?? Color.Gray;
+
     return new TileData(exists, fixed, color);
   }
 }

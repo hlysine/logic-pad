@@ -110,6 +110,7 @@ export default class RegionAreaRule extends Rule {
         case Color.Gray:
           return RegionAreaRule.EXAMPLE_GRID_GRAY[this.size];
       }
+      return RegionAreaRule.EXAMPLE_GRID_GRAY[this.size];
     } else {
       let count = this.size;
       const tiles = array(5, 4, (x, y) => {

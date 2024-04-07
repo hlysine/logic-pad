@@ -24,18 +24,6 @@ function getGrid(solution: GridData) {
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
-    id: 'dev',
-    title: 'Dev',
-    hidden: true,
-    description:
-      'Dev',
-    grid: GridData.create([]),
-    solution: GridData.create([
-      'RRRR',
-    ]),
-    difficulty: 1,
-  },
-  {
     id: 'heart',
     title: 'Heart',
     description:

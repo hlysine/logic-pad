@@ -108,7 +108,6 @@ function validateGrid(grid: GridData, solution: GridData | null) {
     )
   );
 
-  console.log(JSON.parse(JSON.stringify(symbolOverrideStates)));
   symbolOverrideStates.forEach((states, i) => {
     if (ruleStates[i].state !== State.Incomplete) return;
     if (states.some(s => s === State.Error))

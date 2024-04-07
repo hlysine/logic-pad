@@ -21,8 +21,10 @@ export default memo(function HorizontalLayout({
           {center}
         </div>
       </div>
-      <div className="basis-[320px] shrink-0 flex flex-col items-stretch self-stretch justify-center gap-4">
-        {right}
+      <div className="basis-[320px] grow shrink-0 min-h-[50vh] flex flex-col items-end self-stretch justify-stretch">
+        <div className="w-[320px] h-full flex flex-col items-stretch justify-center gap-4">
+          {right}
+        </div>
       </div>
     </div>
   );

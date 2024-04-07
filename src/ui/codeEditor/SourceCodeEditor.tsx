@@ -121,8 +121,8 @@ export default memo(function SourceCodeEditor({
 
   return (
     <>
-      <div className="basis-0 grow shrink min-h-[300px] self-stretch dropdown dropdown-right">
-        <div className="w-full h-full focus-within:w-[min(800px,50vw)] transition-[width] duration-75">
+      <div className="basis-0 grow shrink min-h-[70vh] self-stretch dropdown dropdown-right text-nowrap overflow-visible">
+        <div className="inline-block w-full h-full focus-within:w-[max(100%-400px-1rem,min(800px,50vw))] transition-[width] duration-75">
           <Editor
             loading={loading}
             theme="vs-dark"
@@ -148,7 +148,7 @@ export default memo(function SourceCodeEditor({
             onMount={handleEditorDidMount}
           />
         </div>
-        <div className="dropdown-content shadow-xl bg-base-300 rounded-box z-10 ml-[calc(min(800px,50vw)-300px+1rem)] p-4 w-[400px] h-full overflow-y-auto">
+        <div className="dropdown-content inline-block !relative !inset-0 shadow-xl bg-base-300 rounded-box z-10 ml-4 p-4 w-[400px] h-full overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg text-base-content">Quick reference</h3>
             {enclosure.map(

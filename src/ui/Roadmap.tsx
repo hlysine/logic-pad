@@ -29,7 +29,7 @@ const roadmap: RoadmapItem[] = [
     'Prefilled tiles',
     '# prefilled tiles are wrong',
     '~Custom rule',
-    'Custom symbol',
+    '~Custom symbol',
     'Music Grid (as a grid rule)',
   ],
   '~Add win confirmation',

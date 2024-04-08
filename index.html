@@ -22,6 +22,10 @@
   </head>
   <body oncontextmenu="return false;">
     <div id="app"></div>
+    <script>
+      window.global ||= window;
+    </script>
+    <script src="/z3-built.js"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

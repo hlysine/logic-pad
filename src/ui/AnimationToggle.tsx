@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { MdAnimation } from 'react-icons/md';
-import { cn, siteOptions } from '../utils';
+import { cn, externalReducedMotion, siteOptions } from '../utils';
 
 export default memo(function AnimationToggle() {
   const [reduceMotion, setReduceMotion] = useState(
@@ -14,16 +14,22 @@ export default memo(function AnimationToggle() {
       return val;
     });
   };
+  const external = externalReducedMotion();
   return (
     <div
       className="tooltip tooltip-info tooltip-bottom"
-      data-tip="Toggle fancy animations"
+      data-tip={
+        external
+          ? 'Fancy animations are disabled by the browser'
+          : 'Toggle fancy animations'
+      }
     >
       <button
         className={cn(
           'btn btn-square',
           reduceMotion ? 'text-base-content/30' : 'text-base-content'
         )}
+        disabled={external}
         onClick={toggleReduceMotion}
       >
         <MdAnimation size={24} />

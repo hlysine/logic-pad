@@ -18,8 +18,10 @@ export const siteOptions = {
     window.localStorage.getItem('reducedMotion') === 'true',
 };
 
-export const prefersReducedMotion = () =>
-  siteOptions.reducedMotionOverride ||
+export const externalReducedMotion = () =>
   // @ts-expect-error for browser support
   window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
   window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
+
+export const prefersReducedMotion = () =>
+  siteOptions.reducedMotionOverride || externalReducedMotion();

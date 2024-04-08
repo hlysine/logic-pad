@@ -7,6 +7,13 @@ export interface LetterProps {
   symbol: CustomTextSymbolData;
 }
 
+function getTextSize(text: string) {
+  if (text.length === 1) return 'text-[0.75em]';
+  if (text.length === 2 && !text.includes('\n')) return 'text-[0.5em]';
+  if (text.length === 3 && !text.includes('\n')) return 'text-[0.4em]';
+  return 'text-[0.3em]';
+}
+
 export default memo(function CustomTextSymbol({
   textClass,
   symbol,
@@ -18,9 +25,15 @@ export default memo(function CustomTextSymbol({
         textClass
       )}
     >
-      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
+      <pre
+        className={cn(
+          'absolute m-auto font-[inherit] text-center',
+          getTextSize(symbol.text),
+          textClass
+        )}
+      >
         {symbol.text}
-      </span>
+      </pre>
     </div>
   );
 });

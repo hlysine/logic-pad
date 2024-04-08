@@ -44,6 +44,13 @@ export default class CustomTextSymbol extends MultiEntrySymbol {
       description: 'Text',
       configurable: true,
     },
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'rotation',
+      description: 'Rotation',
+      configurable: true,
+    },
   ]);
 
   /**
@@ -54,18 +61,21 @@ export default class CustomTextSymbol extends MultiEntrySymbol {
    * @param description - The description of the symbol.
    * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
    * @param text - The text to display.
+   * @param rotation - The rotation of the text in degrees.
    */
   public constructor(
     x: number,
     y: number,
     public readonly description: string,
     public readonly grid: GridData,
-    public readonly text: string
+    public readonly text: string,
+    public readonly rotation = 0
   ) {
     super(x, y);
     this.description = description;
     this.grid = grid;
     this.text = text;
+    this.rotation = rotation;
   }
 
   public get id(): string {
@@ -98,23 +108,30 @@ export default class CustomTextSymbol extends MultiEntrySymbol {
     description,
     grid,
     text,
+    rotation,
   }: {
     x?: number;
     y?: number;
     description?: string;
     grid?: GridData;
     text?: string;
+    rotation?: number;
   }): this {
     return new CustomTextSymbol(
       x ?? this.x,
       y ?? this.y,
       description ?? this.description,
       grid ?? this.grid,
-      text ?? this.text
+      text ?? this.text,
+      rotation ?? this.rotation
     ) as this;
   }
 
   public withText(text: string): this {
     return this.copyWith({ text });
+  }
+
+  public withRotation(rotation: number): this {
+    return this.copyWith({ rotation });
   }
 }

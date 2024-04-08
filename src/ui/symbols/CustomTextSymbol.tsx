@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { cn } from '../../utils';
 import CustomTextSymbolData from '../../data/symbols/customTextSymbol';
 
@@ -18,6 +18,12 @@ export default memo(function CustomTextSymbol({
   textClass,
   symbol,
 }: LetterProps) {
+  const textStyle = useMemo(
+    () => ({
+      transform: `rotate(${symbol.rotation}deg)`,
+    }),
+    [symbol.rotation]
+  );
   return (
     <div
       className={cn(
@@ -31,6 +37,7 @@ export default memo(function CustomTextSymbol({
           getTextSize(symbol.text),
           textClass
         )}
+        style={textStyle}
       >
         {symbol.text}
       </pre>

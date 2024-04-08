@@ -909,6 +909,7 @@ export class CustomTextSymbol extends MultiEntrySymbol {
     readonly description: string;
     readonly grid: GridData;
     readonly text: string;
+    readonly rotation: number;
     /**
       * **A custom text symbol**
       *
@@ -917,21 +918,25 @@ export class CustomTextSymbol extends MultiEntrySymbol {
       * @param description - The description of the symbol.
       * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
       * @param text - The text to display.
+      * @param rotation - The rotation of the text in degrees.
       */
-    constructor(x: number, y: number, description: string, grid: GridData, text: string);
+    constructor(x: number, y: number, description: string, grid: GridData, text: string, rotation?: number);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     validateSymbol(_grid: GridData): State;
-    copyWith({ x, y, description, grid, text, }: {
+    get validateWithSolution(): boolean;
+    copyWith({ x, y, description, grid, text, rotation, }: {
         x?: number;
         y?: number;
         description?: string;
         grid?: GridData;
         text?: string;
+        rotation?: number;
     }): this;
     withText(text: string): this;
+    withRotation(rotation: number): this;
 }
 
 export class DartSymbol extends NumberSymbol {

@@ -18,7 +18,7 @@ export default memo(function Symbol({
     throw new Error(`No component for symbol: ${symbol.id}`);
   }
   return (
-    <div className="absolute w-[1em] h-[1em]" style={containerStyle}>
+    <div className="absolute w-[1em] h-[1em] logic-tile" style={containerStyle}>
       <Component textClass={textClass} symbol={symbol} />
     </div>
   );

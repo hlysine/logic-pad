@@ -2,6 +2,28 @@
   transform: scale(0);
 }
 
+.logic-animated:has([style*='transform'])
+  .logic-tile:not([style*='transform']) {
+  animation: tile-appear 50ms ease-in-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logic-animated:has([style*='transform'])
+    .logic-tile:not([style*='transform']) {
+    animation: none;
+    transform: scale(1);
+  }
+}
+
+@keyframes tile-appear {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .tile-fixed {
   border-style: solid;
   border-image-slice: 24 24 24 24;

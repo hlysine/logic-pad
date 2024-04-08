@@ -15,7 +15,8 @@ const MdIcon = lazy(async () => {
   const Md = await import('react-icons/md');
   return {
     default: ({ icon, ...rest }: IconBaseProps & { icon: IconString }) => {
-      const Icon = Md[icon];
+      let Icon = Md[icon];
+      if (!Icon) Icon = Md.MdQuestionMark;
       return <Icon {...rest} />;
     },
   };

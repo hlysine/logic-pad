@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import InstructionData from '../../data/instruction';
 import { State } from '../../data/primitives';
-import { MdOutlineDeleteOutline } from 'react-icons/md';
+import { FiTrash2 } from 'react-icons/fi';
 import Rule from '../../data/rules/rule';
 import InstructionBase from './InstructionBase';
 import { useGrid } from '../GridContext';
@@ -27,7 +27,7 @@ export default memo(function EditableInstruction({
             className="btn btn-accent btn-square shadow-glow-md shadow-accent text-accent-content"
             onClick={() => setGrid(grid.removeRule(instruction))}
           >
-            <MdOutlineDeleteOutline size={24} />
+            <FiTrash2 size={24} />
           </button>
         </div>
       )}

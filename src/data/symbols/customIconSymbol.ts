@@ -1,8 +1,11 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import CustomSymbol from './customSymbol';
+import type Md from 'react-icons/md';
 
-export default class CustomTextSymbol extends CustomSymbol {
+export type IconString = keyof typeof Md;
+
+export default class CustomIconSymbol extends CustomSymbol {
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
   );
@@ -31,16 +34,16 @@ export default class CustomTextSymbol extends CustomSymbol {
     },
     {
       type: ConfigType.Grid,
-      default: CustomTextSymbol.EXAMPLE_GRID,
+      default: CustomIconSymbol.EXAMPLE_GRID,
       field: 'grid',
       description: 'Thumbnail Grid',
       configurable: true,
     },
     {
-      type: ConfigType.String,
-      default: 'X',
-      field: 'text',
-      description: 'Text',
+      type: ConfigType.Icon,
+      default: 'MdQuestionMark',
+      field: 'icon',
+      description: 'Icon',
       configurable: true,
     },
     {
@@ -53,13 +56,13 @@ export default class CustomTextSymbol extends CustomSymbol {
   ]);
 
   /**
-   * **A custom text symbol**
+   * **A custom icon symbol**
    *
    * @param description - The description of the symbol.
    * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
-   * @param text - The text to display.
+   * @param icon - The icon to display. All available icons can be found at https://react-icons.github.io/react-icons/icons/md/
    * @param rotation - The rotation of the text in degrees.
    */
   public constructor(
@@ -67,20 +70,20 @@ export default class CustomTextSymbol extends CustomSymbol {
     grid: GridData,
     x: number,
     y: number,
-    public readonly text: string,
+    public readonly icon: IconString,
     public readonly rotation = 0
   ) {
     super(description, grid, x, y);
-    this.text = text;
+    this.icon = icon;
     this.rotation = rotation;
   }
 
   public get id(): string {
-    return `custom_text`;
+    return `custom_icon`;
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return CustomTextSymbol.CONFIGS;
+    return CustomIconSymbol.CONFIGS;
   }
 
   public copyWith({
@@ -88,28 +91,28 @@ export default class CustomTextSymbol extends CustomSymbol {
     grid,
     x,
     y,
-    text,
+    icon,
     rotation,
   }: {
     description?: string;
     grid?: GridData;
     x?: number;
     y?: number;
-    text?: string;
+    icon?: IconString;
     rotation?: number;
   }): this {
-    return new CustomTextSymbol(
+    return new CustomIconSymbol(
       description ?? this.description,
       grid ?? this.grid,
       x ?? this.x,
       y ?? this.y,
-      text ?? this.text,
+      icon ?? this.icon,
       rotation ?? this.rotation
     ) as this;
   }
 
-  public withText(text: string): this {
-    return this.copyWith({ text });
+  public withIcon(icon: IconString): this {
+    return this.copyWith({ icon });
   }
 
   public withRotation(rotation: number): this {

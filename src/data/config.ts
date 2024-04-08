@@ -8,6 +8,7 @@ export enum ConfigType {
   Direction = 'direction',
   Orientation = 'orientation',
   Grid = 'grid',
+  Icon = 'icon',
 }
 
 export interface Config<T> {
@@ -46,13 +47,18 @@ export interface GridConfig extends Config<GridData> {
   readonly type: ConfigType.Grid;
 }
 
+export interface IconConfig extends Config<string> {
+  readonly type: ConfigType.Icon;
+}
+
 export type AnyConfig =
   | NumberConfig
   | StringConfig
   | ColorConfig
   | DirectionConfig
   | OrientationConfig
-  | GridConfig;
+  | GridConfig
+  | IconConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.

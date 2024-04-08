@@ -33,6 +33,7 @@ import TileData from '../../data/tile';
 import CellCountRule from '../../data/rules/cellCountRule';
 import SymbolsPerRegionRule from '../../data/rules/symbolsPerRegionRule.ts';
 import CustomTextSymbol from '../../data/symbols/customTextSymbol.ts';
+import CustomIconSymbol from '../../data/symbols/customIconSymbol.ts';
 
 export interface EnclosureEntry {
   name: string;
@@ -142,7 +143,12 @@ export const enclosure: EnclosureEntry[] = [
   {
     name: 'CustomTextSymbol',
     value: CustomTextSymbol,
-    example: `.addSymbol(new CustomTextSymbol(\n  1, 1,\n  'Description',\n  GridData.create([]),\n  'X'\n))`,
+    example: `.addSymbol(new CustomTextSymbol(\n  'Description',\n  GridData.create([]),\n  1, 1,\n  'X', 0\n))`,
+  },
+  {
+    name: 'CustomIconSymbol',
+    value: CustomIconSymbol,
+    example: `.addSymbol(new CustomIconSymbol(\n  'Description',\n  GridData.create([]),\n  1, 1,\n  'MdQuestionMark', 0\n))`,
   },
   {
     name: 'QuestionMarkSign',

@@ -46,6 +46,7 @@ export default class SerializerV0 extends SerializerBase {
         );
 
       case ConfigType.String:
+      case ConfigType.Icon:
         return (
           config.field +
           '=' +
@@ -83,6 +84,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Orientation:
         return [config.field, value as Orientation];
       case ConfigType.String:
+      case ConfigType.Icon:
         return [config.field, unescape(value)];
       case ConfigType.Grid: {
         return [config.field, this.parseGrid(unescape(value))];

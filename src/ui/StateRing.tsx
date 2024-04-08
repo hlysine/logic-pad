@@ -31,6 +31,18 @@ export default memo(function StateRing({
     }
   }, [state.final, width, height]);
 
+  useEffect(() => {
+    anime({
+      targets: '.logic-animated .logic-tile',
+      scale: [0, 1],
+      delay: anime.stagger(10, {
+        grid: [width, height],
+        from: 'center',
+        start: 100,
+      }),
+    });
+  }, [width, height]);
+
   return (
     <div
       className={cn(

@@ -1,3 +1,7 @@
+.logic-animated .logic-tile {
+  transform: scale(0);
+}
+
 .tile-fixed {
   border-style: solid;
   border-image-slice: 24 24 24 24;

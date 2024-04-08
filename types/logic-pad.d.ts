@@ -411,8 +411,8 @@ export function unescape(text: string, escapeCharacters?: string): string;
 export abstract class Instruction {
         abstract get id(): string;
         abstract get explanation(): string;
-        abstract createExampleGrid(): GridData;
         get configs(): readonly AnyConfig[] | null;
+        abstract createExampleGrid(): GridData;
         abstract copyWith(props: Record<string, unknown>): this;
         /**
             * Indicates that validation by logic is not available and the solution must be used for validation
@@ -559,8 +559,8 @@ export class BanPatternRule extends Rule {
     constructor(pattern: GridData);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ pattern }: {
@@ -581,8 +581,8 @@ export class CellCountRule extends Rule {
     constructor(color: Color, count: number);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ color, count }: {
@@ -619,8 +619,8 @@ export class ConnectAllRule extends Rule {
     constructor(color: Color);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ color }: {
@@ -639,13 +639,13 @@ export class CustomRule extends Rule {
       * This rule validates answers based on the provided solution.
       *
       * @param description - The description of the rule.
-      * @param grid - The thumbnail grid of the rule, preferably 5x4 in size
+      * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
       */
     constructor(description: string, grid: GridData);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(_grid: GridData): RuleState;
     copyWith({ description, grid, }: {
@@ -665,11 +665,11 @@ export class OffByXRule extends Rule {
     constructor(number: number);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(_grid: GridData): RuleState;
-    overrideSymbolValidation(grid: GridData, symbol: Symbol, validator: (grid: GridData) => State): State;
+    overrideSymbolValidation(grid: GridData, symbol: Symbol, validator: (grid: GridData) => State): State | undefined;
     copyWith({ number }: {
         number?: number;
     }): this;
@@ -688,8 +688,8 @@ export class RegionAreaRule extends Rule {
     constructor(color: Color, size: number);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ color, size }: {
@@ -719,7 +719,7 @@ export abstract class Rule extends Instruction {
       * @param validator - The original validation logic for the symbol.
       * @returns The state of the symbol after validation.
       */
-    overrideSymbolValidation(grid: GridData, _symbol: Symbol, validator: (grid: GridData) => State): State;
+    overrideSymbolValidation(_grid: GridData, _symbol: Symbol, _validator: (grid: GridData) => State): State | undefined;
 }
 
 export class SymbolsPerRegionRule extends Rule {
@@ -735,8 +735,8 @@ export class SymbolsPerRegionRule extends Rule {
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
-    get searchVariants(): SearchVariant[];
     createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ count, color }: {
         count?: number;
@@ -891,8 +891,8 @@ export class AreaNumberSymbol extends NumberSymbol {
     constructor(x: number, y: number, number: number);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     countTiles(grid: GridData): {
         completed: number;
         possible: number;
@@ -903,6 +903,35 @@ export class AreaNumberSymbol extends NumberSymbol {
         number?: number;
     }): this;
     withNumber(number: number): this;
+}
+
+export class CustomTextSymbol extends MultiEntrySymbol {
+    readonly description: string;
+    readonly grid: GridData;
+    readonly text: string;
+    /**
+      * **A custom text symbol**
+      *
+      * @param x - The x-coordinate of the symbol.
+      * @param y - The y-coordinate of the symbol.
+      * @param description - The description of the symbol.
+      * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
+      * @param text - The text to display.
+      */
+    constructor(x: number, y: number, description: string, grid: GridData, text: string);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    validateSymbol(_grid: GridData): State;
+    copyWith({ x, y, description, grid, text, }: {
+        x?: number;
+        y?: number;
+        description?: string;
+        grid?: GridData;
+        text?: string;
+    }): this;
+    withText(text: string): this;
 }
 
 export class DartSymbol extends NumberSymbol {
@@ -918,8 +947,8 @@ export class DartSymbol extends NumberSymbol {
     constructor(x: number, y: number, number: number, orientation: Direction);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     countTiles(grid: GridData): {
         completed: number;
         possible: number;
@@ -949,8 +978,8 @@ export class DirectionLinkerSymbol extends Symbol {
     changeDirections(linkedDirections: DirectionLinkerMap): this;
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     validateSymbol(grid: GridData): State;
     copyWith({ x, y }: {
         x?: number;
@@ -970,8 +999,8 @@ export class GalaxySymbol extends DirectionLinkerSymbol {
     constructor(x: number, y: number);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     validateSymbol(grid: GridData): State;
     copyWith({ x, y }: {
         x?: number;
@@ -993,8 +1022,8 @@ export class LetterSymbol extends Symbol {
     constructor(x: number, y: number, letter: string);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     validateSymbol(grid: GridData): State;
     copyWith({ x, y, letter, }: {
         x?: number;
@@ -1018,14 +1047,23 @@ export class LotusSymbol extends DirectionLinkerSymbol {
     constructor(x: number, y: number, orientation: Orientation);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     validateSymbol(grid: GridData): State;
     copyWith({ x, y, orientation, }: {
         x?: number;
         y?: number;
         orientation?: Orientation;
     }): this;
+}
+
+export abstract class MultiEntrySymbol extends Symbol {
+    /**
+      * Determines if the description of two MultiEntrySymbols can be merged when displayed in the UI.
+      * @param other - The other MultiEntrySymbol to compare to.
+      * @returns Whether the two MultiEntrySymbols have the same description.
+      */
+    descriptionEquals(other: Instruction): boolean;
 }
 
 /**
@@ -1047,8 +1085,8 @@ export abstract class NumberSymbol extends Symbol {
 export class QuestionMarkSign extends Sign {
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     copyWith({ x, y }: {
         x?: number;
         y?: number;
@@ -1083,8 +1121,8 @@ export class ViewpointSymbol extends NumberSymbol {
     constructor(x: number, y: number, number: number);
     get id(): string;
     get explanation(): string;
-    createExampleGrid(): GridData;
     get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
     countTiles(grid: GridData): {
         completed: number;
         possible: number;

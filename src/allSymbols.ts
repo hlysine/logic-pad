@@ -16,6 +16,9 @@ import { Direction, Orientation } from './data/primitives';
 import LotusSymbol from './data/symbols/lotusSymbol';
 import GalaxySymbol from './data/symbols/galaxySymbol';
 import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol';
+import CustomTextSymbol from './data/symbols/customTextSymbol';
+import CustomTextSymbolUI from './ui/symbols/CustomTextSymbol';
+import GridData from './data/grid';
 
 export interface SymbolProps<T extends SymbolData> {
   textClass: string;
@@ -46,6 +49,10 @@ register(new DartSymbolData(0, 0, 1, Direction.Down), DartSymbolUI);
 register(new LotusSymbol(0, 0, Orientation.Up), LotusSymbolUI);
 register(new GalaxySymbol(0, 0), GalaxySymbolUI);
 register(new DirectionLinkerSymbol(0, 0), DirectionLinkerSymbolUI);
+register(
+  new CustomTextSymbol(0, 0, '', GridData.create([]), 'A'),
+  CustomTextSymbolUI
+);
 register(new QuestionMarkSignData(0, 0), QuestionMarkSignUI);
 
 export default allSymbols;

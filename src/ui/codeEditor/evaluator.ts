@@ -32,6 +32,7 @@ import QuestionMarkSign from '../../data/symbols/signs/questionMarkSign';
 import TileData from '../../data/tile';
 import CellCountRule from '../../data/rules/cellCountRule';
 import SymbolsPerRegionRule from '../../data/rules/symbolsPerRegionRule.ts';
+import CustomTextSymbol from '../../data/symbols/customTextSymbol.ts';
 
 export interface EnclosureEntry {
   name: string;
@@ -137,6 +138,11 @@ export const enclosure: EnclosureEntry[] = [
     name: 'GalaxySymbol',
     value: GalaxySymbol,
     example: '.addSymbol(new GalaxySymbol(1, 1))',
+  },
+  {
+    name: 'CustomTextSymbol',
+    value: CustomTextSymbol,
+    example: `.addSymbol(new CustomTextSymbol(\n  1, 1,\n  'Description',\n  GridData.create([]),\n  'X'\n))`,
   },
   {
     name: 'QuestionMarkSign',

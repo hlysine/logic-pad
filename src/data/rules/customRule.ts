@@ -35,7 +35,7 @@ export default class CustomRule extends Rule {
    * This rule validates answers based on the provided solution.
    *
    * @param description - The description of the rule.
-   * @param grid - The thumbnail grid of the rule, preferably 5x4 in size
+   * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
    */
   public constructor(
     public readonly description: string,

@@ -13,6 +13,10 @@ export default defineConfig({
       generatedRouteTree: 'src/ui/router/routeTree.gen.ts',
     }),
     VitePWA({
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+      },
       manifest: {
         theme_color: '#414558',
       },

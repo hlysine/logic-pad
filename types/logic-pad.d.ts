@@ -923,7 +923,7 @@ export class CustomIconSymbol extends CustomSymbol {
       * @param x - The x-coordinate of the symbol.
       * @param y - The y-coordinate of the symbol.
       * @param icon - The icon to display. All available icons can be found at https://react-icons.github.io/react-icons/icons/md/
-      * @param rotation - The rotation of the text in degrees.
+      * @param rotation - The rotation of the icon in degrees.
       */
     constructor(description: string, grid: GridData, x: number, y: number, icon: IconString, rotation?: number);
     get id(): string;

@@ -7,6 +7,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router';
 import TanStackDevTools from '../ui/router/TanStackDevTools';
 import { Suspense, lazy, memo } from 'react';
 import { FaGithub } from 'react-icons/fa';
+import AnimationToggle from '../ui/AnimationToggle';
 const ThemeSwitcher = lazy(() => import('../ui/ThemeSwitcher'));
 
 export const Route = createRootRoute({
@@ -39,6 +40,7 @@ export const Route = createRootRoute({
                 </div>
                 <ModeSwitcher />
                 <div className="flex xl:basis-[320px] grow shrink justify-end items-center">
+                  <AnimationToggle />
                   <Suspense>
                     <ThemeSwitcher />
                   </Suspense>

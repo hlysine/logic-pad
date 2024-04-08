@@ -13,7 +13,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const siteOptions = {
+  reducedMotionOverride:
+    window.localStorage.getItem('reducedMotion') === 'true',
+};
+
 export const prefersReducedMotion = () =>
+  siteOptions.reducedMotionOverride ||
   // @ts-expect-error for browser support
   window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
   window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;

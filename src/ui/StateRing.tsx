@@ -1,6 +1,6 @@
 import { memo, useEffect } from 'react';
 import { ringBorder } from './helper';
-import { cn } from '../utils';
+import { cn, prefersReducedMotion } from '../utils';
 import { useGrid } from './GridContext';
 import { State } from '../data/primitives';
 import anime from 'animejs';
@@ -19,7 +19,7 @@ export default memo(function StateRing({
   const { state } = useGrid();
 
   useEffect(() => {
-    if (state.final === State.Satisfied) {
+    if (state.final === State.Satisfied && !prefersReducedMotion()) {
       anime({
         targets: '.logic-animated .logic-tile',
         scale: [
@@ -32,15 +32,24 @@ export default memo(function StateRing({
   }, [state.final, width, height]);
 
   useEffect(() => {
-    anime({
-      targets: '.logic-animated .logic-tile',
-      scale: [0, 1],
-      delay: anime.stagger(10, {
-        grid: [width, height],
-        from: 'center',
-        start: 100,
-      }),
-    });
+    if (prefersReducedMotion()) {
+      anime({
+        targets: '.logic-animated .logic-tile',
+        scale: 1,
+        duration: 0,
+        delay: 0,
+      });
+    } else {
+      anime({
+        targets: '.logic-animated .logic-tile',
+        scale: [0, 1],
+        delay: anime.stagger(10, {
+          grid: [width, height],
+          from: 'center',
+          start: 100,
+        }),
+      });
+    }
   }, [width, height]);
 
   return (

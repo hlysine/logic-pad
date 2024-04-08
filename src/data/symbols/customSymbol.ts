@@ -6,7 +6,7 @@ export default abstract class CustomSymbol extends MultiEntrySymbol {
   /**
    * **A custom symbol**
    *
-   * @param description - The description of the symbol.
+   * @param description - The description of the symbol. Leave this empty to hide the description.
    * @param grid - The thumbnail grid of the rule, preferably 5x4 in size.
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.

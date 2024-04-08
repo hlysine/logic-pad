@@ -21,6 +21,15 @@ export default memo(function InstructionList({
   children: Instruction,
 }: InstructionListProps) {
   const { grid, state, solution } = useGrid();
+  const hasSymbols = useMemo(() => {
+    if (grid.symbols.size === 0) return false;
+    for (const [_, value] of grid.symbols) {
+      for (const symbol of value) {
+        if (symbol.explanation.length > 0) return true;
+      }
+    }
+    return false;
+  }, [grid]);
   const symbolMergeMap = useMemo(() => {
     const map = new Map<string, number[][]>();
     for (const [key, value] of grid.symbols ?? []) {
@@ -88,15 +97,18 @@ export default memo(function InstructionList({
             state={state?.rules[i]?.state}
           />
         ))}
-        {grid.symbols.size > 0 && <Title>Symbols</Title>}
+        {hasSymbols && <Title>Symbols</Title>}
         {[...symbolMergeMap.entries()].flatMap(([key, value]) =>
-          value.map((group, i) => (
-            <Instruction
-              key={key + group[0]}
-              instruction={grid.symbols.get(key)![group[0]]}
-              state={symbolStateMap.get(key)?.[i]}
-            />
-          ))
+          value.map(
+            (group, i) =>
+              grid.symbols.get(key)![group[0]].explanation.length > 0 && (
+                <Instruction
+                  key={key + group[0]}
+                  instruction={grid.symbols.get(key)![group[0]]}
+                  state={symbolStateMap.get(key)?.[i]}
+                />
+              )
+          )
         )}
       </div>
       {statusText.trim().length > 0 && (

@@ -41,6 +41,7 @@ const roadmap: RoadmapItem[] = [
   'Implement symbol stacking',
   '~Use custom theme system',
   '~Implement puzzle serialization',
+  'Enable PWA',
   [
     '~Optimizations',
     '~Optimize merged tiles',

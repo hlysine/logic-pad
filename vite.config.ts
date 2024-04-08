@@ -13,7 +13,6 @@ export default defineConfig({
       generatedRouteTree: 'src/ui/router/routeTree.gen.ts',
     }),
     VitePWA({
-      registerType: 'autoUpdate',
       manifest: {
         theme_color: '#414558',
       },

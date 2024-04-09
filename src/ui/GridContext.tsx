@@ -145,7 +145,10 @@ function validateGrid(grid: GridData, solution: GridData | null) {
   // validate against the solution
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
-      if (grid.getTile(x, y).color !== solution.getTile(x, y).color) {
+      if (
+        grid.getTile(x, y).exists &&
+        grid.getTile(x, y).color !== solution.getTile(x, y).color
+      ) {
         return {
           final: State.Incomplete,
           rules: ruleStates,

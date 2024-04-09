@@ -133,7 +133,7 @@ function validateGrid(grid: GridData, solution: GridData | null) {
 
   // return early if there is no need to validate against a solution
   if (
-    final !== State.Incomplete ||
+    final === State.Satisfied ||
     !requireSolution ||
     !solution ||
     solution.width !== grid.width ||

@@ -64,7 +64,8 @@ export default memo(function InstructionList({
     const map = new Map<string, State[]>();
     if (!state) return map;
     for (const [key, value] of symbolMergeMap) {
-      const stateSymbols = state.symbols.get(key)!;
+      const stateSymbols = state.symbols.get(key);
+      if (!stateSymbols) continue;
       map.set(
         key,
         value.map(group => {

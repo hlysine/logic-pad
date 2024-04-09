@@ -10,6 +10,9 @@
     "preview": "vite preview",
     "build-types": "rimraf types/temp && rimraf types/temp/logic-pad.d.ts && tsc --declaration --emitDeclarationOnly --noEmit false --outDir types/temp && dts-bundle --name logic-pad --main types/temp/data/**/*.d.ts --outputAsModuleFolder --out ../../logic-pad.d.ts && node ./types/postprocess.js ./types/logic-pad.d.ts && rimraf types/temp"
   },
+  "engines": {
+    "node": ">=20.12.1"
+  },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.22.1",
@@ -63,5 +66,8 @@
     "typescript": "^5.4.3",
     "vite": "^5.1.4",
     "vite-plugin-pwa": "^0.19.8"
+  },
+  "volta": {
+    "node": "20.12.1"
   }
 }

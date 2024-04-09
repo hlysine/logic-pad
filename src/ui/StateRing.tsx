@@ -1,9 +1,9 @@
 import { memo, useEffect } from 'react';
 import { ringBorder } from './helper';
 import { cn, prefersReducedMotion } from '../utils';
-import { useGrid } from './GridContext';
 import { State } from '../data/primitives';
 import anime from 'animejs';
+import { useGridState } from './GridStateContext';
 
 export interface GridRingProps {
   children?: React.ReactNode;
@@ -16,7 +16,7 @@ export default memo(function StateRing({
   width,
   height,
 }: GridRingProps) {
-  const { state } = useGrid();
+  const { state } = useGridState();
 
   useEffect(() => {
     if (state.final === State.Satisfied && !prefersReducedMotion()) {

@@ -7,6 +7,7 @@ import ErrorOverlay from './ErrorOverlay';
 import { Color, State } from '../../data/primitives';
 import GridData from '../../data/grid';
 import Loading from '../Loading';
+import { GridStateConsumer } from '../GridStateContext';
 
 export interface MainGridProps {
   editable: boolean;
@@ -25,7 +26,7 @@ function computeTileSize(grid: GridData) {
 }
 
 export default memo(function MainGrid({ editable, children }: MainGridProps) {
-  const { grid, state, setGrid } = useGrid();
+  const { grid, setGrid } = useGrid();
   const [tileConfig, setTileConfig] = useState<{
     width: number;
     height: number;
@@ -69,13 +70,19 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
           }
         }}
       >
-        <SymbolOverlay grid={grid} state={state.symbols} />
-        {state.rules.map((rule, i) =>
-          rule.state === State.Error ? (
-            <ErrorOverlay key={i} positions={rule.positions} />
-          ) : null
-        )}
-        {children}
+        <GridStateConsumer>
+          {({ state }) => (
+            <>
+              <SymbolOverlay grid={grid} state={state.symbols} />
+              {state.rules.map((rule, i) =>
+                rule.state === State.Error ? (
+                  <ErrorOverlay key={i} positions={rule.positions} />
+                ) : null
+              )}
+              {children}
+            </>
+          )}
+        </GridStateConsumer>
       </Grid>
     </StateRing>
   );

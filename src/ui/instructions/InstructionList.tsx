@@ -4,6 +4,7 @@ import { memo, useMemo } from 'react';
 import { useGrid } from '../GridContext';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import MultiEntrySymbol from '../../data/symbols/multiEntrySymbol';
+import { useGridState } from '../GridStateContext';
 
 export interface InstructionListProps {
   children: React.NamedExoticComponent<InstructionProps>;
@@ -20,7 +21,8 @@ function Title({ children }: { children: React.ReactNode }) {
 export default memo(function InstructionList({
   children: Instruction,
 }: InstructionListProps) {
-  const { grid, state, solution } = useGrid();
+  const { grid, solution } = useGrid();
+  const { state } = useGridState();
   const hasSymbols = useMemo(() => {
     if (grid.symbols.size === 0) return false;
     for (const [_, value] of grid.symbols) {

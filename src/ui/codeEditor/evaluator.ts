@@ -34,6 +34,7 @@ import CellCountRule from '../../data/rules/cellCountRule';
 import SymbolsPerRegionRule from '../../data/rules/symbolsPerRegionRule.ts';
 import CustomTextSymbol from '../../data/symbols/customTextSymbol.ts';
 import CustomIconSymbol from '../../data/symbols/customIconSymbol.ts';
+import validateGrid, { aggregateState } from '../../data/validate.ts';
 
 export interface EnclosureEntry {
   name: string;
@@ -247,6 +248,16 @@ export const enclosure: EnclosureEntry[] = [
   {
     name: 'Compressor',
     value: Compressor,
+    example: null,
+  },
+  {
+    name: 'aggregateState',
+    value: aggregateState,
+    example: null,
+  },
+  {
+    name: 'validateGrid',
+    value: validateGrid,
     example: null,
   },
 ];

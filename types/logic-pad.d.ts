@@ -1239,6 +1239,9 @@ export class TileConnections {
     set bottomRight(value: boolean);
 }
 
+export function aggregateState(rules: RuleState[], symbols: Map<string, State[]>): State;
+export function validateGrid(grid: GridData, solution: GridData | null): GridState;
+
 
 }
 export {};

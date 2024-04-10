@@ -1,9 +1,24 @@
-import { AnyConfig } from '../../config';
+import { AnyConfig, ConfigType } from '../../config';
 import GridData from '../../grid';
 import Sign from './sign';
 
 export default class QuestionMarkSign extends Sign {
-  private static readonly CONFIGS = null;
+  private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'x',
+      description: 'X',
+      configurable: false,
+    },
+    {
+      type: ConfigType.Number,
+      default: 0,
+      field: 'y',
+      description: 'Y',
+      configurable: false,
+    },
+  ]);
 
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['nnnnn', 'nnnnn', 'nnnnn', 'nnnnn'])

@@ -32,6 +32,13 @@ const roadmap: RoadmapItem[] = [
     '# prefilled tiles are wrong',
     'Music Grid (as a grid rule)',
   ],
+  [
+    'Refactors',
+    'Discover rules and symbols with glob import',
+    'Separate data and UI repositories',
+    'Validate grid with web worker',
+    'Use event system for rules and symbols',
+  ],
   '~Add win confirmation',
   '~Add undo and restart',
   '~Add flood painting',

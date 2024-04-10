@@ -1,9 +1,11 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, useContext, useMemo, useState } from 'react';
 import GridData from '../data/grid';
 import { useEdit } from './EditContext';
 import { PuzzleMetadata } from '../data/puzzle';
 import validateGrid from '../data/validate';
 import { useGridState } from './GridStateContext';
+import debounce from 'lodash/debounce';
+import { GridState } from '../data/primitives';
 
 interface GridContext {
   grid: GridData;
@@ -50,10 +52,20 @@ export default memo(function GridContext({
   const [solution, setSolution] = useState<GridData | null>(null);
   const [metadata, setMetadata] = useState<PuzzleMetadata>(defaultMetadata);
 
+  const setStateDebounced = useMemo(
+    () =>
+      debounce((state: GridState) => setState(state), 100, {
+        maxWait: 100,
+        trailing: true,
+        leading: false,
+      }),
+    [setState]
+  );
+
   const setGridRaw: GridContext['setGridRaw'] = (grid, sol) => {
     setGrid(grid);
     if (sol !== undefined) setSolution(sol);
-    setState(validateGrid(grid, sol === undefined ? solution : sol));
+    setStateDebounced(validateGrid(grid, sol === undefined ? solution : sol));
   };
 
   return (

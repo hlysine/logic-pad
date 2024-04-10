@@ -90,10 +90,10 @@ export default class ConnectAllRule extends Rule {
         state: State.Error,
         positions: minBy(islands, island => island.length)!,
       };
-    } else if (islands.length === 1) {
+    } else if (islands.length <= 1) {
       return { state: complete ? State.Satisfied : State.Incomplete };
     } else {
-      return { state: State.Incomplete };
+      return { state: State.Incomplete }; // not reachable but the TS is not happy
     }
   }
 

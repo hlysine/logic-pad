@@ -6,7 +6,7 @@ import SymbolOverlay from './SymbolOverlay';
 import ErrorOverlay from './ErrorOverlay';
 import { Color, State } from '../../data/primitives';
 import GridData from '../../data/grid';
-import Loading from '../Loading';
+import Loading from '../components/Loading';
 import { GridStateConsumer } from '../GridStateContext';
 
 export interface MainGridProps {

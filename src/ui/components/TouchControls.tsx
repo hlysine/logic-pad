@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
-import { cn } from '../utils';
-import mouseContext from './grid/MouseContext';
+import { cn } from '../../utils';
+import mouseContext from '../grid/MouseContext';
 
 interface TouchOptionProps {
   selected: boolean;

@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { cn, externalReducedMotion, siteOptions } from '../utils';
+import { cn, externalReducedMotion, siteOptions } from '../../utils';
 
 export default memo(function AnimationToggle() {
   const [reduceMotion, setReduceMotion] = useState(

@@ -53,5 +53,10 @@ module.exports = {
     ],
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/unified-signatures': 'off',
+    '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
+    '@typescript-eslint/restrict-template-expressions': [
+      'error',
+      { allowNumber: true, allowBoolean: true },
+    ],
   },
 };

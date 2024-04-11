@@ -2,7 +2,7 @@ import { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { memo, useEffect, useState } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
-import { cn } from '../utils';
+import { cn } from '../../utils';
 
 export const themeKey = 'theme';
 
@@ -57,7 +57,7 @@ export default memo(function ThemeSwitcher() {
     localStorage.setItem(themeKey, theme);
     const editorTheme = SUPPORTED_THEMES.find(([t]) => t === theme)?.[1];
     if (monaco && editorTheme) {
-      import(`../../node_modules/monaco-themes/themes/${editorTheme}.json`)
+      import(`../../../node_modules/monaco-themes/themes/${editorTheme}.json`)
         .then(data => {
           monaco.editor.defineTheme(
             editorTheme,

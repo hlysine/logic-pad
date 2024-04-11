@@ -1,4 +1,4 @@
-import Roadmap from '../ui/Roadmap';
+import Roadmap from '../ui/components/Roadmap';
 import DevPuzzles, { DEV_PUZZLES } from '../ui/DevPuzzles';
 import ModeSwitcher from '../ui/modes/ModeSwitcher';
 import EditContext from '../ui/EditContext';
@@ -7,9 +7,10 @@ import { Outlet, createRootRoute } from '@tanstack/react-router';
 import TanStackDevTools from '../ui/router/TanStackDevTools';
 import { Suspense, lazy, memo } from 'react';
 import { FaGithub } from 'react-icons/fa';
-import AnimationToggle from '../ui/AnimationToggle';
+import AnimationToggle from '../ui/components/AnimationToggle';
 import GridStateContext from '../ui/GridStateContext';
-const ThemeSwitcher = lazy(() => import('../ui/ThemeSwitcher'));
+import DocumentTitle from '../ui/components/DocumentTitle';
+const ThemeSwitcher = lazy(() => import('../ui/components/ThemeSwitcher'));
 
 export const Route = createRootRoute({
   component: memo(function Root() {
@@ -17,6 +18,7 @@ export const Route = createRootRoute({
       <EditContext>
         <GridStateContext>
           <GridContext>
+            <DocumentTitle>Logic Pad</DocumentTitle>
             <div className="h-dvh w-dvw overflow-auto bg-neutral">
               <div className="flex flex-col items-stretch min-h-full w-full">
                 <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2">

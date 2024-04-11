@@ -8,8 +8,9 @@ import InstructionSearch from '../ui/instructions/InstructionSearch';
 import { createFileRoute } from '@tanstack/react-router';
 import { Suspense, lazy, memo } from 'react';
 import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
-import Loading from '../ui/Loading';
+import Loading from '../ui/components/Loading';
 import HorizontalLayout from '../ui/HorizontalLayout';
+import DocumentTitle from '../ui/components/DocumentTitle';
 const SourceCodeEditor = lazy(
   () => import('../ui/codeEditor/SourceCodeEditor')
 );
@@ -25,6 +26,7 @@ export const Route = createFileRoute('/create')({
       <HorizontalLayout
         left={
           <>
+            <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
             <Suspense fallback={<Loading />}>
               <SourceCodeEditor loading={<Loading />} />
             </Suspense>

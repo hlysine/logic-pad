@@ -4,7 +4,7 @@ import CustomIconSymbolData, {
   IconString,
 } from '../../data/symbols/customIconSymbol';
 import { IconBaseProps } from 'react-icons';
-import Loading from '../Loading';
+import Loading from '../components/Loading';
 
 export interface CustomIconProps {
   textClass: string;

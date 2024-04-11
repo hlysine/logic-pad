@@ -7,7 +7,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
 import HorizontalLayout from '../ui/HorizontalLayout';
-import TouchControls from '../ui/TouchControls';
+import TouchControls from '../ui/components/TouchControls';
+import DocumentTitle from '../ui/components/DocumentTitle';
 
 export const Route = createFileRoute('/solve')({
   validateSearch,
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/solve')({
       <HorizontalLayout
         left={
           <>
+            <DocumentTitle>Logic Pad</DocumentTitle>
             <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
               <Metadata />
             </div>

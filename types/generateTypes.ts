@@ -1,41 +1,49 @@
 #!/usr/bin/env bun
 
 import { $, ShellError } from 'bun';
-import { readFileSync, writeFileSync } from 'fs';
-import { createMinifier } from '@david/dts-minify';
-import * as ts from 'typescript';
-import dedent from 'dedent';
+import dts from 'dts-bundle';
 
 // remove old files
+console.log('Removing old files...');
 await $`rm -rf ./types/temp`.nothrow();
 await $`rm ./types/logic-pad.d.ts`.nothrow();
 
 try {
   // compile the whole project
-  await $`bunx tsc --declaration --emitDeclarationOnly --noEmit false --outDir ./types/temp`;
+  console.log('Generating types...');
+  await $`bunx --bun tsc --declaration --emitDeclarationOnly --noEmit false --outDir ./types/temp`;
+
   // bundle the data types into one file
-  await $`bunx dts-bundle --name logic-pad --main ./types/temp/data/**/*.d.ts --outputAsModuleFolder --out ../../logic-pad.d.ts`;
+  console.log('Bundling types...');
+  dts.bundle({
+    name: 'logic-pad',
+    main: './types/temp/data/**/*.d.ts',
+    outputAsModuleFolder: true,
+    out: '../../logic-pad.d.ts',
+  });
 
   // wrap the bundled types in a global declaration
   const filePath = './types/logic-pad.d.ts';
 
-  let file = readFileSync(filePath, 'utf-8');
+  let file = await Bun.file(filePath).text();
 
+  file = file
+    .replace(/^export default +(?=class|abstract|function)/gm, 'export ')
+    .replace(/^export default +(?!class|abstract|function)/gm, 'export const ');
   if (!file.startsWith('declare global'))
-    file = dedent`
+    file = `
       declare global {
-        ${file.replace(/^export default /gm, 'export ')}
+        ${file}
       }
       export {};
     `;
+  file = file.replace(/\r\n/g, '\n');
 
-  // minify the file
-  const minifier = createMinifier(ts);
+  await Bun.write(filePath, file);
 
-  writeFileSync(
-    filePath,
-    minifier.minify(file.replace(/\r\n/g, '\n'), { keepJsDocs: true })
-  );
+  // format the file
+  console.log('Formatting types...');
+  await $`prettier --write ${filePath}`;
 } catch (err) {
   if (err instanceof ShellError) {
     console.error(err.stderr);
@@ -43,4 +51,7 @@ try {
 }
 
 // remove the temporary files
+console.log('Cleaning up...');
 await $`rm -rf ./types/temp`;
+
+console.log('Done!');

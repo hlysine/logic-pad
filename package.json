@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "yarn build-types && tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "build-types": "rimraf types/temp && rimraf types/temp/logic-pad.d.ts && tsc --declaration --emitDeclarationOnly --noEmit false --outDir types/temp && dts-bundle --name logic-pad --main types/temp/data/**/*.d.ts --outputAsModuleFolder --out ../../logic-pad.d.ts && node ./types/postprocess.js ./types/logic-pad.d.ts && rimraf types/temp"
+    "dev": "bunx --bun vite",
+    "build": "bun run build-types && bunx --bun tsc && bunx --bun vite build",
+    "lint": "bunx --bun eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "bunx --bun vite preview",
+    "build-types": "bun ./types/generateTypes.ts"
   },
   "engines": {
-    "node": ">=20.12.1"
+    "bun": ">=1.1.0"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
@@ -34,10 +34,11 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@david/dts-minify": "npm:@jsr/david__dts-minify",
     "@tanstack/router-vite-plugin": "^1.20.5",
     "@types/animejs": "^3.1.12",
+    "@types/bun": "^1.0.12",
     "@types/lodash": "^4.17.0",
-    "@types/node": "^20.11.30",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
@@ -46,6 +47,7 @@
     "autoprefixer": "^10.4.18",
     "clsx": "^2.1.0",
     "daisyui": "^4.7.2",
+    "dedent": "^1.5.3",
     "dts-bundle": "^0.7.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -63,11 +65,11 @@
     "rimraf": "^5.0.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.5",
     "vite": "^5.1.4",
     "vite-plugin-pwa": "^0.19.8"
   },
-  "volta": {
-    "node": "20.12.1"
-  }
+  "trustedDependencies": [
+    "@vercel/speed-insights"
+  ]
 }

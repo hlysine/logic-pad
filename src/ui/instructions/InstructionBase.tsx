@@ -30,7 +30,7 @@ export default memo(function Instruction({
       >
         <div
           className={cn(
-            'w-1 shrink-0 grow-0',
+            'w-1 shrink-0 grow-0 transition-colors',
             state === State.Incomplete
               ? 'bg-opacity-0'
               : state === State.Satisfied

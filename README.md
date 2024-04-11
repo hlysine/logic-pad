@@ -10,26 +10,22 @@ Note that this app is still early in development and major refactors are planned
 
 ## Developing Logic Pad
 
-Node.js v20 is required for this project.
-I recommend using [Volta](https://volta.sh/) to set up your JS dev environment.
+[Bun >=v1.1.0](https://bun.sh/) is required for this project.
 
 ```bash
-# 1. Install yarn
-npm install -g yarn
-
-# 2. Clone this repository
+# 1. Clone this repository
 git clone https://github.com/hlysine/logic-pad.git
 
-# 3. Restore dependencies
+# 2. Restore dependencies
 cd logic-pad
-yarn
+bun install
 
-# 4. Run the dev server
-yarn dev
+# 3. Run the dev server
+bun dev
 
 # You can now develop with hot module reload
 ```
 
 In addition to the bundled JS code, the code editor also requires a TS type declaration file to
 display documentation and type info. If you have modified anything in `src/data`, you should
-regenerate the type definition with `yarn build-types`
+regenerate the type definition with `bun build-types`

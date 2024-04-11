@@ -142,7 +142,7 @@ export default memo(function SourceCodeEditor({
             theme="vs-dark"
             width="100%"
             height="100%"
-            className="focus-within:z-30"
+            className="focus-within:z-30 rounded-box overflow-hidden"
             defaultLanguage="javascript"
             defaultValue={(() => {
               let saved = window.localStorage.getItem('sourceCode');

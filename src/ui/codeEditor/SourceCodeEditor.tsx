@@ -136,7 +136,7 @@ export default memo(function SourceCodeEditor({
   return (
     <>
       <div className="basis-0 grow shrink min-h-[70vh] self-stretch dropdown dropdown-right text-nowrap overflow-visible">
-        <div className="inline-block w-full h-full focus-within:w-[max(100%-400px-1rem,min(800px,50vw))] transition-[width] duration-75">
+        <div className="inline-block w-full h-full lg:focus-within:w-[max(100%-400px-1rem,min(800px,50vw))] transition-[width] duration-75">
           <Editor
             loading={loading}
             theme="vs-dark"

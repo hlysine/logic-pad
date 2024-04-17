@@ -863,6 +863,7 @@ declare global {
       solution: GridData | null,
       _state: GridState
     ): string | null;
+    computeSolution(initialGrid: GridData): GridData;
   }
 
   /**

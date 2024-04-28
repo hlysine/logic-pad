@@ -14,7 +14,7 @@ export default memo(function EditorPane() {
   const [activeTab, setActiveTab] = useState(1);
   return (
     <div className="flex-1 flex flex-col gap-2">
-      <div role="tablist" className="tabs tabs-bordered">
+      <div role="tablist" className="tabs tabs-bordered shrink-0">
         {panes.map(([name], i) => (
           <a
             key={name}

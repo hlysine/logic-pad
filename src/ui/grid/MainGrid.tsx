@@ -16,10 +16,16 @@ export interface MainGridProps {
 }
 
 function computeTileSize(grid: GridData) {
-  const newSize = Math.min(
-    (window.innerWidth - 120 - 640) / grid.width,
-    (window.innerHeight - 180) / grid.height
-  );
+  const newSize =
+    window.innerWidth < 1280
+      ? Math.min(
+          (window.innerWidth - 120) / grid.width,
+          (window.innerHeight - 180) / grid.height
+        )
+      : Math.min(
+          (window.innerWidth - 120 - 640) / grid.width,
+          (window.innerHeight - 180) / grid.height
+        );
   return Math.max(
     25,
     Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize)

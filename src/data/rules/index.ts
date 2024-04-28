@@ -1,12 +1,13 @@
 import Rule from './rule';
 
-const rules = import.meta.glob<Rule | undefined>?.(
-  ['./**/*.ts', '!./index.ts'],
-  {
+let rules: Record<string, Rule | undefined> | undefined;
+
+try {
+  rules = import.meta.glob<Rule | undefined>(['./**/*.ts', '!./index.ts'], {
     import: 'instance',
     eager: true,
-  }
-);
+  });
+} catch (_) {} // ignore errors during codegen becausee bun doesn't have import.meta.glob
 
 const allRules = new Map<string, Rule>();
 

@@ -107,7 +107,7 @@ export default class SerializerV0 extends SerializerBase {
   public parseRule(str: string): Rule {
     const [id, ...entries] = str.split(',');
     const instruction = allRules.get(id);
-    if (!instruction) throw new Error(`Unknown symbol: ${id}`);
+    if (!instruction) throw new Error(`Unknown rule: ${id}`);
     const configs = instruction.configs;
     if (configs == null) return instruction.copyWith({});
     return instruction.copyWith(

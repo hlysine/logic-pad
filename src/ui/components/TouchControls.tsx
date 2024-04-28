@@ -20,11 +20,11 @@ export default memo(function TouchControls() {
       >
         <input
           type="range"
-          min={0.5}
-          max={2}
+          min={-1}
+          max={1}
           step={0.1}
-          value={scale}
-          onChange={e => setScale(Number(e.currentTarget.value))}
+          value={Math.log2(scale)}
+          onChange={e => setScale(2 ** Number(e.currentTarget.value))}
           className="range m-2"
         />
       </div>

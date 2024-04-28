@@ -34,8 +34,8 @@ const roadmap: RoadmapItem[] = [
   ],
   [
     'Refactors',
-    'Discover rules and symbols with glob import',
-    'Separate data and UI repositories',
+    '~Discover rules and symbols with glob import',
+    '~Separate data and UI repositories',
     'Validate grid with web worker',
     'Use event system for rules and symbols',
   ],

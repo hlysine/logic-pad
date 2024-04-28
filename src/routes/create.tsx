@@ -11,6 +11,7 @@ import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
 import Loading from '../ui/components/Loading';
 import ThreePaneLayout from '../ui/ThreePaneLayout';
 import DocumentTitle from '../ui/components/DocumentTitle';
+import TouchControls from '../ui/components/TouchControls';
 const SourceCodeEditor = lazy(
   () => import('../ui/codeEditor/SourceCodeEditor')
 );
@@ -30,6 +31,7 @@ export const Route = createFileRoute('/create')({
             <Suspense fallback={<Loading />}>
               <SourceCodeEditor loading={<Loading />} />
             </Suspense>
+            <TouchControls />
             <EditControls />
           </>
         }

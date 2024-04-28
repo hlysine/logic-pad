@@ -11,6 +11,8 @@ import AnimationToggle from '../ui/components/AnimationToggle';
 import GridStateContext from '../ui/GridStateContext';
 import DocumentTitle from '../ui/components/DocumentTitle';
 import DisplayContext from '../ui/DisplayContext';
+import PWAPrompt from '../ui/components/PWAPrompt';
+
 const ThemeSwitcher = lazy(() => import('../ui/components/ThemeSwitcher'));
 
 export const Route = createRootRoute({
@@ -23,6 +25,7 @@ export const Route = createRootRoute({
               <DocumentTitle>Logic Pad</DocumentTitle>
               {/* Large bottom padding in small screen to fit the floating toolbar */}
               <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral pb-32 xl:pb-0">
+                <PWAPrompt />
                 <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">
                   <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2">
                     <div className="flex flex-wrap grow shrink items-center gap-4">

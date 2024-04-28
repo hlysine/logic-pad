@@ -1,4 +1,3 @@
-import Instruction from '../ui/instructions/Instruction';
 import InstructionList from '../ui/instructions/InstructionList';
 import EditControls from '../ui/components/EditControls';
 import MainGrid from '../ui/grid/MainGrid';
@@ -28,7 +27,7 @@ export const Route = createFileRoute('/solve')({
           </>
         }
         center={<MainGrid editable={true} />}
-        right={<InstructionList>{Instruction}</InstructionList>}
+        right={<InstructionList />}
       />
     );
   }),

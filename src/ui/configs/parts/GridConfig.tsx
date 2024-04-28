@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { ConfigType, GridConfig } from '../../data/config';
-import Instruction from '../../data/instruction';
-import { Color } from '../../data/primitives';
-import Grid from '../grid/Grid';
-import GridData from '../../data/grid';
+import { ConfigType, GridConfig } from '../../../data/config';
+import Instruction from '../../../data/instruction';
+import { Color } from '../../../data/primitives';
+import Grid from '../../grid/Grid';
+import GridData from '../../../data/grid';
 
 export interface GridConfigProps {
   instruction: Instruction;

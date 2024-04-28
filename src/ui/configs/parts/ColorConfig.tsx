@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { ColorConfig, ConfigType } from '../../data/config';
-import Instruction from '../../data/instruction';
-import { Color } from '../../data/primitives';
-import { cn } from '../../utils';
+import { ColorConfig, ConfigType } from '../../../data/config';
+import Instruction from '../../../data/instruction';
+import { Color } from '../../../data/primitives';
+import { cn } from '../../../utils';
 
 export interface ColorConfigProps {
   instruction: Instruction;

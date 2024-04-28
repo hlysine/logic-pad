@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ConfigType, NumberConfig } from '../../data/config';
-import Instruction from '../../data/instruction';
+import { ConfigType, NumberConfig } from '../../../data/config';
+import Instruction from '../../../data/instruction';
 
 export interface NumberConfigProps {
   instruction: Instruction;

@@ -1,7 +1,6 @@
 import InstructionList from '../ui/instructions/InstructionList';
 import EditControls from '../ui/components/EditControls';
 import MainGrid from '../ui/grid/MainGrid';
-import EditableInstruction from '../ui/instructions/EditableInstruction';
 import RulerOverlay from '../ui/grid/RulerOverlay';
 import { useGrid } from '../ui/GridContext';
 import InstructionSearch from '../ui/instructions/InstructionSearch';
@@ -12,6 +11,8 @@ import Loading from '../ui/components/Loading';
 import ThreePaneLayout from '../ui/ThreePaneLayout';
 import DocumentTitle from '../ui/components/DocumentTitle';
 import TouchControls from '../ui/components/TouchControls';
+import ConfigContext from '../ui/ConfigContext';
+import ConfigPopup from '../ui/configs/ConfigPopup';
 const SourceCodeEditor = lazy(
   () => import('../ui/codeEditor/SourceCodeEditor')
 );
@@ -24,29 +25,32 @@ export const Route = createFileRoute('/create')({
     useLinkLoader(params);
 
     return (
-      <ThreePaneLayout
-        left={
-          <>
-            <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
-            <Suspense fallback={<Loading />}>
-              <SourceCodeEditor loading={<Loading />} />
-            </Suspense>
-            <TouchControls />
-            <EditControls />
-          </>
-        }
-        center={
-          <MainGrid editable={true}>
-            <RulerOverlay width={grid.width} height={grid.height} />
-          </MainGrid>
-        }
-        right={
-          <>
-            <InstructionSearch />
-            <InstructionList>{EditableInstruction}</InstructionList>
-          </>
-        }
-      />
+      <ConfigContext>
+        <ThreePaneLayout
+          left={
+            <>
+              <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
+              <Suspense fallback={<Loading />}>
+                <SourceCodeEditor loading={<Loading />} />
+              </Suspense>
+              <TouchControls />
+              <EditControls />
+            </>
+          }
+          center={
+            <MainGrid editable={true}>
+              <RulerOverlay width={grid.width} height={grid.height} />
+            </MainGrid>
+          }
+          right={
+            <>
+              <InstructionSearch />
+              <InstructionList editable={true} />
+              <ConfigPopup />
+            </>
+          }
+        />
+      </ConfigContext>
     );
   }),
 });

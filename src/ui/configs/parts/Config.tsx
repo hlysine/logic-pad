@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { AnyConfig } from '../../data/config';
+import { AnyConfig } from '../../../data/config';
 import allConfigs, { ConfigProps } from '.';
 
 export default memo(function Config({

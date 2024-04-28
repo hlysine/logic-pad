@@ -1,14 +1,11 @@
-import { InstructionProps } from './Instruction';
 import { State } from '../../data/primitives';
 import { memo, useMemo } from 'react';
 import { useGrid } from '../GridContext';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import MultiEntrySymbol from '../../data/symbols/multiEntrySymbol';
 import { useGridState } from '../GridStateContext';
-
-export interface InstructionListProps {
-  children: React.NamedExoticComponent<InstructionProps>;
-}
+import Instruction from './Instruction';
+import EditTarget from './EditTarget';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -18,9 +15,14 @@ function Title({ children }: { children: React.ReactNode }) {
   );
 }
 
+export interface InstructionListProps {
+  editable?: boolean;
+}
+
 export default memo(function InstructionList({
-  children: Instruction,
+  editable,
 }: InstructionListProps) {
+  editable = editable ?? false;
   const { grid, solution } = useGrid();
   const { state } = useGridState();
   const hasSymbols = useMemo(() => {
@@ -95,10 +97,14 @@ export default memo(function InstructionList({
         {grid.rules.length > 0 && <Title>Rules</Title>}
         {grid.rules.map((rule, i) => (
           <Instruction
-            key={rule.id + i}
+            key={rule.id + i.toString()}
             instruction={rule}
             state={state?.rules[i]?.state}
-          />
+          >
+            {editable && rule.configs && rule.configs.length > 0 && (
+              <EditTarget instruction={rule} />
+            )}
+          </Instruction>
         ))}
         {hasSymbols && <Title>Symbols</Title>}
         {[...symbolMergeMap.entries()].flatMap(([key, value]) =>
@@ -106,7 +112,7 @@ export default memo(function InstructionList({
             (group, i) =>
               grid.symbols.get(key)![group[0]].explanation.length > 0 && (
                 <Instruction
-                  key={key + group[0]}
+                  key={key + group[0].toString()}
                   instruction={grid.symbols.get(key)![group[0]]}
                   state={symbolStateMap.get(key)?.[i]}
                 />

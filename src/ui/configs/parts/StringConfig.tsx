@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ConfigType, StringConfig } from '../../data/config';
-import Instruction from '../../data/instruction';
+import { ConfigType, StringConfig } from '../../../data/config';
+import Instruction from '../../../data/instruction';
 
 export interface StringConfigProps {
   instruction: Instruction;

@@ -1,5 +1,5 @@
-import { AnyConfig, ConfigType } from '../../data/config';
-import Instruction from '../../data/instruction';
+import { AnyConfig, ConfigType } from '../../../data/config';
+import Instruction from '../../../data/instruction';
 
 export interface ConfigProps<T extends AnyConfig> {
   instruction: Instruction;
@@ -27,7 +27,6 @@ function register(
 }
 
 Object.values(modules).forEach(module => {
-  console.log(module);
   if (
     'default' in module &&
     'type' in module &&

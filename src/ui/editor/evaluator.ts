@@ -58,8 +58,10 @@ Object.values(modules).forEach(module => {
   });
 });
 
+const blacklist = Object.keys(globalThis);
+
 enclosure.forEach(({ name, value }) => {
-  if (name in globalThis) name = `_${name}`;
+  if (blacklist.includes(name)) name = `_${name}`;
   (globalThis as Record<string, unknown>)[name] = value;
 });
 

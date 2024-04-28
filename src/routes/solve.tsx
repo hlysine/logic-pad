@@ -1,6 +1,6 @@
 import Instruction from '../ui/instructions/Instruction';
 import InstructionList from '../ui/instructions/InstructionList';
-import EditControls from '../ui/EditControls';
+import EditControls from '../ui/components/EditControls';
 import MainGrid from '../ui/grid/MainGrid';
 import Metadata from '../ui/metadata/Metadata';
 import { createFileRoute } from '@tanstack/react-router';

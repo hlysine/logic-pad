@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { FiCornerUpLeft, FiCornerUpRight, FiRefreshCcw } from 'react-icons/fi';
-import { useGrid } from './GridContext';
-import { cn } from '../utils';
+import { useGrid } from '../GridContext';
+import { cn } from '../../utils';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { useEdit } from './EditContext';
+import { useEdit } from '../EditContext';
 
 export default memo(function EditControls() {
   const { grid, setGrid, setGridRaw } = useGrid();

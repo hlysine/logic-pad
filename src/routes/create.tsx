@@ -1,5 +1,5 @@
 import InstructionList from '../ui/instructions/InstructionList';
-import EditControls from '../ui/EditControls';
+import EditControls from '../ui/components/EditControls';
 import MainGrid from '../ui/grid/MainGrid';
 import EditableInstruction from '../ui/instructions/EditableInstruction';
 import RulerOverlay from '../ui/grid/RulerOverlay';

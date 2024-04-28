@@ -10,6 +10,7 @@ export interface ColorConfigProps {
   setConfig?: (field: string, value: ColorConfig['default']) => void;
 }
 
+// million-ignore
 const ColorRadio = memo(function ColorRadio({
   value,
   setValue,

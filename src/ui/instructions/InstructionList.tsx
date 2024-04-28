@@ -101,9 +101,7 @@ export default memo(function InstructionList({
             instruction={rule}
             state={state?.rules[i]?.state}
           >
-            {editable && rule.configs && rule.configs.length > 0 && (
-              <EditTarget instruction={rule} />
-            )}
+            {editable && <EditTarget instruction={rule} />}
           </Instruction>
         ))}
         {hasSymbols && <Title>Symbols</Title>}

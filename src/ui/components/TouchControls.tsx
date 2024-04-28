@@ -29,7 +29,7 @@ export default memo(function TouchControls() {
         />
       </div>
       <div
-        className="tooltip tooltip-top flex tooltip-info"
+        className="tooltip tooltip-left xl:tooltip-top flex tooltip-info"
         data-tip="Toggle primary color"
       >
         <label className="swap swap-flip">

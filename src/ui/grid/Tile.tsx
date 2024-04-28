@@ -297,10 +297,10 @@ const tileStyles = Object.freeze(
         key,
         shape.map(part => ({
           style: {
-            top: getEm(part.t) + 'em',
-            left: getEm(part.l) + 'em',
-            bottom: getEm(part.b) + 'em',
-            right: getEm(part.r) + 'em',
+            top: getEm(part.t).toString() + 'em',
+            left: getEm(part.l).toString() + 'em',
+            bottom: getEm(part.b).toString() + 'em',
+            right: getEm(part.r).toString() + 'em',
             width: `${1 - getEm(part.l) - getEm(part.r)}em`,
             height: `${1 - getEm(part.t) - getEm(part.b)}em`,
             borderTopLeftRadius: part.corners & TL ? '0.125em' : 0,

@@ -22,7 +22,7 @@ export default memo(function ThreePaneLayout({
           {center}
         </div>
       </div>
-      <div className="w-[320px] shrink-0 grow-0 min-h-[50vh] flex flex-col items-end self-stretch justify-stretch">
+      <div className="w-[320px] shrink-0 grow-0 flex flex-col items-end self-stretch justify-stretch">
         <div className="w-[320px] h-full flex flex-col items-stretch justify-center gap-4">
           {right}
         </div>

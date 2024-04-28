@@ -121,3 +121,5 @@ export default class DartSymbol extends NumberSymbol {
     return this.copyWith({ number });
   }
 }
+
+export const instance = new DartSymbol(0, 0, 1, Direction.Down);

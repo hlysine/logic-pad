@@ -26,3 +26,5 @@ export default abstract class Symbol extends Instruction {
     return this.copyWith({ x, y });
   }
 }
+
+export const instance = undefined;

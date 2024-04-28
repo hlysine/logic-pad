@@ -72,3 +72,5 @@ export default class UndercluedRule extends Rule {
     return `Tiles Remaining: ${solutionCount - gridCount}`;
   }
 }
+
+export const instance = new UndercluedRule();

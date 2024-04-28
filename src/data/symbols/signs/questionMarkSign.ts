@@ -46,3 +46,5 @@ export default class QuestionMarkSign extends Sign {
     return new QuestionMarkSign(x ?? this.x, y ?? this.y) as this;
   }
 }
+
+export const instance = new QuestionMarkSign(0, 0);

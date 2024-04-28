@@ -130,3 +130,5 @@ export default class OffByXRule extends Rule {
     return this.copyWith({ number });
   }
 }
+
+export const instance = new OffByXRule(1);

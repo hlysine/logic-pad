@@ -119,3 +119,11 @@ export default class CustomIconSymbol extends CustomSymbol {
     return this.copyWith({ rotation });
   }
 }
+
+export const instance = new CustomIconSymbol(
+  '',
+  GridData.create([]),
+  0,
+  0,
+  'MdQuestionMark'
+);

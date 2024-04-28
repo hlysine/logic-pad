@@ -191,3 +191,5 @@ export default class BanPatternRule extends Rule {
     return this.copyWith({ pattern });
   }
 }
+
+export const instance = new BanPatternRule(GridData.create([]));

@@ -7,8 +7,8 @@ import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
 import { Color, Direction, Orientation } from '../primitives';
 import { array, escape, unescape } from '../helper';
-import allRules from '../../allRules';
-import allSymbols from '../../allSymbols';
+import allRules from '../rules';
+import allSymbols from '../symbols';
 import SerializerBase from './serializerBase';
 import { Puzzle, PuzzleMetadata } from '../puzzle';
 
@@ -123,9 +123,9 @@ export default class SerializerV0 extends SerializerBase {
     const [id, ...entries] = str.split(',');
     const instruction = allSymbols.get(id);
     if (!instruction) throw new Error(`Unknown symbol: ${id}`);
-    const configs = instruction.prototype.configs;
-    if (configs == null) return instruction.prototype.copyWith({});
-    return instruction.prototype.copyWith(
+    const configs = instruction.configs;
+    if (configs == null) return instruction.copyWith({});
+    return instruction.copyWith(
       Object.fromEntries(entries.map(entry => this.parseConfig(configs, entry)))
     );
   }

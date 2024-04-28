@@ -32,3 +32,5 @@ export default abstract class NumberSymbol extends Symbol {
     return this.copyWith({ number });
   }
 }
+
+export const instance = undefined;

@@ -140,3 +140,5 @@ export default class LetterSymbol extends Symbol {
     return this.copyWith({ letter });
   }
 }
+
+export const instance = new LetterSymbol(0, 0, 'A');

@@ -87,3 +87,5 @@ export default class CustomRule extends Rule {
     return true;
   }
 }
+
+export const instance = new CustomRule('', GridData.create([]));

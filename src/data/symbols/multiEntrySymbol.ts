@@ -15,3 +15,5 @@ export default abstract class MultiEntrySymbol extends Symbol {
     );
   }
 }
+
+export const instance = undefined;

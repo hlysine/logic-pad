@@ -11,3 +11,5 @@ export default abstract class Sign extends Symbol {
     return State.Incomplete;
   }
 }
+
+export const instance = undefined;

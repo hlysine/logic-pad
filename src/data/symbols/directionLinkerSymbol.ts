@@ -283,3 +283,5 @@ export default class DirectionLinkerSymbol extends Symbol {
     ];
   }
 }
+
+export const instance = undefined;

@@ -109,3 +109,5 @@ export default class ViewpointSymbol extends NumberSymbol {
     return this.copyWith({ number });
   }
 }
+
+export const instance = new ViewpointSymbol(0, 0, 1);

@@ -26,3 +26,5 @@ export default memo(function LotusSymbol({ textClass, symbol }: LotusProps) {
     </div>
   );
 });
+
+export const id = 'lotus';

@@ -46,3 +46,5 @@ export default abstract class Rule extends Instruction {
     return undefined;
   }
 }
+
+export const instance = undefined;

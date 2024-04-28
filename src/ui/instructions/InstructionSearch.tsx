@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react';
-import allRules from '../../allRules';
+import allRules from '../../data/rules';
 import fuzzysort from 'fuzzysort';
 import { cn } from '../../utils';
 import AnnotatedText from './AnnotatedText';

@@ -24,3 +24,5 @@ export default memo(function AreaNumberSymbol({
     </div>
   );
 });
+
+export const id = 'number';

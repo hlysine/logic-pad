@@ -83,3 +83,5 @@ export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
     </div>
   );
 });
+
+export const id = 'dart';

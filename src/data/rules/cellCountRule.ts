@@ -151,3 +151,5 @@ export default class CellCountRule extends Rule {
     return this.copyWith({ count });
   }
 }
+
+export const instance = new CellCountRule(Color.Dark, 10);

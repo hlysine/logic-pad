@@ -116,3 +116,11 @@ export default class CustomTextSymbol extends CustomSymbol {
     return this.copyWith({ rotation });
   }
 }
+
+export const instance = new CustomTextSymbol(
+  '',
+  GridData.create([]),
+  0,
+  0,
+  'X'
+);

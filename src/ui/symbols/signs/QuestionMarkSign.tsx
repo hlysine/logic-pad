@@ -21,3 +21,5 @@ export default memo(function QuestionMarkSign({
     </div>
   );
 });
+
+export const id = 'question_mark';

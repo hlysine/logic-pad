@@ -139,3 +139,5 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
     ) as this;
   }
 }
+
+export const instance = new LotusSymbol(0, 0, Orientation.Up);

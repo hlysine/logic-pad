@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "bunx --bun vite",
-    "build": "bun run build-types && bunx --bun tsc && bunx --bun vite build",
+    "build": "bun run codegen && bunx --bun tsc && bunx --bun vite build",
     "lint": "bunx --bun eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "bunx --bun vite preview",
-    "build-types": "bun ./types/generateTypes.ts"
+    "codegen": "bun ./srcGen/genTypes.ts && bun ./srcGen/genEnclosure.ts"
   },
   "engines": {
     "bun": ">=1.1.0"
@@ -66,6 +66,7 @@
     "rimraf": "^5.0.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss": "^3.4.1",
+    "ts-morph": "^22.0.0",
     "typescript": "^5.4.5",
     "vite": "^5.1.4",
     "vite-plugin-pwa": "^0.19.8"

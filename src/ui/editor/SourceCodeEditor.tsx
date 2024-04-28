@@ -73,7 +73,7 @@ export default memo(function SourceCodeEditor({
       strict: true,
     });
 
-    import('../../../types/logic-pad.d.ts?raw')
+    import('../../generated/logic-pad.d.ts?raw')
       .then(({ default: def }) => {
         monaco.languages.typescript.javascriptDefaults.addExtraLib(
           def,

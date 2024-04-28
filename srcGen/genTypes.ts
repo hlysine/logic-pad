@@ -5,25 +5,25 @@ import dts from 'dts-bundle';
 
 // remove old files
 console.log('Removing old files...');
-await $`rm -rf ./types/temp`.nothrow();
-await $`rm ./types/logic-pad.d.ts`.nothrow();
+await $`rm -rf ./srcGen/temp`.nothrow();
+await $`rm ./src/generated/logic-pad.d.ts`.nothrow();
 
 try {
   // compile the whole project
   console.log('Generating types...');
-  await $`bunx --bun tsc --declaration --emitDeclarationOnly --noEmit false --outDir ./types/temp`;
+  await $`bunx --bun tsc --declaration --emitDeclarationOnly --noEmit false --outDir ./srcGen/temp`;
 
   // bundle the data types into one file
   console.log('Bundling types...');
   dts.bundle({
     name: 'logic-pad',
-    main: './types/temp/data/**/*.d.ts',
+    main: './srcGen/temp/data/**/*.d.ts',
     outputAsModuleFolder: true,
-    out: '../../logic-pad.d.ts',
+    out: '../../../src/generated/logic-pad.d.ts',
   });
 
   // wrap the bundled types in a global declaration
-  const filePath = './types/logic-pad.d.ts';
+  const filePath = './src/generated/logic-pad.d.ts';
 
   let file = await Bun.file(filePath).text();
 
@@ -45,7 +45,7 @@ try {
 
   // format the file
   console.log('Formatting types...');
-  await $`prettier --write ${filePath}`;
+  await $`bunx prettier --write ${filePath}`;
 } catch (err) {
   if (err instanceof ShellError) {
     console.error(err.stderr);
@@ -54,6 +54,6 @@ try {
 
 // remove the temporary files
 console.log('Cleaning up...');
-await $`rm -rf ./types/temp`;
+await $`rm -rf ./srcGen/temp`;
 
 console.log('Done!');

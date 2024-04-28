@@ -9,5 +9,5 @@
     "allowSyntheticDefaultImports": true,
     "strict": true
   },
-  "include": ["vite.config.ts", ".eslintrc.cjs", "types"]
+  "include": ["vite.config.ts", ".eslintrc.cjs", "srcGen"]
 }

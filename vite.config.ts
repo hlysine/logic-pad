@@ -25,7 +25,4 @@ export default defineConfig({
       'Cross-Origin-Embedder-Policy': 'require-corp',
     },
   },
-  esbuild: {
-    minifyIdentifiers: false,
-  },
 });

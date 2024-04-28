@@ -1,3 +1,5 @@
+import { enclosure } from '../../generated/enclosure';
+
 export const examples = [
   'GridData.create(["nnnnn", "nnnnn"])',
   `.withConnections(\n  GridConnections.create(['..aa.', '..aa.'])\n)`,
@@ -29,34 +31,6 @@ export const examples = [
   'Direction.Up\nDirection.Down\nDirection.Left\nDirection.Right',
   'Orientation.Up\nOrientation.UpRight\nOrientation.Right\nOrientation.DownRight\nOrientation.Down\nOrientation.DownLeft\nOrientation.Left\nOrientation.UpLeft',
 ];
-
-export interface EnclosureEntry {
-  name: string;
-  value: unknown;
-}
-
-const enclosure: EnclosureEntry[] = [];
-const modules = import.meta.glob(['../../data/**/*.ts'], { eager: true });
-Object.values(modules).forEach(module => {
-  if (typeof module !== 'object' || module === null || module === undefined)
-    return;
-  Object.entries(module as Record<string, unknown>).forEach(([key, value]) => {
-    if (key === 'instance') return;
-    if (
-      (typeof value !== 'object' && typeof value !== 'function') ||
-      value === null ||
-      value === undefined
-    )
-      return;
-    if (key === 'default') {
-      if ('name' in value) key = value.name as string;
-      else if ('constructor' in value && 'name' in value.constructor)
-        key = value.constructor.name;
-      else console.warn('Could not determine name for', value);
-    }
-    enclosure.push({ name: key, value });
-  });
-});
 
 const blacklist = Object.keys(globalThis);
 

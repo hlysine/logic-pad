@@ -1,6 +1,6 @@
 import Symbol from './symbol';
 
-const symbols = import.meta.glob<Symbol | undefined>(
+const symbols = import.meta.glob<Symbol | undefined>?.(
   ['./**/*.ts', '!./index.ts'],
   {
     import: 'instance',
@@ -14,8 +14,9 @@ function register<T extends Symbol>(prototype: T) {
   allSymbols.set(prototype.id, prototype);
 }
 
-Object.values(symbols).forEach(symbol => {
-  if (symbol) register(symbol);
-});
+if (symbols)
+  Object.values(symbols).forEach(symbol => {
+    if (symbol) register(symbol);
+  });
 
 export { allSymbols };

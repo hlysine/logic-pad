@@ -24,7 +24,7 @@ export default memo(function InstructionSearch() {
   };
 
   return (
-    <div className="pr-2">
+    <div className="pr-2 shrink-0 mt-4">
       <div className="dropdown dropdown-end w-full">
         <input
           type="text"

@@ -32,7 +32,7 @@ export const examples = [
   'Orientation.Up\nOrientation.UpRight\nOrientation.Right\nOrientation.DownRight\nOrientation.Down\nOrientation.DownLeft\nOrientation.Left\nOrientation.UpLeft',
 ];
 
-const blacklist = Object.keys(globalThis);
+const blacklist = ['Symbol', 'Object'];
 
 enclosure.forEach(({ name, value }) => {
   if (blacklist.includes(name)) name = `_${name}`;

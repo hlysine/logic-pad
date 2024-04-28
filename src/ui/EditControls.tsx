@@ -32,17 +32,21 @@ export default memo(function EditControls() {
   return (
     <ul className="menu menu-horizontal justify-center bg-base-100 shadow-md text-base-content rounded-box w-full">
       <li className={cn(undoStack.length === 0 && 'disabled')}>
-        <a className="tooltip" data-tip="Undo (Z)" onClick={undo}>
+        <a className="tooltip tooltip-info" data-tip="Undo (Z)" onClick={undo}>
           <FiCornerUpLeft />
         </a>
       </li>
       <li>
-        <a className="tooltip" data-tip="Restart (R)" onClick={restart}>
+        <a
+          className="tooltip tooltip-info"
+          data-tip="Restart (R)"
+          onClick={restart}
+        >
           <FiRefreshCcw />
         </a>
       </li>
       <li className={cn(redoStack.length === 0 && 'disabled')}>
-        <a className="tooltip" data-tip="Redo (Y)" onClick={redo}>
+        <a className="tooltip tooltip-info" data-tip="Redo (Y)" onClick={redo}>
           <FiCornerUpRight />
         </a>
       </li>

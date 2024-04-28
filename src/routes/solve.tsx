@@ -6,7 +6,7 @@ import Metadata from '../ui/metadata/Metadata';
 import { createFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
-import HorizontalLayout from '../ui/HorizontalLayout';
+import ThreePaneLayout from '../ui/ThreePaneLayout';
 import TouchControls from '../ui/components/TouchControls';
 import DocumentTitle from '../ui/components/DocumentTitle';
 
@@ -16,7 +16,7 @@ export const Route = createFileRoute('/solve')({
     const params = Route.useSearch();
     useLinkLoader(params);
     return (
-      <HorizontalLayout
+      <ThreePaneLayout
         left={
           <>
             <DocumentTitle>Logic Pad</DocumentTitle>

@@ -1,29 +1,10 @@
 import { memo, useState } from 'react';
-import { cn } from '../../utils';
 import mouseContext from '../grid/MouseContext';
-
-interface TouchOptionProps {
-  selected: boolean;
-  className?: string;
-  children: React.ReactNode;
-}
-
-function TouchOption({ selected, className, children }: TouchOptionProps) {
-  return (
-    <div
-      className={cn(
-        'basis-10 p-3 text-center transition-all',
-        selected && 'grow',
-        className
-      )}
-    >
-      {selected && children}
-    </div>
-  );
-}
+import { useDisplay } from '../DisplayContext';
 
 export default memo(function TouchControls() {
   const [inverted, setInverted] = useState(false);
+  const { scale, setScale } = useDisplay();
   const onSwitch = () => {
     setInverted(i => {
       const newValue = !i;
@@ -32,16 +13,35 @@ export default memo(function TouchControls() {
     });
   };
   return (
-    <div
-      className="flex justify-stretch items-stretch shadow-md rounded-box w-full overflow-hidden z-40 cursor-pointer sticky top-2 left-2"
-      onClick={onSwitch}
-    >
-      <TouchOption selected={!inverted} className="bg-black text-white">
-        Black
-      </TouchOption>
-      <TouchOption selected={inverted} className="bg-white text-black">
-        White
-      </TouchOption>
+    <div className="flex items-center shadow-md rounded-box w-full bg-base-100">
+      <div
+        className="tooltip tooltip-top flex tooltip-info flex-1"
+        data-tip="Resize grid"
+      >
+        <input
+          type="range"
+          min={0.5}
+          max={2}
+          step={0.1}
+          value={scale}
+          onChange={e => setScale(Number(e.currentTarget.value))}
+          className="range m-2"
+        />
+      </div>
+      <div
+        className="tooltip tooltip-top flex tooltip-info"
+        data-tip="Toggle primary color"
+      >
+        <label className="swap swap-flip">
+          <input type="checkbox" checked={inverted} onChange={onSwitch} />
+          <div className="swap-on bg-white text-black text-center p-2 px-4 rounded-box">
+            W
+          </div>
+          <div className="swap-off bg-black text-white text-center p-2 px-4 rounded-box">
+            B
+          </div>
+        </label>
+      </div>
     </div>
   );
 });

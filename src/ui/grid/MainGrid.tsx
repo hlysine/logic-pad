@@ -8,6 +8,7 @@ import { Color, State } from '../../data/primitives';
 import GridData from '../../data/grid';
 import Loading from '../components/Loading';
 import { GridStateConsumer } from '../GridStateContext';
+import { useDisplay } from '../DisplayContext';
 
 export interface MainGridProps {
   editable: boolean;
@@ -17,7 +18,7 @@ export interface MainGridProps {
 function computeTileSize(grid: GridData) {
   const newSize = Math.min(
     (window.innerWidth - 80 - 640) / grid.width,
-    (window.innerHeight - 160) / grid.height
+    (window.innerHeight - 180) / grid.height
   );
   return Math.max(
     25,
@@ -27,6 +28,7 @@ function computeTileSize(grid: GridData) {
 
 export default memo(function MainGrid({ editable, children }: MainGridProps) {
   const { grid, setGrid } = useGrid();
+  const { scale } = useDisplay();
   const [tileConfig, setTileConfig] = useState<{
     width: number;
     height: number;
@@ -55,7 +57,7 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
   return (
     <StateRing width={grid.width} height={grid.height}>
       <Grid
-        size={tileConfig.tileSize}
+        size={tileConfig.tileSize * scale}
         grid={grid}
         editable={editable}
         onTileClick={(x, y, target, flood) => {

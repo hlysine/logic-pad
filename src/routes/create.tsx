@@ -13,9 +13,7 @@ import DocumentTitle from '../ui/components/DocumentTitle';
 import TouchControls from '../ui/components/TouchControls';
 import ConfigContext from '../ui/ConfigContext';
 import ConfigPopup from '../ui/configs/ConfigPopup';
-const SourceCodeEditor = lazy(
-  () => import('../ui/codeEditor/SourceCodeEditor')
-);
+const SourceCodeEditor = lazy(() => import('../ui/editor/SourceCodeEditor'));
 
 export const Route = createFileRoute('/create')({
   validateSearch,

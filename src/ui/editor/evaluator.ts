@@ -1,9 +1,9 @@
-import GridData from '../../data/grid';
-import GridConnections from '../../data/gridConnections';
-import BanPatternRule from '../../data/rules/banPatternRule';
-import CompletePatternRule from '../../data/rules/completePatternRule';
-import ConnectAllRule from '../../data/rules/connectAllRule';
-import CustomRule from '../../data/rules/customRule';
+import GridData from '../../data/grid.ts';
+import GridConnections from '../../data/gridConnections.ts';
+import BanPatternRule from '../../data/rules/banPatternRule.ts';
+import CompletePatternRule from '../../data/rules/completePatternRule.ts';
+import ConnectAllRule from '../../data/rules/connectAllRule.ts';
+import CustomRule from '../../data/rules/customRule.ts';
 import {
   Color,
   DIRECTIONS,
@@ -12,25 +12,32 @@ import {
   ORIENTATIONS,
   Orientation,
   State,
-} from '../../data/primitives';
-import UndercluedRule from '../../data/rules/undercluedRule';
-import LetterSymbol from '../../data/symbols/letterSymbol';
-import AreaNumberSymbol from '../../data/symbols/areaNumberSymbol';
-import ViewpointSymbol from '../../data/symbols/viewpointSymbol';
-import DartSymbol from '../../data/symbols/dartSymbol';
-import RegionAreaRule from '../../data/rules/regionAreaRule';
-import TileConnections from '../../data/tileConnections';
-import LotusSymbol from '../../data/symbols/lotusSymbol';
-import GalaxySymbol from '../../data/symbols/galaxySymbol';
-import OffByXRule from '../../data/rules/offByXRule';
-import { ConfigType, configEquals } from '../../data/config';
-import { array, escape, maxBy, minBy, move, unescape } from '../../data/helper';
-import { PuzzleSchema } from '../../data/puzzle';
-import Serializer from '../../data/serializer/allSerializers';
-import Compressor from '../../data/serializer/compressor/allCompressors';
-import QuestionMarkSign from '../../data/symbols/signs/questionMarkSign';
-import TileData from '../../data/tile';
-import CellCountRule from '../../data/rules/cellCountRule';
+} from '../../data/primitives.ts';
+import UndercluedRule from '../../data/rules/undercluedRule.ts';
+import LetterSymbol from '../../data/symbols/letterSymbol.ts';
+import AreaNumberSymbol from '../../data/symbols/areaNumberSymbol.ts';
+import ViewpointSymbol from '../../data/symbols/viewpointSymbol.ts';
+import DartSymbol from '../../data/symbols/dartSymbol.ts';
+import RegionAreaRule from '../../data/rules/regionAreaRule.ts';
+import TileConnections from '../../data/tileConnections.ts';
+import LotusSymbol from '../../data/symbols/lotusSymbol.ts';
+import GalaxySymbol from '../../data/symbols/galaxySymbol.ts';
+import OffByXRule from '../../data/rules/offByXRule.ts';
+import { ConfigType, configEquals } from '../../data/config.ts';
+import {
+  array,
+  escape,
+  maxBy,
+  minBy,
+  move,
+  unescape,
+} from '../../data/helper.ts';
+import { PuzzleSchema } from '../../data/puzzle.ts';
+import Serializer from '../../data/serializer/allSerializers.ts';
+import Compressor from '../../data/serializer/compressor/allCompressors.ts';
+import QuestionMarkSign from '../../data/symbols/signs/questionMarkSign.ts';
+import TileData from '../../data/tile.ts';
+import CellCountRule from '../../data/rules/cellCountRule.ts';
 import SymbolsPerRegionRule from '../../data/rules/symbolsPerRegionRule.ts';
 import CustomTextSymbol from '../../data/symbols/customTextSymbol.ts';
 import CustomIconSymbol from '../../data/symbols/customIconSymbol.ts';

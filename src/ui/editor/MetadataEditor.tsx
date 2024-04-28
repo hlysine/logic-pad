@@ -13,7 +13,7 @@ export default memo(function MetadataEditor() {
         <input
           type="text"
           placeholder="Required"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full"
           value={metadata.title}
           onChange={e => setMetadata({ ...metadata, title: e.target.value })}
         />
@@ -25,7 +25,7 @@ export default memo(function MetadataEditor() {
         <input
           type="text"
           placeholder="Required"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full"
           value={metadata.author}
           onChange={e => setMetadata({ ...metadata, author: e.target.value })}
         />
@@ -46,7 +46,7 @@ export default memo(function MetadataEditor() {
         <input
           type="text"
           placeholder="Optional link to discussion"
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered w-full"
           value={metadata.link}
           onChange={e => setMetadata({ ...metadata, link: e.target.value })}
         />

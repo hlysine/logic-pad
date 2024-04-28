@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { ColorConfig } from '../../data/config';
+import { ColorConfig, ConfigType } from '../../data/config';
 import Instruction from '../../data/instruction';
 import { Color } from '../../data/primitives';
 import { cn } from '../../utils';
@@ -49,7 +49,7 @@ export default memo(function ColorConfig({
   const value = instruction[config.field as keyof typeof instruction] as Color;
   return (
     <div className="flex p-2 justify-between items-center">
-      <span className="text-lg">{config.description}</span>
+      <span>{config.description}</span>
       <div className="flex gap-4">
         <ColorRadio
           value={value}
@@ -72,3 +72,5 @@ export default memo(function ColorConfig({
     </div>
   );
 });
+
+export const type = ConfigType.Color;

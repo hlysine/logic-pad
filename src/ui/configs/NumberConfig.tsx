@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { NumberConfig } from '../../data/config';
+import { ConfigType, NumberConfig } from '../../data/config';
 import Instruction from '../../data/instruction';
 
 export interface NumberConfigProps {
@@ -19,10 +19,10 @@ export default memo(function NumberConfig({
   ] as unknown as number;
   return (
     <div className="flex p-2 gap-4 justify-between items-center">
-      <span className="text-lg">{config.description}</span>
+      <span>{config.description}</span>
       <input
         type="number"
-        className="input input-secondary focus:border-accent bg-opacity-10 text-secondary-content placeholder-secondary-content/30 min-w-0 grow"
+        className="input min-w-0 grow"
         value={value}
         min="0"
         step="1"
@@ -33,3 +33,5 @@ export default memo(function NumberConfig({
     </div>
   );
 });
+
+export const type = ConfigType.Number;

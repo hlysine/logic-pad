@@ -49,7 +49,7 @@ export default memo(function EditableInstruction({
         {instruction.configs !== null && (
           <div
             tabIndex={0}
-            className="p-4 m-2 dropdown-content z-[1] bg-secondary text-secondary-content shadow-xl rounded-box w-[400px]"
+            className="p-4 m-2 dropdown-content z-[1] bg-base-300 text-base-content shadow-xl rounded-box w-[400px]"
           >
             {instruction.configs
               ?.filter(config => config.configurable)

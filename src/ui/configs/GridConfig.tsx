@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { GridConfig } from '../../data/config';
+import { ConfigType, GridConfig } from '../../data/config';
 import Instruction from '../../data/instruction';
 import { Color } from '../../data/primitives';
 import Grid from '../grid/Grid';
@@ -21,7 +21,7 @@ export default memo(function GridConfig({
   ] as unknown as GridData;
   return (
     <div className="flex p-2 justify-between items-center">
-      <span className="text-lg">{config.description}</span>
+      <span>{config.description}</span>
       <Grid
         size={20}
         grid={grid}
@@ -50,3 +50,5 @@ export default memo(function GridConfig({
     </div>
   );
 });
+
+export const type = ConfigType.Grid;

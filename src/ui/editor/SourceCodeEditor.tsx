@@ -7,6 +7,7 @@ import Compressor from '../../data/serializer/compressor/allCompressors';
 import Serializer from '../../data/serializer/allSerializers';
 import { ZodError } from 'zod';
 import evaluate, { enclosure } from './evaluator';
+import { SUPPORTED_THEMES, useTheme } from '../ThemeContext';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -54,6 +55,7 @@ export default memo(function SourceCodeEditor({
     handle: number;
   } | null>(null);
   const monaco = useMonaco();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (!monaco) return;
@@ -139,7 +141,7 @@ export default memo(function SourceCodeEditor({
         <div className="inline-block w-full h-full lg:focus-within:w-[max(100%-400px-1rem,min(800px,50vw))] transition-[width] duration-75">
           <Editor
             loading={loading}
-            theme="vs-dark"
+            theme={SUPPORTED_THEMES.find(([t]) => t === theme)?.[1]}
             width="100%"
             height="100%"
             className="focus-within:z-30 rounded-box overflow-hidden"

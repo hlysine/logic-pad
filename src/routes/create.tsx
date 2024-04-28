@@ -5,15 +5,14 @@ import RulerOverlay from '../ui/grid/RulerOverlay';
 import { useGrid } from '../ui/GridContext';
 import InstructionSearch from '../ui/instructions/InstructionSearch';
 import { createFileRoute } from '@tanstack/react-router';
-import { Suspense, lazy, memo } from 'react';
+import { memo } from 'react';
 import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
-import Loading from '../ui/components/Loading';
 import ThreePaneLayout from '../ui/ThreePaneLayout';
 import DocumentTitle from '../ui/components/DocumentTitle';
 import TouchControls from '../ui/components/TouchControls';
 import ConfigContext from '../ui/ConfigContext';
 import ConfigPopup from '../ui/configs/ConfigPopup';
-const SourceCodeEditor = lazy(() => import('../ui/editor/SourceCodeEditor'));
+import EditorPane from '../ui/editor/EditorPane';
 
 export const Route = createFileRoute('/create')({
   validateSearch,
@@ -28,9 +27,7 @@ export const Route = createFileRoute('/create')({
           left={
             <>
               <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
-              <Suspense fallback={<Loading />}>
-                <SourceCodeEditor loading={<Loading />} />
-              </Suspense>
+              <EditorPane />
               <TouchControls />
               <EditControls />
             </>

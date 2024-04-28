@@ -24,7 +24,7 @@ export default memo(function Instruction({
     [instruction]
   );
   return (
-    <div className="flex flex-col w-[320px] items-stretch">
+    <div className="flex flex-col w-[320px] items-stretch shrink-0">
       <div
         className={cn('relative flex m-0 border-0 pr-2', instructionBg(state))}
       >

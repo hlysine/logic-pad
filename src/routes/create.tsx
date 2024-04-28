@@ -22,7 +22,7 @@ export const Route = createFileRoute('/create')({
   component: memo(function CreateMode() {
     const { grid } = useGrid();
     const params = Route.useSearch();
-    useLinkLoader(params);
+    useLinkLoader(params, true);
 
     return (
       <ConfigContext>

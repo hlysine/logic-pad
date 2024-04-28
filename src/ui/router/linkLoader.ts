@@ -3,6 +3,7 @@ import { useGrid } from '../GridContext';
 import { useEdit } from '../EditContext';
 import Compressor from '../../data/serializer/compressor/allCompressors';
 import Serializer from '../../data/serializer/allSerializers';
+import { useNavigate } from '@tanstack/react-router';
 
 export interface PuzzleParams {
   d?: string;
@@ -20,17 +21,19 @@ export interface LinkLoaderProps {
   params: PuzzleParams;
 }
 
-export default function useLinkLoader(params: PuzzleParams) {
+export default function useLinkLoader(params: PuzzleParams, cleanUrl = false) {
   const { setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
+  const navigate = useNavigate();
   useEffect(() => {
     if (params.d) {
       Compressor.decompress(params.d)
-        .then(data => {
+        .then(async data => {
           const { grid, solution, ...metadata } = Serializer.parsePuzzle(data);
           setGrid(grid, solution);
           setMetadata(metadata);
           clearHistory(grid);
+          if (cleanUrl) await navigate({ search: {} });
         })
         .catch(console.log);
     }

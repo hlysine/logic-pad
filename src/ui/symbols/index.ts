@@ -31,7 +31,6 @@ function register<T extends Symbol>(
 }
 
 Object.values(modules).forEach(module => {
-  console.log(module);
   if ('default' in module && 'id' in module && module.default && module.id) {
     const { default: component, id } = module;
     const symbol = allSymbolData.get(id);

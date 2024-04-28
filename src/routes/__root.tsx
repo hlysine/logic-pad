@@ -1,6 +1,6 @@
 import Roadmap from '../ui/components/Roadmap';
 import DevPuzzles, { DEV_PUZZLES } from '../ui/DevPuzzles';
-import ModeSwitcher from '../ui/modes/ModeSwitcher';
+import ModeSwitcher from '../ui/components/ModeSwitcher';
 import EditContext from '../ui/EditContext';
 import GridContext from '../ui/GridContext';
 import { Outlet, createRootRoute } from '@tanstack/react-router';

@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
-export default function PWAPrompt() {
+export default memo(function PWAPrompt() {
   const { needRefresh, updateServiceWorker } = useRegisterSW();
   const [refresh, setRefresh] = needRefresh;
   if (!refresh) return null;
@@ -25,4 +26,4 @@ export default function PWAPrompt() {
       </div>
     </div>
   );
-}
+});

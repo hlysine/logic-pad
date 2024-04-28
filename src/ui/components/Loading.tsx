@@ -1,10 +1,11 @@
+import { memo } from 'react';
 import { cn } from '../../utils';
 
 export interface LoadingProps {
   className?: string;
 }
 
-export default function Loading({ className }: LoadingProps) {
+export default memo(function Loading({ className }: LoadingProps) {
   return (
     <div
       className={cn(
@@ -15,4 +16,4 @@ export default function Loading({ className }: LoadingProps) {
       <span className="loading loading-bars loading-lg"></span>
     </div>
   );
-}
+});

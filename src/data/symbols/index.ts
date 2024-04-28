@@ -18,4 +18,4 @@ Object.values(symbols).forEach(symbol => {
   if (symbol) register(symbol);
 });
 
-export default allSymbols;
+export { allSymbols };

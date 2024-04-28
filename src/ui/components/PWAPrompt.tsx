@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import Compressor from '../../data/serializer/compressor/allCompressors';
-import Serializer from '../../data/serializer/allSerializers';
+import { Compressor } from '../../data/serializer/compressor/allCompressors';
+import { Serializer } from '../../data/serializer/allSerializers';
 import { useGrid } from '../GridContext';
 import { useNavigate } from '@tanstack/react-router';
 

@@ -612,19 +612,19 @@ declare global {
     'strict',
     z.ZodTypeAny,
     {
-      grid: GridData;
-      description: string;
       link: string;
       title: string;
+      grid: GridData;
+      description: string;
       author: string;
       difficulty: number;
       solution: GridData | null;
     },
     {
-      grid: GridData;
-      description: string;
       link: string;
       title: string;
+      grid: GridData;
+      description: string;
       author: string;
       difficulty: number;
       solution: GridData | null;
@@ -748,6 +748,9 @@ declare global {
     }): this;
     get validateWithSolution(): boolean;
   }
+
+  const allRules: Map<string, Rule>;
+  export { allRules };
 
   export class OffByXRule extends Rule {
     readonly number: number;
@@ -884,7 +887,7 @@ declare global {
      */
     parsePuzzle(input: string): Puzzle;
   };
-  export const Serializer;
+  export { Serializer };
 
   /**
    * The master compressor for compressing and decompressing strings.
@@ -898,7 +901,7 @@ declare global {
     decompress(input: string): Promise<string>;
   }
   const Compressor: MasterCompressor;
-  export const Compressor;
+  export { Compressor };
 
   export abstract class CompressorBase {
     /**
@@ -1194,6 +1197,9 @@ declare global {
     copyWith({ x, y }: { x?: number; y?: number }): this;
   }
 
+  const allSymbols: Map<string, Symbol>;
+  export { allSymbols };
+
   export class LetterSymbol extends Symbol {
     readonly x: number;
     readonly y: number;
@@ -1392,5 +1398,7 @@ declare global {
     grid: GridData,
     solution: GridData | null
   ): GridState;
+
+  export { Symbol as _Symbol };
 }
 export {};

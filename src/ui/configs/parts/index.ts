@@ -10,7 +10,7 @@ export interface ConfigProps<T extends AnyConfig> {
 const modules = import.meta.glob<{
   default?: React.NamedExoticComponent<ConfigProps<any>>;
   type?: ConfigType;
-}>(['./**/*.tsx', './Config.tsx'], {
+}>(['./**/*.tsx', '!./Config.tsx'], {
   eager: true,
 });
 
@@ -38,4 +38,4 @@ Object.values(modules).forEach(module => {
   }
 });
 
-export default allConfigs;
+export { allConfigs };

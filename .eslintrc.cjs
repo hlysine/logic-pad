@@ -21,11 +21,18 @@ module.exports = {
     react: {
       version: 'detect',
     },
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: ['tsconfig.json', 'tsconfig.node.json'],
+      },
+    },
   },
-  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
+  plugins: ['react', '@typescript-eslint', 'import', 'prettier', 'react-hooks'],
   extends: [
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
+    'plugin:import/recommended',
     'standard',
     'prettier',
     'plugin:prettier/recommended',
@@ -68,5 +75,12 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-explicit-any': 'off',
+    'import/no-anonymous-default-export': [
+      'error',
+      {
+        allowNew: true,
+      },
+    ],
+    'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
   },
 };

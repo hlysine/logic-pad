@@ -1,4 +1,4 @@
-import allSymbols, { SymbolProps } from '.';
+import { allSymbols, SymbolProps } from '.';
 import SymbolData from '../../data/symbols/symbol';
 import { memo, useMemo } from 'react';
 

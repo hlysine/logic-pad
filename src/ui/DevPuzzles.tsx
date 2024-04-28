@@ -13,8 +13,8 @@ import UndercluedRule from '../data/rules/undercluedRule';
 import CompletePatternRule from '../data/rules/completePatternRule';
 import { Puzzle } from '../data/puzzle';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import Serializer from '../data/serializer/allSerializers';
-import Compressor from '../data/serializer/compressor/allCompressors';
+import { Serializer } from '../data/serializer/allSerializers';
+import { Compressor } from '../data/serializer/compressor/allCompressors';
 
 export const DEV_PUZZLES: Puzzle[] = [
   {

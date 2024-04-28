@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useGrid } from '../GridContext';
 import { useEdit } from '../EditContext';
-import Compressor from '../../data/serializer/compressor/allCompressors';
-import Serializer from '../../data/serializer/allSerializers';
+import { Compressor } from '../../data/serializer/compressor/allCompressors';
+import { Serializer } from '../../data/serializer/allSerializers';
 import { useNavigate } from '@tanstack/react-router';
 
 export interface PuzzleParams {

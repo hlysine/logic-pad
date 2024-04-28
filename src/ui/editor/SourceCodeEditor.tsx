@@ -3,10 +3,10 @@ import { memo, useEffect, useRef, useState } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { Puzzle, PuzzleSchema } from '../../data/puzzle';
-import Compressor from '../../data/serializer/compressor/allCompressors';
-import Serializer from '../../data/serializer/allSerializers';
+import { Compressor } from '../../data/serializer/compressor/allCompressors';
+import { Serializer } from '../../data/serializer/allSerializers';
 import { ZodError } from 'zod';
-import evaluate, { enclosure } from './evaluator';
+import evaluate, { examples } from './evaluator';
 import { SUPPORTED_THEMES, useTheme } from '../ThemeContext';
 
 const defaultCode = `/** @type Puzzle */
@@ -167,8 +167,8 @@ export default memo(function SourceCodeEditor({
         <div className="dropdown-content inline-block !relative !inset-0 shadow-xl bg-base-300 rounded-box z-10 ml-4 p-4 w-[400px] h-full overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg text-base-content">Quick reference</h3>
-            {enclosure.map(
-              ({ example }) =>
+            {examples.map(
+              example =>
                 example && (
                   <pre key={example} className="text-xs text-base-content">
                     {example}

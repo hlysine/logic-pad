@@ -43,4 +43,4 @@ const Serializer = {
   },
 };
 
-export default Serializer;
+export { Serializer };

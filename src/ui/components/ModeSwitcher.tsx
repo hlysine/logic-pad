@@ -2,8 +2,8 @@ import { memo } from 'react';
 import { useRouterState, useSearch, useNavigate } from '@tanstack/react-router';
 import { Mode } from '../../data/primitives';
 import { cn } from '../../utils';
-import Serializer from '../../data/serializer/allSerializers';
-import Compressor from '../../data/serializer/compressor/allCompressors';
+import { Serializer } from '../../data/serializer/allSerializers';
+import { Compressor } from '../../data/serializer/compressor/allCompressors';
 import { useGrid } from '../GridContext';
 
 export interface ModeButtonProps {

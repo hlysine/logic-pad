@@ -28,12 +28,14 @@ try {
   let file = await Bun.file(filePath).text();
 
   file = file
-    .replace(/^export default +(?=class|abstract|function)/gm, 'export ')
-    .replace(/^export default +(?!class|abstract|function)/gm, 'export const ');
+    .replace(/export default +(?=class|abstract|function)/gm, 'export ')
+    .replace(/export default +(?!class|abstract|function)/gm, 'export const ')
+    .replace(/export const instance.+;/gm, '');
   if (!file.startsWith('declare global'))
     file = `
       declare global {
         ${file}
+        export { Symbol as _Symbol };
       }
       export {};
     `;

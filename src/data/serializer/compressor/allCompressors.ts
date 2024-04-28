@@ -52,4 +52,4 @@ class MasterCompressor extends CompressorBase {
 }
 
 const Compressor = new MasterCompressor();
-export default Compressor;
+export { Compressor };

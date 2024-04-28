@@ -15,4 +15,4 @@ Object.values(rules).forEach(rule => {
   if (rule) register(rule);
 });
 
-export default allRules;
+export { allRules };

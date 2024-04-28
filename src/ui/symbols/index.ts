@@ -1,5 +1,5 @@
 import Symbol from '../../data/symbols/symbol';
-import allSymbolData from '../../data/symbols';
+import { allSymbols as allSymbolData } from '../../data/symbols';
 
 export interface SymbolProps<T extends Symbol> {
   textClass: string;
@@ -14,7 +14,7 @@ export interface SymbolInfo {
 const modules = import.meta.glob<{
   default?: React.NamedExoticComponent<SymbolProps<Symbol>>;
   id?: string;
-}>(['./**/*.tsx', './Symbol.tsx'], {
+}>(['./**/*.tsx', '!./Symbol.tsx'], {
   eager: true,
 });
 
@@ -40,4 +40,4 @@ Object.values(modules).forEach(module => {
   }
 });
 
-export default allSymbols;
+export { allSymbols };

@@ -7,8 +7,8 @@ import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
 import { Color, Direction, Orientation } from '../primitives';
 import { array, escape, unescape } from '../helper';
-import allRules from '../rules';
-import allSymbols from '../symbols';
+import { allRules } from '../rules';
+import { allSymbols } from '../symbols';
 import SerializerBase from './serializerBase';
 import { Puzzle, PuzzleMetadata } from '../puzzle';
 

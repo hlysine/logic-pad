@@ -1,9 +1,15 @@
 import { memo } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import Compressor from '../../data/serializer/compressor/allCompressors';
+import Serializer from '../../data/serializer/allSerializers';
+import { useGrid } from '../GridContext';
+import { useNavigate } from '@tanstack/react-router';
 
 export default memo(function PWAPrompt() {
   const { needRefresh, updateServiceWorker } = useRegisterSW();
+  const { metadata, grid, solution } = useGrid();
+  const navigate = useNavigate();
   const [refresh, setRefresh] = needRefresh;
   if (!refresh) return null;
   return (
@@ -19,7 +25,16 @@ export default memo(function PWAPrompt() {
         </button>
         <button
           className="btn btn-sm btn-primary"
-          onClick={() => updateServiceWorker(true)}
+          onClick={async () => {
+            await navigate({
+              search: {
+                d: await Compressor.compress(
+                  Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+                ),
+              },
+            });
+            await updateServiceWorker(true);
+          }}
         >
           Reload
         </button>

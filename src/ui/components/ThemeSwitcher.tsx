@@ -10,7 +10,6 @@ export default memo(function ThemeSwitcher() {
   const monaco = useMonaco();
 
   useEffect(() => {
-    console.log(theme);
     document.documentElement.dataset.theme = theme;
     const editorTheme = SUPPORTED_THEMES.find(([t]) => t === theme)?.[1];
     if (monaco && editorTheme) {

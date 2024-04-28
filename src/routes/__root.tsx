@@ -23,11 +23,10 @@ export const Route = createRootRoute({
           <GridStateContext>
             <GridContext>
               <DocumentTitle>Logic Pad</DocumentTitle>
-              {/* Large bottom padding in small screen to fit the floating toolbar */}
-              <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral pb-32 xl:pb-0">
+              <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral">
                 <PWAPrompt />
                 <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">
-                  <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2">
+                  <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2 shadow-md">
                     <div className="flex flex-wrap grow shrink items-center gap-4">
                       <h1 className="text-3xl text-neutral-content">
                         Logic Pad

@@ -21,7 +21,7 @@ export const Route = createRootRoute({
           <GridStateContext>
             <GridContext>
               <DocumentTitle>Logic Pad</DocumentTitle>
-              <div className="h-dvh w-dvw overflow-auto bg-neutral">
+              <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral">
                 <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">
                   <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2">
                     <div className="flex flex-wrap grow shrink items-center gap-4">

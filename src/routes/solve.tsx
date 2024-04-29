@@ -26,7 +26,7 @@ export const Route = createFileRoute('/solve')({
             <EditControls />
           </>
         }
-        center={<MainGrid editable={true} />}
+        center={<MainGrid useToolboxClick={false} />}
         right={<InstructionList />}
       />
     );

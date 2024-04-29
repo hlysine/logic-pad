@@ -9,9 +9,10 @@ import GridData from '../../data/grid';
 import Loading from '../components/Loading';
 import { GridStateConsumer } from '../GridStateContext';
 import { useDisplay } from '../DisplayContext';
+import { useToolbox } from '../ToolboxContext';
 
 export interface MainGridProps {
-  editable: boolean;
+  useToolboxClick: boolean;
   children?: React.ReactNode;
 }
 
@@ -32,9 +33,14 @@ function computeTileSize(grid: GridData) {
   );
 }
 
-export default memo(function MainGrid({ editable, children }: MainGridProps) {
-  const { grid, setGrid } = useGrid();
+export default memo(function MainGrid({
+  useToolboxClick,
+  children,
+}: MainGridProps) {
+  const gridContext = useGrid();
+  const { grid, setGrid } = gridContext;
   const { scale } = useDisplay();
+  const { onTileClick } = useToolbox();
   const [tileConfig, setTileConfig] = useState<{
     width: number;
     height: number;
@@ -65,8 +71,12 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
       <Grid
         size={tileConfig.tileSize * scale}
         grid={grid}
-        editable={editable}
+        editable={useToolboxClick ? !!onTileClick : true}
         onTileClick={(x, y, target, flood) => {
+          if (useToolboxClick && onTileClick) {
+            onTileClick(x, y, target, flood, gridContext);
+            return;
+          }
           const tile = grid.getTile(x, y);
           if (flood && target === Color.Gray) {
             // target is Color.Gray if the tile is already the target color

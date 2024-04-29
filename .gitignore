@@ -22,4 +22,4 @@ dist-ssr
 *.sw?
 
 references
-srcGen/temp
+scripts/temp

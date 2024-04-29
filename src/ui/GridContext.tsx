@@ -5,7 +5,7 @@ import { PuzzleMetadata } from '../data/puzzle';
 import validateGrid from '../data/validate';
 import { useGridState } from './GridStateContext';
 
-interface GridContext {
+export interface GridContext {
   grid: GridData;
   solution: GridData | null;
   metadata: PuzzleMetadata;

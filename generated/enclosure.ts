@@ -1,8 +1,15 @@
-import { ConfigType, configEquals } from '../data/config';
-import GridData from '../data/grid';
-import GridConnections from '../data/gridConnections';
-import { array, escape, maxBy, minBy, move, unescape } from '../data/helper';
-import Instruction from '../data/instruction';
+import { ConfigType, configEquals } from '../src/data/config';
+import GridData from '../src/data/grid';
+import GridConnections from '../src/data/gridConnections';
+import {
+  array,
+  escape,
+  maxBy,
+  minBy,
+  move,
+  unescape,
+} from '../src/data/helper';
+import Instruction from '../src/data/instruction';
 import {
   Color,
   DIRECTIONS,
@@ -11,46 +18,46 @@ import {
   ORIENTATIONS,
   Orientation,
   State,
-} from '../data/primitives';
-import { PuzzleSchema } from '../data/puzzle';
-import TileData from '../data/tile';
-import TileConnections from '../data/tileConnections';
-import validateGrid, { aggregateState } from '../data/validate';
-import AreaNumberSymbol from '../data/symbols/areaNumberSymbol';
-import CustomIconSymbol from '../data/symbols/customIconSymbol';
-import CustomSymbol from '../data/symbols/customSymbol';
-import CustomTextSymbol from '../data/symbols/customTextSymbol';
-import DartSymbol from '../data/symbols/dartSymbol';
-import DirectionLinkerSymbol from '../data/symbols/directionLinkerSymbol';
-import GalaxySymbol from '../data/symbols/galaxySymbol';
-import { allSymbols } from '../data/symbols/index';
-import LetterSymbol from '../data/symbols/letterSymbol';
-import LotusSymbol from '../data/symbols/lotusSymbol';
-import MultiEntrySymbol from '../data/symbols/multiEntrySymbol';
-import NumberSymbol from '../data/symbols/numberSymbol';
-import Symbol from '../data/symbols/symbol';
-import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import QuestionMarkSign from '../data/symbols/signs/questionMarkSign';
-import Sign from '../data/symbols/signs/sign';
-import { Serializer } from '../data/serializer/allSerializers';
-import SerializerBase from '../data/serializer/serializerBase';
-import SerializerV0 from '../data/serializer/serializer_v0';
-import { Compressor } from '../data/serializer/compressor/allCompressors';
-import CompressorBase from '../data/serializer/compressor/compressorBase';
-import DeflateCompressor from '../data/serializer/compressor/deflateCompressor';
-import GzipCompressor from '../data/serializer/compressor/gzipCompressor';
-import StreamCompressor from '../data/serializer/compressor/streamCompressor';
-import BanPatternRule from '../data/rules/banPatternRule';
-import CellCountRule from '../data/rules/cellCountRule';
-import CompletePatternRule from '../data/rules/completePatternRule';
-import ConnectAllRule from '../data/rules/connectAllRule';
-import CustomRule from '../data/rules/customRule';
-import { allRules } from '../data/rules/index';
-import OffByXRule from '../data/rules/offByXRule';
-import RegionAreaRule from '../data/rules/regionAreaRule';
-import Rule from '../data/rules/rule';
-import SymbolsPerRegionRule from '../data/rules/symbolsPerRegionRule';
-import UndercluedRule from '../data/rules/undercluedRule';
+} from '../src/data/primitives';
+import { PuzzleSchema } from '../src/data/puzzle';
+import TileData from '../src/data/tile';
+import TileConnections from '../src/data/tileConnections';
+import validateGrid, { aggregateState } from '../src/data/validate';
+import AreaNumberSymbol from '../src/data/symbols/areaNumberSymbol';
+import CustomIconSymbol from '../src/data/symbols/customIconSymbol';
+import CustomSymbol from '../src/data/symbols/customSymbol';
+import CustomTextSymbol from '../src/data/symbols/customTextSymbol';
+import DartSymbol from '../src/data/symbols/dartSymbol';
+import DirectionLinkerSymbol from '../src/data/symbols/directionLinkerSymbol';
+import GalaxySymbol from '../src/data/symbols/galaxySymbol';
+import { allSymbols } from '../src/data/symbols/index';
+import LetterSymbol from '../src/data/symbols/letterSymbol';
+import LotusSymbol from '../src/data/symbols/lotusSymbol';
+import MultiEntrySymbol from '../src/data/symbols/multiEntrySymbol';
+import NumberSymbol from '../src/data/symbols/numberSymbol';
+import Symbol from '../src/data/symbols/symbol';
+import ViewpointSymbol from '../src/data/symbols/viewpointSymbol';
+import QuestionMarkSign from '../src/data/symbols/signs/questionMarkSign';
+import Sign from '../src/data/symbols/signs/sign';
+import { Serializer } from '../src/data/serializer/allSerializers';
+import SerializerBase from '../src/data/serializer/serializerBase';
+import SerializerV0 from '../src/data/serializer/serializer_v0';
+import { Compressor } from '../src/data/serializer/compressor/allCompressors';
+import CompressorBase from '../src/data/serializer/compressor/compressorBase';
+import DeflateCompressor from '../src/data/serializer/compressor/deflateCompressor';
+import GzipCompressor from '../src/data/serializer/compressor/gzipCompressor';
+import StreamCompressor from '../src/data/serializer/compressor/streamCompressor';
+import BanPatternRule from '../src/data/rules/banPatternRule';
+import CellCountRule from '../src/data/rules/cellCountRule';
+import CompletePatternRule from '../src/data/rules/completePatternRule';
+import ConnectAllRule from '../src/data/rules/connectAllRule';
+import CustomRule from '../src/data/rules/customRule';
+import { allRules } from '../src/data/rules/index';
+import OffByXRule from '../src/data/rules/offByXRule';
+import RegionAreaRule from '../src/data/rules/regionAreaRule';
+import Rule from '../src/data/rules/rule';
+import SymbolsPerRegionRule from '../src/data/rules/symbolsPerRegionRule';
+import UndercluedRule from '../src/data/rules/undercluedRule';
 
 const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConfigType', value: ConfigType },

@@ -22,7 +22,7 @@ for await (const file of glob.scan('src/data')) {
     continue;
 
   const result: Module = {
-    path: '../data/' + file.replaceAll('.ts', '').replaceAll('\\', '/'),
+    path: '../src/data/' + file.replaceAll('.ts', '').replaceAll('\\', '/'),
     module,
     defaultExport: undefined,
     namedExports: [],
@@ -61,7 +61,7 @@ console.log('Composing code...');
 const project = new Project({
   tsConfigFilePath: 'tsconfig.json',
 });
-const sourceFile = project.createSourceFile(`../src/generated/enclosure.ts`);
+const sourceFile = project.createSourceFile(`../generated/enclosure.ts`);
 
 sourceFile.addImportDeclarations(
   modules.map(module => ({
@@ -104,9 +104,9 @@ sourceFile.addExportDeclaration({
 });
 
 console.log('Writing...');
-await Bun.write('./src/generated/enclosure.ts', sourceFile.getText());
+await Bun.write('./generated/enclosure.ts', sourceFile.getText());
 
 console.log('Formatting...');
-await $`bunx prettier --write ./src/generated/enclosure.ts`;
+await $`bunx prettier --write ./generated/enclosure.ts`;
 
 console.log('Done!');

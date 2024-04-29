@@ -4,12 +4,13 @@ import { useGrid } from '../GridContext';
 import Grid from './Grid';
 import SymbolOverlay from './SymbolOverlay';
 import ErrorOverlay from './ErrorOverlay';
-import { Color, State } from '../../data/primitives';
+import { State } from '../../data/primitives';
 import GridData from '../../data/grid';
 import Loading from '../components/Loading';
 import { GridStateConsumer } from '../GridStateContext';
 import { useDisplay } from '../DisplayContext';
 import { useToolbox } from '../ToolboxContext';
+import handleTileClick from './handleTileClick';
 
 export interface MainGridProps {
   useToolboxClick: boolean;
@@ -38,7 +39,7 @@ export default memo(function MainGrid({
   children,
 }: MainGridProps) {
   const gridContext = useGrid();
-  const { grid, setGrid } = gridContext;
+  const { grid } = gridContext;
   const { scale } = useDisplay();
   const { onTileClick } = useToolbox();
   const [tileConfig, setTileConfig] = useState<{
@@ -77,15 +78,7 @@ export default memo(function MainGrid({
             onTileClick(x, y, target, flood, gridContext);
             return;
           }
-          const tile = grid.getTile(x, y);
-          if (flood && target === Color.Gray) {
-            // target is Color.Gray if the tile is already the target color
-            setGrid(grid.floodFillAll(Color.Gray, tile.color));
-          } else if (flood && !tile.fixed) {
-            setGrid(grid.floodFill({ x, y }, Color.Gray, target));
-          } else if (!tile.fixed) {
-            setGrid(grid.setTile(x, y, t => t.withColor(target)));
-          }
+          handleTileClick(x, y, target, flood, gridContext, false);
         }}
       >
         <GridStateConsumer>

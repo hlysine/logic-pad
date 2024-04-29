@@ -8,6 +8,8 @@ import { Serializer } from '../../data/serializer/allSerializers';
 import { ZodError } from 'zod';
 import evaluate, { examples } from './evaluator';
 import { SUPPORTED_THEMES, useTheme } from '../ThemeContext';
+import { useToolbox } from '../ToolboxContext';
+import handleTileClick from '../grid/handleTileClick';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -56,6 +58,21 @@ export default memo(function SourceCodeEditor({
   } | null>(null);
   const monaco = useMonaco();
   const { theme } = useTheme();
+  const { setTool } = useToolbox();
+
+  // Set the toolbox tool so that the grid is editable
+  useEffect(() => {
+    setTool(
+      'code',
+      'Code',
+      'Edit the puzzle code',
+      null,
+      (x, y, target, flood, gridContext) => {
+        handleTileClick(x, y, target, flood, gridContext, false);
+      }
+    );
+    return () => setTool(null, null, null, null, null);
+  }, [setTool]);
 
   useEffect(() => {
     if (!monaco) return;

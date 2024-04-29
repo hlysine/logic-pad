@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, useCallback, useContext, useState } from 'react';
 import { Color } from '../data/primitives';
 import { GridContext } from './GridContext';
 
@@ -17,9 +17,9 @@ interface ToolboxContext {
       ) => void)
     | null;
   setTool: (
-    toolId: string,
-    name: string,
-    description: string,
+    toolId: string | null,
+    name: string | null,
+    description: string | null,
     gridOverlay: React.ReactNode,
     onTileClick:
       | ((
@@ -61,6 +61,17 @@ export default memo(function ToolboxContext({
     ((x: number, y: number, target: Color, flood: boolean) => void) | null
   >(null);
 
+  const setTool = useCallback<ToolboxContext['setTool']>(
+    (toolId, name, description, gridOverlay, onTileClick) => {
+      setToolId(toolId);
+      setName(name);
+      setDescription(description);
+      setGridOverlay(gridOverlay);
+      setOnTileClick(() => onTileClick);
+    },
+    [setToolId, setName, setDescription, setGridOverlay, setOnTileClick]
+  );
+
   return (
     <context.Provider
       value={{
@@ -69,13 +80,7 @@ export default memo(function ToolboxContext({
         description,
         gridOverlay,
         onTileClick,
-        setTool: (toolId, name, description, gridOverlay, onTileClick) => {
-          setToolId(toolId);
-          setName(name);
-          setDescription(description);
-          setGridOverlay(gridOverlay);
-          setOnTileClick(() => onTileClick);
-        },
+        setTool,
       }}
     >
       {children}

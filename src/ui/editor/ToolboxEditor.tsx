@@ -1,10 +1,16 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { useToolbox } from '../ToolboxContext';
 import { allTools } from './tools';
 import { cn } from '../../utils';
 
 export default memo(function ToolboxEditor() {
-  const { name, description } = useToolbox();
+  const { name, description, setTool } = useToolbox();
+
+  useEffect(() => {
+    setTool(null, null, null, null, null);
+    return () => setTool(null, null, null, null, null);
+  }, [setTool]);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-2">

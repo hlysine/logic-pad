@@ -25,3 +25,10 @@ export const externalReducedMotion = () =>
 
 export const prefersReducedMotion = () =>
   siteOptions.reducedMotionOverride || externalReducedMotion();
+
+export const mousePosition = { clientX: 0, clientY: 0 };
+
+document.addEventListener('pointermove', e => {
+  mousePosition.clientX = e.clientX;
+  mousePosition.clientY = e.clientY;
+});

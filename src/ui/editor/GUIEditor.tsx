@@ -10,7 +10,7 @@ function Accordion({
   children: React.ReactNode;
 }) {
   return (
-    <div className="collapse collapse-arrow shrink-0 bg-base-100">
+    <div className="collapse collapse-arrow shrink-0 bg-base-100 overflow-visible">
       <input
         type="checkbox"
         name="gui-editor-accordion"
@@ -24,7 +24,7 @@ function Accordion({
 
 export default memo(function GUIEditor() {
   return (
-    <div className="flex flex-col grow-0 gap-2 overflow-y-auto">
+    <div className="flex flex-col grow-0 gap-2 overflow-y-auto overflow-x-visible">
       <Accordion title="Toolbox">
         <ToolboxEditor />
       </Accordion>

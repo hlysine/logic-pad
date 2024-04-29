@@ -3,6 +3,7 @@ import { getInstruction, useConfig } from '../ConfigContext';
 import Config from './parts/Config';
 import Rule from '../../data/rules/rule';
 import { useGrid } from '../GridContext';
+import Symbol from '../../data/symbols/symbol';
 
 const gap = 8;
 
@@ -69,8 +70,8 @@ export default memo(function ConfigPopup() {
         setRef(undefined);
       }
     };
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, [setLocation, setRef, ref]);
 
   useEffect(() => {
@@ -115,8 +116,11 @@ export default memo(function ConfigPopup() {
                   [field]: value,
                 });
                 setGrid(grid.replaceRule(instruction, newInstruction));
-              } else {
-                throw new Error('Not implemented');
+              } else if (instruction instanceof Symbol) {
+                const newInstruction = instruction.copyWith({
+                  [field]: value,
+                });
+                setGrid(grid.replaceSymbol(instruction, newInstruction));
               }
             }}
           />
@@ -129,6 +133,10 @@ export default memo(function ConfigPopup() {
         onClick={() => {
           if (instruction instanceof Rule) {
             setGrid(grid.removeRule(instruction));
+            setLocation(undefined);
+            setRef(undefined);
+          } else if (instruction instanceof Symbol) {
+            setGrid(grid.removeSymbol(instruction));
             setLocation(undefined);
             setRef(undefined);
           }

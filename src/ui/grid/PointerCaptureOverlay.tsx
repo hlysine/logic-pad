@@ -13,6 +13,8 @@ export interface PointerCaptureOverlayProps {
     to: Color,
     flood: boolean
   ) => void;
+  allowDrag?: boolean;
+  step?: number;
 }
 
 export default memo(function PointerCaptureOverlay({
@@ -20,7 +22,12 @@ export default memo(function PointerCaptureOverlay({
   height,
   colorMap,
   onTileClick,
+  allowDrag,
+  step,
 }: PointerCaptureOverlayProps) {
+  allowDrag = allowDrag ?? true;
+  step = step ?? 1;
+
   const prevCoord = useRef({ x: -1, y: -1 });
 
   const getPointerLocation = (
@@ -28,8 +35,18 @@ export default memo(function PointerCaptureOverlay({
     targetColor: Color
   ) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / (rect.width / width));
-    const y = Math.floor((e.clientY - rect.top) / (rect.height / height));
+    const x =
+      Math.floor(
+        (((e.clientX - rect.left) / rect.width) * width -
+          (step === 0.5 ? 0.25 : 0)) /
+          step
+      ) * step;
+    const y =
+      Math.floor(
+        (((e.clientY - rect.top) / rect.height) * height -
+          (step === 0.5 ? 0.25 : 0)) /
+          step
+      ) * step;
     const currentColor = colorMap(x, y, targetColor) ? targetColor : Color.Gray;
     return { x, y, currentColor };
   };
@@ -65,6 +82,7 @@ export default memo(function PointerCaptureOverlay({
       }}
       onPointerMove={e => {
         e.preventDefault();
+        if (!allowDrag) return;
         const targetColor = mouseContext.getColorForButtons(e.buttons);
         if (
           !targetColor ||

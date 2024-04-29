@@ -19,6 +19,7 @@ export interface ToolboxItemProps {
       ) => void)
     | null;
   children: React.ReactNode;
+  className?: string;
 }
 
 export default memo(function ToolboxItem({
@@ -28,6 +29,7 @@ export default memo(function ToolboxItem({
   gridOverlay,
   onTileClick,
   children,
+  className,
 }: ToolboxItemProps) {
   const { toolId, setTool } = useToolbox();
 
@@ -40,7 +42,11 @@ export default memo(function ToolboxItem({
   return (
     <div className="tooltip tooltip-info" data-tip={name}>
       <button
-        className={cn('btn text-xl py-0', toolId === id && 'btn-primary')}
+        className={cn(
+          'btn text-xl p-0 w-12',
+          toolId === id && 'btn-primary',
+          className
+        )}
         onClick={() => setTool(id, name, description, gridOverlay, onTileClick)}
       >
         {children}

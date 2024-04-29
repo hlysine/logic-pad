@@ -221,6 +221,57 @@ export default class GridData {
   }
 
   /**
+   * Remove all symbols that satisfy the predicate.
+   * @param predicate The predicate to test each symbol with.
+   * @returns The new grid with the symbols removed.
+   */
+  public removeSymbolIf(predicate: (symbol: Symbol) => boolean): GridData {
+    return this.withSymbols(map => {
+      for (const [id, symbols] of map) {
+        const newSymbols = symbols.filter(sym => !predicate(sym));
+        if (newSymbols.length === 0) {
+          map.delete(id);
+        } else {
+          map.set(id, newSymbols);
+        }
+      }
+      return map;
+    });
+  }
+
+  /**
+   * Find the first symbol that satisfies the predicate.
+   * @param predicate The predicate to test each symbol with.
+   * @returns The first symbol that satisfies the predicate, or undefined if no symbol is found.
+   */
+  public findSymbol(
+    predicate: (symbol: Symbol) => boolean
+  ): Symbol | undefined {
+    for (const symbols of this.symbols.values()) {
+      const symbol = symbols.find(predicate);
+      if (symbol) return symbol;
+    }
+  }
+
+  /**
+   * Replace an existing symbol with a new symbol.
+   * @param oldSymbol The symbol to replace.
+   * @param newSymbol The new symbol to replace with.
+   * @returns The new grid with the symbol replaced.
+   */
+  public replaceSymbol(oldSymbol: Symbol, newSymbol: Symbol): GridData {
+    return this.withSymbols(map => {
+      if (map.has(oldSymbol.id)) {
+        const symbols = map
+          .get(oldSymbol.id)!
+          .map(s => (s === oldSymbol ? newSymbol : s));
+        map.set(oldSymbol.id, symbols);
+      }
+      return map;
+    });
+  }
+
+  /**
    * Add or modify the rules in the grid.
    * @param rules The new rules to add or modify.
    * @returns The new grid with the new rules.
@@ -249,6 +300,24 @@ export default class GridData {
    */
   public removeRule(rule: Rule): GridData {
     return this.withRules(rules => rules.filter(r => r !== rule));
+  }
+
+  /**
+   * Remove all rules that satisfy the predicate.
+   * @param predicate The predicate to test each rule with.
+   * @returns The new grid with the rules removed.
+   */
+  public removeRuleIf(predicate: (rule: Rule) => boolean): GridData {
+    return this.withRules(rules => rules.filter(r => !predicate(r)));
+  }
+
+  /**
+   * Find the first rule that satisfies the predicate.
+   * @param predicate The predicate to test each rule with.
+   * @returns The first rule that satisfies the predicate, or undefined if no rule is found.
+   */
+  public findRule(predicate: (rule: Rule) => boolean): Rule | undefined {
+    return this.rules.find(predicate);
   }
 
   /**

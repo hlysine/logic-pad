@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { cn } from '../../utils';
 import DartSymbolData from '../../data/symbols/dartSymbol';
 import { Direction } from '../../data/primitives';
@@ -57,8 +57,10 @@ const orientations = {
   },
 };
 
+// million-ignore
 export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
   const direction = symbol.orientation;
+  const Icon = orientations[direction].arrowIcon;
   return (
     <div
       className={cn(
@@ -76,9 +78,7 @@ export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
         className={cn('absolute', textClass, '-m-[0.10em]')}
         style={orientations[direction].arrowStitch}
       >
-        {React.createElement(orientations[direction].arrowIcon, {
-          size: '0.7em',
-        })}
+        <Icon size="0.7em" />
       </div>
     </div>
   );

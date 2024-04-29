@@ -28,7 +28,7 @@ export default memo(function ToolboxEditor() {
         </span>
       </div>
       <span className="divider mt-0 mb-0"></span>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 justify-center">
         {allTools.map((Tool, i) => (
           <Tool key={i} />
         ))}

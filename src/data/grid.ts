@@ -339,13 +339,18 @@ export default class GridData {
    * @returns The new grid with the new dimensions.
    */
   public resize(width: number, height: number): GridData {
-    const newGrid = new GridData(width, height, undefined, this.connections);
-    for (let y = 0; y < Math.min(this.height, height); y++) {
-      for (let x = 0; x < Math.min(this.width, width); x++) {
-        newGrid.setTile(x, y, this.getTile(x, y));
-      }
-    }
-    return newGrid;
+    const tiles = array(width, height, (x, y) =>
+      x >= 0 && x < this.width && y >= 0 && y < this.height
+        ? this.getTile(x, y)
+        : TileData.empty()
+    );
+    return this.removeSymbolIf(
+      sym => sym.x >= width || sym.y >= height
+    ).copyWith({
+      width,
+      height,
+      tiles,
+    });
   }
 
   /**

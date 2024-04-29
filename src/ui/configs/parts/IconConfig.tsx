@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { ConfigType, IconConfig } from '../../../data/config';
 import Instruction from '../../../data/instruction';
 import { IconString } from '../../../data/symbols/customIconSymbol';
@@ -10,8 +10,7 @@ export interface IconConfigProps {
   setConfig?: (field: string, value: IconConfig['default']) => void;
 }
 
-const Md = await import('react-icons/md');
-const iconNames = Object.keys(Md).filter(key => key !== 'default');
+let iconNames: string[] = [];
 
 // million-ignore
 export default memo(function IconConfig({
@@ -19,6 +18,19 @@ export default memo(function IconConfig({
   config,
   setConfig,
 }: IconConfigProps) {
+  const [iconList, setIconList] = useState<string[]>(iconNames);
+
+  useEffect(() => {
+    if (iconNames.length === 0) {
+      import('react-icons/md')
+        .then(md => {
+          iconNames = Object.keys(md).filter(key => key !== 'default');
+          setIconList(iconNames);
+        })
+        .catch(console.log);
+    }
+  }, []);
+
   const value = instruction[
     config.field as keyof typeof instruction
   ] as unknown as IconString;
@@ -27,7 +39,7 @@ export default memo(function IconConfig({
       <span>{config.description}</span>
       <Autocomplete
         className="grow"
-        items={iconNames}
+        items={iconList}
         value={value}
         onChange={e => {
           setConfig?.(config.field, e);

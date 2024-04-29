@@ -144,7 +144,7 @@ export default memo(function SourceCodeEditor({
             theme={SUPPORTED_THEMES.find(([t]) => t === theme)?.[1]}
             width="100%"
             height="100%"
-            className="focus-within:z-30 rounded-box overflow-hidden"
+            className="focus-within:z-30 rounded-box"
             defaultLanguage="javascript"
             defaultValue={(() => {
               let saved = window.localStorage.getItem('sourceCode');

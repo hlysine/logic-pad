@@ -440,27 +440,27 @@ export default memo(function DevPuzzles() {
   }, []);
 
   return DEV_PUZZLES.map(puzzle => (
-    <li
-      key={puzzle.title}
-      onClick={() => {
-        Compressor.compress(Serializer.stringifyPuzzle(puzzle))
-          .then(d =>
-            navigate({
-              to: state.location.pathname,
-              search: {
-                d,
-              },
-            })
-          )
-          .catch(console.log);
-      }}
-    >
-      <a className="text-md">
+    <li key={puzzle.title}>
+      <button
+        className="text-md"
+        onClick={() => {
+          Compressor.compress(Serializer.stringifyPuzzle(puzzle))
+            .then(d =>
+              navigate({
+                to: state.location.pathname,
+                search: {
+                  d,
+                },
+              })
+            )
+            .catch(console.log);
+        }}
+      >
         {puzzle.title}
         <span className="badge badge-secondary badge-sm rounded-lg">
           {puzzle.author}
         </span>
-      </a>
+      </button>
     </li>
   ));
 });

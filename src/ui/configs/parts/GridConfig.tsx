@@ -53,7 +53,7 @@ export default memo(function GridConfig({
     void (async () => {
       if (grid) {
         setUrl(
-          '/edit-embed?nest=' +
+          '/edit-embed?instructions=false&metadata=false&nest=' +
             ('nest' in search ? (search.nest ?? 0) + 1 : 1).toString() +
             '&callback=' +
             callbackId.current +

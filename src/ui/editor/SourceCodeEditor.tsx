@@ -115,8 +115,8 @@ export default memo(function SourceCodeEditor({
         Compressor.compress(Serializer.stringifyPuzzle(puzzle))
           .then(d =>
             navigate({
-              to: state.location.pathname,
               search: {
+                ...state.location.search,
                 d,
               },
             })

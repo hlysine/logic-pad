@@ -13,12 +13,14 @@ import ConfigPopup from '../configs/ConfigPopup';
 import EditorPane from './EditorPane';
 import ToolboxContext from '../ToolboxContext';
 import ToolboxOverlay from './ToolboxOverlay';
+import { useEmbed } from '../EmbedContext';
 
 export interface PuzzleEditorProps {
   children?: React.ReactNode;
 }
 
 export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
+  const { features } = useEmbed();
   return (
     <ToolboxContext>
       <ConfigContext>
@@ -44,8 +46,8 @@ export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
           right={
             <>
               <div className="h-full flex flex-col items-stretch justify-center gap-4">
-                <InstructionSearch />
-                <InstructionList editable={true} />
+                {features.instructions && <InstructionSearch />}
+                <InstructionList editable={features.instructions} />
                 <ConfigPopup />
               </div>
               <div className="p-2 w-full flex flex-col items-stretch justify-end gap-2">

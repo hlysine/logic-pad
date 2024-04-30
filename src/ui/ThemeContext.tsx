@@ -1,4 +1,6 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { useMonaco } from '@monaco-editor/react';
+import { editor } from 'monaco-editor';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
 
 export const themeKey = 'theme';
 
@@ -61,6 +63,26 @@ export default memo(function ThemeContext({
   const [theme, setTheme] = useState(
     () => localStorage.getItem(themeKey) ?? 'dark'
   );
+  const monaco = useMonaco();
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    const editorTheme = SUPPORTED_THEMES.find(([t]) => t === theme)?.[1];
+    if (monaco && editorTheme) {
+      import(`../../node_modules/monaco-themes/themes/${editorTheme}.json`)
+        .then(data => {
+          monaco.editor.defineTheme(
+            editorTheme,
+            data as editor.IStandaloneThemeData
+          );
+          monaco.editor.setTheme(editorTheme);
+        })
+        .catch(() => {
+          monaco.editor.setTheme(editorTheme);
+        })
+        .catch(console.log);
+    }
+  }, [theme, monaco]);
 
   return (
     <context.Provider

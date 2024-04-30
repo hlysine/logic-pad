@@ -9,7 +9,7 @@ import ThreePaneLayout from '../ui/ThreePaneLayout';
 import TouchControls from '../ui/components/TouchControls';
 import DocumentTitle from '../ui/components/DocumentTitle';
 
-export const Route = createFileRoute('/solve')({
+export const Route = createFileRoute('/_layout/solve')({
   validateSearch,
   component: memo(function SolveMode() {
     const params = Route.useSearch();

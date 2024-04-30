@@ -105,12 +105,5 @@ function renderItem(item: RoadmapItem) {
 
 // million-ignore
 export default memo(function Roadmap() {
-  return (
-    <ul
-      tabIndex={0}
-      className="dropdown-content menu menu-vertical min-w-[300px] max-h-[calc(100vh-100px)] flex-nowrap bg-base-200 rounded-box overflow-y-auto overflow-x-visible text-base-content z-50"
-    >
-      {roadmap.map(renderItem)}
-    </ul>
-  );
+  return roadmap.map(renderItem);
 });

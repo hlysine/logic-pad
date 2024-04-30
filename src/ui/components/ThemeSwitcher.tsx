@@ -1,32 +1,10 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { FiChevronDown } from 'react-icons/fi';
 import { cn } from '../../utils';
 import { SUPPORTED_THEMES, themeKey, useTheme } from '../ThemeContext';
-import { useMonaco } from '@monaco-editor/react';
-import { editor } from 'monaco-editor';
 
 export default memo(function ThemeSwitcher() {
   const { theme, setTheme } = useTheme();
-  const monaco = useMonaco();
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    const editorTheme = SUPPORTED_THEMES.find(([t]) => t === theme)?.[1];
-    if (monaco && editorTheme) {
-      import(`../../../node_modules/monaco-themes/themes/${editorTheme}.json`)
-        .then(data => {
-          monaco.editor.defineTheme(
-            editorTheme,
-            data as editor.IStandaloneThemeData
-          );
-          monaco.editor.setTheme(editorTheme);
-        })
-        .catch(() => {
-          monaco.editor.setTheme(editorTheme);
-        })
-        .catch(console.log);
-    }
-  }, [theme, monaco]);
 
   const switchTheme = (newTheme: string) => {
     setTheme(newTheme);

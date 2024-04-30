@@ -1,20 +1,20 @@
 import { memo, useEffect } from 'react';
-import { useGrid } from './GridContext';
-import ViewpointSymbol from '../data/symbols/viewpointSymbol';
-import ConnectAllRule from '../data/rules/connectAllRule';
-import { Color } from '../data/primitives';
-import BanPatternRule from '../data/rules/banPatternRule';
-import GridData from '../data/grid';
-import GridConnections from '../data/gridConnections';
-import { useEdit } from './EditContext';
-import LetterSymbol from '../data/symbols/letterSymbol';
-import AreaNumberSymbol from '../data/symbols/areaNumberSymbol';
-import UndercluedRule from '../data/rules/undercluedRule';
-import CompletePatternRule from '../data/rules/completePatternRule';
-import { Puzzle } from '../data/puzzle';
+import { useGrid } from '../GridContext';
+import ViewpointSymbol from '../../data/symbols/viewpointSymbol';
+import ConnectAllRule from '../../data/rules/connectAllRule';
+import { Color } from '../../data/primitives';
+import BanPatternRule from '../../data/rules/banPatternRule';
+import GridData from '../../data/grid';
+import GridConnections from '../../data/gridConnections';
+import { useEdit } from '../EditContext';
+import LetterSymbol from '../../data/symbols/letterSymbol';
+import AreaNumberSymbol from '../../data/symbols/areaNumberSymbol';
+import UndercluedRule from '../../data/rules/undercluedRule';
+import CompletePatternRule from '../../data/rules/completePatternRule';
+import { Puzzle } from '../../data/puzzle';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
-import { Serializer } from '../data/serializer/allSerializers';
-import { Compressor } from '../data/serializer/compressor/allCompressors';
+import { Serializer } from '../../data/serializer/allSerializers';
+import { Compressor } from '../../data/serializer/compressor/allCompressors';
 
 export const DEV_PUZZLES: Puzzle[] = [
   {
@@ -439,35 +439,28 @@ export default memo(function DevPuzzles() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <ul
-      tabIndex={0}
-      className="dropdown-content menu menu-vertical min-w-[300px] bg-base-200 rounded-box text-base-content z-50"
+  return DEV_PUZZLES.map(puzzle => (
+    <li
+      key={puzzle.title}
+      onClick={() => {
+        Compressor.compress(Serializer.stringifyPuzzle(puzzle))
+          .then(d =>
+            navigate({
+              to: state.location.pathname,
+              search: {
+                d,
+              },
+            })
+          )
+          .catch(console.log);
+      }}
     >
-      {DEV_PUZZLES.map(puzzle => (
-        <li
-          key={puzzle.title}
-          onClick={() => {
-            Compressor.compress(Serializer.stringifyPuzzle(puzzle))
-              .then(d =>
-                navigate({
-                  to: state.location.pathname,
-                  search: {
-                    d,
-                  },
-                })
-              )
-              .catch(console.log);
-          }}
-        >
-          <a className="text-md">
-            {puzzle.title}
-            <span className="badge badge-secondary badge-sm rounded-lg">
-              {puzzle.author}
-            </span>
-          </a>
-        </li>
-      ))}
-    </ul>
-  );
+      <a className="text-md">
+        {puzzle.title}
+        <span className="badge badge-secondary badge-sm rounded-lg">
+          {puzzle.author}
+        </span>
+      </a>
+    </li>
+  ));
 });

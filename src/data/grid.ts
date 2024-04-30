@@ -40,7 +40,7 @@ export default class GridData {
     this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
     this.symbols = symbols ? GridData.deduplicateSymbols(symbols) : new Map();
-    this.rules = rules ? GridData.deduplicateRules(rules) : [];
+    this.rules = rules ?? []; // do not deduplicate rules because it makes for bad editor experience
   }
 
   /**

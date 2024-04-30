@@ -1,11 +1,10 @@
 import { memo } from 'react';
 import { useRouterState, useSearch, useNavigate } from '@tanstack/react-router';
-import { Color, Mode } from '../../data/primitives';
+import { Mode } from '../../data/primitives';
 import { cn } from '../../utils';
 import { Serializer } from '../../data/serializer/allSerializers';
 import { Compressor } from '../../data/serializer/compressor/allCompressors';
 import { useGrid } from '../GridContext';
-import { Puzzle } from '../../data/puzzle';
 
 export interface ModeButtonProps {
   active: boolean;
@@ -27,23 +26,13 @@ const ModeButton = memo(function ModeButton({
       type="button"
       role="tab"
       onClick={async () => {
-        let puzzle: Puzzle | undefined;
-        if (state.location.pathname === '/create') {
-          const overwrite = !!grid.find(
-            t => !t.fixed && t.color !== Color.Gray
-          );
-          if (overwrite) {
-            puzzle = { ...metadata, grid: grid.resetTiles(), solution: grid };
-          }
-        }
-        if (!puzzle) {
-          puzzle = { ...metadata, grid, solution };
-        }
         await navigate({
           to: link,
           search: {
             ...search,
-            d: await Compressor.compress(Serializer.stringifyPuzzle(puzzle)),
+            d: await Compressor.compress(
+              Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+            ),
           },
         });
       }}

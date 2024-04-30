@@ -428,7 +428,7 @@ export default memo(function DevPuzzles() {
   const state = useRouterState();
 
   useEffect(() => {
-    if (grid.equals(defaultGrid)) {
+    if (grid.equals(defaultGrid) && state.location.pathname === '/solve') {
       setGrid(
         DEV_PUZZLES[defaultSelection].grid,
         DEV_PUZZLES[defaultSelection].solution

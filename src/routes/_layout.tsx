@@ -13,7 +13,10 @@ export const Route = createFileRoute('/_layout')({
       <>
         <header className="flex flex-wrap justify-between items-center gap-4 px-8 py-2 shadow-md">
           <div className="flex flex-wrap grow shrink items-center gap-4">
-            <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
+            <h1 className="text-3xl text-neutral-content flex items-center gap-2">
+              <img src="/logo.svg" className="w-8 h-8 inline-block" />
+              Logic Pad
+            </h1>
             <ul className="menu menu-horizontal bg-base-200 rounded-box">
               <li className="dropdown dropdown-bottom">
                 <button tabIndex={0} role="button">

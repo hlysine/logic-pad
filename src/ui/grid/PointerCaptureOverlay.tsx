@@ -15,6 +15,7 @@ export interface PointerCaptureOverlayProps {
   ) => void;
   allowDrag?: boolean;
   step?: number;
+  onPointerUp?: (color: Color) => void;
 }
 
 export default memo(function PointerCaptureOverlay({
@@ -24,6 +25,7 @@ export default memo(function PointerCaptureOverlay({
   onTileClick,
   allowDrag,
   step,
+  onPointerUp,
 }: PointerCaptureOverlayProps) {
   allowDrag = allowDrag ?? true;
   step = step ?? 1;
@@ -70,6 +72,7 @@ export default memo(function PointerCaptureOverlay({
       }}
       onPointerUp={e => {
         e.preventDefault();
+        const color = mouseContext.color ?? Color.Gray;
         mouseContext.setColor(null, false);
         if (e.pointerType !== 'mouse') {
           let targetColor = mouseContext.getColorForButtons(1);
@@ -79,6 +82,7 @@ export default memo(function PointerCaptureOverlay({
             onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
           }
         }
+        onPointerUp?.(color);
       }}
       onPointerMove={e => {
         e.preventDefault();

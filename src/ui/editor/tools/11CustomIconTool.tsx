@@ -9,7 +9,7 @@ const sample = new CustomIconSymbolData(
   new GridData(5, 4),
   0,
   0,
-  'MdEmergency'
+  'MdQuestionMark'
 );
 
 export default memo(function CustomIconTool() {

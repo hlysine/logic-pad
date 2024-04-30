@@ -17,7 +17,6 @@ export default memo(function CustomTextTool() {
     <SymbolTool
       name="Custom Text"
       sample={sample}
-      placementStep={0.5}
       component={CustomTextSymbol}
     />
   );

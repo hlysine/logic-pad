@@ -7,11 +7,6 @@ const sample = new ViewpointSymbolData(0, 0, 1);
 
 export default memo(function ViewpointTool() {
   return (
-    <SymbolTool
-      name="Viewpoint"
-      sample={sample}
-      placementStep={1}
-      component={ViewpointSymbol}
-    />
+    <SymbolTool name="Viewpoint" sample={sample} component={ViewpointSymbol} />
   );
 });

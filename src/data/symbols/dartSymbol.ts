@@ -65,6 +65,10 @@ export default class DartSymbol extends NumberSymbol {
     return `dart`;
   }
 
+  public get placementStep(): number {
+    return 1;
+  }
+
   public get explanation(): string {
     return `*Darts* count opposite color cells in that direction`;
   }

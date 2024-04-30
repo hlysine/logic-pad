@@ -49,6 +49,10 @@ export default class ViewpointSymbol extends NumberSymbol {
     return `viewpoint`;
   }
 
+  public get placementStep(): number {
+    return 1;
+  }
+
   public get explanation(): string {
     return '*Viewpoint Numbers* count visible cells in the four directions';
   }

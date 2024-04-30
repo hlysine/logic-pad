@@ -1,4 +1,5 @@
 import { Puzzle } from '../puzzle';
+import Symbol from '../symbols/symbol';
 import SerializerV0 from './serializer_v0';
 import SerializerBase from './serializerBase';
 
@@ -12,12 +13,33 @@ let defaultSerializer: SerializerBase;
 
 register((defaultSerializer = new SerializerV0()));
 
+function selectSerializer(input: string): {
+  serializer: SerializerBase;
+  data: string;
+} {
+  const match = input.match(/^(\d+)_/);
+  const version = match ? parseInt(match[1]) : 0;
+  const serializer = allSerializers.get(version);
+  if (serializer) {
+    return { serializer, data: input.slice(match?.[0].length ?? 0) };
+  } else {
+    throw new Error(`Unknown serializer version for ${input}`);
+  }
+}
+
 /**
  * The master serializer for puzzles.
  *
  * It uses the default serializer when stringifying puzzles, and select the correct deserializer when parsing puzzles.
  */
 const Serializer = {
+  stringifySymbol(symbol: Symbol): string {
+    return `${defaultSerializer.version}_${defaultSerializer.stringifySymbol(symbol)}`;
+  },
+  parseSymbol(input: string): Symbol {
+    const { serializer, data } = selectSerializer(input);
+    return serializer.parseSymbol(data);
+  },
   /**
    * Convert a puzzle to a string.
    * @param puzzle The puzzle to convert.
@@ -32,14 +54,8 @@ const Serializer = {
    * @returns The parsed puzzle.
    */
   parsePuzzle(input: string): Puzzle {
-    const match = input.match(/^(\d+)_/);
-    const version = match ? parseInt(match[1]) : 0;
-    const serializer = allSerializers.get(version);
-    if (serializer) {
-      return serializer.parsePuzzle(input.slice(match?.[0].length ?? 0));
-    } else {
-      throw new Error(`Unknown serializer version for ${input}`);
-    }
+    const { serializer, data } = selectSerializer(input);
+    return serializer.parsePuzzle(data);
   },
 };
 

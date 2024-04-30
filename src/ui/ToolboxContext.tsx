@@ -1,6 +1,10 @@
 import { createContext, memo, useCallback, useContext, useState } from 'react';
 import { Color } from '../data/primitives';
 import { GridContext } from './GridContext';
+import Symbol from '../data/symbols/symbol';
+import { Serializer } from '../data/serializer/allSerializers';
+
+type Presets = { name: string; symbol: Symbol }[];
 
 interface ToolboxContext {
   toolId: string | null;
@@ -31,6 +35,29 @@ interface ToolboxContext {
         ) => void)
       | null
   ) => void;
+  presets: Presets;
+  setPresets: (presets: Presets) => void;
+}
+
+const presetsKey = 'presets';
+
+function savePresets(presets: Presets) {
+  const savedPresets = presets.map(({ name, symbol }) => ({
+    name,
+    symbol: Serializer.stringifySymbol(symbol),
+  }));
+  localStorage.setItem(presetsKey, JSON.stringify(savedPresets));
+}
+
+function loadPresets(): Presets {
+  const savedPresets = JSON.parse(localStorage.getItem(presetsKey) ?? '[]') as {
+    name: string;
+    symbol: string;
+  }[];
+  return savedPresets.map(({ name, symbol }) => ({
+    name,
+    symbol: Serializer.parseSymbol(symbol),
+  }));
 }
 
 const context = createContext<ToolboxContext>({
@@ -40,6 +67,8 @@ const context = createContext<ToolboxContext>({
   gridOverlay: null,
   onTileClick: null,
   setTool: () => {},
+  presets: loadPresets(),
+  setPresets: () => {},
 });
 
 export const useToolbox = () => {
@@ -60,6 +89,7 @@ export default memo(function ToolboxContext({
   const [onTileClick, setOnTileClick] = useState<
     ((x: number, y: number, target: Color, flood: boolean) => void) | null
   >(null);
+  const [presets, setPresets] = useState<Presets>(() => loadPresets());
 
   const setTool = useCallback<ToolboxContext['setTool']>(
     (toolId, name, description, gridOverlay, onTileClick) => {
@@ -72,6 +102,14 @@ export default memo(function ToolboxContext({
     [setToolId, setName, setDescription, setGridOverlay, setOnTileClick]
   );
 
+  const setPresetsAndSave = useCallback<ToolboxContext['setPresets']>(
+    newPresets => {
+      setPresets(newPresets);
+      savePresets(newPresets);
+    },
+    [setPresets]
+  );
+
   return (
     <context.Provider
       value={{
@@ -81,6 +119,8 @@ export default memo(function ToolboxContext({
         gridOverlay,
         onTileClick,
         setTool,
+        presets,
+        setPresets: setPresetsAndSave,
       }}
     >
       {children}

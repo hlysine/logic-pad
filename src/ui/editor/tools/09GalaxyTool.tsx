@@ -6,12 +6,5 @@ import GalaxySymbol from '../../symbols/GalaxySymbol';
 const sample = new GalaxySymbolData(0, 0);
 
 export default memo(function GalaxyTool() {
-  return (
-    <SymbolTool
-      name="Galaxy"
-      sample={sample}
-      placementStep={0.5}
-      component={GalaxySymbol}
-    />
-  );
+  return <SymbolTool name="Galaxy" sample={sample} component={GalaxySymbol} />;
 });

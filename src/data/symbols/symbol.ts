@@ -14,6 +14,10 @@ export default abstract class Symbol extends Instruction {
 
   public abstract validateSymbol(grid: GridData): State;
 
+  public get placementStep(): number {
+    return 0.5;
+  }
+
   public withX(x: number): this {
     return this.copyWith({ x });
   }

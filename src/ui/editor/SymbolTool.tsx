@@ -11,20 +11,21 @@ import { SymbolProps } from '../symbols';
 
 export interface SymbolToolProps {
   name: string;
+  id?: string;
   sample: Symbol;
-  placementStep: number;
   component: React.NamedExoticComponent<SymbolProps<any>>;
 }
 
 export default memo(function SymbolTool({
   name,
+  id,
   sample,
-  placementStep,
   component: Component,
 }: SymbolToolProps) {
+  id = id ?? sample.id;
   return (
     <ToolboxItem
-      id={sample.id}
+      id={id}
       name={name}
       description="Left click to place a symbol. Click again to configure it."
       gridOverlay={
@@ -38,7 +39,7 @@ export default memo(function SymbolTool({
                       width={grid.width}
                       height={grid.height}
                       allowDrag={false}
-                      step={placementStep}
+                      step={sample.placementStep}
                       colorMap={(x, y, color) => {
                         if (color === Color.Dark)
                           return !!grid.symbols

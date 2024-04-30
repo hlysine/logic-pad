@@ -17,7 +17,6 @@ export default memo(function CustomIconTool() {
     <SymbolTool
       name="Custom Icon"
       sample={sample}
-      placementStep={0.5}
       component={CustomIconSymbol}
     />
   );

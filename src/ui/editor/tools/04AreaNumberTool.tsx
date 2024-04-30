@@ -10,7 +10,6 @@ export default memo(function AreaNumberTool() {
     <SymbolTool
       name="Area Number"
       sample={sample}
-      placementStep={0.5}
       component={AreaNumberSymbol}
     />
   );

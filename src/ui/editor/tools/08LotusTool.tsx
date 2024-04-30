@@ -7,12 +7,5 @@ import { Orientation } from '../../../data/primitives';
 const sample = new LotusSymbolData(0, 0, Orientation.Up);
 
 export default memo(function LotusTool() {
-  return (
-    <SymbolTool
-      name="Lotus"
-      sample={sample}
-      placementStep={0.5}
-      component={LotusSymbol}
-    />
-  );
+  return <SymbolTool name="Lotus" sample={sample} component={LotusSymbol} />;
 });

@@ -1,4 +1,3 @@
-import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { memo, useEffect, useRef, useState } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
@@ -10,6 +9,8 @@ import evaluate, { examples } from './evaluator';
 import { SUPPORTED_THEMES, useTheme } from '../ThemeContext';
 import { useToolbox } from '../ToolboxContext';
 import handleTileClick from '../grid/handleTileClick';
+import { useGrid } from '../GridContext';
+import { array } from '../../data/helper';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -43,8 +44,6 @@ export interface SourceCodeEditorProps {
 export default memo(function SourceCodeEditor({
   loading,
 }: SourceCodeEditorProps) {
-  const navigate = useNavigate();
-  const state = useRouterState();
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const handleEditorDidMount = (editor: editor.IStandaloneCodeEditor) => {
     editorRef.current = editor;
@@ -59,6 +58,7 @@ export default memo(function SourceCodeEditor({
   const monaco = useMonaco();
   const { theme } = useTheme();
   const { setTool } = useToolbox();
+  const { setGrid, setMetadata } = useGrid();
 
   // Set the toolbox tool so that the grid is editable
   useEffect(() => {
@@ -100,7 +100,7 @@ export default memo(function SourceCodeEditor({
       .catch(console.log);
   }, [monaco]);
 
-  const parseJs = () => {
+  const parseJs = async () => {
     if (editorRef.current) {
       const value = editorRef.current.getValue();
       window.localStorage.setItem('sourceCode', value);
@@ -112,16 +112,23 @@ export default memo(function SourceCodeEditor({
         const puzzle: Puzzle = PuzzleSchema.parse(
           evaluate(`"use strict";${value}`)
         );
-        Compressor.compress(Serializer.stringifyPuzzle(puzzle))
-          .then(d =>
-            navigate({
-              search: {
-                ...state.location.search,
-                d,
-              },
-            })
-          )
-          .catch(console.log);
+        const compressed = await Compressor.compress(
+          Serializer.stringifyPuzzle(puzzle)
+        );
+        const decompressed = await Compressor.decompress(compressed);
+        const { grid, solution, ...metadata } =
+          Serializer.parsePuzzle(decompressed);
+        setMetadata(metadata);
+        if (solution) {
+          const tiles = array(grid.width, grid.height, (x, y) => {
+            const tile = grid.getTile(x, y);
+            if (tile.fixed) return tile;
+            return tile.withColor(solution.getTile(x, y).color);
+          });
+          setGrid(grid.withTiles(tiles), null);
+        } else {
+          setGrid(grid, solution);
+        }
       } catch (error) {
         if (toast !== null) clearTimeout(toast.handle);
         const handle = window.setTimeout(() => setToast(null), 5000);

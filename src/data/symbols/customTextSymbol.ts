@@ -31,9 +31,8 @@ export default class CustomTextSymbol extends CustomSymbol {
       configurable: true,
     },
     {
-      type: ConfigType.Tile,
+      type: ConfigType.Grid,
       default: CustomTextSymbol.EXAMPLE_GRID,
-      resizable: false,
       field: 'grid',
       description: 'Thumbnail Grid',
       configurable: true,

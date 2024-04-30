@@ -34,9 +34,8 @@ export default class CustomIconSymbol extends CustomSymbol {
       configurable: true,
     },
     {
-      type: ConfigType.Tile,
+      type: ConfigType.Grid,
       default: CustomIconSymbol.EXAMPLE_GRID,
-      resizable: false,
       field: 'grid',
       description: 'Thumbnail Grid',
       configurable: true,

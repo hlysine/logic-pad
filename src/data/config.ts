@@ -8,6 +8,7 @@ export enum ConfigType {
   Direction = 'direction',
   Orientation = 'orientation',
   Tile = 'tile',
+  Grid = 'grid',
   Icon = 'icon',
 }
 
@@ -49,6 +50,10 @@ export interface TileConfig extends Config<GridData> {
   readonly resizable: boolean;
 }
 
+export interface GridConfig extends Config<GridData> {
+  readonly type: ConfigType.Grid;
+}
+
 export interface IconConfig extends Config<string> {
   readonly type: ConfigType.Icon;
 }
@@ -60,6 +65,7 @@ export type AnyConfig =
   | DirectionConfig
   | OrientationConfig
   | TileConfig
+  | GridConfig
   | IconConfig;
 
 /**

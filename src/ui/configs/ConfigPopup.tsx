@@ -101,7 +101,7 @@ export default memo(function ConfigPopup() {
 
   return (
     <div
-      className="p-4 z-30 bg-base-300 text-base-content shadow-xl rounded-box w-[400px] fixed transition-all flex flex-col gap-2"
+      className="p-4 z-50 bg-base-300 text-base-content shadow-xl rounded-box w-[400px] fixed transition-all flex flex-col gap-2"
       ref={popupRef}
     >
       {configs && configs.length > 0 ? (

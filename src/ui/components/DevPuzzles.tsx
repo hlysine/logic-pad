@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import { useGrid } from '../GridContext';
+import { defaultGrid, useGrid } from '../GridContext';
 import ViewpointSymbol from '../../data/symbols/viewpointSymbol';
 import ConnectAllRule from '../../data/rules/connectAllRule';
 import { Color } from '../../data/primitives';
@@ -428,7 +428,7 @@ export default memo(function DevPuzzles() {
   const state = useRouterState();
 
   useEffect(() => {
-    if (grid.width === 0) {
+    if (grid.equals(defaultGrid)) {
       setGrid(
         DEV_PUZZLES[defaultSelection].grid,
         DEV_PUZZLES[defaultSelection].solution

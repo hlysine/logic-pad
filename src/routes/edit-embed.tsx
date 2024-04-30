@@ -7,10 +7,14 @@ import { Serializer } from '../data/serializer/allSerializers';
 import { GridConsumer } from '../ui/GridContext';
 
 export const Route = createFileRoute('/edit-embed')({
-  validateSearch,
+  validateSearch: (search: Record<string, unknown>) => ({
+    ...validateSearch(search),
+    nest: search.nest ? Number(search.nest) : undefined,
+    callback: search.callback ? String(search.callback) : undefined,
+  }),
   component: memo(function CreateMode() {
     const params = Route.useSearch();
-    useLinkLoader(params);
+    useLinkLoader(params, false, true);
     const navigate = useNavigate();
 
     return (
@@ -21,17 +25,26 @@ export const Route = createFileRoute('/edit-embed')({
               <button
                 className="btn btn-primary"
                 onClick={async () => {
-                  await navigate({
-                    search: {
-                      d: await Compressor.compress(
-                        Serializer.stringifyPuzzle({
-                          ...metadata,
-                          grid,
-                          solution,
-                        })
-                      ),
-                    },
-                  });
+                  if (params.callback) {
+                    const callback = window.parent.gridConfigCallback.get(
+                      params.callback
+                    );
+                    if (callback) {
+                      callback(grid);
+                    }
+                  } else {
+                    await navigate({
+                      search: {
+                        d: await Compressor.compress(
+                          Serializer.stringifyPuzzle({
+                            ...metadata,
+                            grid,
+                            solution,
+                          })
+                        ),
+                      },
+                    });
+                  }
                 }}
               >
                 Save and exit

@@ -17,9 +17,8 @@ export default class CustomRule extends Rule {
       configurable: true,
     },
     {
-      type: ConfigType.Tile,
+      type: ConfigType.Grid,
       default: CustomRule.EXAMPLE_GRID,
-      resizable: false,
       field: 'grid',
       description: 'Thumbnail Grid',
       configurable: true,

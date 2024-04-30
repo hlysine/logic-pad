@@ -43,10 +43,14 @@ export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
           }
           right={
             <>
-              <InstructionSearch />
-              <InstructionList editable={true} />
-              <ConfigPopup />
-              {children}
+              <div className="h-full flex flex-col items-stretch justify-center gap-4">
+                <InstructionSearch />
+                <InstructionList editable={true} />
+                <ConfigPopup />
+              </div>
+              <div className="p-2 w-full flex flex-col items-stretch justify-end gap-2">
+                {children}
+              </div>
             </>
           }
         />

@@ -6,9 +6,7 @@ import type Md from 'react-icons/md';
 export type IconString = keyof typeof Md;
 
 export default class CustomIconSymbol extends CustomSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
-  );
+  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

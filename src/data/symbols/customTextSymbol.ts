@@ -3,9 +3,7 @@ import GridData from '../grid';
 import CustomSymbol from './customSymbol';
 
 export default class CustomTextSymbol extends CustomSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
-  );
+  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

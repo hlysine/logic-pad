@@ -1,7 +1,9 @@
 import { memo } from 'react';
 import Difficulty from '../metadata/Difficulty';
 import { useGrid } from '../GridContext';
+import { cn } from '../../utils';
 
+// million-ignore
 export default memo(function MetadataEditor() {
   const { metadata, setMetadata } = useGrid();
   return (
@@ -13,7 +15,10 @@ export default memo(function MetadataEditor() {
         <input
           type="text"
           placeholder="Required"
-          className="input input-bordered w-full"
+          className={cn(
+            'input input-bordered w-full',
+            metadata.title === '' && 'input-error'
+          )}
           value={metadata.title}
           onChange={e => setMetadata({ ...metadata, title: e.target.value })}
         />
@@ -25,7 +30,10 @@ export default memo(function MetadataEditor() {
         <input
           type="text"
           placeholder="Required"
-          className="input input-bordered w-full"
+          className={cn(
+            'input input-bordered w-full',
+            metadata.author === '' && 'input-error'
+          )}
           value={metadata.author}
           onChange={e => setMetadata({ ...metadata, author: e.target.value })}
         />

@@ -52,17 +52,18 @@ export default memo(function GridConfig({
           Open editor
           <FiExternalLink size={24} />
         </button>
-        {open && (
-          <dialog id="my_modal_2" className={cn('modal', open && 'modal-open')}>
-            <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral">
-              <form method="dialog">
-                <button
-                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                  onClick={() => setOpen(false)}
-                >
-                  ✕
-                </button>
-              </form>
+
+        <dialog id="my_modal_2" className={cn('modal', open && 'modal-open')}>
+          <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral">
+            <form method="dialog">
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                onClick={() => setOpen(false)}
+              >
+                ✕
+              </button>
+            </form>
+            {open && (
               <EmbedContext>
                 <DisplayContext>
                   <EditContext>
@@ -91,12 +92,12 @@ export default memo(function GridConfig({
                   </EditContext>
                 </DisplayContext>
               </EmbedContext>
-            </div>
-            <form method="dialog" className="modal-backdrop bg-neutral/55">
-              <button onClick={() => setOpen(false)}>close</button>
-            </form>
-          </dialog>
-        )}
+            )}
+          </div>
+          <form method="dialog" className="modal-backdrop bg-neutral/55">
+            <button onClick={() => setOpen(false)}>close</button>
+          </form>
+        </dialog>
       </div>
     </div>
   );

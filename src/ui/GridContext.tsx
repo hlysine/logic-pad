@@ -14,7 +14,7 @@ export interface GridContext {
   setMetadata: (value: PuzzleMetadata) => void;
 }
 
-const defaultGrid = GridData.create([]);
+const defaultGrid = new GridData(5, 4);
 const defaultMetadata: PuzzleMetadata = {
   title: '',
   author: '',

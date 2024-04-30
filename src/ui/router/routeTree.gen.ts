@@ -11,18 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './../../routes/__root'
-import { Route as EditEmbedImport } from './../../routes/edit-embed'
 import { Route as LayoutImport } from './../../routes/_layout'
 import { Route as IndexImport } from './../../routes/index'
 import { Route as LayoutSolveImport } from './../../routes/_layout.solve'
 import { Route as LayoutCreateImport } from './../../routes/_layout.create'
 
 // Create/Update Routes
-
-const EditEmbedRoute = EditEmbedImport.update({
-  path: '/edit-embed',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LayoutRoute = LayoutImport.update({
   id: '/_layout',
@@ -56,10 +50,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/edit-embed': {
-      preLoaderRoute: typeof EditEmbedImport
-      parentRoute: typeof rootRoute
-    }
     '/_layout/create': {
       preLoaderRoute: typeof LayoutCreateImport
       parentRoute: typeof LayoutImport
@@ -76,7 +66,6 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   LayoutRoute.addChildren([LayoutCreateRoute, LayoutSolveRoute]),
-  EditEmbedRoute,
 ])
 
 /* prettier-ignore-end */

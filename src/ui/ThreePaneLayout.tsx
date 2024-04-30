@@ -13,7 +13,7 @@ export default memo(function ThreePaneLayout({
 }: ThreePaneLayoutProps) {
   return (
     /* Large bottom padding in small screen to fit the floating toolbar */
-    <div className="flex flex-1 justify-center items-center flex-wrap xl:flex-nowrap gap-2 pt-8 pb-32 xl:pt-0 xl:pb-0">
+    <div className="flex flex-1 h-full justify-center items-center flex-wrap xl:flex-nowrap gap-2 pt-8 pb-32 xl:pt-0 xl:pb-0">
       <div className="w-full xl:w-[320px] shrink-0 grow-0 flex flex-col p-4 gap-4 text-neutral-content self-stretch justify-between">
         {left}
       </div>

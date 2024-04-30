@@ -13,6 +13,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+const epsilon = 0.001;
+
+export function eq(a: number, b: number) {
+  return Math.abs(a - b) < epsilon;
+}
+
 export const siteOptions = {
   reducedMotionOverride:
     window.localStorage.getItem('reducedMotion') === 'true',

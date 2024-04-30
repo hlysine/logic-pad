@@ -81,7 +81,7 @@ export function configEquals<C extends AnyConfig>(
   a: C['default'],
   b: C['default']
 ): boolean {
-  if (type === ConfigType.Tile) {
+  if (type === ConfigType.Tile || type === ConfigType.Grid) {
     return (a as GridData).equals(b as GridData);
   }
   return a === b;

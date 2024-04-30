@@ -52,7 +52,7 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           escape(String(instruction[config.field as keyof Instruction]))
         );
-      case ConfigType.Grid:
+      case ConfigType.Tile:
         return (
           config.field +
           '=' +
@@ -86,7 +86,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.String:
       case ConfigType.Icon:
         return [config.field, unescape(value)];
-      case ConfigType.Grid: {
+      case ConfigType.Tile: {
         return [config.field, this.parseGrid(unescape(value))];
       }
     }

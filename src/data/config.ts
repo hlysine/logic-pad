@@ -7,7 +7,7 @@ export enum ConfigType {
   Color = 'color',
   Direction = 'direction',
   Orientation = 'orientation',
-  Grid = 'grid',
+  Tile = 'tile',
   Icon = 'icon',
 }
 
@@ -44,8 +44,9 @@ export interface OrientationConfig extends Config<Orientation> {
   readonly type: ConfigType.Orientation;
 }
 
-export interface GridConfig extends Config<GridData> {
-  readonly type: ConfigType.Grid;
+export interface TileConfig extends Config<GridData> {
+  readonly type: ConfigType.Tile;
+  readonly resizable: boolean;
 }
 
 export interface IconConfig extends Config<string> {
@@ -58,7 +59,7 @@ export type AnyConfig =
   | ColorConfig
   | DirectionConfig
   | OrientationConfig
-  | GridConfig
+  | TileConfig
   | IconConfig;
 
 /**
@@ -74,7 +75,7 @@ export function configEquals<C extends AnyConfig>(
   a: C['default'],
   b: C['default']
 ): boolean {
-  if (type === ConfigType.Grid) {
+  if (type === ConfigType.Tile) {
     return (a as GridData).equals(b as GridData);
   }
   return a === b;

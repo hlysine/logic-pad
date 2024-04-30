@@ -91,8 +91,9 @@ export default class BanPatternRule extends Rule {
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
-      type: ConfigType.Grid,
+      type: ConfigType.Tile,
       default: BanPatternRule.EXAMPLE_GRID,
+      resizable: true,
       field: 'pattern',
       description: 'Pattern',
       configurable: true,

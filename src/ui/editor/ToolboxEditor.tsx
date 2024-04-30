@@ -3,6 +3,7 @@ import { useToolbox } from '../ToolboxContext';
 import { allTools } from './tools';
 import { cn } from '../../utils';
 import GridSizeEditor from './GridSizeEditor';
+import { GridConsumer } from '../GridContext';
 
 export default memo(function ToolboxEditor() {
   const { name, description, setTool } = useToolbox();
@@ -14,7 +15,11 @@ export default memo(function ToolboxEditor() {
 
   return (
     <div className="flex flex-col gap-2">
-      <GridSizeEditor />
+      <GridConsumer>
+        {({ grid, setGrid }) => (
+          <GridSizeEditor grid={grid} setGrid={setGrid} />
+        )}
+      </GridConsumer>
       <span className="divider mt-0 mb-0"></span>
       <div className="flex flex-col gap-2">
         <span className="text-sm font-bold">{name ?? 'No tool selected'}</span>

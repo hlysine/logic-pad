@@ -3,6 +3,7 @@ import GridData from '../../data/grid';
 import Tile from './Tile';
 import { Color } from '../../data/primitives';
 import { array } from '../../data/helper';
+import { cn } from '../../utils';
 
 export interface GridProps {
   size: number;
@@ -10,6 +11,7 @@ export interface GridProps {
   editable: boolean;
   onTileClick?: (x: number, y: number, target: Color, flood: boolean) => void;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export default memo(function Grid({
@@ -18,6 +20,7 @@ export default memo(function Grid({
   editable,
   onTileClick,
   children,
+  className,
 }: GridProps) {
   const containerStyle = useMemo(
     () => ({
@@ -54,7 +57,7 @@ export default memo(function Grid({
     [grid.width, grid.height, onTileClick]
   );
   return (
-    <div className="relative" style={containerStyle}>
+    <div className={cn('relative', className)} style={containerStyle}>
       <div
         className="grid justify-center content-center absolute inset-0"
         style={gridStyle}

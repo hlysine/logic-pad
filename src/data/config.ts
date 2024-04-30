@@ -28,6 +28,7 @@ export interface NumberConfig extends Config<number> {
 export interface StringConfig extends Config<string> {
   readonly type: ConfigType.String;
   readonly maxLength?: number;
+  readonly placeholder?: string;
 }
 
 export interface ColorConfig extends Config<Color> {

@@ -25,6 +25,7 @@ export default class CustomTextSymbol extends CustomSymbol {
     {
       type: ConfigType.String,
       default: 'A *custom* text symbol',
+      placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
       configurable: true,
@@ -39,6 +40,7 @@ export default class CustomTextSymbol extends CustomSymbol {
     {
       type: ConfigType.String,
       default: 'X',
+      placeholder: 'Short text to be displayed on the symbol',
       field: 'text',
       description: 'Text',
       configurable: true,

@@ -18,11 +18,11 @@ export default memo(function StringConfig({
   return (
     <div className="flex p-2 gap-4 justify-between items-center">
       <span>{config.description}</span>
-      <input
-        type="text"
-        placeholder="Enter description. Emphasize with *asterisks*."
-        className="input min-w-0 grow"
+      <textarea
+        placeholder={config.placeholder}
+        className="textarea min-w-0 grow"
         value={value}
+        maxLength={config.maxLength}
         onChange={e => {
           setConfig?.(config.field, e.target.value);
         }}

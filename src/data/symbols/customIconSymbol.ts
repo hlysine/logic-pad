@@ -28,6 +28,7 @@ export default class CustomIconSymbol extends CustomSymbol {
     {
       type: ConfigType.String,
       default: 'A *custom* text symbol',
+      placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
       configurable: true,

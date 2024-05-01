@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import fuzzysort from 'fuzzysort';
 import { cn } from '../../utils';
-import AnnotatedText from '../instructions/AnnotatedText';
+import AnnotatedText from './AnnotatedText';
 
 export interface AutocompleteProps {
   items: string[];

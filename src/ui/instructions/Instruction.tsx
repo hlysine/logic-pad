@@ -5,7 +5,7 @@ import { cn } from '../../utils';
 import Grid from '../grid/Grid';
 import { instructionBg } from '../helper';
 import SymbolOverlay from '../grid/SymbolOverlay';
-import AnnotatedText from './AnnotatedText';
+import AnnotatedText from '../components/AnnotatedText';
 
 export interface InstructionProps {
   instruction: InstructionData;

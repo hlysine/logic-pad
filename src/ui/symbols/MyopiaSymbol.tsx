@@ -24,22 +24,22 @@ export default memo(function MyopiaSymbol({ textClass, symbol }: MyopiaProps) {
       )}
     >
       {symbol.directions.up && (
-        <div key="up" className="absolute mx-auto top-[0.06em] mb-auto">
+        <div key="up" className="absolute mx-auto top-[0.065em] mb-auto">
           <FaLongArrowAltUp size={'0.5em'} />
         </div>
       )}
       {symbol.directions.down && (
-        <div key="down" className="absolute mx-auto bottom-[0.06em] mt-auto">
+        <div key="down" className="absolute mx-auto bottom-[0.065em] mt-auto">
           <FaLongArrowAltDown size={'0.5em'} />
         </div>
       )}
       {symbol.directions.left && (
-        <div key="left" className="absolute my-auto left-[0.06em] mr-auto">
+        <div key="left" className="absolute my-auto left-[0.065em] mr-auto">
           <FaLongArrowAltLeft size={'0.5em'} />
         </div>
       )}
       {symbol.directions.right && (
-        <div key="right" className="absolute my-auto right-[0.06em] ml-auto">
+        <div key="right" className="absolute my-auto right-[0.065em] ml-auto">
           <FaLongArrowAltRight size={'0.5em'} />
         </div>
       )}

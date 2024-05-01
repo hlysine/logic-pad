@@ -81,7 +81,7 @@ export default memo(function ConfigPopup() {
   });
 
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = (e: PointerEvent) => {
       if (
         !popupRef.current?.contains(e.target as Node) &&
         !ref?.current?.contains(e.target as Node)
@@ -90,8 +90,8 @@ export default memo(function ConfigPopup() {
         setRef(undefined);
       }
     };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('pointerup', handleClick);
+    return () => document.removeEventListener('pointerup', handleClick);
   }, [setLocation, setRef, ref]);
 
   useEffect(() => {

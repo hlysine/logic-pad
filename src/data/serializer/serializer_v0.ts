@@ -5,7 +5,13 @@ import TileData from '../tile';
 import Symbol from '../symbols/symbol';
 import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
-import { Color, Direction, Orientation } from '../primitives';
+import {
+  Color,
+  DIRECTIONS,
+  Direction,
+  DirectionToggle,
+  Orientation,
+} from '../primitives';
 import { array, escape, unescape } from '../helper';
 import { allRules } from '../rules';
 import { allSymbols } from '../symbols';
@@ -44,7 +50,21 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           String(instruction[config.field as keyof Instruction])
         );
-
+      case ConfigType.DirectionToggle:
+        return (
+          config.field +
+          '=' +
+          DIRECTIONS.filter(
+            dir =>
+              (
+                instruction[
+                  config.field as keyof Instruction
+                ] as unknown as DirectionToggle
+              )[dir]
+          )
+            .map(x => x.substring(0, 1))
+            .join('')
+        );
       case ConfigType.String:
       case ConfigType.Icon:
         return (
@@ -82,6 +102,18 @@ export default class SerializerV0 extends SerializerBase {
         return [config.field, value as Color];
       case ConfigType.Direction:
         return [config.field, value as Direction];
+      case ConfigType.DirectionToggle: {
+        const toggle = {
+          up: false,
+          down: false,
+          left: false,
+          right: false,
+        };
+        for (const dir of DIRECTIONS) {
+          toggle[dir] = value.includes(dir.substring(0, 1));
+        }
+        return [config.field, toggle];
+      }
       case ConfigType.Orientation:
         return [config.field, value as Orientation];
       case ConfigType.String:

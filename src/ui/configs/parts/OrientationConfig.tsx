@@ -4,32 +4,12 @@ import Instruction from '../../../data/instruction';
 import { Orientation } from '../../../data/primitives';
 import { cn } from '../../../utils';
 import { FaArrowUp } from 'react-icons/fa';
+import { orientationToRotation } from '../../../data/helper';
 
 export interface OrientationConfigProps {
   instruction: Instruction;
   config: OrientationConfig;
   setConfig?: (field: string, value: OrientationConfig['default']) => void;
-}
-
-function orientationToRotation(orientation: Orientation) {
-  switch (orientation) {
-    case Orientation.Up:
-      return 0;
-    case Orientation.Left:
-      return 270;
-    case Orientation.Right:
-      return 90;
-    case Orientation.Down:
-      return 180;
-    case Orientation.DownLeft:
-      return 225;
-    case Orientation.DownRight:
-      return 125;
-    case Orientation.UpLeft:
-      return 315;
-    case Orientation.UpRight:
-      return 45;
-  }
 }
 
 // million-ignore
@@ -48,7 +28,7 @@ const OrientationRadio = memo(function OrientationRadio({
     <div className={cn('relative w-8 h-8', className)}>
       <input
         type="radio"
-        name="radio-dark"
+        name="radio-orientation"
         className="absolute inset-0 appearance-none rounded checked:shadow-glow-md checked:shadow-accent checked:border-2 checked:border-accent"
         value={orientation}
         checked={value === orientation}

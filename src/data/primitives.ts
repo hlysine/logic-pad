@@ -54,6 +54,10 @@ export const DIRECTIONS: readonly Direction[] = [
   Direction.Right,
 ];
 
+export type DirectionMap<T> = { [key in Direction]: T };
+
+export type DirectionToggle = Readonly<DirectionMap<boolean>>;
+
 export enum Orientation {
   Up = 'up',
   UpRight = 'up-right',

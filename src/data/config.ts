@@ -1,11 +1,18 @@
 import GridData from './grid';
-import { Color, Direction, Orientation } from './primitives';
+import {
+  Color,
+  DIRECTIONS,
+  Direction,
+  DirectionToggle,
+  Orientation,
+} from './primitives';
 
 export enum ConfigType {
   Number = 'number',
   String = 'string',
   Color = 'color',
   Direction = 'direction',
+  DirectionToggle = 'directionToggle',
   Orientation = 'orientation',
   Tile = 'tile',
   Grid = 'grid',
@@ -41,6 +48,10 @@ export interface DirectionConfig extends Config<Direction> {
   readonly type: ConfigType.Direction;
 }
 
+export interface DirectionToggleConfig extends Config<DirectionToggle> {
+  readonly type: ConfigType.DirectionToggle;
+}
+
 export interface OrientationConfig extends Config<Orientation> {
   readonly type: ConfigType.Orientation;
 }
@@ -63,6 +74,7 @@ export type AnyConfig =
   | StringConfig
   | ColorConfig
   | DirectionConfig
+  | DirectionToggleConfig
   | OrientationConfig
   | TileConfig
   | GridConfig
@@ -83,6 +95,11 @@ export function configEquals<C extends AnyConfig>(
 ): boolean {
   if (type === ConfigType.Tile || type === ConfigType.Grid) {
     return (a as GridData).equals(b as GridData);
+  }
+  if (type === ConfigType.DirectionToggle) {
+    return DIRECTIONS.every(
+      dir => (a as DirectionToggle)[dir] === (b as DirectionToggle)[dir]
+    );
   }
   return a === b;
 }

@@ -61,7 +61,7 @@ export default memo(function ToolboxEditor() {
         <div className="flex flex-col gap-2">
           <span className="text-sm font-bold">Presets</span>
           <span className="text-sm">
-            Quickly place multiple symbols with presets.
+            Quickly place identical symbols with presets.
           </span>
         </div>
         <div

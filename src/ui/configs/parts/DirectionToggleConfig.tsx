@@ -1,83 +1,86 @@
 import { memo } from 'react';
-import { DirectionConfig, ConfigType } from '../../../data/config';
+import { DirectionToggleConfig, ConfigType } from '../../../data/config';
 import Instruction from '../../../data/instruction';
-import { Direction } from '../../../data/primitives';
+import { Direction, DirectionToggle } from '../../../data/primitives';
 import { cn } from '../../../utils';
 import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '../../../data/helper';
 
-export interface DirectionConfigProps {
+export interface DirectionToggleConfigProps {
   instruction: Instruction;
-  config: DirectionConfig;
-  setConfig?: (field: string, value: DirectionConfig['default']) => void;
+  config: DirectionToggleConfig;
+  setConfig?: (field: string, value: DirectionToggleConfig['default']) => void;
 }
 
 // million-ignore
-const DirectionRadio = memo(function DirectionRadio({
-  value,
-  setValue,
+const DirectionToggleRadio = memo(function DirectionToggleRadio({
+  checked,
+  setChecked,
   direction,
   className,
 }: {
-  value: Direction;
-  setValue: (value: Direction) => void;
+  checked: boolean;
+  setChecked: (value: boolean) => void;
   direction: Direction;
   className?: string;
 }) {
   return (
     <div className={cn('relative w-8 h-8', className)}>
       <input
-        type="radio"
-        name="radio-direction"
+        type="checkbox"
+        name="radio-direction-toggle"
         className="absolute inset-0 appearance-none rounded checked:shadow-glow-md checked:shadow-accent checked:border-2 checked:border-accent"
-        value={direction}
-        checked={value === direction}
+        checked={checked}
         onChange={e => {
-          setValue(e.target.value as Direction);
+          setChecked(e.target.checked);
         }}
       />
       <FaArrowUp
         className="absolute inset-0 m-auto pointer-events-none"
-        style={{ transform: `rotate(${directionToRotation(direction)}deg)` }}
+        style={{
+          transform: `rotate(${directionToRotation(direction)}deg)`,
+        }}
       />
     </div>
   );
 });
 
 // million-ignore
-export default memo(function DirectionConfig({
+export default memo(function DirectionToggleConfig({
   instruction,
   config,
   setConfig,
-}: DirectionConfigProps) {
+}: DirectionToggleConfigProps) {
   const value = instruction[
     config.field as keyof typeof instruction
-  ] as Direction;
+  ] as unknown as DirectionToggle;
   return (
     <div className="flex p-2 justify-between items-center">
       <span>{config.description}</span>
       <div className="grid grid-cols-3 grid-rows-3">
-        <DirectionRadio
-          value={value}
-          setValue={value => setConfig?.(config.field, value)}
+        <DirectionToggleRadio
+          checked={value.up}
+          setChecked={val => setConfig?.(config.field, { ...value, up: val })}
           direction={Direction.Up}
           className="col-start-2 row-start-1"
         />
-        <DirectionRadio
-          value={value}
-          setValue={value => setConfig?.(config.field, value)}
+        <DirectionToggleRadio
+          checked={value.left}
+          setChecked={val => setConfig?.(config.field, { ...value, left: val })}
           direction={Direction.Left}
           className="col-start-1 row-start-2"
         />
-        <DirectionRadio
-          value={value}
-          setValue={value => setConfig?.(config.field, value)}
+        <DirectionToggleRadio
+          checked={value.right}
+          setChecked={val =>
+            setConfig?.(config.field, { ...value, right: val })
+          }
           direction={Direction.Right}
           className="col-start-3 row-start-2"
         />
-        <DirectionRadio
-          value={value}
-          setValue={value => setConfig?.(config.field, value)}
+        <DirectionToggleRadio
+          checked={value.down}
+          setChecked={val => setConfig?.(config.field, { ...value, down: val })}
           direction={Direction.Down}
           className="col-start-2 row-start-3"
         />
@@ -86,4 +89,4 @@ export default memo(function DirectionConfig({
   );
 });
 
-export const type = ConfigType.Direction;
+export const type = ConfigType.DirectionToggle;

@@ -40,16 +40,7 @@ export default memo(function PuzzleChecklist() {
     [metadata]
   );
 
-  const autoValidation = useMemo(() => {
-    if (grid.rules.some(rule => rule.validateWithSolution)) return false;
-    if (
-      [...grid.symbols.values()].some(list =>
-        list.some(symbol => symbol.validateWithSolution)
-      )
-    )
-      return false;
-    return true;
-  }, [grid]);
+  const autoValidation = useMemo(() => !grid.requireSolution(), [grid]);
 
   const solutionIsNotEmpty = useMemo(
     () =>

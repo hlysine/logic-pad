@@ -62,7 +62,7 @@ export default function useLinkLoader(
         } else if (solutionBehavior === SolutionBehavior.LoadHidden) {
           setGrid(grid, solution);
         } else {
-          result.solutionStripped = solution !== null;
+          result.solutionStripped = solution !== null && grid.requireSolution();
           setGrid(grid, null);
         }
         setMetadata(metadata);

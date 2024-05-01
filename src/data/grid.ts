@@ -570,6 +570,21 @@ export default class GridData {
   }
 
   /**
+   * Check if the grid has any instructions that require a custom solution.
+   * @returns True if the grid has any instructions that require a custom solution, false otherwise.
+   */
+  public requireSolution(): boolean {
+    if (this.rules.some(rule => rule.validateWithSolution)) return true;
+    if (
+      [...this.symbols.values()].some(list =>
+        list.some(symbol => symbol.validateWithSolution)
+      )
+    )
+      return true;
+    return false;
+  }
+
+  /**
    * Reset all non-fixed tiles to gray.
    *
    * @returns The new grid with all non-fixed tiles reset to gray.

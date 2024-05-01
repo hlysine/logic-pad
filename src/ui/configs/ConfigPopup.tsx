@@ -6,6 +6,7 @@ import { useGrid } from '../GridContext';
 import Symbol from '../../data/symbols/symbol';
 import { useToolbox } from '../ToolboxContext';
 import SupportLevel from '../components/SupportLevel';
+import { mousePosition } from '../../utils';
 
 const gap = 8;
 
@@ -13,35 +14,48 @@ function getPosition(
   targetRef: React.RefObject<HTMLElement>,
   boxRef: React.RefObject<HTMLElement>
 ) {
-  const targetRect = targetRef.current?.getBoundingClientRect();
-  const boxRect = boxRef.current?.getBoundingClientRect();
-  const windowRect = document.body.getBoundingClientRect();
-  if (!targetRect || !boxRect) return undefined;
+  let targetRect = targetRef.current?.getBoundingClientRect();
+  let boxRect = boxRef.current?.getBoundingClientRect();
+  const windowRect = document.documentElement.getBoundingClientRect();
+  console.log(targetRect, boxRect);
+  if (!targetRect || !boxRect) {
+    boxRect = new DOMRect(0, 0, 400, 400);
+    targetRect = new DOMRect(
+      mousePosition.clientX - 30,
+      mousePosition.clientY - 30,
+      60,
+      60
+    );
+  }
   const ret: { left: string; top: string } = {
     left: 'auto',
     top: 'auto',
   };
+  const clampWidth = (width: number) =>
+    Math.min(windowRect.width - boxRect.width, Math.max(0, width));
+  const clampHeight = (height: number) =>
+    Math.min(windowRect.height - boxRect.height, Math.max(0, height));
   if (windowRect.width < 1000) {
     if (targetRect.top > windowRect.height / 2) {
-      ret.top = `${targetRect.top - boxRect.height - gap}px`;
+      ret.top = `${clampHeight(targetRect.top - boxRect.height - gap)}px`;
     } else {
-      ret.top = `${targetRect.bottom + gap}px`;
+      ret.top = `${clampHeight(targetRect.bottom + gap)}px`;
     }
     if (targetRect.left > windowRect.width / 2) {
-      ret.left = `${targetRect.right - boxRect.width}px`;
+      ret.left = `${clampWidth(targetRect.right - boxRect.width)}px`;
     } else {
-      ret.left = `${targetRect.left}px`;
+      ret.left = `${clampWidth(Math.max(0, targetRect.left))}px`;
     }
   } else {
     if (targetRect.left > windowRect.width / 2) {
-      ret.left = `${targetRect.left - boxRect.width - gap}px`;
+      ret.left = `${clampWidth(targetRect.left - boxRect.width - gap)}px`;
     } else {
-      ret.left = `${targetRect.right + gap}px`;
+      ret.left = `${clampWidth(targetRect.right + gap)}px`;
     }
     if (targetRect.top > windowRect.height / 2) {
-      ret.top = `${targetRect.bottom - boxRect.height}px`;
+      ret.top = `${clampHeight(targetRect.bottom - boxRect.height)}px`;
     } else {
-      ret.top = `${targetRect.top}px`;
+      ret.top = `${clampHeight(targetRect.top)}px`;
     }
   }
   return ret;
@@ -108,6 +122,7 @@ export default memo(function ConfigPopup() {
     <div
       className="p-4 z-50 bg-base-300 text-base-content shadow-xl rounded-box w-[400px] fixed transition-all flex flex-col gap-2"
       ref={popupRef}
+      style={getPosition(ref, popupRef)}
     >
       {configs && configs.length > 0 ? (
         configs.map(config => (

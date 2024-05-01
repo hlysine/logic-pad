@@ -114,7 +114,9 @@ export default class BanPatternRule extends Rule {
    */
   public constructor(pattern: GridData) {
     super();
-    this.pattern = pattern;
+    this.pattern = pattern.withTiles(tiles =>
+      tiles.map(row => row.map(t => t.withFixed(false)))
+    );
     this.cache = generateCache(this.pattern);
   }
 

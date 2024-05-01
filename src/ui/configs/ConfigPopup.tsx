@@ -5,6 +5,7 @@ import Rule from '../../data/rules/rule';
 import { useGrid } from '../GridContext';
 import Symbol from '../../data/symbols/symbol';
 import { useToolbox } from '../ToolboxContext';
+import SupportLevel from '../components/SupportLevel';
 
 const gap = 8;
 
@@ -132,7 +133,9 @@ export default memo(function ConfigPopup() {
       ) : (
         <span className="text-center">Not configurable</span>
       )}
-      <div className="flex gap-2 self-stretch justify-center">
+      <div className="flex gap-2 self-stretch justify-between px-2">
+        <SupportLevel validate={!instruction.validateWithSolution} />
+        <div className="flex-1" />
         {instruction instanceof Symbol && (
           <div className="dropdown dropdown-top">
             <button tabIndex={0} className="btn btn-outline btn-info">

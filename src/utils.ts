@@ -34,7 +34,15 @@ export const prefersReducedMotion = () =>
 
 export const mousePosition = { clientX: 0, clientY: 0 };
 
-document.addEventListener('pointermove', e => {
+const updateMousePosition = (e: PointerEvent) => {
   mousePosition.clientX = e.clientX;
   mousePosition.clientY = e.clientY;
-});
+};
+
+document.addEventListener('pointermove', updateMousePosition);
+document.addEventListener('pointerdown', updateMousePosition);
+document.addEventListener('pointerup', updateMousePosition);
+document.addEventListener('pointerleave', updateMousePosition);
+document.addEventListener('pointerenter', updateMousePosition);
+document.addEventListener('pointerover', updateMousePosition);
+document.addEventListener('pointerout', updateMousePosition);

@@ -17,7 +17,6 @@ function getPosition(
   let targetRect = targetRef.current?.getBoundingClientRect();
   let boxRect = boxRef.current?.getBoundingClientRect();
   const windowRect = document.documentElement.getBoundingClientRect();
-  console.log(targetRect, boxRect);
   if (!targetRect || !boxRect) {
     boxRect = new DOMRect(0, 0, 400, 400);
     targetRect = new DOMRect(

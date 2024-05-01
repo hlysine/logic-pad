@@ -15,7 +15,7 @@ export default memo(function EditTarget({ instruction }: EditTargetProps) {
     <div
       ref={divRef}
       className="absolute inset-0 cursor-pointer"
-      onClick={() => {
+      onPointerDown={() => {
         setLocation(getInstructionLocation(grid, instruction));
         setRef(divRef);
       }}

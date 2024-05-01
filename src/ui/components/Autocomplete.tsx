@@ -43,7 +43,8 @@ export default memo(function Autocomplete({
           onChange={e => onChange?.(e.target.value)}
           onKeyDown={e => {
             if (e.key === 'Enter') {
-              confirm(results[0]?.target ?? value);
+              const result = results[0]?.target;
+              if (result) confirm(result);
             } else if (e.key === 'Escape') {
               onChange?.('');
             }

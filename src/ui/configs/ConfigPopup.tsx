@@ -75,6 +75,10 @@ export default memo(function ConfigPopup() {
   }, [instruction, setLocation, setRef]);
 
   const popupRef = useRef<HTMLDivElement>(null);
+  const popupLocation = useRef<{ left: string; top: string }>({
+    left: '',
+    top: '',
+  });
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -97,6 +101,7 @@ export default memo(function ConfigPopup() {
       if (!styles) return;
       popupRef.current.style.left = styles.left;
       popupRef.current.style.top = styles.top;
+      popupLocation.current = styles;
     };
     handler();
     window.addEventListener('resize', handler);
@@ -121,7 +126,7 @@ export default memo(function ConfigPopup() {
     <div
       className="p-4 z-50 bg-base-300 text-base-content shadow-xl rounded-box w-[400px] fixed transition-all flex flex-col gap-2"
       ref={popupRef}
-      style={getPosition(ref, popupRef)}
+      style={popupLocation.current}
     >
       {configs && configs.length > 0 ? (
         configs.map(config => (

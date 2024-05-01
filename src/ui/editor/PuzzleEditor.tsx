@@ -14,6 +14,7 @@ import EditorPane from './EditorPane';
 import ToolboxContext from '../ToolboxContext';
 import ToolboxOverlay from './ToolboxOverlay';
 import { useEmbed } from '../EmbedContext';
+import PuzzleChecklist from './PuzzleChecklist';
 
 export interface PuzzleEditorProps {
   children?: React.ReactNode;
@@ -50,7 +51,8 @@ export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
                 <InstructionList editable={features.instructions} />
                 <ConfigPopup />
               </div>
-              <div className="p-2 mt-4 w-full flex flex-col items-stretch justify-end gap-2">
+              <div className="p-2 w-full flex flex-col items-stretch justify-end gap-2 shrink-0">
+                <PuzzleChecklist />
                 {children}
               </div>
             </>

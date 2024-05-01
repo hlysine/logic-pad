@@ -24,6 +24,7 @@ function EmbedLoader({ grid }: { grid: GridData }) {
     setFeatures({
       instructions: false,
       metadata: false,
+      checklist: false,
     });
     setGrid(grid, null);
     // eslint-disable-next-line react-hooks/exhaustive-deps

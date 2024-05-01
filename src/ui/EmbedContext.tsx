@@ -3,6 +3,7 @@ import { createContext, memo, useContext, useState } from 'react';
 interface Features {
   instructions: boolean;
   metadata: boolean;
+  checklist: boolean;
 }
 
 interface EmbedContext {
@@ -14,6 +15,7 @@ const context = createContext<EmbedContext>({
   features: {
     instructions: true,
     metadata: true,
+    checklist: true,
   },
   setFeatures: () => {},
 });
@@ -32,6 +34,7 @@ export default memo(function EmbedContext({
   const [features, setFeatures] = useState<Features>({
     instructions: true,
     metadata: true,
+    checklist: true,
   });
 
   return (

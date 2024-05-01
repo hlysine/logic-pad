@@ -50,7 +50,7 @@ export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
                 <InstructionList editable={features.instructions} />
                 <ConfigPopup />
               </div>
-              <div className="p-2 w-full flex flex-col items-stretch justify-end gap-2">
+              <div className="p-2 mt-4 w-full flex flex-col items-stretch justify-end gap-2">
                 {children}
               </div>
             </>

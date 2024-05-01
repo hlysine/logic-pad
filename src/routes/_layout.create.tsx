@@ -18,10 +18,10 @@ export const Route = createFileRoute('/_layout/create')({
       <PuzzleEditor>
         {linkResult && linkResult.solutionStripped && (
           <div
-            className="tooltip tooltip-top tooltip-info flex"
+            className="tooltip tooltip-top tooltip-info flex shrink-0"
             data-tip="The puzzle solution has been removed to avoid spoiling the puzzle. Click to reload the puzzle with its original solution."
           >
-            <div role="alert" className="alert shadow-lg">
+            <div role="alert" className="alert shadow-lg gap-2">
               <IoWarningOutline className="text-warning" size={24} />
               <div>
                 <h3 className="font-bold">Solution removed</h3>

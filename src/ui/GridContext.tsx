@@ -20,7 +20,7 @@ const defaultMetadata: PuzzleMetadata = {
   author: '',
   description: '',
   link: '',
-  difficulty: 0,
+  difficulty: 1,
 };
 
 const context = createContext<GridContext>({

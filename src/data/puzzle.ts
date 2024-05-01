@@ -26,6 +26,16 @@ export type PuzzleMetadata = {
   difficulty: number;
 };
 
+export const MetadataSchema = z
+  .object({
+    title: z.string().min(1),
+    author: z.string().min(1),
+    description: z.string(),
+    link: z.string(),
+    difficulty: z.number().int().min(1).max(10),
+  })
+  .strict();
+
 export const PuzzleSchema = z
   .object({
     title: z.string().min(1),

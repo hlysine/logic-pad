@@ -6,8 +6,9 @@ import { useGridState } from '../GridStateContext';
 import { Color, State } from '../../data/primitives';
 import { BiSolidFlagCheckered } from 'react-icons/bi';
 import { cn } from '../../utils';
-import { BsPatchCheckFill } from 'react-icons/bs';
+import { BsCreditCard2Front, BsPatchCheckFill } from 'react-icons/bs';
 import { FaCircleHalfStroke } from 'react-icons/fa6';
+import { MetadataSchema } from '../../data/puzzle';
 
 function ChecklistItem({
   icon,
@@ -31,8 +32,13 @@ function ChecklistItem({
 
 export default memo(function PuzzleChecklist() {
   const { features } = useEmbed();
-  const { grid } = useGrid();
+  const { grid, metadata } = useGrid();
   const { state } = useGridState();
+
+  const metadataValid = useMemo(
+    () => MetadataSchema.safeParse(metadata).success,
+    [metadata]
+  );
 
   const autoValidation = useMemo(() => {
     if (grid.rules.some(rule => rule.validateWithSolution)) return false;
@@ -57,9 +63,11 @@ export default memo(function PuzzleChecklist() {
 
   const solutionIsValid = state.final !== State.Error;
 
-  const checklistComplete = autoValidation
-    ? solutionIsComplete && solutionIsValid
-    : solutionIsNotEmpty;
+  const checklistComplete =
+    metadataValid &&
+    (autoValidation
+      ? solutionIsComplete && solutionIsValid
+      : solutionIsNotEmpty);
 
   if (!features.checklist) return null;
 
@@ -78,6 +86,23 @@ export default memo(function PuzzleChecklist() {
     >
       <div className="flex flex-col gap-2 text-sm">
         <ChecklistItem
+          key="metadataValid"
+          icon={
+            <BsCreditCard2Front
+              size={22}
+              className={cn(metadataValid ? 'text-success' : 'text-error')}
+            />
+          }
+          tooltip={
+            metadataValid
+              ? 'All required metadata fields are filled'
+              : 'Fill all required metadata fields'
+          }
+        >
+          {metadataValid ? 'Metadata valid' : 'Metadata invalid'}
+        </ChecklistItem>
+        <ChecklistItem
+          key="autoValidation"
           icon={
             <BiSolidFlagCheckered
               size={22}
@@ -94,6 +119,7 @@ export default memo(function PuzzleChecklist() {
         </ChecklistItem>
         {autoValidation ? (
           <ChecklistItem
+            key="solutionIsValid"
             icon={
               <BsPatchCheckFill
                 size={22}
@@ -114,6 +140,7 @@ export default memo(function PuzzleChecklist() {
           </ChecklistItem>
         ) : (
           <ChecklistItem
+            key="solutionIsNotEmpty"
             icon={
               <FaCircleHalfStroke
                 size={22}

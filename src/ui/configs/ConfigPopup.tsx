@@ -90,8 +90,8 @@ export default memo(function ConfigPopup() {
         setRef(undefined);
       }
     };
-    document.addEventListener('pointerup', handleClick);
-    return () => document.removeEventListener('pointerup', handleClick);
+    document.addEventListener('pointerdown', handleClick);
+    return () => document.removeEventListener('pointerdown', handleClick);
   }, [setLocation, setRef, ref]);
 
   useEffect(() => {

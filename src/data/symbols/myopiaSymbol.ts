@@ -86,6 +86,15 @@ export default class MyopiaSymbol extends Symbol {
     const tile = grid.getTile(this.x, this.y);
     if (!tile.exists || tile.color === Color.Gray) return State.Incomplete;
 
+    const enableDiagonal =
+      this.directions[Orientation.UpLeft] ||
+      this.directions[Orientation.UpRight] ||
+      this.directions[Orientation.DownLeft] ||
+      this.directions[Orientation.DownRight];
+    const allDirections = enableDiagonal
+      ? ORIENTATIONS
+      : [Orientation.Up, Orientation.Down, Orientation.Left, Orientation.Right];
+
     const map: OrientationMap<{ min: number; max: number; complete: boolean }> =
       {
         up: { min: 0, max: 0, complete: true },
@@ -98,7 +107,7 @@ export default class MyopiaSymbol extends Symbol {
         'down-right': { min: 0, max: 0, complete: true },
       };
     const pos = { x: this.x, y: this.y };
-    ORIENTATIONS.forEach(direction => {
+    allDirections.forEach(direction => {
       grid.iterateDirectionAll(
         pos,
         direction,
@@ -123,9 +132,9 @@ export default class MyopiaSymbol extends Symbol {
       );
       if (!stopped) map[direction].max = Number.MAX_SAFE_INTEGER;
     });
-    const pointedDirections = ORIENTATIONS.filter(d => this.directions[d]);
-    const otherDirections = ORIENTATIONS.filter(d => !this.directions[d]);
-    const complete = ORIENTATIONS.every(d => map[d].complete);
+    const pointedDirections = allDirections.filter(d => this.directions[d]);
+    const otherDirections = allDirections.filter(d => !this.directions[d]);
+    const complete = allDirections.every(d => map[d].complete);
     for (let i = 0; i < pointedDirections.length; i++) {
       const direction1 = pointedDirections[i];
       for (let j = i + 1; j < pointedDirections.length; j++) {

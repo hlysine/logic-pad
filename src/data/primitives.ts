@@ -58,6 +58,19 @@ export type DirectionMap<T> = { [key in Direction]: T };
 
 export type DirectionToggle = Readonly<DirectionMap<boolean>>;
 
+export function directionToggle(...directions: readonly Direction[]) {
+  const result = {
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+  };
+  for (const direction of directions) {
+    result[direction] = true;
+  }
+  return result;
+}
+
 export enum Orientation {
   Up = 'up',
   UpRight = 'up-right',
@@ -79,6 +92,27 @@ export const ORIENTATIONS: readonly Orientation[] = [
   Orientation.Left,
   Orientation.UpLeft,
 ];
+
+export type OrientationMap<T> = { [key in Orientation]: T };
+
+export type OrientationToggle = Readonly<OrientationMap<boolean>>;
+
+export function orientationToggle(...orientations: readonly Orientation[]) {
+  const result = {
+    up: false,
+    'up-right': false,
+    right: false,
+    'down-right': false,
+    down: false,
+    'down-left': false,
+    left: false,
+    'up-left': false,
+  };
+  for (const orientation of orientations) {
+    result[orientation] = true;
+  }
+  return result;
+}
 
 export enum Mode {
   Create = 'create',

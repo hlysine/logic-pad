@@ -1,16 +1,9 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import CustomTextSymbolData from '../../../data/symbols/customTextSymbol';
+import { instance } from '../../../data/symbols/customTextSymbol';
 import CustomTextSymbol from '../../symbols/CustomTextSymbol';
-import GridData from '../../../data/grid';
 
-const sample = new CustomTextSymbolData(
-  'A *custom* symbol',
-  new GridData(5, 4),
-  0,
-  0,
-  'X'
-);
+const sample = instance;
 
 export default memo(function CustomTextTool() {
   return (

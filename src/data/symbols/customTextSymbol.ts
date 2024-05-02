@@ -118,8 +118,8 @@ export default class CustomTextSymbol extends CustomSymbol {
 }
 
 export const instance = new CustomTextSymbol(
-  '',
-  GridData.create([]),
+  'A *custom* text symbol',
+  new GridData(5, 4),
   0,
   0,
   'X'

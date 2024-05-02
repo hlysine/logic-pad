@@ -1,6 +1,6 @@
 import GridConnections from './gridConnections';
 import { array, move } from './helper';
-import { Color, Direction, Position } from './primitives';
+import { Color, Direction, Orientation, Position } from './primitives';
 import Rule from './rules/rule';
 import Symbol from './symbols/symbol';
 import TileData from './tile';
@@ -464,7 +464,7 @@ export default class GridData {
    */
   public iterateDirection<T>(
     position: Position,
-    direction: Direction,
+    direction: Direction | Orientation,
     predicate: (tile: TileData) => boolean,
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {
@@ -489,7 +489,7 @@ export default class GridData {
    */
   public iterateDirectionAll<T>(
     position: Position,
-    direction: Direction,
+    direction: Direction | Orientation,
     predicate: (tile: TileData) => boolean,
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {

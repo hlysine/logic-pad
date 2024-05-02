@@ -7,16 +7,32 @@ import { Direction, Orientation, Position } from './primitives';
  * @param step The distance to offset by.
  * @returns The offset position.
  */
-export function move(position: Position, direction: Direction, step = 1) {
+export function move(
+  position: Position,
+  direction: Direction | Orientation,
+  step = 1
+) {
   switch (direction) {
     case Direction.Up:
+    case Orientation.Up:
       return { x: position.x, y: position.y - step };
     case Direction.Down:
+    case Orientation.Down:
       return { x: position.x, y: position.y + step };
     case Direction.Left:
+    case Orientation.Left:
       return { x: position.x - step, y: position.y };
     case Direction.Right:
+    case Orientation.Right:
       return { x: position.x + step, y: position.y };
+    case Orientation.UpLeft:
+      return { x: position.x - step, y: position.y - step };
+    case Orientation.UpRight:
+      return { x: position.x + step, y: position.y - step };
+    case Orientation.DownLeft:
+      return { x: position.x - step, y: position.y + step };
+    case Orientation.DownRight:
+      return { x: position.x + step, y: position.y + step };
   }
 }
 

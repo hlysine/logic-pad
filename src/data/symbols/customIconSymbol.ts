@@ -120,8 +120,8 @@ export default class CustomIconSymbol extends CustomSymbol {
 }
 
 export const instance = new CustomIconSymbol(
-  '',
-  GridData.create([]),
+  'A *custom* icon symbol',
+  new GridData(5, 4),
   0,
   0,
   'MdQuestionMark'

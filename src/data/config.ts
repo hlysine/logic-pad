@@ -4,7 +4,9 @@ import {
   DIRECTIONS,
   Direction,
   DirectionToggle,
+  ORIENTATIONS,
   Orientation,
+  OrientationToggle,
 } from './primitives';
 
 export enum ConfigType {
@@ -14,6 +16,7 @@ export enum ConfigType {
   Direction = 'direction',
   DirectionToggle = 'directionToggle',
   Orientation = 'orientation',
+  OrientationToggle = 'orientationToggle',
   Tile = 'tile',
   Grid = 'grid',
   Icon = 'icon',
@@ -56,6 +59,10 @@ export interface OrientationConfig extends Config<Orientation> {
   readonly type: ConfigType.Orientation;
 }
 
+export interface OrientationToggleConfig extends Config<OrientationToggle> {
+  readonly type: ConfigType.OrientationToggle;
+}
+
 export interface TileConfig extends Config<GridData> {
   readonly type: ConfigType.Tile;
   readonly resizable: boolean;
@@ -76,6 +83,7 @@ export type AnyConfig =
   | DirectionConfig
   | DirectionToggleConfig
   | OrientationConfig
+  | OrientationToggleConfig
   | TileConfig
   | GridConfig
   | IconConfig;
@@ -99,6 +107,11 @@ export function configEquals<C extends AnyConfig>(
   if (type === ConfigType.DirectionToggle) {
     return DIRECTIONS.every(
       dir => (a as DirectionToggle)[dir] === (b as DirectionToggle)[dir]
+    );
+  }
+  if (type === ConfigType.OrientationToggle) {
+    return ORIENTATIONS.every(
+      dir => (a as OrientationToggle)[dir] === (b as OrientationToggle)[dir]
     );
   }
   return a === b;

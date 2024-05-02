@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import GalaxySymbolData from '../../../data/symbols/galaxySymbol';
+import { instance } from '../../../data/symbols/galaxySymbol';
 import GalaxySymbol from '../../symbols/GalaxySymbol';
 
-const sample = new GalaxySymbolData(0, 0);
+const sample = instance;
 
 export default memo(function GalaxyTool() {
   return <SymbolTool name="Galaxy" sample={sample} component={GalaxySymbol} />;

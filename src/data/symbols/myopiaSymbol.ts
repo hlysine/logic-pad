@@ -2,10 +2,12 @@ import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import {
   Color,
-  DIRECTIONS,
-  DirectionMap,
-  DirectionToggle,
+  ORIENTATIONS,
+  Orientation,
+  OrientationMap,
+  OrientationToggle,
   State,
+  orientationToggle,
 } from '../primitives';
 import Symbol from './symbol';
 
@@ -26,8 +28,8 @@ export default class MyopiaSymbol extends Symbol {
       configurable: false,
     },
     {
-      type: ConfigType.DirectionToggle,
-      default: { up: false, down: false, left: false, right: false },
+      type: ConfigType.OrientationToggle,
+      default: orientationToggle(Orientation.Up, Orientation.Right),
       field: 'directions',
       description: 'Directions',
       configurable: true,
@@ -36,18 +38,12 @@ export default class MyopiaSymbol extends Symbol {
 
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['wbwww', 'bwwwb', 'wwwww', 'wbwww']).withSymbols([
-      new MyopiaSymbol(1, 1, {
-        up: true,
-        left: true,
-        right: false,
-        down: false,
-      }),
-      new MyopiaSymbol(4, 3, {
-        up: true,
-        left: false,
-        right: false,
-        down: false,
-      }),
+      new MyopiaSymbol(
+        1,
+        1,
+        orientationToggle(Orientation.Up, Orientation.Left)
+      ),
+      new MyopiaSymbol(4, 3, orientationToggle(Orientation.Up)),
     ])
   );
 
@@ -60,7 +56,7 @@ export default class MyopiaSymbol extends Symbol {
   public constructor(
     x: number,
     y: number,
-    public readonly directions: DirectionToggle
+    public readonly directions: OrientationToggle
   ) {
     super(x, y);
     this.directions = directions;
@@ -90,14 +86,19 @@ export default class MyopiaSymbol extends Symbol {
     const tile = grid.getTile(this.x, this.y);
     if (!tile.exists || tile.color === Color.Gray) return State.Incomplete;
 
-    const map: DirectionMap<{ min: number; max: number; complete: boolean }> = {
-      up: { min: 0, max: 0, complete: true },
-      down: { min: 0, max: 0, complete: true },
-      left: { min: 0, max: 0, complete: true },
-      right: { min: 0, max: 0, complete: true },
-    };
+    const map: OrientationMap<{ min: number; max: number; complete: boolean }> =
+      {
+        up: { min: 0, max: 0, complete: true },
+        down: { min: 0, max: 0, complete: true },
+        left: { min: 0, max: 0, complete: true },
+        right: { min: 0, max: 0, complete: true },
+        'up-left': { min: 0, max: 0, complete: true },
+        'up-right': { min: 0, max: 0, complete: true },
+        'down-left': { min: 0, max: 0, complete: true },
+        'down-right': { min: 0, max: 0, complete: true },
+      };
     const pos = { x: this.x, y: this.y };
-    DIRECTIONS.forEach(direction => {
+    ORIENTATIONS.forEach(direction => {
       grid.iterateDirectionAll(
         pos,
         direction,
@@ -122,9 +123,9 @@ export default class MyopiaSymbol extends Symbol {
       );
       if (!stopped) map[direction].max = Number.MAX_SAFE_INTEGER;
     });
-    const pointedDirections = DIRECTIONS.filter(d => this.directions[d]);
-    const otherDirections = DIRECTIONS.filter(d => !this.directions[d]);
-    const complete = DIRECTIONS.every(d => map[d].complete);
+    const pointedDirections = ORIENTATIONS.filter(d => this.directions[d]);
+    const otherDirections = ORIENTATIONS.filter(d => !this.directions[d]);
+    const complete = ORIENTATIONS.every(d => map[d].complete);
     for (let i = 0; i < pointedDirections.length; i++) {
       const direction1 = pointedDirections[i];
       for (let j = i + 1; j < pointedDirections.length; j++) {
@@ -159,7 +160,7 @@ export default class MyopiaSymbol extends Symbol {
   }: {
     x?: number;
     y?: number;
-    directions?: DirectionToggle;
+    directions?: OrientationToggle;
   }): this {
     return new MyopiaSymbol(
       x ?? this.x,
@@ -168,14 +169,13 @@ export default class MyopiaSymbol extends Symbol {
     ) as this;
   }
 
-  public withDirections(directions: DirectionToggle): this {
+  public withDirections(directions: OrientationToggle): this {
     return this.copyWith({ directions });
   }
 }
 
-export const instance = new MyopiaSymbol(0, 0, {
-  up: true,
-  right: true,
-  left: false,
-  down: false,
-});
+export const instance = new MyopiaSymbol(
+  0,
+  0,
+  orientationToggle(Orientation.Up, Orientation.Right)
+);

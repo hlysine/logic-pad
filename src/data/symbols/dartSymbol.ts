@@ -126,4 +126,4 @@ export default class DartSymbol extends NumberSymbol {
   }
 }
 
-export const instance = new DartSymbol(0, 0, 1, Direction.Down);
+export const instance = new DartSymbol(0, 0, 1, Direction.Right);

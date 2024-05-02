@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import LetterSymbolData from '../../../data/symbols/letterSymbol';
+import { instance } from '../../../data/symbols/letterSymbol';
 import LetterSymbol from '../../symbols/LetterSymbol';
 
-const sample = new LetterSymbolData(0, 0, 'A');
+const sample = instance;
 
 export default memo(function LetterTool() {
   return <SymbolTool name="Letter" sample={sample} component={LetterSymbol} />;

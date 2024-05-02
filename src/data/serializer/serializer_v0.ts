@@ -10,7 +10,11 @@ import {
   DIRECTIONS,
   Direction,
   DirectionToggle,
+  ORIENTATIONS,
   Orientation,
+  OrientationToggle,
+  directionToggle,
+  orientationToggle,
 } from '../primitives';
 import { array, escape, unescape } from '../helper';
 import { allRules } from '../rules';
@@ -24,6 +28,17 @@ const OFFSETS = [
   { x: 1, y: 0 },
   { x: 0, y: 1 },
 ];
+
+const orientationChars = {
+  [Orientation.Up]: 'u',
+  [Orientation.UpRight]: 'x',
+  [Orientation.Right]: 'r',
+  [Orientation.DownRight]: 'z',
+  [Orientation.Down]: 'd',
+  [Orientation.DownLeft]: 'y',
+  [Orientation.Left]: 'l',
+  [Orientation.UpLeft]: 'w',
+};
 
 export default class SerializerV0 extends SerializerBase {
   public readonly version = 0;
@@ -62,7 +77,22 @@ export default class SerializerV0 extends SerializerBase {
                 ] as unknown as DirectionToggle
               )[dir]
           )
-            .map(x => x.substring(0, 1))
+            .map(x => orientationChars[x])
+            .join('')
+        );
+      case ConfigType.OrientationToggle:
+        return (
+          config.field +
+          '=' +
+          ORIENTATIONS.filter(
+            dir =>
+              (
+                instruction[
+                  config.field as keyof Instruction
+                ] as unknown as OrientationToggle
+              )[dir]
+          )
+            .map(x => orientationChars[x])
             .join('')
         );
       case ConfigType.String:
@@ -103,19 +133,21 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Direction:
         return [config.field, value as Direction];
       case ConfigType.DirectionToggle: {
-        const toggle = {
-          up: false,
-          down: false,
-          left: false,
-          right: false,
-        };
+        const toggle = directionToggle();
         for (const dir of DIRECTIONS) {
-          toggle[dir] = value.includes(dir.substring(0, 1));
+          toggle[dir] = value.includes(orientationChars[dir]);
         }
         return [config.field, toggle];
       }
       case ConfigType.Orientation:
         return [config.field, value as Orientation];
+      case ConfigType.OrientationToggle: {
+        const toggle = orientationToggle();
+        for (const dir of ORIENTATIONS) {
+          toggle[dir] = value.includes(orientationChars[dir]);
+        }
+        return [config.field, toggle];
+      }
       case ConfigType.String:
       case ConfigType.Icon:
         return [config.field, unescape(value)];

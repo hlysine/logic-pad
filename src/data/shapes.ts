@@ -1,4 +1,4 @@
-import { Color } from './primitives';
+import { Color, Position } from './primitives';
 import TileData from './tile';
 
 export interface ShapeElement {
@@ -23,16 +23,26 @@ function compareColor(a: Color, b: Color) {
   return colorIndex[a] - colorIndex[b];
 }
 
-function compareElement(a: ShapeElement, b: ShapeElement) {
+function compareElement(
+  a: ShapeElement | undefined,
+  b: ShapeElement | undefined
+) {
+  if (!a && !b) return 0;
+  if (!a) return -1;
+  if (!b) return 1;
   return a.y - b.y || a.x - b.x || compareColor(a.color, b.color);
 }
 
 function compareShape(a: Shape, b: Shape) {
-  for (let i = 0; i < a.elements.length; i++) {
+  for (let i = 0; i < Math.max(a.elements.length, b.elements.length); i++) {
     const cmp = compareElement(a.elements[i], b.elements[i]);
     if (cmp !== 0) return cmp;
   }
   return 0;
+}
+
+export function shapeEquals(a: Shape, b: Shape) {
+  return compareShape(a, b) === 0;
 }
 
 function recenterShape(shape: Shape): Shape {
@@ -70,6 +80,14 @@ export function tilesToShape(tiles: readonly (readonly TileData[])[]): Shape {
     }
   }
   return recenterShape(shape);
+}
+
+export function positionsToShape(positions: Position[], color: Color) {
+  return recenterShape({
+    width: 0,
+    height: 0,
+    elements: positions.map(p => ({ x: p.x, y: p.y, color })),
+  });
 }
 
 type CoordMap = 'x' | 'y' | '-x' | '-y';
@@ -118,7 +136,7 @@ export function getShapeVariants(shape: Shape): Shape[] {
   }));
   const uniqueVariants: Shape[] = [];
   for (const variant of variants) {
-    if (!uniqueVariants.some(shape => compareShape(shape, variant) === 0)) {
+    if (!uniqueVariants.some(shape => shapeEquals(shape, variant))) {
       uniqueVariants.push(variant);
     }
   }

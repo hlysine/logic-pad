@@ -139,8 +139,14 @@ export default class MyopiaSymbol extends Symbol {
     )
       return State.Error;
     if (
-      complete &&
-      DIRECTIONS.every(d => map[d].max === Number.MAX_SAFE_INTEGER)
+      pointedDirections.length === 0 &&
+      otherDirections.some(d => map[d].max !== Number.MAX_SAFE_INTEGER)
+    )
+      return State.Error;
+    if (
+      pointedDirections.some(
+        d => map[d].complete && map[d].max === Number.MAX_SAFE_INTEGER
+      )
     )
       return State.Error;
     return complete ? State.Satisfied : State.Incomplete;

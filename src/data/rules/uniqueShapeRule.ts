@@ -1,11 +1,10 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import { minBy } from '../helper';
 import { Color, RuleState, State } from '../primitives';
 import RegionShapeRule from './regionShapeRule';
 import { SearchVariant } from './rule';
 
-export default class SameShapeRule extends RegionShapeRule {
+export default class UniqueShapeRule extends RegionShapeRule {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Color,
@@ -18,20 +17,20 @@ export default class SameShapeRule extends RegionShapeRule {
   ]);
 
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
-    GridData.create(['wwbww', 'wbwbw', 'wbwbw', 'bwwbb'])
+    GridData.create(['bwbww', 'wwbww', 'wbwbb', 'bwwbw'])
   );
 
   private static readonly EXAMPLE_GRID_DARK = Object.freeze(
-    GridData.create(['bbwbb', 'bwbwb', 'bwbwb', 'wbbww'])
+    GridData.create(['wbwbb', 'bbwbb', 'bwbww', 'wbbwb'])
   );
 
   private static readonly SEARCH_VARIANTS = [
-    new SameShapeRule(Color.Light).searchVariant(),
-    new SameShapeRule(Color.Dark).searchVariant(),
+    new UniqueShapeRule(Color.Light).searchVariant(),
+    new UniqueShapeRule(Color.Dark).searchVariant(),
   ];
 
   /**
-   * **All &lt;color&gt; areas have the same shape and size**
+   * **No two &lt;color&gt; areas have the same shape and size**
    *
    * @param color - The color of the regions to compare.
    */
@@ -40,44 +39,43 @@ export default class SameShapeRule extends RegionShapeRule {
   }
 
   public get id(): string {
-    return `same_shape`;
+    return `unique_shape`;
   }
 
   public get explanation(): string {
-    return `All ${this.color} areas have the same shape and size`;
+    return `No two ${this.color} areas have the same shape and size`;
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return SameShapeRule.CONFIGS;
+    return UniqueShapeRule.CONFIGS;
   }
 
   public createExampleGrid(): GridData {
     return this.color === Color.Light
-      ? SameShapeRule.EXAMPLE_GRID_LIGHT
-      : SameShapeRule.EXAMPLE_GRID_DARK;
+      ? UniqueShapeRule.EXAMPLE_GRID_LIGHT
+      : UniqueShapeRule.EXAMPLE_GRID_DARK;
   }
 
   public get searchVariants(): SearchVariant[] {
-    return SameShapeRule.SEARCH_VARIANTS;
+    return UniqueShapeRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(grid: GridData): RuleState {
     const { regions, complete } = this.getShapeRegions(grid);
-    if (regions.length > 1) {
+    const errorRegion = regions.find(r => r.count > 1);
+    if (errorRegion) {
       return {
         state: State.Error,
-        positions: minBy(regions, island => island.count)!.positions,
+        positions: errorRegion.positions,
       };
-    } else if (regions.length <= 1) {
-      return { state: complete ? State.Satisfied : State.Incomplete };
     } else {
-      return { state: State.Incomplete }; // not reachable but the TS is not happy
+      return { state: complete ? State.Satisfied : State.Incomplete };
     }
   }
 
   public copyWith({ color }: { color?: Color }): this {
-    return new SameShapeRule(color ?? this.color) as this;
+    return new UniqueShapeRule(color ?? this.color) as this;
   }
 }
 
-export const instance = new SameShapeRule(Color.Dark);
+export const instance = new UniqueShapeRule(Color.Dark);

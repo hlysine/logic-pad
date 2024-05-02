@@ -71,7 +71,7 @@ export default class MyopiaSymbol extends Symbol {
   }
 
   public get explanation(): string {
-    return '*Myopia arrows* points to *all* the closest cells of the opposite color';
+    return '*Myopia arrows* point to *all* the closest cells of the opposite color';
   }
 
   public get configs(): readonly AnyConfig[] | null {

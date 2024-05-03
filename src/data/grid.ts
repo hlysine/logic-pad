@@ -745,7 +745,14 @@ export default class GridData {
    * @returns True if the grids are equal, false otherwise.
    */
   public equals(other: GridData): boolean {
-    if (!this.colorEquals(other)) return false;
+    if (this.width !== other.width) return false;
+    if (this.height !== other.height) return false;
+    if (
+      this.tiles.some((row, y) =>
+        row.some((tile, x) => !tile.equals(other.getTile(x, y)))
+      )
+    )
+      return false;
     if (!this.connections.equals(other.connections)) return false;
     if (this.symbols.size !== other.symbols.size) return false;
     for (const [id, symbols] of this.symbols) {
@@ -760,6 +767,47 @@ export default class GridData {
       if (!other.rules.some(r => rule.equals(r))) return false;
     }
     return true;
+  }
+
+  /**
+   * Get the count of tiles that satisfy the given conditions.
+   * @param exists Whether the tile exists or not.
+   * @param fixed Whether the tile is fixed or not. If undefined, the fixed state is ignored.
+   * @param color The color of the tile. If undefined, all colors are included.
+   * @returns The count of tiles that satisfy the given conditions.
+   */
+  public getTileCount(
+    exists: boolean,
+    fixed?: boolean | undefined,
+    color?: Color | undefined
+  ) {
+    let count = 0;
+    this.forEach(tile => {
+      if (tile.exists !== exists) return;
+      if (fixed !== undefined && tile.fixed !== fixed) return;
+      if (color !== undefined && tile.color !== color) return;
+      count++;
+    });
+    return count;
+  }
+
+  /**
+   * Get the count of tiles that satisfy the given conditions for each color.
+   * @param color The color of the tiles.
+   * @returns The count of tiles that satisfy the given conditions for each color.
+   */
+  public getColorCount(color: Color) {
+    let min = 0;
+    let max = this.width * this.height;
+    this.forEach(tile => {
+      if (!tile.exists || (tile.fixed && tile.color !== color)) {
+        max--;
+      }
+      if (tile.exists && tile.fixed && tile.color === color) {
+        min++;
+      }
+    });
+    return { min, max };
   }
 
   /**

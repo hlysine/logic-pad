@@ -15,10 +15,27 @@ export default class AreaNumberModule extends Z3Module {
     ctx: Z3SolverContext<Name, Solver<Name> | Optimize<Name>>
   ): void {
     const symbols = grid.symbols.get(this.id) as AreaNumberSymbol[] | undefined;
+
+    // optimizations
     if (!symbols || symbols.length === 0) {
       return;
     }
 
+    for (const symbol of symbols) {
+      if (symbol.number < 1) {
+        ctx.solver.add(ctx.ctx.Bool.val(false));
+        return;
+      }
+      const { min, max } = grid.getColorCount(
+        grid.getTile(symbol.x, symbol.y).color
+      );
+      if (min > symbol.number || max < symbol.number) {
+        ctx.solver.add(ctx.ctx.Bool.val(false));
+        return;
+      }
+    }
+
+    // encode for real
     const rc = ctx.regionConstrainer;
 
     for (const symbol of symbols) {

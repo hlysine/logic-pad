@@ -57,6 +57,14 @@ export default class TileData {
     return this.fixed;
   }
 
+  public equals(other: TileData): boolean {
+    return (
+      this.exists === other.exists &&
+      this.fixed === other.fixed &&
+      this.color === other.color
+    );
+  }
+
   public static create(char: string): TileData {
     const exists = char !== '.';
     const fixed = char.toUpperCase() === char;

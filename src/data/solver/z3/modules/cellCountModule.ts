@@ -19,7 +19,7 @@ export default class CellCountModule extends Z3Module {
       rule => rule.id === this.id
     ) as CellCountRule[];
 
-    // optimizations to try to simplify the encoding
+    // optimizations
     if (rules.length === 0) {
       return;
     }
@@ -37,20 +37,7 @@ export default class CellCountModule extends Z3Module {
     }
 
     for (const [color, count] of colorMap.entries()) {
-      let min = 0;
-      let max = grid.width * grid.height;
-      if (min > count || max < count) {
-        ctx.solver.add(ctx.ctx.Bool.val(false));
-        return;
-      }
-      grid.forEach(tile => {
-        if (!tile.exists || (tile.fixed && tile.color !== color)) {
-          max--;
-        }
-        if (tile.exists && tile.fixed && tile.color === color) {
-          min++;
-        }
-      });
+      const { min, max } = grid.getColorCount(color);
       if (min > count || max < count) {
         ctx.solver.add(ctx.ctx.Bool.val(false));
         return;
@@ -58,11 +45,10 @@ export default class CellCountModule extends Z3Module {
     }
 
     if (colorMap.has(Color.Light) && colorMap.has(Color.Dark)) {
-      let total = 0;
-      grid.forEach(tile => {
-        if (tile.exists) total++;
-      });
-      if (colorMap.get(Color.Light)! + colorMap.get(Color.Dark)! !== total) {
+      if (
+        colorMap.get(Color.Light)! + colorMap.get(Color.Dark)! !==
+        grid.getTileCount(true)
+      ) {
         ctx.solver.add(ctx.ctx.Bool.val(false));
         return;
       }

@@ -95,7 +95,7 @@ export default class Z3Solver extends SolverBase {
     const result = await symbolGrid.solve();
     console.timeEnd('Solve time');
 
-    if (result === null) {
+    if (!result) {
       yield null;
       return;
     }
@@ -110,7 +110,7 @@ export default class Z3Solver extends SolverBase {
     const result2 = await symbolGrid.isUnique();
     console.timeEnd('Uniqueness time');
 
-    if (result2 === null) {
+    if (!result2) {
       yield null;
       return;
     }

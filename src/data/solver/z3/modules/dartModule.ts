@@ -5,30 +5,10 @@ import Z3Module from './z3Module';
 import DartSymbol, {
   instance as dartInstance,
 } from '../../../symbols/dartSymbol';
-import { Point, RectangularLattice, reduceCells } from 'grilops';
-import { Color, Orientation } from '../../../primitives';
+import { Point, reduceCells } from 'grilops';
+import { Color } from '../../../primitives';
 import { move } from '../../../helper';
-
-function convertDirection(direction: Orientation) {
-  switch (direction) {
-    case Orientation.Up:
-      return RectangularLattice.VERTEX_DIRECTIONS.N;
-    case Orientation.Down:
-      return RectangularLattice.VERTEX_DIRECTIONS.S;
-    case Orientation.Left:
-      return RectangularLattice.VERTEX_DIRECTIONS.W;
-    case Orientation.Right:
-      return RectangularLattice.VERTEX_DIRECTIONS.E;
-    case Orientation.DownLeft:
-      return RectangularLattice.VERTEX_DIRECTIONS.SW;
-    case Orientation.DownRight:
-      return RectangularLattice.VERTEX_DIRECTIONS.SE;
-    case Orientation.UpLeft:
-      return RectangularLattice.VERTEX_DIRECTIONS.NW;
-    case Orientation.UpRight:
-      return RectangularLattice.VERTEX_DIRECTIONS.NE;
-  }
-}
+import { convertDirection } from '../utils';
 
 export default class DartModule extends Z3Module {
   public readonly id = dartInstance.id;

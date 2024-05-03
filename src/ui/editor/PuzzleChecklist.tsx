@@ -270,32 +270,38 @@ export default memo(function PuzzleChecklist() {
                 >
                   {autoSolvable ? 'Auto solvable' : 'Not auto solvable'}
                 </ChecklistItem>
-                <button
-                  className="btn btn-outline btn-info btn-sm"
-                  onClick={async () => {
-                    const requestId = ++solverRequest.current;
-                    setPending(true);
-                    setSolution(null);
-                    setAlternate(null);
-                    try {
-                      let isAlternate = false;
-                      for await (const solution of Solver.solve(grid)) {
-                        if (!isAlternate) {
-                          if (requestId !== solverRequest.current) break;
-                          setSolution({ grid, value: solution });
-                          isAlternate = true;
-                        } else {
-                          if (requestId !== solverRequest.current) break;
-                          setAlternate({ grid, value: solution });
-                        }
-                      }
-                    } finally {
-                      setPending(false);
-                    }
-                  }}
+                <div
+                  className="tooltip tooltip-top tooltip-info"
+                  data-tip="This may take a while. Editing the puzzle will cancel the operation"
                 >
-                  Solve
-                </button>
+                  <button
+                    className="btn btn-outline btn-info btn-sm w-full"
+                    onClick={async () => {
+                      const requestId = ++solverRequest.current;
+                      setPending(true);
+                      setSolution(null);
+                      setAlternate(null);
+                      try {
+                        let isAlternate = false;
+                        for await (const solution of Solver.solve(grid)) {
+                          if (!isAlternate) {
+                            if (requestId !== solverRequest.current) break;
+                            setSolution({ grid, value: solution });
+                            isAlternate = true;
+                          } else {
+                            if (requestId !== solverRequest.current) break;
+                            setAlternate({ grid, value: solution });
+                            break;
+                          }
+                        }
+                      } finally {
+                        setPending(false);
+                      }
+                    }}
+                  >
+                    Solve
+                  </button>
+                </div>
               </>
             )}
           </>

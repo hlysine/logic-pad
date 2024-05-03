@@ -42,11 +42,13 @@ export default memo(function Instruction({
           <AnnotatedText text={instruction.explanation} />
         </div>
         <div className="shrink-0 relative min-h-[calc(28px*4)] min-w-[calc(28px*5)] flex items-center justify-center">
-          <Grid size={28} grid={exampleGrid} editable={false}>
-            {exampleGrid.symbols.size > 0 ? (
-              <SymbolOverlay grid={exampleGrid} />
-            ) : null}
-          </Grid>
+          {exampleGrid && (
+            <Grid size={28} grid={exampleGrid} editable={false}>
+              {exampleGrid.symbols.size > 0 ? (
+                <SymbolOverlay grid={exampleGrid} />
+              ) : null}
+            </Grid>
+          )}
         </div>
         {children}
       </div>

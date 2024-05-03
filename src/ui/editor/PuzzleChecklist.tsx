@@ -13,6 +13,7 @@ import { RiRobot2Fill } from 'react-icons/ri';
 import GridData from '../../data/grid';
 import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
+import { cn } from '../../utils';
 
 function ChecklistItem({
   icon: Icon,
@@ -46,6 +47,9 @@ export default memo(function PuzzleChecklist() {
   const { grid, metadata, setGrid } = useGrid();
   const { state } = useGridState();
 
+  const [environmentCheck, setEnvironmentCheck] = useState<boolean | undefined>(
+    undefined
+  );
   const solverRequest = useRef(0);
   const [isPending, setPending] = useState(false);
   const [solution, setSolution] = useState<TiedToGrid<GridData | null> | null>(
@@ -272,11 +276,24 @@ export default memo(function PuzzleChecklist() {
                 </ChecklistItem>
                 <div
                   className="tooltip tooltip-top tooltip-info"
-                  data-tip="This may take a while. Editing the puzzle will cancel the operation"
+                  data-tip={
+                    environmentCheck === false
+                      ? 'Your browser does not support the solver'
+                      : 'This may take a while. Editing the puzzle will cancel the operation'
+                  }
                 >
                   <button
-                    className="btn btn-outline btn-info btn-sm w-full"
+                    className={cn(
+                      'btn btn-outline btn-info btn-sm w-full',
+                      environmentCheck === false && 'btn-error'
+                    )}
                     onClick={async () => {
+                      let support = environmentCheck;
+                      if (support === undefined) {
+                        support = await Solver.isEnvironmentSupported();
+                        setEnvironmentCheck(support);
+                      }
+                      if (!support) return;
                       const requestId = ++solverRequest.current;
                       setPending(true);
                       setSolution(null);
@@ -298,6 +315,7 @@ export default memo(function PuzzleChecklist() {
                         setPending(false);
                       }
                     }}
+                    disabled={environmentCheck === false}
                   >
                     Solve
                   </button>

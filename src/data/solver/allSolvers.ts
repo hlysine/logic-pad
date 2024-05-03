@@ -14,6 +14,10 @@ register(activeSolver);
 class MasterSolver extends SolverBase {
   public readonly id = 'solver';
 
+  public isEnvironmentSupported(): Promise<boolean> {
+    return activeSolver.isEnvironmentSupported();
+  }
+
   public solve(grid: GridData): AsyncGenerator<GridData | null> {
     // todo: run multiple solvers in parallel when we have more than one
     return activeSolver.solve(grid);
@@ -21,6 +25,10 @@ class MasterSolver extends SolverBase {
 
   public isInstructionSupported(instructionId: string): boolean {
     return activeSolver.isInstructionSupported(instructionId);
+  }
+
+  public isGridSupported(grid: GridData): boolean {
+    return activeSolver.isGridSupported(grid);
   }
 }
 

@@ -16,6 +16,15 @@ import { array } from '../../helper';
 export default class Z3Solver extends SolverBase {
   public readonly id = 'z3';
 
+  public async isEnvironmentSupported(): Promise<boolean> {
+    try {
+      await init();
+      return true;
+    } catch (ex) {
+      return false;
+    }
+  }
+
   public async *solve(grid: GridData): AsyncGenerator<GridData | null> {
     console.log('Initializing dependencies');
 

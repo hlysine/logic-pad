@@ -1,6 +1,7 @@
 import {
   GrilopsContext,
   Point,
+  PointSet,
   SymbolGrid,
   SymbolSet,
   getRectangleLattice,
@@ -72,16 +73,29 @@ export default class Z3Solver extends SolverBase {
     });
 
     // encode connections
+    const visited = array(grid.width, grid.height, () => false);
+    const queue = new PointSet();
     grid.connections.edges.forEach(edge => {
-      const cell1 = symbolGrid.cellAt(new Point(edge.y1, edge.x1));
-      const cell2 = symbolGrid.cellAt(new Point(edge.y2, edge.x2));
-      ctx.solver.add(
-        ctx.ctx.Or(
-          cell1.eq(cell2),
-          cell1.eq(ctx.symbolSet.indices.empty),
-          cell2.eq(ctx.symbolSet.indices.empty)
-        )
-      );
+      queue.add(new Point(edge.y1, edge.x1));
+      queue.add(new Point(edge.y2, edge.x2));
+    });
+    queue.forEach(point => {
+      if (visited[point.y][point.x]) return;
+      visited[point.y][point.x] = true;
+      const connected = grid.connections.getConnectedTiles({
+        x: point.x,
+        y: point.y,
+      });
+      connected.forEach(p => (visited[p.y][p.x] = true));
+      const filtered = connected
+        .filter(p => grid.getTile(p.x, p.y).exists)
+        .map(p => new Point(p.y, p.x));
+      if (filtered.length < 2) return;
+      for (let i = 1; i < filtered.length; i++) {
+        ctx.solver.add(
+          symbolGrid.cellAt(point).eq(symbolGrid.cellAt(filtered[i]))
+        );
+      }
     });
 
     [...new Set(grid.rules.map(r => r.id))].forEach(ruleId =>

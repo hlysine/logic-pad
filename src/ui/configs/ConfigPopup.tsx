@@ -7,6 +7,7 @@ import Symbol from '../../data/symbols/symbol';
 import { useToolbox } from '../ToolboxContext';
 import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../utils';
+import { Solver } from '../../data/solver/allSolvers';
 
 const gap = 8;
 
@@ -153,7 +154,10 @@ export default memo(function ConfigPopup() {
         <span className="text-center">Not configurable</span>
       )}
       <div className="flex gap-2 self-stretch justify-between px-2">
-        <SupportLevel validate={!instruction.validateWithSolution} />
+        <SupportLevel
+          validate={!instruction.validateWithSolution}
+          solve={Solver.isInstructionSupported(instruction.id)}
+        />
         <div className="flex-1" />
         {instruction instanceof Symbol && (
           <div className="dropdown dropdown-top">

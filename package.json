@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "bunx --bun vite",
     "build": "bun run codegen && bunx --bun tsc && bunx --bun vite build",
-    "lint": "bunx --bun eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "bunx --bun vite preview",
     "codegen": "bun ./scripts/genEnclosure.ts && bun ./scripts/genTypes.ts"
   },
@@ -22,6 +22,7 @@
     "animejs": "^3.2.2",
     "base64-arraybuffer": "^1.0.2",
     "fuzzysort": "^2.0.4",
+    "grilops": "^0.1.1",
     "lodash": "^4.17.21",
     "million": "^3.0.6",
     "monaco-editor": "^0.47.0",

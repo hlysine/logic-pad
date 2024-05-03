@@ -82,16 +82,20 @@ export default class MyopiaSymbol extends Symbol {
     return MyopiaSymbol.EXAMPLE_GRID;
   }
 
+  public get containsDiagonal(): boolean {
+    return (
+      this.directions[Orientation.UpLeft] ||
+      this.directions[Orientation.UpRight] ||
+      this.directions[Orientation.DownLeft] ||
+      this.directions[Orientation.DownRight]
+    );
+  }
+
   public validateSymbol(grid: GridData): State {
     const tile = grid.getTile(this.x, this.y);
     if (!tile.exists || tile.color === Color.Gray) return State.Incomplete;
 
-    const enableDiagonal =
-      this.directions[Orientation.UpLeft] ||
-      this.directions[Orientation.UpRight] ||
-      this.directions[Orientation.DownLeft] ||
-      this.directions[Orientation.DownRight];
-    const allDirections = enableDiagonal
+    const allDirections = this.containsDiagonal
       ? ORIENTATIONS
       : [Orientation.Up, Orientation.Down, Orientation.Left, Orientation.Right];
 

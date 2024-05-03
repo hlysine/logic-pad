@@ -134,7 +134,6 @@ export default class MyopiaSymbol extends Symbol {
     });
     const pointedDirections = allDirections.filter(d => this.directions[d]);
     const otherDirections = allDirections.filter(d => !this.directions[d]);
-    const complete = allDirections.every(d => map[d].complete);
     for (let i = 0; i < pointedDirections.length; i++) {
       const direction1 = pointedDirections[i];
       for (let j = i + 1; j < pointedDirections.length; j++) {
@@ -159,7 +158,13 @@ export default class MyopiaSymbol extends Symbol {
       )
     )
       return State.Error;
-    return complete ? State.Satisfied : State.Incomplete;
+    if (
+      Math.max(...pointedDirections.map(d => map[d].max)) <
+      Math.min(...otherDirections.map(d => map[d].min))
+    )
+      return State.Satisfied;
+    if (allDirections.every(d => map[d].complete)) return State.Satisfied;
+    return State.Incomplete;
   }
 
   public copyWith({

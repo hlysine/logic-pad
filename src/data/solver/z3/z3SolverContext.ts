@@ -26,7 +26,11 @@ export default class Z3SolverContext<
   }
 
   public get ctx() {
-    return this.grid.ctx;
+    return this.grid.ctx.context;
+  }
+
+  public get z3() {
+    return this.grid.ctx.z3;
   }
 
   public get regionConstrainer(): RegionConstrainer<Name, Core> {

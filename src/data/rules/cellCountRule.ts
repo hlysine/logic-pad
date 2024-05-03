@@ -95,7 +95,7 @@ export default class CellCountRule extends Rule {
   }
 
   public get explanation(): string {
-    return `There are ${this.count} ${this.color} cell${this.count === 1 ? '' : 's'} *in total*`;
+    return `There ${this.count === 1 ? 'is' : 'are'} ${this.count} ${this.color} cell${this.count === 1 ? '' : 's'} *in total*`;
   }
 
   public get configs(): readonly AnyConfig[] | null {

@@ -62,6 +62,15 @@ export default class Z3Solver extends SolverBase {
       }
     });
 
+    // encode connections
+    grid.connections.edges.forEach(edge => {
+      ctx.solver.add(
+        symbolGrid
+          .cellAt(new Point(edge.y1, edge.x1))
+          .eq(symbolGrid.cellAt(new Point(edge.y2, edge.x2)))
+      );
+    });
+
     [...new Set(grid.rules.map(r => r.id))].forEach(ruleId =>
       allZ3Modules.get(ruleId)!.encode(grid, ctx)
     );

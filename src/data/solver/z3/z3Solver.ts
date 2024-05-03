@@ -73,10 +73,14 @@ export default class Z3Solver extends SolverBase {
 
     // encode connections
     grid.connections.edges.forEach(edge => {
+      const cell1 = symbolGrid.cellAt(new Point(edge.y1, edge.x1));
+      const cell2 = symbolGrid.cellAt(new Point(edge.y2, edge.x2));
       ctx.solver.add(
-        symbolGrid
-          .cellAt(new Point(edge.y1, edge.x1))
-          .eq(symbolGrid.cellAt(new Point(edge.y2, edge.x2)))
+        ctx.ctx.Or(
+          cell1.eq(cell2),
+          cell1.eq(ctx.symbolSet.indices.empty),
+          cell2.eq(ctx.symbolSet.indices.empty)
+        )
       );
     });
 

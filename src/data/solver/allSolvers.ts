@@ -15,6 +15,7 @@ class MasterSolver extends SolverBase {
   public readonly id = 'solver';
 
   public solve(grid: GridData): AsyncGenerator<GridData | null> {
+    // todo: run multiple solvers in parallel when we have more than one
     return activeSolver.solve(grid);
   }
 

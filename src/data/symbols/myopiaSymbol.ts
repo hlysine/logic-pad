@@ -159,8 +159,10 @@ export default class MyopiaSymbol extends Symbol {
     )
       return State.Error;
     if (
+      pointedDirections.length > 0 &&
+      otherDirections.length > 0 &&
       Math.max(...pointedDirections.map(d => map[d].max)) <
-      Math.min(...otherDirections.map(d => map[d].min))
+        Math.min(...otherDirections.map(d => map[d].min))
     )
       return State.Satisfied;
     if (allDirections.every(d => map[d].complete)) return State.Satisfied;

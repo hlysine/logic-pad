@@ -26,13 +26,6 @@ export default class AreaNumberModule extends Z3Module {
         ctx.solver.add(ctx.ctx.Bool.val(false));
         return;
       }
-      const { min, max } = grid.getColorCount(
-        grid.getTile(symbol.x, symbol.y).color
-      );
-      if (min > symbol.number || max < symbol.number) {
-        ctx.solver.add(ctx.ctx.Bool.val(false));
-        return;
-      }
     }
 
     // encode for real
@@ -42,7 +35,9 @@ export default class AreaNumberModule extends Z3Module {
       const x = Math.floor(symbol.x);
       const y = Math.floor(symbol.y);
 
-      ctx.solver.add(rc.regionSizeGrid.get(new Point(y, x))!.eq(symbol.number));
+      ctx.solver.add(
+        rc.regionSizeGrid.get(new Point(y, x))!.eq(Math.round(symbol.number))
+      );
     }
   }
 }

@@ -44,7 +44,12 @@ export default class Z3Solver extends SolverBase {
       [Color.Light, 'W'],
     ]);
     const lattice = getRectangleLattice(grid.height, grid.width);
-    const symbolGrid = new SymbolGrid(grilopsCtx, lattice, symbolSet);
+    const symbolGrid = new SymbolGrid(
+      grilopsCtx,
+      lattice,
+      symbolSet,
+      new z3Ctx.Solver('QF_FD')
+    );
 
     const ctx = new Z3SolverContext(symbolGrid);
 

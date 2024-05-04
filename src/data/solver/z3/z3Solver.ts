@@ -39,7 +39,6 @@ export default class Z3Solver extends SolverBase {
 
     const symbolSet = new SymbolSet([
       ['empty', ' '],
-      [Color.Gray, '.'],
       [Color.Dark, 'B'],
       [Color.Light, 'W'],
     ]);
@@ -70,9 +69,6 @@ export default class Z3Solver extends SolverBase {
       else {
         ctx.solver.add(
           symbolGrid.cellAt(new Point(y, x)).neq(symbolSet.indices.empty)
-        );
-        ctx.solver.add(
-          symbolGrid.cellAt(new Point(y, x)).neq(symbolSet.indices[Color.Gray])
         );
       }
     });
@@ -153,5 +149,11 @@ export default class Z3Solver extends SolverBase {
 
   public isInstructionSupported(instructionId: string): boolean {
     return allZ3Modules.has(instructionId);
+  }
+
+  public isGridSupported(grid: GridData): boolean {
+    if (!super.isGridSupported(grid)) return false;
+    if (grid.getTileCount(true, true, Color.Gray) > 0) return false;
+    return true;
   }
 }

@@ -84,11 +84,7 @@ export default class DartModule extends Z3Module {
           ctx.ctx.Int.val(0),
           (acc, cell) =>
             ctx.ctx.If(
-              ctx.ctx.Or(
-                cell.eq(origin),
-                cell.eq(ctx.symbolSet.indices.empty),
-                cell.eq(ctx.symbolSet.indices[Color.Gray])
-              ),
+              ctx.ctx.Or(cell.eq(origin), cell.eq(ctx.symbolSet.indices.empty)),
               acc,
               acc.add(1)
             )

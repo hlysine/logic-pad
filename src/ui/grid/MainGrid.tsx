@@ -4,7 +4,7 @@ import { useGrid } from '../GridContext';
 import Grid from './Grid';
 import SymbolOverlay from './SymbolOverlay';
 import ErrorOverlay from './ErrorOverlay';
-import { State } from '../../data/primitives';
+import { State, Position } from '../../data/primitives';
 import GridData from '../../data/grid';
 import Loading from '../components/Loading';
 import { GridStateConsumer } from '../GridStateContext';
@@ -85,11 +85,15 @@ export default memo(function MainGrid({
           {({ state }) => (
             <>
               <SymbolOverlay grid={grid} state={state.symbols} />
-              {state.rules.map((rule, i) =>
-                rule.state === State.Error ? (
-                  <ErrorOverlay key={i} positions={rule.positions} />
-                ) : null
-              )}
+              <ErrorOverlay
+                positions={
+                  state.rules
+                    .map(rule => rule.state === State.Error && rule.positions)
+                    .filter(Boolean) as Position[][]
+                }
+                width={grid.width}
+                height={grid.height}
+              />
               {children}
             </>
           )}

@@ -1,10 +1,13 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Position } from '../../data/primitives';
 import GridOverlay from './GridOverlay';
 import { array } from '../../data/helper';
+import { Layer, Line, Stage } from 'react-konva';
 
 export interface ErrorOverlayProps {
-  positions: readonly Position[];
+  positions: readonly (readonly Position[])[];
+  width: number;
+  height: number;
 }
 
 function positionsToGrid(positions: readonly Position[]) {
@@ -25,33 +28,105 @@ function positionsToGrid(positions: readonly Position[]) {
   return grid;
 }
 
-export default memo(function ErrorOverlay({ positions }: ErrorOverlayProps) {
-  const grid = useMemo(() => positionsToGrid(positions), [positions]);
-  if (positions.length === 0) return null;
+export default memo(function ErrorOverlay({
+  positions,
+  width,
+  height,
+}: ErrorOverlayProps) {
+  const grid = useMemo(
+    () => positions.map(list => positionsToGrid(list)),
+    [positions]
+  );
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const [tileSize, setTileSize] = useState(0);
+
+  useEffect(() => {
+    if (overlayRef.current) {
+      const { current } = overlayRef;
+      const resizeHandler = (e: UIEvent) => {
+        const divWidth = (e.currentTarget as HTMLDivElement).offsetWidth;
+        setTileSize(divWidth / width);
+      };
+      resizeHandler({
+        currentTarget: overlayRef.current,
+      } as unknown as UIEvent);
+      current.addEventListener('resize', resizeHandler);
+      return () => current.removeEventListener('resize', resizeHandler);
+    }
+  }, [width]);
+
   return (
-    <GridOverlay>
-      {positions.map(({ x, y }) => (
-        <div
-          key={`${x},${y}`}
-          className="absolute bg-transparent pointer-events-none border-error w-[1em] h-[1em]"
-          style={{
-            left: `calc(${x} * 1em)`,
-            top: `calc(${y} * 1em)`,
-            borderTopWidth: grid[y - 1]
-              ? grid[y - 1][x]
-                ? '0'
-                : `0.125em`
-              : `0.125em`,
-            borderRightWidth: grid[y][x + 1] ? '0' : `0.125em`,
-            borderBottomWidth: grid[y + 1]
-              ? grid[y + 1][x]
-                ? '0'
-                : `0.125em`
-              : `0.125em`,
-            borderLeftWidth: grid[y][x - 1] ? '0' : `0.125em`,
-          }}
-        />
-      ))}
+    <GridOverlay ref={overlayRef}>
+      <Stage
+        width={width * tileSize + 10}
+        height={height * tileSize + 10}
+        className="absolute -top-[5px] -left-[5px]"
+      >
+        <Layer offsetX={-5} offsetY={-5}>
+          {positions.flatMap((list, idx) =>
+            list.flatMap(({ x, y }) =>
+              [
+                grid[idx][y - 1]?.[x] || (
+                  <Line
+                    key={`${x},${y}-top`}
+                    points={[
+                      x * tileSize,
+                      y * tileSize,
+                      (x + 1) * tileSize,
+                      y * tileSize,
+                    ]}
+                    stroke="red"
+                    lineCap="round"
+                    strokeWidth={5}
+                  />
+                ),
+                grid[idx][y][x + 1] || (
+                  <Line
+                    key={`${x},${y}-right`}
+                    points={[
+                      (x + 1) * tileSize,
+                      y * tileSize,
+                      (x + 1) * tileSize,
+                      (y + 1) * tileSize,
+                    ]}
+                    stroke="red"
+                    lineCap="round"
+                    strokeWidth={5}
+                  />
+                ),
+                grid[idx][y + 1]?.[x] || (
+                  <Line
+                    key={`${x},${y}-bottom`}
+                    points={[
+                      x * tileSize,
+                      (y + 1) * tileSize,
+                      (x + 1) * tileSize,
+                      (y + 1) * tileSize,
+                    ]}
+                    stroke="red"
+                    lineCap="round"
+                    strokeWidth={5}
+                  />
+                ),
+                grid[idx][y][x - 1] || (
+                  <Line
+                    key={`${x},${y}-left`}
+                    points={[
+                      x * tileSize,
+                      y * tileSize,
+                      x * tileSize,
+                      (y + 1) * tileSize,
+                    ]}
+                    stroke="red"
+                    lineCap="round"
+                    strokeWidth={5}
+                  />
+                ),
+              ].filter(Boolean)
+            )
+          )}
+        </Layer>
+      </Stage>
     </GridOverlay>
   );
 });

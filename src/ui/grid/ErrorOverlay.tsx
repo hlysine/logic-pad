@@ -43,15 +43,14 @@ export default memo(function ErrorOverlay({
   useEffect(() => {
     if (overlayRef.current) {
       const { current } = overlayRef;
-      const resizeHandler = (e: UIEvent) => {
-        const divWidth = (e.currentTarget as HTMLDivElement).offsetWidth;
+      const resizeHandler = () => {
+        const divWidth = current.offsetWidth;
         setTileSize(divWidth / width);
       };
-      resizeHandler({
-        currentTarget: overlayRef.current,
-      } as unknown as UIEvent);
-      current.addEventListener('resize', resizeHandler);
-      return () => current.removeEventListener('resize', resizeHandler);
+      resizeHandler();
+      const observer = new ResizeObserver(resizeHandler);
+      observer.observe(current);
+      return () => observer.disconnect();
     }
   }, [width]);
 

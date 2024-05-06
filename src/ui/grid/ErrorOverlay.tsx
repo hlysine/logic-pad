@@ -64,8 +64,6 @@ export default memo(function ErrorOverlay({
     [theme]
   );
 
-  console.log(errorColor);
-
   return (
     <GridOverlay ref={overlayRef}>
       <Stage

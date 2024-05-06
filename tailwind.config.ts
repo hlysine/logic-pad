@@ -1,5 +1,31 @@
 import themes from 'daisyui/src/theming/themes';
 import plugin from 'tailwindcss/plugin';
+import { Config } from 'tailwindcss';
+import daisyui from 'daisyui';
+
+/**
+ * utility class presets
+ */
+function _presets() {
+  const shapes = ['circle', 'ellipse'];
+  const pos = {
+    c: 'center',
+    t: 'top',
+    b: 'bottom',
+    l: 'left',
+    r: 'right',
+    tl: 'top left',
+    tr: 'top right',
+    bl: 'bottom left',
+    br: 'bottom right',
+  };
+  const result: Record<string, string> = {};
+  for (const shape of shapes)
+    for (const [posName, posValue] of Object.entries(pos))
+      result[`${shape}-${posName}`] = `${shape} at ${posValue}`;
+
+  return result;
+}
 
 const radialGradientPlugin = plugin(
   function ({ matchUtilities, theme }) {
@@ -20,32 +46,7 @@ const radialGradientPlugin = plugin(
   }
 );
 
-/**
- * utility class presets
- */
-function _presets() {
-  const shapes = ['circle', 'ellipse'];
-  const pos = {
-    c: 'center',
-    t: 'top',
-    b: 'bottom',
-    l: 'left',
-    r: 'right',
-    tl: 'top left',
-    tr: 'top right',
-    bl: 'bottom left',
-    br: 'bottom right',
-  };
-  let result = {};
-  for (const shape of shapes)
-    for (const [posName, posValue] of Object.entries(pos))
-      result[`${shape}-${posName}`] = `${shape} at ${posValue}`;
-
-  return result;
-}
-
-/** @type {import('tailwindcss').Config} */
-export default {
+const tailwindConfig = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -56,7 +57,7 @@ export default {
       },
     },
   },
-  plugins: [require('daisyui'), radialGradientPlugin],
+  plugins: [daisyui, radialGradientPlugin],
   daisyui: {
     themes: [
       'light',
@@ -75,7 +76,7 @@ export default {
       'aqua',
       {
         lofi: {
-          ...themes['lofi'],
+          ...themes.lofi,
           neutral: '#101010',
           accent: '#999',
         },
@@ -85,13 +86,13 @@ export default {
       'wireframe',
       {
         black: {
-          ...themes['black'],
+          ...themes.black,
           accent: '#999',
         },
       },
       {
         luxury: {
-          ...themes['luxury'],
+          ...themes.luxury,
           accent: '#946573',
         },
       },
@@ -109,4 +110,5 @@ export default {
       'sunset',
     ],
   },
-};
+} satisfies Config;
+export default tailwindConfig;

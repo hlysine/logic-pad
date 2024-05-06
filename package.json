@@ -75,6 +75,7 @@
     "vite-plugin-pwa": "^0.19.8"
   },
   "trustedDependencies": [
-    "@vercel/speed-insights"
+    "@vercel/speed-insights",
+    "esbuild"
   ]
 }

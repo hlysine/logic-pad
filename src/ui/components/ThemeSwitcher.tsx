@@ -27,7 +27,7 @@ export default memo(function ThemeSwitcher() {
               type="radio"
               name="theme-dropdown"
               className={cn(
-                'btn btn-sm btn-block btn-ghost justify-start capitalize',
+                'theme-controller btn btn-sm btn-block btn-ghost justify-start capitalize', // theme-controller is required to change CSS styles before the theme context is set
                 theme === themeChoice && 'btn-primary'
               )}
               aria-label={themeChoice}

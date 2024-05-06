@@ -18,6 +18,9 @@ export const Route = createRootRoute({
             <GridStateContext>
               <GridContext>
                 <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral">
+                  <div className="text-error hidden">
+                    {/* For canvas components to retrieve this color */}
+                  </div>
                   <DocumentTitle>Logic Pad</DocumentTitle>
                   <PWAPrompt />
                   <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">

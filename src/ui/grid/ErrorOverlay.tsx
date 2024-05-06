@@ -3,6 +3,7 @@ import { Position } from '../../data/primitives';
 import GridOverlay from './GridOverlay';
 import { array } from '../../data/helper';
 import { Layer, Line, Stage } from 'react-konva';
+import { useTheme } from '../ThemeContext';
 
 export interface ErrorOverlayProps {
   positions: readonly (readonly Position[])[];
@@ -39,6 +40,7 @@ export default memo(function ErrorOverlay({
   );
   const overlayRef = useRef<HTMLDivElement>(null);
   const [tileSize, setTileSize] = useState(0);
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (overlayRef.current) {
@@ -53,6 +55,16 @@ export default memo(function ErrorOverlay({
       return () => observer.disconnect();
     }
   }, [width]);
+
+  const errorColor = useMemo(
+    () =>
+      window.getComputedStyle(document.getElementsByClassName('text-error')[0])
+        .color,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [theme]
+  );
+
+  console.log(errorColor);
 
   return (
     <GridOverlay ref={overlayRef}>
@@ -74,7 +86,7 @@ export default memo(function ErrorOverlay({
                       (x + 1) * tileSize,
                       y * tileSize,
                     ]}
-                    stroke="red"
+                    stroke={errorColor}
                     lineCap="round"
                     strokeWidth={5}
                   />
@@ -88,7 +100,7 @@ export default memo(function ErrorOverlay({
                       (x + 1) * tileSize,
                       (y + 1) * tileSize,
                     ]}
-                    stroke="red"
+                    stroke={errorColor}
                     lineCap="round"
                     strokeWidth={5}
                   />
@@ -102,7 +114,7 @@ export default memo(function ErrorOverlay({
                       (x + 1) * tileSize,
                       (y + 1) * tileSize,
                     ]}
-                    stroke="red"
+                    stroke={errorColor}
                     lineCap="round"
                     strokeWidth={5}
                   />
@@ -116,7 +128,7 @@ export default memo(function ErrorOverlay({
                       x * tileSize,
                       (y + 1) * tileSize,
                     ]}
-                    stroke="red"
+                    stroke={errorColor}
                     lineCap="round"
                     strokeWidth={5}
                   />

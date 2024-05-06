@@ -11,6 +11,7 @@ import { GridStateConsumer } from '../GridStateContext';
 import { useDisplay } from '../DisplayContext';
 import { useToolbox } from '../ToolboxContext';
 import handleTileClick from './handleTileClick';
+import TileCountOverlay from './TileCountOverlay';
 
 export interface MainGridProps {
   useToolboxClick: boolean;
@@ -94,6 +95,7 @@ export default memo(function MainGrid({
                 width={grid.width}
                 height={grid.height}
               />
+              <TileCountOverlay grid={grid} />
               {children}
             </>
           )}

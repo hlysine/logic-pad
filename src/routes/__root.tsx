@@ -18,7 +18,10 @@ export const Route = createRootRoute({
             <GridStateContext>
               <GridContext>
                 <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral">
-                  <div className="text-error hidden">
+                  <div id="color-ref-error" className="text-error hidden">
+                    {/* For canvas components to retrieve this color */}
+                  </div>
+                  <div id="color-ref-accent" className="text-accent hidden">
                     {/* For canvas components to retrieve this color */}
                   </div>
                   <DocumentTitle>Logic Pad</DocumentTitle>

@@ -44,7 +44,7 @@ const roadmap: RoadmapItem[] = [
   '~Add win confirmation',
   '~Add undo and restart',
   '~Add flood painting',
-  'Add tile counting by holding Ctrl',
+  '~Add tile counting by holding Ctrl',
   'Isolate grids between solve and create modes',
   '~Support mobile input',
   'Implement symbol stacking',

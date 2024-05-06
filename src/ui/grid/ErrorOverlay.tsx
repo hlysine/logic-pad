@@ -42,7 +42,7 @@ export default memo(function ErrorOverlay({
 
   const errorColor = useMemo(
     () =>
-      window.getComputedStyle(document.getElementsByClassName('text-error')[0])
+      window.getComputedStyle(document.getElementById('color-ref-error')!)
         .color,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [theme]

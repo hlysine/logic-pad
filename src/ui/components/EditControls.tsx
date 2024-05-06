@@ -25,9 +25,9 @@ export default memo(function EditControls() {
     setGrid(reset);
   };
 
-  useHotkeys('z', undo);
-  useHotkeys('r', restart);
-  useHotkeys('y', redo);
+  useHotkeys('z', undo, { preventDefault: true });
+  useHotkeys('r', restart, { preventDefault: true });
+  useHotkeys('y', redo, { preventDefault: true });
 
   return (
     <ul className="menu menu-horizontal shrink-0 justify-center bg-base-100 shadow-md text-base-content rounded-box fixed bottom-2 z-40 left-2 right-2 xl:static xl:shadow-md">

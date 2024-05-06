@@ -6,6 +6,7 @@ import useLinkLoader, {
 } from '../ui/router/linkLoader';
 import PuzzleEditor from '../ui/editor/PuzzleEditor';
 import { IoWarningOutline } from 'react-icons/io5';
+import ShareButton from '../ui/components/ShareButton';
 
 export const Route = createFileRoute('/_layout/create')({
   validateSearch,
@@ -41,6 +42,7 @@ export const Route = createFileRoute('/_layout/create')({
             </div>
           </div>
         )}
+        <ShareButton />
       </PuzzleEditor>
     );
   }),

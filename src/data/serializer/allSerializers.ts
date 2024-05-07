@@ -1,3 +1,4 @@
+import GridData from '../grid';
 import { Puzzle } from '../puzzle';
 import Symbol from '../symbols/symbol';
 import SerializerV0 from './serializer_v0';
@@ -39,6 +40,13 @@ const Serializer = {
   parseSymbol(input: string): Symbol {
     const { serializer, data } = selectSerializer(input);
     return serializer.parseSymbol(data);
+  },
+  stringifyGrid(grid: GridData): string {
+    return `${defaultSerializer.version}_${defaultSerializer.stringifyGrid(grid)}`;
+  },
+  parseGrid(input: string): GridData {
+    const { serializer, data } = selectSerializer(input);
+    return serializer.parseGrid(data);
   },
   /**
    * Convert a puzzle to a string.

@@ -151,11 +151,9 @@ function computeSolution(initialGrid: GridData): GridData {
 }
 
 onmessage = e => {
-  const { grid, ...metadata } = Serializer.parsePuzzle(e.data as string);
+  const grid = Serializer.parseGrid(e.data as string);
   const solved = computeSolution(grid);
-  postMessage(
-    Serializer.stringifyPuzzle({ ...metadata, grid: solved, solution: solved })
-  );
+  postMessage(Serializer.stringifyGrid(solved));
 };
 
 // make typescript happy

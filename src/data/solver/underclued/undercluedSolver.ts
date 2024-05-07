@@ -12,20 +12,11 @@ export default class UndercluedSolver extends Solver {
     try {
       const solved = await new Promise<GridData | null>(resolve => {
         worker.addEventListener('message', e => {
-          const { solution } = Serializer.parsePuzzle(e.data as string);
-          resolve(solution);
+          const solution = Serializer.parseGrid(e.data as string);
+          if (solution.resetTiles().equals(solution)) resolve(null);
+          else resolve(solution);
         });
-        worker.postMessage(
-          Serializer.stringifyPuzzle({
-            grid,
-            solution: null,
-            title: '',
-            author: '',
-            description: '',
-            link: '',
-            difficulty: 1,
-          })
-        );
+        worker.postMessage(Serializer.stringifyGrid(grid));
       });
       yield solved;
     } finally {

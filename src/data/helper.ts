@@ -92,9 +92,16 @@ export function array<T>(
   height: number,
   value: (x: number, y: number) => T
 ): T[][] {
-  return Array.from({ length: height }, (_, y) =>
-    Array.from({ length: width }, (_, x) => value(x, y))
-  );
+  const result: T[][] = [];
+
+  for (let y = 0; y < height; y++) {
+    result[y] = [];
+    for (let x = 0; x < width; x++) {
+      result[y][x] = value(x, y);
+    }
+  }
+
+  return result;
 }
 
 /**

@@ -1279,6 +1279,19 @@ declare global {
   const allSolvers: Map<string, Solver>;
   export { allSolvers };
 
+  export class BacktrackSolver extends Solver {
+    readonly id = 'backtrack';
+    readonly description =
+      'Solves puzzles using backtracking relatively faster. Support all rules and symbols except for underclued.';
+    solve(grid: GridData): AsyncGenerator<GridData | null>;
+    isValid(grid: GridData): boolean;
+    nextCell(grid: GridData): {
+      x: number;
+      y: number;
+    } | null;
+    backtrack(grid: GridData): GridData | null;
+  }
+
   /**
    * Base class that all solvers must extend.
    */
@@ -1337,6 +1350,14 @@ declare global {
      * @param grid The grid to check.
      * @returns `true` if the grid is supported, or `false` otherwise.
      */
+    isGridSupported(grid: GridData): boolean;
+  }
+
+  export abstract class SolverBase {
+    abstract get id(): string;
+    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
+    isEnvironmentSupported(): Promise<boolean>;
+    abstract isInstructionSupported(instructionId: string): boolean;
     isGridSupported(grid: GridData): boolean;
   }
 
@@ -5203,6 +5224,22 @@ declare global {
     };
     validateSymbol(grid: GridData): State;
     withNumber(number: number): this;
+  }
+
+  export class QuestionMarkSign extends Sign {
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    copyWith({ x, y }: { x?: number; y?: number }): this;
+  }
+
+  /**
+   * A sign is a symbol that is only used for illustrative purposes.
+   * They should only appear in example grids of other instructions.
+   */
+  export abstract class Sign extends Symbol {
+    validateSymbol(_grid: GridData): State;
   }
 
   export abstract class Symbol extends Instruction {

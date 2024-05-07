@@ -1,4 +1,6 @@
 import GridData from '../grid';
+import { allRules } from '../rules';
+import { allSymbols } from '../symbols';
 
 /**
  * Base class that all solvers must extend.
@@ -10,6 +12,11 @@ export default abstract class Solver {
    * This is also displayed to the user when selecting a solver.
    */
   public abstract get id(): string;
+
+  /**
+   * A short paragraph describing when the user should use this solver.
+   */
+  public abstract get description(): string;
 
   /**
    * Solve the given grid. The implementation should delegate long-running tasks to a worker thread and yield solutions
@@ -48,7 +55,17 @@ export default abstract class Solver {
    *
    * @param instructionId The unique identifier of the instruction.
    */
-  public abstract isInstructionSupported(instructionId: string): boolean;
+  public isInstructionSupported(instructionId: string): boolean {
+    const symbol = allSymbols.get(instructionId);
+    if (symbol) {
+      return !symbol.validateWithSolution;
+    }
+    const rule = allRules.get(instructionId);
+    if (rule) {
+      return !rule.validateWithSolution;
+    }
+    return false;
+  }
 
   /**
    * Check if the solver supports the given grid. This methid is frequently called when the user changes the grid, and

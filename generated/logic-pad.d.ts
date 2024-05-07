@@ -1142,6 +1142,8 @@ declare global {
   const Serializer: {
     stringifySymbol(symbol: Symbol): string;
     parseSymbol(input: string): Symbol;
+    stringifyGrid(grid: GridData): string;
+    parseGrid(input: string): GridData;
     /**
      * Convert a puzzle to a string.
      * @param puzzle The puzzle to convert.
@@ -1288,6 +1290,10 @@ declare global {
      */
     abstract get id(): string;
     /**
+     * A short paragraph describing when the user should use this solver.
+     */
+    abstract get description(): string;
+    /**
      * Solve the given grid. The implementation should delegate long-running tasks to a worker thread and yield solutions
      * asynchronously.
      *
@@ -1320,7 +1326,7 @@ declare global {
      *
      * @param instructionId The unique identifier of the instruction.
      */
-    abstract isInstructionSupported(instructionId: string): boolean;
+    isInstructionSupported(instructionId: string): boolean;
     /**
      * Check if the solver supports the given grid. This methid is frequently called when the user changes the grid, and
      * the result is used to enable or disable the "Solve" button.
@@ -1334,13 +1340,16 @@ declare global {
     isGridSupported(grid: GridData): boolean;
   }
 
-  export abstract class SolverBase {
-    abstract get id(): string;
-    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
-    isEnvironmentSupported(): Promise<boolean>;
-    abstract isInstructionSupported(instructionId: string): boolean;
-    isGridSupported(grid: GridData): boolean;
+  export class UndercluedSolver extends Solver {
+    readonly id = 'underclued';
+    readonly description =
+      'Solves every puzzle as if it were underclued. Supports all rules and symbols and is decently fast for small puzzles. Very slow for large puzzles.';
+    solve(grid: GridData): AsyncGenerator<GridData | null>;
+    isInstructionSupported(instructionId: string): boolean;
   }
+
+  const Worker: new (options?: { name?: string }) => Worker;
+  export const Worker;
 
   export class AreaNumberModule extends Z3Module {
     readonly id: string;
@@ -1423,6 +1432,8 @@ declare global {
 
   export class Z3Solver extends Solver {
     readonly id = 'z3';
+    readonly description =
+      'Good for confirming that a solution is unique, especially for larger puzzles. It is otherwise slower than most solvers in small to medium-sized puzzles.';
     isEnvironmentSupported(): Promise<boolean>;
     solve(grid: GridData): AsyncGenerator<GridData | null>;
     isInstructionSupported(instructionId: string): boolean;

@@ -15,6 +15,7 @@ import { IconBaseProps } from 'react-icons';
 import { cn } from '../../utils';
 import { useSolver } from '../SolverContext';
 import { allSolvers } from '../../data/solver/allSolvers';
+import { GoInfo } from 'react-icons/go';
 
 function ChecklistItem({
   icon: Icon,
@@ -105,7 +106,9 @@ export default memo(function PuzzleChecklist() {
       ? solution !== null
         ? solution.value !== null
         : solutionIsComplete && solutionIsValid
-      : solutionIsNotEmpty);
+      : solution !== null
+        ? solution.value !== null
+        : solutionIsNotEmpty);
 
   if (!features.checklist) return null;
 
@@ -165,186 +168,6 @@ export default memo(function PuzzleChecklist() {
                   ? 'Solution incomplete'
                   : 'Solution invalid'}
             </ChecklistItem>
-            {solution !== null || isPending ? (
-              <>
-                <ChecklistItem
-                  key="solution"
-                  icon={HiViewGrid}
-                  iconClass={
-                    solution !== null
-                      ? solution.value !== null
-                        ? 'text-success'
-                        : 'text-error'
-                      : 'opacity-0'
-                  }
-                  tooltip={
-                    solution !== null
-                      ? solution.value !== null
-                        ? 'Solution found. Click to view'
-                        : 'This puzzle has no solution'
-                      : isPending
-                        ? 'Solving...'
-                        : 'Solver stopped before a solution was found'
-                  }
-                >
-                  <span className="flex-1 text-start">
-                    {solution !== null
-                      ? solution.value !== null
-                        ? 'Solution found'
-                        : 'No solution'
-                      : isPending
-                        ? 'Solving...'
-                        : 'Solution unavailable'}
-                  </span>
-                  {!!solution?.value && (
-                    <button
-                      className="btn btn-sm"
-                      onClick={() => {
-                        setGrid(solution.value!);
-                        setSolution({
-                          grid: solution.value!,
-                          value: solution.value,
-                        });
-                        if (alternate) {
-                          setAlternate({
-                            grid: solution.value!,
-                            value: alternate.value,
-                          });
-                        }
-                      }}
-                    >
-                      View
-                    </button>
-                  )}
-                </ChecklistItem>
-                {!!solution?.value && (
-                  <ChecklistItem
-                    key="alternate"
-                    icon={HiViewGridAdd}
-                    iconClass={
-                      alternate !== null
-                        ? alternate.value !== null
-                          ? 'text-success/50'
-                          : 'text-success'
-                        : 'opacity-0'
-                    }
-                    tooltip={
-                      alternate !== null
-                        ? alternate.value !== null
-                          ? 'Click to view alternate solution'
-                          : 'The solution is unique'
-                        : isPending
-                          ? 'Looking for alternate solutions...'
-                          : 'Alternate solution not supported by solver'
-                    }
-                  >
-                    <span className="flex-1 text-start">
-                      {alternate !== null
-                        ? alternate.value !== null
-                          ? 'Solution not unique'
-                          : 'Unique solution'
-                        : isPending
-                          ? 'Verifying...'
-                          : 'Unavailable'}
-                    </span>
-                    {!!alternate?.value && (
-                      <button
-                        className="btn btn-sm"
-                        onClick={() => {
-                          setGrid(alternate.value!);
-                          if (solution)
-                            setSolution({
-                              grid: alternate.value!,
-                              value: solution.value,
-                            });
-                          setAlternate({
-                            grid: alternate.value!,
-                            value: alternate.value,
-                          });
-                        }}
-                      >
-                        View
-                      </button>
-                    )}
-                  </ChecklistItem>
-                )}
-              </>
-            ) : (
-              <>
-                <ChecklistItem
-                  key="autoSolvable"
-                  icon={RiRobot2Fill}
-                  iconClass={autoSolvable ? 'text-success' : 'text-success/50'}
-                  tooltip={
-                    autoSolvable
-                      ? 'Can be solved automatically by the solver'
-                      : 'Cannot be solved automatically'
-                  }
-                >
-                  {autoSolvable ? 'Auto solvable' : 'Not auto solvable'}
-                </ChecklistItem>
-                <div
-                  className="tooltip tooltip-top tooltip-info"
-                  data-tip={
-                    environmentCheck === false
-                      ? 'Your browser does not support the solver'
-                      : 'This may take a while. Editing the puzzle will cancel the operation'
-                  }
-                >
-                  <div className="flex gap-2 items-center">
-                    <span className="shrink-0">Solver:</span>
-                    <select
-                      className="select select-bordered select-sm w-full max-w-xs"
-                      value={solver.id}
-                      onChange={e => setSolver(allSolvers.get(e.target.value)!)}
-                    >
-                      {[...allSolvers.keys()].map(id => (
-                        <option key={id} value={id}>
-                          {id}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      className={cn(
-                        'btn btn-outline btn-info btn-sm',
-                        environmentCheck === false && 'btn-error'
-                      )}
-                      onClick={async () => {
-                        let support = environmentCheck;
-                        if (support === undefined) {
-                          support = await solver.isEnvironmentSupported();
-                          setEnvironmentCheck(support);
-                        }
-                        if (!support) return;
-                        const requestId = ++solverRequest.current;
-                        setPending(true);
-                        setSolution(null);
-                        setAlternate(null);
-                        try {
-                          let isAlternate = false;
-                          for await (const solution of solver.solve(grid)) {
-                            if (!isAlternate) {
-                              if (requestId !== solverRequest.current) break;
-                              setSolution({ grid, value: solution });
-                              isAlternate = true;
-                            } else {
-                              if (requestId !== solverRequest.current) break;
-                              setAlternate({ grid, value: solution });
-                              break;
-                            }
-                          }
-                        } finally {
-                          setPending(false);
-                        }
-                      }}
-                      disabled={environmentCheck === false || !autoSolvable}
-                    >
-                      Solve
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
           </>
         ) : (
           <ChecklistItem
@@ -355,6 +178,215 @@ export default memo(function PuzzleChecklist() {
           >
             {solutionIsNotEmpty ? 'Solution not empty' : 'Solution empty'}
           </ChecklistItem>
+        )}
+        {solution !== null || isPending ? (
+          <>
+            <ChecklistItem
+              key="solution"
+              icon={HiViewGrid}
+              iconClass={
+                solution !== null
+                  ? solution.value !== null
+                    ? 'text-success'
+                    : 'text-error'
+                  : 'opacity-0'
+              }
+              tooltip={
+                solution !== null
+                  ? solution.value !== null
+                    ? 'Solution found. Click to view'
+                    : 'This puzzle has no solution'
+                  : isPending
+                    ? 'Solving...'
+                    : 'Solver stopped before a solution was found'
+              }
+            >
+              <span className="flex-1 text-start">
+                {solution !== null
+                  ? solution.value !== null
+                    ? 'Solution found'
+                    : 'No solution'
+                  : isPending
+                    ? 'Solving...'
+                    : 'Solution unavailable'}
+              </span>
+              {!!solution?.value && (
+                <button
+                  className="btn btn-sm"
+                  onClick={() => {
+                    setGrid(solution.value!);
+                    setSolution({
+                      grid: solution.value!,
+                      value: solution.value,
+                    });
+                    if (alternate) {
+                      setAlternate({
+                        grid: solution.value!,
+                        value: alternate.value,
+                      });
+                    }
+                  }}
+                >
+                  View
+                </button>
+              )}
+            </ChecklistItem>
+            {!!solution?.value && (
+              <ChecklistItem
+                key="alternate"
+                icon={HiViewGridAdd}
+                iconClass={
+                  alternate !== null
+                    ? alternate.value !== null
+                      ? 'text-success/50'
+                      : 'text-success'
+                    : 'opacity-0'
+                }
+                tooltip={
+                  alternate !== null
+                    ? alternate.value !== null
+                      ? 'Click to view alternate solution'
+                      : 'The solution is unique'
+                    : isPending
+                      ? 'Looking for alternate solutions...'
+                      : 'Alternate solution not supported by solver'
+                }
+              >
+                <span className="flex-1 text-start">
+                  {alternate !== null
+                    ? alternate.value !== null
+                      ? 'Solution not unique'
+                      : 'Unique solution'
+                    : isPending
+                      ? 'Verifying...'
+                      : 'Alternate unavailable'}
+                </span>
+                {!!alternate?.value && (
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => {
+                      setGrid(alternate.value!);
+                      if (solution)
+                        setSolution({
+                          grid: alternate.value!,
+                          value: solution.value,
+                        });
+                      setAlternate({
+                        grid: alternate.value!,
+                        value: alternate.value,
+                      });
+                    }}
+                  >
+                    View
+                  </button>
+                )}
+              </ChecklistItem>
+            )}
+          </>
+        ) : (
+          <>
+            <ChecklistItem
+              key="autoSolvable"
+              icon={RiRobot2Fill}
+              iconClass={autoSolvable ? 'text-success' : 'text-success/50'}
+              tooltip={
+                autoSolvable
+                  ? 'Can be solved automatically by the solver'
+                  : 'Cannot be solved automatically'
+              }
+            >
+              {autoSolvable ? 'Auto solvable' : 'Not auto solvable'}
+            </ChecklistItem>
+            <div
+              className="tooltip tooltip-top tooltip-info"
+              data-tip={
+                environmentCheck === false
+                  ? 'Your browser does not support the solver'
+                  : 'This may take a while. Editing the puzzle will cancel the operation'
+              }
+            >
+              <div className="flex gap-1 items-center">
+                <button
+                  className="btn btn-ghost p-1 min-h-0 h-fit shrink-0 flex gap-1 items-center"
+                  onClick={() =>
+                    (
+                      document.getElementById(
+                        'solverModel'
+                      ) as HTMLDialogElement
+                    ).showModal()
+                  }
+                >
+                  Solver:
+                  <GoInfo size={18} />
+                </button>
+                <dialog id="solverModel" className="modal">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-xl">Available solvers</h3>
+                    {[...allSolvers.values()].map(solver => (
+                      <p key={solver.id} className="py-2 text-left">
+                        <b className="text-lg">{solver.id}</b>
+                        <br />
+                        {solver.description}
+                      </p>
+                    ))}
+                    <div className="modal-action">
+                      <form method="dialog">
+                        <button className="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
+                <select
+                  className="select select-bordered select-sm w-full max-w-xs"
+                  value={solver.id}
+                  onChange={e => setSolver(allSolvers.get(e.target.value)!)}
+                >
+                  {[...allSolvers.keys()].map(id => (
+                    <option key={id} value={id}>
+                      {id}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  className={cn(
+                    'btn btn-outline btn-info btn-sm',
+                    environmentCheck === false && 'btn-error'
+                  )}
+                  onClick={async () => {
+                    let support = environmentCheck;
+                    if (support === undefined) {
+                      support = await solver.isEnvironmentSupported();
+                      setEnvironmentCheck(support);
+                    }
+                    if (!support) return;
+                    const requestId = ++solverRequest.current;
+                    setPending(true);
+                    setSolution(null);
+                    setAlternate(null);
+                    try {
+                      let isAlternate = false;
+                      for await (const solution of solver.solve(grid)) {
+                        if (!isAlternate) {
+                          if (requestId !== solverRequest.current) break;
+                          setSolution({ grid, value: solution });
+                          isAlternate = true;
+                        } else {
+                          if (requestId !== solverRequest.current) break;
+                          setAlternate({ grid, value: solution });
+                          break;
+                        }
+                      }
+                    } finally {
+                      setPending(false);
+                    }
+                  }}
+                  disabled={environmentCheck === false || !autoSolvable}
+                >
+                  Solve
+                </button>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </Accordion>

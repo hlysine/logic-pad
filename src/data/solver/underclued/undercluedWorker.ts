@@ -111,7 +111,6 @@ function computeSolution(initialGrid: GridData): GridData {
     const newLastValidGrid = currentGrid.tiles
       .map(row => row.map(t => t.color))
       .flat();
-    console.log(assumptions);
     if (lastValidGrid.length !== 0) {
       const diff = newLastValidGrid.map(
         (color, i) => color === lastValidGrid[i]
@@ -123,7 +122,6 @@ function computeSolution(initialGrid: GridData): GridData {
       });
     }
     [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
-    console.log(assumptions);
     lastValidGrid = newLastValidGrid;
   }
   // Create a new grid with lastValidGrid

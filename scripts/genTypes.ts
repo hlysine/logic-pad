@@ -58,3 +58,5 @@ console.log('Cleaning up...');
 await $`rm -rf ./scripts/temp`;
 
 console.log('Done!');
+
+process.exit(0);

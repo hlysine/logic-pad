@@ -110,3 +110,5 @@ console.log('Formatting...');
 await $`bunx prettier --write ./generated/enclosure.ts`;
 
 console.log('Done!');
+
+process.exit(0);

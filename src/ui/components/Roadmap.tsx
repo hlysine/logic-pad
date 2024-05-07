@@ -29,7 +29,6 @@ const roadmap: RoadmapItem[] = [
     '~Custom rule',
     '~Custom symbol',
     '~Mystery: alternate solution (Hidden)',
-    'Prefilled tiles',
     'Music Grid (as a grid rule)',
   ],
   [

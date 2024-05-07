@@ -69,7 +69,7 @@ import RegionAreaModule from '../src/data/solver/z3/modules/regionAreaModule';
 import ViewpointModule from '../src/data/solver/z3/modules/viewpointModule';
 import Z3Module from '../src/data/solver/z3/modules/z3Module';
 import UndercluedSolver from '../src/data/solver/underclued/undercluedSolver';
-import Worker from '../src/data/solver/underclued/worker';
+import Worker from '../src/data/solver/underclued/undercluedWorker';
 import { Serializer } from '../src/data/serializer/allSerializers';
 import SerializerBase from '../src/data/serializer/serializerBase';
 import SerializerV0 from '../src/data/serializer/serializer_v0';

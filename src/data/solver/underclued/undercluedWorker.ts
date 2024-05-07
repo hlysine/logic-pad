@@ -151,7 +151,8 @@ function computeSolution(initialGrid: GridData): GridData {
 }
 
 onmessage = e => {
-  const grid = Serializer.parseGrid(e.data as string);
+  if (!e.data || typeof e.data !== 'string') return;
+  const grid = Serializer.parseGrid(e.data);
   const solved = computeSolution(grid);
   postMessage(Serializer.stringifyGrid(solved));
 };

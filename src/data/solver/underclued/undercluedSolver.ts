@@ -2,7 +2,7 @@ import GridData from '../../grid';
 import { instance as undercluedInstance } from '../../rules/undercluedRule';
 import { Serializer } from '../../serializer/allSerializers';
 import Solver from '../solver';
-import Worker from './worker?worker';
+import Worker from './undercluedWorker?worker';
 
 export default class UndercluedSolver extends Solver {
   public readonly id = 'underclued';

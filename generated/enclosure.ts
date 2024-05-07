@@ -50,8 +50,6 @@ import MyopiaSymbol from '../src/data/symbols/myopiaSymbol';
 import NumberSymbol from '../src/data/symbols/numberSymbol';
 import Symbol from '../src/data/symbols/symbol';
 import ViewpointSymbol from '../src/data/symbols/viewpointSymbol';
-import QuestionMarkSign from '../src/data/symbols/signs/questionMarkSign';
-import Sign from '../src/data/symbols/signs/sign';
 import { Solver } from '../src/data/solver/allSolvers';
 import SolverBase from '../src/data/solver/solverBase';
 import { convertDirection } from '../src/data/solver/z3/utils';
@@ -89,6 +87,8 @@ import SameShapeRule from '../src/data/rules/sameShapeRule';
 import SymbolsPerRegionRule from '../src/data/rules/symbolsPerRegionRule';
 import UndercluedRule from '../src/data/rules/undercluedRule';
 import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
+import { isEventHandler } from '../src/data/events/helper';
+import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConfigType', value: ConfigType },
@@ -140,8 +140,6 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'NumberSymbol', value: NumberSymbol },
   { name: 'Symbol', value: Symbol },
   { name: 'ViewpointSymbol', value: ViewpointSymbol },
-  { name: 'QuestionMarkSign', value: QuestionMarkSign },
-  { name: 'Sign', value: Sign },
   { name: 'Solver', value: Solver },
   { name: 'SolverBase', value: SolverBase },
   { name: 'convertDirection', value: convertDirection },
@@ -179,6 +177,8 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'SymbolsPerRegionRule', value: SymbolsPerRegionRule },
   { name: 'UndercluedRule', value: UndercluedRule },
   { name: 'UniqueShapeRule', value: UniqueShapeRule },
+  { name: 'isEventHandler', value: isEventHandler },
+  { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];
 
 export { enclosure };

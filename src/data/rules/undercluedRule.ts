@@ -1,7 +1,7 @@
 import GridData from '../grid';
 import { Color, GridState, RuleState, State } from '../primitives';
 import AreaNumberSymbol from '../symbols/areaNumberSymbol';
-import QuestionMarkSign from '../symbols/signs/questionMarkSign';
+import CustomTextSymbol from '../symbols/customTextSymbol';
 import Rule, { SearchVariant } from './rule';
 
 export default class UndercluedRule extends Rule {
@@ -9,9 +9,9 @@ export default class UndercluedRule extends Rule {
     GridData.create(['nbnnn', 'bwbnn', 'nbnnn', 'wwwnn'])
       .addSymbol(new AreaNumberSymbol(1, 1, 1))
       .addSymbol(new AreaNumberSymbol(0, 3, 4))
-      .addSymbol(new QuestionMarkSign(0, 2))
-      .addSymbol(new QuestionMarkSign(2, 2))
-      .addSymbol(new QuestionMarkSign(3, 3))
+      .addSymbol(new CustomTextSymbol('', GridData.create([]), 0, 2, '?'))
+      .addSymbol(new CustomTextSymbol('', GridData.create([]), 2, 2, '?'))
+      .addSymbol(new CustomTextSymbol('', GridData.create([]), 3, 3, '?'))
   );
 
   private static readonly SEARCH_VARIANTS = [

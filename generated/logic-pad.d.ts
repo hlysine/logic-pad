@@ -92,6 +92,29 @@ declare global {
     b: C['default']
   ): boolean;
 
+  export function isEventHandler<T>(val: unknown, event: string): val is T;
+
+  export interface SymbolValidationHandler {
+    /**
+     * Overrides the validation of symbols.
+     *
+     * You can return a different validation result, or call the original validation logic with a modified grid.
+     *
+     * @param grid - The grid to validate.
+     * @param _symbol - The symbol to validate.
+     * @param validator - The original validation logic for the symbol.
+     * @returns The state of the symbol after validation.
+     */
+    overrideSymbolValidation(
+      grid: GridData,
+      symbol: Symbol,
+      validator: (grid: GridData) => State
+    ): State | undefined;
+  }
+  export function handlesSymbolValidation<T>(
+    val: T
+  ): val is T & SymbolValidationHandler;
+
   export class GridData {
     readonly width: number;
     readonly height: number;
@@ -900,7 +923,7 @@ declare global {
   const allRules: Map<string, Rule>;
   export { allRules };
 
-  export class OffByXRule extends Rule {
+  export class OffByXRule extends Rule implements SymbolValidationHandler {
     readonly number: number;
     /**
      * **All numbers are off by &lt;number&gt;**
@@ -917,7 +940,7 @@ declare global {
     overrideSymbolValidation(
       grid: GridData,
       symbol: Symbol,
-      validator: (grid: GridData) => State
+      _validator: (grid: GridData) => State
     ): State | undefined;
     copyWith({ number }: { number?: number }): this;
     withNumber(number: number): this;
@@ -975,21 +998,6 @@ declare global {
     ): string | null;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
-    /**
-     * Allows this rule to override the validation of symbols.
-     *
-     * You can return a different validation result, or call the original validation logic with a modified grid.
-     *
-     * @param grid - The grid to validate.
-     * @param _symbol - The symbol to validate.
-     * @param validator - The original validation logic for the symbol.
-     * @returns The state of the symbol after validation.
-     */
-    overrideSymbolValidation(
-      _grid: GridData,
-      _symbol: Symbol,
-      _validator: (grid: GridData) => State
-    ): State | undefined;
   }
 
   export class SameShapeRule extends RegionShapeRule {
@@ -5074,22 +5082,6 @@ declare global {
     };
     validateSymbol(grid: GridData): State;
     withNumber(number: number): this;
-  }
-
-  export class QuestionMarkSign extends Sign {
-    get id(): string;
-    get explanation(): string;
-    get configs(): readonly AnyConfig[] | null;
-    createExampleGrid(): GridData;
-    copyWith({ x, y }: { x?: number; y?: number }): this;
-  }
-
-  /**
-   * A sign is a symbol that is only used for illustrative purposes.
-   * They should only appear in example grids of other instructions.
-   */
-  export abstract class Sign extends Symbol {
-    validateSymbol(_grid: GridData): State;
   }
 
   export abstract class Symbol extends Instruction {

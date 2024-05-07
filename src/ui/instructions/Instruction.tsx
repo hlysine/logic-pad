@@ -11,12 +11,14 @@ export interface InstructionProps {
   instruction: InstructionData;
   state?: State;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export default memo(function Instruction({
   instruction,
   state,
   children,
+  className,
 }: InstructionProps) {
   state = state ?? State.Incomplete;
   const exampleGrid = useMemo(
@@ -24,7 +26,12 @@ export default memo(function Instruction({
     [instruction]
   );
   return (
-    <div className="flex flex-col w-[320px] items-stretch shrink-0">
+    <div
+      className={cn(
+        'flex flex-col w-[320px] items-stretch shrink-0',
+        className
+      )}
+    >
       <div
         className={cn('relative flex m-0 border-0 pr-2', instructionBg(state))}
       >

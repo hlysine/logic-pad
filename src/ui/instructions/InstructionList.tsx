@@ -6,6 +6,7 @@ import MultiEntrySymbol from '../../data/symbols/multiEntrySymbol';
 import { useGridState } from '../GridStateContext';
 import Instruction from './Instruction';
 import EditTarget from './EditTarget';
+import { cn } from '../../utils';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -104,6 +105,7 @@ export default memo(function InstructionList({
             key={rule.id + i.toString()}
             instruction={rule}
             state={state?.rules[i]?.state}
+            className={cn(rule.visibleWhenSolving || 'opacity-60')}
           >
             {editable && <EditTarget instruction={rule} />}
           </Instruction>

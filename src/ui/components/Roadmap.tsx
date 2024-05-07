@@ -59,10 +59,11 @@ const roadmap: RoadmapItem[] = [
     'Puzzle solver',
     '~Update and document solver API',
     '~Add dropdown to choose solver',
+    '~Add underclued solver',
     'Add a faster solver',
   ],
   [
-    'Puzzle editor',
+    '~Puzzle editor',
     '~Puzzle code editor',
     '~Add color, fix and merge tools',
     '~Add a tool for each symbol type',

@@ -1,3 +1,4 @@
+import { handlesSymbolValidation } from './events/onSymbolValidation';
 import GridData from './grid';
 import { Color, GridState, RuleState, State } from './primitives';
 import Rule from './rules/rule';
@@ -47,13 +48,13 @@ export default function validateGrid(
     if (rule) {
       const newValidator = (grid: GridData) =>
         applySymbolOverrides(grid, rest, symbol, () => validator(grid));
-      let result = rule.overrideSymbolValidation(grid, symbol, newValidator);
+      if (!handlesSymbolValidation(rule)) return newValidator(grid);
+      const result = rule.overrideSymbolValidation(grid, symbol, newValidator);
       if (result === undefined) {
-        result = newValidator(grid);
-      } else {
-        const index = grid.rules.indexOf(rule);
-        symbolOverrideStates[index].push(result);
+        return newValidator(grid);
       }
+      const index = grid.rules.indexOf(rule);
+      symbolOverrideStates[index].push(result);
       return result;
     }
     return validator(grid);

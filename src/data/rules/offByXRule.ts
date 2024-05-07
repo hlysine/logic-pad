@@ -1,4 +1,5 @@
 import { AnyConfig, ConfigType } from '../config';
+import { SymbolValidationHandler } from '../events/onSymbolValidation';
 import GridData from '../grid';
 import { RuleState, State } from '../primitives';
 import AreaNumberSymbol from '../symbols/areaNumberSymbol';
@@ -6,7 +7,10 @@ import NumberSymbol from '../symbols/numberSymbol';
 import Symbol from '../symbols/symbol';
 import Rule, { SearchVariant } from './rule';
 
-export default class OffByXRule extends Rule {
+export default class OffByXRule
+  extends Rule
+  implements SymbolValidationHandler
+{
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -97,7 +101,7 @@ export default class OffByXRule extends Rule {
   public overrideSymbolValidation(
     grid: GridData,
     symbol: Symbol,
-    validator: (grid: GridData) => State
+    _validator: (grid: GridData) => State
   ): State | undefined {
     if (symbol instanceof NumberSymbol) {
       const counts = symbol.countTiles(grid);
@@ -118,7 +122,7 @@ export default class OffByXRule extends Rule {
         return State.Incomplete;
       }
     } else {
-      return super.overrideSymbolValidation(grid, symbol, validator);
+      return undefined;
     }
   }
 

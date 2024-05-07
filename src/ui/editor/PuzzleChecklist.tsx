@@ -245,7 +245,7 @@ export default memo(function PuzzleChecklist() {
                           : 'Unique solution'
                         : isPending
                           ? 'Verifying...'
-                          : 'Unavailable'}
+                          : 'Alternate unavailable'}
                     </span>
                     {!!alternate?.value && (
                       <button

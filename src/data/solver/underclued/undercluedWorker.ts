@@ -10,6 +10,10 @@ function posToCoords(pos: number | undefined, width: number): [number, number] {
   return [pos % width, Math.floor(pos / width)];
 }
 
+function coordsToPos(a: [number, number], width: number) {
+  return a[0] + a[1] * width;
+}
+
 function getValidGrid(
   grid: GridData,
   assumptions: number[],
@@ -29,7 +33,10 @@ function getValidGrid(
       tile.withColor(Color.Dark)
     );
     assumptions.push(newAssump);
-    const state = validateGrid(grid, null);
+    for (const a of grid.connections.getConnectedTiles({ x:coords[0], y:coords[1] })) {
+      canAssump[coordsToPos([a.x, a.y], grid.width)] = a.x === coords[0] && a.y === coords[1];
+    }
+      const state = validateGrid(grid, null);
     // If the grid is invalid, try to backtrack to a right assumption
     if (state.final === State.Error) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -104,25 +111,19 @@ function computeSolution(initialGrid: GridData): GridData {
     const newLastValidGrid = currentGrid.tiles
       .map(row => row.map(t => t.color))
       .flat();
+    console.log(assumptions);
     if (lastValidGrid.length !== 0) {
       const diff = newLastValidGrid.map(
         (color, i) => color === lastValidGrid[i]
       );
       diff.forEach((same, i) => {
         if (!same) {
-          canAssump[i] = false;
           newLastValidGrid[i] = Color.Gray;
         }
       });
-      while (
-        diff.indexOf(false) <= (assumptions.at(-1) ?? -1) &&
-        assumptions.length > 0
-      ) {
-        [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
-      }
-    } else {
-      [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
     }
+    [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
+    console.log(assumptions);
     lastValidGrid = newLastValidGrid;
   }
   // Create a new grid with lastValidGrid

@@ -15,6 +15,7 @@ import { IconBaseProps } from 'react-icons';
 import { cn } from '../../utils';
 import { useSolver } from '../SolverContext';
 import { allSolvers } from '../../data/solver/allSolvers';
+import { GoInfo } from 'react-icons/go';
 
 function ChecklistItem({
   icon: Icon,
@@ -304,8 +305,37 @@ export default memo(function PuzzleChecklist() {
                   : 'This may take a while. Editing the puzzle will cancel the operation'
               }
             >
-              <div className="flex gap-2 items-center">
-                <span className="shrink-0">Solver:</span>
+              <div className="flex gap-1 items-center">
+                <button
+                  className="btn btn-ghost p-1 min-h-0 h-fit shrink-0 flex gap-1 items-center"
+                  onClick={() =>
+                    (
+                      document.getElementById(
+                        'solverModel'
+                      ) as HTMLDialogElement
+                    ).showModal()
+                  }
+                >
+                  Solver:
+                  <GoInfo size={18} />
+                </button>
+                <dialog id="solverModel" className="modal">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-xl">Available solvers</h3>
+                    {[...allSolvers.values()].map(solver => (
+                      <p key={solver.id} className="py-2 text-left">
+                        <b className="text-lg">{solver.id}</b>
+                        <br />
+                        {solver.description}
+                      </p>
+                    ))}
+                    <div className="modal-action">
+                      <form method="dialog">
+                        <button className="btn">Close</button>
+                      </form>
+                    </div>
+                  </div>
+                </dialog>
                 <select
                   className="select select-bordered select-sm w-full max-w-xs"
                   value={solver.id}

@@ -17,6 +17,9 @@ import { array } from '../../helper';
 export default class Z3Solver extends Solver {
   public readonly id = 'z3';
 
+  public readonly description =
+    'Good for confirming that a solution is unique, especially for larger puzzles. It is otherwise slower than most solvers in small to medium-sized puzzles.';
+
   public async isEnvironmentSupported(): Promise<boolean> {
     try {
       await init();

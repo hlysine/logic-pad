@@ -8,7 +8,7 @@ function register(prototype: Solver) {
   allSolvers.set(prototype.id, prototype);
 }
 
-register(new Z3Solver());
 register(new UndercluedSolver());
+register(new Z3Solver());
 
 export { allSolvers };

@@ -7,6 +7,9 @@ import Worker from './worker?worker';
 export default class UndercluedSolver extends Solver {
   public readonly id = 'underclued';
 
+  public readonly description =
+    'Solves every puzzle as if it were underclued. Supports all rules and symbols and is decently fast for small puzzles. Very slow for large puzzles.';
+
   public async *solve(grid: GridData): AsyncGenerator<GridData | null> {
     const worker = new Worker();
     try {

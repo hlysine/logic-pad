@@ -14,6 +14,11 @@ export default abstract class Solver {
   public abstract get id(): string;
 
   /**
+   * A short paragraph describing when the user should use this solver.
+   */
+  public abstract get description(): string;
+
+  /**
    * Solve the given grid. The implementation should delegate long-running tasks to a worker thread and yield solutions
    * asynchronously.
    *

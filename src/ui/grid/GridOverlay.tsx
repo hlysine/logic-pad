@@ -1,3 +1,4 @@
+import { ForwardedRef, forwardRef, memo } from 'react';
 import { cn } from '../../utils';
 
 export interface GridOverlayProps {
@@ -5,10 +6,18 @@ export interface GridOverlayProps {
   children?: React.ReactNode;
 }
 
-export default function GridOverlay({ children, className }: GridOverlayProps) {
-  return (
-    <div className={cn('absolute inset-0 pointer-events-none', className)}>
-      {children}
-    </div>
-  );
-}
+export default memo(
+  forwardRef(function GridOverlay(
+    { children, className }: GridOverlayProps,
+    ref: ForwardedRef<HTMLDivElement>
+  ) {
+    return (
+      <div
+        ref={ref}
+        className={cn('absolute inset-0 pointer-events-none', className)}
+      >
+        {children}
+      </div>
+    );
+  })
+);

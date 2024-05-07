@@ -53,3 +53,5 @@ export default memo(function CustomIconSymbol({
     </div>
   );
 });
+
+export const id = 'custom_icon';

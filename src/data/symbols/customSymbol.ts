@@ -46,3 +46,5 @@ export default abstract class CustomSymbol extends MultiEntrySymbol {
     return this.copyWith({ grid });
   }
 }
+
+export const instance = undefined;

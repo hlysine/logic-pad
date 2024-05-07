@@ -4,29 +4,45 @@ import { useGrid } from '../GridContext';
 import Grid from './Grid';
 import SymbolOverlay from './SymbolOverlay';
 import ErrorOverlay from './ErrorOverlay';
-import { Color, State } from '../../data/primitives';
+import { State, Position } from '../../data/primitives';
 import GridData from '../../data/grid';
 import Loading from '../components/Loading';
 import { GridStateConsumer } from '../GridStateContext';
+import { useDisplay } from '../DisplayContext';
+import { useToolbox } from '../ToolboxContext';
+import handleTileClick from './handleTileClick';
+import TileCountOverlay from './TileCountOverlay';
 
 export interface MainGridProps {
-  editable: boolean;
+  useToolboxClick: boolean;
   children?: React.ReactNode;
 }
 
 function computeTileSize(grid: GridData) {
-  const newSize = Math.min(
-    (window.innerWidth - 80 - 640) / grid.width,
-    (window.innerHeight - 160) / grid.height
-  );
+  const newSize =
+    window.innerWidth < 1280
+      ? Math.min(
+          (window.innerWidth - 120) / grid.width,
+          (window.innerHeight - 180) / grid.height
+        )
+      : Math.min(
+          (window.innerWidth - 120 - 640) / grid.width,
+          (window.innerHeight - 180) / grid.height
+        );
   return Math.max(
     25,
     Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize)
   );
 }
 
-export default memo(function MainGrid({ editable, children }: MainGridProps) {
-  const { grid, setGrid } = useGrid();
+export default memo(function MainGrid({
+  useToolboxClick,
+  children,
+}: MainGridProps) {
+  const gridContext = useGrid();
+  const { grid } = gridContext;
+  const { scale } = useDisplay();
+  const { onTileClick } = useToolbox();
   const [tileConfig, setTileConfig] = useState<{
     width: number;
     height: number;
@@ -55,30 +71,31 @@ export default memo(function MainGrid({ editable, children }: MainGridProps) {
   return (
     <StateRing width={grid.width} height={grid.height}>
       <Grid
-        size={tileConfig.tileSize}
+        size={tileConfig.tileSize * scale}
         grid={grid}
-        editable={editable}
+        editable={useToolboxClick ? !!onTileClick : true}
         onTileClick={(x, y, target, flood) => {
-          const tile = grid.getTile(x, y);
-          if (flood && target === Color.Gray) {
-            // target is Color.Gray if the tile is already the target color
-            setGrid(grid.floodFillAll(Color.Gray, tile.color));
-          } else if (flood && !tile.fixed) {
-            setGrid(grid.floodFill({ x, y }, Color.Gray, target));
-          } else if (!tile.fixed) {
-            setGrid(grid.setTile(x, y, t => t.withColor(target)));
+          if (useToolboxClick && onTileClick) {
+            onTileClick(x, y, target, flood, gridContext);
+            return;
           }
+          handleTileClick(x, y, target, flood, gridContext, false);
         }}
       >
         <GridStateConsumer>
           {({ state }) => (
             <>
               <SymbolOverlay grid={grid} state={state.symbols} />
-              {state.rules.map((rule, i) =>
-                rule.state === State.Error ? (
-                  <ErrorOverlay key={i} positions={rule.positions} />
-                ) : null
-              )}
+              <ErrorOverlay
+                positions={
+                  state.rules
+                    .map(rule => rule.state === State.Error && rule.positions)
+                    .filter(Boolean) as Position[][]
+                }
+                width={grid.width}
+                height={grid.height}
+              />
+              <TileCountOverlay grid={grid} />
               {children}
             </>
           )}

@@ -105,3 +105,5 @@ export default class ConnectAllRule extends Rule {
     return this.copyWith({ color });
   }
 }
+
+export const instance = new ConnectAllRule(Color.Dark);

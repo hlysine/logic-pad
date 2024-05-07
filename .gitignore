@@ -22,4 +22,4 @@ dist-ssr
 *.sw?
 
 references
-types/temp
+scripts/temp

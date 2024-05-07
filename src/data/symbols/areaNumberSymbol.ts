@@ -106,3 +106,5 @@ export default class AreaNumberSymbol extends NumberSymbol {
     return this.copyWith({ number });
   }
 }
+
+export const instance = new AreaNumberSymbol(0, 0, 1);

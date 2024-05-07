@@ -204,3 +204,5 @@ export default class RegionAreaRule extends Rule {
     return this.copyWith({ size });
   }
 }
+
+export const instance = new RegionAreaRule(Color.Dark, 2);

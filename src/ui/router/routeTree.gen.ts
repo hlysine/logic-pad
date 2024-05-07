@@ -11,25 +11,31 @@
 // Import Routes
 
 import { Route as rootRoute } from './../../routes/__root'
-import { Route as SolveImport } from './../../routes/solve'
-import { Route as CreateImport } from './../../routes/create'
+import { Route as LayoutImport } from './../../routes/_layout'
 import { Route as IndexImport } from './../../routes/index'
+import { Route as LayoutSolveImport } from './../../routes/_layout.solve'
+import { Route as LayoutCreateImport } from './../../routes/_layout.create'
 
 // Create/Update Routes
 
-const SolveRoute = SolveImport.update({
-  path: '/solve',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const CreateRoute = CreateImport.update({
-  path: '/create',
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutSolveRoute = LayoutSolveImport.update({
+  path: '/solve',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
+const LayoutCreateRoute = LayoutCreateImport.update({
+  path: '/create',
+  getParentRoute: () => LayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -40,13 +46,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/create': {
-      preLoaderRoute: typeof CreateImport
+    '/_layout': {
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
-    '/solve': {
-      preLoaderRoute: typeof SolveImport
-      parentRoute: typeof rootRoute
+    '/_layout/create': {
+      preLoaderRoute: typeof LayoutCreateImport
+      parentRoute: typeof LayoutImport
+    }
+    '/_layout/solve': {
+      preLoaderRoute: typeof LayoutSolveImport
+      parentRoute: typeof LayoutImport
     }
   }
 }
@@ -55,8 +65,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  CreateRoute,
-  SolveRoute,
+  LayoutRoute.addChildren([LayoutCreateRoute, LayoutSolveRoute]),
 ])
 
 /* prettier-ignore-end */

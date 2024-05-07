@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { cn } from '../../utils';
 import DartSymbolData from '../../data/symbols/dartSymbol';
-import { Direction } from '../../data/primitives';
+import { Orientation } from '../../data/primitives';
 import {
   HiMiniArrowLongDown,
   HiMiniArrowLongLeft,
@@ -15,7 +15,7 @@ export interface DartProps {
 }
 
 const orientations = {
-  [Direction.Up]: {
+  [Orientation.Up]: {
     arrowIcon: HiMiniArrowLongUp,
     arrowStitch: {
       right: 0,
@@ -25,7 +25,7 @@ const orientations = {
       transform: 'translateX(-0.20em)',
     },
   },
-  [Direction.Left]: {
+  [Orientation.Left]: {
     arrowIcon: HiMiniArrowLongLeft,
     arrowStitch: {
       top: 0,
@@ -35,7 +35,7 @@ const orientations = {
       transform: 'translateY(0.20em)',
     },
   },
-  [Direction.Down]: {
+  [Orientation.Down]: {
     arrowIcon: HiMiniArrowLongDown,
     arrowStitch: {
       left: 0,
@@ -45,7 +45,7 @@ const orientations = {
       transform: 'translateX(0.20em)',
     },
   },
-  [Direction.Right]: {
+  [Orientation.Right]: {
     arrowIcon: HiMiniArrowLongRight,
     arrowStitch: {
       bottom: 0,
@@ -55,10 +55,60 @@ const orientations = {
       transform: 'translateY(-0.20em)',
     },
   },
+  [Orientation.UpLeft]: {
+    arrowIcon: HiMiniArrowLongUp,
+    arrowStitch: {
+      right: '0.1em',
+      top: '0.1em',
+      transform: 'rotate(-45deg)',
+      fontSize: '0.9em',
+    },
+    numberDisplacement: {
+      transform: 'translate(-0.20em, 0.20em)',
+    },
+  },
+  [Orientation.UpRight]: {
+    arrowIcon: HiMiniArrowLongRight,
+    arrowStitch: {
+      bottom: '0.1em',
+      right: '0.1em',
+      transform: 'rotate(-45deg)',
+      fontSize: '0.9em',
+    },
+    numberDisplacement: {
+      transform: 'translate(-0.20em, -0.20em)',
+    },
+  },
+  [Orientation.DownLeft]: {
+    arrowIcon: HiMiniArrowLongDown,
+    arrowStitch: {
+      left: '0.1em',
+      top: '0.1em',
+      transform: 'rotate(45deg)',
+      fontSize: '0.9em',
+    },
+    numberDisplacement: {
+      transform: 'translate(0.20em, 0.20em)',
+    },
+  },
+  [Orientation.DownRight]: {
+    arrowIcon: HiMiniArrowLongDown,
+    arrowStitch: {
+      left: '0.1em',
+      bottom: '0.1em',
+      transform: 'rotate(-45deg)',
+      fontSize: '0.9em',
+    },
+    numberDisplacement: {
+      transform: 'translate(0.20em, -0.20em)',
+    },
+  },
 };
 
+// million-ignore
 export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
   const direction = symbol.orientation;
+  const Icon = orientations[direction].arrowIcon;
   return (
     <div
       className={cn(
@@ -76,10 +126,10 @@ export default memo(function DartSymbol({ textClass, symbol }: DartProps) {
         className={cn('absolute', textClass, '-m-[0.10em]')}
         style={orientations[direction].arrowStitch}
       >
-        {React.createElement(orientations[direction].arrowIcon, {
-          size: '0.7em',
-        })}
+        <Icon size="0.7em" />
       </div>
     </div>
   );
 });
+
+export const id = 'dart';

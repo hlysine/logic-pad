@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import { Color, Direction } from '../primitives';
+import { Color, Orientation } from '../primitives';
 import NumberSymbol from './numberSymbol';
 
 export default class DartSymbol extends NumberSymbol {
@@ -27,8 +27,8 @@ export default class DartSymbol extends NumberSymbol {
       configurable: true,
     },
     {
-      type: ConfigType.Direction,
-      default: Direction.Down,
+      type: ConfigType.Orientation,
+      default: Orientation.Right,
       field: 'orientation',
       description: 'Orientation',
       configurable: true,
@@ -37,10 +37,10 @@ export default class DartSymbol extends NumberSymbol {
 
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['wwbbw', 'wwwww', 'wbwbb', 'wwwww'])
-      .addSymbol(new DartSymbol(1, 0, 1, Direction.Down))
-      .addSymbol(new DartSymbol(4, 0, 2, Direction.Left))
-      .addSymbol(new DartSymbol(3, 1, 1, Direction.Down))
-      .addSymbol(new DartSymbol(0, 2, 3, Direction.Right))
+      .addSymbol(new DartSymbol(1, 0, 1, Orientation.Down))
+      .addSymbol(new DartSymbol(4, 0, 2, Orientation.Left))
+      .addSymbol(new DartSymbol(3, 1, 1, Orientation.Down))
+      .addSymbol(new DartSymbol(0, 2, 3, Orientation.Right))
   );
 
   /**
@@ -55,7 +55,7 @@ export default class DartSymbol extends NumberSymbol {
     x: number,
     y: number,
     number: number,
-    public readonly orientation: Direction
+    public readonly orientation: Orientation
   ) {
     super(x, y, number);
     this.orientation = orientation;
@@ -63,6 +63,10 @@ export default class DartSymbol extends NumberSymbol {
 
   public get id(): string {
     return `dart`;
+  }
+
+  public get placementStep(): number {
+    return 1;
   }
 
   public get explanation(): string {
@@ -107,7 +111,7 @@ export default class DartSymbol extends NumberSymbol {
     x?: number;
     y?: number;
     number?: number;
-    orientation?: Direction;
+    orientation?: Orientation;
   }): this {
     return new DartSymbol(
       x ?? this.x,
@@ -121,3 +125,5 @@ export default class DartSymbol extends NumberSymbol {
     return this.copyWith({ number });
   }
 }
+
+export const instance = new DartSymbol(0, 0, 1, Orientation.Right);

@@ -68,3 +68,5 @@ export default class GalaxySymbol extends DirectionLinkerSymbol {
     return new GalaxySymbol(x ?? this.x, y ?? this.y) as this;
   }
 }
+
+export const instance = new GalaxySymbol(0, 0);

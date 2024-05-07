@@ -1,6 +1,6 @@
 import GridConnections from './gridConnections';
 import { array, move } from './helper';
-import { Color, Direction, Position } from './primitives';
+import { Color, Direction, Orientation, Position } from './primitives';
 import Rule from './rules/rule';
 import Symbol from './symbols/symbol';
 import TileData from './tile';
@@ -40,7 +40,7 @@ export default class GridData {
     this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
     this.symbols = symbols ? GridData.deduplicateSymbols(symbols) : new Map();
-    this.rules = rules ? GridData.deduplicateRules(rules) : [];
+    this.rules = rules ?? []; // do not deduplicate rules because it makes for bad editor experience
   }
 
   /**
@@ -221,6 +221,57 @@ export default class GridData {
   }
 
   /**
+   * Remove all symbols that satisfy the predicate.
+   * @param predicate The predicate to test each symbol with.
+   * @returns The new grid with the symbols removed.
+   */
+  public removeSymbolIf(predicate: (symbol: Symbol) => boolean): GridData {
+    return this.withSymbols(map => {
+      for (const [id, symbols] of map) {
+        const newSymbols = symbols.filter(sym => !predicate(sym));
+        if (newSymbols.length === 0) {
+          map.delete(id);
+        } else {
+          map.set(id, newSymbols);
+        }
+      }
+      return map;
+    });
+  }
+
+  /**
+   * Find the first symbol that satisfies the predicate.
+   * @param predicate The predicate to test each symbol with.
+   * @returns The first symbol that satisfies the predicate, or undefined if no symbol is found.
+   */
+  public findSymbol(
+    predicate: (symbol: Symbol) => boolean
+  ): Symbol | undefined {
+    for (const symbols of this.symbols.values()) {
+      const symbol = symbols.find(predicate);
+      if (symbol) return symbol;
+    }
+  }
+
+  /**
+   * Replace an existing symbol with a new symbol.
+   * @param oldSymbol The symbol to replace.
+   * @param newSymbol The new symbol to replace with.
+   * @returns The new grid with the symbol replaced.
+   */
+  public replaceSymbol(oldSymbol: Symbol, newSymbol: Symbol): GridData {
+    return this.withSymbols(map => {
+      if (map.has(oldSymbol.id)) {
+        const symbols = map
+          .get(oldSymbol.id)!
+          .map(s => (s === oldSymbol ? newSymbol : s));
+        map.set(oldSymbol.id, symbols);
+      }
+      return map;
+    });
+  }
+
+  /**
    * Add or modify the rules in the grid.
    * @param rules The new rules to add or modify.
    * @returns The new grid with the new rules.
@@ -252,6 +303,24 @@ export default class GridData {
   }
 
   /**
+   * Remove all rules that satisfy the predicate.
+   * @param predicate The predicate to test each rule with.
+   * @returns The new grid with the rules removed.
+   */
+  public removeRuleIf(predicate: (rule: Rule) => boolean): GridData {
+    return this.withRules(rules => rules.filter(r => !predicate(r)));
+  }
+
+  /**
+   * Find the first rule that satisfies the predicate.
+   * @param predicate The predicate to test each rule with.
+   * @returns The first rule that satisfies the predicate, or undefined if no rule is found.
+   */
+  public findRule(predicate: (rule: Rule) => boolean): Rule | undefined {
+    return this.rules.find(predicate);
+  }
+
+  /**
    * Replace an existing rule with a new rule.
    * @param oldRule The rule to replace.
    * @param newRule The new rule to replace with.
@@ -270,13 +339,18 @@ export default class GridData {
    * @returns The new grid with the new dimensions.
    */
   public resize(width: number, height: number): GridData {
-    const newGrid = new GridData(width, height, undefined, this.connections);
-    for (let y = 0; y < Math.min(this.height, height); y++) {
-      for (let x = 0; x < Math.min(this.width, width); x++) {
-        newGrid.setTile(x, y, this.getTile(x, y));
-      }
-    }
-    return newGrid;
+    const tiles = array(width, height, (x, y) =>
+      x >= 0 && x < this.width && y >= 0 && y < this.height
+        ? this.getTile(x, y)
+        : TileData.empty()
+    );
+    return this.removeSymbolIf(
+      sym => sym.x >= width || sym.y >= height
+    ).copyWith({
+      width,
+      height,
+      tiles,
+    });
   }
 
   /**
@@ -390,7 +464,7 @@ export default class GridData {
    */
   public iterateDirection<T>(
     position: Position,
-    direction: Direction,
+    direction: Direction | Orientation,
     predicate: (tile: TileData) => boolean,
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {
@@ -415,7 +489,7 @@ export default class GridData {
    */
   public iterateDirectionAll<T>(
     position: Position,
-    direction: Direction,
+    direction: Direction | Orientation,
     predicate: (tile: TileData) => boolean,
     callback: (tile: TileData, x: number, y: number) => T | undefined
   ): T | undefined {
@@ -493,6 +567,21 @@ export default class GridData {
         row.map(tile => (tile.color === from ? tile.withColor(to) : tile))
       ),
     });
+  }
+
+  /**
+   * Check if the grid has any instructions that require a custom solution.
+   * @returns True if the grid has any instructions that require a custom solution, false otherwise.
+   */
+  public requireSolution(): boolean {
+    if (this.rules.some(rule => rule.validateWithSolution)) return true;
+    if (
+      [...this.symbols.values()].some(list =>
+        list.some(symbol => symbol.validateWithSolution)
+      )
+    )
+      return true;
+    return false;
   }
 
   /**
@@ -656,7 +745,14 @@ export default class GridData {
    * @returns True if the grids are equal, false otherwise.
    */
   public equals(other: GridData): boolean {
-    if (!this.colorEquals(other)) return false;
+    if (this.width !== other.width) return false;
+    if (this.height !== other.height) return false;
+    if (
+      this.tiles.some((row, y) =>
+        row.some((tile, x) => !tile.equals(other.getTile(x, y)))
+      )
+    )
+      return false;
     if (!this.connections.equals(other.connections)) return false;
     if (this.symbols.size !== other.symbols.size) return false;
     for (const [id, symbols] of this.symbols) {
@@ -671,6 +767,47 @@ export default class GridData {
       if (!other.rules.some(r => rule.equals(r))) return false;
     }
     return true;
+  }
+
+  /**
+   * Get the count of tiles that satisfy the given conditions.
+   * @param exists Whether the tile exists or not.
+   * @param fixed Whether the tile is fixed or not. If undefined, the fixed state is ignored.
+   * @param color The color of the tile. If undefined, all colors are included.
+   * @returns The count of tiles that satisfy the given conditions.
+   */
+  public getTileCount(
+    exists: boolean,
+    fixed?: boolean | undefined,
+    color?: Color | undefined
+  ) {
+    let count = 0;
+    this.forEach(tile => {
+      if (tile.exists !== exists) return;
+      if (fixed !== undefined && tile.fixed !== fixed) return;
+      if (color !== undefined && tile.color !== color) return;
+      count++;
+    });
+    return count;
+  }
+
+  /**
+   * Get the count of tiles that satisfy the given conditions for each color.
+   * @param color The color of the tiles.
+   * @returns The count of tiles that satisfy the given conditions for each color.
+   */
+  public getColorCount(color: Color) {
+    let min = 0;
+    let max = this.width * this.height;
+    this.forEach(tile => {
+      if (!tile.exists || (tile.fixed && tile.color !== color)) {
+        max--;
+      }
+      if (tile.exists && tile.fixed && tile.color === color) {
+        min++;
+      }
+    });
+    return { min, max };
   }
 
   /**

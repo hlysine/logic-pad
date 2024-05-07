@@ -25,30 +25,28 @@ const roadmap: RoadmapItem[] = [
     '~Exactly # symbols per ___ region',
     '~All numbers are off by #',
     '~There are # ___ cells in total',
+    '~Myopia',
     '~Custom rule',
     '~Custom symbol',
-    'Mystery puzzle: violate the rules (Hidden)',
-    'Prefilled tiles',
-    '# prefilled tiles are wrong',
+    '~Mystery: alternate solution (Hidden)',
     'Music Grid (as a grid rule)',
   ],
   [
     'Refactors',
-    'Discover rules and symbols with glob import',
-    'Separate data and UI repositories',
-    'Validate grid with web worker',
-    'Use event system for rules and symbols',
+    '~Discover rules and symbols with glob import',
+    '~Separate data and UI repositories',
+    '~Discover code editor enclosure with glob import',
+    '~Use event system for rules and symbols',
   ],
   '~Add win confirmation',
   '~Add undo and restart',
   '~Add flood painting',
-  'Add tile counting by holding Ctrl',
-  'Isolate grids between solve and create modes',
-  'Support mobile input',
-  'Implement symbol stacking',
+  '~Add tile counting by holding Ctrl',
+  '~Isolate grids between solve and create modes',
+  '~Support mobile input',
   '~Use custom theme system',
   '~Implement puzzle serialization',
-  'Enable PWA',
+  '~Enable PWA',
   [
     '~Optimizations',
     '~Optimize merged tiles',
@@ -58,15 +56,21 @@ const roadmap: RoadmapItem[] = [
     '~Memoize components',
   ],
   [
+    'Puzzle solver',
+    '~Update and document solver API',
+    '~Add dropdown to choose solver',
+    'Add a faster solver',
+  ],
+  [
     'Puzzle editor',
     '~Puzzle code editor',
-    'Add color, fix and merge tools',
-    'Add a tool for each symbol type',
-    'Hide tools behind search bar',
+    '~Add color, fix and merge tools',
+    '~Add a tool for each symbol type',
     '~Set up rule configuration UI',
     '~Hide rules behind search bar',
     '~Add puzzle metadata fields',
     '~Add difficulty field',
+    '~Shortcut keys for tools',
   ],
   [
     'Online features',
@@ -103,12 +107,5 @@ function renderItem(item: RoadmapItem) {
 
 // million-ignore
 export default memo(function Roadmap() {
-  return (
-    <ul
-      tabIndex={0}
-      className="dropdown-content menu menu-vertical min-w-[300px] max-h-[calc(100vh-100px)] flex-nowrap bg-base-200 rounded-box overflow-y-auto overflow-x-visible text-base-content z-50"
-    >
-      {roadmap.map(renderItem)}
-    </ul>
-  );
+  return roadmap.map(renderItem);
 });

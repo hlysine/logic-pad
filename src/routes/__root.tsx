@@ -1,70 +1,44 @@
-import Roadmap from '../ui/components/Roadmap';
-import DevPuzzles, { DEV_PUZZLES } from '../ui/DevPuzzles';
-import ModeSwitcher from '../ui/modes/ModeSwitcher';
-import EditContext from '../ui/EditContext';
-import GridContext from '../ui/GridContext';
 import { Outlet, createRootRoute } from '@tanstack/react-router';
-import TanStackDevTools from '../ui/router/TanStackDevTools';
-import { Suspense, lazy, memo } from 'react';
-import { FaGithub } from 'react-icons/fa';
-import AnimationToggle from '../ui/components/AnimationToggle';
-import GridStateContext from '../ui/GridStateContext';
+import ThemeContext from '../ui/ThemeContext';
 import DocumentTitle from '../ui/components/DocumentTitle';
-const ThemeSwitcher = lazy(() => import('../ui/components/ThemeSwitcher'));
+import PWAPrompt from '../ui/components/PWAPrompt';
+import TanStackDevTools from '../ui/router/TanStackDevTools';
+import { memo } from 'react';
+import GridContext from '../ui/GridContext';
+import GridStateContext from '../ui/GridStateContext';
+import EditContext from '../ui/EditContext';
+import DisplayContext from '../ui/DisplayContext';
+import SolverContext from '../ui/SolverContext';
 
 export const Route = createRootRoute({
   component: memo(function Root() {
     return (
-      <EditContext>
-        <GridStateContext>
-          <GridContext>
-            <DocumentTitle>Logic Pad</DocumentTitle>
-            <div className="h-dvh w-dvw overflow-auto bg-neutral">
-              <div className="flex flex-col items-stretch min-h-full w-full">
-                <header className="flex flex-wrap justify-between items-stretch gap-4 px-8 py-2">
-                  <div className="flex flex-wrap grow shrink items-center gap-4">
-                    <h1 className="text-3xl text-neutral-content">Logic Pad</h1>
-                    <ul className="menu menu-horizontal bg-base-200 rounded-box">
-                      <li className="dropdown dropdown-bottom">
-                        <div tabIndex={0} role="button">
-                          Dev Puzzles{' '}
-                          <span className="badge badge-accent">
-                            {DEV_PUZZLES.length}
-                          </span>
-                        </div>
-                        <DevPuzzles />
-                      </li>
-                      <li className="dropdown dropdown-bottom">
-                        <div tabIndex={0} role="button">
-                          Roadmap
-                        </div>
-                        <Roadmap />
-                      </li>
-                    </ul>
+      <ThemeContext>
+        <DisplayContext>
+          <EditContext>
+            <GridStateContext>
+              <GridContext>
+                <SolverContext>
+                  <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral">
+                    <div id="color-ref-error" className="text-error hidden">
+                      {/* For canvas components to retrieve this color */}
+                    </div>
+                    <div id="color-ref-accent" className="text-accent hidden">
+                      {/* For canvas components to retrieve this color */}
+                    </div>
+                    <DocumentTitle>Logic Pad</DocumentTitle>
+                    <PWAPrompt />
+                    <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">
+                      <Outlet />
+                      <TanStackDevTools />
+                    </div>
                   </div>
-                  <ModeSwitcher />
-                  <div className="flex xl:basis-[320px] grow shrink justify-end items-center">
-                    <AnimationToggle />
-                    <Suspense>
-                      <ThemeSwitcher />
-                    </Suspense>
-                    <a
-                      className="btn btn-square"
-                      href="https://github.com/hlysine/logic-pad"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <FaGithub size={24} />
-                    </a>
-                  </div>
-                </header>
-                <Outlet />
-                <TanStackDevTools />
-              </div>
-            </div>
-          </GridContext>
-        </GridStateContext>
-      </EditContext>
+                </SolverContext>
+              </GridContext>
+            </GridStateContext>
+          </EditContext>
+        </DisplayContext>
+      </ThemeContext>
     );
   }),
 });

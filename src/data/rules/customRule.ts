@@ -4,9 +4,7 @@ import { RuleState, State } from '../primitives';
 import Rule, { SearchVariant } from './rule';
 
 export default class CustomRule extends Rule {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
-  );
+  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
 
   public static readonly configs: readonly AnyConfig[] = Object.freeze([
     {
@@ -87,3 +85,5 @@ export default class CustomRule extends Rule {
     return true;
   }
 }
+
+export const instance = new CustomRule('', GridData.create([]));

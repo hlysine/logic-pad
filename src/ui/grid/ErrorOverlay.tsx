@@ -1,10 +1,14 @@
 import { memo, useMemo } from 'react';
 import { Position } from '../../data/primitives';
-import GridOverlay from './GridOverlay';
 import { array } from '../../data/helper';
+import { Line } from 'react-konva';
+import { useTheme } from '../ThemeContext';
+import GridCanvasOverlay from './GridCanvasOverlay';
 
 export interface ErrorOverlayProps {
-  positions: readonly Position[];
+  positions: readonly (readonly Position[])[];
+  width: number;
+  height: number;
 }
 
 function positionsToGrid(positions: readonly Position[]) {
@@ -25,33 +29,91 @@ function positionsToGrid(positions: readonly Position[]) {
   return grid;
 }
 
-export default memo(function ErrorOverlay({ positions }: ErrorOverlayProps) {
-  const grid = useMemo(() => positionsToGrid(positions), [positions]);
-  if (positions.length === 0) return null;
+export default memo(function ErrorOverlay({
+  positions,
+  width,
+  height,
+}: ErrorOverlayProps) {
+  const grid = useMemo(
+    () => positions.map(list => positionsToGrid(list)),
+    [positions]
+  );
+  const { theme } = useTheme();
+
+  const errorColor = useMemo(
+    () =>
+      window.getComputedStyle(document.getElementById('color-ref-error')!)
+        .color,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [theme]
+  );
+
   return (
-    <GridOverlay>
-      {positions.map(({ x, y }) => (
-        <div
-          key={`${x},${y}`}
-          className="absolute bg-transparent pointer-events-none border-error w-[1em] h-[1em]"
-          style={{
-            left: `calc(${x} * 1em)`,
-            top: `calc(${y} * 1em)`,
-            borderTopWidth: grid[y - 1]
-              ? grid[y - 1][x]
-                ? '0'
-                : `0.125em`
-              : `0.125em`,
-            borderRightWidth: grid[y][x + 1] ? '0' : `0.125em`,
-            borderBottomWidth: grid[y + 1]
-              ? grid[y + 1][x]
-                ? '0'
-                : `0.125em`
-              : `0.125em`,
-            borderLeftWidth: grid[y][x - 1] ? '0' : `0.125em`,
-          }}
-        />
-      ))}
-    </GridOverlay>
+    <GridCanvasOverlay width={width} height={height} bleed={5}>
+      {tileSize =>
+        positions.flatMap((list, idx) =>
+          list.flatMap(({ x, y }) =>
+            [
+              grid[idx][y - 1]?.[x] || (
+                <Line
+                  key={`${x},${y}-top`}
+                  points={[
+                    x * tileSize,
+                    y * tileSize,
+                    (x + 1) * tileSize,
+                    y * tileSize,
+                  ]}
+                  stroke={errorColor}
+                  lineCap="round"
+                  strokeWidth={5}
+                />
+              ),
+              grid[idx][y][x + 1] || (
+                <Line
+                  key={`${x},${y}-right`}
+                  points={[
+                    (x + 1) * tileSize,
+                    y * tileSize,
+                    (x + 1) * tileSize,
+                    (y + 1) * tileSize,
+                  ]}
+                  stroke={errorColor}
+                  lineCap="round"
+                  strokeWidth={5}
+                />
+              ),
+              grid[idx][y + 1]?.[x] || (
+                <Line
+                  key={`${x},${y}-bottom`}
+                  points={[
+                    x * tileSize,
+                    (y + 1) * tileSize,
+                    (x + 1) * tileSize,
+                    (y + 1) * tileSize,
+                  ]}
+                  stroke={errorColor}
+                  lineCap="round"
+                  strokeWidth={5}
+                />
+              ),
+              grid[idx][y][x - 1] || (
+                <Line
+                  key={`${x},${y}-left`}
+                  points={[
+                    x * tileSize,
+                    y * tileSize,
+                    x * tileSize,
+                    (y + 1) * tileSize,
+                  ]}
+                  stroke={errorColor}
+                  lineCap="round"
+                  strokeWidth={5}
+                />
+              ),
+            ].filter(Boolean)
+          )
+        )
+      }
+    </GridCanvasOverlay>
   );
 });

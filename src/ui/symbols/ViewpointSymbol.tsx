@@ -42,3 +42,5 @@ export default memo(function ViewpointSymbol({
     </div>
   );
 });
+
+export const id = 'viewpoint';

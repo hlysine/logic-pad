@@ -6,9 +6,7 @@ import type Md from 'react-icons/md';
 export type IconString = keyof typeof Md;
 
 export default class CustomIconSymbol extends CustomSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
-  );
+  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
@@ -28,6 +26,7 @@ export default class CustomIconSymbol extends CustomSymbol {
     {
       type: ConfigType.String,
       default: 'A *custom* text symbol',
+      placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
       configurable: true,
@@ -119,3 +118,11 @@ export default class CustomIconSymbol extends CustomSymbol {
     return this.copyWith({ rotation });
   }
 }
+
+export const instance = new CustomIconSymbol(
+  'A *custom* icon symbol',
+  new GridData(5, 4),
+  0,
+  0,
+  'MdQuestionMark'
+);

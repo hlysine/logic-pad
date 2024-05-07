@@ -185,3 +185,5 @@ export default class SymbolsPerRegionRule extends Rule {
     return count;
   }
 }
+
+export const instance = new SymbolsPerRegionRule(Color.Dark, 1);

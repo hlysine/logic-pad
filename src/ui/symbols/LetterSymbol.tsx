@@ -21,3 +21,5 @@ export default memo(function LetterSymbol({ textClass, symbol }: LetterProps) {
     </div>
   );
 });
+
+export const id = 'letter';

@@ -44,3 +44,5 @@ export default memo(function CustomTextSymbol({
     </div>
   );
 });
+
+export const id = 'custom_text';

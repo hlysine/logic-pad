@@ -5,7 +5,7 @@ import { PuzzleMetadata } from '../data/puzzle';
 import validateGrid from '../data/validate';
 import { useGridState } from './GridStateContext';
 
-interface GridContext {
+export interface GridContext {
   grid: GridData;
   solution: GridData | null;
   metadata: PuzzleMetadata;
@@ -14,13 +14,13 @@ interface GridContext {
   setMetadata: (value: PuzzleMetadata) => void;
 }
 
-const defaultGrid = GridData.create([]);
+export const defaultGrid = new GridData(5, 4);
 const defaultMetadata: PuzzleMetadata = {
   title: '',
   author: '',
   description: '',
   link: '',
-  difficulty: 0,
+  difficulty: 1,
 };
 
 const context = createContext<GridContext>({

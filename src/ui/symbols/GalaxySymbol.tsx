@@ -22,3 +22,5 @@ export default memo(function GalaxySymbol({ textClass }: GalaxyProps) {
     </div>
   );
 });
+
+export const id = 'galaxy';

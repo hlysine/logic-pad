@@ -106,7 +106,7 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
         default: Orientation.Up,
         field: 'orientation',
         description: 'Orientation',
-        configurable: false,
+        configurable: true,
       },
     ]);
   }
@@ -139,3 +139,5 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
     ) as this;
   }
 }
+
+export const instance = new LotusSymbol(0, 0, Orientation.Up);

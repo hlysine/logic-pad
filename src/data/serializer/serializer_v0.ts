@@ -5,10 +5,20 @@ import TileData from '../tile';
 import Symbol from '../symbols/symbol';
 import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
-import { Color, Direction, Orientation } from '../primitives';
+import {
+  Color,
+  DIRECTIONS,
+  Direction,
+  DirectionToggle,
+  ORIENTATIONS,
+  Orientation,
+  OrientationToggle,
+  directionToggle,
+  orientationToggle,
+} from '../primitives';
 import { array, escape, unescape } from '../helper';
-import allRules from '../../allRules';
-import allSymbols from '../../allSymbols';
+import { allRules } from '../rules';
+import { allSymbols } from '../symbols';
 import SerializerBase from './serializerBase';
 import { Puzzle, PuzzleMetadata } from '../puzzle';
 
@@ -18,6 +28,17 @@ const OFFSETS = [
   { x: 1, y: 0 },
   { x: 0, y: 1 },
 ];
+
+const orientationChars = {
+  [Orientation.Up]: 'u',
+  [Orientation.UpRight]: 'x',
+  [Orientation.Right]: 'r',
+  [Orientation.DownRight]: 'z',
+  [Orientation.Down]: 'd',
+  [Orientation.DownLeft]: 'y',
+  [Orientation.Left]: 'l',
+  [Orientation.UpLeft]: 'w',
+};
 
 export default class SerializerV0 extends SerializerBase {
   public readonly version = 0;
@@ -35,6 +56,12 @@ export default class SerializerV0 extends SerializerBase {
 
   public stringifyConfig(instruction: Instruction, config: AnyConfig): string {
     switch (config.type) {
+      case ConfigType.Boolean:
+        return (
+          config.field +
+          '=' +
+          (instruction[config.field as keyof Instruction] ? '1' : '0')
+        );
       case ConfigType.Number:
       case ConfigType.Color:
       case ConfigType.Direction:
@@ -44,7 +71,36 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           String(instruction[config.field as keyof Instruction])
         );
-
+      case ConfigType.DirectionToggle:
+        return (
+          config.field +
+          '=' +
+          DIRECTIONS.filter(
+            dir =>
+              (
+                instruction[
+                  config.field as keyof Instruction
+                ] as unknown as DirectionToggle
+              )[dir]
+          )
+            .map(x => orientationChars[x])
+            .join('')
+        );
+      case ConfigType.OrientationToggle:
+        return (
+          config.field +
+          '=' +
+          ORIENTATIONS.filter(
+            dir =>
+              (
+                instruction[
+                  config.field as keyof Instruction
+                ] as unknown as OrientationToggle
+              )[dir]
+          )
+            .map(x => orientationChars[x])
+            .join('')
+        );
       case ConfigType.String:
       case ConfigType.Icon:
         return (
@@ -52,6 +108,8 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           escape(String(instruction[config.field as keyof Instruction]))
         );
+      case ConfigType.Tile:
+      case ConfigType.Solution:
       case ConfigType.Grid:
         return (
           config.field +
@@ -75,20 +133,37 @@ export default class SerializerV0 extends SerializerBase {
     const config = configs.find(x => x.field === key);
     if (!config) throw new Error(`Unknown config: ${key}`);
     switch (config.type) {
+      case ConfigType.Boolean:
+        return [config.field, value === '1'];
       case ConfigType.Number:
         return [config.field, Number(value)];
       case ConfigType.Color:
         return [config.field, value as Color];
       case ConfigType.Direction:
         return [config.field, value as Direction];
+      case ConfigType.DirectionToggle: {
+        const toggle = directionToggle();
+        for (const dir of DIRECTIONS) {
+          toggle[dir] = value.includes(orientationChars[dir]);
+        }
+        return [config.field, toggle];
+      }
       case ConfigType.Orientation:
         return [config.field, value as Orientation];
+      case ConfigType.OrientationToggle: {
+        const toggle = orientationToggle();
+        for (const dir of ORIENTATIONS) {
+          toggle[dir] = value.includes(orientationChars[dir]);
+        }
+        return [config.field, toggle];
+      }
       case ConfigType.String:
       case ConfigType.Icon:
         return [config.field, unescape(value)];
-      case ConfigType.Grid: {
+      case ConfigType.Tile:
+      case ConfigType.Solution:
+      case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
-      }
     }
   }
 
@@ -107,7 +182,7 @@ export default class SerializerV0 extends SerializerBase {
   public parseRule(str: string): Rule {
     const [id, ...entries] = str.split(',');
     const instruction = allRules.get(id);
-    if (!instruction) throw new Error(`Unknown symbol: ${id}`);
+    if (!instruction) throw new Error(`Unknown rule: ${id}`);
     const configs = instruction.configs;
     if (configs == null) return instruction.copyWith({});
     return instruction.copyWith(
@@ -123,9 +198,9 @@ export default class SerializerV0 extends SerializerBase {
     const [id, ...entries] = str.split(',');
     const instruction = allSymbols.get(id);
     if (!instruction) throw new Error(`Unknown symbol: ${id}`);
-    const configs = instruction.prototype.configs;
-    if (configs == null) return instruction.prototype.copyWith({});
-    return instruction.prototype.copyWith(
+    const configs = instruction.configs;
+    if (configs == null) return instruction.copyWith({});
+    return instruction.copyWith(
       Object.fromEntries(entries.map(entry => this.parseConfig(configs, entry)))
     );
   }

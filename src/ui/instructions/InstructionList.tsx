@@ -1,14 +1,12 @@
-import { InstructionProps } from './Instruction';
 import { State } from '../../data/primitives';
 import { memo, useMemo } from 'react';
 import { useGrid } from '../GridContext';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import MultiEntrySymbol from '../../data/symbols/multiEntrySymbol';
 import { useGridState } from '../GridStateContext';
-
-export interface InstructionListProps {
-  children: React.NamedExoticComponent<InstructionProps>;
-}
+import Instruction from './Instruction';
+import EditTarget from './EditTarget';
+import { cn } from '../../utils';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -18,11 +16,20 @@ function Title({ children }: { children: React.ReactNode }) {
   );
 }
 
+export interface InstructionListProps {
+  editable?: boolean;
+}
+
 export default memo(function InstructionList({
-  children: Instruction,
+  editable,
 }: InstructionListProps) {
+  editable = editable ?? false;
   const { grid, solution } = useGrid();
   const { state } = useGridState();
+  const filteredRules = useMemo(() => {
+    if (editable) return grid.rules;
+    return grid.rules.filter(rule => rule.visibleWhenSolving);
+  }, [grid.rules, editable]);
   const hasSymbols = useMemo(() => {
     if (grid.symbols.size === 0) return false;
     for (const [_, value] of grid.symbols) {
@@ -90,15 +97,18 @@ export default memo(function InstructionList({
     [grid, solution, state]
   );
   return (
-    <div className="flex flex-col items-end w-[320px] self-stretch">
-      <div className="flex flex-col flex-1 items-end justify-center">
-        {grid.rules.length > 0 && <Title>Rules</Title>}
-        {grid.rules.map((rule, i) => (
+    <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto">
+      <div className="flex flex-col shrink-0 items-end justify-start">
+        {filteredRules.length > 0 && <Title>Rules</Title>}
+        {filteredRules.map((rule, i) => (
           <Instruction
-            key={rule.id + i}
+            key={rule.id + i.toString()}
             instruction={rule}
             state={state?.rules[i]?.state}
-          />
+            className={cn(rule.visibleWhenSolving || 'opacity-60')}
+          >
+            {editable && <EditTarget instruction={rule} />}
+          </Instruction>
         ))}
         {hasSymbols && <Title>Symbols</Title>}
         {[...symbolMergeMap.entries()].flatMap(([key, value]) =>
@@ -106,7 +116,7 @@ export default memo(function InstructionList({
             (group, i) =>
               grid.symbols.get(key)![group[0]].explanation.length > 0 && (
                 <Instruction
-                  key={key + group[0]}
+                  key={key + group[0].toString()}
                   instruction={grid.symbols.get(key)![group[0]]}
                   state={symbolStateMap.get(key)?.[i]}
                 />

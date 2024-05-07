@@ -6,9 +6,10 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './ui/router/routeTree.gen';
 import NotFound from './ui/router/NotFound';
+import { themeKey } from './ui/ThemeContext';
 
 // load the selected theme early to avoid flicker
-const savedTheme = localStorage.getItem('theme') ?? 'dracula';
+const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
 document.documentElement.dataset.theme = savedTheme;
 
 const router = createRouter({

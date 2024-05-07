@@ -3,9 +3,7 @@ import GridData from '../grid';
 import CustomSymbol from './customSymbol';
 
 export default class CustomTextSymbol extends CustomSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww'])
-  );
+  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
@@ -25,6 +23,7 @@ export default class CustomTextSymbol extends CustomSymbol {
     {
       type: ConfigType.String,
       default: 'A *custom* text symbol',
+      placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
       configurable: true,
@@ -39,6 +38,7 @@ export default class CustomTextSymbol extends CustomSymbol {
     {
       type: ConfigType.String,
       default: 'X',
+      placeholder: 'Short text to be displayed on the symbol',
       field: 'text',
       description: 'Text',
       configurable: true,
@@ -116,3 +116,11 @@ export default class CustomTextSymbol extends CustomSymbol {
     return this.copyWith({ rotation });
   }
 }
+
+export const instance = new CustomTextSymbol(
+  'A *custom* text symbol',
+  new GridData(5, 4),
+  0,
+  0,
+  'X'
+);

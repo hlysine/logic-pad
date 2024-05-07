@@ -48,3 +48,5 @@ export default class CompletePatternRule extends Rule {
     return true;
   }
 }
+
+export const instance = new CompletePatternRule();

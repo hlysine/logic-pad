@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 import { ConfigType, SolutionConfig } from '../../../data/config';
 import Instruction from '../../../data/instruction';
 import { Color } from '../../../data/primitives';
@@ -19,12 +19,17 @@ export default memo(function SolutionConfig({
   setConfig,
 }: SolutionConfigProps) {
   const { grid: baseGrid } = useGrid();
+  const solution = instruction[
+    config.field as keyof typeof instruction
+  ] as unknown as GridData;
   const grid = useMemo(() => {
-    const solution = instruction[
-      config.field as keyof typeof instruction
-    ] as unknown as GridData;
     return MysteryRule.cleanSolution(solution, baseGrid);
-  }, [baseGrid, config.field, instruction]);
+  }, [baseGrid, solution]);
+  useEffect(() => {
+    if (!grid.equals(solution)) {
+      setConfig?.(config.field, grid);
+    }
+  }, [baseGrid, config.field, grid, setConfig, solution]);
   return (
     <div className="flex p-2 justify-between items-center">
       <span className="flex-1">{config.description}</span>

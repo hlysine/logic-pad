@@ -16,10 +16,12 @@ export default class UndercluedSolver extends Solver {
       const solved = await new Promise<GridData | null>(resolve => {
         worker.addEventListener('message', e => {
           const solution = Serializer.parseGrid(e.data as string);
+          console.timeEnd('Solve time');
           if (solution.resetTiles().equals(solution)) resolve(null);
           else resolve(solution);
         });
         worker.postMessage(Serializer.stringifyGrid(grid));
+        console.time('Solve time');
       });
       yield solved;
     } finally {

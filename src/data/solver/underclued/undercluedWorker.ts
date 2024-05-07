@@ -98,7 +98,7 @@ function computeSolution(initialGrid: GridData): GridData {
         )
         .join('\n')
     );
-    if (anyNewGrid === null) {
+    if (!anyNewGrid) {
       break;
     }
     const newLastValidGrid = currentGrid.tiles

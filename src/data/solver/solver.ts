@@ -1,4 +1,6 @@
 import GridData from '../grid';
+import { allRules } from '../rules';
+import { allSymbols } from '../symbols';
 
 /**
  * Base class that all solvers must extend.
@@ -48,7 +50,17 @@ export default abstract class Solver {
    *
    * @param instructionId The unique identifier of the instruction.
    */
-  public abstract isInstructionSupported(instructionId: string): boolean;
+  public isInstructionSupported(instructionId: string): boolean {
+    const symbol = allSymbols.get(instructionId);
+    if (symbol) {
+      return !symbol.validateWithSolution;
+    }
+    const rule = allRules.get(instructionId);
+    if (rule) {
+      return !rule.validateWithSolution;
+    }
+    return false;
+  }
 
   /**
    * Check if the solver supports the given grid. This methid is frequently called when the user changes the grid, and

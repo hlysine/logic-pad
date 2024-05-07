@@ -1320,7 +1320,7 @@ declare global {
      *
      * @param instructionId The unique identifier of the instruction.
      */
-    abstract isInstructionSupported(instructionId: string): boolean;
+    isInstructionSupported(instructionId: string): boolean;
     /**
      * Check if the solver supports the given grid. This methid is frequently called when the user changes the grid, and
      * the result is used to enable or disable the "Solve" button.
@@ -1334,13 +1334,14 @@ declare global {
     isGridSupported(grid: GridData): boolean;
   }
 
-  export abstract class SolverBase {
-    abstract get id(): string;
-    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
-    isEnvironmentSupported(): Promise<boolean>;
-    abstract isInstructionSupported(instructionId: string): boolean;
-    isGridSupported(grid: GridData): boolean;
+  export class UndercluedSolver extends Solver {
+    readonly id = 'underclued';
+    solve(grid: GridData): AsyncGenerator<GridData | null>;
+    isInstructionSupported(instructionId: string): boolean;
   }
+
+  const Worker: new (options?: { name?: string }) => Worker;
+  export const Worker;
 
   export class AreaNumberModule extends Z3Module {
     readonly id: string;

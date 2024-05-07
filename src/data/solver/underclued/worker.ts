@@ -157,3 +157,7 @@ onmessage = e => {
     Serializer.stringifyPuzzle({ ...metadata, grid: solved, solution: solved })
   );
 };
+
+// make typescript happy
+declare const Worker: new (options?: { name?: string }) => Worker;
+export default Worker;

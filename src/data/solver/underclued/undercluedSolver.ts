@@ -1,4 +1,5 @@
 import GridData from '../../grid';
+import { instance as undercluedInstance } from '../../rules/undercluedRule';
 import { Serializer } from '../../serializer/allSerializers';
 import Solver from '../solver';
 import Worker from './worker?worker';
@@ -32,7 +33,10 @@ export default class UndercluedSolver extends Solver {
     }
   }
 
-  public isInstructionSupported(_instructionId: string): boolean {
-    return true;
+  public isInstructionSupported(instructionId: string): boolean {
+    if (super.isInstructionSupported(instructionId)) {
+      return true;
+    }
+    return instructionId === undercluedInstance.id;
   }
 }

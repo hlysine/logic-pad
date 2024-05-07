@@ -3,8 +3,8 @@ import Solver from '../solver';
 import Worker from './backtrackWorker?worker';
 import { Serializer } from '../../serializer/allSerializers';
 
-export default class BacktrackSolver extends Solver {
-  public readonly id = 'backtrack';
+export default class BacktrackNaiveSolver extends Solver {
+  public readonly id = 'backtrack naive';
 
   public readonly description =
     'Solves puzzles using backtracking. Support all rules and symbols except for underclued.';

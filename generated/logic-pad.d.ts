@@ -13,6 +13,7 @@ declare global {
   import type Md from 'react-icons/md';
 
   export enum ConfigType {
+    Boolean = 'boolean',
     Number = 'number',
     String = 'string',
     Color = 'color',
@@ -21,6 +22,7 @@ declare global {
     Orientation = 'orientation',
     OrientationToggle = 'orientationToggle',
     Tile = 'tile',
+    Solution = 'solution',
     Grid = 'grid',
     Icon = 'icon',
   }
@@ -30,6 +32,9 @@ declare global {
     readonly description: string;
     readonly default: T;
     readonly configurable: boolean;
+  }
+  export interface BooleanConfig extends Config<boolean> {
+    readonly type: ConfigType.Boolean;
   }
   export interface NumberConfig extends Config<number> {
     readonly type: ConfigType.Number;
@@ -61,6 +66,9 @@ declare global {
     readonly type: ConfigType.Tile;
     readonly resizable: boolean;
   }
+  export interface SolutionConfig extends Config<GridData> {
+    readonly type: ConfigType.Solution;
+  }
   export interface GridConfig extends Config<GridData> {
     readonly type: ConfigType.Grid;
   }
@@ -68,6 +76,7 @@ declare global {
     readonly type: ConfigType.Icon;
   }
   export type AnyConfig =
+    | BooleanConfig
     | NumberConfig
     | StringConfig
     | ColorConfig
@@ -76,6 +85,7 @@ declare global {
     | OrientationConfig
     | OrientationToggleConfig
     | TileConfig
+    | SolutionConfig
     | GridConfig
     | IconConfig;
   /**
@@ -94,6 +104,24 @@ declare global {
 
   export function isEventHandler<T>(val: unknown, event: string): val is T;
 
+  export interface FinalValidationHandler {
+    /**
+     * Edits the final grid state after all rules and symbols have been validated.
+     *
+     * @param grid The grid that is being validated.
+     * @param solution The solution grid, or null if the solution is not available.
+     * @param state The current state of the grid.
+     */
+    onFinalValidation(
+      grid: GridData,
+      solution: GridData | null,
+      state: GridState
+    ): GridState;
+  }
+  export function handlesFinalValidation<T extends Instruction>(
+    val: T
+  ): val is T & FinalValidationHandler;
+
   export interface SymbolValidationHandler {
     /**
      * Overrides the validation of symbols.
@@ -105,13 +133,13 @@ declare global {
      * @param validator - The original validation logic for the symbol.
      * @returns The state of the symbol after validation.
      */
-    overrideSymbolValidation(
+    onSymbolValidation(
       grid: GridData,
       symbol: Symbol,
       validator: (grid: GridData) => State
     ): State | undefined;
   }
-  export function handlesSymbolValidation<T>(
+  export function handlesSymbolValidation<T extends Rule>(
     val: T
   ): val is T & SymbolValidationHandler;
 
@@ -784,21 +812,21 @@ declare global {
     z.ZodTypeAny,
     {
       link: string;
+      solution: GridData | null;
       grid: GridData;
       description: string;
       title: string;
       author: string;
       difficulty: number;
-      solution: GridData | null;
     },
     {
       link: string;
+      solution: GridData | null;
       grid: GridData;
       description: string;
       title: string;
       author: string;
       difficulty: number;
-      solution: GridData | null;
     }
   >;
   export type Puzzle = PuzzleMetadata & {
@@ -923,6 +951,37 @@ declare global {
   const allRules: Map<string, Rule>;
   export { allRules };
 
+  export class MysteryRule extends Rule implements FinalValidationHandler {
+    readonly solution: GridData;
+    readonly visible: boolean;
+    /**
+     * **Mystery: alternate solution**
+     */
+    constructor(solution: GridData, visible: boolean);
+    get id(): string;
+    get explanation(): string;
+    get visibleWhenSolving(): boolean;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    onFinalValidation(
+      grid: GridData,
+      _solution: GridData | null,
+      state: GridState
+    ): GridState;
+    copyWith({
+      solution,
+      visible,
+    }: {
+      solution?: GridData;
+      visible?: boolean;
+    }): this;
+    withSolution(solution: GridData): this;
+    withVisible(visible: boolean): this;
+    static cleanSolution(solution: GridData, baseGrid?: GridData): GridData;
+  }
+
   export class OffByXRule extends Rule implements SymbolValidationHandler {
     readonly number: number;
     /**
@@ -937,7 +996,7 @@ declare global {
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(_grid: GridData): RuleState;
-    overrideSymbolValidation(
+    onSymbolValidation(
       grid: GridData,
       symbol: Symbol,
       _validator: (grid: GridData) => State
@@ -998,6 +1057,7 @@ declare global {
     ): string | null;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
+    get visibleWhenSolving(): boolean;
   }
 
   export class SameShapeRule extends RegionShapeRule {
@@ -1214,15 +1274,65 @@ declare global {
   export function getShapeVariants(shape: Shape): Shape[];
   export function normalizeShape(shape: Shape): Shape;
 
-  class MasterSolver extends SolverBase {
-    readonly id = 'solver';
+  const allSolvers: Map<string, Solver>;
+  export { allSolvers };
+
+  /**
+   * Base class that all solvers must extend.
+   */
+  export abstract class Solver {
+    /**
+     * The unique identifier of the solver.
+     *
+     * This is also displayed to the user when selecting a solver.
+     */
+    abstract get id(): string;
+    /**
+     * Solve the given grid. The implementation should delegate long-running tasks to a worker thread and yield solutions
+     * asynchronously.
+     *
+     * The solver must yield at least once, otherwise the UI will not update.
+     *
+     * If the solver finds no solution other than those already yielded, it should yield `null`. Yielding `null` on the
+     * first iteration indicates that the grid is unsolvable. Yielding `null` on the second iteration indicates that the
+     * solution is unique.
+     *
+     * In the current UI implementation, the solver will be terminated after yielding `null`, or after 2 iterations if
+     * `null` is never yielded. The solver should perform any necessary cleanup in the `finally` block of the generator.
+     *
+     * @param grid The grid to solve. The provided grid is guaranteed to be supported by the solver. Some tiles in the
+     * grid may already be filled by the user. It is up to the solver to decide whether to respect these tiles or not.
+     */
+    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
+    /**
+     * Check if the solver supports the current browser environment. This method is called once when the user first clicks
+     * the "Solve" button, and the result is cached for the duration of the editor session.
+     *
+     * The `solve` method will not be called if this method returns `false`, and a message will be displayed to the user
+     * indicating that the solver is not supported.
+     *
+     * @returns A promise that resolves to `true` if the environment is supported, or `false` otherwise.
+     */
     isEnvironmentSupported(): Promise<boolean>;
-    solve(grid: GridData): AsyncGenerator<GridData | null>;
-    isInstructionSupported(instructionId: string): boolean;
+    /**
+     * Check if the solver supports the given instruction. This is used to render a small indication in the UI for each
+     * instruction in the editor.
+     *
+     * @param instructionId The unique identifier of the instruction.
+     */
+    abstract isInstructionSupported(instructionId: string): boolean;
+    /**
+     * Check if the solver supports the given grid. This methid is frequently called when the user changes the grid, and
+     * the result is used to enable or disable the "Solve" button.
+     *
+     * The `solve` method will not be called if this method returns `false`, and a message will be displayed to the user
+     * indicating that the grid is not supported by this solver.
+     *
+     * @param grid The grid to check.
+     * @returns `true` if the grid is supported, or `false` otherwise.
+     */
     isGridSupported(grid: GridData): boolean;
   }
-  const Solver: MasterSolver;
-  export { Solver };
 
   export abstract class SolverBase {
     abstract get id(): string;
@@ -1311,7 +1421,7 @@ declare global {
     direction: Orientation | Direction
   ): import('grilops').Direction;
 
-  export class Z3Solver extends SolverBase {
+  export class Z3Solver extends Solver {
     readonly id = 'z3';
     isEnvironmentSupported(): Promise<boolean>;
     solve(grid: GridData): AsyncGenerator<GridData | null>;
@@ -5183,6 +5293,11 @@ declare global {
     rules: RuleState[],
     symbols: Map<string, State[]>
   ): State;
+  export function applyFinalOverrides(
+    grid: GridData,
+    solution: GridData | null,
+    state: GridState
+  ): GridState;
   export function validateGrid(
     grid: GridData,
     solution: GridData | null

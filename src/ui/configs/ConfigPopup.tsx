@@ -7,7 +7,7 @@ import Symbol from '../../data/symbols/symbol';
 import { useToolbox } from '../ToolboxContext';
 import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../utils';
-import { Solver } from '../../data/solver/allSolvers';
+import { useSolver } from '../SolverContext';
 
 const gap = 8;
 
@@ -65,6 +65,7 @@ export default memo(function ConfigPopup() {
   const { location, ref, setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
   const { presets, setPresets } = useToolbox();
+  const { solver } = useSolver();
 
   const instruction = location ? getInstruction(grid, location) : undefined;
 
@@ -156,7 +157,7 @@ export default memo(function ConfigPopup() {
       <div className="flex gap-2 self-stretch justify-between px-2">
         <SupportLevel
           validate={!instruction.validateWithSolution}
-          solve={Solver.isInstructionSupported(instruction.id)}
+          solve={solver.isInstructionSupported(instruction.id)}
         />
         <div className="flex-1" />
         {instruction instanceof Symbol && (

@@ -7,14 +7,14 @@ import {
   getRectangleLattice,
 } from 'grilops';
 import GridData from '../../grid';
-import SolverBase from '../solverBase';
+import Solver from '../solver';
 import { allZ3Modules } from './modules';
 import { Color } from '../../primitives';
 import { Model, init } from 'z3-solver';
 import Z3SolverContext from './z3SolverContext';
 import { array } from '../../helper';
 
-export default class Z3Solver extends SolverBase {
+export default class Z3Solver extends Solver {
   public readonly id = 'z3';
 
   public async isEnvironmentSupported(): Promise<boolean> {

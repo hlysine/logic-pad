@@ -34,7 +34,10 @@ import {
 } from '../src/data/shapes';
 import TileData from '../src/data/tile';
 import TileConnections from '../src/data/tileConnections';
-import validateGrid, { aggregateState } from '../src/data/validate';
+import validateGrid, {
+  aggregateState,
+  applyFinalOverrides,
+} from '../src/data/validate';
 import AreaNumberSymbol from '../src/data/symbols/areaNumberSymbol';
 import CustomIconSymbol from '../src/data/symbols/customIconSymbol';
 import CustomSymbol from '../src/data/symbols/customSymbol';
@@ -50,8 +53,8 @@ import MyopiaSymbol from '../src/data/symbols/myopiaSymbol';
 import NumberSymbol from '../src/data/symbols/numberSymbol';
 import Symbol from '../src/data/symbols/symbol';
 import ViewpointSymbol from '../src/data/symbols/viewpointSymbol';
-import { Solver } from '../src/data/solver/allSolvers';
-import SolverBase from '../src/data/solver/solverBase';
+import { allSolvers } from '../src/data/solver/allSolvers';
+import Solver from '../src/data/solver/solver';
 import { convertDirection } from '../src/data/solver/z3/utils';
 import Z3Solver from '../src/data/solver/z3/z3Solver';
 import Z3SolverContext from '../src/data/solver/z3/z3SolverContext';
@@ -79,6 +82,7 @@ import CompletePatternRule from '../src/data/rules/completePatternRule';
 import ConnectAllRule from '../src/data/rules/connectAllRule';
 import CustomRule from '../src/data/rules/customRule';
 import { allRules } from '../src/data/rules/index';
+import MysteryRule from '../src/data/rules/mysteryRule';
 import OffByXRule from '../src/data/rules/offByXRule';
 import RegionAreaRule from '../src/data/rules/regionAreaRule';
 import RegionShapeRule from '../src/data/rules/regionShapeRule';
@@ -88,6 +92,7 @@ import SymbolsPerRegionRule from '../src/data/rules/symbolsPerRegionRule';
 import UndercluedRule from '../src/data/rules/undercluedRule';
 import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
 import { isEventHandler } from '../src/data/events/helper';
+import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
 import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
@@ -125,6 +130,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'TileConnections', value: TileConnections },
   { name: 'validateGrid', value: validateGrid },
   { name: 'aggregateState', value: aggregateState },
+  { name: 'applyFinalOverrides', value: applyFinalOverrides },
   { name: 'AreaNumberSymbol', value: AreaNumberSymbol },
   { name: 'CustomIconSymbol', value: CustomIconSymbol },
   { name: 'CustomSymbol', value: CustomSymbol },
@@ -140,8 +146,8 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'NumberSymbol', value: NumberSymbol },
   { name: 'Symbol', value: Symbol },
   { name: 'ViewpointSymbol', value: ViewpointSymbol },
+  { name: 'allSolvers', value: allSolvers },
   { name: 'Solver', value: Solver },
-  { name: 'SolverBase', value: SolverBase },
   { name: 'convertDirection', value: convertDirection },
   { name: 'Z3Solver', value: Z3Solver },
   { name: 'Z3SolverContext', value: Z3SolverContext },
@@ -169,6 +175,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConnectAllRule', value: ConnectAllRule },
   { name: 'CustomRule', value: CustomRule },
   { name: 'allRules', value: allRules },
+  { name: 'MysteryRule', value: MysteryRule },
   { name: 'OffByXRule', value: OffByXRule },
   { name: 'RegionAreaRule', value: RegionAreaRule },
   { name: 'RegionShapeRule', value: RegionShapeRule },
@@ -178,6 +185,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'UndercluedRule', value: UndercluedRule },
   { name: 'UniqueShapeRule', value: UniqueShapeRule },
   { name: 'isEventHandler', value: isEventHandler },
+  { name: 'handlesFinalValidation', value: handlesFinalValidation },
   { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];
 

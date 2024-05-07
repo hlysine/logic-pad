@@ -8,12 +8,13 @@ import { BiSolidFlagCheckered } from 'react-icons/bi';
 import { BsCreditCard2Front, BsPatchCheckFill } from 'react-icons/bs';
 import { FaCircleHalfStroke } from 'react-icons/fa6';
 import { MetadataSchema } from '../../data/puzzle';
-import { Solver } from '../../data/solver/allSolvers';
 import { RiRobot2Fill } from 'react-icons/ri';
 import GridData from '../../data/grid';
 import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
 import { cn } from '../../utils';
+import { useSolver } from '../SolverContext';
+import { allSolvers } from '../../data/solver/allSolvers';
 
 function ChecklistItem({
   icon: Icon,
@@ -46,6 +47,7 @@ export default memo(function PuzzleChecklist() {
   const { features } = useEmbed();
   const { grid, metadata, setGrid } = useGrid();
   const { state } = useGridState();
+  const { solver, setSolver } = useSolver();
 
   const [environmentCheck, setEnvironmentCheck] = useState<boolean | undefined>(
     undefined
@@ -69,6 +71,10 @@ export default memo(function PuzzleChecklist() {
     }
   }, [grid, solution, alternate]);
 
+  useEffect(() => {
+    setEnvironmentCheck(undefined);
+  }, [solver]);
+
   const metadataValid = useMemo(
     () => MetadataSchema.safeParse(metadata).success,
     [metadata]
@@ -88,7 +94,10 @@ export default memo(function PuzzleChecklist() {
 
   const solutionIsValid = state.final !== State.Error;
 
-  const autoSolvable = useMemo(() => Solver.isGridSupported(grid), [grid]);
+  const autoSolvable = useMemo(
+    () => solver.isGridSupported(grid),
+    [solver, grid]
+  );
 
   const checklistComplete =
     metadataValid &&
@@ -282,43 +291,57 @@ export default memo(function PuzzleChecklist() {
                       : 'This may take a while. Editing the puzzle will cancel the operation'
                   }
                 >
-                  <button
-                    className={cn(
-                      'btn btn-outline btn-info btn-sm w-full',
-                      environmentCheck === false && 'btn-error'
-                    )}
-                    onClick={async () => {
-                      let support = environmentCheck;
-                      if (support === undefined) {
-                        support = await Solver.isEnvironmentSupported();
-                        setEnvironmentCheck(support);
-                      }
-                      if (!support) return;
-                      const requestId = ++solverRequest.current;
-                      setPending(true);
-                      setSolution(null);
-                      setAlternate(null);
-                      try {
-                        let isAlternate = false;
-                        for await (const solution of Solver.solve(grid)) {
-                          if (!isAlternate) {
-                            if (requestId !== solverRequest.current) break;
-                            setSolution({ grid, value: solution });
-                            isAlternate = true;
-                          } else {
-                            if (requestId !== solverRequest.current) break;
-                            setAlternate({ grid, value: solution });
-                            break;
-                          }
+                  <div className="flex gap-2 items-center">
+                    <span className="shrink-0">Solver:</span>
+                    <select
+                      className="select select-bordered select-sm w-full max-w-xs"
+                      value={solver.id}
+                      onChange={e => setSolver(allSolvers.get(e.target.value)!)}
+                    >
+                      {[...allSolvers.keys()].map(id => (
+                        <option key={id} value={id}>
+                          {id}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      className={cn(
+                        'btn btn-outline btn-info btn-sm',
+                        environmentCheck === false && 'btn-error'
+                      )}
+                      onClick={async () => {
+                        let support = environmentCheck;
+                        if (support === undefined) {
+                          support = await solver.isEnvironmentSupported();
+                          setEnvironmentCheck(support);
                         }
-                      } finally {
-                        setPending(false);
-                      }
-                    }}
-                    disabled={environmentCheck === false}
-                  >
-                    Solve
-                  </button>
+                        if (!support) return;
+                        const requestId = ++solverRequest.current;
+                        setPending(true);
+                        setSolution(null);
+                        setAlternate(null);
+                        try {
+                          let isAlternate = false;
+                          for await (const solution of solver.solve(grid)) {
+                            if (!isAlternate) {
+                              if (requestId !== solverRequest.current) break;
+                              setSolution({ grid, value: solution });
+                              isAlternate = true;
+                            } else {
+                              if (requestId !== solverRequest.current) break;
+                              setAlternate({ grid, value: solution });
+                              break;
+                            }
+                          }
+                        } finally {
+                          setPending(false);
+                        }
+                      }}
+                      disabled={environmentCheck === false || !autoSolvable}
+                    >
+                      Solve
+                    </button>
+                  </div>
                 </div>
               </>
             )}

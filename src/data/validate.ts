@@ -1,3 +1,4 @@
+import { handlesFinalValidation } from './events/onFinalValidation';
 import { handlesSymbolValidation } from './events/onSymbolValidation';
 import GridData from './grid';
 import { Color, GridState, RuleState, State } from './primitives';
@@ -21,6 +22,26 @@ export function aggregateState(
   if (rules.length === 0 && symbols.size === 0) return State.Incomplete;
 
   return State.Satisfied;
+}
+
+export function applyFinalOverrides(
+  grid: GridData,
+  solution: GridData | null,
+  state: GridState
+) {
+  grid.symbols.forEach(list => {
+    list.forEach(sym => {
+      if (handlesFinalValidation(sym)) {
+        state = sym.onFinalValidation(grid, solution, state);
+      }
+    });
+  });
+  grid.rules.forEach(rule => {
+    if (handlesFinalValidation(rule)) {
+      state = rule.onFinalValidation(grid, solution, state);
+    }
+  });
+  return state;
 }
 
 export default function validateGrid(
@@ -49,7 +70,7 @@ export default function validateGrid(
       const newValidator = (grid: GridData) =>
         applySymbolOverrides(grid, rest, symbol, () => validator(grid));
       if (!handlesSymbolValidation(rule)) return newValidator(grid);
-      const result = rule.overrideSymbolValidation(grid, symbol, newValidator);
+      const result = rule.onSymbolValidation(grid, symbol, newValidator);
       if (result === undefined) {
         return newValidator(grid);
       }
@@ -101,7 +122,11 @@ export default function validateGrid(
     solution.width !== grid.width ||
     solution.height !== grid.height
   ) {
-    return { final, rules: ruleStates, symbols: symbolStates };
+    return applyFinalOverrides(grid, solution, {
+      final,
+      rules: ruleStates,
+      symbols: symbolStates,
+    });
   }
 
   // validate against the solution
@@ -111,11 +136,11 @@ export default function validateGrid(
         grid.getTile(x, y).exists &&
         grid.getTile(x, y).color !== solution.getTile(x, y).color
       ) {
-        return {
+        return applyFinalOverrides(grid, solution, {
           final: State.Incomplete,
           rules: ruleStates,
           symbols: symbolStates,
-        };
+        });
       }
     }
   }
@@ -135,5 +160,11 @@ export default function validateGrid(
       }
     });
   });
-  return { final: State.Satisfied, rules: ruleStates, symbols: symbolStates };
+
+  const finalState: GridState = {
+    final: State.Satisfied,
+    rules: ruleStates,
+    symbols: symbolStates,
+  };
+  return applyFinalOverrides(grid, solution, finalState);
 }

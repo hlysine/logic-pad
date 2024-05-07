@@ -98,7 +98,7 @@ export default class OffByXRule
     return { state: State.Incomplete };
   }
 
-  public overrideSymbolValidation(
+  public onSymbolValidation(
     grid: GridData,
     symbol: Symbol,
     _validator: (grid: GridData) => State

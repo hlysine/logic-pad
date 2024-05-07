@@ -1,5 +1,6 @@
 import GridData from '../grid';
 import { State } from '../primitives';
+import Rule from '../rules/rule';
 import Symbol from '../symbols/symbol';
 import { isEventHandler } from './helper';
 
@@ -14,15 +15,15 @@ export interface SymbolValidationHandler {
    * @param validator - The original validation logic for the symbol.
    * @returns The state of the symbol after validation.
    */
-  overrideSymbolValidation(
+  onSymbolValidation(
     grid: GridData,
     symbol: Symbol,
     validator: (grid: GridData) => State
   ): State | undefined;
 }
 
-export function handlesSymbolValidation<T>(
+export function handlesSymbolValidation<T extends Rule>(
   val: T
 ): val is T & SymbolValidationHandler {
-  return isEventHandler(val, 'overrideSymbolValidation');
+  return isEventHandler(val, 'onSymbolValidation');
 }

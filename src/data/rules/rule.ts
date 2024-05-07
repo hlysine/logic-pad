@@ -26,6 +26,10 @@ export default abstract class Rule extends Instruction {
       rule: this,
     };
   }
+
+  public get visibleWhenSolving(): boolean {
+    return true;
+  }
 }
 
 export const instance = undefined;

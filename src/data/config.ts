@@ -10,6 +10,7 @@ import {
 } from './primitives';
 
 export enum ConfigType {
+  Boolean = 'boolean',
   Number = 'number',
   String = 'string',
   Color = 'color',
@@ -18,6 +19,7 @@ export enum ConfigType {
   Orientation = 'orientation',
   OrientationToggle = 'orientationToggle',
   Tile = 'tile',
+  Solution = 'solution',
   Grid = 'grid',
   Icon = 'icon',
 }
@@ -28,6 +30,10 @@ export interface Config<T> {
   readonly description: string;
   readonly default: T;
   readonly configurable: boolean;
+}
+
+export interface BooleanConfig extends Config<boolean> {
+  readonly type: ConfigType.Boolean;
 }
 
 export interface NumberConfig extends Config<number> {
@@ -68,6 +74,10 @@ export interface TileConfig extends Config<GridData> {
   readonly resizable: boolean;
 }
 
+export interface SolutionConfig extends Config<GridData> {
+  readonly type: ConfigType.Solution;
+}
+
 export interface GridConfig extends Config<GridData> {
   readonly type: ConfigType.Grid;
 }
@@ -77,6 +87,7 @@ export interface IconConfig extends Config<string> {
 }
 
 export type AnyConfig =
+  | BooleanConfig
   | NumberConfig
   | StringConfig
   | ColorConfig
@@ -85,6 +96,7 @@ export type AnyConfig =
   | OrientationConfig
   | OrientationToggleConfig
   | TileConfig
+  | SolutionConfig
   | GridConfig
   | IconConfig;
 
@@ -101,7 +113,11 @@ export function configEquals<C extends AnyConfig>(
   a: C['default'],
   b: C['default']
 ): boolean {
-  if (type === ConfigType.Tile || type === ConfigType.Grid) {
+  if (
+    type === ConfigType.Tile ||
+    type === ConfigType.Grid ||
+    type === ConfigType.Solution
+  ) {
     return (a as GridData).equals(b as GridData);
   }
   if (type === ConfigType.DirectionToggle) {

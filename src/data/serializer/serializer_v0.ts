@@ -56,6 +56,12 @@ export default class SerializerV0 extends SerializerBase {
 
   public stringifyConfig(instruction: Instruction, config: AnyConfig): string {
     switch (config.type) {
+      case ConfigType.Boolean:
+        return (
+          config.field +
+          '=' +
+          (instruction[config.field as keyof Instruction] ? '1' : '0')
+        );
       case ConfigType.Number:
       case ConfigType.Color:
       case ConfigType.Direction:
@@ -103,6 +109,7 @@ export default class SerializerV0 extends SerializerBase {
           escape(String(instruction[config.field as keyof Instruction]))
         );
       case ConfigType.Tile:
+      case ConfigType.Solution:
       case ConfigType.Grid:
         return (
           config.field +
@@ -126,6 +133,8 @@ export default class SerializerV0 extends SerializerBase {
     const config = configs.find(x => x.field === key);
     if (!config) throw new Error(`Unknown config: ${key}`);
     switch (config.type) {
+      case ConfigType.Boolean:
+        return [config.field, value === '1'];
       case ConfigType.Number:
         return [config.field, Number(value)];
       case ConfigType.Color:
@@ -152,6 +161,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Icon:
         return [config.field, unescape(value)];
       case ConfigType.Tile:
+      case ConfigType.Solution:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
     }

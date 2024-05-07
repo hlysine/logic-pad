@@ -35,9 +35,12 @@ export default class BanPatternRule extends Rule {
    */
   public constructor(pattern: GridData) {
     super();
-    this.pattern = pattern.withTiles(tiles =>
-      tiles.map(row => row.map(t => t.withFixed(false)))
-    );
+    this.pattern = pattern
+      // unlock all tiles
+      .withTiles(tiles => tiles.map(row => row.map(t => t.withFixed(false))))
+      // strip all symbols and rules
+      .withRules([])
+      .withSymbols(new Map());
     this.cache = getShapeVariants(tilesToShape(this.pattern.tiles));
   }
 

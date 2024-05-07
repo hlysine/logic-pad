@@ -25,6 +25,10 @@ export default memo(function InstructionList({
   editable = editable ?? false;
   const { grid, solution } = useGrid();
   const { state } = useGridState();
+  const filteredRules = useMemo(() => {
+    if (editable) return grid.rules;
+    return grid.rules.filter(rule => rule.visibleWhenSolving);
+  }, [grid.rules, editable]);
   const hasSymbols = useMemo(() => {
     if (grid.symbols.size === 0) return false;
     for (const [_, value] of grid.symbols) {
@@ -94,8 +98,8 @@ export default memo(function InstructionList({
   return (
     <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto">
       <div className="flex flex-col shrink-0 items-end justify-start">
-        {grid.rules.length > 0 && <Title>Rules</Title>}
-        {grid.rules.map((rule, i) => (
+        {filteredRules.length > 0 && <Title>Rules</Title>}
+        {filteredRules.map((rule, i) => (
           <Instruction
             key={rule.id + i.toString()}
             instruction={rule}

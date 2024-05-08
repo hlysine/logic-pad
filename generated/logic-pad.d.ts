@@ -122,6 +122,13 @@ declare global {
     val: T
   ): val is T & FinalValidationHandler;
 
+  export interface GridChangeHandler {
+    onGridChange(newGrid: GridData): this;
+  }
+  export function handlesGridChange<T extends Instruction>(
+    val: T
+  ): val is T & GridChangeHandler;
+
   export interface SymbolValidationHandler {
     /**
      * Overrides the validation of symbols.
@@ -1279,18 +1286,17 @@ declare global {
   const allSolvers: Map<string, Solver>;
   export { allSolvers };
 
+  export const Worker;
+
   export class BacktrackSolver extends Solver {
     readonly id = 'backtrack';
     readonly description =
-      'Solves puzzles using backtracking relatively faster. Support all rules and symbols except for underclued.';
+      'Solves puzzles using backtracking. Support all rules and symbols except for underclued.';
     solve(grid: GridData): AsyncGenerator<GridData | null>;
-    isValid(grid: GridData): boolean;
-    nextCell(grid: GridData): {
-      x: number;
-      y: number;
-    } | null;
-    backtrack(grid: GridData): GridData | null;
   }
+
+  const _default: null;
+  export const _default;
 
   /**
    * Base class that all solvers must extend.
@@ -1368,6 +1374,9 @@ declare global {
     solve(grid: GridData): AsyncGenerator<GridData | null>;
     isInstructionSupported(instructionId: string): boolean;
   }
+
+  const Worker: new (options?: { name?: string }) => Worker;
+  export const Worker;
 
   const Worker: new (options?: { name?: string }) => Worker;
   export const Worker;

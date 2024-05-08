@@ -71,6 +71,7 @@ import Z3Module from '../src/data/solver/z3/modules/z3Module';
 import UndercluedSolver from '../src/data/solver/underclued/undercluedSolver';
 import Worker from '../src/data/solver/underclued/worker';
 import BacktrackSolver from '../src/data/solver/backtrack/backtrackSolver';
+import '../src/data/solver/backtrack/worker';
 import { Serializer } from '../src/data/serializer/allSerializers';
 import SerializerBase from '../src/data/serializer/serializerBase';
 import SerializerV0 from '../src/data/serializer/serializer_v0';

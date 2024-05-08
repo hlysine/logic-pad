@@ -33,10 +33,14 @@ function getValidGrid(
       tile.withColor(Color.Dark)
     );
     assumptions.push(newAssump);
-    for (const a of grid.connections.getConnectedTiles({ x:coords[0], y:coords[1] })) {
-      canAssump[coordsToPos([a.x, a.y], grid.width)] = a.x === coords[0] && a.y === coords[1];
+    for (const a of grid.connections.getConnectedTiles({
+      x: coords[0],
+      y: coords[1],
+    })) {
+      canAssump[coordsToPos([a.x, a.y], grid.width)] =
+        a.x === coords[0] && a.y === coords[1];
     }
-      const state = validateGrid(grid, null);
+    const state = validateGrid(grid, null);
     // If the grid is invalid, try to backtrack to a right assumption
     if (state.final === State.Error) {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define

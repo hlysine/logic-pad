@@ -125,13 +125,6 @@ declare global {
     val: T
   ): val is T & GridChangeHandler;
 
-  export interface SetGridHandler {
-    onSetGrid(oldGrid: GridData, newGrid: GridData): GridData;
-  }
-  export function handlesSetGrid<T extends Instruction>(
-    val: T
-  ): val is T & SetGridHandler;
-
   export interface SymbolValidationHandler {
     /**
      * Overrides the validation of symbols.
@@ -960,58 +953,6 @@ declare global {
 
   const allRules: Map<string, Rule>;
   export { allRules };
-
-  export interface Row {
-    readonly note: string | undefined;
-    readonly velocity: number | undefined;
-  }
-  export class ControlLine {
-    readonly column: number;
-    readonly bpm: number | undefined;
-    readonly pedal: boolean | undefined;
-    readonly rows: readonly Row[];
-    constructor(
-      column: number,
-      bpm: number | undefined,
-      pedal: boolean | undefined,
-      rows: readonly Row[]
-    );
-    copyWith({
-      column,
-      bpm,
-      pedal,
-      rows,
-    }: {
-      column?: number;
-      bpm?: number | undefined;
-      pedal?: boolean | undefined;
-      rows?: readonly Row[];
-    }): this;
-    withColumn(column: number): this;
-    withBpm(bpm: number | undefined): this;
-    withPedal(pedal: boolean | undefined): this;
-    withRows(rows: readonly Row[]): this;
-    equals(other: ControlLine): boolean;
-  }
-  export class MusicGridRule
-    extends Rule
-    implements GridChangeHandler, SetGridHandler
-  {
-    readonly controlLines: readonly ControlLine[];
-    /**
-     * **Music Grid: Listen and deduce**
-     */
-    constructor(controlLines: readonly ControlLine[]);
-    get id(): string;
-    get explanation(): string;
-    createExampleGrid(): GridData;
-    get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
-    onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData;
-    onGridChange(newGrid: GridData): this;
-    copyWith({ controlLines }: { controlLines?: readonly ControlLine[] }): this;
-    get validateWithSolution(): boolean;
-  }
 
   export class MysteryRule
     extends Rule

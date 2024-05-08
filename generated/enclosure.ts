@@ -95,6 +95,7 @@ import UndercluedRule from '../src/data/rules/undercluedRule';
 import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
 import { isEventHandler } from '../src/data/events/helper';
 import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
+import { handlesGridChange } from '../src/data/events/onGridChange';
 import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
@@ -190,6 +191,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'UniqueShapeRule', value: UniqueShapeRule },
   { name: 'isEventHandler', value: isEventHandler },
   { name: 'handlesFinalValidation', value: handlesFinalValidation },
+  { name: 'handlesGridChange', value: handlesGridChange },
   { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];
 

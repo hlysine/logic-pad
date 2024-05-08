@@ -1,7 +1,6 @@
 import { State } from '../../data/primitives';
 import { memo, useMemo } from 'react';
 import { useGrid } from '../GridContext';
-import { HiOutlineLightBulb } from 'react-icons/hi';
 import MultiEntrySymbol from '../../data/symbols/multiEntrySymbol';
 import { useGridState } from '../GridStateContext';
 import Instruction from './Instruction';
@@ -24,7 +23,7 @@ export default memo(function InstructionList({
   editable,
 }: InstructionListProps) {
   editable = editable ?? false;
-  const { grid, solution } = useGrid();
+  const { grid } = useGrid();
   const { state } = useGridState();
   const filteredRules = useMemo(() => {
     if (editable) return grid.rules;
@@ -88,14 +87,6 @@ export default memo(function InstructionList({
     }
     return map;
   }, [symbolMergeMap, state]);
-  const statusText = useMemo(
-    () =>
-      grid.rules
-        .map(rule => rule.statusText(grid, solution, state))
-        .filter(Boolean)
-        .join('\n'),
-    [grid, solution, state]
-  );
   return (
     <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto">
       <div className="flex flex-col shrink-0 items-end justify-start">
@@ -124,16 +115,6 @@ export default memo(function InstructionList({
           )
         )}
       </div>
-      {statusText.trim().length > 0 && (
-        <div className="card grow-0 shrink-0 card-side bg-base-100 shadow-md m-4 ml-0 pl-4 self-stretch">
-          <figure className="shrink-0 p-2">
-            <HiOutlineLightBulb size={24} />
-          </figure>
-          <div className="card-body p-4">
-            <p>{statusText}</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 });

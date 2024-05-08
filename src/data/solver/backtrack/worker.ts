@@ -343,58 +343,13 @@ function backtrack(grid: BTGridData, adjacencies: Adjacency[]): boolean {
   return false;
 }
 
-// export function solveUnderclued(grid: GridData): GridData | null {
-//   let output = grid;
-//   let count = 0;
-
-//   const result = grid.forEach((tile, x, y) => {
-//     if (!tile.exists || tile.color !== Color.Gray) return;
-
-//     console.log(`Trying (${x}, ${y})`);
-
-//     let darkPossible: boolean;
-//     let lightPossible: boolean;
-
-//     {
-//       const newGrid = grid.setTile(x, y, tile.withColor(Color.Dark));
-
-//       const solution = solveAdvanced(newGrid);
-//       count++;
-
-//       darkPossible = solution !== null;
-//     }
-
-//     {
-//       const newGrid = grid.setTile(x, y, tile.withColor(Color.Light));
-
-//       const solution = solveAdvanced(newGrid);
-//       count++;
-
-//       lightPossible = solution !== null;
-//     }
-
-//     // WTF No solution
-//     if (!darkPossible && !lightPossible) return null;
-
-//     if (darkPossible && !lightPossible)
-//       output = output.setTile(x, y, tile.withColor(Color.Dark));
-//     if (!darkPossible && lightPossible)
-//       output = output.setTile(x, y, tile.withColor(Color.Light));
-//   });
-
-//   console.log(`Solve count: ${count}`);
-
-//   if (result === null) return null;
-//   else return output;
-// }
-
 interface PossibleState {
   dark: boolean;
   light: boolean;
 }
 
-export function solveUnderclued(grid: GridData): GridData | null {
-  let output = grid;
+export function solveUnderclued(input: GridData): GridData | null {
+  let grid = input;
   let count = 0;
 
   const possibles: PossibleState[][] = array(grid.width, grid.height, () => ({
@@ -402,73 +357,52 @@ export function solveUnderclued(grid: GridData): GridData | null {
     light: false,
   }));
 
-  const result = grid.forEach((tile, x, y) => {
-    if (!tile.exists || tile.color !== Color.Gray) return;
+  function search(x: number, y: number, tile: TileData, color: Color): boolean {
+    const newGrid = grid.setTile(x, y, tile.withColor(color));
 
-    console.log(`Trying (${x}, ${y})`);
+    // Solve
+    const solution = solveAdvanced(newGrid);
+    count++;
 
-    let darkPossible: boolean;
-    let lightPossible: boolean;
-
-    if (possibles[y][x].dark) {
-      // We skip this solve if it is proved to be solvable
-      darkPossible = true;
-    } else {
-      const newGrid = grid.setTile(x, y, tile.withColor(Color.Dark));
-
-      // Solve
-      const solution = solveAdvanced(newGrid);
-      count++;
-
-      // Update the new possible states
-      if (solution) {
-        solution.forEach((solTile, solX, solY) => {
-          if (solTile.color === Color.Dark) {
-            possibles[solY][solX].dark = true;
-          } else {
-            possibles[solY][solX].light = true;
-          }
-        });
-      }
-
-      darkPossible = solution !== null;
+    // Update the new possible states
+    if (solution) {
+      solution.forEach((solTile, solX, solY) => {
+        if (solTile.color === Color.Dark) {
+          possibles[solY][solX].dark = true;
+        } else {
+          possibles[solY][solX].light = true;
+        }
+      });
     }
 
-    if (possibles[y][x].light) {
-      // We skip this solve if it is proved to be solvable
-      lightPossible = true;
-    } else {
-      const newGrid = grid.setTile(x, y, tile.withColor(Color.Light));
+    return solution !== null;
+  }
 
-      // Solve
-      const solution = solveAdvanced(newGrid);
-      count++;
+  for (let y = 0; y < grid.height; y++) {
+    for (let x = 0; x < grid.width; x++) {
+      const tile = grid.getTile(x, y);
 
-      // Update the new possible states
-      if (solution) {
-        solution.forEach((solTile, solX, solY) => {
-          if (solTile.color === Color.Dark) {
-            possibles[solY][solX].dark = true;
-          } else {
-            possibles[solY][solX].light = true;
-          }
-        });
-      }
+      if (!tile.exists || tile.color !== Color.Gray) continue;
 
-      lightPossible = solution !== null;
+      console.log(`Trying (${x}, ${y})`);
+
+      // We can skip this solve if it is proved to be solvable
+      const darkPossible =
+        possibles[y][x].dark || search(x, y, tile, Color.Dark);
+      const lightPossible =
+        possibles[y][x].light || search(x, y, tile, Color.Light);
+
+      // No solution
+      if (!darkPossible && !lightPossible) return null;
+
+      if (darkPossible && !lightPossible)
+        grid = grid.setTile(x, y, tile.withColor(Color.Dark));
+      if (!darkPossible && lightPossible)
+        grid = grid.setTile(x, y, tile.withColor(Color.Light));
     }
-
-    // WTF No solution
-    if (!darkPossible && !lightPossible) return null;
-
-    if (darkPossible && !lightPossible)
-      output = output.setTile(x, y, tile.withColor(Color.Dark));
-    if (!darkPossible && lightPossible)
-      output = output.setTile(x, y, tile.withColor(Color.Light));
-  });
+  }
 
   console.log(`Solve count: ${count}`);
 
-  if (result === null) return null;
-  else return output;
+  return grid;
 }

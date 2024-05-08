@@ -4,7 +4,8 @@ import { Color, State, Position } from '../../primitives';
 import TileData from '../../tile';
 import validateGrid from '../../validate';
 import Instruction from '../../instruction';
-import { solveAdvanced } from './worker';
+import { solveAdvanced, solveUnderclued } from './worker';
+import { instance as undercluedInstance } from '../../rules/undercluedRule';
 
 export default class BacktrackAdvancedSolver extends Solver {
   public readonly id = 'backtrack advanced';
@@ -17,13 +18,24 @@ export default class BacktrackAdvancedSolver extends Solver {
 
     console.time('Solve time');
 
-    const res = solveAdvanced(grid);
+    let res: GridData | null;
+    if (grid.findRule(rule => rule.id == undercluedInstance.id)) {
+      res = solveUnderclued(grid);
+    } else {
+      res = solveAdvanced(grid);
+    }
 
     console.timeEnd('Solve time');
 
     console.log(res);
 
     yield res;
+  }
+
+  public isInstructionSupported(instructionId: string): boolean {
+    if (instructionId == undercluedInstance.id) return true;
+
+    return super.isInstructionSupported(instructionId);
   }
 
   // Internal functions

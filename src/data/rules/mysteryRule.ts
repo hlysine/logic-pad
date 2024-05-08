@@ -1,5 +1,6 @@
 import { AnyConfig, ConfigType } from '../config';
 import { FinalValidationHandler } from '../events/onFinalValidation';
+import { GridChangeHandler } from '../events/onGridChange';
 import GridData from '../grid';
 import { array } from '../helper';
 import { Color, GridState, RuleState, State } from '../primitives';
@@ -9,7 +10,7 @@ import Rule, { SearchVariant } from './rule';
 
 export default class MysteryRule
   extends Rule
-  implements FinalValidationHandler
+  implements FinalValidationHandler, GridChangeHandler
 {
   private static readonly EXAMPLE_GRID = Object.freeze(
     new GridData(1, 1)
@@ -19,8 +20,9 @@ export default class MysteryRule
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
-      type: ConfigType.Solution,
+      type: ConfigType.Tile,
       default: MysteryRule.EXAMPLE_GRID,
+      resizable: false,
       field: 'solution',
       description: 'Solution',
       configurable: true,
@@ -92,6 +94,32 @@ export default class MysteryRule
         rules: state.rules,
       };
     return state;
+  }
+
+  public onGridChange(newGrid: GridData): this {
+    if (
+      newGrid.width === this.solution.width &&
+      newGrid.height === this.solution.height
+    ) {
+      if (
+        !newGrid.tiles.some((row, y) =>
+          row.some((tile, x) => {
+            const solutionTile = this.solution.getTile(x, y);
+            if (solutionTile.exists !== tile.exists) return true;
+            if (solutionTile.fixed !== tile.fixed) return true;
+            if (
+              solutionTile.exists &&
+              solutionTile.fixed &&
+              solutionTile.color !== tile.color
+            )
+              return true;
+            return false;
+          })
+        )
+      )
+        return this;
+    }
+    return this.withSolution(MysteryRule.cleanSolution(this.solution, newGrid));
   }
 
   public copyWith({

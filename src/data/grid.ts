@@ -1,3 +1,4 @@
+import { handlesGridChange } from './events/onGridChange';
 import GridConnections from './gridConnections';
 import { array, move } from './helper';
 import { Color, Direction, Orientation, Position } from './primitives';
@@ -39,8 +40,24 @@ export default class GridData {
     this.height = height;
     this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
-    this.symbols = symbols ? GridData.deduplicateSymbols(symbols) : new Map();
-    this.rules = rules ?? []; // do not deduplicate rules because it makes for bad editor experience
+    const newSymbols = symbols
+      ? GridData.deduplicateSymbols(symbols)
+      : new Map<string, Symbol[]>();
+    const newRules = rules ? rules.slice() : []; // do not deduplicate rules because it makes for bad editor experience
+    this.symbols = newSymbols;
+    this.rules = newRules;
+    newSymbols.forEach(list => {
+      list.forEach((sym, i) => {
+        if (handlesGridChange(sym)) {
+          list[i] = sym.onGridChange(this);
+        }
+      });
+    });
+    newRules.forEach((rule, i) => {
+      if (handlesGridChange(rule)) {
+        newRules[i] = rule.onGridChange(this);
+      }
+    });
   }
 
   /**
@@ -816,7 +833,7 @@ export default class GridData {
    * @param rules The list of rules to deduplicate.
    * @returns The deduplicated list of rules.
    */
-  public static deduplicateRules(rules: readonly Rule[]): readonly Rule[] {
+  public static deduplicateRules(rules: readonly Rule[]): Rule[] {
     return rules.filter(
       (rule, index, self) => self.findIndex(r => r.equals(rule)) === index
     );
@@ -830,7 +847,7 @@ export default class GridData {
    */
   public static deduplicateSymbols(
     symbols: ReadonlyMap<string, readonly Symbol[]>
-  ): ReadonlyMap<string, readonly Symbol[]> {
+  ): Map<string, Symbol[]> {
     const map = new Map<string, Symbol[]>();
     for (const [id, symbolList] of symbols) {
       map.set(

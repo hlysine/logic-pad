@@ -57,7 +57,7 @@ export default class MysteryRule
   }
 
   public get explanation(): string {
-    return `*Mystery*: alternate solution`;
+    return `*Mystery:* Alternate solution`;
   }
 
   public get visibleWhenSolving(): boolean {

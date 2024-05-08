@@ -4,6 +4,7 @@ import { useEdit } from './EditContext';
 import { PuzzleMetadata } from '../data/puzzle';
 import validateGrid from '../data/validate';
 import { useGridState } from './GridStateContext';
+import { handlesSetGrid } from '../data/events/onSetGrid';
 
 export interface GridContext {
   grid: GridData;
@@ -50,10 +51,22 @@ export default memo(function GridContext({
   const [solution, setSolution] = useState<GridData | null>(null);
   const [metadata, setMetadata] = useState<PuzzleMetadata>(defaultMetadata);
 
-  const setGridRaw: GridContext['setGridRaw'] = (grid, sol) => {
-    setGrid(grid);
+  const setGridRaw: GridContext['setGridRaw'] = (newGrid, sol) => {
+    newGrid.symbols.forEach(list => {
+      list.forEach(symbol => {
+        if (handlesSetGrid(symbol)) {
+          newGrid = symbol.onSetGrid(grid, newGrid);
+        }
+      });
+    });
+    newGrid.rules.forEach(rule => {
+      if (handlesSetGrid(rule)) {
+        newGrid = rule.onSetGrid(grid, newGrid);
+      }
+    });
+    setGrid(newGrid);
     if (sol !== undefined) setSolution(sol);
-    setState(validateGrid(grid, sol === undefined ? solution : sol));
+    setState(validateGrid(newGrid, sol === undefined ? solution : sol));
   };
 
   return (

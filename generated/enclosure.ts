@@ -10,6 +10,7 @@ import {
   minBy,
   move,
   orientationToRotation,
+  resize,
   unescape,
 } from '../src/data/helper';
 import Instruction from '../src/data/instruction';
@@ -84,6 +85,7 @@ import CompletePatternRule from '../src/data/rules/completePatternRule';
 import ConnectAllRule from '../src/data/rules/connectAllRule';
 import CustomRule from '../src/data/rules/customRule';
 import { allRules } from '../src/data/rules/index';
+import MusicGridRule, { ControlLine } from '../src/data/rules/musicGridRule';
 import MysteryRule from '../src/data/rules/mysteryRule';
 import OffByXRule from '../src/data/rules/offByXRule';
 import RegionAreaRule from '../src/data/rules/regionAreaRule';
@@ -96,6 +98,7 @@ import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
 import { isEventHandler } from '../src/data/events/helper';
 import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
 import { handlesGridChange } from '../src/data/events/onGridChange';
+import { handlesSetGrid } from '../src/data/events/onSetGrid';
 import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
@@ -111,6 +114,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'minBy', value: minBy },
   { name: 'move', value: move },
   { name: 'orientationToRotation', value: orientationToRotation },
+  { name: 'resize', value: resize },
   { name: 'unescape', value: unescape },
   { name: 'Instruction', value: Instruction },
   { name: 'Color', value: Color },
@@ -180,6 +184,8 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConnectAllRule', value: ConnectAllRule },
   { name: 'CustomRule', value: CustomRule },
   { name: 'allRules', value: allRules },
+  { name: 'MusicGridRule', value: MusicGridRule },
+  { name: 'ControlLine', value: ControlLine },
   { name: 'MysteryRule', value: MysteryRule },
   { name: 'OffByXRule', value: OffByXRule },
   { name: 'RegionAreaRule', value: RegionAreaRule },
@@ -192,6 +198,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'isEventHandler', value: isEventHandler },
   { name: 'handlesFinalValidation', value: handlesFinalValidation },
   { name: 'handlesGridChange', value: handlesGridChange },
+  { name: 'handlesSetGrid', value: handlesSetGrid },
   { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];
 

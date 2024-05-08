@@ -112,12 +112,13 @@ export default memo(function SourceCodeEditor({
         const puzzle: Puzzle = PuzzleSchema.parse(
           evaluate(`"use strict";${value}`)
         );
-        const compressed = await Compressor.compress(
-          Serializer.stringifyPuzzle(puzzle)
-        );
-        const decompressed = await Compressor.decompress(compressed);
-        const { grid, solution, ...metadata } =
-          Serializer.parsePuzzle(decompressed);
+        // TODO: DEBUG bypass
+        // const compressed = await Compressor.compress(
+        //   Serializer.stringifyPuzzle(puzzle)
+        // );
+        // const decompressed = await Compressor.decompress(compressed);
+        const { grid, solution, ...metadata } = puzzle;
+        // Serializer.parsePuzzle(decompressed);
         setMetadata(metadata);
         if (solution) {
           const tiles = array(grid.width, grid.height, (x, y) => {

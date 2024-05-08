@@ -98,6 +98,39 @@ export function array<T>(
 }
 
 /**
+ * Resize the given array to the new size, cutting off or padding with the default value.
+ * @param array The array to resize.
+ * @param newSize The new size of the array.
+ * @param defaultValue A function that returns the default value for each new element.
+ * @returns The resized array.
+ */
+export function resize<T>(
+  array: T[],
+  newSize: number,
+  defaultValue: () => T
+): T[];
+export function resize<T>(
+  array: readonly T[],
+  newSize: number,
+  defaultValue: () => T
+): readonly T[];
+export function resize<T>(
+  array: readonly T[],
+  newSize: number,
+  defaultValue: () => T
+): readonly T[] {
+  if (array.length < newSize) {
+    return [
+      ...array,
+      ...Array.from({ length: newSize - array.length }, defaultValue),
+    ];
+  } else if (array.length > newSize) {
+    return array.slice(0, newSize);
+  }
+  return array;
+}
+
+/**
  * Check if all the given values are equal.
  * @param values The values to compare.
  * @returns Whether all the values are equal.

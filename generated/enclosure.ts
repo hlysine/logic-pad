@@ -69,9 +69,7 @@ import RegionAreaModule from '../src/data/solver/z3/modules/regionAreaModule';
 import ViewpointModule from '../src/data/solver/z3/modules/viewpointModule';
 import Z3Module from '../src/data/solver/z3/modules/z3Module';
 import UndercluedSolver from '../src/data/solver/underclued/undercluedSolver';
-import Worker from '../src/data/solver/underclued/undercluedWorker';
 import BacktrackSolver from '../src/data/solver/backtrack/backtrackSolver';
-import '../src/data/solver/backtrack/worker';
 import { Serializer } from '../src/data/serializer/allSerializers';
 import SerializerBase from '../src/data/serializer/serializerBase';
 import SerializerV0 from '../src/data/serializer/serializer_v0';
@@ -167,7 +165,6 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'ViewpointModule', value: ViewpointModule },
   { name: 'Z3Module', value: Z3Module },
   { name: 'UndercluedSolver', value: UndercluedSolver },
-  { name: 'Worker', value: Worker },
   { name: 'BacktrackSolver', value: BacktrackSolver },
   { name: 'Serializer', value: Serializer },
   { name: 'SerializerBase', value: SerializerBase },

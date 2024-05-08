@@ -1,6 +1,6 @@
 import GridData from '../../grid';
 import Solver from '../solver';
-import Worker from './worker?worker';
+import Worker from './backtrackWorker?worker';
 import { Serializer } from '../../serializer/allSerializers';
 
 export default class BacktrackSolver extends Solver {
@@ -14,7 +14,7 @@ export default class BacktrackSolver extends Solver {
 
     try {
       const solutions = await new Promise<GridData[]>(resolve => {
-        worker.addEventListener('message', e => {
+        worker.addEventListener('message', (e: MessageEvent<string[]>) => {
           resolve(e.data.map((grid: string) => Serializer.parseGrid(grid)));
         });
 

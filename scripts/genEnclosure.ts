@@ -64,11 +64,13 @@ const project = new Project({
 const sourceFile = project.createSourceFile(`../generated/enclosure.ts`);
 
 sourceFile.addImportDeclarations(
-  modules.map(module => ({
-    moduleSpecifier: module.path,
-    namedImports: module.namedExports,
-    defaultImport: module.defaultExport ?? undefined,
-  }))
+  modules
+    .filter(module => !!module.defaultExport || module.namedExports.length > 0)
+    .map(module => ({
+      moduleSpecifier: module.path,
+      namedImports: module.namedExports,
+      defaultImport: module.defaultExport ?? undefined,
+    }))
 );
 
 sourceFile.addVariableStatement({

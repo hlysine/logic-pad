@@ -6,7 +6,7 @@ import validateGrid from '../../validate';
 
 // Check if the grid is valid
 function isValid(grid: GridData): boolean {
-  return validateGrid(grid, null).final != State.Error;
+  return validateGrid(grid, null).final !== State.Error;
 }
 
 // Chooses the next empty cell to search
@@ -14,7 +14,7 @@ function nextCell(grid: GridData): { x: number; y: number } | null {
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
       const tile = grid.getTile(x, y);
-      if (tile.exists && tile.color == Color.Gray) return { x, y };
+      if (tile.exists && tile.color === Color.Gray) return { x, y };
     }
   }
   return null;
@@ -25,7 +25,7 @@ function backtrack(grid: GridData, solutions: GridData[]): boolean {
   if (!isValid(grid)) return false;
 
   // Find the first empty cell
-  let pos = nextCell(grid);
+  const pos = nextCell(grid);
   if (!pos) {
     // Solution found
     solutions.push(grid);
@@ -71,4 +71,5 @@ onmessage = e => {
 };
 
 // make typescript happy
+// eslint-disable-next-line import/no-anonymous-default-export
 export default null;

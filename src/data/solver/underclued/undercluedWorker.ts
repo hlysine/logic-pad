@@ -161,5 +161,5 @@ onmessage = e => {
 };
 
 // make typescript happy
-declare const Worker: new (options?: { name?: string }) => Worker;
-export default Worker;
+// eslint-disable-next-line import/no-anonymous-default-export
+export default null;

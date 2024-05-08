@@ -442,15 +442,14 @@ export default class GridData {
     if (!tile.exists || !predicate(tile)) {
       return;
     }
-    const visited = new Set<string>();
+    const visited = array(this.width, this.height, () => false);
     const stack = [position];
     while (stack.length > 0) {
       const { x, y } = stack.pop()!;
-      const key = `${x},${y}`;
-      if (visited.has(key)) {
+      if (visited[y][x]) {
         continue;
       }
-      visited.add(key);
+      visited[y][x] = true;
       const ret = callback(this.getTile(x, y), x, y);
       if (ret !== undefined) return ret;
       for (const offset of NEIGHBOR_OFFSETS) {

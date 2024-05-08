@@ -8,6 +8,7 @@ import {
   Orientation,
   OrientationToggle,
 } from './primitives';
+import { ControlLine } from './rules/musicControlLine';
 
 export enum ConfigType {
   Boolean = 'boolean',
@@ -19,9 +20,9 @@ export enum ConfigType {
   Orientation = 'orientation',
   OrientationToggle = 'orientationToggle',
   Tile = 'tile',
-  Solution = 'solution',
   Grid = 'grid',
   Icon = 'icon',
+  ControlLines = 'controlLines',
 }
 
 export interface Config<T> {
@@ -82,6 +83,10 @@ export interface IconConfig extends Config<string> {
   readonly type: ConfigType.Icon;
 }
 
+export interface ControlLinesConfig extends Config<ControlLine[]> {
+  readonly type: ConfigType.ControlLines;
+}
+
 export type AnyConfig =
   | BooleanConfig
   | NumberConfig
@@ -93,7 +98,8 @@ export type AnyConfig =
   | OrientationToggleConfig
   | TileConfig
   | GridConfig
-  | IconConfig;
+  | IconConfig
+  | ControlLinesConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.
@@ -108,6 +114,12 @@ export function configEquals<C extends AnyConfig>(
   a: C['default'],
   b: C['default']
 ): boolean {
+  if (type === ConfigType.ControlLines) {
+    const aLines = a as ControlLine[];
+    const bLines = b as ControlLine[];
+    if (aLines.length !== bLines.length) return false;
+    return aLines.every((line, i) => line.equals(bLines[i]));
+  }
   if (type === ConfigType.Tile || type === ConfigType.Grid) {
     return (a as GridData).equals(b as GridData);
   }

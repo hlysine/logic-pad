@@ -15,10 +15,17 @@ import { array } from '../../../data/helper';
 
 export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;
 
+type EventData =
+  | { type: 'pedal'; value: boolean }
+  | { type: 'keydown'; value: string; velocity: number }
+  | { type: 'keyup'; value: string }
+  | { type: 'bpm'; value: number };
+
 const piano = new Piano({
   release: false,
   pedal: true,
   velocities: 5,
+  maxPolyphony: 64,
 });
 
 function encodePlayback(grid: GridData, musicGrid: MusicGridRule): () => void {
@@ -31,21 +38,24 @@ function encodePlayback(grid: GridData, musicGrid: MusicGridRule): () => void {
     note: undefined,
     velocity: undefined,
   }));
-  const events: ({ time: Tone.Unit.Time } & (
-    | { type: 'pedal'; value: boolean }
-    | { type: 'keydown'; value: string; velocity: number }
-    | { type: 'keyup'; value: string }
-    | { type: 'bpm'; value: number }
-  ))[] = [];
+  const events = new Map<Tone.Unit.Time, EventData[]>();
+  const addEvent = (time: Tone.Unit.Time, event: EventData) => {
+    const existing = events.get(time);
+    if (existing) {
+      existing.push(event);
+    } else {
+      events.set(time, [event]);
+    }
+  };
   for (let x = 0; x < grid.width; x++) {
     const line = musicGrid.controlLines.find(line => line.column === x);
     if (line) {
       if (line.bpm !== undefined && line.bpm !== bpm) {
-        events.push({ time: `${x}n`, type: 'bpm', value: line.bpm });
+        addEvent(`${x / 2}`, { type: 'bpm', value: line.bpm });
         bpm = line.bpm;
       }
       if (line.pedal !== undefined && line.pedal !== pedal) {
-        events.push({ time: `${x}n`, type: 'pedal', value: line.pedal });
+        addEvent(`${x / 2}`, { type: 'pedal', value: line.pedal });
         pedal = line.pedal;
       }
       line.rows.forEach((row, j) => {
@@ -66,8 +76,7 @@ function encodePlayback(grid: GridData, musicGrid: MusicGridRule): () => void {
         tile.color === Color.Dark &&
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        events.push({
-          time: `${x}n`,
+        addEvent(`${x / 2}`, {
           type: 'keydown',
           value: row.note,
           velocity: row.velocity,
@@ -83,36 +92,46 @@ function encodePlayback(grid: GridData, musicGrid: MusicGridRule): () => void {
         ) {
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
-        events.push({
-          time: `${endPos.x + 1}n`,
+        addEvent(`${(endPos.x + 1) / 2}`, {
           type: 'keyup',
           value: row.note,
         });
       }
     });
   }
-  const notes = new Tone.Part((time, event) => {
-    switch (event.type) {
-      case 'bpm':
-        Tone.getTransport().bpm.setValueAtTime(event.value, time);
-        break;
-      case 'pedal':
-        if (event.value) {
-          piano.pedalDown({ time });
-        } else {
-          piano.pedalUp({ time });
+  const notes = new Tone.Part(
+    (time, event) => {
+      event.forEach(event => {
+        switch (event.type) {
+          case 'bpm':
+            Tone.getTransport().bpm.setValueAtTime(event.value, time);
+            break;
+          case 'pedal':
+            if (event.value) {
+              piano.pedalDown({ time });
+            } else {
+              piano.pedalUp({ time });
+            }
+            break;
+          case 'keydown':
+            piano.keyDown({
+              note: event.value,
+              velocity: event.velocity,
+              time,
+            });
+            break;
+          case 'keyup':
+            piano.keyUp({ note: event.value, time });
+            break;
         }
-        break;
-      case 'keydown':
-        piano.keyDown({ note: event.value, velocity: event.velocity, time });
-        break;
-      case 'keyup':
-        piano.keyUp({ note: event.value, time });
-        break;
-    }
-  }, events).start(0);
+      });
+    },
+    [...events.entries()]
+  ).start(0);
   piano.toDestination();
   return () => {
+    notes.stop();
+    notes.cancel();
     notes.clear();
     notes.dispose();
   };
@@ -133,7 +152,9 @@ const MusicControls = lazy(async function () {
           <button
             type="button"
             className="btn btn-ghost text-lg"
-            onClick={async () => {
+            onClick={() => {
+              Tone.getTransport().stop();
+              Tone.getTransport().seconds = 0;
               const tiles = array(
                 solution?.width ?? grid.width,
                 solution?.height ?? grid.height,
@@ -153,7 +174,6 @@ const MusicControls = lazy(async function () {
                   cleanUp: encodePlayback(newGrid, instruction),
                 };
               }
-              Tone.getTransport().stop();
               Tone.getTransport().start();
             }}
           >

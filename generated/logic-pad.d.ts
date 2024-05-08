@@ -22,9 +22,9 @@ declare global {
     Orientation = 'orientation',
     OrientationToggle = 'orientationToggle',
     Tile = 'tile',
-    Solution = 'solution',
     Grid = 'grid',
     Icon = 'icon',
+    ControlLines = 'controlLines',
   }
   export interface Config<T> {
     readonly type: ConfigType;
@@ -72,6 +72,9 @@ declare global {
   export interface IconConfig extends Config<string> {
     readonly type: ConfigType.Icon;
   }
+  export interface ControlLinesConfig extends Config<ControlLine[]> {
+    readonly type: ConfigType.ControlLines;
+  }
   export type AnyConfig =
     | BooleanConfig
     | NumberConfig
@@ -83,7 +86,8 @@ declare global {
     | OrientationToggleConfig
     | TileConfig
     | GridConfig
-    | IconConfig;
+    | IconConfig
+    | ControlLinesConfig;
   /**
    * Compare two config values for equality, using an appropriate method for the config type.
    *
@@ -839,21 +843,21 @@ declare global {
     z.ZodTypeAny,
     {
       link: string;
-      solution: GridData | null;
       grid: GridData;
       description: string;
       title: string;
       author: string;
       difficulty: number;
+      solution: GridData | null;
     },
     {
       link: string;
-      solution: GridData | null;
       grid: GridData;
       description: string;
       title: string;
       author: string;
       difficulty: number;
+      solution: GridData | null;
     }
   >;
   export type Puzzle = PuzzleMetadata & {
@@ -1010,6 +1014,7 @@ declare global {
     withRows(rows: readonly Row[]): this;
     equals(other: ControlLine): boolean;
   }
+
   export class MusicGridRule
     extends Rule
     implements GridChangeHandler, SetGridHandler
@@ -1285,6 +1290,8 @@ declare global {
     readonly version = 0;
     stringifyTile(tile: TileData): string;
     parseTile(str: string): TileData;
+    stringifyControlLine(line: ControlLine): string;
+    parseControlLine(str: string): ControlLine;
     stringifyConfig(instruction: Instruction, config: AnyConfig): string;
     parseConfig(
       configs: readonly AnyConfig[],

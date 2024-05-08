@@ -85,7 +85,8 @@ import CompletePatternRule from '../src/data/rules/completePatternRule';
 import ConnectAllRule from '../src/data/rules/connectAllRule';
 import CustomRule from '../src/data/rules/customRule';
 import { allRules } from '../src/data/rules/index';
-import MusicGridRule, { ControlLine } from '../src/data/rules/musicGridRule';
+import { ControlLine } from '../src/data/rules/musicControlLine';
+import MusicGridRule from '../src/data/rules/musicGridRule';
 import MysteryRule from '../src/data/rules/mysteryRule';
 import OffByXRule from '../src/data/rules/offByXRule';
 import RegionAreaRule from '../src/data/rules/regionAreaRule';
@@ -184,8 +185,8 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConnectAllRule', value: ConnectAllRule },
   { name: 'CustomRule', value: CustomRule },
   { name: 'allRules', value: allRules },
-  { name: 'MusicGridRule', value: MusicGridRule },
   { name: 'ControlLine', value: ControlLine },
+  { name: 'MusicGridRule', value: MusicGridRule },
   { name: 'MysteryRule', value: MysteryRule },
   { name: 'OffByXRule', value: OffByXRule },
   { name: 'RegionAreaRule', value: RegionAreaRule },

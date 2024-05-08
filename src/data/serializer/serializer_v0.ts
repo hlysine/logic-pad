@@ -21,6 +21,7 @@ import { allRules } from '../rules';
 import { allSymbols } from '../symbols';
 import SerializerBase from './serializerBase';
 import { Puzzle, PuzzleMetadata } from '../puzzle';
+import { ControlLine } from '../rules/musicControlLine';
 
 const OFFSETS = [
   { x: 0, y: -1 },
@@ -52,6 +53,49 @@ export default class SerializerV0 extends SerializerBase {
 
   public parseTile(str: string): TileData {
     return TileData.create(str);
+  }
+
+  public stringifyControlLine(line: ControlLine): string {
+    return `c${line.column}|b${line.bpm ?? ''}|p${line.pedal ? '1' : line.pedal !== undefined ? '0' : ''}|r${line.rows.map(row => `v${row.velocity ?? ''}n${row.note ?? ''}`).join(',')}`;
+  }
+
+  public parseControlLine(str: string): ControlLine {
+    let column: number | undefined;
+    let bpm: number | undefined;
+    let pedal: boolean | undefined;
+    const rows: { note: string | undefined; velocity: number | undefined }[] =
+      [];
+
+    const data = str.split('|');
+    for (const entry of data) {
+      const key = entry.charAt(0);
+      const value = entry.slice(1);
+      switch (key) {
+        case 'c':
+          column = value === '' ? undefined : Number(value);
+          break;
+        case 'b':
+          bpm = value === '' ? undefined : Number(value);
+          break;
+        case 'p':
+          pedal = value === '1' ? true : value === '0' ? false : undefined;
+          break;
+        case 'r':
+          rows.push(
+            ...value.split(',').map(row => {
+              const match = row.match(/^v([\d.]*?)n(.*)$/);
+              if (!match) return { note: undefined, velocity: undefined };
+              const [, velocity, note] = match;
+              return {
+                note: note === '' ? undefined : note,
+                velocity: velocity === '' ? undefined : Number(velocity),
+              };
+            })
+          );
+          break;
+      }
+    }
+    return new ControlLine(column ?? 0, bpm, pedal, rows);
   }
 
   public stringifyConfig(instruction: Instruction, config: AnyConfig): string {
@@ -121,6 +165,20 @@ export default class SerializerV0 extends SerializerBase {
             )
           )
         );
+      case ConfigType.ControlLines:
+        return (
+          config.field +
+          '=' +
+          escape(
+            (
+              instruction[
+                config.field as keyof Instruction
+              ] as unknown as ControlLine[]
+            )
+              .map(line => this.stringifyControlLine(line))
+              .join(':')
+          )
+        );
     }
   }
 
@@ -162,6 +220,13 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Tile:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
+      case ConfigType.ControlLines:
+        return [
+          config.field,
+          unescape(value)
+            .split(':')
+            .map(line => this.parseControlLine(line)),
+        ];
     }
   }
 

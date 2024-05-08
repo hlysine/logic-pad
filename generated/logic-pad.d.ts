@@ -1352,6 +1352,16 @@ declare global {
   const allSolvers: Map<string, Solver>;
   export { allSolvers };
 
+  export class BacktrackSolver extends Solver {
+    readonly id = 'backtrack';
+    readonly description =
+      'Solves puzzles using backtracking. Support all rules and symbols except for underclued.';
+    solve(grid: GridData): AsyncGenerator<GridData | null>;
+  }
+
+  const _default: null;
+  export const _default;
+
   /**
    * Base class that all solvers must extend.
    */
@@ -1421,8 +1431,8 @@ declare global {
     isInstructionSupported(instructionId: string): boolean;
   }
 
-  const Worker: new (options?: { name?: string }) => Worker;
-  export const Worker;
+  const _default: null;
+  export const _default;
 
   export class AreaNumberModule extends Z3Module {
     readonly id: string;

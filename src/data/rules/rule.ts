@@ -1,5 +1,5 @@
 import GridData from '../grid';
-import { GridState, RuleState } from '../primitives';
+import { RuleState } from '../primitives';
 import Instruction from '../instruction';
 
 export interface SearchVariant {
@@ -9,14 +9,6 @@ export interface SearchVariant {
 
 export default abstract class Rule extends Instruction {
   public abstract validateGrid(grid: GridData): RuleState;
-
-  public statusText(
-    _grid: GridData,
-    _solution: GridData | null,
-    _state: GridState
-  ): string | null {
-    return null;
-  }
 
   public abstract get searchVariants(): SearchVariant[];
 

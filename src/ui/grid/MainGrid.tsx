@@ -12,6 +12,8 @@ import { useDisplay } from '../DisplayContext';
 import { useToolbox } from '../ToolboxContext';
 import handleTileClick from './handleTileClick';
 import TileCountOverlay from './TileCountOverlay';
+import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
+import { PartPlacement } from '../instructions/parts/types';
 
 export interface MainGridProps {
   useToolboxClick: boolean;
@@ -96,6 +98,7 @@ export default memo(function MainGrid({
                 height={grid.height}
               />
               <TileCountOverlay grid={grid} />
+              <InstructionPartOutlet placement={PartPlacement.GridOverlay} />
               {children}
             </>
           )}

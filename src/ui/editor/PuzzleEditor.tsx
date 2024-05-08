@@ -15,6 +15,8 @@ import ToolboxContext from '../ToolboxContext';
 import ToolboxOverlay from './ToolboxOverlay';
 import { useEmbed } from '../EmbedContext';
 import PuzzleChecklist from './PuzzleChecklist';
+import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
+import { PartPlacement } from '../instructions/parts/types';
 
 export interface PuzzleEditorProps {
   children?: React.ReactNode;
@@ -30,6 +32,9 @@ export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
             <>
               <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
               <EditorPane />
+              <div className="shrink-0 flex-col gap-1 hidden has-[*]:flex">
+                <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
+              </div>
               <TouchControls />
               <EditControls />
             </>

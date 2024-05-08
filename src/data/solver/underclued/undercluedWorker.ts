@@ -10,6 +10,10 @@ function posToCoords(pos: number | undefined, width: number): [number, number] {
   return [pos % width, Math.floor(pos / width)];
 }
 
+function coordsToPos(a: [number, number], width: number) {
+  return a[0] + a[1] * width;
+}
+
 function getValidGrid(
   grid: GridData,
   assumptions: number[],
@@ -29,6 +33,13 @@ function getValidGrid(
       tile.withColor(Color.Dark)
     );
     assumptions.push(newAssump);
+    for (const a of grid.connections.getConnectedTiles({
+      x: coords[0],
+      y: coords[1],
+    })) {
+      canAssump[coordsToPos([a.x, a.y], grid.width)] =
+        a.x === coords[0] && a.y === coords[1];
+    }
     const state = validateGrid(grid, null);
     // If the grid is invalid, try to backtrack to a right assumption
     if (state.final === State.Error) {
@@ -98,7 +109,7 @@ function computeSolution(initialGrid: GridData): GridData {
         )
         .join('\n')
     );
-    if (anyNewGrid === null) {
+    if (!anyNewGrid) {
       break;
     }
     const newLastValidGrid = currentGrid.tiles
@@ -110,19 +121,11 @@ function computeSolution(initialGrid: GridData): GridData {
       );
       diff.forEach((same, i) => {
         if (!same) {
-          canAssump[i] = false;
           newLastValidGrid[i] = Color.Gray;
         }
       });
-      while (
-        diff.indexOf(false) <= (assumptions.at(-1) ?? -1) &&
-        assumptions.length > 0
-      ) {
-        [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
-      }
-    } else {
-      [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
     }
+    [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
     lastValidGrid = newLastValidGrid;
   }
   // Create a new grid with lastValidGrid
@@ -151,7 +154,8 @@ function computeSolution(initialGrid: GridData): GridData {
 }
 
 onmessage = e => {
-  const grid = Serializer.parseGrid(e.data as string);
+  if (!e.data || typeof e.data !== 'string') return;
+  const grid = Serializer.parseGrid(e.data);
   const solved = computeSolution(grid);
   postMessage(Serializer.stringifyGrid(solved));
 };

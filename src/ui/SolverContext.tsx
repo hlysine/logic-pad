@@ -25,7 +25,7 @@ export default memo(function SolverContext({
 }: {
   children: React.ReactNode;
 }) {
-  const [solver, setSolver] = useState(defaultSolver);
+  const [solver, setSolver] = useState(() => defaultSolver);
 
   return (
     <context.Provider

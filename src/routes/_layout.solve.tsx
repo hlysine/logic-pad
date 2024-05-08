@@ -8,6 +8,8 @@ import useLinkLoader, { validateSearch } from '../ui/router/linkLoader';
 import ThreePaneLayout from '../ui/ThreePaneLayout';
 import TouchControls from '../ui/components/TouchControls';
 import DocumentTitle from '../ui/components/DocumentTitle';
+import InstructionPartOutlet from '../ui/instructions/InstructionPartOutlet';
+import { PartPlacement } from '../ui/instructions/parts/types';
 
 export const Route = createFileRoute('/_layout/solve')({
   validateSearch,
@@ -21,6 +23,7 @@ export const Route = createFileRoute('/_layout/solve')({
             <DocumentTitle>Logic Pad</DocumentTitle>
             <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
               <Metadata />
+              <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
             </div>
             <TouchControls />
             <EditControls />

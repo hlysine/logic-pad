@@ -69,7 +69,7 @@ import RegionAreaModule from '../src/data/solver/z3/modules/regionAreaModule';
 import ViewpointModule from '../src/data/solver/z3/modules/viewpointModule';
 import Z3Module from '../src/data/solver/z3/modules/z3Module';
 import UndercluedSolver from '../src/data/solver/underclued/undercluedSolver';
-import Worker from '../src/data/solver/underclued/worker';
+import Worker from '../src/data/solver/underclued/undercluedWorker';
 import BacktrackSolver from '../src/data/solver/backtrack/backtrackSolver';
 import '../src/data/solver/backtrack/worker';
 import { Serializer } from '../src/data/serializer/allSerializers';
@@ -97,6 +97,7 @@ import UndercluedRule from '../src/data/rules/undercluedRule';
 import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
 import { isEventHandler } from '../src/data/events/helper';
 import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
+import { handlesGridChange } from '../src/data/events/onGridChange';
 import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
@@ -193,6 +194,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'UniqueShapeRule', value: UniqueShapeRule },
   { name: 'isEventHandler', value: isEventHandler },
   { name: 'handlesFinalValidation', value: handlesFinalValidation },
+  { name: 'handlesGridChange', value: handlesGridChange },
   { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];
 

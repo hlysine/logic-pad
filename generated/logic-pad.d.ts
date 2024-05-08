@@ -66,9 +66,6 @@ declare global {
     readonly type: ConfigType.Tile;
     readonly resizable: boolean;
   }
-  export interface SolutionConfig extends Config<GridData> {
-    readonly type: ConfigType.Solution;
-  }
   export interface GridConfig extends Config<GridData> {
     readonly type: ConfigType.Grid;
   }
@@ -85,7 +82,6 @@ declare global {
     | OrientationConfig
     | OrientationToggleConfig
     | TileConfig
-    | SolutionConfig
     | GridConfig
     | IconConfig;
   /**
@@ -525,7 +521,7 @@ declare global {
      * @param rules The list of rules to deduplicate.
      * @returns The deduplicated list of rules.
      */
-    static deduplicateRules(rules: readonly Rule[]): readonly Rule[];
+    static deduplicateRules(rules: readonly Rule[]): Rule[];
     /**
      * Deduplicate the symbols in the given map.
      *
@@ -534,7 +530,7 @@ declare global {
      */
     static deduplicateSymbols(
       symbols: ReadonlyMap<string, readonly Symbol[]>
-    ): ReadonlyMap<string, readonly Symbol[]>;
+    ): Map<string, Symbol[]>;
   }
 
   export class GridConnections {
@@ -958,7 +954,10 @@ declare global {
   const allRules: Map<string, Rule>;
   export { allRules };
 
-  export class MysteryRule extends Rule implements FinalValidationHandler {
+  export class MysteryRule
+    extends Rule
+    implements FinalValidationHandler, GridChangeHandler
+  {
     readonly solution: GridData;
     readonly visible: boolean;
     /**
@@ -977,6 +976,7 @@ declare global {
       _solution: GridData | null,
       state: GridState
     ): GridState;
+    onGridChange(newGrid: GridData): this;
     copyWith({
       solution,
       visible,
@@ -1057,11 +1057,6 @@ declare global {
   }
   export abstract class Rule extends Instruction {
     abstract validateGrid(grid: GridData): RuleState;
-    statusText(
-      _grid: GridData,
-      _solution: GridData | null,
-      _state: GridState
-    ): string | null;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
     get visibleWhenSolving(): boolean;
@@ -1118,11 +1113,6 @@ declare global {
     validateGrid(_grid: GridData): RuleState;
     copyWith(_: object): this;
     get validateWithSolution(): boolean;
-    statusText(
-      grid: GridData,
-      solution: GridData | null,
-      _state: GridState
-    ): string | null;
   }
 
   export class UniqueShapeRule extends RegionShapeRule {

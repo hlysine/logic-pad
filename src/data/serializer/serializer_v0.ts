@@ -109,7 +109,6 @@ export default class SerializerV0 extends SerializerBase {
           escape(String(instruction[config.field as keyof Instruction]))
         );
       case ConfigType.Tile:
-      case ConfigType.Solution:
       case ConfigType.Grid:
         return (
           config.field +
@@ -161,7 +160,6 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Icon:
         return [config.field, unescape(value)];
       case ConfigType.Tile:
-      case ConfigType.Solution:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
     }

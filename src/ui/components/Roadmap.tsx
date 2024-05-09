@@ -32,7 +32,7 @@ const roadmap: RoadmapItem[] = [
     'Music Grid (as a grid rule)',
   ],
   [
-    'Refactors',
+    '~Refactors',
     '~Discover rules and symbols with glob import',
     '~Separate data and UI repositories',
     '~Discover code editor enclosure with glob import',

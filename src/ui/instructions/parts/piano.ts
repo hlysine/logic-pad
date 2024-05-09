@@ -11,6 +11,13 @@ type EventData =
   | { type: 'bpm'; value: number }
   | { type: 'stopAll' };
 
+export const playbackState = {
+  /**
+   * Indicates that the current playback is a solution, thus the tile animations should be disabled.
+   */
+  isSolution: false,
+};
+
 export const piano = new Piano({
   release: false,
   pedal: false,
@@ -240,8 +247,10 @@ export interface CachedPlayback {
 export function playGrid(
   grid: GridData,
   musicGrid: MusicGridRule,
+  isSolution: boolean,
   cache?: CachedPlayback
 ): CachedPlayback {
+  playbackState.isSolution = isSolution;
   Tone.getTransport().stop();
   piano.stopAll();
   if (!cache?.grid?.equals(grid)) {

@@ -7,6 +7,10 @@ import GridRawCanvasOverlay, {
   RawCanvasRef,
 } from '../../grid/GridRawCanvasOverlay';
 import { useTheme } from '../../ThemeContext';
+import { playbackState } from './piano';
+import { Color } from '../../../data/primitives';
+
+const BLEED = 5;
 
 export default memo(function MusicOverlayPart() {
   const { grid } = useGrid();
@@ -14,6 +18,14 @@ export default memo(function MusicOverlayPart() {
   const targetRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const [targetPosition, setTargetPosition] = useState(0);
+  const tileAnimations = useRef<number[][]>([]);
+  const prevPosition = useRef(-1);
+
+  useEffect(() => {
+    tileAnimations.current = Array.from({ length: grid.height }, () =>
+      Array.from({ length: grid.width }, () => 0)
+    );
+  }, [grid.height, grid.width]);
 
   const infoColor = useMemo(
     () =>
@@ -22,22 +34,78 @@ export default memo(function MusicOverlayPart() {
     [theme]
   );
 
+  const accentColor = useMemo(
+    () =>
+      window.getComputedStyle(document.getElementById('color-ref-accent')!)
+        .color,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [theme]
+  );
+
+  useEffect(() => {
+    const handler = () => {
+      prevPosition.current = -1;
+    };
+    Tone.getTransport().on('stop', handler);
+    return () => {
+      Tone.getTransport().off('stop', handler);
+    };
+  }, []);
+
   useEffect(() => {
     const handle = Tone.getTransport().scheduleRepeat(
       time => {
         Tone.getDraw().schedule(() => {
           const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
+          const prevPos = prevPosition.current;
+          prevPosition.current = position;
           if (canvasRef.current) {
             const { ctx, tileSize } = canvasRef.current;
-            ctx.clearRect(0, 0, grid.width * tileSize, grid.height * tileSize);
+            ctx.clearRect(
+              -BLEED,
+              -BLEED,
+              grid.width * tileSize + BLEED * 2,
+              grid.height * tileSize + BLEED * 2
+            );
+            if (!playbackState.isSolution) {
+              for (let y = 0; y < grid.height; y++) {
+                for (let x = 0; x < grid.width; x++) {
+                  if (tileAnimations.current[y][x] > 0) {
+                    ctx.fillStyle = `${accentColor.substring(0, accentColor.length - 2)}/${
+                      tileAnimations.current[y][x]
+                    })`;
+                    ctx.fillRect(
+                      x * tileSize,
+                      y * tileSize,
+                      tileSize,
+                      tileSize
+                    );
+                    tileAnimations.current[y][x] /= 1.06;
+                  }
+                }
+              }
+            }
             if (position >= grid.width || position <= 0) return;
-            ctx.fillStyle = infoColor;
-            ctx.fillRect(
+            const column = Math.floor(position);
+            if (column !== Math.floor(prevPos)) {
+              for (let y = 0; y < grid.height; y++) {
+                const tile = grid.getTile(column, y);
+                if (!tile.exists || tile.color !== Color.Dark) continue;
+                tileAnimations.current[y][column] = 0.7;
+              }
+            }
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo((position % grid.width) * tileSize, 0);
+            ctx.lineTo(
               (position % grid.width) * tileSize,
-              0,
-              5,
               grid.height * tileSize
             );
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = playbackState.isSolution
+              ? infoColor
+              : accentColor;
+            ctx.stroke();
             setTargetPosition(position);
           }
         }, time);
@@ -48,7 +116,7 @@ export default memo(function MusicOverlayPart() {
     return () => {
       Tone.getTransport().clear(handle);
     };
-  }, [grid.height, grid.width, infoColor]);
+  }, [grid, infoColor, accentColor]);
 
   useEffect(() => {
     targetRef.current?.scrollIntoView({ behavior: 'instant' });
@@ -59,6 +127,7 @@ export default memo(function MusicOverlayPart() {
       ref={canvasRef}
       width={grid.width}
       height={grid.height}
+      bleed={BLEED}
     >
       <div
         ref={targetRef}

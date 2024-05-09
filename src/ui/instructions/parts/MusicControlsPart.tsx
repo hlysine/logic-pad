@@ -45,6 +45,10 @@ const MusicControls = lazy(async function () {
         return () => cleanUp(playback.current);
       }, []);
 
+      useEffect(() => {
+        cleanUp(playback.current);
+      }, [grid.width, grid.height]);
+
       return (
         <>
           <button
@@ -66,6 +70,7 @@ const MusicControls = lazy(async function () {
               playback.current = playGrid(
                 newGrid,
                 instruction,
+                true,
                 playback.current
               );
             }}
@@ -77,7 +82,12 @@ const MusicControls = lazy(async function () {
             type="button"
             className="btn btn-ghost text-lg"
             onClick={() => {
-              playback.current = playGrid(grid, instruction, playback.current);
+              playback.current = playGrid(
+                grid,
+                instruction,
+                false,
+                playback.current
+              );
             }}
           >
             <FaPlay />

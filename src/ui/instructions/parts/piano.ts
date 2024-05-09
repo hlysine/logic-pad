@@ -159,6 +159,8 @@ export function encodeImmediate(
   pianoImmediate.pedalUp();
   pianoImmediatePedal.pedalDown();
 
+  let remainingPolyphony = 2;
+
   // prepare events
   let bpm = 120;
   let pedal = false;
@@ -191,6 +193,7 @@ export function encodeImmediate(
     }
     rows.forEach((row, y) => {
       if (row.note === undefined || row.velocity === undefined) return;
+      if (remainingPolyphony <= 0) return;
       const tile = grid.getTile(x, y);
       const oldTile = oldGrid.getTile(x, y);
       if (
@@ -201,6 +204,7 @@ export function encodeImmediate(
       ) {
         const targetPiano = pedal ? pianoImmediatePedal : pianoImmediate;
         targetPiano.keyDown({ note: row.note, velocity: row.velocity });
+        remainingPolyphony--;
         let endPos = { x, y };
         while (
           grid.connections.isConnected({

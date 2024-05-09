@@ -9,13 +9,21 @@ import { FaPlay } from 'react-icons/fa';
 import Loading from '../../components/Loading';
 import { Color } from '../../../data/primitives';
 import { array } from '../../../data/helper';
-import { CachedPlayback, cleanUp, piano, playGrid } from './piano';
+import {
+  CachedPlayback,
+  cleanUp,
+  piano,
+  pianoImmediate,
+  playGrid,
+  playImmediate,
+} from './piano';
 import GridData from '../../../data/grid';
 
 export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;
 
 const MusicControls = lazy(async function () {
   await piano.load();
+  await pianoImmediate.load();
   return {
     default: memo(function MusicControls({
       instruction,
@@ -26,16 +34,7 @@ const MusicControls = lazy(async function () {
 
       useEffect(() => {
         if (previousGrid.current && !previousGrid.current.colorEquals(grid)) {
-          const cache = playGrid(
-            grid,
-            instruction,
-            playback.current,
-            previousGrid.current
-          );
-          playback.current = {
-            grid: null,
-            cleanUp: cache.cleanUp,
-          };
+          playImmediate(grid, previousGrid.current, instruction);
         }
         previousGrid.current = grid;
       }, [grid, instruction]);

@@ -18,10 +18,16 @@ export const piano = new Piano({
   maxPolyphony: 64,
 }).toDestination();
 
+export const pianoImmediate = new Piano({
+  release: false,
+  pedal: false,
+  velocities: 5,
+  maxPolyphony: 64,
+}).toDestination();
+
 export function encodePlayback(
   grid: GridData,
-  musicGrid: MusicGridRule,
-  oldGrid?: GridData
+  musicGrid: MusicGridRule
 ): () => void {
   // prepare events
   let bpm: number | undefined;
@@ -43,18 +49,14 @@ export function encodePlayback(
     }
   };
   for (let x = 0; x < grid.width; x++) {
-    const getTime = (time: number) => {
-      if (oldGrid) return time - x / 2;
-      return time;
-    };
     const line = musicGrid.controlLines.find(line => line.column === x);
     if (line) {
       if (line.bpm !== undefined && line.bpm !== bpm) {
-        addEvent(getTime(x / 2), { type: 'bpm', value: line.bpm });
+        addEvent(x / 2, { type: 'bpm', value: line.bpm });
         bpm = line.bpm;
       }
       if (line.pedal !== undefined && line.pedal !== pedal) {
-        addEvent(getTime(x / 2), { type: 'pedal', value: line.pedal });
+        addEvent(x / 2, { type: 'pedal', value: line.pedal });
         pedal = line.pedal;
       }
       line.rows.forEach((row, j) => {
@@ -70,14 +72,12 @@ export function encodePlayback(
     rows.forEach((row, y) => {
       if (row.note === undefined || row.velocity === undefined) return;
       const tile = grid.getTile(x, y);
-      const oldTile = oldGrid?.getTile(x, y);
       if (
         tile.exists &&
         tile.color === Color.Dark &&
-        (!oldTile || !oldTile.exists || oldTile.color !== Color.Dark) &&
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        addEvent(getTime(x / 2), {
+        addEvent(x / 2, {
           type: 'keydown',
           value: row.note,
           velocity: row.velocity,
@@ -93,7 +93,7 @@ export function encodePlayback(
         ) {
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
-        addEvent(getTime((endPos.x + 1) / 2), {
+        addEvent((endPos.x + 1) / 2, {
           type: 'keyup',
           value: row.note,
         });
@@ -144,6 +144,76 @@ export function encodePlayback(
   };
 }
 
+export function encodeImmediate(
+  grid: GridData,
+  oldGrid: GridData,
+  musicGrid: MusicGridRule
+) {
+  // prepare events
+  let bpm = 120;
+  let pedal = false;
+  const rows: {
+    note: string | undefined;
+    velocity: number | undefined;
+  }[] = Array.from({ length: grid.height }, () => ({
+    note: undefined,
+    velocity: undefined,
+  }));
+
+  for (let x = 0; x < grid.width; x++) {
+    const line = musicGrid.controlLines.find(line => line.column === x);
+    if (line) {
+      if (line.bpm !== undefined && line.bpm !== bpm) {
+        bpm = line.bpm;
+      }
+      if (line.pedal !== undefined && line.pedal !== pedal) {
+        pedal = line.pedal;
+      }
+      line.rows.forEach((row, j) => {
+        if (j >= rows.length) return;
+        if (row.note !== undefined) {
+          rows[j].note = row.note;
+        }
+        if (row.velocity !== undefined) {
+          rows[j].velocity = row.velocity;
+        }
+      });
+    }
+    rows.forEach((row, y) => {
+      if (row.note === undefined || row.velocity === undefined) return;
+      const tile = grid.getTile(x, y);
+      const oldTile = oldGrid.getTile(x, y);
+      if (
+        tile.exists &&
+        tile.color === Color.Dark &&
+        (!oldTile.exists || oldTile.color !== Color.Dark) &&
+        !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
+      ) {
+        if (pedal) pianoImmediate.pedalDown();
+        else pianoImmediate.pedalUp();
+        pianoImmediate.keyDown({ note: row.note, velocity: row.velocity });
+        let endPos = { x, y };
+        while (
+          grid.connections.isConnected({
+            x1: endPos.x,
+            y1: endPos.y,
+            x2: endPos.x + 1,
+            y2: endPos.y,
+          })
+        ) {
+          endPos = { x: endPos.x + 1, y: endPos.y };
+        }
+        const time = `+${(((endPos.x + 1) / 2 - x / 2) * 120 * 120) / Tone.getTransport().bpm.value / bpm}`;
+        pianoImmediate.keyUp({
+          note: row.note,
+          velocity: row.velocity,
+          time,
+        });
+      }
+    });
+  }
+}
+
 export interface CachedPlayback {
   grid: GridData | null;
   cleanUp: () => void;
@@ -152,8 +222,7 @@ export interface CachedPlayback {
 export function playGrid(
   grid: GridData,
   musicGrid: MusicGridRule,
-  cache?: CachedPlayback,
-  oldGrid?: GridData
+  cache?: CachedPlayback
 ): CachedPlayback {
   Tone.getTransport().stop();
   piano.stopAll();
@@ -161,11 +230,20 @@ export function playGrid(
     cache?.cleanUp?.();
     cache = {
       grid,
-      cleanUp: encodePlayback(grid, musicGrid, oldGrid),
+      cleanUp: encodePlayback(grid, musicGrid),
     };
   }
   Tone.getTransport().start();
   return cache;
+}
+
+export function playImmediate(
+  grid: GridData,
+  oldGrid: GridData,
+  musicGrid: MusicGridRule
+) {
+  encodeImmediate(grid, oldGrid, musicGrid);
+  Tone.getTransport().start();
 }
 
 export function cleanUp(cache?: CachedPlayback) {

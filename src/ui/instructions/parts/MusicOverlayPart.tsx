@@ -23,24 +23,28 @@ export default memo(function MusicOverlayPart() {
   );
 
   useEffect(() => {
-    const handle = Tone.getTransport().scheduleRepeat(time => {
-      Tone.getDraw().schedule(() => {
-        const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
-        if (canvasRef.current) {
-          const { ctx, tileSize } = canvasRef.current;
-          ctx.clearRect(0, 0, grid.width * tileSize, grid.height * tileSize);
-          if (position >= grid.width || position <= 0) return;
-          ctx.fillStyle = infoColor;
-          ctx.fillRect(
-            (position % grid.width) * tileSize,
-            0,
-            5,
-            grid.height * tileSize
-          );
-          setTargetPosition(position);
-        }
-      }, time);
-    }, 0.01);
+    const handle = Tone.getTransport().scheduleRepeat(
+      time => {
+        Tone.getDraw().schedule(() => {
+          const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
+          if (canvasRef.current) {
+            const { ctx, tileSize } = canvasRef.current;
+            ctx.clearRect(0, 0, grid.width * tileSize, grid.height * tileSize);
+            if (position >= grid.width || position <= 0) return;
+            ctx.fillStyle = infoColor;
+            ctx.fillRect(
+              (position % grid.width) * tileSize,
+              0,
+              5,
+              grid.height * tileSize
+            );
+            setTargetPosition(position);
+          }
+        }, time);
+      },
+      0.01,
+      0
+    );
     return () => {
       Tone.getTransport().clear(handle);
     };

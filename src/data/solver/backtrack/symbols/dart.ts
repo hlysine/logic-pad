@@ -1,7 +1,7 @@
-import DartSymbol from '../../symbols/dartSymbol';
-import { Position } from '../../primitives';
-import { BTColor, BTGridData, BTTile, getOppositeColor } from './worker';
-import { move } from '../../helper';
+import DartSymbol from '../../../symbols/dartSymbol';
+import { Position } from '../../../primitives';
+import { BTColor, BTGridData, BTTile, getOppositeColor } from '../worker';
+import { move } from '../../../helper';
 
 export function verifyDartSymbol(
   grid: BTGridData,

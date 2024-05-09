@@ -1,8 +1,7 @@
-import { Color, Position, State } from '../../primitives';
+import { Color, Position } from '../../primitives';
 import Instruction from '../../instruction';
 import GridData from '../../grid';
 import TileData from '../../tile';
-import validateGrid from '../../validate';
 import Rule from '../../rules/rule';
 import Symbol from '../../symbols/symbol';
 import { array } from '../../helper';
@@ -19,10 +18,17 @@ import GalaxySymbol, {
 import LotusSymbol, {
   instance as lotusInstance,
 } from '../../symbols/lotusSymbol';
-import { buildDartAdjacency, verifyDartSymbol } from './dart';
-import { verifyGalaxySymbol, verifyLotusSymbol } from './directionLinker';
-import { verifyViewpointSymbol } from './viewpoint';
-import { verifyAreaNumberSymbol } from './areaNumber';
+import { verifyAreaNumberSymbol } from './symbols/areaNumber';
+import { buildDartAdjacency, verifyDartSymbol } from './symbols/dart';
+import {
+  verifyGalaxySymbol,
+  verifyLotusSymbol,
+} from './symbols/directionLinker';
+import { verifyViewpointSymbol } from './symbols/viewpoint';
+import ConnectAllRule, {
+  instance as connectAllInstance,
+} from '../../rules/connectAllRule';
+import { verifyConnectAllRule } from './rules/connectAll';
 
 export enum BTTile {
   Empty,
@@ -90,6 +96,12 @@ export function getOppositeColor(color: BTColor): BTColor {
   return color == BTTile.Dark ? BTTile.Light : BTTile.Dark;
 }
 
+export function colorToBTTile(color: Color): BTTile {
+  if (color === Color.Gray) return BTTile.Empty;
+  else if (color === Color.Light) return BTTile.Light;
+  else return BTTile.Dark;
+}
+
 // This interface stores tiles that are "near" to a symbol or rule. ("near" means able to influence the result of a symbol or rule)
 // For example, if the instruction is an area symbol, affected tiles will store the position of the empty tiles on the border of the symbol.
 interface Adjacency {
@@ -108,18 +120,22 @@ export function solveAdvanced(grid: GridData): GridData | null {
     let tiles: Position[] | false;
     if (symbol.id == areaNumberInstance.id) {
       tiles = verifyAreaNumberSymbol(newGrid, symbol as AreaNumberSymbol);
+      if (!tiles) return null;
     } else if (symbol.id == dartInstance.id) {
       tiles = buildDartAdjacency(newGrid, symbol as DartSymbol);
+      if (!tiles) return null;
     } else if (symbol.id == viewpointInstance.id) {
       tiles = verifyViewpointSymbol(newGrid, symbol as ViewpointSymbol);
+      if (!tiles) return null;
     } else if (symbol.id == galaxyInstance.id) {
       tiles = verifyGalaxySymbol(newGrid, symbol as GalaxySymbol);
+      if (!tiles) return null;
     } else if (symbol.id == lotusInstance.id) {
       tiles = verifyLotusSymbol(newGrid, symbol as LotusSymbol);
+      if (!tiles) return null;
     }
 
-    if (!tiles!) return null;
-    adjacencies.push({ instruction: symbol, affectedTiles: tiles });
+    if (tiles!) adjacencies.push({ instruction: symbol, affectedTiles: tiles });
   }
 
   // Call backtrack
@@ -211,11 +227,10 @@ function isValid(
       let result: Position[] | false;
 
       if (adj.instruction.id == areaNumberInstance.id) {
-        //   result = verifyAreaNumberSymbol(
-        //     grid,
-        //     adj.instruction as AreaNumberSymbol
-        //   );
-        continue;
+        result = verifyAreaNumberSymbol(
+          grid,
+          adj.instruction as AreaNumberSymbol
+        );
       } else if (adj.instruction.id == dartInstance.id) {
         //     // For dart, we don't need to rebuild adjacency
         result = verifyDartSymbol(grid, adj.instruction as DartSymbol)
@@ -245,9 +260,18 @@ function isValid(
   for (const symbol of grid.symbols) {
     // Opposite color case
     // A cell can potentially invalidate an area symbol even if the cell is not "near" to the symbol
+    // TODO: Duplicated area check
     if (
       symbol.id == areaNumberInstance.id &&
       !verifyAreaNumberSymbol(grid, symbol as AreaNumberSymbol)
+    )
+      return false;
+  }
+
+  for (const rule of grid.rules) {
+    if (
+      rule.id == connectAllInstance.id &&
+      !verifyConnectAllRule(grid, rule as ConnectAllRule)
     )
       return false;
   }

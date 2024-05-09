@@ -1,6 +1,6 @@
-import ViewpointSymbol from '../../symbols/viewpointSymbol';
-import { Position } from '../../primitives';
-import { BTColor, BTGridData, BTTile, getOppositeColor } from './worker';
+import ViewpointSymbol from '../../../symbols/viewpointSymbol';
+import { Position } from '../../../primitives';
+import { BTColor, BTGridData, BTTile, getOppositeColor } from '../worker';
 
 export function verifyViewpointSymbol(
   grid: BTGridData,

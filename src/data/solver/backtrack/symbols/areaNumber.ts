@@ -1,6 +1,6 @@
-import AreaNumberSymbol from '../../symbols/areaNumberSymbol';
-import { Position } from '../../primitives';
-import { BTGridData, BTTile } from './worker';
+import AreaNumberSymbol from '../../../symbols/areaNumberSymbol';
+import { Position } from '../../../primitives';
+import { BTGridData, BTTile } from '../worker';
 
 export function verifyAreaNumberSymbol(
   grid: BTGridData,

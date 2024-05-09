@@ -1,8 +1,8 @@
-import GalaxySymbol from '../../symbols/galaxySymbol';
-import LotusSymbol from '../../symbols/lotusSymbol';
-import { Orientation, Position } from '../../primitives';
-import { BTGridData, BTTile } from './worker';
-import DirectionLinkerSymbol from '../../symbols/directionLinkerSymbol';
+import GalaxySymbol from '../../../symbols/galaxySymbol';
+import LotusSymbol from '../../../symbols/lotusSymbol';
+import { Orientation, Position } from '../../../primitives';
+import { BTGridData, BTTile } from '../worker';
+import DirectionLinkerSymbol from '../../../symbols/directionLinkerSymbol';
 
 // Translate a position in relative to a galaxy symbol
 function movePosGalaxy(

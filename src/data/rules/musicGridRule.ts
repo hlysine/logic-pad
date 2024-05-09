@@ -36,7 +36,7 @@ export default class MusicGridRule
   ];
 
   /**
-   * **Music Grid: Listen and deduce**
+   * **Music Grid: Listen to the solution**
    */
   public constructor(public readonly controlLines: readonly ControlLine[]) {
     super();
@@ -48,7 +48,7 @@ export default class MusicGridRule
   }
 
   public get explanation(): string {
-    return `*Music Grid:* Listen and deduce`;
+    return `*Music Grid:* Listen to the solution`;
   }
 
   public get configs(): readonly AnyConfig[] | null {

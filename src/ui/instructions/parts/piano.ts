@@ -22,6 +22,7 @@ export function encodePlayback(
   grid: GridData,
   musicGrid: MusicGridRule
 ): () => void {
+  // prepare events
   let bpm: number | undefined;
   let pedal: boolean | undefined;
   const rows: {
@@ -44,11 +45,11 @@ export function encodePlayback(
     const line = musicGrid.controlLines.find(line => line.column === x);
     if (line) {
       if (line.bpm !== undefined && line.bpm !== bpm) {
-        addEvent(`${x / 2}`, { type: 'bpm', value: line.bpm });
+        addEvent(x / 2, { type: 'bpm', value: line.bpm });
         bpm = line.bpm;
       }
       if (line.pedal !== undefined && line.pedal !== pedal) {
-        addEvent(`${x / 2}`, { type: 'pedal', value: line.pedal });
+        addEvent(x / 2, { type: 'pedal', value: line.pedal });
         pedal = line.pedal;
       }
       line.rows.forEach((row, j) => {
@@ -69,7 +70,7 @@ export function encodePlayback(
         tile.color === Color.Dark &&
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        addEvent(`${x / 2}`, {
+        addEvent(x / 2, {
           type: 'keydown',
           value: row.note,
           velocity: row.velocity,
@@ -85,14 +86,18 @@ export function encodePlayback(
         ) {
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
-        addEvent(`${(endPos.x + 1) / 2}`, {
+        addEvent((endPos.x + 1) / 2, {
           type: 'keyup',
           value: row.note,
         });
       }
     });
   }
+
+  // reset bpm to 120 before encoding because the time values are bpm-dependent
   Tone.getTransport().bpm.value = 120;
+
+  // create part
   const notes = new Tone.Part(
     (time, event) => {
       event.forEach(event => {
@@ -125,7 +130,8 @@ export function encodePlayback(
     },
     [...events.entries()]
   ).start(0);
-  console.log(JSON.parse(JSON.stringify([...events.entries()])));
+
+  // return clean-up function
   return () => {
     notes.dispose();
   };

@@ -49,7 +49,13 @@ const MusicControls = lazy(async function () {
             <RiHeadphoneFill />
             Listen
           </button>
-          <button type="button" className="btn btn-ghost text-lg">
+          <button
+            type="button"
+            className="btn btn-ghost text-lg"
+            onClick={() => {
+              playback.current = playGrid(grid, instruction, playback.current);
+            }}
+          >
             <FaPlay />
             Play
           </button>

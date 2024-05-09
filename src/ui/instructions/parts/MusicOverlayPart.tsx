@@ -23,7 +23,7 @@ export default memo(function MusicOverlayPart() {
   );
 
   useEffect(() => {
-    const handle1 = Tone.getTransport().scheduleRepeat(time => {
+    const handle = Tone.getTransport().scheduleRepeat(time => {
       Tone.getDraw().schedule(() => {
         const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
         if (canvasRef.current) {
@@ -41,21 +41,13 @@ export default memo(function MusicOverlayPart() {
         }
       }, time);
     }, 0.01);
-    const handle2 = Tone.getTransport().scheduleRepeat(time => {
-      Tone.getDraw().schedule(() => {
-        const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
-        if (position >= grid.width || position <= 0) return;
-        setTargetPosition(position);
-      }, time);
-    }, 0.1);
     return () => {
-      Tone.getTransport().clear(handle1);
-      Tone.getTransport().clear(handle2);
+      Tone.getTransport().clear(handle);
     };
   }, [grid.height, grid.width, infoColor]);
 
   useEffect(() => {
-    targetRef.current?.scrollIntoView();
+    targetRef.current?.scrollIntoView({ behavior: 'instant' });
   }, [targetPosition]);
 
   return (

@@ -17,7 +17,7 @@ export class ControlLine {
    * @param column The column at which the settings take effect
    * @param bpm The new beats per minute, or undefined to keep the current value from the previous control line
    * @param pedal Whether the pedal is pressed, or undefined to keep the current value from the previous control line
-   * @param rows The notes to play at each row. Must have the same length as the grid height
+   * @param rows The notes to play at each row. This list is automatically resized to match the height of the grid. You may pass in an empty list if none of the rows need to be changed.
    */
   public constructor(
     public readonly column: number,

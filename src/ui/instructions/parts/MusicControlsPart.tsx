@@ -1,4 +1,4 @@
-import { Suspense, lazy, memo, useRef } from 'react';
+import { Suspense, lazy, memo, useEffect, useRef } from 'react';
 import { useGrid } from '../../GridContext';
 import { InstructionPartProps, PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
@@ -9,7 +9,8 @@ import { FaPlay } from 'react-icons/fa';
 import Loading from '../../components/Loading';
 import { Color } from '../../../data/primitives';
 import { array } from '../../../data/helper';
-import { CachedPlayback, piano, playGrid } from './piano';
+import { CachedPlayback, cleanUp, piano, playGrid } from './piano';
+import GridData from '../../../data/grid';
 
 export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;
 
@@ -21,6 +22,28 @@ const MusicControls = lazy(async function () {
     }: MusicControlsPartProps) {
       const { grid, solution } = useGrid();
       const playback = useRef<CachedPlayback | undefined>(undefined);
+      const previousGrid = useRef<GridData | null>(null);
+
+      useEffect(() => {
+        if (previousGrid.current && !previousGrid.current.colorEquals(grid)) {
+          const cache = playGrid(
+            grid,
+            instruction,
+            playback.current,
+            previousGrid.current
+          );
+          playback.current = {
+            grid: null,
+            cleanUp: cache.cleanUp,
+          };
+        }
+        previousGrid.current = grid;
+      }, [grid, instruction]);
+
+      useEffect(() => {
+        return () => cleanUp(playback.current);
+      }, []);
+
       return (
         <>
           <button

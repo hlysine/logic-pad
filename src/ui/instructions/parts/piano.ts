@@ -20,7 +20,8 @@ export const piano = new Piano({
 
 export function encodePlayback(
   grid: GridData,
-  musicGrid: MusicGridRule
+  musicGrid: MusicGridRule,
+  oldGrid?: GridData
 ): () => void {
   // prepare events
   let bpm: number | undefined;
@@ -42,14 +43,18 @@ export function encodePlayback(
     }
   };
   for (let x = 0; x < grid.width; x++) {
+    const getTime = (time: number) => {
+      if (oldGrid) return time - x / 2;
+      return time;
+    };
     const line = musicGrid.controlLines.find(line => line.column === x);
     if (line) {
       if (line.bpm !== undefined && line.bpm !== bpm) {
-        addEvent(x / 2, { type: 'bpm', value: line.bpm });
+        addEvent(getTime(x / 2), { type: 'bpm', value: line.bpm });
         bpm = line.bpm;
       }
       if (line.pedal !== undefined && line.pedal !== pedal) {
-        addEvent(x / 2, { type: 'pedal', value: line.pedal });
+        addEvent(getTime(x / 2), { type: 'pedal', value: line.pedal });
         pedal = line.pedal;
       }
       line.rows.forEach((row, j) => {
@@ -65,12 +70,14 @@ export function encodePlayback(
     rows.forEach((row, y) => {
       if (row.note === undefined || row.velocity === undefined) return;
       const tile = grid.getTile(x, y);
+      const oldTile = oldGrid?.getTile(x, y);
       if (
         tile.exists &&
         tile.color === Color.Dark &&
+        (!oldTile || !oldTile.exists || oldTile.color !== Color.Dark) &&
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        addEvent(x / 2, {
+        addEvent(getTime(x / 2), {
           type: 'keydown',
           value: row.note,
           velocity: row.velocity,
@@ -86,7 +93,7 @@ export function encodePlayback(
         ) {
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
-        addEvent((endPos.x + 1) / 2, {
+        addEvent(getTime((endPos.x + 1) / 2), {
           type: 'keyup',
           value: row.note,
         });
@@ -138,24 +145,31 @@ export function encodePlayback(
 }
 
 export interface CachedPlayback {
-  grid: GridData;
+  grid: GridData | null;
   cleanUp: () => void;
 }
 
 export function playGrid(
   grid: GridData,
   musicGrid: MusicGridRule,
-  cache?: CachedPlayback
+  cache?: CachedPlayback,
+  oldGrid?: GridData
 ): CachedPlayback {
   Tone.getTransport().stop();
   piano.stopAll();
-  if (!cache?.grid.equals(grid)) {
+  if (!cache?.grid?.equals(grid)) {
     cache?.cleanUp?.();
     cache = {
       grid,
-      cleanUp: encodePlayback(grid, musicGrid),
+      cleanUp: encodePlayback(grid, musicGrid, oldGrid),
     };
   }
   Tone.getTransport().start();
   return cache;
+}
+
+export function cleanUp(cache?: CachedPlayback) {
+  cache?.cleanUp();
+  Tone.getTransport().stop();
+  piano.stopAll();
 }

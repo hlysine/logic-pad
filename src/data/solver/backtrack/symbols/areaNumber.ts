@@ -1,75 +1,107 @@
 import AreaNumberSymbol from '../../../symbols/areaNumberSymbol';
 import { Position } from '../../../primitives';
-import { BTGridData, BTTile } from '../worker';
+import BTModule, {
+  BTGridData,
+  BTTile,
+  CheckResult,
+  IntArray2D,
+  Rating,
+  createOneTileResult,
+} from '../data';
 
-export function verifyAreaNumberSymbol(
-  grid: BTGridData,
-  symbol: AreaNumberSymbol
-): Position[] | false {
-  const tile = grid.getTile(symbol.x, symbol.y);
+export default class AreaNumberBTModule extends BTModule {
+  public instr: AreaNumberSymbol;
 
-  if (tile == BTTile.Empty) return [{ x: symbol.x, y: symbol.y }];
-
-  const visited: boolean[][] = [];
-
-  const sameTileQueue: Position[] = [{ x: symbol.x, y: symbol.y }];
-  const usableTileQueue: Position[] = [];
-
-  let sameCellCount = 0;
-  let usableCellCount = 0;
-
-  // Initialize the visited array
-  for (let y = 0; y < grid.height; y++) {
-    visited[y] = [];
-    for (let x = 0; x < grid.width; x++) {
-      visited[y][x] = false;
-    }
+  public constructor(instr: AreaNumberSymbol) {
+    super();
+    this.instr = instr;
   }
 
-  visited[symbol.y][symbol.x] = true;
+  public checkGlobal(grid: BTGridData): CheckResult | false {
+    const tile = grid.getTile(this.instr.x, this.instr.y);
 
-  // Count same tile
-  while (sameTileQueue.length > 0) {
-    const curPos = sameTileQueue.pop()!;
-    sameCellCount += 1;
+    if (tile == BTTile.Empty)
+      return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
 
-    for (const edge of grid.getEdges(curPos)) {
-      if (visited[edge.y][edge.x]) continue;
+    const visited = IntArray2D.create(grid.width, grid.height);
 
-      const edgeTile = grid.getTile(edge.x, edge.y);
+    const sameTileQueue: Position[] = [{ x: this.instr.x, y: this.instr.y }];
+    const usableTileQueue: Position[] = [];
 
-      if (edgeTile == BTTile.Empty) {
-        usableTileQueue.push(edge);
-      } else if (edgeTile == tile) {
-        sameTileQueue.push(edge);
-      }
+    let sameCellCount = 0;
+    let usableCellCount = 0;
 
-      visited[edge.y][edge.x] = true;
-    }
-  }
+    visited.set(this.instr.x, this.instr.y, 1);
 
-  if (sameCellCount > symbol.number) return false;
+    // Count same tile
+    while (sameTileQueue.length > 0) {
+      const curPos = sameTileQueue.pop()!;
+      sameCellCount += 1;
 
-  const emptyEdges = [...usableTileQueue];
+      for (const edge of grid.getEdges(curPos)) {
+        if (visited.get(edge.x, edge.y)) continue;
 
-  // Count usable tile
-  while (usableTileQueue.length > 0) {
-    const curPos = usableTileQueue.pop()!;
-    usableCellCount += 1;
+        const edgeTile = grid.getTile(edge.x, edge.y);
 
-    if (sameCellCount + usableCellCount >= symbol.number) return emptyEdges;
+        if (edgeTile == BTTile.Empty) {
+          usableTileQueue.push(edge);
+        } else if (edgeTile == tile) {
+          sameTileQueue.push(edge);
+        }
 
-    for (const edge of grid.getEdges(curPos)) {
-      if (visited[edge.y][edge.x]) continue;
-
-      const edgeTile = grid.getTile(edge.x, edge.y);
-
-      if (edgeTile == BTTile.Empty || edgeTile == tile) {
-        usableTileQueue.push(edge);
-        visited[edge.y][edge.x] = true;
+        visited.set(edge.x, edge.y, 1);
       }
     }
+
+    if (sameCellCount > this.instr.number) return false;
+
+    const ratings: Rating[] = [];
+
+    for (const pos of usableTileQueue) {
+      ratings.push({ pos, score: 1 });
+    }
+
+    // Count usable tile
+    while (usableTileQueue.length > 0) {
+      const curPos = usableTileQueue.pop()!;
+      usableCellCount += 1;
+
+      if (sameCellCount + usableCellCount >= this.instr.number)
+        return { tilesNeedCheck: null, ratings };
+
+      for (const edge of grid.getEdges(curPos)) {
+        if (visited.get(edge.x, edge.y)) continue;
+
+        const edgeTile = grid.getTile(edge.x, edge.y);
+
+        if (edgeTile == BTTile.Empty || edgeTile == tile) {
+          usableTileQueue.push(edge);
+          visited.set(edge.x, edge.y, 1);
+        }
+      }
+    }
+
+    return sameCellCount + usableCellCount >= this.instr.number
+      ? { tilesNeedCheck: null, ratings }
+      : false;
   }
 
-  return sameCellCount + usableCellCount >= symbol.number ? emptyEdges : false;
+  public checkLocal(
+    grid: BTGridData,
+    positions: Position[]
+  ): CheckResult | boolean {
+    // TODO: Also skip checks if color is the same and within the zone but not directly affecting
+
+    // Skip checks if it is too far to affect the symbol
+    if (
+      positions.every(
+        pos =>
+          Math.abs(pos.x - this.instr.x) + Math.abs(pos.y - this.instr.y) >
+          this.instr.number
+      )
+    )
+      return true;
+
+    return this.checkGlobal(grid);
+  }
 }

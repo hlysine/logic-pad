@@ -1,5 +1,4 @@
 import { Color, Position } from '../../primitives';
-import Instruction from '../../instruction';
 import GridData from '../../grid';
 import TileData from '../../tile';
 import Rule from '../../rules/rule';
@@ -12,138 +11,30 @@ import DartSymbol, { instance as dartInstance } from '../../symbols/dartSymbol';
 import ViewpointSymbol, {
   instance as viewpointInstance,
 } from '../../symbols/viewpointSymbol';
-import GalaxySymbol, {
-  instance as galaxyInstance,
-} from '../../symbols/galaxySymbol';
-import LotusSymbol, {
-  instance as lotusInstance,
-} from '../../symbols/lotusSymbol';
-import { verifyAreaNumberSymbol } from './symbols/areaNumber';
-import { buildDartAdjacency, verifyDartSymbol } from './symbols/dart';
-import {
-  verifyGalaxySymbol,
-  verifyLotusSymbol,
-} from './symbols/directionLinker';
-import { verifyViewpointSymbol } from './symbols/viewpoint';
-import ConnectAllRule, {
-  instance as connectAllInstance,
-} from '../../rules/connectAllRule';
-import { verifyConnectAllRule } from './rules/connectAll';
-
-export enum BTTile {
-  Empty,
-  Dark,
-  Light,
-  Border,
-}
-
-export type BTColor = BTTile.Dark | BTTile.Light;
-
-export class BTGridData {
-  public readonly tiles: BTTile[][];
-  public readonly symbols: Symbol[];
-  public readonly rules: Rule[];
-  public readonly width: number;
-  public readonly height: number;
-
-  public constructor(
-    tiles: BTTile[][],
-    symbols: Symbol[],
-    rules: Rule[],
-    width: number,
-    height: number
-  ) {
-    this.tiles = tiles;
-    this.symbols = symbols;
-    this.rules = rules;
-    this.width = width;
-    this.height = height;
-  }
-
-  public getTile(x: number, y: number): BTTile {
-    return this.tiles[y][x];
-  }
-
-  public isInBound(x: number, y: number) {
-    return x >= 0 && x < this.width && y >= 0 && y < this.height;
-  }
-
-  public getEdges(pos: Position): Position[] {
-    const positions: Position[] = [];
-
-    if (pos.x > 0) {
-      if (this.getTile(pos.x - 1, pos.y) != BTTile.Border)
-        positions.push({ x: pos.x - 1, y: pos.y });
-    }
-    if (pos.x + 1 < this.width) {
-      if (this.getTile(pos.x + 1, pos.y) != BTTile.Border)
-        positions.push({ x: pos.x + 1, y: pos.y });
-    }
-    if (pos.y > 0) {
-      if (this.getTile(pos.x, pos.y - 1) != BTTile.Border)
-        positions.push({ x: pos.x, y: pos.y - 1 });
-    }
-    if (pos.y + 1 < this.height) {
-      if (this.getTile(pos.x, pos.y + 1) != BTTile.Border)
-        positions.push({ x: pos.x, y: pos.y + 1 });
-    }
-
-    return positions;
-  }
-}
-
-export function getOppositeColor(color: BTColor): BTColor {
-  return color == BTTile.Dark ? BTTile.Light : BTTile.Dark;
-}
-
-export function colorToBTTile(color: Color): BTTile {
-  if (color === Color.Gray) return BTTile.Empty;
-  else if (color === Color.Light) return BTTile.Light;
-  else return BTTile.Dark;
-}
-
-// This interface stores tiles that are "near" to a symbol or rule. ("near" means able to influence the result of a symbol or rule)
-// For example, if the instruction is an area symbol, affected tiles will store the position of the empty tiles on the border of the symbol.
-interface Adjacency {
-  instruction: Instruction;
-  affectedTiles: Position[];
-}
-
-export function solveAdvanced(grid: GridData): GridData | null {
-  // Translate to BT data types
-  const newGrid = translateToBTGridData(grid);
-
-  // Generate adjacencies
-  const adjacencies: Adjacency[] = [];
-
-  for (const symbol of newGrid.symbols) {
-    let tiles: Position[] | false;
-    if (symbol.id == areaNumberInstance.id) {
-      tiles = verifyAreaNumberSymbol(newGrid, symbol as AreaNumberSymbol);
-      if (!tiles) return null;
-    } else if (symbol.id == dartInstance.id) {
-      tiles = buildDartAdjacency(newGrid, symbol as DartSymbol);
-      if (!tiles) return null;
-    } else if (symbol.id == viewpointInstance.id) {
-      tiles = verifyViewpointSymbol(newGrid, symbol as ViewpointSymbol);
-      if (!tiles) return null;
-    } else if (symbol.id == galaxyInstance.id) {
-      tiles = verifyGalaxySymbol(newGrid, symbol as GalaxySymbol);
-      if (!tiles) return null;
-    } else if (symbol.id == lotusInstance.id) {
-      tiles = verifyLotusSymbol(newGrid, symbol as LotusSymbol);
-      if (!tiles) return null;
-    }
-
-    if (tiles!) adjacencies.push({ instruction: symbol, affectedTiles: tiles });
-  }
-
-  // Call backtrack
-  const result = backtrack(newGrid, adjacencies);
-  if (!result) return null;
-
-  return translateBackGridData(grid, newGrid);
-}
+import { instance as galaxyInstance } from '../../symbols/galaxySymbol';
+import { instance as lotusInstance } from '../../symbols/lotusSymbol';
+import { instance as undercluedInstance } from '../../rules/undercluedRule';
+import ConnectAllRule from '../../rules/connectAllRule';
+import BTModule, { BTGridData, BTTile, IntArray2D, Rating } from './data';
+import AreaNumberBTModule from './symbols/areaNumber';
+import DirectionLinkerBTModule from './symbols/directionLinker';
+import DirectionLinkerSymbol from '../../symbols/directionLinkerSymbol';
+import DartBTModule from './symbols/dart';
+import ViewpointBTModule from './symbols/viewpoint';
+import { instance as connectAllInstance } from '../z3/modules/connectAllModule';
+import ConnectAllBTModule from './rules/connectAll';
+import BanPatternRule, {
+  instance as banPatternInstance,
+} from '../../rules/banPatternRule';
+import BanPatternBTModule from './rules/banPattern';
+import RegionAreaBTModule from './rules/regionArea';
+import RegionAreaRule, {
+  instance as regionAreaInstance,
+} from '../../rules/regionAreaRule';
+import MyopiaSymbol, {
+  instance as myopiaInstance,
+} from '../../symbols/myopiaSymbol';
+import MyopiaBTModule from './symbols/myopia';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -155,12 +46,25 @@ function translateToBTGridData(grid: GridData): BTGridData {
     else return BTTile.Empty;
   });
 
+  const connections: Position[][][] = array(
+    grid.width,
+    grid.height,
+    (x, y) => grid.connections.getConnectedTiles({ x, y }) as Position[]
+  );
+
   const symbols: Symbol[] = [];
   grid.symbols.forEach(s => symbols.push(...s));
 
   const rules: Rule[] = [...grid.rules];
 
-  return new BTGridData(tiles, symbols, rules, grid.width, grid.height);
+  return new BTGridData(
+    tiles,
+    connections,
+    symbols,
+    rules,
+    grid.width,
+    grid.height
+  );
 }
 
 function translateBackGridData(grid: GridData, btGrid: BTGridData): GridData {
@@ -185,98 +89,34 @@ function translateBackGridData(grid: GridData, btGrid: BTGridData): GridData {
   return grid.withTiles(tiles);
 }
 
-function buildAdjacencyGrid(
-  grid: BTGridData,
-  adjList: Adjacency[]
-): (Adjacency[] | null)[][] {
-  let adjGrid: (Adjacency[] | null)[][] = [];
-
-  // Initialize the map
-  for (let y = 0; y < grid.height; y++) {
-    adjGrid[y] = [];
-    for (let x = 0; x < grid.width; x++) {
-      adjGrid[y][x] = null;
-    }
-  }
-
-  for (const adj of adjList) {
-    for (const pos of adj.affectedTiles) {
-      const tile = grid.getTile(pos.x, pos.y);
-
-      if (tile != BTTile.Empty) continue;
-
-      if (!adjGrid[pos.y][pos.x]) adjGrid[pos.y][pos.x] = [];
-      adjGrid[pos.y][pos.x]!.push(adj);
-    }
-  }
-
-  return adjGrid;
-}
-
 function isValid(
   grid: BTGridData,
-  adjGrid: (Adjacency[] | null)[][],
-  placed: Position,
-  originalAdj: [Adjacency, Position[]][]
-): boolean {
-  // Loop through all symbols & rules that are "near" to this cell
-  // For most constraints, only cells that are "near" can make the constraint invalid, so only those cells should be checked
+  places: Position[],
+  modules: BTModule[],
+  checkable: (IntArray2D | null)[],
+  ratings: (Rating[] | null)[]
+): [(IntArray2D | null)[], (Rating[] | null)[]] | false {
+  const newCheckable: (IntArray2D | null)[] = [...checkable];
+  const newRatings: (Rating[] | null)[] = [...ratings];
 
-  if (adjGrid[placed.y][placed.x]) {
-    for (const adj of adjGrid[placed.y][placed.x]!) {
-      let result: Position[] | false;
+  for (let i = 0; i < modules.length; i++) {
+    const module = modules[i];
 
-      if (adj.instruction.id == areaNumberInstance.id) {
-        result = verifyAreaNumberSymbol(
-          grid,
-          adj.instruction as AreaNumberSymbol
-        );
-      } else if (adj.instruction.id == dartInstance.id) {
-        //     // For dart, we don't need to rebuild adjacency
-        result = verifyDartSymbol(grid, adj.instruction as DartSymbol)
-          ? adj.affectedTiles
-          : false;
-      } else if (adj.instruction.id == viewpointInstance.id) {
-        result = verifyViewpointSymbol(
-          grid,
-          adj.instruction as ViewpointSymbol
-        );
-      } else if (adj.instruction.id == galaxyInstance.id) {
-        result = verifyGalaxySymbol(grid, adj.instruction as GalaxySymbol);
-      } else if (adj.instruction.id == lotusInstance.id) {
-        result = verifyLotusSymbol(grid, adj.instruction as LotusSymbol);
-      }
+    // Check if skippable
+    if (checkable[i] && !places.some(pos => checkable[i]!.get(pos.x, pos.y)))
+      continue;
 
-      if (!result!) return false;
+    const result = module.checkLocal(grid, places);
+    if (!result) return false;
 
-      // Save affected cells
-      originalAdj.push([adj, adj.affectedTiles]);
-      // Update adjacency
-      adj.affectedTiles = result;
-    }
+    // If returns true, it means do not change checkable and ratings
+    if (result === true) continue;
+
+    newCheckable[i] = result.tilesNeedCheck;
+    newRatings[i] = result.ratings;
   }
 
-  // Area symbol special case
-  for (const symbol of grid.symbols) {
-    // Opposite color case
-    // A cell can potentially invalidate an area symbol even if the cell is not "near" to the symbol
-    // TODO: Duplicated area check
-    if (
-      symbol.id == areaNumberInstance.id &&
-      !verifyAreaNumberSymbol(grid, symbol as AreaNumberSymbol)
-    )
-      return false;
-  }
-
-  for (const rule of grid.rules) {
-    if (
-      rule.id == connectAllInstance.id &&
-      !verifyConnectAllRule(grid, rule as ConnectAllRule)
-    )
-      return false;
-  }
-
-  return true;
+  return [newCheckable, newRatings];
 }
 
 function naiveNextTile(grid: BTGridData): Position | null {
@@ -289,90 +129,153 @@ function naiveNextTile(grid: BTGridData): Position | null {
 }
 
 // This function chooses the next empty tile to search.
-// The logic is that cells that are more "near" to symbols and rules should be searched first (more constrained).
-// This help reduces the search space.
-function advancedNextTile(
+function getNextTile(
   grid: BTGridData,
-  adjGrid: (Adjacency[] | null)[][]
+  ratings: (Rating[] | null)[]
 ): Position | null {
-  // Find the cell with the most constraints in the lookup
-  let highest: number = 0;
+  const scores: number[][] = [];
+
+  // TODO: Sum up all the scores of connected tiles without overcounting
+
+  for (let y = 0; y < grid.height; y++) {
+    scores[y] = [];
+    for (let x = 0; x < grid.width; x++) {
+      scores[y][x] = 0;
+    }
+  }
+
+  for (const rating of ratings) {
+    if (!rating) continue;
+    for (const score of rating) {
+      scores[score.pos.y][score.pos.x] += score.score;
+    }
+  }
+
+  let highest = 0;
   let pos: Position | null = null;
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
-      if (!adjGrid[y][x]) continue;
-
-      if (adjGrid[y][x]!.length > highest) {
-        highest = adjGrid[y][x]!.length;
+      if (scores[y][x] > highest && grid.getTile(x, y) == BTTile.Empty) {
+        highest = scores[y][x];
         pos = { x, y };
       }
     }
   }
+
   if (pos) return pos;
 
   // Fallback to naive next tile
   return naiveNextTile(grid);
 }
 
-// Reverse all adjacency changes made.
-function reverseAdjChange(originalAdj: [Adjacency, Position[]][]) {
-  for (const [adj, affectedTiles] of originalAdj) {
-    adj.affectedTiles = affectedTiles;
-  }
-}
-
-function backtrack(grid: BTGridData, adjacencies: Adjacency[]): boolean {
-  // Build an adjacency lookup grid
-  // TODO: Do not build this lookup grid on every backtrack
-  const adjGrid = buildAdjacencyGrid(grid, adjacencies);
-
-  // Find the first empty cell
-  let pos = advancedNextTile(grid, adjGrid);
+function backtrack(
+  grid: BTGridData,
+  modules: BTModule[],
+  checkable: (IntArray2D | null)[],
+  ratings: (Rating[] | null)[]
+): boolean {
+  // Find the best empty cell to guess
+  let pos = getNextTile(grid, ratings);
   if (!pos) return true;
 
   // TODO: Use a better method to determine the order
 
   {
-    grid.tiles[pos.y][pos.x] = BTTile.Light;
+    grid.setTileWithConnection(pos.x, pos.y, BTTile.Light);
 
-    // Guess
-    const originalAdj: [Adjacency, Position[]][] = [];
-    if (
-      isValid(grid, adjGrid, pos, originalAdj) &&
-      backtrack(grid, adjacencies)
-    )
-      return true;
+    const places = grid.connections[pos.y][pos.x];
+    const result = isValid(grid, places, modules, checkable, ratings);
 
-    // Reverse adjacency changes
-    reverseAdjChange(originalAdj);
+    if (result && backtrack(grid, modules, result[0], result[1])) return true;
   }
 
   {
-    grid.tiles[pos.y][pos.x] = BTTile.Dark;
+    grid.setTileWithConnection(pos.x, pos.y, BTTile.Dark);
 
-    // Guess
-    const originalAdj: [Adjacency, Position[]][] = [];
-    if (
-      isValid(grid, adjGrid, pos, originalAdj) &&
-      backtrack(grid, adjacencies)
-    )
-      return true;
+    const places = grid.connections[pos.y][pos.x];
+    const result = isValid(grid, places, modules, checkable, ratings);
 
-    // Reverse adjacency changes
-    reverseAdjChange(originalAdj);
+    if (result && backtrack(grid, modules, result[0], result[1])) return true;
   }
 
   // If both fail, returns to initial state
-  grid.tiles[pos.y][pos.x] = BTTile.Empty;
+  grid.setTileWithConnection(pos.x, pos.y, BTTile.Empty);
   return false;
 }
 
-interface PossibleState {
-  dark: boolean;
-  light: boolean;
+function solveNormal(input: GridData): GridData | null {
+  // Translate to BT data types
+  const grid = translateToBTGridData(input);
+
+  // Build modules
+  const modules: BTModule[] = [];
+
+  const checkable: (IntArray2D | null)[] = [];
+  const ratings: (Rating[] | null)[] = [];
+
+  // TODO: Combine symbols and rules
+  for (const symbol of grid.symbols) {
+    let module: BTModule | undefined;
+    if (symbol.id == areaNumberInstance.id) {
+      module = new AreaNumberBTModule(symbol as AreaNumberSymbol);
+    } else if (symbol.id == dartInstance.id) {
+      module = new DartBTModule(symbol as DartSymbol);
+    } else if (symbol.id == viewpointInstance.id) {
+      module = new ViewpointBTModule(symbol as ViewpointSymbol);
+    } else if (
+      symbol.id == galaxyInstance.id ||
+      symbol.id == lotusInstance.id
+    ) {
+      module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
+    } else if (symbol.id == myopiaInstance.id) {
+      module = new MyopiaBTModule(symbol as MyopiaSymbol);
+    }
+
+    if (!module) throw new Error('Symbol not supported.');
+
+    const result = module.checkGlobal(grid);
+    if (!result) return null;
+
+    modules.push(module);
+    checkable.push(result.tilesNeedCheck);
+    ratings.push(result.ratings);
+  }
+
+  for (const rule of grid.rules) {
+    let module: BTModule | undefined;
+    if (rule.id == connectAllInstance.id) {
+      module = new ConnectAllBTModule(rule as ConnectAllRule);
+    } else if (rule.id == regionAreaInstance.id) {
+      module = new RegionAreaBTModule(rule as RegionAreaRule);
+    } else if (rule.id == banPatternInstance.id) {
+      module = new BanPatternBTModule(rule as BanPatternRule);
+    } else if (rule.id == undercluedInstance.id) {
+      continue;
+    }
+
+    if (!module) throw new Error('Symbol not supported.');
+
+    const result = module.checkGlobal(grid);
+    if (!result) return null;
+
+    modules.push(module);
+    checkable.push(result.tilesNeedCheck);
+    ratings.push(result.ratings);
+  }
+
+  // Call backtrack
+  const result = backtrack(grid, modules, checkable, ratings);
+  if (!result) return null;
+
+  return translateBackGridData(input, grid);
 }
 
 export function solveUnderclued(input: GridData): GridData | null {
+  interface PossibleState {
+    dark: boolean;
+    light: boolean;
+  }
+
   let grid = input;
   let count = 0;
 
@@ -382,10 +285,12 @@ export function solveUnderclued(input: GridData): GridData | null {
   }));
 
   function search(x: number, y: number, tile: TileData, color: Color): boolean {
+    console.log(`Trying (${x}, ${y}) with ${color}`);
+
     const newGrid = grid.setTile(x, y, tile.withColor(color));
 
     // Solve
-    const solution = solveAdvanced(newGrid);
+    const solution = solveNormal(newGrid);
     count++;
 
     // Update the new possible states
@@ -408,8 +313,6 @@ export function solveUnderclued(input: GridData): GridData | null {
 
       if (!tile.exists || tile.color !== Color.Gray) continue;
 
-      console.log(`Trying (${x}, ${y})`);
-
       // We can skip this solve if it is proved to be solvable
       const darkPossible =
         possibles[y][x].dark || search(x, y, tile, Color.Dark);
@@ -429,4 +332,12 @@ export function solveUnderclued(input: GridData): GridData | null {
   console.log(`Solve count: ${count}`);
 
   return grid;
+}
+
+export function solve(grid: GridData): GridData | null {
+  if (grid.findRule(rule => rule.id == undercluedInstance.id)) {
+    return solveUnderclued(grid);
+  } else {
+    return solveNormal(grid);
+  }
 }

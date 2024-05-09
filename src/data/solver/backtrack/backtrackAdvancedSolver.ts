@@ -1,6 +1,6 @@
 import GridData from '../../grid';
 import Solver from '../solver';
-import { solveAdvanced, solveUnderclued } from './worker';
+import { solve } from './worker';
 import { instance as undercluedInstance } from '../../rules/undercluedRule';
 
 export default class BacktrackAdvancedSolver extends Solver {
@@ -14,12 +14,7 @@ export default class BacktrackAdvancedSolver extends Solver {
 
     console.time('Solve time');
 
-    let res: GridData | null;
-    if (grid.findRule(rule => rule.id == undercluedInstance.id)) {
-      res = solveUnderclued(grid);
-    } else {
-      res = solveAdvanced(grid);
-    }
+    const res = solve(grid);
 
     console.timeEnd('Solve time');
 

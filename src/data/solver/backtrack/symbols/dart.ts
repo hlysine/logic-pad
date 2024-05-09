@@ -1,51 +1,80 @@
 import DartSymbol from '../../../symbols/dartSymbol';
-import { Position } from '../../../primitives';
-import { BTColor, BTGridData, BTTile, getOppositeColor } from '../worker';
 import { move } from '../../../helper';
+import { Position } from '../../../primitives';
+import BTModule, {
+  BTColor,
+  BTGridData,
+  BTTile,
+  CheckResult,
+  IntArray2D,
+  createOneTileResult,
+  getOppositeColor,
+} from '../data';
 
-export function verifyDartSymbol(
-  grid: BTGridData,
-  symbol: DartSymbol
-): boolean {
-  const tile = grid.getTile(symbol.x, symbol.y);
+export default class DartBTModule extends BTModule {
+  public instr: DartSymbol;
 
-  if (tile == BTTile.Empty) return true;
+  private cachedCheckResult?: CheckResult;
 
-  let pos = move({ x: symbol.x, y: symbol.y }, symbol.orientation);
+  public constructor(instr: DartSymbol) {
+    super();
+    this.instr = instr;
+  }
 
-  let completed = 0;
-  let empty = 0;
+  public checkGlobal(grid: BTGridData): CheckResult | false {
+    const tile = grid.getTile(this.instr.x, this.instr.y);
 
-  while (grid.isInBound(pos.x, pos.y)) {
-    // Opposite tiles
-    if (grid.getTile(pos.x, pos.y) == getOppositeColor(tile as BTColor)) {
-      completed += 1;
-      if (completed > symbol.number) return false;
+    if (tile == BTTile.Empty)
+      return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
+
+    let pos = move(
+      { x: this.instr.x, y: this.instr.y },
+      this.instr.orientation
+    );
+
+    let completed = 0;
+    let empty = 0;
+
+    while (grid.isInBound(pos.x, pos.y)) {
+      // Opposite tiles
+      if (grid.getTile(pos.x, pos.y) == getOppositeColor(tile as BTColor)) {
+        completed += 1;
+        if (completed > this.instr.number) return false;
+      }
+
+      // Empty tiles
+      if (grid.getTile(pos.x, pos.y) == BTTile.Empty) empty += 1;
+
+      pos = move(pos, this.instr.orientation);
     }
 
-    // Empty tiles
-    if (grid.getTile(pos.x, pos.y) == BTTile.Empty) empty += 1;
+    if (completed + empty < this.instr.number) return false;
 
-    pos = move(pos, symbol.orientation);
+    if (!this.cachedCheckResult)
+      this.cachedCheckResult = this.buildCheckAndRating(grid);
+
+    return this.cachedCheckResult;
   }
 
-  return completed + empty >= symbol.number;
-}
-
-// Dart adjacency can be built before running the solver
-export function buildDartAdjacency(
-  grid: BTGridData,
-  symbol: DartSymbol
-): Position[] {
-  const affectedTiles: Position[] = [];
-
-  let pos = { x: symbol.x, y: symbol.y };
-
-  while (grid.isInBound(pos.x, pos.y)) {
-    if (grid.getTile(pos.x, pos.y) == BTTile.Empty) affectedTiles.push(pos);
-
-    pos = move(pos, symbol.orientation);
+  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
+    return this.checkGlobal(grid);
   }
 
-  return affectedTiles;
+  private buildCheckAndRating(grid: BTGridData): CheckResult {
+    const tilesNeedCheck = IntArray2D.create(grid.width, grid.height);
+    const ratings = [];
+
+    let pos = { x: this.instr.x, y: this.instr.y };
+
+    while (grid.isInBound(pos.x, pos.y)) {
+      if (grid.getTile(pos.x, pos.y) == BTTile.Empty) {
+        tilesNeedCheck.set(pos.x, pos.y, 1);
+        ratings.push({ pos, score: 1 });
+      }
+
+      pos = move(pos, this.instr.orientation);
+    }
+
+    return { tilesNeedCheck, ratings };
+  }
 }

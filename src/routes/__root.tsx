@@ -26,6 +26,9 @@ export const Route = createRootRoute({
                     <div id="color-ref-accent" className="text-accent hidden">
                       {/* For canvas components to retrieve this color */}
                     </div>
+                    <div id="color-ref-info" className="text-info hidden">
+                      {/* For canvas components to retrieve this color */}
+                    </div>
                     <DocumentTitle>Logic Pad</DocumentTitle>
                     <PWAPrompt />
                     <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">

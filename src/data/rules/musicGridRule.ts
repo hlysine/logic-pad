@@ -70,7 +70,9 @@ export default class MusicGridRule
   public onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData {
     if (newGrid.getTileCount(true, undefined, Color.Gray) === 0) return newGrid;
     const tiles = newGrid.tiles.map(row =>
-      row.map(tile => tile.withColor(Color.Light))
+      row.map(tile =>
+        tile.color === Color.Gray ? tile.withColor(Color.Light) : tile
+      )
     );
     return newGrid.copyWith({ tiles });
   }

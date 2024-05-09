@@ -37,6 +37,7 @@ export default class MusicGridRule
 
   /**
    * **Music Grid: Listen to the solution**
+   * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
    */
   public constructor(public readonly controlLines: readonly ControlLine[]) {
     super();

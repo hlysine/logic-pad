@@ -14,6 +14,7 @@ import {
   cleanUp,
   piano,
   pianoImmediate,
+  pianoImmediatePedal,
   playGrid,
   playImmediate,
 } from './piano';
@@ -24,6 +25,7 @@ export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;
 const MusicControls = lazy(async function () {
   await piano.load();
   await pianoImmediate.load();
+  await pianoImmediatePedal.load();
   return {
     default: memo(function MusicControls({
       instruction,

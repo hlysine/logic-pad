@@ -437,8 +437,12 @@ export default class SerializerV0 extends SerializerBase {
     let grid = puzzle.grid;
     if (puzzle.solution !== null) {
       const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
-        const tile = puzzle.grid.tiles[y][x];
-        return tile.exists && tile.color === Color.Gray
+        const tile = puzzle.grid.getTile(x, y);
+        const solutionTile = puzzle.solution!.getTile(x, y);
+        return tile.exists &&
+          !tile.fixed &&
+          solutionTile.exists &&
+          solutionTile.color !== Color.Gray
           ? tile.copyWith({
               color: puzzle.solution!.tiles[y][x].color,
             })

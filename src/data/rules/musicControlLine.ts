@@ -1,9 +1,24 @@
 export interface Row {
+  /**
+   * The note to play at this row, or undefined to keep the current note from the previous control line.
+   * If this is undefined from the first control line, the note will be silent.
+   */
   readonly note: string | undefined;
+  /**
+   * The velocity to play the note at, or undefined to keep the current velocity from the previous control line.
+   * Ranges from 0 to 1
+   */
   readonly velocity: number | undefined;
 }
 
 export class ControlLine {
+  /**
+   * Configure playback settings, taking effect at the given column (inclusive)
+   * @param column The column at which the settings take effect
+   * @param bpm The new beats per minute, or undefined to keep the current value from the previous control line
+   * @param pedal Whether the pedal is pressed, or undefined to keep the current value from the previous control line
+   * @param rows The notes to play at each row. Must have the same length as the grid height
+   */
   public constructor(
     public readonly column: number,
     public readonly bpm: number | undefined,

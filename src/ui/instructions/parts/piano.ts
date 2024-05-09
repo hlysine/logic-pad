@@ -15,14 +15,21 @@ export const piano = new Piano({
   release: false,
   pedal: false,
   velocities: 5,
-  maxPolyphony: 64,
+  maxPolyphony: 32,
+}).toDestination();
+
+export const pianoImmediatePedal = new Piano({
+  release: false,
+  pedal: false,
+  velocities: 5,
+  maxPolyphony: 32,
 }).toDestination();
 
 export const pianoImmediate = new Piano({
   release: false,
   pedal: false,
   velocities: 5,
-  maxPolyphony: 64,
+  maxPolyphony: 32,
 }).toDestination();
 
 export function encodePlayback(
@@ -149,6 +156,9 @@ export function encodeImmediate(
   oldGrid: GridData,
   musicGrid: MusicGridRule
 ) {
+  pianoImmediate.pedalUp();
+  pianoImmediatePedal.pedalDown();
+
   // prepare events
   let bpm = 120;
   let pedal = false;
@@ -189,9 +199,8 @@ export function encodeImmediate(
         (!oldTile.exists || oldTile.color !== Color.Dark) &&
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        if (pedal) pianoImmediate.pedalDown();
-        else pianoImmediate.pedalUp();
-        pianoImmediate.keyDown({ note: row.note, velocity: row.velocity });
+        const targetPiano = pedal ? pianoImmediatePedal : pianoImmediate;
+        targetPiano.keyDown({ note: row.note, velocity: row.velocity });
         let endPos = { x, y };
         while (
           grid.connections.isConnected({
@@ -204,7 +213,7 @@ export function encodeImmediate(
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
         const time = `+${(((endPos.x + 1) / 2 - x / 2) * 120 * 120) / Tone.getTransport().bpm.value / bpm}`;
-        pianoImmediate.keyUp({
+        targetPiano.keyUp({
           note: row.note,
           velocity: row.velocity,
           time,

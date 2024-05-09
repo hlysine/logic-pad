@@ -983,7 +983,15 @@ declare global {
   export { allRules };
 
   export interface Row {
+    /**
+     * The note to play at this row, or undefined to keep the current note from the previous control line.
+     * If this is undefined from the first control line, the note will be silent.
+     */
     readonly note: string | undefined;
+    /**
+     * The velocity to play the note at, or undefined to keep the current velocity from the previous control line.
+     * Ranges from 0 to 1
+     */
     readonly velocity: number | undefined;
   }
   export class ControlLine {
@@ -991,6 +999,13 @@ declare global {
     readonly bpm: number | undefined;
     readonly pedal: boolean | undefined;
     readonly rows: readonly Row[];
+    /**
+     * Configure playback settings, taking effect at the given column (inclusive)
+     * @param column The column at which the settings take effect
+     * @param bpm The new beats per minute, or undefined to keep the current value from the previous control line
+     * @param pedal Whether the pedal is pressed, or undefined to keep the current value from the previous control line
+     * @param rows The notes to play at each row. Must have the same length as the grid height
+     */
     constructor(
       column: number,
       bpm: number | undefined,
@@ -1021,11 +1036,13 @@ declare global {
   {
     readonly controlLines: readonly ControlLine[];
     /**
-     * **Music Grid: Listen and deduce**
+     * **Music Grid: Listen to the solution**
+     * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
      */
     constructor(controlLines: readonly ControlLine[]);
     get id(): string;
     get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(_grid: GridData): RuleState;

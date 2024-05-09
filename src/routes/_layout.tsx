@@ -17,7 +17,7 @@ export const Route = createFileRoute('/_layout')({
               <img src="/logo.svg" className="w-8 h-8 inline-block" />
               Logic Pad
             </h1>
-            <ul className="menu menu-horizontal bg-base-200 rounded-box">
+            <ul className="menu menu-horizontal bg-base-200 text-base-content rounded-box">
               <li className="dropdown dropdown-bottom">
                 <button tabIndex={0} role="button">
                   Dev Puzzles{' '}

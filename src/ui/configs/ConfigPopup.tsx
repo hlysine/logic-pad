@@ -167,7 +167,7 @@ export default memo(function ConfigPopup() {
             </button>
             <div
               tabIndex={0}
-              className="dropdown-content z-[1] p-2 shadow-lg bg-base-200 rounded-box w-72 flex gap-2 mb-2"
+              className="dropdown-content z-[1] p-2 shadow-lg bg-base-200 text-base-content rounded-box w-72 flex gap-2 mb-2"
             >
               <input
                 type="text"

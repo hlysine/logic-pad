@@ -19,7 +19,10 @@ export default memo(function EditorPane() {
           <a
             key={name}
             role="tab"
-            className={cn('tab', activeTab === i && 'tab-active')}
+            className={cn(
+              'tab text-neutral-content',
+              activeTab === i && 'tab-active'
+            )}
             onClick={() => setActiveTab(i)}
           >
             {name}

@@ -156,8 +156,13 @@ export function encodeImmediate(
   oldGrid: GridData,
   musicGrid: MusicGridRule
 ) {
+  // set the piano to the correct state
   pianoImmediate.pedalUp();
   pianoImmediatePedal.pedalDown();
+
+  // a small hack to hide the progress line if no grid is currently playing
+  if (Tone.getTransport().state !== 'started')
+    Tone.getTransport().ticks = Tone.getTransport().PPQ * grid.width * 2;
 
   let remainingPolyphony = 2;
 

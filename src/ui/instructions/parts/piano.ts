@@ -9,7 +9,7 @@ type EventData =
   | { type: 'keydown'; value: string; velocity: number }
   | { type: 'keyup'; value: string }
   | { type: 'bpm'; value: number }
-  | { type: 'stopAll' };
+  | { type: 'complete' };
 
 export const playbackState = {
   /**
@@ -41,7 +41,8 @@ export const pianoImmediate = new Piano({
 
 export function encodePlayback(
   grid: GridData,
-  musicGrid: MusicGridRule
+  musicGrid: MusicGridRule,
+  onComplete?: () => void
 ): () => void {
   // prepare events
   let bpm: number | undefined;
@@ -114,6 +115,7 @@ export function encodePlayback(
       }
     });
   }
+  addEvent(grid.width / 2, { type: 'complete' });
 
   // reset bpm to 120 before encoding because the time values are bpm-dependent
   Tone.getTransport().bpm.value = 120;
@@ -143,8 +145,8 @@ export function encodePlayback(
           case 'keyup':
             piano.keyUp({ note: event.value, time });
             break;
-          case 'stopAll':
-            piano.stopAll();
+          case 'complete':
+            onComplete?.();
             break;
         }
       });
@@ -248,6 +250,7 @@ export function playGrid(
   grid: GridData,
   musicGrid: MusicGridRule,
   isSolution: boolean,
+  onComplete?: () => void,
   cache?: CachedPlayback
 ): CachedPlayback {
   playbackState.isSolution = isSolution;
@@ -257,7 +260,7 @@ export function playGrid(
     cache?.cleanUp?.();
     cache = {
       grid,
-      cleanUp: encodePlayback(grid, musicGrid),
+      cleanUp: encodePlayback(grid, musicGrid, onComplete),
     };
   }
   Tone.getTransport().start();

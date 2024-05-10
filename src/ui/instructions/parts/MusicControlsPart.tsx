@@ -44,12 +44,17 @@ const MusicControls = lazy(async function () {
         previousGrid.current = grid;
       }, [grid, instruction]);
 
+      const stopAll = (playback: CachedPlayback | undefined) => {
+        cleanUp(playback);
+        setPlayState('none');
+      };
+
       useEffect(() => {
-        return () => cleanUp(playback.current);
+        return () => stopAll(playback.current);
       }, []);
 
       useEffect(() => {
-        cleanUp(playback.current);
+        stopAll(playback.current);
       }, [grid.width, grid.height]);
 
       return (
@@ -59,8 +64,7 @@ const MusicControls = lazy(async function () {
             className="btn btn-ghost text-lg"
             onClick={() => {
               if (playState === 'listen') {
-                cleanUp(playback.current);
-                setPlayState('none');
+                stopAll(playback.current);
               } else {
                 const tiles = array(
                   solution?.width ?? grid.width,
@@ -78,6 +82,7 @@ const MusicControls = lazy(async function () {
                   newGrid,
                   instruction,
                   true,
+                  () => setPlayState('none'),
                   playback.current
                 );
                 setPlayState('listen');
@@ -101,13 +106,13 @@ const MusicControls = lazy(async function () {
             className="btn btn-ghost text-lg"
             onClick={() => {
               if (playState === 'play') {
-                cleanUp(playback.current);
-                setPlayState('none');
+                stopAll(playback.current);
               } else {
                 playback.current = playGrid(
                   grid,
                   instruction,
                   false,
+                  () => setPlayState('none'),
                   playback.current
                 );
                 setPlayState('play');

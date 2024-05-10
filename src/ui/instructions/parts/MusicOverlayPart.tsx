@@ -131,8 +131,8 @@ export default memo(function MusicOverlayPart() {
     >
       <div
         ref={targetRef}
-        className="absolute w-48 h-0 opacity-0"
-        style={{ left: `${targetPosition}em`, top: '50%' }}
+        className="absolute w-48 h-0 opacity-0 -top-12 xl:top-1/2"
+        style={{ left: `${targetPosition}em` }}
       ></div>
     </GridRawCanvasOverlay>
   );

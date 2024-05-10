@@ -109,6 +109,10 @@ export default class MusicGridRule
   public get validateWithSolution(): boolean {
     return true;
   }
+
+  public get isSingleton(): boolean {
+    return true;
+  }
 }
 
 export const instance = new MusicGridRule([new ControlLine(0, 120, false, [])]);

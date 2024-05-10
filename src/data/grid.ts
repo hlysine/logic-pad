@@ -44,7 +44,8 @@ export default class GridData {
     const newSymbols = symbols
       ? GridData.deduplicateSymbols(symbols)
       : new Map<string, Symbol[]>();
-    const newRules = rules ? rules.slice() : []; // do not deduplicate rules because it makes for bad editor experience
+    // do not deduplicate all rules because it makes for bad editor experience
+    const newRules = rules ? GridData.deduplicateSingletonRules(rules) : [];
     this.symbols = newSymbols;
     this.rules = newRules;
     newSymbols.forEach(list => {
@@ -849,6 +850,19 @@ export default class GridData {
   public static deduplicateRules(rules: readonly Rule[]): Rule[] {
     return rules.filter(
       (rule, index, self) => self.findIndex(r => r.equals(rule)) === index
+    );
+  }
+
+  /**
+   * Deduplicate the singleton rules in the given list.
+   *
+   * @param rules The list of rules to deduplicate.
+   * @returns The deduplicated list of rules.
+   */
+  public static deduplicateSingletonRules(rules: readonly Rule[]): Rule[] {
+    return rules.filter(
+      (rule, index, self) =>
+        !rule.isSingleton || self.findIndex(r => r.id === rule.id) === index
     );
   }
 

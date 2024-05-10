@@ -47,6 +47,10 @@ export default class CompletePatternRule extends Rule {
   public get validateWithSolution(): boolean {
     return true;
   }
+
+  public get isSingleton(): boolean {
+    return true;
+  }
 }
 
 export const instance = new CompletePatternRule();

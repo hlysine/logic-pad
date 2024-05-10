@@ -1,4 +1,5 @@
 import { handlesGridChange } from './events/onGridChange';
+import { handlesSetGrid } from './events/onSetGrid';
 import GridConnections from './gridConnections';
 import { array, move } from './helper';
 import { Color, Direction, Orientation, Position } from './primitives';
@@ -605,7 +606,7 @@ export default class GridData {
    *
    * @returns The new grid with all non-fixed tiles reset to gray.
    */
-  public resetTiles(): GridData {
+  public resetTiles(): this {
     let changed = false;
     const newTiles = array(this.width, this.height, (x, y) => {
       const tile = this.getTile(x, y);
@@ -616,7 +617,20 @@ export default class GridData {
       return tile;
     });
     if (!changed) return this;
-    return this.copyWith({ tiles: newTiles });
+    let newGrid = this.copyWith({ tiles: newTiles });
+    this.symbols.forEach(list => {
+      list.forEach(symbol => {
+        if (handlesSetGrid(symbol)) {
+          newGrid = symbol.onSetGrid(this, newGrid);
+        }
+      });
+    });
+    this.rules.forEach(rule => {
+      if (handlesSetGrid(rule)) {
+        newGrid = rule.onSetGrid(this, newGrid);
+      }
+    });
+    return newGrid as this;
   }
 
   /**

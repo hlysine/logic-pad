@@ -59,48 +59,50 @@ const MusicControls = lazy(async function () {
 
       return (
         <>
-          <button
-            type="button"
-            className="btn btn-ghost text-lg"
-            onClick={() => {
-              if (playState === 'listen') {
-                stopAll(playback.current);
-              } else {
-                const tiles = array(
-                  solution?.width ?? grid.width,
-                  solution?.height ?? grid.height,
-                  (x, y) => {
-                    const gridTile = grid.getTile(x, y);
-                    if (!solution) return gridTile;
-                    const tile = solution.getTile(x, y);
-                    if (tile.exists && tile.color !== Color.Gray) return tile;
-                    return gridTile;
-                  }
-                );
-                const newGrid = grid.withTiles(tiles);
-                playback.current = playGrid(
-                  newGrid,
-                  instruction,
-                  true,
-                  () => setPlayState('none'),
-                  playback.current
-                );
-                setPlayState('listen');
-              }
-            }}
-          >
-            {playState === 'listen' ? (
-              <>
-                <RiStopLargeFill />
-                Stop
-              </>
-            ) : (
-              <>
-                <RiHeadphoneFill />
-                Listen
-              </>
-            )}
-          </button>
+          {solution && (
+            <button
+              type="button"
+              className="btn btn-ghost text-lg"
+              onClick={() => {
+                if (playState === 'listen') {
+                  stopAll(playback.current);
+                } else {
+                  const tiles = array(
+                    solution?.width ?? grid.width,
+                    solution?.height ?? grid.height,
+                    (x, y) => {
+                      const gridTile = grid.getTile(x, y);
+                      if (!solution) return gridTile;
+                      const tile = solution.getTile(x, y);
+                      if (tile.exists && tile.color !== Color.Gray) return tile;
+                      return gridTile;
+                    }
+                  );
+                  const newGrid = grid.withTiles(tiles);
+                  playback.current = playGrid(
+                    newGrid,
+                    instruction,
+                    true,
+                    () => setPlayState('none'),
+                    playback.current
+                  );
+                  setPlayState('listen');
+                }
+              }}
+            >
+              {playState === 'listen' ? (
+                <>
+                  <RiStopLargeFill />
+                  Stop
+                </>
+              ) : (
+                <>
+                  <RiHeadphoneFill />
+                  Listen
+                </>
+              )}
+            </button>
+          )}
           <button
             type="button"
             className="btn btn-ghost text-lg"

@@ -1,10 +1,10 @@
-import { Suspense, lazy, memo, useEffect, useRef } from 'react';
+import { Suspense, lazy, memo, useEffect, useRef, useState } from 'react';
 import { useGrid } from '../../GridContext';
 import { InstructionPartProps, PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
   instance as musicGridInstance,
 } from '../../../data/rules/musicGridRule';
-import { RiHeadphoneFill } from 'react-icons/ri';
+import { RiHeadphoneFill, RiStopLargeFill } from 'react-icons/ri';
 import { FaPlay } from 'react-icons/fa';
 import Loading from '../../components/Loading';
 import { Color } from '../../../data/primitives';
@@ -33,6 +33,9 @@ const MusicControls = lazy(async function () {
       const { grid, solution } = useGrid();
       const playback = useRef<CachedPlayback | undefined>(undefined);
       const previousGrid = useRef<GridData | null>(null);
+      const [playState, setPlayState] = useState<'listen' | 'play' | 'none'>(
+        'none'
+      );
 
       useEffect(() => {
         if (previousGrid.current && !previousGrid.current.colorEquals(grid)) {
@@ -55,43 +58,73 @@ const MusicControls = lazy(async function () {
             type="button"
             className="btn btn-ghost text-lg"
             onClick={() => {
-              const tiles = array(
-                solution?.width ?? grid.width,
-                solution?.height ?? grid.height,
-                (x, y) => {
-                  const gridTile = grid.getTile(x, y);
-                  if (!solution) return gridTile;
-                  const tile = solution.getTile(x, y);
-                  if (tile.exists && tile.color !== Color.Gray) return tile;
-                  return gridTile;
-                }
-              );
-              const newGrid = grid.withTiles(tiles);
-              playback.current = playGrid(
-                newGrid,
-                instruction,
-                true,
-                playback.current
-              );
+              if (playState === 'listen') {
+                cleanUp(playback.current);
+                setPlayState('none');
+              } else {
+                const tiles = array(
+                  solution?.width ?? grid.width,
+                  solution?.height ?? grid.height,
+                  (x, y) => {
+                    const gridTile = grid.getTile(x, y);
+                    if (!solution) return gridTile;
+                    const tile = solution.getTile(x, y);
+                    if (tile.exists && tile.color !== Color.Gray) return tile;
+                    return gridTile;
+                  }
+                );
+                const newGrid = grid.withTiles(tiles);
+                playback.current = playGrid(
+                  newGrid,
+                  instruction,
+                  true,
+                  playback.current
+                );
+                setPlayState('listen');
+              }
             }}
           >
-            <RiHeadphoneFill />
-            Listen
+            {playState === 'listen' ? (
+              <>
+                <RiStopLargeFill />
+                Stop
+              </>
+            ) : (
+              <>
+                <RiHeadphoneFill />
+                Listen
+              </>
+            )}
           </button>
           <button
             type="button"
             className="btn btn-ghost text-lg"
             onClick={() => {
-              playback.current = playGrid(
-                grid,
-                instruction,
-                false,
-                playback.current
-              );
+              if (playState === 'play') {
+                cleanUp(playback.current);
+                setPlayState('none');
+              } else {
+                playback.current = playGrid(
+                  grid,
+                  instruction,
+                  false,
+                  playback.current
+                );
+                setPlayState('play');
+              }
             }}
           >
-            <FaPlay />
-            Play
+            {playState === 'play' ? (
+              <>
+                <RiStopLargeFill />
+                Stop
+              </>
+            ) : (
+              <>
+                <FaPlay />
+                Play
+              </>
+            )}
           </button>
         </>
       );

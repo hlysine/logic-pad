@@ -275,6 +275,7 @@ export function playImmediate(
 
 export function cleanUp(cache?: CachedPlayback) {
   cache?.cleanUp();
+  if (cache) cache.grid = null;
   Tone.getTransport().stop();
   piano.stopAll();
 }

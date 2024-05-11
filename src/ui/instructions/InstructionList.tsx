@@ -99,7 +99,7 @@ export default memo(function InstructionList({
             state={state?.rules[i]?.state}
             className={cn(rule.visibleWhenSolving || 'opacity-60')}
           >
-            {editable && <EditTarget instruction={rule} />}
+            {editable && <EditTarget configurable={rule} />}
           </Instruction>
         ))}
         {hasSymbols && <Title>Symbols</Title>}

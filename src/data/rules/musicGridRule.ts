@@ -6,8 +6,19 @@ import { resize } from '../helper';
 import { Color, RuleState, State } from '../primitives';
 import CustomIconSymbol from '../symbols/customIconSymbol';
 import TileData from '../tile';
-import { ControlLine } from './musicControlLine';
+import { ControlLine, Row } from './musicControlLine';
 import Rule, { SearchVariant } from './rule';
+
+const DEFAULT_SCALLE = [
+  new Row('C5', 0.6),
+  new Row('B4', 0.6),
+  new Row('A4', 0.6),
+  new Row('G4', 0.6),
+  new Row('F4', 0.6),
+  new Row('E4', 0.6),
+  new Row('D4', 0.6),
+  new Row('C4', 0.6),
+];
 
 export default class MusicGridRule
   extends Rule
@@ -24,7 +35,7 @@ export default class MusicGridRule
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.ControlLines,
-      default: [new ControlLine(0, 120, false, [])],
+      default: [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
       field: 'controlLines',
       description: 'Control Lines',
       configurable: false,
@@ -32,7 +43,9 @@ export default class MusicGridRule
   ]);
 
   private static readonly SEARCH_VARIANTS = [
-    new MusicGridRule([]).searchVariant(),
+    new MusicGridRule([
+      new ControlLine(0, 120, false, DEFAULT_SCALLE),
+    ]).searchVariant(),
   ];
 
   /**
@@ -89,13 +102,30 @@ export default class MusicGridRule
       .filter(line => line.column < newGrid.width)
       .map(line =>
         line.withRows(
-          resize(line.rows, Math.max(line.rows.length, newGrid.height), () => ({
-            note: undefined,
-            velocity: undefined,
-          }))
+          resize(
+            line.rows,
+            Math.max(line.rows.length, newGrid.height),
+            () => new Row(null, null)
+          )
         )
       );
     return this.copyWith({ controlLines });
+  }
+
+  /**
+   * Add or replace a control line.
+   * @param controlLine The control line to set.
+   * @returns A new rule with the control line set.
+   */
+  public setControlLine(controlLine: ControlLine): this {
+    const controlLines = this.controlLines.filter(
+      line => line.column !== controlLine.column
+    );
+    return this.copyWith({
+      controlLines: [...controlLines, controlLine].sort(
+        (a, b) => a.column - b.column
+      ),
+    });
   }
 
   public copyWith({
@@ -115,4 +145,6 @@ export default class MusicGridRule
   }
 }
 
-export const instance = new MusicGridRule([new ControlLine(0, 120, false, [])]);
+export const instance = new MusicGridRule([
+  new ControlLine(0, 120, false, DEFAULT_SCALLE),
+]);

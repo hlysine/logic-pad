@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import Symbol from '../../data/symbols/symbol';
 import ToolboxItem from './ToolboxItem';
-import { ConfigConsumer, getInstructionLocation } from '../ConfigContext';
+import { ConfigConsumer, getConfigurableLocation } from '../ConfigContext';
 import { GridConsumer } from '../GridContext';
 import { Color } from '../../data/primitives';
 import { eq, mousePosition } from '../../utils';
@@ -50,7 +50,7 @@ export default memo(function SymbolTool({
                       onTileClick={(x, y, from, to) => {
                         if (from === Color.Dark) {
                           setLocation(
-                            getInstructionLocation(
+                            getConfigurableLocation(
                               grid,
                               grid.findSymbol(
                                 sym =>

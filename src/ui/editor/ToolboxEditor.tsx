@@ -7,6 +7,8 @@ import { GridConsumer } from '../GridContext';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import SymbolTool from './SymbolTool';
 import { allSymbols } from '../symbols';
+import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
+import { PartPlacement } from '../instructions/parts/types';
 
 export default memo(function ToolboxEditor() {
   const { toolId, name, description, setTool, presets, setPresets } =
@@ -55,6 +57,7 @@ export default memo(function ToolboxEditor() {
         {allTools.map((Tool, i) => (
           <Tool key={i} />
         ))}
+        <InstructionPartOutlet placement={PartPlacement.Toolbox} />
       </div>
       <span className="divider mt-0 mb-0"></span>
       <div className="flex gap-4 justify-between items-center pr-4">

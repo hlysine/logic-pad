@@ -3,6 +3,7 @@ import Instruction from '../../../data/instruction';
 export enum PartPlacement {
   LeftPanel = 'left-panel',
   GridOverlay = 'grid-overlay',
+  Toolbox = 'toolbox',
 }
 
 export interface PartSpec {

@@ -1,24 +1,24 @@
 import { memo } from 'react';
 import { ConfigType, TileConfig } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 import { Color } from '../../../data/primitives';
 import Grid from '../../grid/Grid';
 import GridData from '../../../data/grid';
 import GridSizeEditor from '../../editor/GridSizeEditor';
 
 export interface TileConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: TileConfig;
   setConfig?: (field: string, value: TileConfig['default']) => void;
 }
 
 export default memo(function TileConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: TileConfigProps) {
-  const grid = instruction[
-    config.field as keyof typeof instruction
+  const grid = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as GridData;
   return (
     <div className="flex p-2 justify-between items-center">

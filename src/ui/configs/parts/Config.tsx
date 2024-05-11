@@ -3,7 +3,7 @@ import { AnyConfig } from '../../../data/config';
 import { allConfigs, ConfigProps } from '.';
 
 export default memo(function Config({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: ConfigProps<AnyConfig>) {
@@ -13,7 +13,7 @@ export default memo(function Config({
   }
   return (
     <Component
-      instruction={instruction}
+      configurable={configurable}
       config={config}
       setConfig={setConfig}
     />

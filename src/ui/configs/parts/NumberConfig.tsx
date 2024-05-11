@@ -1,21 +1,21 @@
 import { memo } from 'react';
 import { ConfigType, NumberConfig } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 
 export interface NumberConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: NumberConfig;
   setConfig?: (field: string, value: NumberConfig['default']) => void;
 }
 
 // million-ignore
 export default memo(function NumberConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: NumberConfigProps) {
-  const value = instruction[
-    config.field as keyof typeof instruction
+  const value = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as number;
   return (
     <div className="flex p-2 gap-4 justify-between items-center">
@@ -24,7 +24,8 @@ export default memo(function NumberConfig({
         type="number"
         className="input min-w-0 grow"
         value={value}
-        min="0"
+        min={config.min}
+        max={config.max}
         step="1"
         onChange={e => {
           setConfig?.(config.field, Math.floor(Number(e.target.value)));

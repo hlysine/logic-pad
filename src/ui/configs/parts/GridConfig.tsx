@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { ConfigType, GridConfig } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 import GridData from '../../../data/grid';
 import { FiExternalLink } from 'react-icons/fi';
 import { cn } from '../../../utils';
@@ -12,7 +12,7 @@ import EditContext from '../../EditContext';
 import GridStateContext from '../../GridStateContext';
 
 export interface GridConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: GridConfig;
   setConfig?: (field: string, value: GridConfig['default']) => void;
 }
@@ -33,12 +33,12 @@ function EmbedLoader({ grid }: { grid: GridData }) {
 }
 
 export default memo(function GridConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: GridConfigProps) {
-  const grid = instruction[
-    config.field as keyof typeof instruction
+  const grid = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as GridData;
   const [open, setOpen] = useState(false);
 

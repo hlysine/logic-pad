@@ -1,10 +1,14 @@
 import { createContext, memo, useContext, useState } from 'react';
-import Instruction from '../data/instruction';
 import GridData from '../data/grid';
 import Rule from '../data/rules/rule';
 import Symbol from '../data/symbols/symbol';
+import Configurable from '../data/configurable';
+import MusicGridRule, {
+  instance as musicGridInstance,
+} from '../data/rules/musicGridRule';
+import { ControlLine, Row } from '../data/rules/musicControlLine';
 
-export type InstructionLocation =
+export type ConfigurableLocation =
   | {
       type: 'rule';
       index: number;
@@ -13,43 +17,94 @@ export type InstructionLocation =
       type: 'symbol';
       id: string;
       index: number;
+    }
+  | {
+      type: 'controlLine';
+      column: number;
+    }
+  | {
+      type: 'row';
+      column: number;
+      row: number;
     };
 
-export function getInstruction(grid: GridData, location: InstructionLocation) {
+export function getConfigurable(
+  grid: GridData,
+  location: ConfigurableLocation
+) {
   if (location.type === 'rule') {
     return grid.rules[location.index];
-  } else {
+  } else if (location.type === 'symbol') {
     const list = grid.symbols.get(location.id);
     if (!list) return undefined;
     return list[location.index];
+  } else if (location.type === 'controlLine') {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    return musicGrid.controlLines.find(line => line.column === location.column);
+  } else if (location.type === 'row') {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    const line = musicGrid.controlLines.find(
+      line => line.column === location.column
+    );
+    if (!line) return undefined;
+    return line.rows[location.row];
   }
 }
 
-export function getInstructionLocation(
+export function getConfigurableLocation(
   grid: GridData,
-  instruction: Instruction
-): InstructionLocation | undefined {
-  if (instruction instanceof Rule) {
+  configurable: Configurable
+): ConfigurableLocation | undefined {
+  if (configurable instanceof Rule) {
     return {
       type: 'rule',
-      index: grid.rules.indexOf(instruction),
+      index: grid.rules.indexOf(configurable),
     };
-  } else if (instruction instanceof Symbol) {
-    const list = grid.symbols.get(instruction.id);
+  } else if (configurable instanceof Symbol) {
+    const list = grid.symbols.get(configurable.id);
     if (!list) return undefined;
     return {
       type: 'symbol',
-      id: instruction.id,
-      index: list.indexOf(instruction),
+      id: configurable.id,
+      index: list.indexOf(configurable),
+    };
+  } else if (configurable instanceof ControlLine) {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    return {
+      type: 'controlLine',
+      column: configurable.column,
+    };
+  } else if (configurable instanceof Row) {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    const line = musicGrid.controlLines.find(line =>
+      line.rows.includes(configurable)
+    );
+    if (!line) return undefined;
+    return {
+      type: 'row',
+      column: line.column,
+      row: line.rows.indexOf(configurable),
     };
   }
   return undefined;
 }
 
 interface ConfigContext {
-  location: InstructionLocation | undefined;
+  location: ConfigurableLocation | undefined;
   ref: React.RefObject<HTMLElement> | undefined;
-  setLocation: (value: InstructionLocation | undefined) => void;
+  setLocation: (value: ConfigurableLocation | undefined) => void;
   setRef: (value: React.RefObject<HTMLElement> | undefined) => void;
 }
 
@@ -71,7 +126,7 @@ export default memo(function ConfigContext({
 }: {
   children: React.ReactNode;
 }) {
-  const [location, setLocation] = useState<InstructionLocation | undefined>(
+  const [location, setLocation] = useState<ConfigurableLocation | undefined>(
     undefined
   );
   const [ref, setRef] = useState<React.RefObject<HTMLElement> | undefined>(

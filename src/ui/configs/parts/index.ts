@@ -1,8 +1,8 @@
 import { AnyConfig, ConfigType } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 
 export interface ConfigProps<T extends AnyConfig> {
-  instruction: Instruction;
+  configurable: Configurable;
   config: T;
   setConfig?: (field: string, value: T['default']) => void;
 }

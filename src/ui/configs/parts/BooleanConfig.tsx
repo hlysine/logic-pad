@@ -1,21 +1,21 @@
 import { memo } from 'react';
 import { ConfigType, BooleanConfig } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 
 export interface BooleanConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: BooleanConfig;
   setConfig?: (field: string, value: BooleanConfig['default']) => void;
 }
 
 // million-ignore
 export default memo(function BooleanConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: BooleanConfigProps) {
-  const value = instruction[
-    config.field as keyof typeof instruction
+  const value = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as boolean;
   return (
     <div className="flex p-2 gap-4 justify-between items-center">

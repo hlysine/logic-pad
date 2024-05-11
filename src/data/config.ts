@@ -12,7 +12,9 @@ import { ControlLine } from './rules/musicControlLine';
 
 export enum ConfigType {
   Boolean = 'boolean',
+  NullableBoolean = 'nullableBoolean',
   Number = 'number',
+  NullableNumber = 'nullableNumber',
   String = 'string',
   Color = 'color',
   Direction = 'direction',
@@ -23,6 +25,7 @@ export enum ConfigType {
   Grid = 'grid',
   Icon = 'icon',
   ControlLines = 'controlLines',
+  NullableNote = 'nullableNote',
 }
 
 export interface Config<T> {
@@ -37,8 +40,18 @@ export interface BooleanConfig extends Config<boolean> {
   readonly type: ConfigType.Boolean;
 }
 
+export interface NullableBooleanConfig extends Config<boolean | null> {
+  readonly type: ConfigType.NullableBoolean;
+}
+
 export interface NumberConfig extends Config<number> {
   readonly type: ConfigType.Number;
+  readonly min?: number;
+  readonly max?: number;
+}
+
+export interface NullableNumberConfig extends Config<number | null> {
+  readonly type: ConfigType.NullableNumber;
   readonly min?: number;
   readonly max?: number;
 }
@@ -87,9 +100,15 @@ export interface ControlLinesConfig extends Config<ControlLine[]> {
   readonly type: ConfigType.ControlLines;
 }
 
+export interface NullableNoteConfig extends Config<string | null> {
+  readonly type: ConfigType.NullableNote;
+}
+
 export type AnyConfig =
   | BooleanConfig
+  | NullableBooleanConfig
   | NumberConfig
+  | NullableNumberConfig
   | StringConfig
   | ColorConfig
   | DirectionConfig
@@ -99,7 +118,8 @@ export type AnyConfig =
   | TileConfig
   | GridConfig
   | IconConfig
-  | ControlLinesConfig;
+  | ControlLinesConfig
+  | NullableNoteConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.

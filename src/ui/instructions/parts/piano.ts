@@ -45,14 +45,14 @@ export function encodePlayback(
   onComplete?: () => void
 ): () => void {
   // prepare events
-  let bpm: number | undefined;
-  let pedal: boolean | undefined;
+  let bpm = 120;
+  let pedal = false;
   const rows: {
-    note: string | undefined;
-    velocity: number | undefined;
+    note: string | null;
+    velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
-    note: undefined,
-    velocity: undefined,
+    note: null,
+    velocity: null,
   }));
   const events = new Map<Tone.Unit.Time, EventData[]>();
   const addEvent = (time: Tone.Unit.Time, event: EventData) => {
@@ -66,26 +66,26 @@ export function encodePlayback(
   for (let x = 0; x < grid.width; x++) {
     const line = musicGrid.controlLines.find(line => line.column === x);
     if (line) {
-      if (line.bpm !== undefined && line.bpm !== bpm) {
+      if (line.bpm !== null && line.bpm !== bpm) {
         addEvent(x / 2, { type: 'bpm', value: line.bpm });
         bpm = line.bpm;
       }
-      if (line.pedal !== undefined && line.pedal !== pedal) {
+      if (line.pedal !== null && line.pedal !== pedal) {
         addEvent(x / 2, { type: 'pedal', value: line.pedal });
         pedal = line.pedal;
       }
       line.rows.forEach((row, j) => {
         if (j >= rows.length) return;
-        if (row.note !== undefined) {
+        if (row.note !== null) {
           rows[j].note = row.note;
         }
-        if (row.velocity !== undefined) {
+        if (row.velocity !== null) {
           rows[j].velocity = row.velocity;
         }
       });
     }
     rows.forEach((row, y) => {
-      if (row.note === undefined || row.velocity === undefined) return;
+      if (row.note === null || row.velocity === null) return;
       const tile = grid.getTile(x, y);
       if (
         tile.exists &&
@@ -179,34 +179,34 @@ export function encodeImmediate(
   let bpm = 120;
   let pedal = false;
   const rows: {
-    note: string | undefined;
-    velocity: number | undefined;
+    note: string | null;
+    velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
-    note: undefined,
-    velocity: undefined,
+    note: null,
+    velocity: null,
   }));
 
   for (let x = 0; x < grid.width; x++) {
     const line = musicGrid.controlLines.find(line => line.column === x);
     if (line) {
-      if (line.bpm !== undefined && line.bpm !== bpm) {
+      if (line.bpm !== null && line.bpm !== bpm) {
         bpm = line.bpm;
       }
-      if (line.pedal !== undefined && line.pedal !== pedal) {
+      if (line.pedal !== null && line.pedal !== pedal) {
         pedal = line.pedal;
       }
       line.rows.forEach((row, j) => {
         if (j >= rows.length) return;
-        if (row.note !== undefined) {
+        if (row.note !== null) {
           rows[j].note = row.note;
         }
-        if (row.velocity !== undefined) {
+        if (row.velocity !== null) {
           rows[j].velocity = row.velocity;
         }
       });
     }
     rows.forEach((row, y) => {
-      if (row.note === undefined || row.velocity === undefined) return;
+      if (row.note === null || row.velocity === null) return;
       if (remainingPolyphony <= 0) return;
       const tile = grid.getTile(x, y);
       const oldTile = oldGrid.getTile(x, y);

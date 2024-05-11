@@ -14,7 +14,9 @@ declare global {
 
   export enum ConfigType {
     Boolean = 'boolean',
+    NullableBoolean = 'nullableBoolean',
     Number = 'number',
+    NullableNumber = 'nullableNumber',
     String = 'string',
     Color = 'color',
     Direction = 'direction',
@@ -25,6 +27,7 @@ declare global {
     Grid = 'grid',
     Icon = 'icon',
     ControlLines = 'controlLines',
+    NullableNote = 'nullableNote',
   }
   export interface Config<T> {
     readonly type: ConfigType;
@@ -36,10 +39,20 @@ declare global {
   export interface BooleanConfig extends Config<boolean> {
     readonly type: ConfigType.Boolean;
   }
+  export interface NullableBooleanConfig extends Config<boolean | null> {
+    readonly type: ConfigType.NullableBoolean;
+  }
   export interface NumberConfig extends Config<number> {
     readonly type: ConfigType.Number;
     readonly min?: number;
     readonly max?: number;
+    readonly step?: number;
+  }
+  export interface NullableNumberConfig extends Config<number | null> {
+    readonly type: ConfigType.NullableNumber;
+    readonly min?: number;
+    readonly max?: number;
+    readonly step?: number;
   }
   export interface StringConfig extends Config<string> {
     readonly type: ConfigType.String;
@@ -75,9 +88,14 @@ declare global {
   export interface ControlLinesConfig extends Config<ControlLine[]> {
     readonly type: ConfigType.ControlLines;
   }
+  export interface NullableNoteConfig extends Config<string | null> {
+    readonly type: ConfigType.NullableNote;
+  }
   export type AnyConfig =
     | BooleanConfig
+    | NullableBooleanConfig
     | NumberConfig
+    | NullableNumberConfig
     | StringConfig
     | ColorConfig
     | DirectionConfig
@@ -87,7 +105,8 @@ declare global {
     | TileConfig
     | GridConfig
     | IconConfig
-    | ControlLinesConfig;
+    | ControlLinesConfig
+    | NullableNoteConfig;
   /**
    * Compare two config values for equality, using an appropriate method for the config type.
    *
@@ -101,6 +120,18 @@ declare global {
     a: C['default'],
     b: C['default']
   ): boolean;
+
+  export abstract class Configurable {
+    get configs(): readonly AnyConfig[] | null;
+    abstract copyWith(props: Record<string, unknown>): this;
+    /**
+     * Check if this instruction is equal to another instruction by comparing their IDs and configs.
+     *
+     * @param other The other instruction to compare to.
+     * @returns Whether the two instructions are equal.
+     */
+    equals(other: Configurable): boolean;
+  }
 
   export function isEventHandler<T>(val: unknown, event: string): val is T;
 
@@ -458,7 +489,7 @@ declare global {
      *
      * @returns The new grid with all non-fixed tiles reset to gray.
      */
-    resetTiles(): GridData;
+    resetTiles(): this;
     /**
      * Copy the tiles in the given region to a new grid.
      * All connections and symbols within the selected region are copied.
@@ -533,6 +564,13 @@ declare global {
      * @returns The deduplicated list of rules.
      */
     static deduplicateRules(rules: readonly Rule[]): Rule[];
+    /**
+     * Deduplicate the singleton rules in the given list.
+     *
+     * @param rules The list of rules to deduplicate.
+     * @returns The deduplicated list of rules.
+     */
+    static deduplicateSingletonRules(rules: readonly Rule[]): Rule[];
     /**
      * Deduplicate the symbols in the given map.
      *
@@ -678,12 +716,10 @@ declare global {
    */
   export function unescape(text: string, escapeCharacters?: string): string;
 
-  export abstract class Instruction {
+  export abstract class Instruction extends Configurable {
     abstract get id(): string;
     abstract get explanation(): string;
-    get configs(): readonly AnyConfig[] | null;
     abstract createExampleGrid(): GridData;
-    abstract copyWith(props: Record<string, unknown>): this;
     /**
      * Indicates that validation by logic is not available and the solution must be used for validation
      */
@@ -843,8 +879,8 @@ declare global {
     z.ZodTypeAny,
     {
       link: string;
-      grid: GridData;
       description: string;
+      grid: GridData;
       title: string;
       author: string;
       difficulty: number;
@@ -852,8 +888,8 @@ declare global {
     },
     {
       link: string;
-      grid: GridData;
       description: string;
+      grid: GridData;
       title: string;
       author: string;
       difficulty: number;
@@ -930,6 +966,7 @@ declare global {
     validateGrid(_grid: GridData): RuleState;
     copyWith(_: object): this;
     get validateWithSolution(): boolean;
+    get isSingleton(): boolean;
   }
 
   export class ConnectAllRule extends Rule {
@@ -982,36 +1019,57 @@ declare global {
   const allRules: Map<string, Rule>;
   export { allRules };
 
-  export interface Row {
+  export class Row extends Configurable {
     /**
-     * The note to play at this row, or undefined to keep the current note from the previous control line.
-     * If this is undefined from the first control line, the note will be silent.
+     * The note to play at this row, or null to keep the current note from the previous control line.
+     * If this is null from the first control line, the note will be silent.
      */
-    readonly note: string | undefined;
+    readonly note: string | null;
     /**
-     * The velocity to play the note at, or undefined to keep the current velocity from the previous control line.
+     * The velocity to play the note at, or null to keep the current velocity from the previous control line.
      * Ranges from 0 to 1
      */
-    readonly velocity: number | undefined;
+    readonly velocity: number | null;
+    constructor(
+      /**
+       * The note to play at this row, or null to keep the current note from the previous control line.
+       * If this is null from the first control line, the note will be silent.
+       */
+      note: string | null,
+      /**
+       * The velocity to play the note at, or null to keep the current velocity from the previous control line.
+       * Ranges from 0 to 1
+       */
+      velocity: number | null
+    );
+    get configs(): readonly AnyConfig[] | null;
+    copyWith({
+      note,
+      velocity,
+    }: {
+      note?: string | null;
+      velocity?: number | null;
+    }): this;
   }
-  export class ControlLine {
+  export class ControlLine extends Configurable {
     readonly column: number;
-    readonly bpm: number | undefined;
-    readonly pedal: boolean | undefined;
+    readonly bpm: number | null;
+    readonly pedal: boolean | null;
     readonly rows: readonly Row[];
     /**
      * Configure playback settings, taking effect at the given column (inclusive)
      * @param column The column at which the settings take effect
-     * @param bpm The new beats per minute, or undefined to keep the current value from the previous control line
-     * @param pedal Whether the pedal is pressed, or undefined to keep the current value from the previous control line
+     * @param bpm The new beats per minute, or null to keep the current value from the previous control line
+     * @param pedal Whether the pedal is pressed, or null to keep the current value from the previous control line
      * @param rows The notes to play at each row. This list is automatically resized to match the height of the grid. You may pass in an empty list if none of the rows need to be changed.
      */
     constructor(
       column: number,
-      bpm: number | undefined,
-      pedal: boolean | undefined,
+      bpm: number | null,
+      pedal: boolean | null,
       rows: readonly Row[]
     );
+    get configs(): readonly AnyConfig[] | null;
     copyWith({
       column,
       bpm,
@@ -1019,15 +1077,16 @@ declare global {
       rows,
     }: {
       column?: number;
-      bpm?: number | undefined;
-      pedal?: boolean | undefined;
+      bpm?: number | null;
+      pedal?: boolean | null;
       rows?: readonly Row[];
     }): this;
     withColumn(column: number): this;
-    withBpm(bpm: number | undefined): this;
-    withPedal(pedal: boolean | undefined): this;
+    withBpm(bpm: number | null): this;
+    withPedal(pedal: boolean | null): this;
     withRows(rows: readonly Row[]): this;
     equals(other: ControlLine): boolean;
+    get isEmpty(): boolean;
   }
 
   export class MusicGridRule
@@ -1048,8 +1107,15 @@ declare global {
     validateGrid(_grid: GridData): RuleState;
     onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData;
     onGridChange(newGrid: GridData): this;
+    /**
+     * Add or replace a control line.
+     * @param controlLine The control line to set.
+     * @returns A new rule with the control line set.
+     */
+    setControlLine(controlLine: ControlLine): this;
     copyWith({ controlLines }: { controlLines?: readonly ControlLine[] }): this;
     get validateWithSolution(): boolean;
+    get isSingleton(): boolean;
   }
 
   export class MysteryRule
@@ -1158,6 +1224,10 @@ declare global {
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
     get visibleWhenSolving(): boolean;
+    /**
+     * Whether only one instance of this rule is allowed in a grid.
+     */
+    get isSingleton(): boolean;
   }
 
   export class SameShapeRule extends RegionShapeRule {
@@ -1211,6 +1281,7 @@ declare global {
     validateGrid(_grid: GridData): RuleState;
     copyWith(_: object): this;
     get validateWithSolution(): boolean;
+    get isSingleton(): boolean;
   }
 
   export class UniqueShapeRule extends RegionShapeRule {

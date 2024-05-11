@@ -1,4 +1,5 @@
 import { ConfigType, configEquals } from '../src/data/config';
+import Configurable from '../src/data/configurable';
 import GridData from '../src/data/grid';
 import GridConnections from '../src/data/gridConnections';
 import {
@@ -85,7 +86,7 @@ import CompletePatternRule from '../src/data/rules/completePatternRule';
 import ConnectAllRule from '../src/data/rules/connectAllRule';
 import CustomRule from '../src/data/rules/customRule';
 import { allRules } from '../src/data/rules/index';
-import { ControlLine } from '../src/data/rules/musicControlLine';
+import { ControlLine, Row } from '../src/data/rules/musicControlLine';
 import MusicGridRule from '../src/data/rules/musicGridRule';
 import MysteryRule from '../src/data/rules/mysteryRule';
 import OffByXRule from '../src/data/rules/offByXRule';
@@ -105,6 +106,7 @@ import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConfigType', value: ConfigType },
   { name: 'configEquals', value: configEquals },
+  { name: 'Configurable', value: Configurable },
   { name: 'GridData', value: GridData },
   { name: 'GridConnections', value: GridConnections },
   { name: 'allEqual', value: allEqual },
@@ -186,6 +188,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'CustomRule', value: CustomRule },
   { name: 'allRules', value: allRules },
   { name: 'ControlLine', value: ControlLine },
+  { name: 'Row', value: Row },
   { name: 'MusicGridRule', value: MusicGridRule },
   { name: 'MysteryRule', value: MysteryRule },
   { name: 'OffByXRule', value: OffByXRule },

@@ -56,7 +56,7 @@ export default class SerializerV0 extends SerializerBase {
   }
 
   public stringifyControlLine(line: ControlLine): string {
-    return `c${line.column}|b${line.bpm ?? ''}|p${line.pedal ? '1' : line.pedal !== undefined ? '0' : ''}|r${line.rows.map(row => `v${row.velocity ?? ''}n${row.note ?? ''}`).join(',')}`;
+    return `c${line.column}|b${line.bpm ?? ''}|p${line.pedal ? '1' : line.pedal !== null ? '0' : ''}|r${line.rows.map(row => `v${row.velocity ?? ''}n${row.note ?? ''}`).join(',')}`;
   }
 
   public parseControlLine(str: string): ControlLine {

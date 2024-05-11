@@ -67,7 +67,7 @@ const PlaybackOverlay = memo(function PlaybackOverlay() {
           .map(line => (
             <div
               key={line.column}
-              className="absolute top-0 h-[calc(100%+0.5em)] w-[1em] border-l-8 border-secondary"
+              className="absolute top-0 h-[calc(100%+0.5em)] w-[1em] border-l-[0.1em] border-secondary"
               style={{ left: `${line.column}em` }}
             >
               <div className="absolute inset-0 bottom-[0.5em] bg-gradient-to-r from-secondary via-20% via-secondary/20 to-secondary/0"></div>

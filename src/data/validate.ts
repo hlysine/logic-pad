@@ -7,6 +7,7 @@ import Symbol from './symbols/symbol';
 
 export function aggregateState(
   rules: RuleState[],
+  grid: GridData,
   symbols: Map<string, State[]>
 ) {
   if (rules.some(s => s.state === State.Error)) return State.Error;
@@ -14,9 +15,22 @@ export function aggregateState(
     if (symbolList.some(s => s === State.Error)) return State.Error;
   }
 
-  if (rules.some(s => s.state === State.Incomplete)) return State.Incomplete;
-  for (const [_, symbolList] of symbols) {
-    if (symbolList.some(s => s === State.Incomplete)) return State.Incomplete;
+  if (
+    rules.some(
+      (s, idx) =>
+        s.state === State.Incomplete && grid.rules[idx].necessaryForCompletion
+    )
+  )
+    return State.Incomplete;
+  for (const [key, symbolList] of symbols) {
+    if (
+      symbolList.some(
+        (s, idx) =>
+          s === State.Incomplete &&
+          grid.symbols.get(key)![idx].necessaryForCompletion
+      )
+    )
+      return State.Incomplete;
   }
 
   if (rules.length === 0 && symbols.size === 0) return State.Incomplete;
@@ -103,7 +117,7 @@ export default function validateGrid(
       ruleStates[i] = { state: State.Satisfied };
   });
 
-  let final = aggregateState(ruleStates, symbolStates);
+  let final = aggregateState(ruleStates, grid, symbolStates);
 
   // in addition to satisfying all rules and symbols, a solution must also fill the grid completely
   if (!requireSolution && final === State.Satisfied) {

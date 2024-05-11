@@ -15,6 +15,10 @@ export default abstract class Instruction extends Configurable {
     return false;
   }
 
+  public get necessaryForCompletion(): boolean {
+    return true;
+  }
+
   /**
    * Check if this instruction is equal to another instruction by comparing their IDs and configs.
    *

@@ -81,6 +81,10 @@ export default class MysteryRule
     return { state: State.Incomplete };
   }
 
+  public get necessaryForCompletion(): boolean {
+    return false;
+  }
+
   public onFinalValidation(
     grid: GridData,
     _solution: GridData | null,

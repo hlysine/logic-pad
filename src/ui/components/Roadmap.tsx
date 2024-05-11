@@ -10,7 +10,7 @@ const roadmap: RoadmapItem[] = [
   '~Implement rules UI',
   '~Implement color themes',
   [
-    'Add rules and symbols',
+    '~Add rules and symbols',
     '~Area number',
     '~Letter',
     "~Don't make this pattern",
@@ -29,7 +29,7 @@ const roadmap: RoadmapItem[] = [
     '~Custom rule',
     '~Custom symbol',
     '~Mystery: alternate solution (Hidden)',
-    'Music Grid (as a grid rule)',
+    '~Music Grid (as a grid rule)',
   ],
   [
     '~Refactors',

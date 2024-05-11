@@ -52,7 +52,7 @@ export function encodePlayback(
     velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
     note: null,
-    velocity: null,
+    velocity: 0.6,
   }));
   const events = new Map<Tone.Unit.Time, EventData[]>();
   const addEvent = (time: Tone.Unit.Time, event: EventData) => {
@@ -183,7 +183,7 @@ export function encodeImmediate(
     velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
     note: null,
-    velocity: null,
+    velocity: 0.6,
   }));
 
   for (let x = 0; x < grid.width; x++) {

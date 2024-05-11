@@ -59,7 +59,17 @@ export function getConfigurable(
 
 export function getConfigurableLocation(
   grid: GridData,
-  configurable: Configurable
+  configurable: Rule | Symbol | ControlLine
+): ConfigurableLocation | undefined;
+export function getConfigurableLocation(
+  grid: GridData,
+  configurable: Row,
+  line: ControlLine
+): ConfigurableLocation | undefined;
+export function getConfigurableLocation(
+  grid: GridData,
+  configurable: Configurable,
+  line?: ControlLine
 ): ConfigurableLocation | undefined {
   if (configurable instanceof Rule) {
     return {
@@ -84,13 +94,6 @@ export function getConfigurableLocation(
       column: configurable.column,
     };
   } else if (configurable instanceof Row) {
-    const musicGrid = grid.rules.find(
-      rule => rule.id === musicGridInstance.id
-    ) as MusicGridRule | undefined;
-    if (!musicGrid) return undefined;
-    const line = musicGrid.controlLines.find(line =>
-      line.rows.includes(configurable)
-    );
     if (!line) return undefined;
     return {
       type: 'row',

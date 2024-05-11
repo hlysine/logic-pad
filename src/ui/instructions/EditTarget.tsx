@@ -2,6 +2,7 @@ import { memo, useRef } from 'react';
 import { getConfigurableLocation, useConfig } from '../ConfigContext';
 import { useGrid } from '../GridContext';
 import Configurable from '../../data/configurable';
+import Symbol from '../../data/symbols/symbol';
 
 export interface EditTargetProps {
   configurable: Configurable;
@@ -16,7 +17,7 @@ export default memo(function EditTarget({ configurable }: EditTargetProps) {
       ref={divRef}
       className="absolute inset-0 cursor-pointer"
       onPointerDown={() => {
-        setLocation(getConfigurableLocation(grid, configurable));
+        setLocation(getConfigurableLocation(grid, configurable as Symbol));
         setRef(divRef);
       }}
     ></div>

@@ -1,23 +1,36 @@
 import { memo } from 'react';
-import { ConfigType, NullableNumberConfig } from '../../../data/config';
+import { ConfigType, NullableNoteConfig } from '../../../data/config';
 import Configurable from '../../../data/configurable';
+import Autocomplete from '../../components/Autocomplete';
 import { FaTrashCan } from 'react-icons/fa6';
 
-export interface NullableNumberConfigProps {
+export interface NullableNoteConfigProps {
   configurable: Configurable;
-  config: NullableNumberConfig;
-  setConfig?: (field: string, value: NullableNumberConfig['default']) => void;
+  config: NullableNoteConfig;
+  setConfig?: (field: string, value: NullableNoteConfig['default']) => void;
 }
 
+const letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+const accidentals = ['bb', 'b', '', '#', 'x'];
+const octaves = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+const noteNames: string[] = [];
+letters.forEach(letter => {
+  accidentals.forEach(accidental => {
+    octaves.forEach(octave => {
+      noteNames.push(`${letter}${accidental}${octave}`);
+    });
+  });
+});
+
 // million-ignore
-export default memo(function NullableNumberConfig({
+export default memo(function NullableNoteConfig({
   configurable,
   config,
   setConfig,
-}: NullableNumberConfigProps) {
+}: NullableNoteConfigProps) {
   const value = configurable[
     config.field as keyof typeof configurable
-  ] as unknown as number | null;
+  ] as unknown as string | null;
   return (
     <div className="flex p-2 gap-4 justify-between items-center">
       <span>{config.description}</span>
@@ -25,10 +38,7 @@ export default memo(function NullableNumberConfig({
         <button
           className="btn btn-sm"
           onClick={() => {
-            setConfig?.(
-              config.field,
-              config.default ?? config.min ?? config.max ?? 0
-            );
+            setConfig?.(config.field, config.default ?? 'C4');
           }}
         >
           Unset
@@ -48,17 +58,12 @@ export default memo(function NullableNumberConfig({
               <FaTrashCan />
             </button>
           </div>
-          <input
-            type="number"
-            className="input min-w-0 grow"
+          <Autocomplete
+            className="grow"
+            items={noteNames}
             value={value}
-            min={config.min}
-            max={config.max}
-            step={config.step ?? 1}
             onChange={e => {
-              if (config.step === 1)
-                setConfig?.(config.field, Math.floor(Number(e.target.value)));
-              else setConfig?.(config.field, Number(e.target.value));
+              setConfig?.(config.field, e);
             }}
           />
         </div>
@@ -67,4 +72,4 @@ export default memo(function NullableNumberConfig({
   );
 });
 
-export const type = ConfigType.NullableNumber;
+export const type = ConfigType.NullableNote;

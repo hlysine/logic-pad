@@ -299,7 +299,7 @@ export default memo(function ConfigPopup() {
                     musicGrid,
                     musicGrid.copyWith({
                       controlLines: musicGrid.controlLines.filter(
-                        l => l !== line
+                        l => l.column !== line.column
                       ),
                     })
                   )
@@ -310,7 +310,7 @@ export default memo(function ConfigPopup() {
                     musicGrid,
                     musicGrid.copyWith({
                       controlLines: musicGrid.controlLines.map(l =>
-                        l === line ? newLine : line
+                        l.column === line.column ? newLine : l
                       ),
                     })
                   )

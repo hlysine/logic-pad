@@ -102,11 +102,7 @@ export default class MusicGridRule
       .filter(line => line.column < newGrid.width)
       .map(line =>
         line.withRows(
-          resize(
-            line.rows,
-            Math.max(line.rows.length, newGrid.height),
-            () => new Row(null, null)
-          )
+          resize(line.rows, newGrid.height, () => new Row(null, null))
         )
       );
     return this.copyWith({ controlLines });

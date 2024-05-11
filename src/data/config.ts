@@ -48,12 +48,14 @@ export interface NumberConfig extends Config<number> {
   readonly type: ConfigType.Number;
   readonly min?: number;
   readonly max?: number;
+  readonly step?: number;
 }
 
 export interface NullableNumberConfig extends Config<number | null> {
   readonly type: ConfigType.NullableNumber;
   readonly min?: number;
   readonly max?: number;
+  readonly step?: number;
 }
 
 export interface StringConfig extends Config<string> {

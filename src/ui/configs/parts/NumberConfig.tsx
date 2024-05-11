@@ -26,9 +26,11 @@ export default memo(function NumberConfig({
         value={value}
         min={config.min}
         max={config.max}
-        step="1"
+        step={config.step ?? 1}
         onChange={e => {
-          setConfig?.(config.field, Math.floor(Number(e.target.value)));
+          if (config.step === 1)
+            setConfig?.(config.field, Math.floor(Number(e.target.value)));
+          else setConfig?.(config.field, Number(e.target.value));
         }}
       />
     </div>

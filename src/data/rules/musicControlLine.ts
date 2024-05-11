@@ -15,6 +15,7 @@ export class Row extends Configurable {
       default: 0.6,
       min: 0,
       max: 1,
+      step: 0.2,
       field: 'velocity',
       description: 'Velocity',
       configurable: true,

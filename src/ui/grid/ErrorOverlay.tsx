@@ -56,7 +56,7 @@ export default memo(function ErrorOverlay({
             [
               grid[idx][y - 1]?.[x] || (
                 <Line
-                  key={`${x},${y}-top`}
+                  key={`${x},${y}-top-${idx}`}
                   points={[
                     x * tileSize,
                     y * tileSize,
@@ -70,7 +70,7 @@ export default memo(function ErrorOverlay({
               ),
               grid[idx][y][x + 1] || (
                 <Line
-                  key={`${x},${y}-right`}
+                  key={`${x},${y}-right-${idx}`}
                   points={[
                     (x + 1) * tileSize,
                     y * tileSize,
@@ -84,7 +84,7 @@ export default memo(function ErrorOverlay({
               ),
               grid[idx][y + 1]?.[x] || (
                 <Line
-                  key={`${x},${y}-bottom`}
+                  key={`${x},${y}-bottom-${idx}`}
                   points={[
                     x * tileSize,
                     (y + 1) * tileSize,
@@ -98,7 +98,7 @@ export default memo(function ErrorOverlay({
               ),
               grid[idx][y][x - 1] || (
                 <Line
-                  key={`${x},${y}-left`}
+                  key={`${x},${y}-left-${idx}`}
                   points={[
                     x * tileSize,
                     y * tileSize,

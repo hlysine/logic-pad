@@ -32,6 +32,7 @@ export default memo(function TileConfig({
           />
         )}
         <Grid
+          type="canvas"
           size={Math.min(25, (10 * 25) / grid.width)}
           grid={grid}
           editable={true}

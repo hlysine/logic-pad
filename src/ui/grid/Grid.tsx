@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import GridData from '../../data/grid';
 import { Color } from '../../data/primitives';
-import DOMGrid from './canvasGrid/Grid';
+import CanvasGrid from './canvasGrid/Grid';
+import DOMGrid from './domGrid/Grid';
 
 export interface GridProps {
   size: number;
@@ -12,6 +13,16 @@ export interface GridProps {
   className?: string;
 }
 
-export default memo(function Grid(props: GridProps) {
+export default memo(function Grid({
+  type,
+  ...props
+}: GridProps & { type?: 'dom' | 'canvas' | 'auto' }) {
+  type ??= 'auto';
+  if (
+    type === 'canvas' ||
+    (type === 'auto' && props.grid.width * props.grid.height > 500)
+  ) {
+    return <CanvasGrid {...props} />;
+  }
   return <DOMGrid {...props} />;
 });

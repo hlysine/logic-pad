@@ -51,6 +51,7 @@ export default memo(function Instruction({
         <div className="shrink-0 relative min-h-[calc(28px*4)] min-w-[calc(28px*5)] flex items-center justify-center">
           {exampleGrid && (
             <Grid
+              type="canvas"
               size={
                 exampleGrid.width === 1 && exampleGrid.height === 1 ? 56 : 28 // special case for rules with a single symbol as thumbnail
               }

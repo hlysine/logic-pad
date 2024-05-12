@@ -283,10 +283,14 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
               {positions.map(({ x, y }) => (
                 <Rect
                   key={`${x},${y}`}
-                  x={x * tileSize}
-                  y={y * tileSize}
-                  width={tileSize}
-                  height={tileSize}
+                  x={Math.floor(x * tileSize)}
+                  y={Math.floor(y * tileSize)}
+                  width={
+                    Math.floor((x + 1) * tileSize) - Math.floor(x * tileSize)
+                  }
+                  height={
+                    Math.floor((y + 1) * tileSize) - Math.floor(y * tileSize)
+                  }
                   fill={accentColor}
                   opacity={0.5}
                 />

@@ -1,11 +1,10 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { array } from '../../../data/helper';
 import { cn } from '../../../utils';
 import { type GridProps } from '../Grid';
-import { Layer, Stage } from 'react-konva';
 import PointerCaptureOverlay from '../PointerCaptureOverlay';
 import { useTheme } from '../../ThemeContext';
-import Tile from './Tile';
+import { ColorInfo, clearTile, renderTile } from './tile';
 
 export default memo(function Grid({
   size,
@@ -15,6 +14,8 @@ export default memo(function Grid({
   children,
   className,
 }: GridProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const { theme } = useTheme();
   const containerStyle = useMemo(
     () => ({
@@ -34,54 +35,46 @@ export default memo(function Grid({
     [grid.connections, grid.width, grid.height]
   );
 
-  const whiteColor = useMemo(
-    () =>
-      window.getComputedStyle(document.getElementById('color-ref-white')!)
-        .color,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [theme]
-  );
-  const blackColor = useMemo(
-    () =>
-      window.getComputedStyle(document.getElementById('color-ref-black')!)
-        .color,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [theme]
-  );
-  const neutralColor = useMemo(
-    () =>
-      window.getComputedStyle(
+  const colorInfo = useMemo<ColorInfo>(
+    () => ({
+      black: window.getComputedStyle(
+        document.getElementById('color-ref-black')!
+      ).color,
+      white: window.getComputedStyle(
+        document.getElementById('color-ref-white')!
+      ).color,
+      neutral: window.getComputedStyle(
         document.getElementById('color-ref-neutral-content')!
       ).color,
+    }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [theme]
   );
 
+  useEffect(() => {
+    if (!canvasCtx.current) {
+      canvasCtx.current = canvasRef.current?.getContext('2d') ?? null;
+    }
+    if (!canvasCtx.current) return;
+    const ctx = canvasCtx.current;
+    for (let y = 0; y < grid.height; y++) {
+      for (let x = 0; x < grid.width; x++) {
+        const tile = grid.getTile(x, y);
+        clearTile(ctx, x, y, size);
+        if (!tile.exists) continue;
+        renderTile(ctx, x, y, size, tile, tileConnections[y][x], colorInfo);
+      }
+    }
+  }, [grid, size, canvasCtx, colorInfo, tileConnections]);
+
   return (
     <div className={cn('relative', className)} style={containerStyle}>
-      <Stage
+      <canvas
+        ref={canvasRef}
         width={grid.width * size}
         height={grid.height * size}
-        className="absolute"
-      >
-        <Layer>
-          {grid.tiles.map((row, y) =>
-            row.map((tile, x) => (
-              <Tile
-                key={`${x},${y}`}
-                data={tile}
-                x={x}
-                y={y}
-                size={size}
-                connections={tileConnections[y][x]}
-                blackColor={blackColor}
-                whiteColor={whiteColor}
-                neutralColor={neutralColor}
-              />
-            ))
-          )}
-        </Layer>
-      </Stage>
+        className="absolute inset-0"
+      />
       <PointerCaptureOverlay
         width={grid.width}
         height={grid.height}

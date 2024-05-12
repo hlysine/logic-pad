@@ -30,7 +30,7 @@ const roadmap: RoadmapItem[] = [
     '~Custom symbol',
     '~Mystery: alternate solution (Hidden)',
     '~Music Grid (as a grid rule)',
-    'Minesweeper',
+    '~Minesweeper',
   ],
   [
     '~Refactors',

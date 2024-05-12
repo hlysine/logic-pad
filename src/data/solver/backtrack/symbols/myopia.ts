@@ -49,7 +49,7 @@ export default class MyopiaBTModule extends BTModule {
 
         if (
           getOppositeColor(tile as BTColor) == curTile ||
-          curTile == BTTile.Border
+          curTile == BTTile.NonExist
         ) {
           stopped = true;
           break;

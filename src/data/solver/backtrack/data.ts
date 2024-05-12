@@ -1,37 +1,26 @@
 import Instruction from '../../instruction';
 import { Color, Position } from '../../primitives';
-import Rule from '../../rules/rule';
-import Symbol from '../../symbols/symbol';
 
 export enum BTTile {
   Empty,
   Dark,
   Light,
-  Border,
+  NonExist,
 }
 
 export type BTColor = BTTile.Dark | BTTile.Light;
 
 export class BTGridData {
-  public readonly tiles: BTTile[][];
-  public readonly connections: Position[][][];
-  public readonly symbols: Symbol[];
-  public readonly rules: Rule[];
-  public readonly width: number;
-  public readonly height: number;
-
   public constructor(
-    tiles: BTTile[][],
-    connections: Position[][][],
-    symbols: Symbol[],
-    rules: Rule[],
-    width: number,
-    height: number
+    public readonly tiles: BTTile[][],
+    public readonly connections: Position[][][],
+    public readonly modules: BTModule[],
+    public readonly width: number,
+    public readonly height: number
   ) {
     this.tiles = tiles;
     this.connections = connections;
-    this.symbols = symbols;
-    this.rules = rules;
+    this.modules = modules;
     this.width = width;
     this.height = height;
   }
@@ -54,19 +43,19 @@ export class BTGridData {
     const positions: Position[] = [];
 
     if (pos.x > 0) {
-      if (this.getTile(pos.x - 1, pos.y) != BTTile.Border)
+      if (this.getTile(pos.x - 1, pos.y) != BTTile.NonExist)
         positions.push({ x: pos.x - 1, y: pos.y });
     }
     if (pos.x + 1 < this.width) {
-      if (this.getTile(pos.x + 1, pos.y) != BTTile.Border)
+      if (this.getTile(pos.x + 1, pos.y) != BTTile.NonExist)
         positions.push({ x: pos.x + 1, y: pos.y });
     }
     if (pos.y > 0) {
-      if (this.getTile(pos.x, pos.y - 1) != BTTile.Border)
+      if (this.getTile(pos.x, pos.y - 1) != BTTile.NonExist)
         positions.push({ x: pos.x, y: pos.y - 1 });
     }
     if (pos.y + 1 < this.height) {
-      if (this.getTile(pos.x, pos.y + 1) != BTTile.Border)
+      if (this.getTile(pos.x, pos.y + 1) != BTTile.NonExist)
         positions.push({ x: pos.x, y: pos.y + 1 });
     }
 
@@ -75,11 +64,11 @@ export class BTGridData {
 }
 
 export class IntArray2D {
-  private array: Uint8Array;
-  public width: number;
-  public height: number;
-
-  private constructor(array: Uint8Array, width: number, height: number) {
+  private constructor(
+    private readonly array: Uint8Array,
+    public readonly width: number,
+    public readonly height: number
+  ) {
     this.array = array;
     this.width = width;
     this.height = height;

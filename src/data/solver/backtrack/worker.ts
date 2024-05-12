@@ -1,8 +1,6 @@
 import { Color, Position } from '../../primitives';
 import GridData from '../../grid';
 import TileData from '../../tile';
-import Rule from '../../rules/rule';
-import Symbol from '../../symbols/symbol';
 import { array } from '../../helper';
 import AreaNumberSymbol, {
   instance as areaNumberInstance,
@@ -40,7 +38,7 @@ function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
     const tile = grid.getTile(x, y);
 
-    if (!tile.exists) return BTTile.Border;
+    if (!tile.exists) return BTTile.NonExist;
     else if (tile.color == Color.Dark) return BTTile.Dark;
     else if (tile.color == Color.Light) return BTTile.Light;
     else return BTTile.Empty;
@@ -52,39 +50,60 @@ function translateToBTGridData(grid: GridData): BTGridData {
     (x, y) => grid.connections.getConnectedTiles({ x, y }) as Position[]
   );
 
-  const symbols: Symbol[] = [];
-  grid.symbols.forEach(s => symbols.push(...s));
+  const modules: BTModule[] = [];
 
-  const rules: Rule[] = [...grid.rules];
+  for (const [id, symbolList] of grid.symbols) {
+    for (const symbol of symbolList) {
+      let module: BTModule | undefined;
+      if (id == areaNumberInstance.id) {
+        module = new AreaNumberBTModule(symbol as AreaNumberSymbol);
+      } else if (id == dartInstance.id) {
+        module = new DartBTModule(symbol as DartSymbol);
+      } else if (id == viewpointInstance.id) {
+        module = new ViewpointBTModule(symbol as ViewpointSymbol);
+      } else if (id == galaxyInstance.id || id == lotusInstance.id) {
+        module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
+      } else if (id == myopiaInstance.id) {
+        module = new MyopiaBTModule(symbol as MyopiaSymbol);
+      }
 
-  return new BTGridData(
-    tiles,
-    connections,
-    symbols,
-    rules,
-    grid.width,
-    grid.height
-  );
+      if (!module) throw new Error('Symbol not supported.');
+
+      modules.push(module);
+    }
+  }
+
+  for (const rule of grid.rules) {
+    let module: BTModule | undefined;
+    if (rule.id == connectAllInstance.id) {
+      module = new ConnectAllBTModule(rule as ConnectAllRule);
+    } else if (rule.id == regionAreaInstance.id) {
+      module = new RegionAreaBTModule(rule as RegionAreaRule);
+    } else if (rule.id == banPatternInstance.id) {
+      module = new BanPatternBTModule(rule as BanPatternRule);
+    } else if (rule.id == undercluedInstance.id) {
+      continue;
+    }
+
+    if (!module) throw new Error('Rule not supported.');
+
+    modules.push(module);
+  }
+
+  return new BTGridData(tiles, connections, modules, grid.width, grid.height);
 }
 
 function translateBackGridData(grid: GridData, btGrid: BTGridData): GridData {
-  let tiles: TileData[][] = [];
-  for (let y = 0; y < grid.height; y++) {
-    tiles[y] = [];
-    for (let x = 0; x < grid.width; x++) {
-      const origTile = grid.getTile(x, y);
+  const tiles: TileData[][] = array(grid.width, grid.height, (x, y) => {
+    const origTile = grid.getTile(x, y);
 
-      if (!origTile.exists) tiles[y][x] = TileData.doesNotExist();
-      else if (origTile.fixed || origTile.color != Color.Gray)
-        tiles[y][x] = origTile;
-      else
-        tiles[y][x] = new TileData(
-          true,
-          false,
-          btGrid.getTile(x, y) == BTTile.Dark ? Color.Dark : Color.Light
-        );
-    }
-  }
+    if (!origTile.exists || origTile.fixed || origTile.color != Color.Gray)
+      return origTile;
+    else
+      return origTile.withColor(
+        btGrid.getTile(x, y) == BTTile.Dark ? Color.Dark : Color.Light
+      );
+  });
 
   return grid.withTiles(tiles);
 }
@@ -92,15 +111,14 @@ function translateBackGridData(grid: GridData, btGrid: BTGridData): GridData {
 function isValid(
   grid: BTGridData,
   places: Position[],
-  modules: BTModule[],
   checkable: (IntArray2D | null)[],
   ratings: (Rating[] | null)[]
 ): [(IntArray2D | null)[], (Rating[] | null)[]] | false {
   const newCheckable: (IntArray2D | null)[] = [...checkable];
   const newRatings: (Rating[] | null)[] = [...ratings];
 
-  for (let i = 0; i < modules.length; i++) {
-    const module = modules[i];
+  for (let i = 0; i < grid.modules.length; i++) {
+    const module = grid.modules[i];
 
     // Check if skippable
     if (checkable[i] && !places.some(pos => checkable[i]!.get(pos.x, pos.y)))
@@ -117,15 +135,6 @@ function isValid(
   }
 
   return [newCheckable, newRatings];
-}
-
-function naiveNextTile(grid: BTGridData): Position | null {
-  for (let y = 0; y < grid.height; y++) {
-    for (let x = 0; x < grid.width; x++) {
-      if (grid.getTile(x, y) == BTTile.Empty) return { x, y };
-    }
-  }
-  return null;
 }
 
 // This function chooses the next empty tile to search.
@@ -153,24 +162,25 @@ function getNextTile(
 
   let highest = 0;
   let pos: Position | null = null;
+  let fallback: Position | null = null;
+
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
-      if (scores[y][x] > highest && grid.getTile(x, y) == BTTile.Empty) {
+      if (grid.getTile(x, y) != BTTile.Empty) continue;
+      if (scores[y][x] > highest) {
         highest = scores[y][x];
         pos = { x, y };
       }
+
+      if (!fallback) fallback = { x, y };
     }
   }
 
-  if (pos) return pos;
-
-  // Fallback to naive next tile
-  return naiveNextTile(grid);
+  return pos || fallback;
 }
 
 function backtrack(
   grid: BTGridData,
-  modules: BTModule[],
   checkable: (IntArray2D | null)[],
   ratings: (Rating[] | null)[]
 ): boolean {
@@ -184,18 +194,18 @@ function backtrack(
     grid.setTileWithConnection(pos.x, pos.y, BTTile.Light);
 
     const places = grid.connections[pos.y][pos.x];
-    const result = isValid(grid, places, modules, checkable, ratings);
+    const result = isValid(grid, places, checkable, ratings);
 
-    if (result && backtrack(grid, modules, result[0], result[1])) return true;
+    if (result && backtrack(grid, result[0], result[1])) return true;
   }
 
   {
     grid.setTileWithConnection(pos.x, pos.y, BTTile.Dark);
 
     const places = grid.connections[pos.y][pos.x];
-    const result = isValid(grid, places, modules, checkable, ratings);
+    const result = isValid(grid, places, checkable, ratings);
 
-    if (result && backtrack(grid, modules, result[0], result[1])) return true;
+    if (result && backtrack(grid, result[0], result[1])) return true;
   }
 
   // If both fail, returns to initial state
@@ -207,64 +217,19 @@ function solveNormal(input: GridData): GridData | null {
   // Translate to BT data types
   const grid = translateToBTGridData(input);
 
-  // Build modules
-  const modules: BTModule[] = [];
-
   const checkable: (IntArray2D | null)[] = [];
   const ratings: (Rating[] | null)[] = [];
 
-  // TODO: Combine symbols and rules
-  for (const symbol of grid.symbols) {
-    let module: BTModule | undefined;
-    if (symbol.id == areaNumberInstance.id) {
-      module = new AreaNumberBTModule(symbol as AreaNumberSymbol);
-    } else if (symbol.id == dartInstance.id) {
-      module = new DartBTModule(symbol as DartSymbol);
-    } else if (symbol.id == viewpointInstance.id) {
-      module = new ViewpointBTModule(symbol as ViewpointSymbol);
-    } else if (
-      symbol.id == galaxyInstance.id ||
-      symbol.id == lotusInstance.id
-    ) {
-      module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
-    } else if (symbol.id == myopiaInstance.id) {
-      module = new MyopiaBTModule(symbol as MyopiaSymbol);
-    }
+  for (const module of grid.modules) {
+    const res = module.checkGlobal(grid);
+    if (!res) return null;
 
-    if (!module) throw new Error('Symbol not supported.');
-
-    const result = module.checkGlobal(grid);
-    if (!result) return null;
-
-    modules.push(module);
-    checkable.push(result.tilesNeedCheck);
-    ratings.push(result.ratings);
-  }
-
-  for (const rule of grid.rules) {
-    let module: BTModule | undefined;
-    if (rule.id == connectAllInstance.id) {
-      module = new ConnectAllBTModule(rule as ConnectAllRule);
-    } else if (rule.id == regionAreaInstance.id) {
-      module = new RegionAreaBTModule(rule as RegionAreaRule);
-    } else if (rule.id == banPatternInstance.id) {
-      module = new BanPatternBTModule(rule as BanPatternRule);
-    } else if (rule.id == undercluedInstance.id) {
-      continue;
-    }
-
-    if (!module) throw new Error('Symbol not supported.');
-
-    const result = module.checkGlobal(grid);
-    if (!result) return null;
-
-    modules.push(module);
-    checkable.push(result.tilesNeedCheck);
-    ratings.push(result.ratings);
+    checkable.push(res.tilesNeedCheck);
+    ratings.push(res.ratings);
   }
 
   // Call backtrack
-  const result = backtrack(grid, modules, checkable, ratings);
+  const result = backtrack(grid, checkable, ratings);
   if (!result) return null;
 
   return translateBackGridData(input, grid);

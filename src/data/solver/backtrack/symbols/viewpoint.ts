@@ -54,7 +54,7 @@ export default class ViewpointBTModule extends BTModule {
 
         if (
           getOppositeColor(tile as BTColor) == curTile ||
-          curTile == BTTile.Border
+          curTile == BTTile.NonExist
         )
           break;
 

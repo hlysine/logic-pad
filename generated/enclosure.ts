@@ -50,6 +50,7 @@ import GalaxySymbol from '../src/data/symbols/galaxySymbol';
 import { allSymbols } from '../src/data/symbols/index';
 import LetterSymbol from '../src/data/symbols/letterSymbol';
 import LotusSymbol from '../src/data/symbols/lotusSymbol';
+import MinesweeperSymbol from '../src/data/symbols/minesweeperSymbol';
 import MultiEntrySymbol from '../src/data/symbols/multiEntrySymbol';
 import MyopiaSymbol from '../src/data/symbols/myopiaSymbol';
 import NumberSymbol from '../src/data/symbols/numberSymbol';
@@ -72,6 +73,22 @@ import ViewpointModule from '../src/data/solver/z3/modules/viewpointModule';
 import Z3Module from '../src/data/solver/z3/modules/z3Module';
 import UndercluedSolver from '../src/data/solver/underclued/undercluedSolver';
 import BacktrackSolver from '../src/data/solver/backtrack/backtrackSolver';
+import BTModule, {
+  BTGridData,
+  BTTile,
+  IntArray2D,
+  colorToBTTile,
+  createOneTileResult,
+  getOppositeColor,
+} from '../src/data/solver/backtrack/data';
+import AreaNumberBTModule from '../src/data/solver/backtrack/symbols/areaNumber';
+import DartBTModule from '../src/data/solver/backtrack/symbols/dart';
+import DirectionLinkerBTModule from '../src/data/solver/backtrack/symbols/directionLinker';
+import MyopiaBTModule from '../src/data/solver/backtrack/symbols/myopia';
+import ViewpointBTModule from '../src/data/solver/backtrack/symbols/viewpoint';
+import BanPatternBTModule from '../src/data/solver/backtrack/rules/banPattern';
+import ConnectAllBTModule from '../src/data/solver/backtrack/rules/connectAll';
+import RegionAreaBTModule from '../src/data/solver/backtrack/rules/regionArea';
 import { Serializer } from '../src/data/serializer/allSerializers';
 import SerializerBase from '../src/data/serializer/serializerBase';
 import SerializerV0 from '../src/data/serializer/serializer_v0';
@@ -151,6 +168,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'allSymbols', value: allSymbols },
   { name: 'LetterSymbol', value: LetterSymbol },
   { name: 'LotusSymbol', value: LotusSymbol },
+  { name: 'MinesweeperSymbol', value: MinesweeperSymbol },
   { name: 'MultiEntrySymbol', value: MultiEntrySymbol },
   { name: 'MyopiaSymbol', value: MyopiaSymbol },
   { name: 'NumberSymbol', value: NumberSymbol },
@@ -173,6 +191,21 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'Z3Module', value: Z3Module },
   { name: 'UndercluedSolver', value: UndercluedSolver },
   { name: 'BacktrackSolver', value: BacktrackSolver },
+  { name: 'BTModule', value: BTModule },
+  { name: 'BTGridData', value: BTGridData },
+  { name: 'BTTile', value: BTTile },
+  { name: 'IntArray2D', value: IntArray2D },
+  { name: 'colorToBTTile', value: colorToBTTile },
+  { name: 'createOneTileResult', value: createOneTileResult },
+  { name: 'getOppositeColor', value: getOppositeColor },
+  { name: 'AreaNumberBTModule', value: AreaNumberBTModule },
+  { name: 'DartBTModule', value: DartBTModule },
+  { name: 'DirectionLinkerBTModule', value: DirectionLinkerBTModule },
+  { name: 'MyopiaBTModule', value: MyopiaBTModule },
+  { name: 'ViewpointBTModule', value: ViewpointBTModule },
+  { name: 'BanPatternBTModule', value: BanPatternBTModule },
+  { name: 'ConnectAllBTModule', value: ConnectAllBTModule },
+  { name: 'RegionAreaBTModule', value: RegionAreaBTModule },
   { name: 'Serializer', value: Serializer },
   { name: 'SerializerBase', value: SerializerBase },
   { name: 'SerializerV0', value: SerializerV0 },

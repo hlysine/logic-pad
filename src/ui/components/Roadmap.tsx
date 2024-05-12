@@ -30,6 +30,7 @@ const roadmap: RoadmapItem[] = [
     '~Custom symbol',
     '~Mystery: alternate solution (Hidden)',
     '~Music Grid (as a grid rule)',
+    'Minesweeper',
   ],
   [
     '~Refactors',
@@ -54,6 +55,7 @@ const roadmap: RoadmapItem[] = [
     '~Optimize fixed tiles',
     '~Add transitions to laggy buttons',
     '~Memoize components',
+    'Render grid on canvas',
   ],
   [
     'Puzzle solver',

@@ -21,6 +21,7 @@
     "@vercel/speed-insights": "^1.0.10",
     "animejs": "^3.2.2",
     "base64-arraybuffer": "^1.0.2",
+    "event-iterator": "^2.0.0",
     "events": "^3.3.0",
     "fuzzysort": "^2.0.4",
     "grilops": "^0.1.1",

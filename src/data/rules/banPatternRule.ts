@@ -26,7 +26,7 @@ export default class BanPatternRule extends Rule {
   ];
 
   public readonly pattern: GridData;
-  private readonly cache: Shape[];
+  public readonly cache: Shape[];
 
   /**
    * **Don't make this pattern**

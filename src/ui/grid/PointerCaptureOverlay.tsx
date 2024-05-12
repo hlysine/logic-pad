@@ -14,8 +14,20 @@ export interface PointerCaptureOverlayProps {
     flood: boolean
   ) => void;
   allowDrag?: boolean;
+  allowReplace?: boolean;
   step?: number;
   onPointerUp?: (color: Color) => void;
+}
+
+function opposite(color: Color) {
+  switch (color) {
+    case Color.Dark:
+      return Color.Light;
+    case Color.Light:
+      return Color.Dark;
+    default:
+      return Color.Gray;
+  }
 }
 
 export default memo(function PointerCaptureOverlay({
@@ -24,10 +36,12 @@ export default memo(function PointerCaptureOverlay({
   colorMap,
   onTileClick,
   allowDrag,
+  allowReplace,
   step,
   onPointerUp,
 }: PointerCaptureOverlayProps) {
   allowDrag = allowDrag ?? true;
+  allowReplace = allowReplace ?? false;
   step = step ?? 1;
 
   const prevCoord = useRef({ x: -1, y: -1 });
@@ -65,7 +79,13 @@ export default memo(function PointerCaptureOverlay({
           } else {
             const { x, y, currentColor } = getPointerLocation(e, targetColor);
             if (currentColor !== Color.Gray) targetColor = Color.Gray;
-            mouseContext.setColor(targetColor, false);
+            mouseContext.setColor(
+              targetColor,
+              allowReplace &&
+                targetColor !== Color.Gray &&
+                getPointerLocation(e, opposite(targetColor)).currentColor !==
+                  Color.Gray
+            );
             onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
           }
         }

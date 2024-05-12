@@ -24,7 +24,7 @@ export default class DartBTModule extends BTModule {
   public checkGlobal(grid: BTGridData): CheckResult | false {
     const tile = grid.getTile(this.instr.x, this.instr.y);
 
-    if (tile == BTTile.Empty)
+    if (tile === BTTile.Empty)
       return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
 
     let pos = move(
@@ -37,13 +37,13 @@ export default class DartBTModule extends BTModule {
 
     while (grid.isInBound(pos.x, pos.y)) {
       // Opposite tiles
-      if (grid.getTile(pos.x, pos.y) == getOppositeColor(tile as BTColor)) {
+      if (grid.getTile(pos.x, pos.y) === getOppositeColor(tile as BTColor)) {
         completed += 1;
         if (completed > this.instr.number) return false;
       }
 
       // Empty tiles
-      if (grid.getTile(pos.x, pos.y) == BTTile.Empty) empty += 1;
+      if (grid.getTile(pos.x, pos.y) === BTTile.Empty) empty += 1;
 
       pos = move(pos, this.instr.orientation);
     }
@@ -67,7 +67,7 @@ export default class DartBTModule extends BTModule {
     let pos = { x: this.instr.x, y: this.instr.y };
 
     while (grid.isInBound(pos.x, pos.y)) {
-      if (grid.getTile(pos.x, pos.y) == BTTile.Empty) {
+      if (grid.getTile(pos.x, pos.y) === BTTile.Empty) {
         tilesNeedCheck.set(pos.x, pos.y, 1);
         ratings.push({ pos, score: 1 });
       }

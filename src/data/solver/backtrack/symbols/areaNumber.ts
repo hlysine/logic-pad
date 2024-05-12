@@ -20,7 +20,7 @@ export default class AreaNumberBTModule extends BTModule {
   public checkGlobal(grid: BTGridData): CheckResult | false {
     const tile = grid.getTile(this.instr.x, this.instr.y);
 
-    if (tile == BTTile.Empty)
+    if (tile === BTTile.Empty)
       return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
 
     const visited = IntArray2D.create(grid.width, grid.height);
@@ -43,9 +43,9 @@ export default class AreaNumberBTModule extends BTModule {
 
         const edgeTile = grid.getTile(edge.x, edge.y);
 
-        if (edgeTile == BTTile.Empty) {
+        if (edgeTile === BTTile.Empty) {
           usableTileQueue.push(edge);
-        } else if (edgeTile == tile) {
+        } else if (edgeTile === tile) {
           sameTileQueue.push(edge);
         }
 
@@ -74,7 +74,7 @@ export default class AreaNumberBTModule extends BTModule {
 
         const edgeTile = grid.getTile(edge.x, edge.y);
 
-        if (edgeTile == BTTile.Empty || edgeTile == tile) {
+        if (edgeTile === BTTile.Empty || edgeTile === tile) {
           usableTileQueue.push(edge);
           visited.set(edge.x, edge.y, 1);
         }

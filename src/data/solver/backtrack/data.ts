@@ -43,19 +43,19 @@ export class BTGridData {
     const positions: Position[] = [];
 
     if (pos.x > 0) {
-      if (this.getTile(pos.x - 1, pos.y) != BTTile.NonExist)
+      if (this.getTile(pos.x - 1, pos.y) !== BTTile.NonExist)
         positions.push({ x: pos.x - 1, y: pos.y });
     }
     if (pos.x + 1 < this.width) {
-      if (this.getTile(pos.x + 1, pos.y) != BTTile.NonExist)
+      if (this.getTile(pos.x + 1, pos.y) !== BTTile.NonExist)
         positions.push({ x: pos.x + 1, y: pos.y });
     }
     if (pos.y > 0) {
-      if (this.getTile(pos.x, pos.y - 1) != BTTile.NonExist)
+      if (this.getTile(pos.x, pos.y - 1) !== BTTile.NonExist)
         positions.push({ x: pos.x, y: pos.y - 1 });
     }
     if (pos.y + 1 < this.height) {
-      if (this.getTile(pos.x, pos.y + 1) != BTTile.NonExist)
+      if (this.getTile(pos.x, pos.y + 1) !== BTTile.NonExist)
         positions.push({ x: pos.x, y: pos.y + 1 });
     }
 
@@ -123,7 +123,7 @@ export default abstract class BTModule {
 }
 
 export function getOppositeColor(color: BTColor): BTColor {
-  return color == BTTile.Dark ? BTTile.Light : BTTile.Dark;
+  return color === BTTile.Dark ? BTTile.Light : BTTile.Dark;
 }
 
 export function colorToBTTile(color: Color): BTTile {

@@ -40,8 +40,8 @@ function translateToBTGridData(grid: GridData): BTGridData {
     const tile = grid.getTile(x, y);
 
     if (!tile.exists) return BTTile.NonExist;
-    else if (tile.color == Color.Dark) return BTTile.Dark;
-    else if (tile.color == Color.Light) return BTTile.Light;
+    else if (tile.color === Color.Dark) return BTTile.Dark;
+    else if (tile.color === Color.Light) return BTTile.Light;
     else return BTTile.Empty;
   });
 
@@ -56,15 +56,15 @@ function translateToBTGridData(grid: GridData): BTGridData {
   for (const [id, symbolList] of grid.symbols) {
     for (const symbol of symbolList) {
       let module: BTModule | undefined;
-      if (id == areaNumberInstance.id) {
+      if (id === areaNumberInstance.id) {
         module = new AreaNumberBTModule(symbol as AreaNumberSymbol);
-      } else if (id == dartInstance.id) {
+      } else if (id === dartInstance.id) {
         module = new DartBTModule(symbol as DartSymbol);
-      } else if (id == viewpointInstance.id) {
+      } else if (id === viewpointInstance.id) {
         module = new ViewpointBTModule(symbol as ViewpointSymbol);
-      } else if (id == galaxyInstance.id || id == lotusInstance.id) {
+      } else if (id === galaxyInstance.id || id === lotusInstance.id) {
         module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
-      } else if (id == myopiaInstance.id) {
+      } else if (id === myopiaInstance.id) {
         module = new MyopiaBTModule(symbol as MyopiaSymbol);
       }
 
@@ -76,13 +76,13 @@ function translateToBTGridData(grid: GridData): BTGridData {
 
   for (const rule of grid.rules) {
     let module: BTModule | undefined;
-    if (rule.id == connectAllInstance.id) {
+    if (rule.id === connectAllInstance.id) {
       module = new ConnectAllBTModule(rule as ConnectAllRule);
-    } else if (rule.id == regionAreaInstance.id) {
+    } else if (rule.id === regionAreaInstance.id) {
       module = new RegionAreaBTModule(rule as RegionAreaRule);
-    } else if (rule.id == banPatternInstance.id) {
+    } else if (rule.id === banPatternInstance.id) {
       module = new BanPatternBTModule(rule as BanPatternRule);
-    } else if (rule.id == undercluedInstance.id) {
+    } else if (rule.id === undercluedInstance.id) {
       continue;
     }
 
@@ -98,11 +98,11 @@ function translateBackGridData(grid: GridData, btGrid: BTGridData): GridData {
   const tiles: TileData[][] = array(grid.width, grid.height, (x, y) => {
     const origTile = grid.getTile(x, y);
 
-    if (!origTile.exists || origTile.fixed || origTile.color != Color.Gray)
+    if (!origTile.exists || origTile.fixed || origTile.color !== Color.Gray)
       return origTile;
     else
       return origTile.withColor(
-        btGrid.getTile(x, y) == BTTile.Dark ? Color.Dark : Color.Light
+        btGrid.getTile(x, y) === BTTile.Dark ? Color.Dark : Color.Light
       );
   });
 
@@ -167,7 +167,7 @@ function getNextTile(
 
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
-      if (grid.getTile(x, y) != BTTile.Empty) continue;
+      if (grid.getTile(x, y) !== BTTile.Empty) continue;
       if (scores[y][x] > highest) {
         highest = scores[y][x];
         pos = { x, y };
@@ -177,7 +177,7 @@ function getNextTile(
     }
   }
 
-  return pos || fallback;
+  return pos ?? fallback;
 }
 
 function backtrack(
@@ -310,7 +310,7 @@ function solveUnderclued(input: GridData): GridData | null {
 }
 
 function solve(grid: GridData, solutionFn: (grid: GridData) => boolean) {
-  if (grid.findRule(rule => rule.id == undercluedInstance.id)) {
+  if (grid.findRule(rule => rule.id === undercluedInstance.id)) {
     const res = solveUnderclued(grid);
     if (res) solutionFn(res);
   } else {
@@ -326,7 +326,7 @@ onmessage = e => {
   let count = 0;
 
   solve(grid, solution => {
-    if (count == 0) console.timeLog('Solve time', 'First solution');
+    if (count === 0) console.timeLog('Solve time', 'First solution');
 
     postMessage(Serializer.stringifyGrid(solution));
 
@@ -338,3 +338,7 @@ onmessage = e => {
 
   postMessage(null);
 };
+
+// make typescript happy
+// eslint-disable-next-line import/no-anonymous-default-export
+export default null;

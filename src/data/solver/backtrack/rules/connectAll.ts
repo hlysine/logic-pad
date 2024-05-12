@@ -24,7 +24,7 @@ export default class ConnectAllBTModule extends BTModule {
     const sameCells: Position[] = [];
     for (let y = 0; y < grid.height; y++) {
       for (let x = 0; x < grid.width; x++) {
-        if (grid.getTile(x, y) == color) {
+        if (grid.getTile(x, y) === color) {
           sameCells.push({ x, y });
         }
       }
@@ -45,7 +45,7 @@ export default class ConnectAllBTModule extends BTModule {
       for (const edge of grid.getEdges(curPos)) {
         if (
           visited.get(edge.x, edge.y) ||
-          grid.getTile(edge.x, edge.y) == getOppositeColor(color)
+          grid.getTile(edge.x, edge.y) === getOppositeColor(color)
         ) {
           continue;
         }

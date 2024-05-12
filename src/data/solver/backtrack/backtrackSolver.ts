@@ -60,6 +60,6 @@ export default class BacktrackSolver extends Solver {
   }
 
   public isInstructionSupported(instructionId: string): boolean {
-    return BacktrackSolver.supportedInstrs.some(i => instructionId == i);
+    return BacktrackSolver.supportedInstrs.some(i => instructionId === i);
   }
 }

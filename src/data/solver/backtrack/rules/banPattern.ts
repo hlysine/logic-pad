@@ -30,7 +30,7 @@ export default class BanPatternBTModule extends BTModule {
 
       for (const shape of this.instr.cache) {
         for (const origin of shape.elements) {
-          if (colorToBTTile(origin.color) != tile) continue;
+          if (colorToBTTile(origin.color) !== tile) continue;
           if (
             origin.x > x ||
             origin.y > y ||
@@ -45,7 +45,7 @@ export default class BanPatternBTModule extends BTModule {
                 grid.getTile(
                   element.x - origin.x + x,
                   element.y - origin.y + y
-                ) == colorToBTTile(element.color)
+                ) === colorToBTTile(element.color)
             )
           )
             return false;

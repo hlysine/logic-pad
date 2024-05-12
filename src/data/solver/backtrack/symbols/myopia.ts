@@ -24,7 +24,7 @@ export default class MyopiaBTModule extends BTModule {
 
     const tile = grid.getTile(this.instr.x, this.instr.y);
 
-    if (tile == BTTile.Empty)
+    if (tile === BTTile.Empty)
       return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
 
     const traverse = (dir: Orientation): [number, number, boolean] => {
@@ -40,7 +40,7 @@ export default class MyopiaBTModule extends BTModule {
         const curTile = grid.getTile(pos.x, pos.y);
 
         if (connected) {
-          if (tile == curTile) {
+          if (tile === curTile) {
             min += 1;
           } else {
             connected = false;
@@ -48,8 +48,8 @@ export default class MyopiaBTModule extends BTModule {
         }
 
         if (
-          getOppositeColor(tile as BTColor) == curTile ||
-          curTile == BTTile.NonExist
+          getOppositeColor(tile as BTColor) === curTile ||
+          curTile === BTTile.NonExist
         ) {
           stopped = true;
           break;

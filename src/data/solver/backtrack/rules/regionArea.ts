@@ -26,7 +26,7 @@ export default class RegionAreaBTModule extends BTModule {
     for (let y = 0; y < grid.height; y++) {
       for (let x = 0; x < grid.width; x++) {
         if (visited.get(x, y) & 0b01111111) continue;
-        if (grid.getTile(x, y) != color) continue;
+        if (grid.getTile(x, y) !== color) continue;
 
         id += 1;
         if (id > 127) throw new Error('Too many regions!');
@@ -59,14 +59,14 @@ export default class RegionAreaBTModule extends BTModule {
       sameCellCount += 1;
 
       for (const edge of grid.getEdges(curPos)) {
-        if ((visited.get(edge.x, edge.y) & 0b01111111) == id) continue;
+        if ((visited.get(edge.x, edge.y) & 0b01111111) === id) continue;
 
         const edgeTile = grid.getTile(edge.x, edge.y);
 
-        if (edgeTile == BTTile.Empty) {
+        if (edgeTile === BTTile.Empty) {
           usableTileQueue.push(edge);
           visited.set(edge.x, edge.y, id | 0b10000000);
-        } else if (edgeTile == tile) {
+        } else if (edgeTile === tile) {
           sameTileQueue.push(edge);
           visited.set(edge.x, edge.y, id);
         }
@@ -83,11 +83,11 @@ export default class RegionAreaBTModule extends BTModule {
       if (sameCellCount + usableCellCount >= this.instr.size) return true;
 
       for (const edge of grid.getEdges(curPos)) {
-        if ((visited.get(edge.x, edge.y) & 0b01111111) == id) continue;
+        if ((visited.get(edge.x, edge.y) & 0b01111111) === id) continue;
 
         const edgeTile = grid.getTile(edge.x, edge.y);
 
-        if (edgeTile == BTTile.Empty || edgeTile == tile) {
+        if (edgeTile === BTTile.Empty || edgeTile === tile) {
           usableTileQueue.push(edge);
           visited.set(edge.x, edge.y, id | 0b10000000);
         }

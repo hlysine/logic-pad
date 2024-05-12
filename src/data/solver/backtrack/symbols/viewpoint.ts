@@ -22,7 +22,7 @@ export default class ViewpointBTModule extends BTModule {
   public checkGlobal(grid: BTGridData): CheckResult | false {
     const tile = grid.getTile(this.instr.x, this.instr.y);
 
-    if (tile == BTTile.Empty)
+    if (tile === BTTile.Empty)
       return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
 
     const tilesNeedCheck = IntArray2D.create(grid.width, grid.height);
@@ -40,11 +40,11 @@ export default class ViewpointBTModule extends BTModule {
         const curTile = grid.getTile(x, y);
 
         if (connected) {
-          if (tile == curTile) {
+          if (tile === curTile) {
             completed += 1;
             if (completed > this.instr.number) return true;
           } else {
-            if (curTile == BTTile.Empty) {
+            if (curTile === BTTile.Empty) {
               tilesNeedCheck.set(x, y, 1);
               ratings.push({ pos: { x, y }, score: 1 });
             }
@@ -53,8 +53,8 @@ export default class ViewpointBTModule extends BTModule {
         }
 
         if (
-          getOppositeColor(tile as BTColor) == curTile ||
-          curTile == BTTile.NonExist
+          getOppositeColor(tile as BTColor) === curTile ||
+          curTile === BTTile.NonExist
         )
           break;
 

@@ -55,7 +55,8 @@ const roadmap: RoadmapItem[] = [
     '~Optimize fixed tiles',
     '~Add transitions to laggy buttons',
     '~Memoize components',
-    'Render grid on canvas',
+    '~Render grid on canvas',
+    'Remove Konva in error and tile count overlays',
   ],
   [
     'Puzzle solver',

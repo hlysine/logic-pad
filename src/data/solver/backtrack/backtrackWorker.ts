@@ -180,25 +180,17 @@ function getNextTile(
   return pos || fallback;
 }
 
-interface SolutionContainer {
-  maxCount: number;
-  solutions: BTGridData[];
-}
-
 function backtrack(
   grid: BTGridData,
-  sols: SolutionContainer,
   checkable: (IntArray2D | null)[],
-  ratings: (Rating[] | null)[]
+  ratings: (Rating[] | null)[],
+  solutionFn: (grid: BTGridData) => boolean
 ): boolean {
   // Find the best empty cell to guess
   const pos = getNextTile(grid, ratings);
 
   // Found a solution
-  if (!pos) {
-    sols.solutions.push(grid.clone());
-    return sols.solutions.length >= sols.maxCount;
-  }
+  if (!pos) return !solutionFn(grid.clone());
 
   // TODO: Use a better method to determine the order
 
@@ -208,7 +200,8 @@ function backtrack(
     const places = grid.connections[pos.y][pos.x];
     const result = isValid(grid, places, checkable, ratings);
 
-    if (result && backtrack(grid, sols, result[0], result[1])) return true;
+    if (result && backtrack(grid, result[0], result[1], solutionFn))
+      return true;
   }
 
   {
@@ -217,7 +210,8 @@ function backtrack(
     const places = grid.connections[pos.y][pos.x];
     const result = isValid(grid, places, checkable, ratings);
 
-    if (result && backtrack(grid, sols, result[0], result[1])) return true;
+    if (result && backtrack(grid, result[0], result[1], solutionFn))
+      return true;
   }
 
   // If both fail, returns to initial state
@@ -225,7 +219,7 @@ function backtrack(
   return false;
 }
 
-function solveNormal(input: GridData, maxCount: number): GridData[] {
+function solveNormal(input: GridData, solutionFn: (grid: GridData) => boolean) {
   // Translate to BT data types
   const grid = translateToBTGridData(input);
 
@@ -241,10 +235,9 @@ function solveNormal(input: GridData, maxCount: number): GridData[] {
   }
 
   // Call backtrack
-  const sols: SolutionContainer = { maxCount, solutions: [] };
-  backtrack(grid, sols, checkable, ratings);
-
-  return sols.solutions.map(sol => translateBackGridData(input, sol));
+  backtrack(grid, checkable, ratings, sol =>
+    solutionFn(translateBackGridData(input, sol))
+  );
 }
 
 function solveUnderclued(input: GridData): GridData | null {
@@ -264,17 +257,21 @@ function solveUnderclued(input: GridData): GridData | null {
   function search(x: number, y: number, tile: TileData, color: Color): boolean {
     count++;
 
-    console.log(`Trying (${x}, ${y}) with ${color}`);
+    // console.log(`Trying (${x}, ${y}) with ${color}`);
 
     const newGrid = grid.setTile(x, y, tile.withColor(color));
 
     // Solve
-    const solutions = solveNormal(newGrid, 1);
+    let solution: GridData | undefined;
+    solveNormal(newGrid, sol => {
+      solution = sol;
+      return false;
+    });
 
-    if (solutions.length == 0) return false;
+    if (!solution) return false;
 
     // Update the new possible states
-    solutions[0].forEach((solTile, solX, solY) => {
+    solution.forEach((solTile, solX, solY) => {
       if (solTile.color === Color.Dark) {
         possibles[solY][solX].dark = true;
       } else {
@@ -312,12 +309,12 @@ function solveUnderclued(input: GridData): GridData | null {
   return grid;
 }
 
-function solve(grid: GridData, maxCount: number): GridData[] {
+function solve(grid: GridData, solutionFn: (grid: GridData) => boolean) {
   if (grid.findRule(rule => rule.id == undercluedInstance.id)) {
     const res = solveUnderclued(grid);
-    return res ? [res] : [];
+    if (res) solutionFn(res);
   } else {
-    return solveNormal(grid, maxCount);
+    solveNormal(grid, solutionFn);
   }
 }
 
@@ -326,9 +323,18 @@ onmessage = e => {
 
   console.time('Solve time');
 
-  const solutions: GridData[] = solve(grid, 2);
+  let count = 0;
+
+  solve(grid, solution => {
+    if (count == 0) console.timeLog('Solve time', 'First solution');
+
+    postMessage(Serializer.stringifyGrid(solution));
+
+    count += 1;
+    return count < 2;
+  });
 
   console.timeEnd('Solve time');
 
-  postMessage(solutions.map(grid => Serializer.stringifyGrid(grid)));
+  postMessage(null);
 };

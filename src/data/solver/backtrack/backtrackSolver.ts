@@ -12,6 +12,7 @@ import { instance as connectAllInstance } from '../z3/modules/connectAllModule';
 import { instance as banPatternInstance } from '../../rules/banPatternRule';
 import { instance as regionAreaInstance } from '../../rules/regionAreaRule';
 import { Serializer } from '../../serializer/allSerializers';
+import EventIterator from 'event-iterator';
 
 export default class BacktrackSolver extends Solver {
   private static readonly supportedInstrs = [
@@ -36,17 +37,22 @@ export default class BacktrackSolver extends Solver {
     const worker = new Worker();
 
     try {
-      const solutions = await new Promise<GridData[]>(resolve => {
-        worker.addEventListener('message', (e: MessageEvent<string[]>) => {
-          resolve(e.data.map((grid: string) => Serializer.parseGrid(grid)));
-        });
-
+      const iterator = new EventIterator<GridData>(({ push, stop }) => {
         worker.postMessage(Serializer.stringifyGrid(grid));
+
+        worker.addEventListener('message', (e: MessageEvent<string | null>) => {
+          if (e.data) {
+            push(Serializer.parseGrid(e.data));
+          } else {
+            stop();
+          }
+        });
       });
 
-      for (const solution of solutions) {
+      for await (const solution of iterator) {
         yield solution;
       }
+
       yield null;
     } finally {
       worker.terminate();

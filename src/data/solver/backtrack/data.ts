@@ -61,6 +61,16 @@ export class BTGridData {
 
     return positions;
   }
+
+  public clone(): BTGridData {
+    return new BTGridData(
+      this.tiles.map(arr => [...arr]),
+      this.connections,
+      this.modules,
+      this.width,
+      this.height
+    );
+  }
 }
 
 export class IntArray2D {
@@ -78,16 +88,16 @@ export class IntArray2D {
     return new IntArray2D(new Uint8Array(width * height), width, height);
   }
 
-  public clone(): IntArray2D {
-    return new IntArray2D(new Uint8Array(this.array), this.width, this.height);
-  }
-
   public set(x: number, y: number, value: number) {
     this.array[y * this.width + x] = value;
   }
 
   public get(x: number, y: number): number {
     return this.array[y * this.width + x];
+  }
+
+  public clone(): IntArray2D {
+    return new IntArray2D(new Uint8Array(this.array), this.width, this.height);
   }
 }
 

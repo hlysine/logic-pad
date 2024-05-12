@@ -8,10 +8,13 @@ import {
   Orientation,
   OrientationToggle,
 } from './primitives';
+import { ControlLine } from './rules/musicControlLine';
 
 export enum ConfigType {
   Boolean = 'boolean',
+  NullableBoolean = 'nullableBoolean',
   Number = 'number',
+  NullableNumber = 'nullableNumber',
   String = 'string',
   Color = 'color',
   Direction = 'direction',
@@ -19,9 +22,10 @@ export enum ConfigType {
   Orientation = 'orientation',
   OrientationToggle = 'orientationToggle',
   Tile = 'tile',
-  Solution = 'solution',
   Grid = 'grid',
   Icon = 'icon',
+  ControlLines = 'controlLines',
+  NullableNote = 'nullableNote',
 }
 
 export interface Config<T> {
@@ -36,10 +40,22 @@ export interface BooleanConfig extends Config<boolean> {
   readonly type: ConfigType.Boolean;
 }
 
+export interface NullableBooleanConfig extends Config<boolean | null> {
+  readonly type: ConfigType.NullableBoolean;
+}
+
 export interface NumberConfig extends Config<number> {
   readonly type: ConfigType.Number;
   readonly min?: number;
   readonly max?: number;
+  readonly step?: number;
+}
+
+export interface NullableNumberConfig extends Config<number | null> {
+  readonly type: ConfigType.NullableNumber;
+  readonly min?: number;
+  readonly max?: number;
+  readonly step?: number;
 }
 
 export interface StringConfig extends Config<string> {
@@ -82,9 +98,19 @@ export interface IconConfig extends Config<string> {
   readonly type: ConfigType.Icon;
 }
 
+export interface ControlLinesConfig extends Config<ControlLine[]> {
+  readonly type: ConfigType.ControlLines;
+}
+
+export interface NullableNoteConfig extends Config<string | null> {
+  readonly type: ConfigType.NullableNote;
+}
+
 export type AnyConfig =
   | BooleanConfig
+  | NullableBooleanConfig
   | NumberConfig
+  | NullableNumberConfig
   | StringConfig
   | ColorConfig
   | DirectionConfig
@@ -93,7 +119,9 @@ export type AnyConfig =
   | OrientationToggleConfig
   | TileConfig
   | GridConfig
-  | IconConfig;
+  | IconConfig
+  | ControlLinesConfig
+  | NullableNoteConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.
@@ -108,6 +136,12 @@ export function configEquals<C extends AnyConfig>(
   a: C['default'],
   b: C['default']
 ): boolean {
+  if (type === ConfigType.ControlLines) {
+    const aLines = a as ControlLine[];
+    const bLines = b as ControlLine[];
+    if (aLines.length !== bLines.length) return false;
+    return aLines.every((line, i) => line.equals(bLines[i]));
+  }
   if (type === ConfigType.Tile || type === ConfigType.Grid) {
     return (a as GridData).equals(b as GridData);
   }

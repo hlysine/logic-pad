@@ -1,13 +1,14 @@
 import { memo, useRef } from 'react';
-import { getInstructionLocation, useConfig } from '../ConfigContext';
-import Instruction from '../../data/instruction';
+import { getConfigurableLocation, useConfig } from '../ConfigContext';
 import { useGrid } from '../GridContext';
+import Configurable from '../../data/configurable';
+import Symbol from '../../data/symbols/symbol';
 
 export interface EditTargetProps {
-  instruction: Instruction;
+  configurable: Configurable;
 }
 
-export default memo(function EditTarget({ instruction }: EditTargetProps) {
+export default memo(function EditTarget({ configurable }: EditTargetProps) {
   const { setLocation, setRef } = useConfig();
   const { grid } = useGrid();
   const divRef = useRef<HTMLDivElement>(null);
@@ -16,7 +17,7 @@ export default memo(function EditTarget({ instruction }: EditTargetProps) {
       ref={divRef}
       className="absolute inset-0 cursor-pointer"
       onPointerDown={() => {
-        setLocation(getInstructionLocation(grid, instruction));
+        setLocation(getConfigurableLocation(grid, configurable as Symbol));
         setRef(divRef);
       }}
     ></div>

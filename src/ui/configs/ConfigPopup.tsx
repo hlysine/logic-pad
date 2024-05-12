@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react';
-import { getInstruction, useConfig } from '../ConfigContext';
+import { getConfigurable, useConfig } from '../ConfigContext';
 import Config from './parts/Config';
 import Rule from '../../data/rules/rule';
 import { useGrid } from '../GridContext';
@@ -8,6 +8,10 @@ import { useToolbox } from '../ToolboxContext';
 import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../utils';
 import { useSolver } from '../SolverContext';
+import { ControlLine, Row } from '../../data/rules/musicControlLine';
+import MusicGridRule, {
+  instance as musicGridInstance,
+} from '../../data/rules/musicGridRule';
 
 const gap = 8;
 
@@ -67,14 +71,14 @@ export default memo(function ConfigPopup() {
   const { presets, setPresets } = useToolbox();
   const { solver } = useSolver();
 
-  const instruction = location ? getInstruction(grid, location) : undefined;
+  const configurable = location ? getConfigurable(grid, location) : undefined;
 
   useEffect(() => {
-    if (!instruction) {
+    if (!configurable) {
       setLocation(undefined);
       setRef(undefined);
     }
-  }, [instruction, setLocation, setRef]);
+  }, [configurable, setLocation, setRef]);
 
   const popupRef = useRef<HTMLDivElement>(null);
   const popupLocation = useRef<{ left: string; top: string }>({
@@ -120,9 +124,9 @@ export default memo(function ConfigPopup() {
 
   const [presetName, setPresetName] = useState('');
 
-  if (!instruction || !ref) return null;
+  if (!configurable || !ref) return null;
 
-  const configs = instruction.configs?.filter(config => config.configurable);
+  const configs = configurable.configs?.filter(config => config.configurable);
 
   return (
     <div
@@ -134,19 +138,58 @@ export default memo(function ConfigPopup() {
         configs.map(config => (
           <Config
             key={`${config.field}: ${config.type}`}
-            instruction={instruction}
+            configurable={configurable}
             config={config}
             setConfig={(field, value) => {
-              if (instruction instanceof Rule) {
-                const newInstruction = instruction.copyWith({
+              if (configurable instanceof Rule) {
+                const newInstruction = configurable.copyWith({
                   [field]: value,
                 });
-                setGrid(grid.replaceRule(instruction, newInstruction));
-              } else if (instruction instanceof Symbol) {
-                const newInstruction = instruction.copyWith({
+                setGrid(grid.replaceRule(configurable, newInstruction));
+              } else if (configurable instanceof Symbol) {
+                const newInstruction = configurable.copyWith({
                   [field]: value,
                 });
-                setGrid(grid.replaceSymbol(instruction, newInstruction));
+                setGrid(grid.replaceSymbol(configurable, newInstruction));
+              } else if (configurable instanceof ControlLine) {
+                const newControlLine = configurable.copyWith({
+                  [field]: value,
+                });
+                const musicGrid = grid.rules.find(
+                  rule => rule.id === musicGridInstance.id
+                ) as MusicGridRule | undefined;
+                if (!musicGrid) return;
+                setGrid(
+                  grid.replaceRule(
+                    musicGrid,
+                    musicGrid.setControlLine(newControlLine)
+                  )
+                );
+              } else if (configurable instanceof Row) {
+                const newControlLine = configurable.copyWith({
+                  [field]: value,
+                });
+                const musicGrid = grid.rules.find(
+                  rule => rule.id === musicGridInstance.id
+                ) as MusicGridRule | undefined;
+                if (!musicGrid) return;
+                if (location?.type !== 'row') return;
+                const line = musicGrid.controlLines.find(
+                  line => line.column === location.column
+                );
+                if (!line) return;
+                setGrid(
+                  grid.replaceRule(
+                    musicGrid,
+                    musicGrid.setControlLine(
+                      line.copyWith({
+                        rows: line.rows.map((row, i) =>
+                          i === location.row ? newControlLine : row
+                        ),
+                      })
+                    )
+                  )
+                );
               }
             }}
           />
@@ -155,19 +198,21 @@ export default memo(function ConfigPopup() {
         <span className="text-center">Not configurable</span>
       )}
       <div className="flex gap-2 self-stretch justify-between px-2">
-        <SupportLevel
-          validate={!instruction.validateWithSolution}
-          solve={solver.isInstructionSupported(instruction.id)}
-        />
+        {(configurable instanceof Rule || configurable instanceof Symbol) && (
+          <SupportLevel
+            validate={!configurable.validateWithSolution}
+            solve={solver.isInstructionSupported(configurable.id)}
+          />
+        )}
         <div className="flex-1" />
-        {instruction instanceof Symbol && (
+        {configurable instanceof Symbol && (
           <div className="dropdown dropdown-top">
             <button tabIndex={0} className="btn btn-outline btn-info">
               Add to presets
             </button>
             <div
               tabIndex={0}
-              className="dropdown-content z-[1] p-2 shadow-lg bg-base-200 rounded-box w-72 flex gap-2 mb-2"
+              className="dropdown-content z-[1] p-2 shadow-lg bg-base-200 text-base-content rounded-box w-72 flex gap-2 mb-2"
             >
               <input
                 type="text"
@@ -184,7 +229,7 @@ export default memo(function ConfigPopup() {
                 onClick={() => {
                   setPresets([
                     ...presets,
-                    { name: presetName, symbol: instruction },
+                    { name: presetName, symbol: configurable },
                   ]);
                   setPresetName('');
                 }}
@@ -197,15 +242,83 @@ export default memo(function ConfigPopup() {
         <button
           className="btn btn-outline btn-error"
           onClick={() => {
-            if (instruction instanceof Rule) {
-              setGrid(grid.removeRule(instruction));
-              setLocation(undefined);
-              setRef(undefined);
-            } else if (instruction instanceof Symbol) {
-              setGrid(grid.removeSymbol(instruction));
-              setLocation(undefined);
-              setRef(undefined);
+            if (configurable instanceof Rule) {
+              setGrid(grid.removeRule(configurable));
+            } else if (configurable instanceof Symbol) {
+              setGrid(grid.removeSymbol(configurable));
+            } else if (configurable instanceof ControlLine) {
+              const musicGrid = grid.rules.find(
+                rule => rule.id === musicGridInstance.id
+              ) as MusicGridRule | undefined;
+              if (!musicGrid) return;
+              const newLine = configurable.copyWith({
+                bpm: null,
+                pedal: null,
+              });
+              if (newLine.isEmpty) {
+                setGrid(
+                  grid.replaceRule(
+                    musicGrid,
+                    musicGrid.copyWith({
+                      controlLines: musicGrid.controlLines.filter(
+                        line => line !== configurable
+                      ),
+                    })
+                  )
+                );
+              } else {
+                setGrid(
+                  grid.replaceRule(
+                    musicGrid,
+                    musicGrid.copyWith({
+                      controlLines: musicGrid.controlLines.map(line =>
+                        line === configurable ? newLine : line
+                      ),
+                    })
+                  )
+                );
+              }
+            } else if (configurable instanceof Row) {
+              const musicGrid = grid.rules.find(
+                rule => rule.id === musicGridInstance.id
+              ) as MusicGridRule | undefined;
+              if (!musicGrid) return;
+              if (location?.type !== 'row') return;
+              const line = musicGrid.controlLines.find(
+                line => line.column === location.column
+              );
+              if (!line) return;
+              const newLine = line.copyWith({
+                rows: line.rows.map((row, i) =>
+                  i === location.row ? new Row(null, null) : row
+                ),
+              });
+              if (newLine.isEmpty) {
+                setGrid(
+                  grid.replaceRule(
+                    musicGrid,
+                    musicGrid.copyWith({
+                      controlLines: musicGrid.controlLines.filter(
+                        l => l.column !== line.column
+                      ),
+                    })
+                  )
+                );
+              } else {
+                setGrid(
+                  grid.replaceRule(
+                    musicGrid,
+                    musicGrid.copyWith({
+                      controlLines: musicGrid.controlLines.map(l =>
+                        l.column === line.column ? newLine : l
+                      ),
+                    })
+                  )
+                );
+              }
             }
+            setLocation(undefined);
+            setRef(undefined);
           }}
         >
           Delete

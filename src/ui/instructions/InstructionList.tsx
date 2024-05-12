@@ -88,7 +88,8 @@ export default memo(function InstructionList({
     return map;
   }, [symbolMergeMap, state]);
   return (
-    <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto">
+    <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto py-[1px]">
+      {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
       <div className="flex flex-col shrink-0 items-end justify-start">
         {filteredRules.length > 0 && <Title>Rules</Title>}
         {filteredRules.map((rule, i) => (
@@ -98,7 +99,7 @@ export default memo(function InstructionList({
             state={state?.rules[i]?.state}
             className={cn(rule.visibleWhenSolving || 'opacity-60')}
           >
-            {editable && <EditTarget instruction={rule} />}
+            {editable && <EditTarget configurable={rule} />}
           </Instruction>
         ))}
         {hasSymbols && <Title>Symbols</Title>}

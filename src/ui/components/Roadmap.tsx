@@ -10,7 +10,7 @@ const roadmap: RoadmapItem[] = [
   '~Implement rules UI',
   '~Implement color themes',
   [
-    'Add rules and symbols',
+    '~Add rules and symbols',
     '~Area number',
     '~Letter',
     "~Don't make this pattern",
@@ -29,10 +29,11 @@ const roadmap: RoadmapItem[] = [
     '~Custom rule',
     '~Custom symbol',
     '~Mystery: alternate solution (Hidden)',
-    'Music Grid (as a grid rule)',
+    '~Music Grid (as a grid rule)',
+    '~Minesweeper',
   ],
   [
-    'Refactors',
+    '~Refactors',
     '~Discover rules and symbols with glob import',
     '~Separate data and UI repositories',
     '~Discover code editor enclosure with glob import',
@@ -54,6 +55,7 @@ const roadmap: RoadmapItem[] = [
     '~Optimize fixed tiles',
     '~Add transitions to laggy buttons',
     '~Memoize components',
+    'Render grid on canvas',
   ],
   [
     'Puzzle solver',

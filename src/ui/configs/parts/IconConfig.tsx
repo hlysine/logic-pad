@@ -1,11 +1,11 @@
 import { memo, useEffect, useState } from 'react';
 import { ConfigType, IconConfig } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 import { IconString } from '../../../data/symbols/customIconSymbol';
 import Autocomplete from '../../components/Autocomplete';
 
 export interface IconConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: IconConfig;
   setConfig?: (field: string, value: IconConfig['default']) => void;
 }
@@ -14,7 +14,7 @@ let iconNames: string[] = [];
 
 // million-ignore
 export default memo(function IconConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: IconConfigProps) {
@@ -31,8 +31,8 @@ export default memo(function IconConfig({
     }
   }, []);
 
-  const value = instruction[
-    config.field as keyof typeof instruction
+  const value = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as IconString;
   return (
     <div className="flex p-2 gap-4 justify-between items-center">

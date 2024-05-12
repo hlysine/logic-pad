@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { OrientationToggleConfig, ConfigType } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 import { Orientation, OrientationToggle } from '../../../data/primitives';
 import { cn } from '../../../utils';
 import { FaArrowUp } from 'react-icons/fa';
 import { orientationToRotation } from '../../../data/helper';
 
 export interface OrientationToggleConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: OrientationToggleConfig;
   setConfig?: (
     field: string,
@@ -50,12 +50,12 @@ const OrientationToggleRadio = memo(function OrientationToggleRadio({
 
 // million-ignore
 export default memo(function OrientationToggleConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: OrientationToggleConfigProps) {
-  const value = instruction[
-    config.field as keyof typeof instruction
+  const value = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as OrientationToggle;
   return (
     <div className="flex p-2 justify-between items-center">

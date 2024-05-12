@@ -27,6 +27,7 @@ export default class GridConnections {
   }
 
   public isConnected(edge: Edge): boolean {
+    if (edge.x1 === edge.x2 && edge.y1 === edge.y2) return true;
     return this.edges.some(e => isSameEdge(e, edge));
   }
 

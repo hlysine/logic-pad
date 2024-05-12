@@ -57,7 +57,7 @@ export default class MysteryRule
   }
 
   public get explanation(): string {
-    return `*Mystery*: alternate solution`;
+    return `*Mystery:* Alternate solution`;
   }
 
   public get visibleWhenSolving(): boolean {
@@ -79,6 +79,10 @@ export default class MysteryRule
   public validateGrid(grid: GridData): RuleState {
     if (grid.colorEquals(this.solution)) return { state: State.Satisfied };
     return { state: State.Incomplete };
+  }
+
+  public get necessaryForCompletion(): boolean {
+    return false;
   }
 
   public onFinalValidation(

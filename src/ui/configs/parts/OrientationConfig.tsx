@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { OrientationConfig, ConfigType } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 import { Orientation } from '../../../data/primitives';
 import { cn } from '../../../utils';
 import { FaArrowUp } from 'react-icons/fa';
 import { orientationToRotation } from '../../../data/helper';
 
 export interface OrientationConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: OrientationConfig;
   setConfig?: (field: string, value: OrientationConfig['default']) => void;
 }
@@ -48,13 +48,13 @@ const OrientationRadio = memo(function OrientationRadio({
 
 // million-ignore
 export default memo(function OrientationConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: OrientationConfigProps) {
-  const value = instruction[
-    config.field as keyof typeof instruction
-  ] as Orientation;
+  const value = configurable[
+    config.field as keyof typeof configurable
+  ] as unknown as Orientation;
   return (
     <div className="flex p-2 justify-between items-center">
       <span>{config.description}</span>

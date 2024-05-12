@@ -50,7 +50,13 @@ export default memo(function Instruction({
         </div>
         <div className="shrink-0 relative min-h-[calc(28px*4)] min-w-[calc(28px*5)] flex items-center justify-center">
           {exampleGrid && (
-            <Grid size={28} grid={exampleGrid} editable={false}>
+            <Grid
+              size={
+                exampleGrid.width === 1 && exampleGrid.height === 1 ? 56 : 28 // special case for rules with a single symbol as thumbnail
+              }
+              grid={exampleGrid}
+              editable={false}
+            >
               {exampleGrid.symbols.size > 0 ? (
                 <SymbolOverlay grid={exampleGrid} />
               ) : null}

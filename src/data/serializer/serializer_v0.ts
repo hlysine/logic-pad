@@ -21,6 +21,7 @@ import { allRules } from '../rules';
 import { allSymbols } from '../symbols';
 import SerializerBase from './serializerBase';
 import { Puzzle, PuzzleMetadata } from '../puzzle';
+import { ControlLine, Row } from '../rules/musicControlLine';
 
 const OFFSETS = [
   { x: 0, y: -1 },
@@ -54,6 +55,48 @@ export default class SerializerV0 extends SerializerBase {
     return TileData.create(str);
   }
 
+  public stringifyControlLine(line: ControlLine): string {
+    return `c${line.column}|b${line.bpm ?? ''}|p${line.pedal ? '1' : line.pedal !== null ? '0' : ''}|r${line.rows.map(row => `v${row.velocity ?? ''}n${row.note ?? ''}`).join(',')}`;
+  }
+
+  public parseControlLine(str: string): ControlLine {
+    let column: number | null = null;
+    let bpm: number | null = null;
+    let pedal: boolean | null = null;
+    const rows: Row[] = [];
+
+    const data = str.split('|');
+    for (const entry of data) {
+      const key = entry.charAt(0);
+      const value = entry.slice(1);
+      switch (key) {
+        case 'c':
+          column = value === '' ? null : Number(value);
+          break;
+        case 'b':
+          bpm = value === '' ? null : Number(value);
+          break;
+        case 'p':
+          pedal = value === '1' ? true : value === '0' ? false : null;
+          break;
+        case 'r':
+          rows.push(
+            ...value.split(',').map(row => {
+              const match = row.match(/^v([\d.]*?)n(.*)$/);
+              if (!match) return new Row(null, null);
+              const [, velocity, note] = match;
+              return new Row(
+                note === '' ? null : note,
+                velocity === '' ? null : Number(velocity)
+              );
+            })
+          );
+          break;
+      }
+    }
+    return new ControlLine(column ?? 0, bpm, pedal, rows);
+  }
+
   public stringifyConfig(instruction: Instruction, config: AnyConfig): string {
     switch (config.type) {
       case ConfigType.Boolean:
@@ -70,6 +113,24 @@ export default class SerializerV0 extends SerializerBase {
           config.field +
           '=' +
           String(instruction[config.field as keyof Instruction])
+        );
+      case ConfigType.NullableBoolean:
+        return (
+          config.field +
+          '=' +
+          (instruction[config.field as keyof Instruction] === null
+            ? ''
+            : instruction[config.field as keyof Instruction]
+              ? '1'
+              : '0')
+        );
+      case ConfigType.NullableNumber:
+        return (
+          config.field +
+          '=' +
+          (instruction[config.field as keyof Instruction] === null
+            ? ''
+            : String(instruction[config.field as keyof Instruction]))
         );
       case ConfigType.DirectionToggle:
         return (
@@ -108,6 +169,16 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           escape(String(instruction[config.field as keyof Instruction]))
         );
+      case ConfigType.NullableNote:
+        return (
+          config.field +
+          '=' +
+          escape(
+            instruction[config.field as keyof Instruction] === null
+              ? ''
+              : escape(String(instruction[config.field as keyof Instruction]))
+          )
+        );
       case ConfigType.Tile:
       case ConfigType.Grid:
         return (
@@ -119,6 +190,20 @@ export default class SerializerV0 extends SerializerBase {
                 config.field as keyof Instruction
               ] as unknown as GridData
             )
+          )
+        );
+      case ConfigType.ControlLines:
+        return (
+          config.field +
+          '=' +
+          escape(
+            (
+              instruction[
+                config.field as keyof Instruction
+              ] as unknown as ControlLine[]
+            )
+              .map(line => this.stringifyControlLine(line))
+              .join(':')
           )
         );
     }
@@ -134,8 +219,12 @@ export default class SerializerV0 extends SerializerBase {
     switch (config.type) {
       case ConfigType.Boolean:
         return [config.field, value === '1'];
+      case ConfigType.NullableBoolean:
+        return [config.field, value === '' ? null : value === '1'];
       case ConfigType.Number:
         return [config.field, Number(value)];
+      case ConfigType.NullableNumber:
+        return [config.field, value === '' ? null : Number(value)];
       case ConfigType.Color:
         return [config.field, value as Color];
       case ConfigType.Direction:
@@ -162,6 +251,15 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Tile:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
+      case ConfigType.ControlLines:
+        return [
+          config.field,
+          unescape(value)
+            .split(':')
+            .map(line => this.parseControlLine(line)),
+        ];
+      case ConfigType.NullableNote:
+        return [config.field, value === '' ? null : unescape(value)];
     }
   }
 
@@ -372,8 +470,12 @@ export default class SerializerV0 extends SerializerBase {
     let grid = puzzle.grid;
     if (puzzle.solution !== null) {
       const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
-        const tile = puzzle.grid.tiles[y][x];
-        return tile.exists && tile.color === Color.Gray
+        const tile = puzzle.grid.getTile(x, y);
+        const solutionTile = puzzle.solution!.getTile(x, y);
+        return tile.exists &&
+          !tile.fixed &&
+          solutionTile.exists &&
+          solutionTile.color !== Color.Gray
           ? tile.copyWith({
               color: puzzle.solution!.tiles[y][x].color,
             })

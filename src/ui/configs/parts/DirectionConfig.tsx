@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { DirectionConfig, ConfigType } from '../../../data/config';
-import Instruction from '../../../data/instruction';
 import { Direction } from '../../../data/primitives';
 import { cn } from '../../../utils';
 import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '../../../data/helper';
+import Configurable from '../../../data/configurable';
 
 export interface DirectionConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: DirectionConfig;
   setConfig?: (field: string, value: DirectionConfig['default']) => void;
 }
@@ -46,13 +46,13 @@ const DirectionRadio = memo(function DirectionRadio({
 
 // million-ignore
 export default memo(function DirectionConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: DirectionConfigProps) {
-  const value = instruction[
-    config.field as keyof typeof instruction
-  ] as Direction;
+  const value = configurable[
+    config.field as keyof typeof configurable
+  ] as unknown as Direction;
   return (
     <div className="flex p-2 justify-between items-center">
       <span>{config.description}</span>

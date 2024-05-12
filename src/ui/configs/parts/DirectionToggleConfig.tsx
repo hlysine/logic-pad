@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { DirectionToggleConfig, ConfigType } from '../../../data/config';
-import Instruction from '../../../data/instruction';
+import Configurable from '../../../data/configurable';
 import { Direction, DirectionToggle } from '../../../data/primitives';
 import { cn } from '../../../utils';
 import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '../../../data/helper';
 
 export interface DirectionToggleConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: DirectionToggleConfig;
   setConfig?: (field: string, value: DirectionToggleConfig['default']) => void;
 }
@@ -47,12 +47,12 @@ const DirectionToggleRadio = memo(function DirectionToggleRadio({
 
 // million-ignore
 export default memo(function DirectionToggleConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: DirectionToggleConfigProps) {
-  const value = instruction[
-    config.field as keyof typeof instruction
+  const value = configurable[
+    config.field as keyof typeof configurable
   ] as unknown as DirectionToggle;
   return (
     <div className="flex p-2 justify-between items-center">

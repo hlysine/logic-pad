@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import { ColorConfig, ConfigType } from '../../../data/config';
-import Instruction from '../../../data/instruction';
 import { Color } from '../../../data/primitives';
 import { cn } from '../../../utils';
+import Configurable from '../../../data/configurable';
 
 export interface ColorConfigProps {
-  instruction: Instruction;
+  configurable: Configurable;
   config: ColorConfig;
   setConfig?: (field: string, value: ColorConfig['default']) => void;
 }
@@ -43,11 +43,13 @@ const ColorRadio = memo(function ColorRadio({
 
 // million-ignore
 export default memo(function ColorConfig({
-  instruction,
+  configurable,
   config,
   setConfig,
 }: ColorConfigProps) {
-  const value = instruction[config.field as keyof typeof instruction] as Color;
+  const value = configurable[
+    config.field as keyof typeof configurable
+  ] as unknown as Color;
   return (
     <div className="flex p-2 justify-between items-center">
       <span>{config.description}</span>

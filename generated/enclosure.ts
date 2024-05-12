@@ -1,4 +1,5 @@
 import { ConfigType, configEquals } from '../src/data/config';
+import Configurable from '../src/data/configurable';
 import GridData from '../src/data/grid';
 import GridConnections from '../src/data/gridConnections';
 import {
@@ -10,6 +11,7 @@ import {
   minBy,
   move,
   orientationToRotation,
+  resize,
   unescape,
 } from '../src/data/helper';
 import Instruction from '../src/data/instruction';
@@ -48,6 +50,7 @@ import GalaxySymbol from '../src/data/symbols/galaxySymbol';
 import { allSymbols } from '../src/data/symbols/index';
 import LetterSymbol from '../src/data/symbols/letterSymbol';
 import LotusSymbol from '../src/data/symbols/lotusSymbol';
+import MinesweeperSymbol from '../src/data/symbols/minesweeperSymbol';
 import MultiEntrySymbol from '../src/data/symbols/multiEntrySymbol';
 import MyopiaSymbol from '../src/data/symbols/myopiaSymbol';
 import NumberSymbol from '../src/data/symbols/numberSymbol';
@@ -100,6 +103,8 @@ import CompletePatternRule from '../src/data/rules/completePatternRule';
 import ConnectAllRule from '../src/data/rules/connectAllRule';
 import CustomRule from '../src/data/rules/customRule';
 import { allRules } from '../src/data/rules/index';
+import { ControlLine, Row } from '../src/data/rules/musicControlLine';
+import MusicGridRule from '../src/data/rules/musicGridRule';
 import MysteryRule from '../src/data/rules/mysteryRule';
 import OffByXRule from '../src/data/rules/offByXRule';
 import RegionAreaRule from '../src/data/rules/regionAreaRule';
@@ -112,11 +117,13 @@ import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
 import { isEventHandler } from '../src/data/events/helper';
 import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
 import { handlesGridChange } from '../src/data/events/onGridChange';
+import { handlesSetGrid } from '../src/data/events/onSetGrid';
 import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConfigType', value: ConfigType },
   { name: 'configEquals', value: configEquals },
+  { name: 'Configurable', value: Configurable },
   { name: 'GridData', value: GridData },
   { name: 'GridConnections', value: GridConnections },
   { name: 'allEqual', value: allEqual },
@@ -127,6 +134,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'minBy', value: minBy },
   { name: 'move', value: move },
   { name: 'orientationToRotation', value: orientationToRotation },
+  { name: 'resize', value: resize },
   { name: 'unescape', value: unescape },
   { name: 'Instruction', value: Instruction },
   { name: 'Color', value: Color },
@@ -160,6 +168,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'allSymbols', value: allSymbols },
   { name: 'LetterSymbol', value: LetterSymbol },
   { name: 'LotusSymbol', value: LotusSymbol },
+  { name: 'MinesweeperSymbol', value: MinesweeperSymbol },
   { name: 'MultiEntrySymbol', value: MultiEntrySymbol },
   { name: 'MyopiaSymbol', value: MyopiaSymbol },
   { name: 'NumberSymbol', value: NumberSymbol },
@@ -211,6 +220,9 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConnectAllRule', value: ConnectAllRule },
   { name: 'CustomRule', value: CustomRule },
   { name: 'allRules', value: allRules },
+  { name: 'ControlLine', value: ControlLine },
+  { name: 'Row', value: Row },
+  { name: 'MusicGridRule', value: MusicGridRule },
   { name: 'MysteryRule', value: MysteryRule },
   { name: 'OffByXRule', value: OffByXRule },
   { name: 'RegionAreaRule', value: RegionAreaRule },
@@ -223,6 +235,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'isEventHandler', value: isEventHandler },
   { name: 'handlesFinalValidation', value: handlesFinalValidation },
   { name: 'handlesGridChange', value: handlesGridChange },
+  { name: 'handlesSetGrid', value: handlesSetGrid },
   { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];
 

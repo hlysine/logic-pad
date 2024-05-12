@@ -851,6 +851,7 @@ declare global {
 
   export class BanPatternRule extends Rule {
     readonly pattern: GridData;
+    readonly cache: Shape[];
     /**
      * **Don't make this pattern**
      *
@@ -1276,11 +1277,131 @@ declare global {
   const allSolvers: Map<string, Solver>;
   export { allSolvers };
 
+  export const Worker;
+
   export class BacktrackSolver extends Solver {
     readonly id = 'backtrack';
     readonly description =
-      'Solves puzzles using backtracking. Support all rules and symbols except for underclued.';
+      'Solves puzzles using backtracking with optimizations (blazingly fast). Support most rules and symbols (including underclued).';
     solve(grid: GridData): AsyncGenerator<GridData | null>;
+    isInstructionSupported(instructionId: string): boolean;
+  }
+
+  const _default: null;
+  export const _default;
+
+  export enum BTTile {
+    Empty = 0,
+    Dark = 1,
+    Light = 2,
+    NonExist = 3,
+  }
+  export type BTColor = BTTile.Dark | BTTile.Light;
+  export class BTGridData {
+    readonly tiles: BTTile[][];
+    readonly connections: Position[][][];
+    readonly modules: BTModule[];
+    readonly width: number;
+    readonly height: number;
+    constructor(
+      tiles: BTTile[][],
+      connections: Position[][][],
+      modules: BTModule[],
+      width: number,
+      height: number
+    );
+    getTile(x: number, y: number): BTTile;
+    setTileWithConnection(x: number, y: number, tile: BTTile): void;
+    isInBound(x: number, y: number): boolean;
+    getEdges(pos: Position): Position[];
+    clone(): BTGridData;
+  }
+  export class IntArray2D {
+    readonly width: number;
+    readonly height: number;
+    static create(width: number, height: number): IntArray2D;
+    set(x: number, y: number, value: number): void;
+    get(x: number, y: number): number;
+    clone(): IntArray2D;
+  }
+  export interface CheckResult {
+    tilesNeedCheck: IntArray2D | null;
+    ratings: Rating[] | null;
+  }
+  export interface Rating {
+    pos: Position;
+    score: number;
+  }
+  export abstract class BTModule {
+    abstract instr: Instruction;
+    abstract checkGlobal(grid: BTGridData): CheckResult | false;
+    abstract checkLocal(
+      grid: BTGridData,
+      positions: Position[]
+    ): CheckResult | boolean;
+  }
+  export function getOppositeColor(color: BTColor): BTColor;
+  export function colorToBTTile(color: Color): BTTile;
+  export function createOneTileResult(
+    grid: BTGridData,
+    pos: Position,
+    score?: number | undefined
+  ): CheckResult;
+
+  export class BanPatternBTModule extends BTModule {
+    instr: BanPatternRule;
+    constructor(instr: BanPatternRule);
+    checkGlobal(_: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, positions: Position[]): CheckResult | false;
+  }
+
+  export class ConnectAllBTModule extends BTModule {
+    instr: ConnectAllRule;
+    constructor(instr: ConnectAllRule);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+  }
+
+  export class RegionAreaBTModule extends BTModule {
+    instr: RegionAreaRule;
+    constructor(instr: RegionAreaRule);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+  }
+
+  export class AreaNumberBTModule extends BTModule {
+    instr: AreaNumberSymbol;
+    constructor(instr: AreaNumberSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, positions: Position[]): CheckResult | boolean;
+  }
+
+  export class DartBTModule extends BTModule {
+    instr: DartSymbol;
+    constructor(instr: DartSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+  }
+
+  export class DirectionLinkerBTModule extends BTModule {
+    instr: DirectionLinkerSymbol;
+    constructor(instr: DirectionLinkerSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+  }
+
+  export class MyopiaBTModule extends BTModule {
+    instr: MyopiaSymbol;
+    constructor(instr: MyopiaSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+  }
+
+  export class ViewpointBTModule extends BTModule {
+    instr: ViewpointSymbol;
+    constructor(instr: ViewpointSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
   }
 
   const _default: null;
@@ -1347,6 +1468,14 @@ declare global {
     isGridSupported(grid: GridData): boolean;
   }
 
+  export abstract class SolverBase {
+    abstract get id(): string;
+    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
+    isEnvironmentSupported(): Promise<boolean>;
+    abstract isInstructionSupported(instructionId: string): boolean;
+    isGridSupported(grid: GridData): boolean;
+  }
+
   export class UndercluedSolver extends Solver {
     readonly id = 'underclued';
     readonly description =
@@ -1357,6 +1486,9 @@ declare global {
 
   const _default: null;
   export const _default;
+
+  const Worker: new (options?: { name?: string }) => Worker;
+  export const Worker;
 
   export class AreaNumberModule extends Z3Module {
     readonly id: string;
@@ -5210,6 +5342,22 @@ declare global {
     };
     validateSymbol(grid: GridData): State;
     withNumber(number: number): this;
+  }
+
+  export class QuestionMarkSign extends Sign {
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    copyWith({ x, y }: { x?: number; y?: number }): this;
+  }
+
+  /**
+   * A sign is a symbol that is only used for illustrative purposes.
+   * They should only appear in example grids of other instructions.
+   */
+  export abstract class Sign extends Symbol {
+    validateSymbol(_grid: GridData): State;
   }
 
   export abstract class Symbol extends Instruction {

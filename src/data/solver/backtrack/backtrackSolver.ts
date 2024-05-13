@@ -37,7 +37,7 @@ export default class BacktrackSolver extends Solver {
     const worker = new Worker();
 
     try {
-      const iterator = new EventIterator<GridData>(({ push, stop }) => {
+      const iterator = new EventIterator<GridData>(({ push, stop, fail }) => {
         worker.postMessage(Serializer.stringifyGrid(grid));
 
         worker.addEventListener('message', (e: MessageEvent<string | null>) => {
@@ -46,6 +46,11 @@ export default class BacktrackSolver extends Solver {
           } else {
             stop();
           }
+        });
+
+        worker.addEventListener('error', (e: ErrorEvent) => {
+          alert(`Error while solving!\n${e.message}`);
+          fail(new Error(e.message));
         });
       });
 

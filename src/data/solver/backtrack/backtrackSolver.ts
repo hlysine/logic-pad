@@ -40,7 +40,7 @@ export default class BacktrackSolver extends Solver {
 
     try {
       const iterator = new EventIterator<GridData>(({ push, stop, fail }) => {
-        worker.postMessage(Serializer.stringifyGrid(grid));
+        worker.postMessage(Serializer.stringifyGrid(grid.resetTiles()));
 
         worker.addEventListener('message', (e: MessageEvent<string | null>) => {
           if (e.data) {

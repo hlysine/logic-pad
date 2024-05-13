@@ -13,6 +13,7 @@ import { instance as banPatternInstance } from '../../rules/banPatternRule';
 import { instance as regionAreaInstance } from '../../rules/regionAreaRule';
 import { Serializer } from '../../serializer/allSerializers';
 import EventIterator from 'event-iterator';
+import { instance as letterInstance } from '../../symbols/letterSymbol';
 
 export default class BacktrackSolver extends Solver {
   private static readonly supportedInstrs = [
@@ -22,6 +23,7 @@ export default class BacktrackSolver extends Solver {
     galaxyInstance.id,
     lotusInstance.id,
     myopiaInstance.id,
+    letterInstance.id,
     undercluedInstance.id,
     connectAllInstance.id,
     banPatternInstance.id,

@@ -1,4 +1,3 @@
-import Instruction from '../../instruction';
 import { Color, Position } from '../../primitives';
 
 export enum BTTile {
@@ -112,8 +111,6 @@ export interface Rating {
 }
 
 export default abstract class BTModule {
-  abstract instr: Instruction;
-
   public abstract checkGlobal(grid: BTGridData): CheckResult | false;
 
   public abstract checkLocal(

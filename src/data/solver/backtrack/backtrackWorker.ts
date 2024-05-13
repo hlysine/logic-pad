@@ -34,6 +34,10 @@ import MyopiaSymbol, {
 } from '../../symbols/myopiaSymbol';
 import MyopiaBTModule from './symbols/myopia';
 import { Serializer } from '../../serializer/allSerializers';
+import LetterSymbol, {
+  instance as letterInstance,
+} from '../../symbols/letterSymbol';
+import LetterBTModule from './symbols/letter';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -66,12 +70,25 @@ function translateToBTGridData(grid: GridData): BTGridData {
         module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
       } else if (id === myopiaInstance.id) {
         module = new MyopiaBTModule(symbol as MyopiaSymbol);
+      } else if (id === letterInstance.id) {
+        continue;
       }
 
       if (!module) throw new Error('Symbol not supported.');
 
       modules.push(module);
     }
+  }
+
+  const letterSymbols = grid.symbols.get(letterInstance.id);
+  if (letterSymbols) {
+    modules.push(
+      new LetterBTModule(
+        letterSymbols as LetterSymbol[],
+        grid.width,
+        grid.height
+      )
+    );
   }
 
   for (const rule of grid.rules) {

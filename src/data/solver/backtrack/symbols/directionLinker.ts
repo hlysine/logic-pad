@@ -22,15 +22,18 @@ export default class DirectionLinkerBTModule extends BTModule {
   }
 
   public checkGlobal(grid: BTGridData): CheckResult | false {
-    const tile = grid.getTile(this.instr.x, this.instr.y);
+    const thisX = Math.floor(this.instr.x);
+    const thisY = Math.floor(this.instr.y);
+
+    const tile = grid.getTile(thisX, thisY);
 
     if (tile === BTTile.Empty)
-      return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
+      return createOneTileResult(grid, { x: thisX, y: thisY });
 
     const tilesNeedCheck = IntArray2D.create(grid.width, grid.height);
     const ratings: Rating[] = [];
 
-    const queue: Position[] = [{ x: this.instr.x, y: this.instr.y }];
+    const queue: Position[] = [{ x: thisX, y: thisY }];
     const visited = IntArray2D.create(grid.width, grid.height);
 
     // Visit all connected tiles

@@ -18,20 +18,23 @@ export default class AreaNumberBTModule extends BTModule {
   }
 
   public checkGlobal(grid: BTGridData): CheckResult | false {
-    const tile = grid.getTile(this.instr.x, this.instr.y);
+    const thisX = Math.floor(this.instr.x);
+    const thisY = Math.floor(this.instr.y);
+
+    const tile = grid.getTile(thisX, thisY);
 
     if (tile === BTTile.Empty)
-      return createOneTileResult(grid, { x: this.instr.x, y: this.instr.y });
+      return createOneTileResult(grid, { x: thisX, y: thisY });
 
     const visited = IntArray2D.create(grid.width, grid.height);
 
-    const sameTileQueue: Position[] = [{ x: this.instr.x, y: this.instr.y }];
+    const sameTileQueue: Position[] = [{ x: thisX, y: thisY }];
     const usableTileQueue: Position[] = [];
 
     let sameCellCount = 0;
     let usableCellCount = 0;
 
-    visited.set(this.instr.x, this.instr.y, 1);
+    visited.set(thisX, thisY, 1);
 
     // Count same tile
     while (sameTileQueue.length > 0) {
@@ -90,14 +93,16 @@ export default class AreaNumberBTModule extends BTModule {
     grid: BTGridData,
     positions: Position[]
   ): CheckResult | boolean {
-    // TODO: Also skip checks if color is the same and within the zone but not directly affecting
+    // TODO: Also skip checks if color is the same and within the zone but not directly affectin
+
+    const thisX = Math.floor(this.instr.x);
+    const thisY = Math.floor(this.instr.y);
 
     // Skip checks if it is too far to affect the symbol
     if (
       positions.every(
         pos =>
-          Math.abs(pos.x - this.instr.x) + Math.abs(pos.y - this.instr.y) >
-          this.instr.number
+          Math.abs(pos.x - thisX) + Math.abs(pos.y - thisY) > this.instr.number
       )
     )
       return true;

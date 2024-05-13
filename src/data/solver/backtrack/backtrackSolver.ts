@@ -13,6 +13,7 @@ import { instance as banPatternInstance } from '../../rules/banPatternRule';
 import { instance as regionAreaInstance } from '../../rules/regionAreaRule';
 import { Serializer } from '../../serializer/allSerializers';
 import EventIterator from 'event-iterator';
+import { instance as letterInstance } from '../../symbols/letterSymbol';
 
 export default class BacktrackSolver extends Solver {
   private static readonly supportedInstrs = [
@@ -22,6 +23,7 @@ export default class BacktrackSolver extends Solver {
     galaxyInstance.id,
     lotusInstance.id,
     myopiaInstance.id,
+    letterInstance.id,
     undercluedInstance.id,
     connectAllInstance.id,
     banPatternInstance.id,
@@ -37,8 +39,8 @@ export default class BacktrackSolver extends Solver {
     const worker = new Worker();
 
     try {
-      const iterator = new EventIterator<GridData>(({ push, stop }) => {
-        worker.postMessage(Serializer.stringifyGrid(grid));
+      const iterator = new EventIterator<GridData>(({ push, stop, fail }) => {
+        worker.postMessage(Serializer.stringifyGrid(grid.resetTiles()));
 
         worker.addEventListener('message', (e: MessageEvent<string | null>) => {
           if (e.data) {
@@ -46,6 +48,11 @@ export default class BacktrackSolver extends Solver {
           } else {
             stop();
           }
+        });
+
+        worker.addEventListener('error', (e: ErrorEvent) => {
+          alert(`Error while solving!\n${e.message}`);
+          fail(new Error(e.message));
         });
       });
 

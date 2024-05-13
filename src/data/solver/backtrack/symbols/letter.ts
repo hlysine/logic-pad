@@ -24,7 +24,7 @@ export default class LetterBTModule extends BTModule {
       const id = letterMap.get(instr.letter)!;
 
       this.letters[id].push(instr);
-      this.letterGrid.set(instr.x, instr.y, id + 1);
+      this.letterGrid.set(Math.floor(instr.x), Math.floor(instr.y), id + 1);
     }
   }
 
@@ -33,11 +33,12 @@ export default class LetterBTModule extends BTModule {
 
     for (let id = 0; id < this.letters.length; id++) {
       for (const symbol of this.letters[id]) {
-        if (grid.getTile(symbol.x, symbol.y) === BTTile.Empty) continue;
+        const symbolX = Math.floor(symbol.x);
+        const symbolY = Math.floor(symbol.y);
 
-        if (
-          !this.visitArea(grid, visited, { x: symbol.x, y: symbol.y }, id + 1)
-        )
+        if (grid.getTile(symbolX, symbolY) === BTTile.Empty) continue;
+
+        if (!this.visitArea(grid, visited, { x: symbolX, y: symbolY }, id + 1))
           return false;
 
         break;

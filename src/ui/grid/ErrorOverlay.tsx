@@ -1,9 +1,8 @@
-import { memo, useMemo } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { Position } from '../../data/primitives';
 import { array } from '../../data/helper';
-import { Line } from 'react-konva';
 import { useTheme } from '../ThemeContext';
-import GridCanvasOverlay from './GridCanvasOverlay';
+import GridRawCanvasOverlay, { RawCanvasRef } from './GridRawCanvasOverlay';
 
 export interface ErrorOverlayProps {
   positions: readonly (readonly Position[])[];
@@ -29,11 +28,14 @@ function positionsToGrid(positions: readonly Position[]) {
   return grid;
 }
 
+const BLEED = 5;
+
 export default memo(function ErrorOverlay({
   positions,
   width,
   height,
 }: ErrorOverlayProps) {
+  const canvasRef = useRef<RawCanvasRef>(null);
   const grid = useMemo(
     () => positions.map(list => positionsToGrid(list)),
     [positions]
@@ -48,72 +50,62 @@ export default memo(function ErrorOverlay({
     [theme]
   );
 
+  useEffect(() => {
+    if (canvasRef.current) {
+      const { ctx, tileSize } = canvasRef.current;
+      ctx.clearRect(
+        -BLEED,
+        -BLEED,
+        width * tileSize + 2 * BLEED,
+        height * tileSize + 2 * BLEED
+      );
+
+      const line = (x1: number, y1: number, x2: number, y2: number) => {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      };
+
+      ctx.strokeStyle = errorColor;
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+
+      positions.forEach((list, idx) =>
+        list.forEach(({ x, y }) => {
+          if (!grid[idx][y - 1]?.[x]) {
+            line(x * tileSize, y * tileSize, (x + 1) * tileSize, y * tileSize);
+          }
+          if (!grid[idx][y][x + 1]) {
+            line(
+              (x + 1) * tileSize,
+              y * tileSize,
+              (x + 1) * tileSize,
+              (y + 1) * tileSize
+            );
+          }
+          if (!grid[idx][y + 1]?.[x]) {
+            line(
+              x * tileSize,
+              (y + 1) * tileSize,
+              (x + 1) * tileSize,
+              (y + 1) * tileSize
+            );
+          }
+          if (!grid[idx][y][x - 1]) {
+            line(x * tileSize, y * tileSize, x * tileSize, (y + 1) * tileSize);
+          }
+        })
+      );
+    }
+  }, [positions, grid, errorColor, width, height]);
+
   return (
-    <GridCanvasOverlay width={width} height={height} bleed={5}>
-      {tileSize =>
-        positions.flatMap((list, idx) =>
-          list.flatMap(({ x, y }) =>
-            [
-              grid[idx][y - 1]?.[x] || (
-                <Line
-                  key={`${x},${y}-top-${idx}`}
-                  points={[
-                    x * tileSize,
-                    y * tileSize,
-                    (x + 1) * tileSize,
-                    y * tileSize,
-                  ]}
-                  stroke={errorColor}
-                  lineCap="round"
-                  strokeWidth={5}
-                />
-              ),
-              grid[idx][y][x + 1] || (
-                <Line
-                  key={`${x},${y}-right-${idx}`}
-                  points={[
-                    (x + 1) * tileSize,
-                    y * tileSize,
-                    (x + 1) * tileSize,
-                    (y + 1) * tileSize,
-                  ]}
-                  stroke={errorColor}
-                  lineCap="round"
-                  strokeWidth={5}
-                />
-              ),
-              grid[idx][y + 1]?.[x] || (
-                <Line
-                  key={`${x},${y}-bottom-${idx}`}
-                  points={[
-                    x * tileSize,
-                    (y + 1) * tileSize,
-                    (x + 1) * tileSize,
-                    (y + 1) * tileSize,
-                  ]}
-                  stroke={errorColor}
-                  lineCap="round"
-                  strokeWidth={5}
-                />
-              ),
-              grid[idx][y][x - 1] || (
-                <Line
-                  key={`${x},${y}-left-${idx}`}
-                  points={[
-                    x * tileSize,
-                    y * tileSize,
-                    x * tileSize,
-                    (y + 1) * tileSize,
-                  ]}
-                  stroke={errorColor}
-                  lineCap="round"
-                  strokeWidth={5}
-                />
-              ),
-            ].filter(Boolean)
-          )
-        )
-      }
-    </GridCanvasOverlay>
+    <GridRawCanvasOverlay
+      ref={canvasRef}
+      width={width}
+      height={height}
+      bleed={BLEED}
+    ></GridRawCanvasOverlay>
   );
 });

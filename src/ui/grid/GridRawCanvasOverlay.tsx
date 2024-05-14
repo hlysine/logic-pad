@@ -14,16 +14,17 @@ export interface GridRawCanvasOverlayProps {
   height: number;
   bleed?: number;
   children?: React.ReactNode;
+  onResize?: (tileSize: number) => void;
 }
 
 export interface RawCanvasRef {
+  canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  tileSize: number;
 }
 
 export default memo(
   forwardRef(function GridRawCanvasOverlay(
-    { width, height, bleed, children }: GridRawCanvasOverlayProps,
+    { width, height, bleed, children, onResize }: GridRawCanvasOverlayProps,
     ref: ForwardedRef<RawCanvasRef>
   ) {
     bleed ??= 0;
@@ -41,9 +42,10 @@ export default memo(
           throw new Error('Could not get canvas context');
         }
         ctx.translate(bleed, bleed);
-        return { ctx, tileSize };
+        return { canvas: canvasRef.current, ctx };
       },
-      [tileSize, bleed]
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [bleed, tileSize]
     );
 
     useEffect(() => {
@@ -52,13 +54,14 @@ export default memo(
         const resizeHandler = () => {
           const divWidth = current.offsetWidth;
           setTileSize(divWidth / width);
+          onResize?.(divWidth / width);
         };
         resizeHandler();
         const observer = new ResizeObserver(resizeHandler);
         observer.observe(current);
         return () => observer.disconnect();
       }
-    }, [width]);
+    }, [onResize, width]);
 
     return (
       <GridOverlay ref={overlayRef}>

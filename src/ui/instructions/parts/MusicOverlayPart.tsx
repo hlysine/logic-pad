@@ -15,6 +15,7 @@ const BLEED = 5;
 export default memo(function MusicOverlayPart() {
   const { grid } = useGrid();
   const canvasRef = useRef<RawCanvasRef>(null);
+  const [tileSize, setTileSize] = useState(0);
   const targetRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const [targetPosition, setTargetPosition] = useState(0);
@@ -59,8 +60,8 @@ export default memo(function MusicOverlayPart() {
           const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
           const prevPos = prevPosition.current;
           prevPosition.current = position;
-          if (canvasRef.current) {
-            const { ctx, tileSize } = canvasRef.current;
+          if (canvasRef.current && tileSize !== 0) {
+            const { ctx } = canvasRef.current;
             ctx.clearRect(
               -BLEED,
               -BLEED,
@@ -116,7 +117,7 @@ export default memo(function MusicOverlayPart() {
     return () => {
       Tone.getTransport().clear(handle);
     };
-  }, [grid, infoColor, accentColor]);
+  }, [grid, infoColor, accentColor, tileSize]);
 
   useEffect(() => {
     targetRef.current?.scrollIntoView({ behavior: 'instant' });
@@ -128,6 +129,7 @@ export default memo(function MusicOverlayPart() {
       width={grid.width}
       height={grid.height}
       bleed={BLEED}
+      onResize={size => setTileSize(size)}
     >
       <div
         ref={targetRef}

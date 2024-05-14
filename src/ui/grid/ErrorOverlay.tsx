@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Position } from '../../data/primitives';
 import { array } from '../../data/helper';
 import { useTheme } from '../ThemeContext';
@@ -36,6 +36,7 @@ export default memo(function ErrorOverlay({
   height,
 }: ErrorOverlayProps) {
   const canvasRef = useRef<RawCanvasRef>(null);
+  const [tileSize, setTileSize] = useState(0);
   const grid = useMemo(
     () => positions.map(list => positionsToGrid(list)),
     [positions]
@@ -51,54 +52,54 @@ export default memo(function ErrorOverlay({
   );
 
   useEffect(() => {
-    if (canvasRef.current) {
-      const { ctx, tileSize } = canvasRef.current;
-      ctx.clearRect(
-        -BLEED,
-        -BLEED,
-        width * tileSize + 2 * BLEED,
-        height * tileSize + 2 * BLEED
-      );
+    if (!canvasRef.current) return;
+    if (tileSize === 0) return;
+    const { ctx } = canvasRef.current;
+    ctx.clearRect(
+      -BLEED,
+      -BLEED,
+      width * tileSize + 2 * BLEED,
+      height * tileSize + 2 * BLEED
+    );
 
-      const line = (x1: number, y1: number, x2: number, y2: number) => {
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-      };
+    const line = (x1: number, y1: number, x2: number, y2: number) => {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    };
 
-      ctx.strokeStyle = errorColor;
-      ctx.lineWidth = 5;
-      ctx.lineCap = 'round';
+    ctx.strokeStyle = errorColor;
+    ctx.lineWidth = tileSize * 0.2;
+    ctx.lineCap = 'round';
 
-      positions.forEach((list, idx) =>
-        list.forEach(({ x, y }) => {
-          if (!grid[idx][y - 1]?.[x]) {
-            line(x * tileSize, y * tileSize, (x + 1) * tileSize, y * tileSize);
-          }
-          if (!grid[idx][y][x + 1]) {
-            line(
-              (x + 1) * tileSize,
-              y * tileSize,
-              (x + 1) * tileSize,
-              (y + 1) * tileSize
-            );
-          }
-          if (!grid[idx][y + 1]?.[x]) {
-            line(
-              x * tileSize,
-              (y + 1) * tileSize,
-              (x + 1) * tileSize,
-              (y + 1) * tileSize
-            );
-          }
-          if (!grid[idx][y][x - 1]) {
-            line(x * tileSize, y * tileSize, x * tileSize, (y + 1) * tileSize);
-          }
-        })
-      );
-    }
-  }, [positions, grid, errorColor, width, height]);
+    positions.forEach((list, idx) =>
+      list.forEach(({ x, y }) => {
+        if (!grid[idx][y - 1]?.[x]) {
+          line(x * tileSize, y * tileSize, (x + 1) * tileSize, y * tileSize);
+        }
+        if (!grid[idx][y][x + 1]) {
+          line(
+            (x + 1) * tileSize,
+            y * tileSize,
+            (x + 1) * tileSize,
+            (y + 1) * tileSize
+          );
+        }
+        if (!grid[idx][y + 1]?.[x]) {
+          line(
+            x * tileSize,
+            (y + 1) * tileSize,
+            (x + 1) * tileSize,
+            (y + 1) * tileSize
+          );
+        }
+        if (!grid[idx][y][x - 1]) {
+          line(x * tileSize, y * tileSize, x * tileSize, (y + 1) * tileSize);
+        }
+      })
+    );
+  }, [positions, grid, errorColor, width, height, tileSize]);
 
   return (
     <GridRawCanvasOverlay
@@ -106,6 +107,7 @@ export default memo(function ErrorOverlay({
       width={width}
       height={height}
       bleed={BLEED}
+      onResize={size => setTileSize(size)}
     ></GridRawCanvasOverlay>
   );
 });

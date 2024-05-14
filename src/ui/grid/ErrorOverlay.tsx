@@ -70,7 +70,7 @@ export default memo(function ErrorOverlay({
     };
 
     ctx.strokeStyle = errorColor;
-    ctx.lineWidth = tileSize * 0.2;
+    ctx.lineWidth = tileSize * 0.15;
     ctx.lineCap = 'round';
 
     positions.forEach((list, idx) =>

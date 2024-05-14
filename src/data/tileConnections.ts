@@ -84,4 +84,15 @@ export default class TileConnections {
   public set bottomRight(value: boolean) {
     this[1][1] = value;
   }
+
+  public equals(other: TileConnections): boolean {
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        if (this[i][j] !== other[i][j]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 }

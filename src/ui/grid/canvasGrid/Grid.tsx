@@ -5,6 +5,14 @@ import { type GridProps } from '../Grid';
 import PointerCaptureOverlay from '../PointerCaptureOverlay';
 import { useTheme } from '../../ThemeContext';
 import { ColorInfo, clearTile, renderTile } from './tile';
+import GridData from '../../../data/grid';
+import TileConnections from '../../../data/tileConnections';
+
+interface GridRenderData {
+  grid: GridData;
+  connections: TileConnections[][];
+  size: number;
+}
 
 export default memo(function Grid({
   size,
@@ -16,6 +24,7 @@ export default memo(function Grid({
 }: GridProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
+  const prevData = useRef<GridRenderData | null>(null);
   const { theme } = useTheme();
   const containerStyle = useMemo(
     () => ({
@@ -60,11 +69,19 @@ export default memo(function Grid({
     for (let y = 0; y < grid.height; y++) {
       for (let x = 0; x < grid.width; x++) {
         const tile = grid.getTile(x, y);
+        const oldTile = prevData.current?.grid.getTile(x, y);
+        if (
+          prevData.current?.size === size &&
+          oldTile?.equals(tile) &&
+          prevData.current?.connections[y]?.[x].equals(tileConnections[y][x])
+        )
+          continue;
         clearTile(ctx, x, y, size);
         if (!tile.exists) continue;
         renderTile(ctx, x, y, size, tile, tileConnections[y][x], colorInfo);
       }
     }
+    prevData.current = { grid, connections: tileConnections, size };
   }, [grid, size, canvasCtx, colorInfo, tileConnections]);
 
   return (

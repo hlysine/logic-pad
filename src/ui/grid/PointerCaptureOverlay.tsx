@@ -71,7 +71,6 @@ export default memo(function PointerCaptureOverlay({
     <div
       className="absolute inset-0"
       onPointerDown={e => {
-        e.preventDefault();
         if (e.pointerType === 'mouse') {
           let targetColor = mouseContext.getColorForButtons(e.buttons);
           if (!targetColor) {
@@ -91,7 +90,6 @@ export default memo(function PointerCaptureOverlay({
         }
       }}
       onPointerUp={e => {
-        e.preventDefault();
         const color = mouseContext.color ?? Color.Gray;
         mouseContext.setColor(null, false);
         if (e.pointerType !== 'mouse') {
@@ -105,7 +103,6 @@ export default memo(function PointerCaptureOverlay({
         onPointerUp?.(color);
       }}
       onPointerMove={e => {
-        e.preventDefault();
         if (!allowDrag) return;
         const targetColor = mouseContext.getColorForButtons(e.buttons);
         if (

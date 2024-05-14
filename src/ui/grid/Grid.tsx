@@ -3,6 +3,7 @@ import GridData from '../../data/grid';
 import { Color } from '../../data/primitives';
 import CanvasGrid from './canvasGrid/Grid';
 import DOMGrid from './domGrid/Grid';
+import { prefersReducedMotion } from '../../utils';
 
 export interface GridProps {
   size: number;
@@ -20,7 +21,8 @@ export default memo(function Grid({
   type ??= 'auto';
   if (
     type === 'canvas' ||
-    (type === 'auto' && props.grid.width * props.grid.height > 500)
+    (type === 'auto' &&
+      (props.grid.width * props.grid.height > 500 || prefersReducedMotion()))
   ) {
     return <CanvasGrid {...props} />;
   }

@@ -3,9 +3,7 @@ import { instance as musicGridInstance } from '../../../data/rules/musicGridRule
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useGrid } from '../../GridContext';
-import GridRawCanvasOverlay, {
-  RawCanvasRef,
-} from '../../grid/GridRawCanvasOverlay';
+import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
 import { useTheme } from '../../ThemeContext';
 import { playbackState } from './piano';
 import { Color } from '../../../data/primitives';
@@ -124,7 +122,7 @@ export default memo(function MusicOverlayPart() {
   }, [targetPosition]);
 
   return (
-    <GridRawCanvasOverlay
+    <GridCanvasOverlay
       ref={canvasRef}
       width={grid.width}
       height={grid.height}
@@ -136,7 +134,7 @@ export default memo(function MusicOverlayPart() {
         className="absolute w-48 h-0 opacity-0 -top-12 xl:top-1/2"
         style={{ left: `${targetPosition}em` }}
       ></div>
-    </GridRawCanvasOverlay>
+    </GridCanvasOverlay>
   );
 });
 

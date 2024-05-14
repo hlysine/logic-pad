@@ -2,7 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Position } from '../../data/primitives';
 import { array } from '../../data/helper';
 import { useTheme } from '../ThemeContext';
-import GridRawCanvasOverlay, { RawCanvasRef } from './GridRawCanvasOverlay';
+import GridCanvasOverlay, { RawCanvasRef } from './GridCanvasOverlay';
 
 export interface ErrorOverlayProps {
   positions: readonly (readonly Position[])[];
@@ -102,12 +102,12 @@ export default memo(function ErrorOverlay({
   }, [positions, grid, errorColor, width, height, tileSize]);
 
   return (
-    <GridRawCanvasOverlay
+    <GridCanvasOverlay
       ref={canvasRef}
       width={width}
       height={height}
       bleed={BLEED}
       onResize={size => setTileSize(size)}
-    ></GridRawCanvasOverlay>
+    ></GridCanvasOverlay>
   );
 });

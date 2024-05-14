@@ -3,27 +3,50 @@ import {
   forwardRef,
   memo,
   useEffect,
+  useImperativeHandle,
   useRef,
   useState,
 } from 'react';
 import GridOverlay from './GridOverlay';
-import { Layer, Stage } from 'react-konva';
 
 export interface GridCanvasOverlayProps {
   width: number;
   height: number;
   bleed?: number;
-  children?: (tileSize: number) => React.ReactNode;
+  children?: React.ReactNode;
+  onResize?: (tileSize: number) => void;
+}
+
+export interface RawCanvasRef {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
 }
 
 export default memo(
   forwardRef(function GridCanvasOverlay(
-    { width, height, bleed, children }: GridCanvasOverlayProps,
-    ref: ForwardedRef<HTMLDivElement>
+    { width, height, bleed, children, onResize }: GridCanvasOverlayProps,
+    ref: ForwardedRef<RawCanvasRef>
   ) {
     bleed ??= 0;
-    const overlayRef = useRef<HTMLDivElement>();
+    const overlayRef = useRef<HTMLDivElement>(null);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [tileSize, setTileSize] = useState(0);
+    useImperativeHandle(
+      ref,
+      () => {
+        if (!canvasRef.current) {
+          throw new Error('Canvas ref not set');
+        }
+        const ctx = canvasRef.current.getContext('2d');
+        if (!ctx) {
+          throw new Error('Could not get canvas context');
+        }
+        ctx.translate(bleed, bleed);
+        return { canvas: canvasRef.current, ctx };
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [bleed, tileSize]
+    );
 
     useEffect(() => {
       if (overlayRef.current) {
@@ -31,32 +54,25 @@ export default memo(
         const resizeHandler = () => {
           const divWidth = current.offsetWidth;
           setTileSize(divWidth / width);
+          onResize?.(divWidth / width);
         };
         resizeHandler();
         const observer = new ResizeObserver(resizeHandler);
         observer.observe(current);
         return () => observer.disconnect();
       }
-    }, [width]);
+    }, [onResize, width]);
 
     return (
-      <GridOverlay
-        ref={el => {
-          if (typeof ref === 'function') ref(el);
-          else if (ref) ref.current = el;
-          overlayRef.current = el ?? undefined;
-        }}
-      >
-        <Stage
+      <GridOverlay ref={overlayRef}>
+        <canvas
+          ref={canvasRef}
           width={width * tileSize + bleed * 2}
           height={height * tileSize + bleed * 2}
           style={{ top: -bleed, left: -bleed }}
           className="absolute"
-        >
-          <Layer offsetX={-bleed} offsetY={-bleed}>
-            {children?.(tileSize)}
-          </Layer>
-        </Stage>
+        ></canvas>
+        {children}
       </GridOverlay>
     );
   })

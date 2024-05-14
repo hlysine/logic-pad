@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../ThemeContext';
-import GridRawCanvasOverlay, { RawCanvasRef } from './GridRawCanvasOverlay';
+import GridCanvasOverlay, { RawCanvasRef } from './GridCanvasOverlay';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { Color, DIRECTIONS, Direction, Position } from '../../data/primitives';
 import GridData from '../../data/grid';
@@ -276,12 +276,12 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
   }, [grid, position, accentColor, tileSize]);
 
   return (
-    <GridRawCanvasOverlay
+    <GridCanvasOverlay
       ref={canvasRef}
       width={grid.width}
       height={grid.height}
       bleed={BLEED}
       onResize={size => setTileSize(size)}
-    ></GridRawCanvasOverlay>
+    ></GridCanvasOverlay>
   );
 });

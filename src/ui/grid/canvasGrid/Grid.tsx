@@ -73,7 +73,7 @@ export default memo(function Grid({
         if (
           prevData.current?.size === size &&
           oldTile?.equals(tile) &&
-          prevData.current?.connections[y]?.[x].equals(tileConnections[y][x])
+          prevData.current?.connections[y]?.[x]?.equals(tileConnections[y][x])
         )
           continue;
         clearTile(ctx, x, y, size);

@@ -22,14 +22,16 @@ function getPosition(
   let targetRect = targetRef.current?.getBoundingClientRect();
   let boxRect = boxRef.current?.getBoundingClientRect();
   const windowRect = document.documentElement.getBoundingClientRect();
-  if (!targetRect || !boxRect) {
-    boxRect = new DOMRect(0, 0, 400, 400);
+  if (!targetRect) {
     targetRect = new DOMRect(
       mousePosition.clientX - 30,
       mousePosition.clientY - 30,
       60,
       60
     );
+  }
+  if (!boxRect) {
+    boxRect = new DOMRect(0, 0, 400, 400);
   }
   const ret: { left: string; top: string } = {
     left: 'auto',
@@ -102,7 +104,7 @@ export default memo(function ConfigPopup() {
 
   useEffect(() => {
     const handler = () => {
-      if (!ref?.current || !popupRef.current) return;
+      if (!ref || !popupRef.current) return;
       const styles = getPosition(ref, popupRef);
       if (!styles) return;
       popupRef.current.style.left = styles.left;

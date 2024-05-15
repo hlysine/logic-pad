@@ -59,7 +59,7 @@ const MusicControls = lazy(async function () {
 
       return (
         <>
-          {solution && (
+          {(instruction.track ?? solution) && (
             <button
               type="button"
               className="btn btn-ghost text-lg"
@@ -67,25 +67,39 @@ const MusicControls = lazy(async function () {
                 if (playState === 'listen') {
                   stopAll(playback.current);
                 } else {
-                  const tiles = array(
-                    solution?.width ?? grid.width,
-                    solution?.height ?? grid.height,
-                    (x, y) => {
-                      const gridTile = grid.getTile(x, y);
-                      if (!solution) return gridTile;
-                      const tile = solution.getTile(x, y);
-                      if (tile.exists && tile.color !== Color.Gray) return tile;
-                      return gridTile;
-                    }
-                  );
-                  const newGrid = grid.withTiles(tiles);
-                  playback.current = playGrid(
-                    newGrid,
-                    instruction,
-                    true,
-                    () => setPlayState('none'),
-                    playback.current
-                  );
+                  if (instruction.track) {
+                    const musicGrid = instruction.track.findRule(
+                      r => r.id === musicGridInstance.id
+                    ) as MusicGridRule | undefined;
+                    if (!musicGrid) return;
+                    playback.current = playGrid(
+                      instruction.track,
+                      musicGrid,
+                      true,
+                      () => setPlayState('none'),
+                      playback.current
+                    );
+                  } else {
+                    const tiles = array(
+                      solution?.width ?? grid.width,
+                      solution?.height ?? grid.height,
+                      (x, y) => {
+                        const gridTile = grid.getTile(x, y);
+                        if (!solution) return gridTile;
+                        const tile = solution.getTile(x, y);
+                        if (tile.exists && tile.color !== Color.Gray)
+                          return tile;
+                        return gridTile;
+                      }
+                    );
+                    playback.current = playGrid(
+                      grid.withTiles(tiles),
+                      instruction,
+                      true,
+                      () => setPlayState('none'),
+                      playback.current
+                    );
+                  }
                   setPlayState('listen');
                 }
               }}

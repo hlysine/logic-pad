@@ -192,6 +192,20 @@ export default class SerializerV0 extends SerializerBase {
             )
           )
         );
+      case ConfigType.NullableGrid:
+        return (
+          config.field +
+          '=' +
+          escape(
+            instruction[config.field as keyof Instruction] === null
+              ? ''
+              : this.stringifyGrid(
+                  instruction[
+                    config.field as keyof Instruction
+                  ] as unknown as GridData
+                )
+          )
+        );
       case ConfigType.ControlLines:
         return (
           config.field +
@@ -251,6 +265,11 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Tile:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
+      case ConfigType.NullableGrid:
+        return [
+          config.field,
+          value === '' ? null : this.parseGrid(unescape(value)),
+        ];
       case ConfigType.ControlLines:
         return [
           config.field,

@@ -1,35 +1,14 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useState } from 'react';
 import { ConfigType, GridConfig } from '../../../data/config';
 import Configurable from '../../../data/configurable';
 import GridData from '../../../data/grid';
 import { FiExternalLink } from 'react-icons/fi';
-import { cn } from '../../../utils';
-import EmbedContext, { useEmbed } from '../../EmbedContext';
-import PuzzleEditor from '../../editor/PuzzleEditor';
-import GridContext, { GridConsumer, useGrid } from '../../GridContext';
-import DisplayContext from '../../DisplayContext';
-import EditContext from '../../EditContext';
-import GridStateContext from '../../GridStateContext';
+import GridEditorModal from './GridEditorModal';
 
 export interface GridConfigProps {
   configurable: Configurable;
   config: GridConfig;
   setConfig?: (field: string, value: GridConfig['default']) => void;
-}
-
-function EmbedLoader({ grid }: { grid: GridData }) {
-  const { setFeatures } = useEmbed();
-  const { setGrid } = useGrid();
-  useEffect(() => {
-    setFeatures({
-      instructions: false,
-      metadata: false,
-      checklist: false,
-    });
-    setGrid(grid, null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  return null;
 }
 
 export default memo(function GridConfig({
@@ -54,51 +33,12 @@ export default memo(function GridConfig({
           <FiExternalLink size={24} />
         </button>
 
-        <dialog id="my_modal_2" className={cn('modal', open && 'modal-open')}>
-          <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral">
-            <form method="dialog">
-              <button
-                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-                onClick={() => setOpen(false)}
-              >
-                ✕
-              </button>
-            </form>
-            {open && (
-              <EmbedContext>
-                <DisplayContext>
-                  <EditContext>
-                    <GridStateContext>
-                      <GridContext>
-                        <EmbedLoader grid={grid} />
-                        <PuzzleEditor>
-                          <GridConsumer>
-                            {({ grid }) => {
-                              return (
-                                <button
-                                  className="btn btn-primary"
-                                  onClick={() => {
-                                    setConfig?.(config.field, grid);
-                                    setOpen(false);
-                                  }}
-                                >
-                                  Save and exit
-                                </button>
-                              );
-                            }}
-                          </GridConsumer>
-                        </PuzzleEditor>
-                      </GridContext>
-                    </GridStateContext>
-                  </EditContext>
-                </DisplayContext>
-              </EmbedContext>
-            )}
-          </div>
-          <form method="dialog" className="modal-backdrop bg-neutral/55">
-            <button onClick={() => setOpen(false)}>close</button>
-          </form>
-        </dialog>
+        <GridEditorModal
+          grid={grid}
+          setGrid={grid => setConfig?.(config.field, grid)}
+          open={open}
+          setOpen={setOpen}
+        />
       </div>
     </div>
   );

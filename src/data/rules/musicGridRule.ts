@@ -40,21 +40,40 @@ export default class MusicGridRule
       description: 'Control Lines',
       configurable: false,
     },
+    {
+      type: ConfigType.NullableGrid,
+      default: null,
+      nonNullDefault: new GridData(5, 4).addRule(
+        new MusicGridRule(
+          [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+          null
+        )
+      ),
+      field: 'track',
+      description: 'Track',
+      configurable: true,
+    },
   ]);
 
   private static readonly SEARCH_VARIANTS = [
-    new MusicGridRule([
-      new ControlLine(0, 120, false, DEFAULT_SCALLE),
-    ]).searchVariant(),
+    new MusicGridRule(
+      [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+      null
+    ).searchVariant(),
   ];
 
   /**
    * **Music Grid: Listen to the solution**
    * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
+   * @param track The grid to be played when "listen" is clicked. Set as null to play the solution.
    */
-  public constructor(public readonly controlLines: readonly ControlLine[]) {
+  public constructor(
+    public readonly controlLines: readonly ControlLine[],
+    public readonly track: GridData | null
+  ) {
     super();
     this.controlLines = controlLines;
+    this.track = track;
   }
 
   public get id(): string {
@@ -124,12 +143,21 @@ export default class MusicGridRule
     });
   }
 
+  public withTrack(track: GridData | null): this {
+    return this.copyWith({ track });
+  }
+
   public copyWith({
     controlLines,
+    track,
   }: {
     controlLines?: readonly ControlLine[];
+    track?: GridData | null;
   }): this {
-    return new MusicGridRule(controlLines ?? this.controlLines) as this;
+    return new MusicGridRule(
+      controlLines ?? this.controlLines,
+      track !== undefined ? track : this.track
+    ) as this;
   }
 
   public get validateWithSolution(): boolean {
@@ -141,6 +169,7 @@ export default class MusicGridRule
   }
 }
 
-export const instance = new MusicGridRule([
-  new ControlLine(0, 120, false, DEFAULT_SCALLE),
-]);
+export const instance = new MusicGridRule(
+  [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+  null
+);

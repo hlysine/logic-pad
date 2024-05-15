@@ -23,6 +23,7 @@ export enum ConfigType {
   OrientationToggle = 'orientationToggle',
   Tile = 'tile',
   Grid = 'grid',
+  NullableGrid = 'nullableGrid',
   Icon = 'icon',
   ControlLines = 'controlLines',
   NullableNote = 'nullableNote',
@@ -94,6 +95,11 @@ export interface GridConfig extends Config<GridData> {
   readonly type: ConfigType.Grid;
 }
 
+export interface NullableGridConfig extends Config<GridData | null> {
+  readonly type: ConfigType.NullableGrid;
+  readonly nonNullDefault: GridData;
+}
+
 export interface IconConfig extends Config<string> {
   readonly type: ConfigType.Icon;
 }
@@ -119,6 +125,7 @@ export type AnyConfig =
   | OrientationToggleConfig
   | TileConfig
   | GridConfig
+  | NullableGridConfig
   | IconConfig
   | ControlLinesConfig
   | NullableNoteConfig;
@@ -143,6 +150,11 @@ export function configEquals<C extends AnyConfig>(
     return aLines.every((line, i) => line.equals(bLines[i]));
   }
   if (type === ConfigType.Tile || type === ConfigType.Grid) {
+    return (a as GridData).equals(b as GridData);
+  }
+  if (type === ConfigType.NullableGrid) {
+    if (a === null && b === null) return true;
+    if (a === null || b === null) return false;
     return (a as GridData).equals(b as GridData);
   }
   if (type === ConfigType.DirectionToggle) {

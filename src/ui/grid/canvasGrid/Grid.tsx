@@ -12,6 +12,7 @@ interface GridRenderData {
   grid: GridData;
   connections: TileConnections[][];
   size: number;
+  colorInfo: ColorInfo;
 }
 
 export default memo(function Grid({
@@ -71,6 +72,7 @@ export default memo(function Grid({
         const tile = grid.getTile(x, y);
         const oldTile = prevData.current?.grid.getTile(x, y);
         if (
+          prevData.current?.colorInfo === colorInfo &&
           prevData.current?.size === size &&
           oldTile?.equals(tile) &&
           prevData.current?.connections[y]?.[x]?.equals(tileConnections[y][x])
@@ -81,7 +83,7 @@ export default memo(function Grid({
         renderTile(ctx, x, y, size, tile, tileConnections[y][x], colorInfo);
       }
     }
-    prevData.current = { grid, connections: tileConnections, size };
+    prevData.current = { grid, connections: tileConnections, size, colorInfo };
   }, [grid, size, canvasCtx, colorInfo, tileConnections]);
 
   return (

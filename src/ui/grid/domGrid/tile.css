@@ -2,14 +2,15 @@
   transform: scale(0);
 }
 
-.logic-animated:has([style*='transform'])
-  .logic-tile:not([style*='transform']) {
+.logic-animated:has([style*='transform']) .logic-tile:not([style*='transform']),
+.logic-animated:has(canvas) .logic-tile:not([style*='transform']) {
   animation: tile-appear 50ms ease-in-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .logic-animated:has([style*='transform'])
-    .logic-tile:not([style*='transform']) {
+    .logic-tile:not([style*='transform']),
+  .logic-animated:has(canvas) .logic-tile:not([style*='transform']) {
     animation: none;
     transform: scale(1);
   }

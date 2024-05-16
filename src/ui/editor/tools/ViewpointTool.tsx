@@ -7,6 +7,11 @@ const sample = instance;
 
 export default memo(function ViewpointTool() {
   return (
-    <SymbolTool name="Viewpoint" sample={sample} component={ViewpointSymbol} />
+    <SymbolTool
+      name="Viewpoint"
+      order={7}
+      sample={sample}
+      component={ViewpointSymbol}
+    />
   );
 });

@@ -6,5 +6,12 @@ import LetterSymbol from '../../symbols/LetterSymbol';
 const sample = instance;
 
 export default memo(function LetterTool() {
-  return <SymbolTool name="Letter" sample={sample} component={LetterSymbol} />;
+  return (
+    <SymbolTool
+      name="Letter"
+      order={6}
+      sample={sample}
+      component={LetterSymbol}
+    />
+  );
 });

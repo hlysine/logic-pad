@@ -6,5 +6,7 @@ import DartSymbol from '../../symbols/DartSymbol';
 const sample = instance;
 
 export default memo(function DartTool() {
-  return <SymbolTool name="Dart" sample={sample} component={DartSymbol} />;
+  return (
+    <SymbolTool name="Dart" order={8} sample={sample} component={DartSymbol} />
+  );
 });

@@ -9,6 +9,7 @@ export default memo(function MinesweeperTool() {
   return (
     <SymbolTool
       name="Minesweeper Number"
+      order={12}
       sample={sample}
       component={MinesweeperSymbol}
     />

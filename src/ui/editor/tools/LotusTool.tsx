@@ -6,5 +6,12 @@ import LotusSymbol from '../../symbols/LotusSymbol';
 const sample = instance;
 
 export default memo(function LotusTool() {
-  return <SymbolTool name="Lotus" sample={sample} component={LotusSymbol} />;
+  return (
+    <SymbolTool
+      name="Lotus"
+      order={9}
+      sample={sample}
+      component={LotusSymbol}
+    />
+  );
 });

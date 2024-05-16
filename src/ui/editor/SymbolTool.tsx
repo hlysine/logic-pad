@@ -14,6 +14,7 @@ export interface SymbolToolProps {
   id?: string;
   sample: Symbol;
   component: React.NamedExoticComponent<SymbolProps<any>>;
+  order?: number;
 }
 
 export default memo(function SymbolTool({
@@ -21,6 +22,7 @@ export default memo(function SymbolTool({
   id,
   sample,
   component: Component,
+  order,
 }: SymbolToolProps) {
   id = id ?? sample.id;
   return (
@@ -28,6 +30,7 @@ export default memo(function SymbolTool({
       id={id}
       name={name}
       description="Left click to place a symbol. Click again to configure it."
+      order={order}
       gridOverlay={
         <ConfigConsumer>
           {({ setLocation, setRef }) => {

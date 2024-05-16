@@ -122,6 +122,7 @@ export default memo(function MergeTool() {
   return (
     <ToolboxItem
       id="resize"
+      order={4}
       name="Resize grid"
       description="Click between tiles to insert. Click on tiles to remove."
       hotkey="f"

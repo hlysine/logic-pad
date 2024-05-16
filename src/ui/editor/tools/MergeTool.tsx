@@ -62,6 +62,7 @@ export default memo(function MergeTool() {
   return (
     <ToolboxItem
       id="merge"
+      order={3}
       name="Merge tiles"
       description="Left click and drag to merge tiles. Right click and drag to split tiles."
       hotkey="d"

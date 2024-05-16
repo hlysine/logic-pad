@@ -9,6 +9,7 @@ export default memo(function TileTool() {
   return (
     <ToolboxItem
       id="tile"
+      order={2}
       name="Edit tile"
       description="Left click to set a tile as given. Right click to remove a tile."
       hotkey="s"

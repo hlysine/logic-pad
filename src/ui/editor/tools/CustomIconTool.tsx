@@ -9,6 +9,7 @@ export default memo(function CustomIconTool() {
   return (
     <SymbolTool
       name="Custom Icon"
+      order={14}
       sample={sample}
       component={CustomIconSymbol}
     />

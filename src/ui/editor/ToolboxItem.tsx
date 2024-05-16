@@ -22,6 +22,7 @@ export interface ToolboxItemProps {
   children: React.ReactNode;
   className?: string;
   hotkey?: string;
+  order?: number;
 }
 
 export default memo(function ToolboxItem({
@@ -33,6 +34,7 @@ export default memo(function ToolboxItem({
   children,
   className,
   hotkey,
+  order,
 }: ToolboxItemProps) {
   const { toolId, setTool } = useToolbox();
 
@@ -56,6 +58,7 @@ export default memo(function ToolboxItem({
     <div
       className="tooltip tooltip-info"
       data-tip={name + (hotkey ? ` (${hotkey})` : '')}
+      style={{ order }}
     >
       <button
         className={cn(

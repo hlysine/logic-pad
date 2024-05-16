@@ -9,6 +9,7 @@ export default memo(function CustomTextTool() {
   return (
     <SymbolTool
       name="Custom Text"
+      order={13}
       sample={sample}
       component={CustomTextSymbol}
     />

@@ -96,8 +96,4 @@ export default class RegionAreaBTModule extends BTModule {
 
     return sameCellCount + usableCellCount >= this.instr.size;
   }
-
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
-  }
 }

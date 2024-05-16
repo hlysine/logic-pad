@@ -65,10 +65,6 @@ export default class DirectionLinkerBTModule extends BTModule {
     return { tilesNeedCheck, ratings };
   }
 
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
-  }
-
   private movePos(grid: BTGridData, x: number, y: number): Position | null {
     if (this.instr.id === galaxyInstance.id) {
       return this.movePosGalaxy(grid, x, y);

@@ -1,6 +1,5 @@
 import DartSymbol from '../../../symbols/dartSymbol';
 import { move } from '../../../helper';
-import { Position } from '../../../primitives';
 import BTModule, {
   BTColor,
   BTGridData,
@@ -54,10 +53,6 @@ export default class DartBTModule extends BTModule {
       this.cachedCheckResult = this.buildCheckAndRating(grid);
 
     return this.cachedCheckResult;
-  }
-
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
   }
 
   private buildCheckAndRating(grid: BTGridData): CheckResult {

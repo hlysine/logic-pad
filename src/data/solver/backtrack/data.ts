@@ -113,10 +113,9 @@ export interface Rating {
 export default abstract class BTModule {
   public abstract checkGlobal(grid: BTGridData): CheckResult | false;
 
-  public abstract checkLocal(
-    grid: BTGridData,
-    positions: Position[]
-  ): CheckResult | boolean;
+  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | boolean {
+    return this.checkGlobal(grid);
+  }
 }
 
 export function getOppositeColor(color: BTColor): BTColor {

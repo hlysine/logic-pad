@@ -115,8 +115,4 @@ export default class LetterBTModule extends BTModule {
 
     return letterVisited === this.letters[id - 1].length;
   }
-
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
-  }
 }

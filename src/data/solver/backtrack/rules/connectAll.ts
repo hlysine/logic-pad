@@ -62,8 +62,4 @@ export default class ConnectAllBTModule extends BTModule {
 
     return { tilesNeedCheck: null, ratings: null };
   }
-
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
-  }
 }

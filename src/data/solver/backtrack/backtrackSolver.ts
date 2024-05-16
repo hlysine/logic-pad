@@ -14,6 +14,7 @@ import { instance as regionAreaInstance } from '../../rules/regionAreaRule';
 import { Serializer } from '../../serializer/allSerializers';
 import EventIterator from 'event-iterator';
 import { instance as letterInstance } from '../../symbols/letterSymbol';
+import { instance as cellCountInstance } from '../../rules/cellCountRule';
 
 export default class BacktrackSolver extends Solver {
   private static readonly supportedInstrs = [
@@ -28,6 +29,7 @@ export default class BacktrackSolver extends Solver {
     connectAllInstance.id,
     banPatternInstance.id,
     regionAreaInstance.id,
+    cellCountInstance.id,
   ];
 
   public readonly id = 'backtrack';

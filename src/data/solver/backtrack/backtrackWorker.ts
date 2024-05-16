@@ -38,6 +38,10 @@ import LetterSymbol, {
   instance as letterInstance,
 } from '../../symbols/letterSymbol';
 import LetterBTModule from './symbols/letter';
+import CellCountRule, {
+  instance as cellCountInstance,
+} from '../../rules/cellCountRule';
+import CellCountBTModule from './rules/cellCount';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -99,6 +103,8 @@ function translateToBTGridData(grid: GridData): BTGridData {
       module = new RegionAreaBTModule(rule as RegionAreaRule);
     } else if (rule.id === banPatternInstance.id) {
       module = new BanPatternBTModule(rule as BanPatternRule);
+    } else if (rule.id === cellCountInstance.id) {
+      module = new CellCountBTModule(rule as CellCountRule);
     } else if (rule.id === undercluedInstance.id) {
       continue;
     }

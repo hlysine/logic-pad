@@ -2,7 +2,7 @@ import GridData from '../../data/grid';
 import Symbol from '../symbols/Symbol';
 import { fg } from '../helper';
 import GridOverlay from './GridOverlay';
-import { GridState, State } from '../../data/primitives';
+import { Color, GridState, State } from '../../data/primitives';
 import { memo } from 'react';
 
 export interface SymbolOverlayProps {
@@ -20,6 +20,7 @@ export default memo(function SymbolOverlay({
         symbols.map((symbol, i) => {
           let symbolState = state?.get(symbol.id)?.[i];
           if (!symbolState) symbolState = State.Incomplete;
+          const tile = grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y));
           return (
             <Symbol
               key={`${symbol.id}(${symbol.x},${symbol.y})`}
@@ -28,10 +29,7 @@ export default memo(function SymbolOverlay({
                   ? 'text-error'
                   : symbolState === State.Satisfied
                     ? 'text-success'
-                    : fg(
-                        grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y))
-                          .color
-                      )
+                    : fg(tile.exists ? tile.color : Color.Gray)
               }
               symbol={symbol}
             />

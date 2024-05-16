@@ -46,6 +46,11 @@ import MinesweeperSymbol, {
   instance as minesweeperInstance,
 } from '../../symbols/minesweeperSymbol';
 import MinesweeperBTModule from './symbols/minesweeper';
+import SymbolsPerRegionRule, {
+  instance as symbolsPerRegionInstance,
+} from '../../rules/symbolsPerRegionRule';
+import SymbolsPerRegionBTModule from './rules/symbolsPerRegion';
+import Symbol from '../../symbols/symbol';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -109,6 +114,16 @@ function translateToBTGridData(grid: GridData): BTGridData {
       module = new RegionAreaBTModule(rule as RegionAreaRule);
     } else if (rule.id === banPatternInstance.id) {
       module = new BanPatternBTModule(rule as BanPatternRule);
+    } else if (rule.id === symbolsPerRegionInstance.id) {
+      const allSymbols: Symbol[] = [];
+      grid.symbols.forEach(symbols => allSymbols.push(...symbols));
+
+      module = new SymbolsPerRegionBTModule(
+        rule as SymbolsPerRegionRule,
+        grid.width,
+        grid.height,
+        allSymbols
+      );
     } else if (rule.id === cellCountInstance.id) {
       module = new CellCountBTModule(rule as CellCountRule);
     } else if (rule.id === undercluedInstance.id) {

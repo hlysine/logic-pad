@@ -16,6 +16,7 @@ import EventIterator from 'event-iterator';
 import { instance as letterInstance } from '../../symbols/letterSymbol';
 import { instance as cellCountInstance } from '../../rules/cellCountRule';
 import { instance as minesweeperInstance } from '../../symbols/minesweeperSymbol';
+import { instance as symbolsPerRegionInstance } from '../../rules/symbolsPerRegionRule';
 
 export default class BacktrackSolver extends Solver {
   private static readonly supportedInstrs = [
@@ -31,6 +32,7 @@ export default class BacktrackSolver extends Solver {
     connectAllInstance.id,
     banPatternInstance.id,
     regionAreaInstance.id,
+    symbolsPerRegionInstance.id,
     cellCountInstance.id,
   ];
 

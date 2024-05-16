@@ -42,6 +42,10 @@ import CellCountRule, {
   instance as cellCountInstance,
 } from '../../rules/cellCountRule';
 import CellCountBTModule from './rules/cellCount';
+import MinesweeperSymbol, {
+  instance as minesweeperInstance,
+} from '../../symbols/minesweeperSymbol';
+import MinesweeperBTModule from './symbols/minesweeper';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -74,6 +78,8 @@ function translateToBTGridData(grid: GridData): BTGridData {
         module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
       } else if (id === myopiaInstance.id) {
         module = new MyopiaBTModule(symbol as MyopiaSymbol);
+      } else if (id === minesweeperInstance.id) {
+        module = new MinesweeperBTModule(symbol as MinesweeperSymbol);
       } else if (id === letterInstance.id) {
         continue;
       }

@@ -15,6 +15,7 @@ import { Serializer } from '../../serializer/allSerializers';
 import EventIterator from 'event-iterator';
 import { instance as letterInstance } from '../../symbols/letterSymbol';
 import { instance as cellCountInstance } from '../../rules/cellCountRule';
+import { instance as minesweeperInstance } from '../../symbols/minesweeperSymbol';
 
 export default class BacktrackSolver extends Solver {
   private static readonly supportedInstrs = [
@@ -24,6 +25,7 @@ export default class BacktrackSolver extends Solver {
     galaxyInstance.id,
     lotusInstance.id,
     myopiaInstance.id,
+    minesweeperInstance.id,
     letterInstance.id,
     undercluedInstance.id,
     connectAllInstance.id,

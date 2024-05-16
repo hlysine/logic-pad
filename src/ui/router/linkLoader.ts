@@ -6,8 +6,22 @@ import { Serializer } from '../../data/serializer/allSerializers';
 import { useNavigate } from '@tanstack/react-router';
 import { array } from '../../data/helper';
 
+export enum SolutionBehavior {
+  LoadVisible = 'visible',
+  LoadHidden = 'hidden',
+  Remove = 'remove',
+}
+
+function validateLoader(value: string): SolutionBehavior | undefined {
+  if (Object.values(SolutionBehavior).includes(value as SolutionBehavior)) {
+    return value as SolutionBehavior;
+  }
+  return undefined;
+}
+
 export interface PuzzleParams {
   d?: string;
+  loader?: SolutionBehavior;
 }
 
 export const validateSearch = (
@@ -15,17 +29,12 @@ export const validateSearch = (
 ): PuzzleParams => {
   return {
     d: search.d ? String(search.d) : undefined,
+    loader: search.loader ? validateLoader(String(search.loader)) : undefined,
   };
 };
 
 export interface LinkLoaderProps {
   params: PuzzleParams;
-}
-
-export enum SolutionBehavior {
-  LoadVisible = 'visible',
-  LoadHidden = 'hidden',
-  Remove = 'remove',
 }
 
 interface LinkLoaderResult {
@@ -49,17 +58,18 @@ export default function useLinkLoader(
         solutionStripped: false,
       };
       if (params.d) {
+        const behavior = params.loader ?? solutionBehavior;
         const decompressed = await Compressor.decompress(params.d);
         const { grid, solution, ...metadata } =
           Serializer.parsePuzzle(decompressed);
-        if (solutionBehavior === SolutionBehavior.LoadVisible && solution) {
+        if (behavior === SolutionBehavior.LoadVisible && solution) {
           const tiles = array(grid.width, grid.height, (x, y) => {
             const tile = grid.getTile(x, y);
             if (tile.fixed) return tile;
             return tile.withColor(solution.getTile(x, y).color);
           });
           setGrid(grid.withTiles(tiles), null);
-        } else if (solutionBehavior === SolutionBehavior.LoadHidden) {
+        } else if (behavior === SolutionBehavior.LoadHidden) {
           setGrid(grid, solution);
         } else {
           result.solutionStripped = solution !== null && grid.requireSolution();

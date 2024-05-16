@@ -209,20 +209,11 @@ function backtrack(
   // Found a solution
   if (!pos) return !solutionFn(grid.clone());
 
-  // TODO: Use a better method to determine the order
+  for (let i = 0; i <= 1; i++) {
+    // TODO: Use a better method to determine the order
+    const tile = i === 0 ? BTTile.Light : BTTile.Dark;
 
-  {
-    grid.setTileWithConnection(pos.x, pos.y, BTTile.Light);
-
-    const places = grid.connections[pos.y][pos.x];
-    const result = isValid(grid, places, checkable, ratings);
-
-    if (result && backtrack(grid, result[0], result[1], solutionFn))
-      return true;
-  }
-
-  {
-    grid.setTileWithConnection(pos.x, pos.y, BTTile.Dark);
+    grid.setTileWithConnection(pos.x, pos.y, tile);
 
     const places = grid.connections[pos.y][pos.x];
     const result = isValid(grid, places, checkable, ratings);

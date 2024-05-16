@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, useContext, useEffect, useState } from 'react';
 import GridData from '../data/grid';
 import { useEdit } from './EditContext';
 import { PuzzleMetadata } from '../data/puzzle';
@@ -44,12 +44,17 @@ export default memo(function GridContext({
 }: {
   children: React.ReactNode;
 }) {
-  const { recordEdit } = useEdit();
+  const { recordEdit, clearHistory } = useEdit();
   const { setState } = useGridState();
 
   const [grid, setGrid] = useState(defaultGrid);
   const [solution, setSolution] = useState<GridData | null>(null);
   const [metadata, setMetadata] = useState<PuzzleMetadata>(defaultMetadata);
+
+  useEffect(() => {
+    clearHistory(grid);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setGridRaw: GridContext['setGridRaw'] = (newGrid, sol) => {
     newGrid.symbols.forEach(list => {

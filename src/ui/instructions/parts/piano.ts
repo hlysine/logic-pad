@@ -16,6 +16,7 @@ export const playbackState = {
    * Indicates that the current playback is a solution, thus the tile animations should be disabled.
    */
   isSolution: false,
+  playback: undefined as CachedPlayback | undefined,
 };
 
 export const piano = new Piano({

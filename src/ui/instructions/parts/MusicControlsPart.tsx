@@ -17,8 +17,10 @@ import {
   pianoImmediatePedal,
   playGrid,
   playImmediate,
+  playbackState,
 } from './piano';
 import GridData from '../../../data/grid';
+import * as Tone from 'tone';
 
 export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;
 
@@ -31,7 +33,6 @@ const MusicControls = lazy(async function () {
       instruction,
     }: MusicControlsPartProps) {
       const { grid, solution } = useGrid();
-      const playback = useRef<CachedPlayback | undefined>(undefined);
       const previousGrid = useRef<GridData | null>(null);
       const [playState, setPlayState] = useState<'listen' | 'play' | 'none'>(
         'none'
@@ -50,12 +51,22 @@ const MusicControls = lazy(async function () {
       };
 
       useEffect(() => {
-        return () => stopAll(playback.current);
+        return () => stopAll(playbackState.playback);
       }, []);
 
       useEffect(() => {
-        stopAll(playback.current);
+        stopAll(playbackState.playback);
       }, [grid.width, grid.height]);
+
+      useEffect(() => {
+        const handler = () => {
+          setPlayState('none');
+        };
+        Tone.getTransport().on('stop', handler);
+        return () => {
+          Tone.getTransport().off('stop', handler);
+        };
+      }, []);
 
       return (
         <>
@@ -65,19 +76,19 @@ const MusicControls = lazy(async function () {
               className="btn btn-ghost text-lg"
               onClick={() => {
                 if (playState === 'listen') {
-                  stopAll(playback.current);
+                  stopAll(playbackState.playback);
                 } else {
                   if (instruction.track) {
                     const musicGrid = instruction.track.findRule(
                       r => r.id === musicGridInstance.id
                     ) as MusicGridRule | undefined;
                     if (!musicGrid) return;
-                    playback.current = playGrid(
+                    playbackState.playback = playGrid(
                       instruction.track,
                       musicGrid,
                       true,
                       () => setPlayState('none'),
-                      playback.current
+                      playbackState.playback
                     );
                   } else {
                     const tiles = array(
@@ -92,12 +103,12 @@ const MusicControls = lazy(async function () {
                         return gridTile;
                       }
                     );
-                    playback.current = playGrid(
+                    playbackState.playback = playGrid(
                       grid.withTiles(tiles),
                       instruction,
                       true,
                       () => setPlayState('none'),
-                      playback.current
+                      playbackState.playback
                     );
                   }
                   setPlayState('listen');
@@ -122,14 +133,14 @@ const MusicControls = lazy(async function () {
             className="btn btn-ghost text-lg"
             onClick={() => {
               if (playState === 'play') {
-                stopAll(playback.current);
+                stopAll(playbackState.playback);
               } else {
-                playback.current = playGrid(
+                playbackState.playback = playGrid(
                   grid,
                   instruction,
                   false,
                   () => setPlayState('none'),
-                  playback.current
+                  playbackState.playback
                 );
                 setPlayState('play');
               }

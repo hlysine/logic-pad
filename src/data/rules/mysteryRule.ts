@@ -6,7 +6,6 @@ import GridData from '../grid';
 import { array } from '../helper';
 import { Color, GridState, RuleState, State } from '../primitives';
 import CustomTextSymbol from '../symbols/customTextSymbol';
-import TileData from '../tile';
 import Rule, { SearchVariant } from './rule';
 
 export default class MysteryRule
@@ -14,9 +13,9 @@ export default class MysteryRule
   implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
 {
   private static readonly EXAMPLE_GRID = Object.freeze(
-    new GridData(1, 1)
-      .withTiles([[new TileData(false, false, Color.Dark)]])
-      .addSymbol(new CustomTextSymbol('', GridData.create([]), 0, 0, '?'))
+    GridData.create(['.']).addSymbol(
+      new CustomTextSymbol('', GridData.create([]), 0, 0, '?')
+    )
   );
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([

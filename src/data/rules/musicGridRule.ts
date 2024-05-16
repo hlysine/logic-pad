@@ -6,7 +6,6 @@ import GridData from '../grid';
 import { resize } from '../helper';
 import { Color, RuleState, State } from '../primitives';
 import CustomIconSymbol from '../symbols/customIconSymbol';
-import TileData from '../tile';
 import { ControlLine, Row } from './musicControlLine';
 import Rule, { SearchVariant } from './rule';
 
@@ -26,11 +25,9 @@ export default class MusicGridRule
   implements GridChangeHandler, SetGridHandler, GridResizeHandler
 {
   private static readonly EXAMPLE_GRID = Object.freeze(
-    new GridData(1, 1)
-      .withTiles([[new TileData(false, false, Color.Dark)]])
-      .addSymbol(
-        new CustomIconSymbol('', GridData.create([]), 0, 0, 'MdMusicNote')
-      )
+    GridData.create(['.']).addSymbol(
+      new CustomIconSymbol('', GridData.create([]), 0, 0, 'MdMusicNote')
+    )
   );
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([

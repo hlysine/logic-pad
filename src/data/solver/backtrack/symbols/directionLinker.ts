@@ -1,9 +1,9 @@
+import { Orientation, Position } from '../../../primitives';
+import DirectionLinkerSymbol from '../../../symbols/directionLinkerSymbol';
 import GalaxySymbol, {
   instance as galaxyInstance,
 } from '../../../symbols/galaxySymbol';
 import LotusSymbol from '../../../symbols/lotusSymbol';
-import { Orientation, Position } from '../../../primitives';
-import DirectionLinkerSymbol from '../../../symbols/directionLinkerSymbol';
 import BTModule, {
   BTGridData,
   BTTile,

@@ -1,10 +1,10 @@
+import CellCountRule from '../../../rules/cellCountRule';
 import BTModule, {
   BTGridData,
-  colorToBTTile,
-  CheckResult,
   BTTile,
+  CheckResult,
+  colorToBTTile,
 } from '../data';
-import CellCountRule from '../../../rules/cellCountRule';
 
 export default class CellCountBTModule extends BTModule {
   public instr: CellCountRule;

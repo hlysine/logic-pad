@@ -1,5 +1,5 @@
-import AreaNumberSymbol from '../../../symbols/areaNumberSymbol';
 import { Position } from '../../../primitives';
+import AreaNumberSymbol from '../../../symbols/areaNumberSymbol';
 import BTModule, {
   BTGridData,
   BTTile,

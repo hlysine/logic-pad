@@ -1,10 +1,10 @@
-import BanPatternRule from '../../../rules/banPatternRule';
 import { Position } from '../../../primitives';
+import BanPatternRule from '../../../rules/banPatternRule';
 import BTModule, {
-  BTGridData,
   BTColor,
-  colorToBTTile,
+  BTGridData,
   CheckResult,
+  colorToBTTile,
 } from '../data';
 
 export default class BanPatternBTModule extends BTModule {

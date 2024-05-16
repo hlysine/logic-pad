@@ -1,5 +1,5 @@
-import DartSymbol from '../../../symbols/dartSymbol';
 import { move } from '../../../helper';
+import DartSymbol from '../../../symbols/dartSymbol';
 import BTModule, {
   BTColor,
   BTGridData,

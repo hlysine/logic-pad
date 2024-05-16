@@ -1,3 +1,4 @@
+import MinesweeperSymbol from '../../../symbols/minesweeperSymbol';
 import BTModule, {
   BTColor,
   BTGridData,
@@ -7,7 +8,6 @@ import BTModule, {
   createOneTileResult,
   getOppositeColor,
 } from '../data';
-import MinesweeperSymbol from '../../../symbols/minesweeperSymbol';
 
 export default class MinesweeperBTModule extends BTModule {
   public instr: MinesweeperSymbol;

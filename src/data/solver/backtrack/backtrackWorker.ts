@@ -1,56 +1,56 @@
-import { Color, Position } from '../../primitives';
 import GridData from '../../grid';
-import TileData from '../../tile';
 import { array } from '../../helper';
+import { Color, Position } from '../../primitives';
+import BanPatternRule, {
+  instance as banPatternInstance,
+} from '../../rules/banPatternRule';
+import CellCountRule, {
+  instance as cellCountInstance,
+} from '../../rules/cellCountRule';
+import ConnectAllRule from '../../rules/connectAllRule';
+import RegionAreaRule, {
+  instance as regionAreaInstance,
+} from '../../rules/regionAreaRule';
+import SymbolsPerRegionRule, {
+  instance as symbolsPerRegionInstance,
+} from '../../rules/symbolsPerRegionRule';
+import { instance as undercluedInstance } from '../../rules/undercluedRule';
+import { Serializer } from '../../serializer/allSerializers';
 import AreaNumberSymbol, {
   instance as areaNumberInstance,
 } from '../../symbols/areaNumberSymbol';
 import DartSymbol, { instance as dartInstance } from '../../symbols/dartSymbol';
-import ViewpointSymbol, {
-  instance as viewpointInstance,
-} from '../../symbols/viewpointSymbol';
-import { instance as galaxyInstance } from '../../symbols/galaxySymbol';
-import { instance as lotusInstance } from '../../symbols/lotusSymbol';
-import { instance as undercluedInstance } from '../../rules/undercluedRule';
-import ConnectAllRule from '../../rules/connectAllRule';
-import BTModule, { BTGridData, BTTile, IntArray2D, Rating } from './data';
-import AreaNumberBTModule from './symbols/areaNumber';
-import DirectionLinkerBTModule from './symbols/directionLinker';
 import DirectionLinkerSymbol from '../../symbols/directionLinkerSymbol';
-import DartBTModule from './symbols/dart';
-import ViewpointBTModule from './symbols/viewpoint';
-import { instance as connectAllInstance } from '../z3/modules/connectAllModule';
-import ConnectAllBTModule from './rules/connectAll';
-import BanPatternRule, {
-  instance as banPatternInstance,
-} from '../../rules/banPatternRule';
-import BanPatternBTModule from './rules/banPattern';
-import RegionAreaBTModule from './rules/regionArea';
-import RegionAreaRule, {
-  instance as regionAreaInstance,
-} from '../../rules/regionAreaRule';
-import MyopiaSymbol, {
-  instance as myopiaInstance,
-} from '../../symbols/myopiaSymbol';
-import MyopiaBTModule from './symbols/myopia';
-import { Serializer } from '../../serializer/allSerializers';
+import { instance as galaxyInstance } from '../../symbols/galaxySymbol';
 import LetterSymbol, {
   instance as letterInstance,
 } from '../../symbols/letterSymbol';
-import LetterBTModule from './symbols/letter';
-import CellCountRule, {
-  instance as cellCountInstance,
-} from '../../rules/cellCountRule';
-import CellCountBTModule from './rules/cellCount';
+import { instance as lotusInstance } from '../../symbols/lotusSymbol';
 import MinesweeperSymbol, {
   instance as minesweeperInstance,
 } from '../../symbols/minesweeperSymbol';
-import MinesweeperBTModule from './symbols/minesweeper';
-import SymbolsPerRegionRule, {
-  instance as symbolsPerRegionInstance,
-} from '../../rules/symbolsPerRegionRule';
-import SymbolsPerRegionBTModule from './rules/symbolsPerRegion';
+import MyopiaSymbol, {
+  instance as myopiaInstance,
+} from '../../symbols/myopiaSymbol';
 import Symbol from '../../symbols/symbol';
+import ViewpointSymbol, {
+  instance as viewpointInstance,
+} from '../../symbols/viewpointSymbol';
+import TileData from '../../tile';
+import { instance as connectAllInstance } from '../z3/modules/connectAllModule';
+import BTModule, { BTGridData, BTTile, IntArray2D, Rating } from './data';
+import BanPatternBTModule from './rules/banPattern';
+import CellCountBTModule from './rules/cellCount';
+import ConnectAllBTModule from './rules/connectAll';
+import RegionAreaBTModule from './rules/regionArea';
+import SymbolsPerRegionBTModule from './rules/symbolsPerRegion';
+import AreaNumberBTModule from './symbols/areaNumber';
+import DartBTModule from './symbols/dart';
+import DirectionLinkerBTModule from './symbols/directionLinker';
+import LetterBTModule from './symbols/letter';
+import MinesweeperBTModule from './symbols/minesweeper';
+import MyopiaBTModule from './symbols/myopia';
+import ViewpointBTModule from './symbols/viewpoint';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {

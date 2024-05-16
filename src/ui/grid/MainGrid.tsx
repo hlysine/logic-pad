@@ -73,7 +73,7 @@ export default memo(function MainGrid({
   return (
     <StateRing width={grid.width} height={grid.height}>
       <Grid
-        size={tileConfig.tileSize * scale}
+        size={Math.round(tileConfig.tileSize * scale)}
         grid={grid}
         editable={useToolboxClick ? !!onTileClick : true}
         onTileClick={(x, y, target, flood) => {

@@ -98,10 +98,16 @@ const NoteOverlay = memo(function NoteOverlay() {
                     className="absolute h-[1em] w-[1em] bg-gradient-to-r from-secondary from-5% via-20% via-secondary/20 to-secondary/0"
                     style={{ left: `${line.column}em`, top: `${idx}em` }}
                   >
-                    <div className="badge badge-secondary absolute left-[0.33em] top-[0.33em] text-[0.15em] h-[1.3em] rounded-l-none whitespace-nowrap pl-0">
-                      {row.note ?? '~'}
-                      {row.velocity !== null ? `/ ${row.velocity}` : ''}
-                    </div>
+                    {row.note !== null && (
+                      <div className="badge badge-secondary absolute left-[0.16em] top-[0.33em] text-[0.25em] h-[1.3em] pr-[0.4em] rounded-l-none rounded-r-[1em] whitespace-nowrap pl-0">
+                        {row.note}
+                      </div>
+                    )}
+                    {row.velocity !== null && (
+                      <div className="badge badge-secondary absolute left-[0.33em] top-[2.33em] text-[0.20em] h-[1.3em] pr-[0.4em] rounded-l-none rounded-r-[1em] whitespace-nowrap pl-0">
+                        {row.velocity}
+                      </div>
+                    )}
                   </div>
                 )
             )

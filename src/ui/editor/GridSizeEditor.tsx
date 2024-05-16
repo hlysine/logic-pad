@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { cn } from '../../utils';
 import GridData from '../../data/grid';
 
@@ -42,6 +42,12 @@ export default memo(function GridSizeEditor({
   size = size ?? 'md';
   const [width, setWidth] = useState(grid.width);
   const [height, setHeight] = useState(grid.height);
+
+  useEffect(() => {
+    setWidth(grid.width);
+    setHeight(grid.height);
+  }, [grid]);
+
   return (
     <>
       <div className="flex gap-2">

@@ -6,6 +6,7 @@ import AnnotatedText from './AnnotatedText';
 export interface AutocompleteProps {
   items: string[];
   value: string;
+  all?: boolean;
   placeholder?: string;
   onChange?: (value: string) => void;
   onConfirm?: (value: string) => void;
@@ -16,14 +17,17 @@ export interface AutocompleteProps {
 export default memo(function Autocomplete({
   items,
   value,
+  all,
   placeholder,
   onChange,
   onConfirm,
   className,
 }: AutocompleteProps) {
+  all = all ?? false;
+
   const results = useMemo(
-    () => fuzzysort.go(value, items, { limit: 10 }),
-    [value, items]
+    () => fuzzysort.go(value, items, { limit: 50, all }),
+    [value, items, all]
   );
 
   const confirm = (value: string) => {
@@ -53,7 +57,7 @@ export default memo(function Autocomplete({
         <ul
           tabIndex={0}
           className={cn(
-            'dropdown-content z-[1] menu p-2 shadow bg-base-100 text-base-content rounded-box w-full m-0',
+            'dropdown-content z-[1] menu flex-nowrap overflow-y-auto p-2 shadow bg-base-100 text-base-content rounded-box w-full m-0 max-h-[50vh]',
             results.length === 0 && 'hidden'
           )}
         >

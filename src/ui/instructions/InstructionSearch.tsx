@@ -23,6 +23,7 @@ export default memo(function InstructionSearch() {
       placeholder="Add a new rule..."
       items={descriptionList}
       value={search}
+      all={true}
       onChange={setSearch}
       onConfirm={val =>
         addRule(ruleList.find(x => x.description === val)!.rule)

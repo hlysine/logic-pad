@@ -1,6 +1,7 @@
 import { AnyConfig, ConfigType } from '../config';
 import { FinalValidationHandler } from '../events/onFinalValidation';
 import { GridChangeHandler } from '../events/onGridChange';
+import { GridResizeHandler } from '../events/onGridResize';
 import GridData from '../grid';
 import { array } from '../helper';
 import { Color, GridState, RuleState, State } from '../primitives';
@@ -10,7 +11,7 @@ import Rule, { SearchVariant } from './rule';
 
 export default class MysteryRule
   extends Rule
-  implements FinalValidationHandler, GridChangeHandler
+  implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
 {
   private static readonly EXAMPLE_GRID = Object.freeze(
     new GridData(1, 1)
@@ -124,6 +125,28 @@ export default class MysteryRule
         return this;
     }
     return this.withSolution(MysteryRule.cleanSolution(this.solution, newGrid));
+  }
+
+  public onGridResize(
+    _grid: GridData,
+    mode: 'insert' | 'remove',
+    direction: 'row' | 'column',
+    index: number
+  ): this | null {
+    if (mode === 'insert') {
+      if (direction === 'row') {
+        return this.withSolution(this.solution.insertRow(index));
+      } else if (direction === 'column') {
+        return this.withSolution(this.solution.insertColumn(index));
+      }
+    } else if (mode === 'remove') {
+      if (direction === 'row') {
+        return this.withSolution(this.solution.removeRow(index));
+      } else if (direction === 'column') {
+        return this.withSolution(this.solution.removeColumn(index));
+      }
+    }
+    return this;
   }
 
   public copyWith({

@@ -17,6 +17,8 @@ export interface PointerCaptureOverlayProps {
   allowReplace?: boolean;
   step?: number;
   onPointerUp?: (color: Color) => void;
+  onPointerMove?: (x: number, y: number) => void;
+  children?: React.ReactNode;
 }
 
 function opposite(color: Color) {
@@ -39,6 +41,8 @@ export default memo(function PointerCaptureOverlay({
   allowReplace,
   step,
   onPointerUp,
+  onPointerMove,
+  children,
 }: PointerCaptureOverlayProps) {
   allowDrag = allowDrag ?? true;
   allowReplace = allowReplace ?? false;
@@ -46,10 +50,7 @@ export default memo(function PointerCaptureOverlay({
 
   const prevCoord = useRef({ x: -1, y: -1 });
 
-  const getPointerLocation = (
-    e: React.PointerEvent<HTMLDivElement>,
-    targetColor: Color
-  ) => {
+  const getPointerLocation = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x =
       Math.floor(
@@ -63,8 +64,12 @@ export default memo(function PointerCaptureOverlay({
           (step === 0.5 ? 0.25 : 0)) /
           step
       ) * step;
+    return { x, y };
+  };
+
+  const getPointerColor = (x: number, y: number, targetColor: Color) => {
     const currentColor = colorMap(x, y, targetColor) ? targetColor : Color.Gray;
-    return { x, y, currentColor };
+    return currentColor;
   };
 
   return (
@@ -76,14 +81,14 @@ export default memo(function PointerCaptureOverlay({
           if (!targetColor) {
             mouseContext.setColor(null, false);
           } else {
-            const { x, y, currentColor } = getPointerLocation(e, targetColor);
+            const { x, y } = getPointerLocation(e);
+            const currentColor = getPointerColor(x, y, targetColor);
             if (currentColor !== Color.Gray) targetColor = Color.Gray;
             mouseContext.setColor(
               targetColor,
               allowReplace &&
                 targetColor !== Color.Gray &&
-                getPointerLocation(e, opposite(targetColor)).currentColor !==
-                  Color.Gray
+                getPointerColor(x, y, opposite(targetColor)) !== Color.Gray
             );
             onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
           }
@@ -95,7 +100,8 @@ export default memo(function PointerCaptureOverlay({
         if (e.pointerType !== 'mouse') {
           let targetColor = mouseContext.getColorForButtons(1);
           if (targetColor) {
-            const { x, y, currentColor } = getPointerLocation(e, targetColor);
+            const { x, y } = getPointerLocation(e);
+            const currentColor = getPointerColor(x, y, targetColor);
             if (targetColor === currentColor) targetColor = Color.Gray;
             onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
           }
@@ -103,6 +109,8 @@ export default memo(function PointerCaptureOverlay({
         onPointerUp?.(color);
       }}
       onPointerMove={e => {
+        const hoverLocation = getPointerLocation(e);
+        onPointerMove?.(hoverLocation.x, hoverLocation.y);
         if (!allowDrag) return;
         const targetColor = mouseContext.getColorForButtons(e.buttons);
         if (
@@ -113,7 +121,8 @@ export default memo(function PointerCaptureOverlay({
         ) {
           mouseContext.setColor(null, false);
         } else {
-          const { x, y, currentColor } = getPointerLocation(e, targetColor);
+          const { x, y } = getPointerLocation(e);
+          const currentColor = getPointerColor(x, y, targetColor);
 
           if (x === prevCoord.current.x && y === prevCoord.current.y) return;
           prevCoord.current = { x, y };
@@ -128,6 +137,8 @@ export default memo(function PointerCaptureOverlay({
         }
       }}
       onPointerLeave={() => (prevCoord.current = { x: -1, y: -1 })}
-    ></div>
+    >
+      {children}
+    </div>
   );
 });

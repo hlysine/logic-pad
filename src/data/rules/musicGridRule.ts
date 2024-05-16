@@ -1,5 +1,6 @@
 import { AnyConfig, ConfigType } from '../config';
 import { GridChangeHandler } from '../events/onGridChange';
+import { GridResizeHandler } from '../events/onGridResize';
 import { SetGridHandler } from '../events/onSetGrid';
 import GridData from '../grid';
 import { resize } from '../helper';
@@ -22,7 +23,7 @@ const DEFAULT_SCALLE = [
 
 export default class MusicGridRule
   extends Rule
-  implements GridChangeHandler, SetGridHandler
+  implements GridChangeHandler, SetGridHandler, GridResizeHandler
 {
   private static readonly EXAMPLE_GRID = Object.freeze(
     new GridData(1, 1)
@@ -72,7 +73,7 @@ export default class MusicGridRule
     public readonly track: GridData | null
   ) {
     super();
-    this.controlLines = controlLines;
+    this.controlLines = MusicGridRule.deduplicateControlLines(controlLines);
     this.track = track;
   }
 
@@ -127,6 +128,59 @@ export default class MusicGridRule
     return this.copyWith({ controlLines });
   }
 
+  public onGridResize(
+    _grid: GridData,
+    mode: 'insert' | 'remove',
+    direction: 'row' | 'column',
+    index: number
+  ): this | null {
+    if (mode === 'insert') {
+      if (direction === 'row') {
+        return this.copyWith({
+          controlLines: this.controlLines.map(line => {
+            const rows = line.rows.slice();
+            rows.splice(index, 0, new Row(null, null));
+            return line.withRows(rows);
+          }),
+        });
+      } else if (direction === 'column') {
+        return this.copyWith({
+          controlLines: this.controlLines.map(line =>
+            line.column >= index ? line.withColumn(line.column + 1) : line
+          ),
+        });
+      }
+    } else if (mode === 'remove') {
+      if (direction === 'row') {
+        return this.copyWith({
+          controlLines: this.controlLines.map(line =>
+            line.withRows(line.rows.filter((_, idx) => idx !== index))
+          ),
+        });
+      } else if (direction === 'column') {
+        const lines: ControlLine[] = [];
+        for (const line of this.controlLines) {
+          if (line.column === index) {
+            const nextLine = this.controlLines.find(
+              l => l.column === index + 1
+            );
+            if (nextLine) {
+              lines.push(MusicGridRule.mergeControlLines(line, nextLine));
+            } else {
+              lines.push(line.withColumn(index));
+            }
+          } else if (line.column > index) {
+            lines.push(line.withColumn(line.column - 1));
+          } else {
+            lines.push(line);
+          }
+        }
+        return this.copyWith({ controlLines: lines });
+      }
+    }
+    return this;
+  }
+
   /**
    * Add or replace a control line.
    * @param controlLine The control line to set.
@@ -166,6 +220,40 @@ export default class MusicGridRule
 
   public get isSingleton(): boolean {
     return true;
+  }
+
+  public static mergeControlLines(...lines: ControlLine[]): ControlLine {
+    const rows = Array.from(
+      { length: Math.max(...lines.map(l => l.rows.length)) },
+      (_, idx) => {
+        const note = lines
+          .map(l => l.rows[idx]?.note)
+          .reduce((a, b) => b ?? a, null);
+        const velocity = lines
+          .map(l => l.rows[idx]?.velocity)
+          .reduce((a, b) => b ?? a, null);
+        return new Row(note, velocity);
+      }
+    );
+    const bpm = lines.map(l => l.bpm).reduce((a, b) => b ?? a, null);
+    const pedal = lines.map(l => l.pedal).reduce((a, b) => b ?? a, null);
+    return new ControlLine(lines[0].column, bpm, pedal, rows);
+  }
+
+  public static deduplicateControlLines(
+    lines: readonly ControlLine[]
+  ): ControlLine[] {
+    const columns = new Map<number, ControlLine[]>();
+    for (const line of lines) {
+      if (!columns.has(line.column)) {
+        columns.set(line.column, [line]);
+      } else {
+        columns.get(line.column)!.push(line);
+      }
+    }
+    return Array.from(columns.values()).map(lines =>
+      lines.length > 1 ? MusicGridRule.mergeControlLines(...lines) : lines[0]
+    );
   }
 }
 

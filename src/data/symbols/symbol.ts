@@ -1,8 +1,12 @@
+import { GridResizeHandler } from '../events/onGridResize';
 import GridData from '../grid';
 import Instruction from '../instruction';
 import { State } from '../primitives';
 
-export default abstract class Symbol extends Instruction {
+export default abstract class Symbol
+  extends Instruction
+  implements GridResizeHandler
+{
   public constructor(
     public readonly x: number,
     public readonly y: number
@@ -13,6 +17,27 @@ export default abstract class Symbol extends Instruction {
   }
 
   public abstract validateSymbol(grid: GridData): State;
+
+  public onGridResize(
+    _grid: GridData,
+    mode: 'insert' | 'remove',
+    direction: 'row' | 'column',
+    index: number
+  ): this | null {
+    if (mode === 'insert') {
+      return this.copyWith({
+        x: direction === 'column' && this.x >= index ? this.x + 1 : this.x,
+        y: direction === 'row' && this.y >= index ? this.y + 1 : this.y,
+      });
+    } else {
+      if (direction === 'column' && this.x === index) return null;
+      if (direction === 'row' && this.y === index) return null;
+      return this.copyWith({
+        x: direction === 'column' && this.x > index ? this.x - 1 : this.x,
+        y: direction === 'row' && this.y > index ? this.y - 1 : this.y,
+      });
+    }
+  }
 
   public get placementStep(): number {
     return 0.5;

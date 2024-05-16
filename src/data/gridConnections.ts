@@ -161,4 +161,180 @@ export default class GridConnections {
       (edge, index) => edges.findIndex(e => isSameEdge(e, edge)) === index
     );
   }
+
+  public insertColumn(index: number): GridConnections {
+    return new GridConnections(
+      this.edges.flatMap(edge => {
+        if (
+          (edge.x1 < index && edge.x2 < index) ||
+          (edge.x1 >= index && edge.x2 >= index)
+        ) {
+          if (edge.x1 < index) {
+            return [edge];
+          }
+          return [
+            { x1: edge.x1 + 1, y1: edge.y1, x2: edge.x2 + 1, y2: edge.y2 },
+          ];
+        }
+        return [
+          { x1: edge.x1, y1: edge.y1, x2: edge.x2, y2: edge.y2 },
+          { x1: edge.x1 + 1, y1: edge.y1, x2: edge.x2 + 1, y2: edge.y2 },
+        ];
+      })
+    );
+  }
+
+  public insertRow(index: number): GridConnections {
+    return new GridConnections(
+      this.edges.flatMap(edge => {
+        if (
+          (edge.y1 < index && edge.y2 < index) ||
+          (edge.y1 >= index && edge.y2 >= index)
+        ) {
+          if (edge.y1 < index) {
+            return [edge];
+          }
+          return [
+            { x1: edge.x1, y1: edge.y1 + 1, x2: edge.x2, y2: edge.y2 + 1 },
+          ];
+        }
+        return [
+          { x1: edge.x1, y1: edge.y1, x2: edge.x2, y2: edge.y2 },
+          { x1: edge.x1, y1: edge.y1 + 1, x2: edge.x2, y2: edge.y2 + 1 },
+        ];
+      })
+    );
+  }
+
+  public removeColumn(index: number): GridConnections {
+    const toProcess = new Map<number, Edge[]>();
+    const toKeep: Edge[] = [];
+    this.edges.forEach(edge => {
+      if (
+        (edge.x1 < index && edge.x2 < index) ||
+        (edge.x1 > index && edge.x2 > index)
+      ) {
+        if (edge.x1 < index) {
+          toKeep.push(edge);
+        } else {
+          toKeep.push({
+            x1: edge.x1 - 1,
+            y1: edge.y1,
+            x2: edge.x2 - 1,
+            y2: edge.y2,
+          });
+        }
+      } else if (edge.x1 !== index && edge.x2 !== index) {
+        toKeep.push({
+          x1: edge.x1 > index ? edge.x1 - 1 : edge.x1,
+          y1: edge.y1,
+          x2: edge.x2 > index ? edge.x2 - 1 : edge.x2,
+          y2: edge.y2,
+        });
+      } else {
+        if (edge.x1 === index) {
+          if (!toProcess.has(edge.y1)) {
+            toProcess.set(edge.y1, [edge]);
+          } else {
+            toProcess.get(edge.y1)!.push(edge);
+          }
+        } else if (edge.x2 === index) {
+          if (!toProcess.has(edge.y2)) {
+            toProcess.set(edge.y2, [edge]);
+          } else {
+            toProcess.get(edge.y2)!.push(edge);
+          }
+        }
+      }
+    });
+    for (const [key, list] of toProcess.entries()) {
+      for (let i = 1; i < list.length; i++) {
+        if (!isSameEdge(list[i], list[i - 1])) {
+          let x1, y1, x2, y2;
+          if (list[i].x1 === index && list[i].y1 === key) {
+            x1 = list[i].x2 > index ? list[i].x2 - 1 : list[i].x2;
+            y1 = list[i].y2;
+          } else {
+            x1 = list[i].x1 > index ? list[i].x1 - 1 : list[i].x1;
+            y1 = list[i].y1;
+          }
+          if (list[i - 1].x1 === index && list[i - 1].y1 === key) {
+            x2 = list[i - 1].x2 > index ? list[i - 1].x2 - 1 : list[i - 1].x2;
+            y2 = list[i - 1].y2;
+          } else {
+            x2 = list[i - 1].x1 > index ? list[i - 1].x1 - 1 : list[i - 1].x1;
+            y2 = list[i - 1].y1;
+          }
+          toKeep.push({ x1, y1, x2, y2 });
+        }
+      }
+    }
+    return new GridConnections(toKeep);
+  }
+
+  public removeRow(index: number): GridConnections {
+    const toProcess = new Map<number, Edge[]>();
+    const toKeep: Edge[] = [];
+    this.edges.forEach(edge => {
+      if (
+        (edge.y1 < index && edge.y2 < index) ||
+        (edge.y1 > index && edge.y2 > index)
+      ) {
+        if (edge.y1 < index) {
+          toKeep.push(edge);
+        } else {
+          toKeep.push({
+            x1: edge.x1,
+            y1: edge.y1 - 1,
+            x2: edge.x2,
+            y2: edge.y2 - 1,
+          });
+        }
+      } else if (edge.y1 !== index && edge.y2 !== index) {
+        toKeep.push({
+          x1: edge.x1,
+          y1: edge.y1 > index ? edge.y1 - 1 : edge.y1,
+          x2: edge.x2,
+          y2: edge.y2 > index ? edge.y2 - 1 : edge.y2,
+        });
+      } else {
+        if (edge.y1 === index) {
+          if (!toProcess.has(edge.x1)) {
+            toProcess.set(edge.x1, [edge]);
+          } else {
+            toProcess.get(edge.x1)!.push(edge);
+          }
+        } else if (edge.y2 === index) {
+          if (!toProcess.has(edge.x2)) {
+            toProcess.set(edge.x2, [edge]);
+          } else {
+            toProcess.get(edge.x2)!.push(edge);
+          }
+        }
+      }
+    });
+    for (const [key, list] of toProcess.entries()) {
+      for (let i = 1; i < list.length; i++) {
+        if (!isSameEdge(list[i], list[i - 1])) {
+          let x1, y1, x2, y2;
+          if (list[i].y1 === index && list[i].x1 === key) {
+            x1 = list[i].x2;
+            y1 = list[i].y2 > index ? list[i].y2 - 1 : list[i].y2;
+          } else {
+            x1 = list[i].x1;
+            y1 = list[i].y1 > index ? list[i].y1 - 1 : list[i].y1;
+          }
+          if (list[i - 1].y1 === index && list[i - 1].x1 === key) {
+            x2 = list[i - 1].x2;
+            y2 = list[i - 1].y2 > index ? list[i - 1].y2 - 1 : list[i - 1].y2;
+          } else {
+            x2 = list[i - 1].x1;
+            y2 = list[i - 1].y1 > index ? list[i - 1].y1 - 1 : list[i - 1].y1;
+          }
+          toKeep.push({ x1, y1, x2, y2 });
+        }
+      }
+    }
+    return new GridConnections(toKeep);
+  }
 }

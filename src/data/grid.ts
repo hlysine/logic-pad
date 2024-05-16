@@ -1,4 +1,5 @@
 import { handlesGridChange } from './events/onGridChange';
+import { handlesGridResize } from './events/onGridResize';
 import { handlesSetGrid } from './events/onSetGrid';
 import GridConnections from './gridConnections';
 import { array, move } from './helper';
@@ -352,24 +353,161 @@ export default class GridData {
   }
 
   /**
-   * Resize the grid to the new width and height. Common tiles are kept, and new tiles are empty.
+   * Insert a new column at the given index, shifting all components of the grid accordingly. Newly inserted tiles are gray.
+   * @param index The index to insert the column at.
+   * @returns The new grid with the new column inserted.
+   */
+  public insertColumn(index: number): GridData {
+    if (index < 0 || index > this.width) return this;
+    const tiles = array(this.width + 1, this.height, (x, y) => {
+      if (x < index) return this.getTile(x, y);
+      if (x === index) return TileData.empty();
+      return this.getTile(x - 1, y);
+    });
+    const connections = this.connections.insertColumn(index);
+    const rules = this.rules
+      .map(rule => {
+        if (handlesGridResize(rule))
+          return rule.onGridResize(this, 'insert', 'column', index);
+        else return rule;
+      })
+      .filter(rule => rule !== null) as Rule[];
+    const symbols = new Map<string, Symbol[]>();
+    for (const [id, symbolList] of this.symbols) {
+      const newList = symbolList
+        .map(symbol => symbol.onGridResize(this, 'insert', 'column', index))
+        .filter(symbol => symbol !== null) as Symbol[];
+      if (newList.length > 0) symbols.set(id, newList);
+    }
+    return this.copyWith({
+      width: this.width + 1,
+      tiles,
+      connections,
+      rules,
+      symbols,
+    });
+  }
+
+  /**
+   * Insert a new row at the given index, shifting all components of the grid accordingly. Newly inserted tiles are gray.
+   * @param index The index to insert the row at.
+   * @returns The new grid with the new row inserted.
+   */
+  public insertRow(index: number): GridData {
+    if (index < 0 || index > this.height) return this;
+    const tiles = array(this.width, this.height + 1, (x, y) => {
+      if (y < index) return this.getTile(x, y);
+      if (y === index) return TileData.empty();
+      return this.getTile(x, y - 1);
+    });
+    const connections = this.connections.insertRow(index);
+    const rules = this.rules
+      .map(rule => {
+        if (handlesGridResize(rule))
+          return rule.onGridResize(this, 'insert', 'row', index);
+        else return rule;
+      })
+      .filter(rule => rule !== null) as Rule[];
+    const symbols = new Map<string, Symbol[]>();
+    for (const [id, symbolList] of this.symbols) {
+      const newList = symbolList
+        .map(symbol => symbol.onGridResize(this, 'insert', 'row', index))
+        .filter(symbol => symbol !== null) as Symbol[];
+      if (newList.length > 0) symbols.set(id, newList);
+    }
+    return this.copyWith({
+      height: this.height + 1,
+      tiles,
+      connections,
+      rules,
+      symbols,
+    });
+  }
+
+  /**
+   * Remove a column at the given index, shifting all components of the grid accordingly.
+   * @param index The index to remove the column at.
+   * @returns The new grid with the column removed.
+   */
+  public removeColumn(index: number): GridData {
+    if (index < 0 || index >= this.width) return this;
+    const tiles = array(this.width - 1, this.height, (x, y) =>
+      x < index ? this.getTile(x, y) : this.getTile(x + 1, y)
+    );
+    const connections = this.connections.removeColumn(index);
+    const rules = this.rules
+      .map(rule => {
+        if (handlesGridResize(rule))
+          return rule.onGridResize(this, 'remove', 'column', index);
+        else return rule;
+      })
+      .filter(rule => rule !== null) as Rule[];
+    const symbols = new Map<string, Symbol[]>();
+    for (const [id, symbolList] of this.symbols) {
+      const newList = symbolList
+        .map(symbol => symbol.onGridResize(this, 'remove', 'column', index))
+        .filter(symbol => symbol !== null) as Symbol[];
+      if (newList.length > 0) symbols.set(id, newList);
+    }
+    return this.copyWith({
+      width: this.width - 1,
+      tiles,
+      connections,
+      rules,
+      symbols,
+    });
+  }
+
+  /**
+   * Remove a row at the given index, shifting all components of the grid accordingly.
+   * @param index The index to remove the row at.
+   * @returns The new grid with the row removed.
+   */
+  public removeRow(index: number): GridData {
+    if (index < 0 || index >= this.height) return this;
+    const tiles = array(this.width, this.height - 1, (x, y) =>
+      y < index ? this.getTile(x, y) : this.getTile(x, y + 1)
+    );
+    const connections = this.connections.removeRow(index);
+    const rules = this.rules
+      .map(rule => {
+        if (handlesGridResize(rule))
+          return rule.onGridResize(this, 'remove', 'row', index);
+        else return rule;
+      })
+      .filter(rule => rule !== null) as Rule[];
+    const symbols = new Map<string, Symbol[]>();
+    for (const [id, symbolList] of this.symbols) {
+      const newList = symbolList
+        .map(symbol => symbol.onGridResize(this, 'remove', 'row', index))
+        .filter(symbol => symbol !== null) as Symbol[];
+      if (newList.length > 0) symbols.set(id, newList);
+    }
+    return this.copyWith({
+      height: this.height - 1,
+      tiles,
+      connections,
+      rules,
+      symbols,
+    });
+  }
+
+  /**
+   * Resize the grid to the new width and height, shifting all components of the grid accordingly. Newly inserted tiles are gray.
    * @param width The new width of the grid.
    * @param height The new height of the grid.
    * @returns The new grid with the new dimensions.
    */
-  public resize(width: number, height: number): GridData {
-    const tiles = array(width, height, (x, y) =>
-      x >= 0 && x < this.width && y >= 0 && y < this.height
-        ? this.getTile(x, y)
-        : TileData.empty()
-    );
-    return this.removeSymbolIf(
-      sym => sym.x >= width || sym.y >= height
-    ).copyWith({
-      width,
-      height,
-      tiles,
-    });
+  public resize(width: number, height: number): this {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    let newGrid: GridData = this;
+    while (newGrid.width < width) newGrid = newGrid.insertColumn(newGrid.width);
+    while (newGrid.width > width)
+      newGrid = newGrid.removeColumn(newGrid.width - 1);
+    while (newGrid.height < height) newGrid = newGrid.insertRow(newGrid.height);
+    while (newGrid.height > height)
+      newGrid = newGrid.removeRow(newGrid.height - 1);
+    return newGrid as this;
   }
 
   /**

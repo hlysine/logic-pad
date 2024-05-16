@@ -48,34 +48,48 @@ export default memo(function GridConfig({
           </button>
         </form>
         {open && (
-          <EmbedContext>
-            <DisplayContext>
-              <EditContext>
-                <GridStateContext>
-                  <GridContext>
-                    <EmbedLoader grid={grid} />
-                    <PuzzleEditor>
-                      <GridConsumer>
-                        {({ grid }) => {
-                          return (
-                            <button
-                              className="btn btn-primary"
-                              onClick={() => {
-                                setGrid(grid);
-                                setOpen(false);
-                              }}
-                            >
-                              Save and exit
-                            </button>
-                          );
-                        }}
-                      </GridConsumer>
-                    </PuzzleEditor>
-                  </GridContext>
-                </GridStateContext>
-              </EditContext>
-            </DisplayContext>
-          </EmbedContext>
+          <GridConsumer>
+            {({ grid: outerGrid }) => (
+              <EmbedContext>
+                <DisplayContext>
+                  <EditContext>
+                    <GridStateContext>
+                      <GridContext>
+                        <EmbedLoader grid={grid} />
+                        <PuzzleEditor>
+                          <GridConsumer>
+                            {({ grid, setGrid: setInnerGrid }) => {
+                              return (
+                                <>
+                                  <button
+                                    className="btn"
+                                    onClick={() => {
+                                      setInnerGrid(outerGrid);
+                                    }}
+                                  >
+                                    Copy from main grid
+                                  </button>
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                      setGrid(grid);
+                                      setOpen(false);
+                                    }}
+                                  >
+                                    Save and exit
+                                  </button>
+                                </>
+                              );
+                            }}
+                          </GridConsumer>
+                        </PuzzleEditor>
+                      </GridContext>
+                    </GridStateContext>
+                  </EditContext>
+                </DisplayContext>
+              </EmbedContext>
+            )}
+          </GridConsumer>
         )}
       </div>
       <form method="dialog" className="modal-backdrop bg-neutral/55">

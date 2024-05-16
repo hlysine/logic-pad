@@ -10,6 +10,7 @@ import TouchControls from '../ui/components/TouchControls';
 import DocumentTitle from '../ui/components/DocumentTitle';
 import InstructionPartOutlet from '../ui/instructions/InstructionPartOutlet';
 import { PartPlacement } from '../ui/instructions/parts/types';
+import ForesightContext from '../ui/ForesightContext';
 
 export const Route = createFileRoute('/_layout/solve')({
   validateSearch,
@@ -17,21 +18,23 @@ export const Route = createFileRoute('/_layout/solve')({
     const params = Route.useSearch();
     useLinkLoader(params);
     return (
-      <ThreePaneLayout
-        left={
-          <>
-            <DocumentTitle>Logic Pad</DocumentTitle>
-            <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
-              <Metadata />
-              <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
-            </div>
-            <TouchControls />
-            <EditControls />
-          </>
-        }
-        center={<MainGrid useToolboxClick={false} />}
-        right={<InstructionList />}
-      />
+      <ForesightContext>
+        <ThreePaneLayout
+          left={
+            <>
+              <DocumentTitle>Logic Pad</DocumentTitle>
+              <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
+                <Metadata />
+                <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
+              </div>
+              <TouchControls />
+              <EditControls />
+            </>
+          }
+          center={<MainGrid useToolboxClick={false} />}
+          right={<InstructionList />}
+        />
+      </ForesightContext>
     );
   }),
 });

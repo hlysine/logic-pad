@@ -3,7 +3,6 @@ import StateRing from '../StateRing';
 import { useGrid } from '../GridContext';
 import Grid from './Grid';
 import SymbolOverlay from './SymbolOverlay';
-import ErrorOverlay from './ErrorOverlay';
 import { State, Position } from '../../data/primitives';
 import GridData from '../../data/grid';
 import Loading from '../components/Loading';
@@ -14,6 +13,7 @@ import handleTileClick from './handleTileClick';
 import TileCountOverlay from './TileCountOverlay';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
+import ErrorOverlay from './ErrorOverlay';
 
 export interface MainGridProps {
   useToolboxClick: boolean;

@@ -92,9 +92,7 @@ export default memo(function GridConfig({
           </GridConsumer>
         )}
       </div>
-      <form method="dialog" className="modal-backdrop bg-neutral/55">
-        <button onClick={() => setOpen(false)}>close</button>
-      </form>
+      <form method="dialog" className="modal-backdrop bg-neutral/55"></form>
     </dialog>
   );
 });

@@ -87,9 +87,12 @@ export default memo(function MusicOverlayPart() {
             if (position >= grid.width || position <= 0) return;
             const column = Math.floor(position);
             if (column !== Math.floor(prevPos)) {
-              for (let y = 0; y < grid.height; y++) {
-                const tile = grid.getTile(column, y);
+              const playbackGrid = playbackState.playback?.grid ?? grid;
+              for (let y = 0; y < playbackGrid.height; y++) {
+                const tile = playbackGrid.getTile(column, y);
                 if (!tile.exists || tile.color !== Color.Dark) continue;
+                if (tileAnimations.current.length <= y) continue;
+                if (tileAnimations.current[y].length <= column) continue;
                 tileAnimations.current[y][column] = 0.7;
               }
             }

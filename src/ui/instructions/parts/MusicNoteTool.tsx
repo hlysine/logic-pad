@@ -55,12 +55,13 @@ const NoteOverlay = memo(function NoteOverlay() {
                       x,
                       null,
                       null,
+                      false,
                       Array.from(
                         { length: grid.height },
                         () => new Row(null, null)
                       ).map((r, idx) =>
                         idx === y
-                          ? r.copyWith({ note: 'C4', velocity: 0.6 })
+                          ? r.copyWith({ note: 'C4', velocity: null })
                           : r
                       )
                     )
@@ -74,7 +75,7 @@ const NoteOverlay = memo(function NoteOverlay() {
                   musicGrid.setControlLine(
                     line.copyWith({
                       rows: line.rows.map((r, idx) =>
-                        idx === y ? new Row('C4', 0.6) : r
+                        idx === y ? new Row('C4', null) : r
                       ),
                     })
                   )

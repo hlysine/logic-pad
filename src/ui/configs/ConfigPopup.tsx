@@ -256,6 +256,7 @@ export default memo(function ConfigPopup() {
               const newLine = configurable.copyWith({
                 bpm: null,
                 pedal: null,
+                checkpoint: false,
               });
               if (newLine.isEmpty) {
                 setGrid(

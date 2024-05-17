@@ -75,6 +75,13 @@ export class ControlLine extends Configurable {
       description: 'Pedal',
       configurable: true,
     },
+    {
+      type: ConfigType.Boolean,
+      default: false,
+      field: 'checkpoint',
+      description: 'Checkpoint',
+      configurable: true,
+    },
   ]);
 
   /**
@@ -82,18 +89,21 @@ export class ControlLine extends Configurable {
    * @param column The column at which the settings take effect
    * @param bpm The new beats per minute, or null to keep the current value from the previous control line
    * @param pedal Whether the pedal is pressed, or null to keep the current value from the previous control line
+   * @param checkpoint Whether this control line is a checkpoint
    * @param rows The notes to play at each row. This list is automatically resized to match the height of the grid. You may pass in an empty list if none of the rows need to be changed.
    */
   public constructor(
     public readonly column: number,
     public readonly bpm: number | null,
     public readonly pedal: boolean | null,
+    public readonly checkpoint: boolean,
     public readonly rows: readonly Row[]
   ) {
     super();
     this.column = Math.floor(column);
     this.bpm = bpm;
     this.pedal = pedal;
+    this.checkpoint = checkpoint;
     this.rows = rows;
   }
 
@@ -105,17 +115,20 @@ export class ControlLine extends Configurable {
     column,
     bpm,
     pedal,
+    checkpoint,
     rows,
   }: {
     column?: number;
     bpm?: number | null;
     pedal?: boolean | null;
+    checkpoint?: boolean;
     rows?: readonly Row[];
   }): this {
     return new ControlLine(
       column ?? this.column,
       bpm !== undefined ? bpm : this.bpm,
       pedal !== undefined ? pedal : this.pedal,
+      checkpoint ?? this.checkpoint,
       rows ?? this.rows
     ) as this;
   }
@@ -132,6 +145,10 @@ export class ControlLine extends Configurable {
     return this.copyWith({ pedal });
   }
 
+  public withCheckpoint(checkpoint: boolean): this {
+    return this.copyWith({ checkpoint });
+  }
+
   public withRows(rows: readonly Row[]): this {
     return this.copyWith({ rows });
   }
@@ -141,6 +158,7 @@ export class ControlLine extends Configurable {
       this.column === other.column &&
       this.bpm === other.bpm &&
       this.pedal === other.pedal &&
+      this.checkpoint === other.checkpoint &&
       this.rows.length === other.rows.length &&
       this.rows.every((row, i) => {
         const otherRow = other.rows[i];
@@ -153,6 +171,7 @@ export class ControlLine extends Configurable {
     return (
       this.bpm === null &&
       this.pedal === null &&
+      !this.checkpoint &&
       !this.rows.some(row => row.note !== null || row.velocity !== null)
     );
   }

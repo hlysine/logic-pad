@@ -83,26 +83,24 @@ export default memo(function MusicOverlayPart() {
                   }
                 }
               }
-            }
-            if (position >= grid.width || position <= 0) return;
-            const column = Math.floor(position);
-            if (column !== Math.floor(prevPos)) {
-              const playbackGrid = playbackState.playback?.grid ?? grid;
-              for (let y = 0; y < playbackGrid.height; y++) {
-                const tile = playbackGrid.getTile(column, y);
-                if (!tile.exists || tile.color !== Color.Dark) continue;
-                if (tileAnimations.current.length <= y) continue;
-                if (tileAnimations.current[y].length <= column) continue;
-                tileAnimations.current[y][column] = 0.7;
+              if (position >= grid.width || position <= 0) return;
+              const column = Math.floor(position);
+              if (column !== Math.floor(prevPos)) {
+                const playbackGrid = playbackState.playback?.grid ?? grid;
+                for (let y = 0; y < playbackGrid.height; y++) {
+                  const tile = playbackGrid.getTile(column, y);
+                  if (!tile.exists || tile.color !== Color.Dark) continue;
+                  if (tileAnimations.current.length <= y) continue;
+                  if (tileAnimations.current[y].length <= column) continue;
+                  tileAnimations.current[y][column] = 0.7;
+                }
               }
             }
+            if (position >= grid.width || position <= 0) return;
             ctx.lineCap = 'round';
             ctx.beginPath();
-            ctx.moveTo((position % grid.width) * tileSize, 0);
-            ctx.lineTo(
-              (position % grid.width) * tileSize,
-              grid.height * tileSize
-            );
+            ctx.moveTo(position * tileSize, 0);
+            ctx.lineTo(position * tileSize, grid.height * tileSize);
             ctx.lineWidth = 5;
             ctx.strokeStyle = playbackState.isSolution
               ? infoColor

@@ -33,7 +33,7 @@ export default class MusicGridRule
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.ControlLines,
-      default: [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+      default: [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
       field: 'controlLines',
       description: 'Control Lines',
       configurable: false,
@@ -43,7 +43,7 @@ export default class MusicGridRule
       default: null,
       nonNullDefault: new GridData(5, 4).addRule(
         new MusicGridRule(
-          [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+          [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
           null
         )
       ),
@@ -55,7 +55,7 @@ export default class MusicGridRule
 
   private static readonly SEARCH_VARIANTS = [
     new MusicGridRule(
-      [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+      [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
       null
     ).searchVariant(),
   ];
@@ -234,7 +234,8 @@ export default class MusicGridRule
     );
     const bpm = lines.map(l => l.bpm).reduce((a, b) => b ?? a, null);
     const pedal = lines.map(l => l.pedal).reduce((a, b) => b ?? a, null);
-    return new ControlLine(lines[0].column, bpm, pedal, rows);
+    const checkpoint = lines.some(l => l.checkpoint);
+    return new ControlLine(lines[0].column, bpm, pedal, checkpoint, rows);
   }
 
   public static deduplicateControlLines(
@@ -255,6 +256,6 @@ export default class MusicGridRule
 }
 
 export const instance = new MusicGridRule(
-  [new ControlLine(0, 120, false, DEFAULT_SCALLE)],
+  [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
   null
 );

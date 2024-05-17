@@ -56,13 +56,24 @@ export default class SerializerV0 extends SerializerBase {
   }
 
   public stringifyControlLine(line: ControlLine): string {
-    return `c${line.column}|b${line.bpm ?? ''}|p${line.pedal ? '1' : line.pedal !== null ? '0' : ''}|r${line.rows.map(row => `v${row.velocity ?? ''}n${row.note ?? ''}`).join(',')}`;
+    const result: string[] = [];
+    result.push(`c${line.column}`);
+    if (line.bpm !== null) result.push(`b${line.bpm}`);
+    if (line.pedal !== null) result.push(`p${line.pedal ? '1' : '0'}`);
+    if (line.checkpoint) result.push('s');
+    result.push(
+      `r${line.rows
+        .map(row => `v${row.velocity ?? ''}n${row.note ?? ''}`)
+        .join(',')}`
+    );
+    return result.join('|');
   }
 
   public parseControlLine(str: string): ControlLine {
     let column: number | null = null;
     let bpm: number | null = null;
     let pedal: boolean | null = null;
+    let checkpoint = false;
     const rows: Row[] = [];
 
     const data = str.split('|');
@@ -79,6 +90,9 @@ export default class SerializerV0 extends SerializerBase {
         case 'p':
           pedal = value === '1' ? true : value === '0' ? false : null;
           break;
+        case 's':
+          checkpoint = true;
+          break;
         case 'r':
           rows.push(
             ...value.split(',').map(row => {
@@ -94,7 +108,7 @@ export default class SerializerV0 extends SerializerBase {
           break;
       }
     }
-    return new ControlLine(column ?? 0, bpm, pedal, rows);
+    return new ControlLine(column ?? 0, bpm, pedal, checkpoint, rows);
   }
 
   public stringifyConfig(instruction: Instruction, config: AnyConfig): string {

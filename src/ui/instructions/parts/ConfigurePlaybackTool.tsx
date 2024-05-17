@@ -12,6 +12,7 @@ import { Color } from '../../../data/primitives';
 import { ControlLine } from '../../../data/rules/musicControlLine';
 import { getConfigurableLocation, useConfig } from '../../ConfigContext';
 import { mousePosition } from '../../../utils';
+import { IoMdFlag } from 'react-icons/io';
 
 const PlaybackOverlay = memo(function PlaybackOverlay() {
   const { setLocation, setRef } = useConfig();
@@ -30,7 +31,8 @@ const PlaybackOverlay = memo(function PlaybackOverlay() {
           if (color !== Color.Dark) return false;
           return musicGrid.controlLines.some(
             line =>
-              line.column === x && (line.bpm != null || line.pedal !== null)
+              line.column === x &&
+              (line.bpm != null || line.pedal !== null || line.checkpoint)
           );
         }}
         onTileClick={(x, _y, from, _to) => {
@@ -53,8 +55,8 @@ const PlaybackOverlay = memo(function PlaybackOverlay() {
                 musicGrid.setControlLine(
                   musicGrid.controlLines
                     .find(line => line.column === x)
-                    ?.copyWith({ bpm: 120, pedal: false }) ??
-                    new ControlLine(x, 120, false, [])
+                    ?.copyWith({ bpm: 120, pedal: null, checkpoint: false }) ??
+                    new ControlLine(x, 120, null, false, [])
                 )
               )
             );
@@ -63,14 +65,21 @@ const PlaybackOverlay = memo(function PlaybackOverlay() {
       />
       <GridOverlay>
         {musicGrid.controlLines
-          .filter(line => line.bpm !== null || line.pedal != null)
+          .filter(
+            line => line.bpm !== null || line.pedal != null || line.checkpoint
+          )
           .map(line => (
             <div
               key={line.column}
-              className="absolute top-0 h-[calc(100%+0.5em)] w-[1em] border-l-[0.1em] border-secondary"
+              className="absolute top-0 h-[calc(100%+0.7em)] w-[1em] border-l-[0.1em] border-secondary"
               style={{ left: `${line.column}em` }}
             >
-              <div className="absolute inset-0 bottom-[0.5em] bg-gradient-to-r from-secondary via-20% via-secondary/20 to-secondary/0"></div>
+              <div className="absolute inset-0 bottom-[0.7em] bg-gradient-to-r from-secondary via-20% via-secondary/20 to-secondary/0"></div>
+              {line.checkpoint && (
+                <div className="badge badge-secondary absolute bottom-[3.2em] text-[0.15em] h-[1.3em] rounded-l-none whitespace-nowrap pl-0">
+                  <IoMdFlag size={24} />
+                </div>
+              )}
               {line.pedal !== null && (
                 <div className="badge badge-secondary absolute bottom-[1.6em] text-[0.15em] h-[1.3em] rounded-l-none whitespace-nowrap pl-0">
                   {line.pedal ? 'Pedal Down' : 'Pedal Up'}

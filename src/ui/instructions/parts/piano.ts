@@ -16,6 +16,7 @@ export const playbackState = {
    * Indicates that the current playback is a solution, thus the tile animations should be disabled.
    */
   isSolution: false,
+  checkpoint: 0,
   playback: undefined as CachedPlayback | undefined,
 };
 
@@ -255,7 +256,7 @@ export function playGrid(
   cache?: CachedPlayback
 ): CachedPlayback {
   playbackState.isSolution = isSolution;
-  Tone.getTransport().stop();
+  // Tone.getTransport().stop();
   piano.stopAll();
   if (!cache?.grid?.equals(grid)) {
     cache?.cleanUp?.();
@@ -265,6 +266,8 @@ export function playGrid(
     };
   }
   Tone.getTransport().start();
+  Tone.getTransport().ticks =
+    playbackState.checkpoint * Tone.getTransport().PPQ;
   return cache;
 }
 

@@ -42,7 +42,7 @@ export default memo(function MusicOverlayPart({
           style={{ left: `${line.column - 0.2}em` }}
           onClick={() => setActiveCheckpoint(line.column)}
         >
-          <FaPlay size={16} />
+          <FaPlay size="0.2em" />
         </button>
       ))}
     </GridOverlay>

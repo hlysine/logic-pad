@@ -63,7 +63,17 @@ export default memo(function ForesightControlsPart({
 
   return (
     <>
-      <div className="grow-0 shrink-0 bg-primary/10 flex flex-col items-stretch order-last">
+      {message && (
+        <div className="card grow-0 shrink-0 card-side rounded-none bg-primary/10">
+          <figure className="shrink-0 p-2">
+            <IoIosEye size={16} />
+          </figure>
+          <div className="card-body p-4">
+            <p>{message}</p>
+          </div>
+        </div>
+      )}
+      <div className="grow-0 shrink-0 bg-primary/10 flex flex-col items-stretch">
         <div className="flex gap-2 justify-around items-center">
           <button
             type="button"
@@ -121,21 +131,11 @@ export default memo(function ForesightControlsPart({
           max="100"
         ></progress>
       </div>
-      {message && (
-        <div className="card grow-0 shrink-0 card-side rounded-none bg-primary/10 order-last">
-          <figure className="shrink-0 p-2">
-            <IoIosEye size={16} />
-          </figure>
-          <div className="card-body p-4">
-            <p>{message}</p>
-          </div>
-        </div>
-      )}
     </>
   );
 });
 
 export const spec: PartSpec = {
-  placement: PartPlacement.LeftPanel,
+  placement: PartPlacement.LeftBottom,
   instructionId: foresightInstance.id,
 };

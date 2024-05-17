@@ -27,6 +27,7 @@ export const Route = createFileRoute('/_layout/solve')({
                 <Metadata />
                 <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
               </div>
+              <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
               <TouchControls />
               <EditControls />
             </>

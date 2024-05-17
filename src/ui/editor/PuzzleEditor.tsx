@@ -34,6 +34,7 @@ export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
               <EditorPane />
               <div className="shrink-0 flex-col gap-1 hidden has-[*]:flex">
                 <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
+                <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
               </div>
               <TouchControls />
               <EditControls />

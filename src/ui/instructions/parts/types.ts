@@ -2,6 +2,7 @@ import Instruction from '../../../data/instruction';
 
 export enum PartPlacement {
   LeftPanel = 'left-panel',
+  LeftBottom = 'left-bottom',
   GridOverlay = 'grid-overlay',
   Toolbox = 'toolbox',
 }

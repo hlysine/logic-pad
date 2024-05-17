@@ -268,6 +268,17 @@ export function playGrid(
   Tone.getTransport().start();
   Tone.getTransport().ticks =
     playbackState.checkpoint * Tone.getTransport().PPQ;
+  Tone.getTransport().bpm.value = musicGrid.controlLines
+    .filter(line => line.column <= playbackState.checkpoint)
+    .reduce((a, b) => b.bpm ?? a, 120);
+  const pedal = musicGrid.controlLines
+    .filter(line => line.column <= playbackState.checkpoint)
+    .reduce((a, b) => b.pedal ?? a, false);
+  if (pedal) {
+    piano.pedalDown();
+  } else {
+    piano.pedalUp();
+  }
   return cache;
 }
 

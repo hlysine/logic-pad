@@ -111,7 +111,9 @@ const MusicControls = lazy(async function () {
                       playbackState.playback
                     );
                   }
-                  setPlayState('listen');
+                  Tone.getTransport().once('start', () =>
+                    setPlayState('listen')
+                  );
                 }
               }}
             >
@@ -142,7 +144,7 @@ const MusicControls = lazy(async function () {
                   () => setPlayState('none'),
                   playbackState.playback
                 );
-                setPlayState('play');
+                Tone.getTransport().once('start', () => setPlayState('play'));
               }
             }}
           >

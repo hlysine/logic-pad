@@ -256,7 +256,7 @@ export function playGrid(
   cache?: CachedPlayback
 ): CachedPlayback {
   playbackState.isSolution = isSolution;
-  // Tone.getTransport().stop();
+  Tone.getTransport().stop();
   piano.stopAll();
   if (!cache?.grid?.equals(grid)) {
     cache?.cleanUp?.();

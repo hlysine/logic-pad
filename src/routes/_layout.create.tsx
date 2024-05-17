@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader, {
-  SolutionBehavior,
+  SolutionHandling,
   validateSearch,
 } from '../ui/router/linkLoader';
 import PuzzleEditor from '../ui/editor/PuzzleEditor';
@@ -13,7 +13,10 @@ export const Route = createFileRoute('/_layout/create')({
   component: memo(function CreateMode() {
     const params = Route.useSearch();
     const navigate = useNavigate();
-    const linkResult = useLinkLoader(params, true, SolutionBehavior.Remove);
+    const linkResult = useLinkLoader(params, {
+      cleanUrl: true,
+      solutionHandling: SolutionHandling.Remove,
+    });
 
     return (
       <PuzzleEditor>

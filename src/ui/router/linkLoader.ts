@@ -6,22 +6,22 @@ import { Serializer } from '../../data/serializer/allSerializers';
 import { useNavigate } from '@tanstack/react-router';
 import { array } from '../../data/helper';
 
-export enum SolutionBehavior {
+export enum SolutionHandling {
   LoadVisible = 'visible',
   LoadHidden = 'hidden',
   Remove = 'remove',
 }
 
-function validateLoader(value: string): SolutionBehavior | undefined {
-  if (Object.values(SolutionBehavior).includes(value as SolutionBehavior)) {
-    return value as SolutionBehavior;
+function validateLoader(value: string): SolutionHandling | undefined {
+  if (Object.values(SolutionHandling).includes(value as SolutionHandling)) {
+    return value as SolutionHandling;
   }
   return undefined;
 }
 
 export interface PuzzleParams {
   d?: string;
-  loader?: SolutionBehavior;
+  loader?: SolutionHandling;
 }
 
 export const validateSearch = (
@@ -42,10 +42,28 @@ interface LinkLoaderResult {
   solutionStripped: boolean;
 }
 
+interface LinkLoaderParams {
+  /**
+   * Whether search params are removed after loading the puzzle.
+   */
+  cleanUrl?: boolean;
+  /**
+   * Specifies how the solution should be loaded.
+   */
+  solutionHandling?: SolutionHandling;
+  /**
+   * Whether to allow loading empty puzzles.
+   */
+  allowEmpty?: boolean;
+}
+
 export default function useLinkLoader(
   params: PuzzleParams,
-  cleanUrl = false,
-  solutionBehavior = SolutionBehavior.LoadHidden
+  {
+    cleanUrl = false,
+    solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
+    allowEmpty = true,
+  }: LinkLoaderParams = {}
 ): LinkLoaderResult | undefined {
   const { setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
@@ -62,14 +80,14 @@ export default function useLinkLoader(
         const decompressed = await Compressor.decompress(params.d);
         const { grid, solution, ...metadata } =
           Serializer.parsePuzzle(decompressed);
-        if (behavior === SolutionBehavior.LoadVisible && solution) {
+        if (behavior === SolutionHandling.LoadVisible && solution) {
           const tiles = array(grid.width, grid.height, (x, y) => {
             const tile = grid.getTile(x, y);
             if (tile.fixed) return tile;
             return tile.withColor(solution.getTile(x, y).color);
           });
           setGrid(grid.withTiles(tiles), null);
-        } else if (behavior === SolutionBehavior.LoadHidden) {
+        } else if (behavior === SolutionHandling.LoadHidden) {
           setGrid(grid, solution);
         } else {
           result.solutionStripped = solution !== null && grid.requireSolution();
@@ -78,6 +96,8 @@ export default function useLinkLoader(
         setMetadata(metadata);
         clearHistory(grid);
         if (cleanUrl) await navigate({ search: {} });
+      } else if (!allowEmpty) {
+        await navigate({ to: '/' });
       }
       setResult(result);
     })();

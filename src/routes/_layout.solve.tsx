@@ -16,7 +16,7 @@ export const Route = createFileRoute('/_layout/solve')({
   validateSearch,
   component: memo(function SolveMode() {
     const params = Route.useSearch();
-    useLinkLoader(params);
+    useLinkLoader(params, { allowEmpty: false });
     return (
       <ForesightContext>
         <ThreePaneLayout

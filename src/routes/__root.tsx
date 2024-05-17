@@ -19,28 +19,7 @@ export const Route = createRootRoute({
             <GridStateContext>
               <GridContext>
                 <SolverContext>
-                  <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral">
-                    <div id="color-ref-error" className="text-error hidden">
-                      {/* For canvas components to retrieve this color */}
-                    </div>
-                    <div id="color-ref-accent" className="text-accent hidden">
-                      {/* For canvas components to retrieve this color */}
-                    </div>
-                    <div id="color-ref-info" className="text-info hidden">
-                      {/* For canvas components to retrieve this color */}
-                    </div>
-                    <div id="color-ref-black" className="text-black hidden">
-                      {/* For canvas components to retrieve this color */}
-                    </div>
-                    <div id="color-ref-white" className="text-white hidden">
-                      {/* For canvas components to retrieve this color */}
-                    </div>
-                    <div
-                      id="color-ref-neutral-content"
-                      className="text-neutral-content/20 hidden"
-                    >
-                      {/* For canvas components to retrieve this color */}
-                    </div>
+                  <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral text-neutral-content">
                     <DocumentTitle>Logic Pad</DocumentTitle>
                     <PWAPrompt />
                     <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">

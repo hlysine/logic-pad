@@ -5,16 +5,32 @@ export interface DifficultyProps {
   value: number;
   readonly?: boolean;
   onChange?: (value: number) => void;
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+}
+
+function sizeToRating(size: DifficultyProps['size']) {
+  switch (size) {
+    case 'xs':
+      return 'rating-xs';
+    case 'sm':
+      return 'rating-sm';
+    case 'lg':
+      return 'rating-lg';
+    default:
+      return 'rating-md';
+  }
 }
 
 export default memo(function Difficulty({
   value,
   readonly,
   onChange,
+  size,
 }: DifficultyProps) {
   readonly = readonly ?? !onChange;
+  size = size ?? 'md';
   return (
-    <div className="rating rating-md">
+    <div className={cn('rating', sizeToRating(size))}>
       {Array.from({ length: readonly ? 5 : 10 }, (_, i) => (
         <input
           key={i}

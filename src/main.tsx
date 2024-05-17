@@ -27,6 +27,27 @@ declare module '@tanstack/react-router' {
 ReactDOM.createRoot(document.getElementById('app')!).render(
   <React.StrictMode>
     <>
+      <div id="color-ref-error" className="text-error hidden">
+        {/* For canvas components to retrieve this color */}
+      </div>
+      <div id="color-ref-accent" className="text-accent hidden">
+        {/* For canvas components to retrieve this color */}
+      </div>
+      <div id="color-ref-info" className="text-info hidden">
+        {/* For canvas components to retrieve this color */}
+      </div>
+      <div id="color-ref-black" className="text-black hidden">
+        {/* For canvas components to retrieve this color */}
+      </div>
+      <div id="color-ref-white" className="text-white hidden">
+        {/* For canvas components to retrieve this color */}
+      </div>
+      <div
+        id="color-ref-neutral-content"
+        className="text-neutral-content/20 hidden"
+      >
+        {/* For canvas components to retrieve this color */}
+      </div>
       <SpeedInsights />
       <RouterProvider router={router} />
     </>

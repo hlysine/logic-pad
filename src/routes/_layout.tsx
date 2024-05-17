@@ -1,11 +1,8 @@
 import Roadmap from '../ui/components/Roadmap';
-import DevPuzzles, { DEV_PUZZLES } from '../ui/components/DevPuzzles';
 import ModeSwitcher from '../ui/components/ModeSwitcher';
 import { Outlet, createFileRoute } from '@tanstack/react-router';
-import { Suspense, lazy, memo } from 'react';
-import { FaGithub } from 'react-icons/fa';
-import AnimationToggle from '../ui/components/AnimationToggle';
-const ThemeSwitcher = lazy(() => import('../ui/components/ThemeSwitcher'));
+import { memo } from 'react';
+import QuickAccessBar from '../ui/components/QuickAccessBar';
 
 export const Route = createFileRoute('/_layout')({
   component: memo(function Layout() {
@@ -20,20 +17,6 @@ export const Route = createFileRoute('/_layout')({
             <ul className="menu menu-horizontal bg-base-200 text-base-content rounded-box">
               <li className="dropdown dropdown-bottom">
                 <button tabIndex={0} role="button">
-                  Dev Puzzles{' '}
-                  <span className="badge badge-accent">
-                    {DEV_PUZZLES.length}
-                  </span>
-                </button>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content menu menu-vertical min-w-[300px] bg-base-200 rounded-box text-base-content z-50"
-                >
-                  <DevPuzzles />
-                </ul>
-              </li>
-              <li className="dropdown dropdown-bottom">
-                <button tabIndex={0} role="button">
                   Roadmap
                 </button>
                 <ul
@@ -46,20 +29,7 @@ export const Route = createFileRoute('/_layout')({
             </ul>
           </div>
           <ModeSwitcher />
-          <div className="flex xl:basis-[320px] grow shrink justify-end items-center">
-            <AnimationToggle />
-            <Suspense>
-              <ThemeSwitcher />
-            </Suspense>
-            <a
-              className="btn btn-square"
-              href="https://github.com/hlysine/logic-pad"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <FaGithub size={24} />
-            </a>
-          </div>
+          <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />
         </header>
         <Outlet />
       </>

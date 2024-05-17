@@ -3,6 +3,7 @@ import { useGrid } from '../GridContext';
 import { FiExternalLink } from 'react-icons/fi';
 import Difficulty from './Difficulty';
 import DocumentTitle from '../components/DocumentTitle';
+import Markdown from '../components/Markdown';
 
 export default memo(function Metadata() {
   const { metadata } = useGrid();
@@ -28,7 +29,7 @@ export default memo(function Metadata() {
           <FiExternalLink size={24} />
         </a>
       )}
-      <div>{metadata.description}</div>
+      <Markdown>{metadata.description}</Markdown>
     </div>
   );
 });

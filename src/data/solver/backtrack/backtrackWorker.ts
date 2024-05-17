@@ -11,10 +11,16 @@ import ConnectAllRule from '../../rules/connectAllRule';
 import RegionAreaRule, {
   instance as regionAreaInstance,
 } from '../../rules/regionAreaRule';
+import SameShapeRule, {
+  instance as sameShapeInstance,
+} from '../../rules/sameShapeRule';
 import SymbolsPerRegionRule, {
   instance as symbolsPerRegionInstance,
 } from '../../rules/symbolsPerRegionRule';
 import { instance as undercluedInstance } from '../../rules/undercluedRule';
+import UniqueShapeRule, {
+  instance as uniqueShapeInstance,
+} from '../../rules/uniqueShapeRule';
 import { Serializer } from '../../serializer/allSerializers';
 import AreaNumberSymbol, {
   instance as areaNumberInstance,
@@ -43,7 +49,9 @@ import BanPatternBTModule from './rules/banPattern';
 import CellCountBTModule from './rules/cellCount';
 import ConnectAllBTModule from './rules/connectAll';
 import RegionAreaBTModule from './rules/regionArea';
+import SameShapeBTModule from './rules/sameShape';
 import SymbolsPerRegionBTModule from './rules/symbolsPerRegion';
+import UniqueShapeBTModule from './rules/uniqueShape';
 import AreaNumberBTModule from './symbols/areaNumber';
 import DartBTModule from './symbols/dart';
 import DirectionLinkerBTModule from './symbols/directionLinker';
@@ -126,6 +134,10 @@ function translateToBTGridData(grid: GridData): BTGridData {
       );
     } else if (rule.id === cellCountInstance.id) {
       module = new CellCountBTModule(rule as CellCountRule);
+    } else if (rule.id === sameShapeInstance.id) {
+      module = new SameShapeBTModule(rule as SameShapeRule);
+    } else if (rule.id === uniqueShapeInstance.id) {
+      module = new UniqueShapeBTModule(rule as UniqueShapeRule);
     } else if (rule.id === undercluedInstance.id) {
       continue;
     }

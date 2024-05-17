@@ -3,8 +3,10 @@ import GridData from '../../grid';
 import { instance as banPatternInstance } from '../../rules/banPatternRule';
 import { instance as cellCountInstance } from '../../rules/cellCountRule';
 import { instance as regionAreaInstance } from '../../rules/regionAreaRule';
+import { instance as sameShapeInstance } from '../../rules/sameShapeRule';
 import { instance as symbolsPerRegionInstance } from '../../rules/symbolsPerRegionRule';
 import { instance as undercluedInstance } from '../../rules/undercluedRule';
+import { instance as uniqueShapeInstance } from '../../rules/uniqueShapeRule';
 import { Serializer } from '../../serializer/allSerializers';
 import { instance as areaNumberInstance } from '../../symbols/areaNumberSymbol';
 import { instance as dartInstance } from '../../symbols/dartSymbol';
@@ -34,6 +36,8 @@ export default class BacktrackSolver extends Solver {
     regionAreaInstance.id,
     symbolsPerRegionInstance.id,
     cellCountInstance.id,
+    sameShapeInstance.id,
+    uniqueShapeInstance.id,
   ];
 
   public readonly id = 'backtrack';
@@ -73,6 +77,6 @@ export default class BacktrackSolver extends Solver {
   }
 
   public isInstructionSupported(instructionId: string): boolean {
-    return BacktrackSolver.supportedInstrs.some(i => instructionId === i);
+    return BacktrackSolver.supportedInstrs.includes(instructionId);
   }
 }

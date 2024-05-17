@@ -1,4 +1,5 @@
 import GridData from '../../grid';
+import { Color } from '../../primitives';
 import { instance as undercluedInstance } from '../../rules/undercluedRule';
 import { Serializer } from '../../serializer/allSerializers';
 import Solver from '../solver';
@@ -24,6 +25,11 @@ export default class UndercluedSolver extends Solver {
         console.time('Solve time');
       });
       yield solved;
+      if (solved) {
+        if (solved.getTileCount(true, undefined, Color.Gray) === 0) {
+          yield null; // the grid is completely filled, which means the solution is unique
+        }
+      }
     } finally {
       worker.terminate();
     }

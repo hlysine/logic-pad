@@ -26,12 +26,15 @@ import AreaNumberSymbol, {
   instance as areaNumberInstance,
 } from '../../symbols/areaNumberSymbol';
 import DartSymbol, { instance as dartInstance } from '../../symbols/dartSymbol';
-import DirectionLinkerSymbol from '../../symbols/directionLinkerSymbol';
-import { instance as galaxyInstance } from '../../symbols/galaxySymbol';
+import GalaxySymbol, {
+  instance as galaxyInstance,
+} from '../../symbols/galaxySymbol';
 import LetterSymbol, {
   instance as letterInstance,
 } from '../../symbols/letterSymbol';
-import { instance as lotusInstance } from '../../symbols/lotusSymbol';
+import LotusSymbol, {
+  instance as lotusInstance,
+} from '../../symbols/lotusSymbol';
 import MinesweeperSymbol, {
   instance as minesweeperInstance,
 } from '../../symbols/minesweeperSymbol';
@@ -54,8 +57,9 @@ import SymbolsPerRegionBTModule from './rules/symbolsPerRegion';
 import UniqueShapeBTModule from './rules/uniqueShape';
 import AreaNumberBTModule from './symbols/areaNumber';
 import DartBTModule from './symbols/dart';
-import DirectionLinkerBTModule from './symbols/directionLinker';
+import GalaxyBTModule from './symbols/galaxy';
 import LetterBTModule from './symbols/letter';
+import LotusBTModule from './symbols/lotus';
 import MinesweeperBTModule from './symbols/minesweeper';
 import MyopiaBTModule from './symbols/myopia';
 import ViewpointBTModule from './symbols/viewpoint';
@@ -87,8 +91,10 @@ function translateToBTGridData(grid: GridData): BTGridData {
         module = new DartBTModule(symbol as DartSymbol);
       } else if (id === viewpointInstance.id) {
         module = new ViewpointBTModule(symbol as ViewpointSymbol);
-      } else if (id === galaxyInstance.id || id === lotusInstance.id) {
-        module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
+      } else if (id === galaxyInstance.id) {
+        module = new GalaxyBTModule(symbol as GalaxySymbol);
+      } else if (id === lotusInstance.id) {
+        module = new LotusBTModule(symbol as LotusSymbol);
       } else if (id === myopiaInstance.id) {
         module = new MyopiaBTModule(symbol as MyopiaSymbol);
       } else if (id === minesweeperInstance.id) {

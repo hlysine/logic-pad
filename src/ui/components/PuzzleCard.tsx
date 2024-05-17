@@ -33,10 +33,10 @@ export function getPuzzleType(grid: GridData) {
 
 export const puzzleTypeFilters = [
   { name: 'All', icon: HiOutlineViewGridAdd },
-  { name: 'Music', icon: FaMusic },
-  { name: 'Pattern', icon: PiCheckerboardFill },
-  { name: 'Underclued', icon: TbLayoutGridRemove },
   { name: 'Logic', icon: TbLayoutGrid },
+  { name: 'Underclued', icon: TbLayoutGridRemove },
+  { name: 'Pattern', icon: PiCheckerboardFill },
+  { name: 'Music', icon: FaMusic },
 ];
 
 export default memo(function PuzzleCard({

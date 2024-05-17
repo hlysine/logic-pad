@@ -1,8 +1,4 @@
-import GalaxySymbol, {
-  instance as galaxyInstance,
-} from '../../../symbols/galaxySymbol';
-import LotusSymbol from '../../../symbols/lotusSymbol';
-import { Orientation, Position } from '../../../primitives';
+import { Position } from '../../../primitives';
 import DirectionLinkerSymbol from '../../../symbols/directionLinkerSymbol';
 import BTModule, {
   BTGridData,
@@ -13,7 +9,7 @@ import BTModule, {
   createOneTileResult,
 } from '../data';
 
-export default class DirectionLinkerBTModule extends BTModule {
+export default abstract class DirectionLinkerBTModule extends BTModule {
   public instr: DirectionLinkerSymbol;
 
   public constructor(instr: DirectionLinkerSymbol) {
@@ -65,61 +61,9 @@ export default class DirectionLinkerBTModule extends BTModule {
     return { tilesNeedCheck, ratings };
   }
 
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
-  }
-
-  private movePos(grid: BTGridData, x: number, y: number): Position | null {
-    if (this.instr.id === galaxyInstance.id) {
-      return this.movePosGalaxy(grid, x, y);
-    } else {
-      return this.movePosLotus(grid, x, y);
-    }
-  }
-
-  // Translate a position in relative to a galaxy symbol
-  private movePosGalaxy(
+  protected abstract movePos(
     grid: BTGridData,
     x: number,
     y: number
-  ): Position | null {
-    const symbol = this.instr as GalaxySymbol;
-
-    const pos = { x: 2 * symbol.x - x, y: 2 * symbol.y - y };
-    return grid.isInBound(pos.x, pos.y) ? pos : null;
-  }
-
-  // Translate a position in relative to a lotus symbol
-  private movePosLotus(
-    grid: BTGridData,
-    x: number,
-    y: number
-  ): Position | null {
-    const symbol = this.instr as LotusSymbol;
-
-    let pos!: Position;
-    if (
-      symbol.orientation === Orientation.Up ||
-      symbol.orientation === Orientation.Down
-    ) {
-      pos = { x: 2 * symbol.x - x, y };
-    } else if (
-      symbol.orientation === Orientation.UpRight ||
-      symbol.orientation === Orientation.DownLeft
-    ) {
-      pos = { x: symbol.y + symbol.x - y, y: symbol.y + symbol.x - x };
-    } else if (
-      symbol.orientation === Orientation.Right ||
-      symbol.orientation === Orientation.Left
-    ) {
-      pos = { x, y: 2 * symbol.y - y };
-    } else if (
-      symbol.orientation === Orientation.DownRight ||
-      symbol.orientation === Orientation.UpLeft
-    ) {
-      pos = { x: symbol.x - symbol.y + y, y: symbol.y - symbol.x + x };
-    }
-
-    return grid.isInBound(pos.x, pos.y) ? pos : null;
-  }
+  ): Position | null;
 }

@@ -1,4 +1,3 @@
-import { Position } from '../../../primitives';
 import ViewpointSymbol from '../../../symbols/viewpointSymbol';
 import BTModule, {
   BTColor,
@@ -73,9 +72,5 @@ export default class ViewpointBTModule extends BTModule {
     if (possible < this.instr.number) return false;
 
     return { tilesNeedCheck, ratings };
-  }
-
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
   }
 }

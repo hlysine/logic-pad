@@ -1,43 +1,68 @@
-import { Color, Position } from '../../primitives';
 import GridData from '../../grid';
-import TileData from '../../tile';
 import { array } from '../../helper';
+import { Color, Position } from '../../primitives';
+import BanPatternRule, {
+  instance as banPatternInstance,
+} from '../../rules/banPatternRule';
+import CellCountRule, {
+  instance as cellCountInstance,
+} from '../../rules/cellCountRule';
+import ConnectAllRule from '../../rules/connectAllRule';
+import RegionAreaRule, {
+  instance as regionAreaInstance,
+} from '../../rules/regionAreaRule';
+import SameShapeRule, {
+  instance as sameShapeInstance,
+} from '../../rules/sameShapeRule';
+import SymbolsPerRegionRule, {
+  instance as symbolsPerRegionInstance,
+} from '../../rules/symbolsPerRegionRule';
+import { instance as undercluedInstance } from '../../rules/undercluedRule';
+import UniqueShapeRule, {
+  instance as uniqueShapeInstance,
+} from '../../rules/uniqueShapeRule';
+import { Serializer } from '../../serializer/allSerializers';
 import AreaNumberSymbol, {
   instance as areaNumberInstance,
 } from '../../symbols/areaNumberSymbol';
 import DartSymbol, { instance as dartInstance } from '../../symbols/dartSymbol';
-import ViewpointSymbol, {
-  instance as viewpointInstance,
-} from '../../symbols/viewpointSymbol';
-import { instance as galaxyInstance } from '../../symbols/galaxySymbol';
-import { instance as lotusInstance } from '../../symbols/lotusSymbol';
-import { instance as undercluedInstance } from '../../rules/undercluedRule';
-import ConnectAllRule from '../../rules/connectAllRule';
-import BTModule, { BTGridData, BTTile, IntArray2D, Rating } from './data';
-import AreaNumberBTModule from './symbols/areaNumber';
-import DirectionLinkerBTModule from './symbols/directionLinker';
-import DirectionLinkerSymbol from '../../symbols/directionLinkerSymbol';
-import DartBTModule from './symbols/dart';
-import ViewpointBTModule from './symbols/viewpoint';
-import { instance as connectAllInstance } from '../z3/modules/connectAllModule';
-import ConnectAllBTModule from './rules/connectAll';
-import BanPatternRule, {
-  instance as banPatternInstance,
-} from '../../rules/banPatternRule';
-import BanPatternBTModule from './rules/banPattern';
-import RegionAreaBTModule from './rules/regionArea';
-import RegionAreaRule, {
-  instance as regionAreaInstance,
-} from '../../rules/regionAreaRule';
-import MyopiaSymbol, {
-  instance as myopiaInstance,
-} from '../../symbols/myopiaSymbol';
-import MyopiaBTModule from './symbols/myopia';
-import { Serializer } from '../../serializer/allSerializers';
+import GalaxySymbol, {
+  instance as galaxyInstance,
+} from '../../symbols/galaxySymbol';
 import LetterSymbol, {
   instance as letterInstance,
 } from '../../symbols/letterSymbol';
+import LotusSymbol, {
+  instance as lotusInstance,
+} from '../../symbols/lotusSymbol';
+import MinesweeperSymbol, {
+  instance as minesweeperInstance,
+} from '../../symbols/minesweeperSymbol';
+import MyopiaSymbol, {
+  instance as myopiaInstance,
+} from '../../symbols/myopiaSymbol';
+import Symbol from '../../symbols/symbol';
+import ViewpointSymbol, {
+  instance as viewpointInstance,
+} from '../../symbols/viewpointSymbol';
+import TileData from '../../tile';
+import { instance as connectAllInstance } from '../z3/modules/connectAllModule';
+import BTModule, { BTGridData, BTTile, IntArray2D, Rating } from './data';
+import BanPatternBTModule from './rules/banPattern';
+import CellCountBTModule from './rules/cellCount';
+import ConnectAllBTModule from './rules/connectAll';
+import RegionAreaBTModule from './rules/regionArea';
+import SameShapeBTModule from './rules/sameShape';
+import SymbolsPerRegionBTModule from './rules/symbolsPerRegion';
+import UniqueShapeBTModule from './rules/uniqueShape';
+import AreaNumberBTModule from './symbols/areaNumber';
+import DartBTModule from './symbols/dart';
+import GalaxyBTModule from './symbols/galaxy';
 import LetterBTModule from './symbols/letter';
+import LotusBTModule from './symbols/lotus';
+import MinesweeperBTModule from './symbols/minesweeper';
+import MyopiaBTModule from './symbols/myopia';
+import ViewpointBTModule from './symbols/viewpoint';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -66,10 +91,14 @@ function translateToBTGridData(grid: GridData): BTGridData {
         module = new DartBTModule(symbol as DartSymbol);
       } else if (id === viewpointInstance.id) {
         module = new ViewpointBTModule(symbol as ViewpointSymbol);
-      } else if (id === galaxyInstance.id || id === lotusInstance.id) {
-        module = new DirectionLinkerBTModule(symbol as DirectionLinkerSymbol);
+      } else if (id === galaxyInstance.id) {
+        module = new GalaxyBTModule(symbol as GalaxySymbol);
+      } else if (id === lotusInstance.id) {
+        module = new LotusBTModule(symbol as LotusSymbol);
       } else if (id === myopiaInstance.id) {
         module = new MyopiaBTModule(symbol as MyopiaSymbol);
+      } else if (id === minesweeperInstance.id) {
+        module = new MinesweeperBTModule(symbol as MinesweeperSymbol);
       } else if (id === letterInstance.id) {
         continue;
       }
@@ -99,6 +128,22 @@ function translateToBTGridData(grid: GridData): BTGridData {
       module = new RegionAreaBTModule(rule as RegionAreaRule);
     } else if (rule.id === banPatternInstance.id) {
       module = new BanPatternBTModule(rule as BanPatternRule);
+    } else if (rule.id === symbolsPerRegionInstance.id) {
+      const allSymbols: Symbol[] = [];
+      grid.symbols.forEach(symbols => allSymbols.push(...symbols));
+
+      module = new SymbolsPerRegionBTModule(
+        rule as SymbolsPerRegionRule,
+        grid.width,
+        grid.height,
+        allSymbols
+      );
+    } else if (rule.id === cellCountInstance.id) {
+      module = new CellCountBTModule(rule as CellCountRule);
+    } else if (rule.id === sameShapeInstance.id) {
+      module = new SameShapeBTModule(rule as SameShapeRule);
+    } else if (rule.id === uniqueShapeInstance.id) {
+      module = new UniqueShapeBTModule(rule as UniqueShapeRule);
     } else if (rule.id === undercluedInstance.id) {
       continue;
     }
@@ -209,20 +254,11 @@ function backtrack(
   // Found a solution
   if (!pos) return !solutionFn(grid.clone());
 
-  // TODO: Use a better method to determine the order
+  for (let i = 0; i <= 1; i++) {
+    // TODO: Use a better method to determine the order
+    const tile = i === 0 ? BTTile.Light : BTTile.Dark;
 
-  {
-    grid.setTileWithConnection(pos.x, pos.y, BTTile.Light);
-
-    const places = grid.connections[pos.y][pos.x];
-    const result = isValid(grid, places, checkable, ratings);
-
-    if (result && backtrack(grid, result[0], result[1], solutionFn))
-      return true;
-  }
-
-  {
-    grid.setTileWithConnection(pos.x, pos.y, BTTile.Dark);
+    grid.setTileWithConnection(pos.x, pos.y, tile);
 
     const places = grid.connections[pos.y][pos.x];
     const result = isValid(grid, places, checkable, ratings);

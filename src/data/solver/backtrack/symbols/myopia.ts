@@ -1,5 +1,5 @@
 import { move } from '../../../helper';
-import { ORIENTATIONS, Orientation, Position } from '../../../primitives';
+import { ORIENTATIONS, Orientation } from '../../../primitives';
 import MyopiaSymbol from '../../../symbols/myopiaSymbol';
 import BTModule, {
   BTColor,
@@ -104,9 +104,5 @@ export default class MyopiaBTModule extends BTModule {
       return false;
 
     return { tilesNeedCheck: null, ratings: null };
-  }
-
-  public checkLocal(grid: BTGridData, _: Position[]): CheckResult | false {
-    return this.checkGlobal(grid);
   }
 }

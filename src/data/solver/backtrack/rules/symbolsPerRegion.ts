@@ -1,5 +1,6 @@
 import { Position } from '../../../primitives';
-import RegionAreaRule from '../../../rules/regionAreaRule';
+import SymbolsPerRegionRule from '../../../rules/symbolsPerRegionRule';
+import Symbol from '../../../symbols/symbol';
 import BTModule, {
   BTGridData,
   BTTile,
@@ -8,12 +9,32 @@ import BTModule, {
   colorToBTTile,
 } from '../data';
 
-export default class RegionAreaBTModule extends BTModule {
-  public instr: RegionAreaRule;
+export default class SymbolsPerRegionBTModule extends BTModule {
+  public instr: SymbolsPerRegionRule;
 
-  public constructor(instr: RegionAreaRule) {
+  private symbolCount: IntArray2D;
+
+  public constructor(
+    instr: SymbolsPerRegionRule,
+    width: number,
+    height: number,
+    allSymbols: Symbol[]
+  ) {
     super();
     this.instr = instr;
+
+    this.symbolCount = IntArray2D.create(width, height);
+
+    for (const symbol of allSymbols) {
+      const symbolX = Math.floor(symbol.x);
+      const symbolY = Math.floor(symbol.y);
+
+      this.symbolCount.set(
+        symbolX,
+        symbolY,
+        this.symbolCount.get(symbolX, symbolY) + 1
+      );
+    }
   }
 
   public checkGlobal(grid: BTGridData): CheckResult | false {
@@ -48,15 +69,16 @@ export default class RegionAreaBTModule extends BTModule {
     const sameTileQueue: Position[] = [pos];
     const usableTileQueue: Position[] = [];
 
-    let sameCellCount = 0;
-    let usableCellCount = 0;
+    let completed = 0;
+    let possible = 0;
 
     visited.set(pos.x, pos.y, id);
 
     // Count same tile
     while (sameTileQueue.length > 0) {
       const curPos = sameTileQueue.pop()!;
-      sameCellCount += 1;
+
+      completed += this.symbolCount.get(curPos.x, curPos.y);
 
       for (const edge of grid.getEdges(curPos)) {
         if ((visited.get(edge.x, edge.y) & 0b01111111) === id) continue;
@@ -73,14 +95,15 @@ export default class RegionAreaBTModule extends BTModule {
       }
     }
 
-    if (sameCellCount > this.instr.size) return false;
+    if (completed > this.instr.count) return false;
 
     // Count usable tile
     while (usableTileQueue.length > 0) {
       const curPos = usableTileQueue.pop()!;
-      usableCellCount += 1;
 
-      if (sameCellCount + usableCellCount >= this.instr.size) return true;
+      possible += this.symbolCount.get(curPos.x, curPos.y);
+
+      if (completed + possible >= this.instr.count) return true;
 
       for (const edge of grid.getEdges(curPos)) {
         if ((visited.get(edge.x, edge.y) & 0b01111111) === id) continue;
@@ -94,6 +117,6 @@ export default class RegionAreaBTModule extends BTModule {
       }
     }
 
-    return sameCellCount + usableCellCount >= this.instr.size;
+    return completed + possible >= this.instr.count;
   }
 }

@@ -1,5 +1,6 @@
 # 18/5/2024
 
+- Fixed incorrect rendering of the thumbnail grid of ban pattern rule
 - Added "at least/at most" options to symbols per area rule
 - Added a confirmation message when leaving the puzzle editor
 - Clicking the site icon now brings you back to the front page

@@ -61,14 +61,14 @@ export default memo(function PuzzleCard({
   return (
     <Link
       className={cn(
-        'btn shadow-md bg-base-100/40 text-base-content inline-flex gap-4 h-fit min-h-0',
+        'btn shadow-md bg-base-100/40 text-base-content inline-flex h-fit min-h-0 max-w-full',
         className
       )}
       to={link}
     >
-      <Icon size={48} />
+      <Icon size={48} className="m-4" />
       <div className="flex flex-col gap-2 p-4">
-        <h2 className="card-title">{metadata.title}</h2>
+        <h2 className="card-title text-wrap">{metadata.title}</h2>
         <div className="text-left">{metadata.author}</div>
         <Difficulty value={metadata.difficulty} size="sm" />
       </div>

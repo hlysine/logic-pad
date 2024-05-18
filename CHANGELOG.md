@@ -1,5 +1,6 @@
 # 18/5/2024
 
+- Added "at least/at most" options to symbols per area rule
 - Added a confirmation message when leaving the puzzle editor
 - Clicking the site icon now brings you back to the front page
 - Fixed front page colors in different themes

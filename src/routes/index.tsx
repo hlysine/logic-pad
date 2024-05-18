@@ -85,7 +85,7 @@ export const Route = createFileRoute('/')({
         </div>
         <div
           ref={curatedPuzzles}
-          className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8"
+          className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 min-h-dvh"
         >
           <div className="flex justify-between items-start flex-wrap">
             <h3 className="text-2xl lg:text-4xl">Curated Puzzles</h3>

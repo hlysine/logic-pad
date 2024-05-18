@@ -1,4 +1,4 @@
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { memo, useRef, useState } from 'react';
 import QuickAccessBar from '../ui/components/QuickAccessBar';
 import Grid from '../ui/grid/Grid';
@@ -6,6 +6,7 @@ import GridData from '../data/grid';
 import GridConnections from '../data/gridConnections';
 import CuratedPuzzles from '../ui/components/CuratedPuzzles';
 import { puzzleTypeFilters } from '../ui/components/PuzzleCard';
+import { defaultGrid, useGrid } from '../ui/GridContext';
 
 const grid = GridData.create([
   '.nwww',
@@ -20,6 +21,8 @@ const grid = GridData.create([
 export const Route = createFileRoute('/')({
   component: memo(function Home() {
     const curatedPuzzles = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
+    const { setGrid, setMetadata } = useGrid();
     const [filter, setFilter] = useState<string>('All');
     return (
       <>
@@ -48,12 +51,23 @@ export const Route = createFileRoute('/')({
                   A modern, open-source web app for grid-based puzzles.
                 </span>
                 <div className="flex flex-wrap gap-4 items-center mt-4">
-                  <Link
-                    to="/create"
+                  <button
+                    type="button"
                     className="btn btn-md lg:btn-lg btn-accent"
+                    onClick={async () => {
+                      setGrid(defaultGrid, null);
+                      setMetadata({
+                        title: '',
+                        author: '',
+                        link: '',
+                        description: '',
+                        difficulty: 1,
+                      });
+                      await navigate({ to: '/create' });
+                    }}
                   >
                     Create your own puzzle
-                  </Link>
+                  </button>
                   <button
                     type="button"
                     className="btn btn-md lg:btn-lg btn-accent btn-outline"

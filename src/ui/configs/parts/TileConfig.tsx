@@ -43,12 +43,12 @@ export default memo(function TileConfig({
               // target is Color.Gray if the tile is already the target color
               setConfig?.(
                 config.field,
-                grid.floodFillAll(Color.Gray, tile.color)
+                grid.floodFillAll(Color.Gray, tile.color, false)
               );
             } else if (flood && !tile.fixed) {
               setConfig?.(
                 config.field,
-                grid.floodFill({ x, y }, Color.Gray, target)
+                grid.floodFill({ x, y }, Color.Gray, target, false)
               );
             } else if (!tile.fixed) {
               setConfig?.(

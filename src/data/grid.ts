@@ -696,13 +696,19 @@ export default class GridData {
    * @param position The position to start the flood fill from.
    * @param from The color of the tiles to fill.
    * @param to The color to fill the tiles with.
+   * @param allowFixed Whether to fill fixed tiles.
    * @returns The new grid with the region filled with the new color.
    */
-  public floodFill(position: Position, from: Color, to: Color): GridData {
+  public floodFill(
+    position: Position,
+    from: Color,
+    to: Color,
+    allowFixed: boolean
+  ): GridData {
     const tiles = array(this.width, this.height, (x, y) => this.getTile(x, y));
     this.iterateArea(
       position,
-      t => t.color === from,
+      t => t.color === from && (allowFixed || !t.fixed),
       (tile, x, y) => {
         tiles[y][x] = tile.withColor(to);
       }
@@ -715,12 +721,17 @@ export default class GridData {
    *
    * @param from The color of the tiles to fill.
    * @param to The color to fill the tiles with.
+   * @param allowFixed Whether to fill fixed tiles.
    * @returns The new grid with all tiles filled with the new color.
    */
-  public floodFillAll(from: Color, to: Color): GridData {
+  public floodFillAll(from: Color, to: Color, allowFixed: boolean): GridData {
     return this.copyWith({
       tiles: this.tiles.map(row =>
-        row.map(tile => (tile.color === from ? tile.withColor(to) : tile))
+        row.map(tile =>
+          tile.color === from && (allowFixed || !tile.fixed)
+            ? tile.withColor(to)
+            : tile
+        )
       ),
     });
   }

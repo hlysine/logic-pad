@@ -13,9 +13,9 @@ export default function handleTileClick(
     const tile = grid.getTile(x, y);
     if (flood && target === Color.Gray) {
       // target is Color.Gray if the tile is already the target color
-      setGrid(grid.floodFillAll(Color.Gray, tile.color));
+      setGrid(grid.floodFillAll(Color.Gray, tile.color, true));
     } else if (flood) {
-      setGrid(grid.floodFill({ x, y }, tile.color, target));
+      setGrid(grid.floodFill({ x, y }, tile.color, target, true));
     } else {
       setGrid(grid.setTile(x, y, t => t.withColor(target)));
     }
@@ -23,9 +23,9 @@ export default function handleTileClick(
     const tile = grid.getTile(x, y);
     if (flood && target === Color.Gray) {
       // target is Color.Gray if the tile is already the target color
-      setGrid(grid.floodFillAll(Color.Gray, tile.color));
+      setGrid(grid.floodFillAll(Color.Gray, tile.color, false));
     } else if (flood && !tile.fixed) {
-      setGrid(grid.floodFill({ x, y }, Color.Gray, target));
+      setGrid(grid.floodFill({ x, y }, Color.Gray, target, false));
     } else if (!tile.fixed) {
       setGrid(grid.setTile(x, y, t => t.withColor(target)));
     }

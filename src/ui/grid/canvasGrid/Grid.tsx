@@ -74,6 +74,8 @@ export default memo(function Grid({
         if (
           prevData.current?.colorInfo === colorInfo &&
           prevData.current?.size === size &&
+          prevData.current?.grid.width === grid.width &&
+          prevData.current?.grid.height === grid.height &&
           oldTile?.equals(tile) &&
           prevData.current?.connections[y]?.[x]?.equals(tileConnections[y][x])
         )
@@ -83,7 +85,12 @@ export default memo(function Grid({
         renderTile(ctx, x, y, size, tile, tileConnections[y][x], colorInfo);
       }
     }
-    prevData.current = { grid, connections: tileConnections, size, colorInfo };
+    prevData.current = {
+      grid,
+      connections: tileConnections,
+      size,
+      colorInfo,
+    };
   }, [grid, size, canvasCtx, colorInfo, tileConnections]);
 
   return (

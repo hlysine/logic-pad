@@ -7,6 +7,7 @@ import GridConnections from '../data/gridConnections';
 import CuratedPuzzles from '../ui/components/CuratedPuzzles';
 import { puzzleTypeFilters } from '../ui/components/PuzzleCard';
 import { defaultGrid, useGrid } from '../ui/GridContext';
+import Changelog from '../ui/components/Changelog';
 
 const grid = GridData.create([
   '.nwww',
@@ -80,19 +81,7 @@ export const Route = createFileRoute('/')({
                     Check out some examples
                   </button>
                 </div>
-                {/* <button className="btn btn-ghost mt-16 flex flex-col flex-nowrap justify-center items-stretch gap-8 text-left p-4 h-fit border-y border-x-0 border-accent">
-                  <div className="flex gap-4 items-center flex-wrap">
-                    <GrNew size={24} className="text-accent" />
-                    <h3 className="font-bold text-xl">New updates</h3>
-                    <span>17/5/2024</span>
-                    <div className="flex-1"></div>
-                    <span className="opacity-70">View changelog &gt;&gt;</span>
-                  </div>
-                  <Markdown>{dedent`
-                  - Added landing page
-                  - Added landing page
-                `}</Markdown>
-                </button> */}
+                <Changelog />
               </div>
             </div>
           </div>

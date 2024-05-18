@@ -12,7 +12,10 @@ export default memo(function Markdown({
 }: MarkdownProps) {
   return (
     <div
-      className={cn('[&_li]:list-disc [&_li]:ms-4 leading-normal', className)}
+      className={cn(
+        '[&_li]:list-disc [&_li]:ms-5 leading-normal [&_h1]:text-lg [&_h1]:font-semibold [&_h1]:mt-4 [&_h1]:mb-2',
+        className
+      )}
     >
       <Remark {...remarkProps} />
     </div>

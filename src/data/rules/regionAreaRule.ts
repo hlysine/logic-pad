@@ -80,7 +80,6 @@ export default class RegionAreaRule extends Rule {
   private static readonly SEARCH_VARIANTS = [
     new RegionAreaRule(Color.Dark, 2).searchVariant(),
     new RegionAreaRule(Color.Light, 2).searchVariant(),
-    new RegionAreaRule(Color.Gray, 2).searchVariant(),
   ];
 
   /**

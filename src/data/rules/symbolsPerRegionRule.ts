@@ -49,12 +49,15 @@ export default class SymbolsPerRegionRule extends Rule {
 
   private static readonly SEARCH_VARIANTS = [
     new SymbolsPerRegionRule(Color.Light, 1).searchVariant(),
+    new SymbolsPerRegionRule(Color.Dark, 1).searchVariant(),
     new SymbolsPerRegionRule(
       Color.Light,
       1,
       Comparison.AtLeast
     ).searchVariant(),
+    new SymbolsPerRegionRule(Color.Dark, 1, Comparison.AtLeast).searchVariant(),
     new SymbolsPerRegionRule(Color.Light, 1, Comparison.AtMost).searchVariant(),
+    new SymbolsPerRegionRule(Color.Dark, 1, Comparison.AtMost).searchVariant(),
   ];
 
   /**

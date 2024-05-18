@@ -1,4 +1,8 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useBlocker,
+  useNavigate,
+} from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader, {
   SolutionHandling,
@@ -7,6 +11,7 @@ import useLinkLoader, {
 import PuzzleEditor from '../ui/editor/PuzzleEditor';
 import { IoWarningOutline } from 'react-icons/io5';
 import ShareButton from '../ui/components/ShareButton';
+import { defaultGrid, useGrid } from '../ui/GridContext';
 
 export const Route = createFileRoute('/_layout/create')({
   validateSearch,
@@ -17,6 +22,11 @@ export const Route = createFileRoute('/_layout/create')({
       cleanUrl: true,
       solutionHandling: SolutionHandling.Remove,
     });
+    const { grid } = useGrid();
+    useBlocker(
+      () => window.confirm('Are you sure you want to leave?'),
+      !params.d && !grid.equals(defaultGrid)
+    );
 
     return (
       <PuzzleEditor>

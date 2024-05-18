@@ -23,7 +23,7 @@ export const Route = createFileRoute('/')({
     const [filter, setFilter] = useState<string>('All');
     return (
       <>
-        <div className="flex flex-col xl:h-dvh shrink-0">
+        <div className="flex flex-col min-h-dvh shrink-0">
           <QuickAccessBar className="justify-end px-8 py-2" />
           <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
             <div className="relative order-1 grow shrink self-stretch overflow-visible pointer-events-none -z-10 min-h-64 m-16">
@@ -41,22 +41,22 @@ export const Route = createFileRoute('/')({
                 <img src="/logo.svg" className="absolute inset-0" />
               </div>
               <div className="flex flex-col gap-4">
-                <span className="text-accent text-4xl xl:text-6xl font-medium">
+                <span className="text-accent text-4xl lg:text-6xl font-medium">
                   Logic Pad
                 </span>
-                <span className="text-xl xl:text-2xl">
+                <span className="text-xl lg:text-2xl">
                   A modern, open-source web app for grid-based puzzles.
                 </span>
                 <div className="flex flex-wrap gap-4 items-center mt-4">
                   <Link
                     to="/create"
-                    className="btn btn-md xl:btn-lg btn-accent"
+                    className="btn btn-md lg:btn-lg btn-accent"
                   >
                     Create your own puzzle
                   </Link>
                   <button
                     type="button"
-                    className="btn btn-md xl:btn-lg btn-accent btn-outline"
+                    className="btn btn-md lg:btn-lg btn-accent btn-outline"
                     onClick={() =>
                       curatedPuzzles.current?.scrollIntoView({
                         behavior: 'smooth',
@@ -87,9 +87,9 @@ export const Route = createFileRoute('/')({
           ref={curatedPuzzles}
           className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8"
         >
-          <div className="flex justify-between items-center">
-            <h3 className="text-2xl xl:text-4xl">Curated Puzzles</h3>
-            <ul className="menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+          <div className="flex justify-between items-start flex-wrap">
+            <h3 className="text-2xl lg:text-4xl">Curated Puzzles</h3>
+            <ul className="menu menu-vertical md:menu-horizontal bg-base-200/50 text-base-content rounded-box">
               {puzzleTypeFilters.map(({ name, icon: Icon }) => (
                 <li key={name}>
                   <a

@@ -52,7 +52,7 @@ export default memo(function CuratedPuzzles({ filter }: CuratedPuzzlesProps) {
   }, [puzzles, filter]);
   return filteredPuzzles.map(({ puzzle, link }) => (
     <PuzzleCard
-      className="min-w-64 transition-all hover:scale-105 hover:rotate-3"
+      className="min-w-64 transition-all hover:scale-105 hover:rotate-3 hover:shadow-xl"
       key={puzzle.title}
       grid={puzzle.grid}
       metadata={puzzle}

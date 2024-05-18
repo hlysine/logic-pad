@@ -1,7 +1,7 @@
 import Rule, { SearchVariant } from './rule';
 import GridData from '../grid';
 import { AnyConfig, ConfigType } from '../config';
-import { Color, Position, RuleState, State } from '../primitives';
+import { Color, Comparison, Position, RuleState, State } from '../primitives';
 import { array } from '../helper';
 import LetterSymbol from '../symbols/letterSymbol';
 import Symbol from '../symbols/symbol';
@@ -32,6 +32,13 @@ export default class SymbolsPerRegionRule extends Rule {
       configurable: true,
       allowGray: true,
     },
+    {
+      type: ConfigType.Comparison,
+      default: Comparison.Equal,
+      field: 'comparison',
+      description: 'Comparison',
+      configurable: true,
+    },
   ]);
 
   private static readonly EXAMPLE_GRIDS = {
@@ -42,6 +49,12 @@ export default class SymbolsPerRegionRule extends Rule {
 
   private static readonly SEARCH_VARIANTS = [
     new SymbolsPerRegionRule(Color.Light, 1).searchVariant(),
+    new SymbolsPerRegionRule(
+      Color.Light,
+      1,
+      Comparison.AtLeast
+    ).searchVariant(),
+    new SymbolsPerRegionRule(Color.Light, 1, Comparison.AtMost).searchVariant(),
   ];
 
   /**
@@ -49,14 +62,17 @@ export default class SymbolsPerRegionRule extends Rule {
    *
    * @param color - Color of the region affected by the rule
    * @param count - Number of symbols to have in each region
+   * @param comparison - Comparison to use when checking the number of symbols
    */
   public constructor(
     public readonly color: Color,
-    public readonly count: number
+    public readonly count: number,
+    public readonly comparison: Comparison = Comparison.Equal
   ) {
     super();
     this.color = color;
     this.count = count;
+    this.comparison = comparison;
   }
 
   public get id(): string {
@@ -64,7 +80,14 @@ export default class SymbolsPerRegionRule extends Rule {
   }
 
   public get explanation(): string {
-    return `Exactly ${this.count} symbol${this.count === 1 ? '' : 's'} per ${this.color} area`;
+    switch (this.comparison) {
+      case Comparison.AtLeast:
+        return `At least ${this.count} symbol${this.count === 1 ? '' : 's'} per ${this.color} area`;
+      case Comparison.AtMost:
+        return `At most ${this.count} symbol${this.count === 1 ? '' : 's'} per ${this.color} area`;
+      default:
+        return `Exactly ${this.count} symbol${this.count === 1 ? '' : 's'} per ${this.color} area`;
+    }
   }
 
   public get configs(): readonly AnyConfig[] | null {
@@ -72,10 +95,25 @@ export default class SymbolsPerRegionRule extends Rule {
   }
 
   public createExampleGrid(): GridData {
-    if (this.count > SymbolsPerRegionRule.SYMBOL_POSITIONS.length) {
-      const symbol = new LetterSymbol(1.5, 1.5, `${this.count}X`);
+    if (
+      this.count > SymbolsPerRegionRule.SYMBOL_POSITIONS.length ||
+      this.comparison !== Comparison.Equal
+    ) {
+      let description = '';
+      switch (this.comparison) {
+        case Comparison.AtLeast:
+          description = `≥${this.count}X`;
+          break;
+        case Comparison.AtMost:
+          description = `≤${this.count}X`;
+          break;
+        default:
+          description = `${this.count}X`;
+          break;
+      }
+      const symbol = new LetterSymbol(1.5, 1.5, description);
       return SymbolsPerRegionRule.EXAMPLE_GRIDS[this.color]
-        .copyWith({ symbols: new Map([['letter', [symbol]]]) })
+        .addSymbol(symbol)
         .withConnections(
           GridConnections.create(['.....', '.aa..', '.aa..', '.....'])
         );
@@ -85,9 +123,7 @@ export default class SymbolsPerRegionRule extends Rule {
       const { x, y } = SymbolsPerRegionRule.SYMBOL_POSITIONS[i];
       symbols.push(new LetterSymbol(x, y, 'X'));
     }
-    return SymbolsPerRegionRule.EXAMPLE_GRIDS[this.color].copyWith({
-      symbols: new Map([['letter', symbols]]),
-    });
+    return SymbolsPerRegionRule.EXAMPLE_GRIDS[this.color].withSymbols(symbols);
   }
 
   public get searchVariants(): SearchVariant[] {
@@ -121,7 +157,7 @@ export default class SymbolsPerRegionRule extends Rule {
           );
         }
       );
-      if (nbSymbolsIn > this.count) {
+      if (this.comparison !== Comparison.AtLeast && nbSymbolsIn > this.count) {
         return { state: State.Error, positions: completed };
       }
       let nbSymbolsOut = 0;
@@ -142,7 +178,7 @@ export default class SymbolsPerRegionRule extends Rule {
           }
         );
       }
-      if (nbSymbolsOut < this.count) {
+      if (this.comparison !== Comparison.AtMost && nbSymbolsOut < this.count) {
         return { state: State.Error, positions: gray };
       }
       if (gray.length !== completed.length) {
@@ -152,10 +188,19 @@ export default class SymbolsPerRegionRule extends Rule {
     return complete ? { state: State.Satisfied } : { state: State.Incomplete };
   }
 
-  public copyWith({ count, color }: { count?: number; color?: Color }): this {
+  public copyWith({
+    count,
+    color,
+    comparison,
+  }: {
+    count?: number;
+    color?: Color;
+    comparison?: Comparison;
+  }): this {
     return new SymbolsPerRegionRule(
       color ?? this.color,
-      count ?? this.count
+      count ?? this.count,
+      comparison ?? this.comparison
     ) as this;
   }
 
@@ -165,6 +210,10 @@ export default class SymbolsPerRegionRule extends Rule {
 
   public withCount(count: number): this {
     return this.copyWith({ count });
+  }
+
+  public withComparison(comparison: Comparison): this {
+    return this.copyWith({ comparison });
   }
 
   private static countAllSymbolsOfPosition(

@@ -1,6 +1,7 @@
 import GridData from './grid';
 import {
   Color,
+  Comparison,
   DIRECTIONS,
   Direction,
   DirectionToggle,
@@ -17,6 +18,7 @@ export enum ConfigType {
   NullableNumber = 'nullableNumber',
   String = 'string',
   Color = 'color',
+  Comparison = 'comparison',
   Direction = 'direction',
   DirectionToggle = 'directionToggle',
   Orientation = 'orientation',
@@ -70,6 +72,10 @@ export interface ColorConfig extends Config<Color> {
   readonly allowGray: boolean;
 }
 
+export interface ComparisonConfig extends Config<Comparison> {
+  readonly type: ConfigType.Comparison;
+}
+
 export interface DirectionConfig extends Config<Direction> {
   readonly type: ConfigType.Direction;
 }
@@ -119,6 +125,7 @@ export type AnyConfig =
   | NullableNumberConfig
   | StringConfig
   | ColorConfig
+  | ComparisonConfig
   | DirectionConfig
   | DirectionToggleConfig
   | OrientationConfig

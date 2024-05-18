@@ -7,6 +7,7 @@ import Instruction from '../instruction';
 import { AnyConfig, ConfigType } from '../config';
 import {
   Color,
+  Comparison,
   DIRECTIONS,
   Direction,
   DirectionToggle,
@@ -121,6 +122,7 @@ export default class SerializerV0 extends SerializerBase {
         );
       case ConfigType.Number:
       case ConfigType.Color:
+      case ConfigType.Comparison:
       case ConfigType.Direction:
       case ConfigType.Orientation:
         return (
@@ -255,6 +257,8 @@ export default class SerializerV0 extends SerializerBase {
         return [config.field, value === '' ? null : Number(value)];
       case ConfigType.Color:
         return [config.field, value as Color];
+      case ConfigType.Comparison:
+        return [config.field, value as Comparison];
       case ConfigType.Direction:
         return [config.field, value as Direction];
       case ConfigType.DirectionToggle: {

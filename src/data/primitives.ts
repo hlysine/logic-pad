@@ -40,6 +40,18 @@ export enum Color {
   Gray = 'gray',
 }
 
+export enum Comparison {
+  Equal = 'eq',
+  AtLeast = 'ge',
+  AtMost = 'le',
+}
+
+export const COMPARISONS: readonly Comparison[] = [
+  Comparison.Equal,
+  Comparison.AtLeast,
+  Comparison.AtMost,
+];
+
 export enum Direction {
   Up = 'up',
   Down = 'down',

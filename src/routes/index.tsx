@@ -92,11 +92,11 @@ export const Route = createFileRoute('/')({
         >
           <div className="flex justify-between items-start flex-wrap">
             <h3 className="text-2xl lg:text-4xl">Curated Puzzles</h3>
-            <ul className="menu menu-vertical md:menu-horizontal bg-base-200/50 text-base-content rounded-box">
+            <ul className="menu menu-vertical md:menu-horizontal bg-base-100/15 text-neutral-content rounded-box">
               {puzzleTypeFilters.map(({ name, icon: Icon }) => (
                 <li key={name}>
                   <a
-                    className={name === filter ? 'bg-base-300' : ''}
+                    className={name === filter ? 'bg-base-300/20' : ''}
                     onClick={() => setFilter(name)}
                   >
                     <Icon />

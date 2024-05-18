@@ -61,7 +61,7 @@ export default memo(function PuzzleCard({
   return (
     <Link
       className={cn(
-        'btn shadow-md bg-base-100/40 text-base-content inline-flex h-fit min-h-0 max-w-full',
+        'btn shadow-md bg-base-100/15 hover:bg-base-300/15 text-neutral-content inline-flex h-fit min-h-0 max-w-full',
         className
       )}
       to={link}

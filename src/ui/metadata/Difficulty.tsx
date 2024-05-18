@@ -37,9 +37,13 @@ export default memo(function Difficulty({
           type="radio"
           name="rating-8"
           className={cn(
-            'mask mask-circle scale-75 bg-accent',
-            !readonly && i >= 5 && 'mask-star-2 scale-105',
-            readonly && value > 5 && 'mask-star-2 scale-105',
+            'mask mask-circle bg-accent scale-[0.8]',
+            !readonly &&
+              i >= 5 &&
+              'mask-star-2 scale-105 relative -top-[0.1rem]',
+            readonly &&
+              value > 5 &&
+              'mask-star-2 scale-105 relative -top-[0.1rem]',
             readonly && 'pointer-events-none',
             readonly && i > (value - 1) % 5 && 'opacity-0'
           )}

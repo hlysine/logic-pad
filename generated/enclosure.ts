@@ -16,7 +16,9 @@ import {
 } from '../src/data/helper';
 import Instruction from '../src/data/instruction';
 import {
+  COMPARISONS,
   Color,
+  Comparison,
   DIRECTIONS,
   Direction,
   Mode,
@@ -84,11 +86,20 @@ import BTModule, {
 import AreaNumberBTModule from '../src/data/solver/backtrack/symbols/areaNumber';
 import DartBTModule from '../src/data/solver/backtrack/symbols/dart';
 import DirectionLinkerBTModule from '../src/data/solver/backtrack/symbols/directionLinker';
+import GalaxyBTModule from '../src/data/solver/backtrack/symbols/galaxy';
+import LetterBTModule from '../src/data/solver/backtrack/symbols/letter';
+import LotusBTModule from '../src/data/solver/backtrack/symbols/lotus';
+import MinesweeperBTModule from '../src/data/solver/backtrack/symbols/minesweeper';
 import MyopiaBTModule from '../src/data/solver/backtrack/symbols/myopia';
 import ViewpointBTModule from '../src/data/solver/backtrack/symbols/viewpoint';
 import BanPatternBTModule from '../src/data/solver/backtrack/rules/banPattern';
+import CellCountBTModule from '../src/data/solver/backtrack/rules/cellCount';
 import ConnectAllBTModule from '../src/data/solver/backtrack/rules/connectAll';
 import RegionAreaBTModule from '../src/data/solver/backtrack/rules/regionArea';
+import RegionShapeBTModule from '../src/data/solver/backtrack/rules/regionShape';
+import SameShapeBTModule from '../src/data/solver/backtrack/rules/sameShape';
+import SymbolsPerRegionBTModule from '../src/data/solver/backtrack/rules/symbolsPerRegion';
+import UniqueShapeBTModule from '../src/data/solver/backtrack/rules/uniqueShape';
 import { Serializer } from '../src/data/serializer/allSerializers';
 import SerializerBase from '../src/data/serializer/serializerBase';
 import SerializerV0 from '../src/data/serializer/serializer_v0';
@@ -102,6 +113,7 @@ import CellCountRule from '../src/data/rules/cellCountRule';
 import CompletePatternRule from '../src/data/rules/completePatternRule';
 import ConnectAllRule from '../src/data/rules/connectAllRule';
 import CustomRule from '../src/data/rules/customRule';
+import ForesightRule from '../src/data/rules/foresightRule';
 import { allRules } from '../src/data/rules/index';
 import { ControlLine, Row } from '../src/data/rules/musicControlLine';
 import MusicGridRule from '../src/data/rules/musicGridRule';
@@ -117,6 +129,7 @@ import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
 import { isEventHandler } from '../src/data/events/helper';
 import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
 import { handlesGridChange } from '../src/data/events/onGridChange';
+import { handlesGridResize } from '../src/data/events/onGridResize';
 import { handlesSetGrid } from '../src/data/events/onSetGrid';
 import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
 
@@ -137,7 +150,9 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'resize', value: resize },
   { name: 'unescape', value: unescape },
   { name: 'Instruction', value: Instruction },
+  { name: 'COMPARISONS', value: COMPARISONS },
   { name: 'Color', value: Color },
+  { name: 'Comparison', value: Comparison },
   { name: 'DIRECTIONS', value: DIRECTIONS },
   { name: 'Direction', value: Direction },
   { name: 'Mode', value: Mode },
@@ -201,11 +216,20 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'AreaNumberBTModule', value: AreaNumberBTModule },
   { name: 'DartBTModule', value: DartBTModule },
   { name: 'DirectionLinkerBTModule', value: DirectionLinkerBTModule },
+  { name: 'GalaxyBTModule', value: GalaxyBTModule },
+  { name: 'LetterBTModule', value: LetterBTModule },
+  { name: 'LotusBTModule', value: LotusBTModule },
+  { name: 'MinesweeperBTModule', value: MinesweeperBTModule },
   { name: 'MyopiaBTModule', value: MyopiaBTModule },
   { name: 'ViewpointBTModule', value: ViewpointBTModule },
   { name: 'BanPatternBTModule', value: BanPatternBTModule },
+  { name: 'CellCountBTModule', value: CellCountBTModule },
   { name: 'ConnectAllBTModule', value: ConnectAllBTModule },
   { name: 'RegionAreaBTModule', value: RegionAreaBTModule },
+  { name: 'RegionShapeBTModule', value: RegionShapeBTModule },
+  { name: 'SameShapeBTModule', value: SameShapeBTModule },
+  { name: 'SymbolsPerRegionBTModule', value: SymbolsPerRegionBTModule },
+  { name: 'UniqueShapeBTModule', value: UniqueShapeBTModule },
   { name: 'Serializer', value: Serializer },
   { name: 'SerializerBase', value: SerializerBase },
   { name: 'SerializerV0', value: SerializerV0 },
@@ -219,6 +243,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'CompletePatternRule', value: CompletePatternRule },
   { name: 'ConnectAllRule', value: ConnectAllRule },
   { name: 'CustomRule', value: CustomRule },
+  { name: 'ForesightRule', value: ForesightRule },
   { name: 'allRules', value: allRules },
   { name: 'ControlLine', value: ControlLine },
   { name: 'Row', value: Row },
@@ -235,6 +260,7 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'isEventHandler', value: isEventHandler },
   { name: 'handlesFinalValidation', value: handlesFinalValidation },
   { name: 'handlesGridChange', value: handlesGridChange },
+  { name: 'handlesGridResize', value: handlesGridResize },
   { name: 'handlesSetGrid', value: handlesSetGrid },
   { name: 'handlesSymbolValidation', value: handlesSymbolValidation },
 ];

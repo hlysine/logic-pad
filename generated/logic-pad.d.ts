@@ -19,12 +19,14 @@ declare global {
     NullableNumber = 'nullableNumber',
     String = 'string',
     Color = 'color',
+    Comparison = 'comparison',
     Direction = 'direction',
     DirectionToggle = 'directionToggle',
     Orientation = 'orientation',
     OrientationToggle = 'orientationToggle',
     Tile = 'tile',
     Grid = 'grid',
+    NullableGrid = 'nullableGrid',
     Icon = 'icon',
     ControlLines = 'controlLines',
     NullableNote = 'nullableNote',
@@ -63,6 +65,9 @@ declare global {
     readonly type: ConfigType.Color;
     readonly allowGray: boolean;
   }
+  export interface ComparisonConfig extends Config<Comparison> {
+    readonly type: ConfigType.Comparison;
+  }
   export interface DirectionConfig extends Config<Direction> {
     readonly type: ConfigType.Direction;
   }
@@ -82,6 +87,10 @@ declare global {
   export interface GridConfig extends Config<GridData> {
     readonly type: ConfigType.Grid;
   }
+  export interface NullableGridConfig extends Config<GridData | null> {
+    readonly type: ConfigType.NullableGrid;
+    readonly nonNullDefault: GridData;
+  }
   export interface IconConfig extends Config<string> {
     readonly type: ConfigType.Icon;
   }
@@ -98,12 +107,14 @@ declare global {
     | NullableNumberConfig
     | StringConfig
     | ColorConfig
+    | ComparisonConfig
     | DirectionConfig
     | DirectionToggleConfig
     | OrientationConfig
     | OrientationToggleConfig
     | TileConfig
     | GridConfig
+    | NullableGridConfig
     | IconConfig
     | ControlLinesConfig
     | NullableNoteConfig;
@@ -159,6 +170,21 @@ declare global {
   export function handlesGridChange<T extends Instruction>(
     val: T
   ): val is T & GridChangeHandler;
+
+  export interface GridResizeHandler {
+    /**
+     * Update itself when the grid is resized.
+     */
+    onGridResize(
+      grid: GridData,
+      mode: 'insert' | 'remove',
+      direction: 'row' | 'column',
+      index: number
+    ): this | null;
+  }
+  export function handlesGridResize<T extends Instruction>(
+    val: T
+  ): val is T & GridResizeHandler;
 
   export interface SetGridHandler {
     onSetGrid(oldGrid: GridData, newGrid: GridData): GridData;
@@ -360,12 +386,36 @@ declare global {
      */
     replaceRule(oldRule: Rule, newRule: Rule): GridData;
     /**
-     * Resize the grid to the new width and height. Common tiles are kept, and new tiles are empty.
+     * Insert a new column at the given index, shifting all components of the grid accordingly. Newly inserted tiles are gray.
+     * @param index The index to insert the column at.
+     * @returns The new grid with the new column inserted.
+     */
+    insertColumn(index: number): GridData;
+    /**
+     * Insert a new row at the given index, shifting all components of the grid accordingly. Newly inserted tiles are gray.
+     * @param index The index to insert the row at.
+     * @returns The new grid with the new row inserted.
+     */
+    insertRow(index: number): GridData;
+    /**
+     * Remove a column at the given index, shifting all components of the grid accordingly.
+     * @param index The index to remove the column at.
+     * @returns The new grid with the column removed.
+     */
+    removeColumn(index: number): GridData;
+    /**
+     * Remove a row at the given index, shifting all components of the grid accordingly.
+     * @param index The index to remove the row at.
+     * @returns The new grid with the row removed.
+     */
+    removeRow(index: number): GridData;
+    /**
+     * Resize the grid to the new width and height, shifting all components of the grid accordingly. Newly inserted tiles are gray.
      * @param width The new width of the grid.
      * @param height The new height of the grid.
      * @returns The new grid with the new dimensions.
      */
-    resize(width: number, height: number): GridData;
+    resize(width: number, height: number): this;
     /**
      * Create a new mutable TileData array from a string array.
      *
@@ -613,6 +663,10 @@ declare global {
      * @returns The deduplicated array of edges.
      */
     static deduplicateEdges(edges: readonly Edge[]): readonly Edge[];
+    insertColumn(index: number): GridConnections;
+    insertRow(index: number): GridConnections;
+    removeColumn(index: number): GridConnections;
+    removeRow(index: number): GridConnections;
   }
 
   /**
@@ -770,6 +824,12 @@ declare global {
     Light = 'light',
     Gray = 'gray',
   }
+  export enum Comparison {
+    Equal = 'eq',
+    AtLeast = 'ge',
+    AtMost = 'le',
+  }
+  export const COMPARISONS: readonly Comparison[];
   export enum Direction {
     Up = 'up',
     Down = 'down',
@@ -1018,6 +1078,33 @@ declare global {
     get validateWithSolution(): boolean;
   }
 
+  export class ForesightRule extends Rule {
+    readonly count: number;
+    readonly regenInterval: number;
+    readonly startFull: boolean;
+    /**
+     * **Foresight: Show hints**
+     */
+    constructor(count: number, regenInterval: number, startFull: boolean);
+    get id(): string;
+    get explanation(): string;
+    get visibleWhenSolving(): boolean;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_grid: GridData): RuleState;
+    get necessaryForCompletion(): boolean;
+    copyWith({
+      count,
+      regenInterval,
+      startFull,
+    }: {
+      count?: number;
+      regenInterval?: number;
+      startFull?: boolean;
+    }): this;
+  }
+
   const allRules: Map<string, Rule>;
   export { allRules };
 
@@ -1057,18 +1144,21 @@ declare global {
     readonly column: number;
     readonly bpm: number | null;
     readonly pedal: boolean | null;
+    readonly checkpoint: boolean;
     readonly rows: readonly Row[];
     /**
      * Configure playback settings, taking effect at the given column (inclusive)
      * @param column The column at which the settings take effect
      * @param bpm The new beats per minute, or null to keep the current value from the previous control line
      * @param pedal Whether the pedal is pressed, or null to keep the current value from the previous control line
+     * @param checkpoint Whether this control line is a checkpoint
      * @param rows The notes to play at each row. This list is automatically resized to match the height of the grid. You may pass in an empty list if none of the rows need to be changed.
      */
     constructor(
       column: number,
       bpm: number | null,
       pedal: boolean | null,
+      checkpoint: boolean,
       rows: readonly Row[]
     );
     get configs(): readonly AnyConfig[] | null;
@@ -1076,16 +1166,19 @@ declare global {
       column,
       bpm,
       pedal,
+      checkpoint,
       rows,
     }: {
       column?: number;
       bpm?: number | null;
       pedal?: boolean | null;
+      checkpoint?: boolean;
       rows?: readonly Row[];
     }): this;
     withColumn(column: number): this;
     withBpm(bpm: number | null): this;
     withPedal(pedal: boolean | null): this;
+    withCheckpoint(checkpoint: boolean): this;
     withRows(rows: readonly Row[]): this;
     equals(other: ControlLine): boolean;
     get isEmpty(): boolean;
@@ -1093,14 +1186,16 @@ declare global {
 
   export class MusicGridRule
     extends Rule
-    implements GridChangeHandler, SetGridHandler
+    implements GridChangeHandler, SetGridHandler, GridResizeHandler
   {
     readonly controlLines: readonly ControlLine[];
+    readonly track: GridData | null;
     /**
      * **Music Grid: Listen to the solution**
      * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
+     * @param track The grid to be played when "listen" is clicked. Set as null to play the solution.
      */
-    constructor(controlLines: readonly ControlLine[]);
+    constructor(controlLines: readonly ControlLine[], track: GridData | null);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
@@ -1109,20 +1204,37 @@ declare global {
     validateGrid(_grid: GridData): RuleState;
     onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData;
     onGridChange(newGrid: GridData): this;
+    onGridResize(
+      _grid: GridData,
+      mode: 'insert' | 'remove',
+      direction: 'row' | 'column',
+      index: number
+    ): this | null;
     /**
      * Add or replace a control line.
      * @param controlLine The control line to set.
      * @returns A new rule with the control line set.
      */
     setControlLine(controlLine: ControlLine): this;
-    copyWith({ controlLines }: { controlLines?: readonly ControlLine[] }): this;
+    withTrack(track: GridData | null): this;
+    copyWith({
+      controlLines,
+      track,
+    }: {
+      controlLines?: readonly ControlLine[];
+      track?: GridData | null;
+    }): this;
     get validateWithSolution(): boolean;
     get isSingleton(): boolean;
+    static mergeControlLines(...lines: ControlLine[]): ControlLine;
+    static deduplicateControlLines(
+      lines: readonly ControlLine[]
+    ): ControlLine[];
   }
 
   export class MysteryRule
     extends Rule
-    implements FinalValidationHandler, GridChangeHandler
+    implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
   {
     readonly solution: GridData;
     readonly visible: boolean;
@@ -1144,6 +1256,12 @@ declare global {
       state: GridState
     ): GridState;
     onGridChange(newGrid: GridData): this;
+    onGridResize(
+      _grid: GridData,
+      mode: 'insert' | 'remove',
+      direction: 'row' | 'column',
+      index: number
+    ): this | null;
     copyWith({
       solution,
       visible,
@@ -1252,22 +1370,33 @@ declare global {
   export class SymbolsPerRegionRule extends Rule {
     readonly color: Color;
     readonly count: number;
+    readonly comparison: Comparison;
     /**
      * **Exactly &lt;count&gt; symbols per &lt;color&gt; area**
      *
      * @param color - Color of the region affected by the rule
      * @param count - Number of symbols to have in each region
+     * @param comparison - Comparison to use when checking the number of symbols
      */
-    constructor(color: Color, count: number);
+    constructor(color: Color, count: number, comparison?: Comparison);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
-    copyWith({ count, color }: { count?: number; color?: Color }): this;
+    copyWith({
+      count,
+      color,
+      comparison,
+    }: {
+      count?: number;
+      color?: Color;
+      comparison?: Comparison;
+    }): this;
     withColor(color: Color): this;
     withCount(count: number): this;
+    withComparison(comparison: Comparison): this;
   }
 
   export class UndercluedRule extends Rule {
@@ -1450,8 +1579,6 @@ declare global {
   const allSolvers: Map<string, Solver>;
   export { allSolvers };
 
-  export const Worker;
-
   export class BacktrackSolver extends Solver {
     readonly id = 'backtrack';
     readonly description =
@@ -1506,12 +1633,8 @@ declare global {
     score: number;
   }
   export abstract class BTModule {
-    abstract instr: Instruction;
     abstract checkGlobal(grid: BTGridData): CheckResult | false;
-    abstract checkLocal(
-      grid: BTGridData,
-      positions: Position[]
-    ): CheckResult | boolean;
+    checkLocal(grid: BTGridData, _: Position[]): CheckResult | boolean;
   }
   export function getOppositeColor(color: BTColor): BTColor;
   export function colorToBTTile(color: Color): BTTile;
@@ -1528,18 +1651,51 @@ declare global {
     checkLocal(grid: BTGridData, positions: Position[]): CheckResult | false;
   }
 
+  export class CellCountBTModule extends BTModule {
+    instr: CellCountRule;
+    constructor(instr: CellCountRule);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+  }
+
   export class ConnectAllBTModule extends BTModule {
     instr: ConnectAllRule;
     constructor(instr: ConnectAllRule);
     checkGlobal(grid: BTGridData): CheckResult | false;
-    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
   }
 
   export class RegionAreaBTModule extends BTModule {
     instr: RegionAreaRule;
     constructor(instr: RegionAreaRule);
     checkGlobal(grid: BTGridData): CheckResult | false;
-    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+  }
+
+  export abstract class RegionShapeBTModule extends BTModule {
+    instr: RegionShapeRule;
+    constructor(instr: RegionShapeRule);
+    protected getShapeRegions(grid: BTGridData): ShapeRegions['regions'];
+  }
+
+  export class SameShapeBTModule extends RegionShapeBTModule {
+    instr: SameShapeRule;
+    constructor(instr: SameShapeRule);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+  }
+
+  export class SymbolsPerRegionBTModule extends BTModule {
+    instr: SymbolsPerRegionRule;
+    constructor(
+      instr: SymbolsPerRegionRule,
+      width: number,
+      height: number,
+      allSymbols: Symbol[]
+    );
+    checkGlobal(grid: BTGridData): CheckResult | false;
+  }
+
+  export class UniqueShapeBTModule extends RegionShapeBTModule {
+    instr: UniqueShapeRule;
+    constructor(instr: UniqueShapeRule);
+    checkGlobal(grid: BTGridData): CheckResult | false;
   }
 
   export class AreaNumberBTModule extends BTModule {
@@ -1553,32 +1709,53 @@ declare global {
     instr: DartSymbol;
     constructor(instr: DartSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
-    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
   }
 
-  export class DirectionLinkerBTModule extends BTModule {
+  export abstract class DirectionLinkerBTModule extends BTModule {
     instr: DirectionLinkerSymbol;
     constructor(instr: DirectionLinkerSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
-    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
+    protected abstract movePos(
+      grid: BTGridData,
+      x: number,
+      y: number
+    ): Position | null;
+  }
+
+  export class GalaxyBTModule extends DirectionLinkerBTModule {
+    instr: GalaxySymbol;
+    constructor(instr: GalaxySymbol);
+    protected movePos(grid: BTGridData, x: number, y: number): Position | null;
+  }
+
+  export class LetterBTModule extends BTModule {
+    constructor(instrs: LetterSymbol[], width: number, height: number);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+  }
+
+  export class LotusBTModule extends DirectionLinkerBTModule {
+    instr: LotusSymbol;
+    constructor(instr: LotusSymbol);
+    protected movePos(grid: BTGridData, x: number, y: number): Position | null;
+  }
+
+  export class MinesweeperBTModule extends BTModule {
+    instr: MinesweeperSymbol;
+    constructor(instr: MinesweeperSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
   }
 
   export class MyopiaBTModule extends BTModule {
     instr: MyopiaSymbol;
     constructor(instr: MyopiaSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
-    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
   }
 
   export class ViewpointBTModule extends BTModule {
     instr: ViewpointSymbol;
     constructor(instr: ViewpointSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
-    checkLocal(grid: BTGridData, _: Position[]): CheckResult | false;
   }
-
-  const _default: null;
-  export const _default;
 
   /**
    * Base class that all solvers must extend.
@@ -1641,14 +1818,6 @@ declare global {
     isGridSupported(grid: GridData): boolean;
   }
 
-  export abstract class SolverBase {
-    abstract get id(): string;
-    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
-    isEnvironmentSupported(): Promise<boolean>;
-    abstract isInstructionSupported(instructionId: string): boolean;
-    isGridSupported(grid: GridData): boolean;
-  }
-
   export class UndercluedSolver extends Solver {
     readonly id = 'underclued';
     readonly description =
@@ -1659,9 +1828,6 @@ declare global {
 
   const _default: null;
   export const _default;
-
-  const Worker: new (options?: { name?: string }) => Worker;
-  export const Worker;
 
   export class AreaNumberModule extends Z3Module {
     readonly id: string;
@@ -5547,27 +5713,20 @@ declare global {
     withNumber(number: number): this;
   }
 
-  export class QuestionMarkSign extends Sign {
-    get id(): string;
-    get explanation(): string;
-    get configs(): readonly AnyConfig[] | null;
-    createExampleGrid(): GridData;
-    copyWith({ x, y }: { x?: number; y?: number }): this;
-  }
-
-  /**
-   * A sign is a symbol that is only used for illustrative purposes.
-   * They should only appear in example grids of other instructions.
-   */
-  export abstract class Sign extends Symbol {
-    validateSymbol(_grid: GridData): State;
-  }
-
-  export abstract class Symbol extends Instruction {
+  export abstract class Symbol
+    extends Instruction
+    implements GridResizeHandler
+  {
     readonly x: number;
     readonly y: number;
     constructor(x: number, y: number);
     abstract validateSymbol(grid: GridData): State;
+    onGridResize(
+      _grid: GridData,
+      mode: 'insert' | 'remove',
+      direction: 'row' | 'column',
+      index: number
+    ): this | null;
     get placementStep(): number;
     withX(x: number): this;
     withY(y: number): this;
@@ -5656,6 +5815,7 @@ declare global {
     set bottom(value: boolean);
     get bottomRight(): boolean;
     set bottomRight(value: boolean);
+    equals(other: TileConnections): boolean;
   }
 
   export function aggregateState(

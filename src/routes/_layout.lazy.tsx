@@ -1,10 +1,10 @@
 import Roadmap from '../ui/components/Roadmap';
 import ModeSwitcher from '../ui/components/ModeSwitcher';
-import { Link, Outlet, createFileRoute } from '@tanstack/react-router';
+import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import QuickAccessBar from '../ui/components/QuickAccessBar';
 
-export const Route = createFileRoute('/_layout')({
+export const Route = createLazyFileRoute('/_layout')({
   component: memo(function Layout() {
     return (
       <>

@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import fuzzysort from 'fuzzysort';
+import fuzzysort from 'fuzzysort-esm';
 import { cn } from '../../utils';
 import AnnotatedText from './AnnotatedText';
 

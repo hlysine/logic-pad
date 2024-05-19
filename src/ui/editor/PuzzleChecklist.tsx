@@ -1,4 +1,12 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Suspense,
+  lazy,
+  memo,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useEmbed } from '../EmbedContext';
 import { useGrid } from '../GridContext';
 import Accordion from '../components/Accordion';
@@ -12,10 +20,10 @@ import { RiRobot2Fill } from 'react-icons/ri';
 import GridData from '../../data/grid';
 import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
-import { cn } from '../../utils';
 import { useSolver } from '../SolverContext';
-import { allSolvers } from '../../data/solver/allSolvers';
-import { GoInfo } from 'react-icons/go';
+import Loading from '../components/Loading';
+
+const SolverSelector = lazy(() => import('./SolverSelector'));
 
 function ChecklistItem({
   icon: Icon,
@@ -48,11 +56,8 @@ export default memo(function PuzzleChecklist() {
   const { features } = useEmbed();
   const { grid, metadata, setGrid } = useGrid();
   const { state } = useGridState();
-  const { solver, setSolver } = useSolver();
+  const { solver } = useSolver();
 
-  const [environmentCheck, setEnvironmentCheck] = useState<boolean | undefined>(
-    undefined
-  );
   const solverRequest = useRef(0);
   const [isPending, setPending] = useState(false);
   const [solution, setSolution] = useState<TiedToGrid<GridData | null> | null>(
@@ -71,10 +76,6 @@ export default memo(function PuzzleChecklist() {
       setPending(false);
     }
   }, [grid, solution, alternate]);
-
-  useEffect(() => {
-    setEnvironmentCheck(undefined);
-  }, [solver]);
 
   const metadataValid = useMemo(
     () => MetadataSchema.safeParse(metadata).success,
@@ -96,7 +97,7 @@ export default memo(function PuzzleChecklist() {
   const solutionIsValid = state.final !== State.Error;
 
   const autoSolvable = useMemo(
-    () => solver.isGridSupported(grid),
+    () => solver?.isGridSupported(grid) ?? false,
     [solver, grid]
   );
 
@@ -297,95 +298,32 @@ export default memo(function PuzzleChecklist() {
             >
               {autoSolvable ? 'Auto solvable' : 'Not auto solvable'}
             </ChecklistItem>
-            <div
-              className="tooltip tooltip-top tooltip-info"
-              data-tip={
-                environmentCheck === false
-                  ? 'Your browser does not support the solver'
-                  : 'This may take a while. Editing the puzzle will cancel the operation'
-              }
-            >
-              <div className="flex gap-1 items-center">
-                <button
-                  className="btn btn-ghost p-1 min-h-0 h-fit shrink-0 flex gap-1 items-center"
-                  onClick={() =>
-                    (
-                      document.getElementById(
-                        'solverModel'
-                      ) as HTMLDialogElement
-                    ).showModal()
-                  }
-                >
-                  Solver:
-                  <GoInfo size={18} />
-                </button>
-                <dialog id="solverModel" className="modal">
-                  <div className="modal-box">
-                    <h3 className="font-bold text-xl">Available solvers</h3>
-                    {[...allSolvers.values()].map(solver => (
-                      <p key={solver.id} className="py-2 text-left">
-                        <b className="text-lg">{solver.id}</b>
-                        <br />
-                        {solver.description}
-                      </p>
-                    ))}
-                    <div className="modal-action">
-                      <form method="dialog">
-                        <button className="btn">Close</button>
-                      </form>
-                    </div>
-                  </div>
-                </dialog>
-                <select
-                  className="select select-bordered select-sm w-full max-w-xs"
-                  value={solver.id}
-                  onChange={e => setSolver(allSolvers.get(e.target.value)!)}
-                >
-                  {[...allSolvers.keys()].map(id => (
-                    <option key={id} value={id}>
-                      {id}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  className={cn(
-                    'btn btn-outline btn-info btn-sm',
-                    environmentCheck === false && 'btn-error'
-                  )}
-                  onClick={async () => {
-                    let support = environmentCheck;
-                    if (support === undefined) {
-                      support = await solver.isEnvironmentSupported();
-                      setEnvironmentCheck(support);
-                    }
-                    if (!support) return;
-                    const requestId = ++solverRequest.current;
-                    setPending(true);
-                    setSolution(null);
-                    setAlternate(null);
-                    try {
-                      let isAlternate = false;
-                      for await (const solution of solver.solve(grid)) {
-                        if (!isAlternate) {
-                          if (requestId !== solverRequest.current) break;
-                          setSolution({ grid, value: solution });
-                          isAlternate = true;
-                        } else {
-                          if (requestId !== solverRequest.current) break;
-                          setAlternate({ grid, value: solution });
-                          break;
-                        }
+            <Suspense fallback={<Loading />}>
+              <SolverSelector
+                onSolve={async solver => {
+                  const requestId = ++solverRequest.current;
+                  setPending(true);
+                  setSolution(null);
+                  setAlternate(null);
+                  try {
+                    let isAlternate = false;
+                    for await (const solution of solver.solve(grid)) {
+                      if (!isAlternate) {
+                        if (requestId !== solverRequest.current) break;
+                        setSolution({ grid, value: solution });
+                        isAlternate = true;
+                      } else {
+                        if (requestId !== solverRequest.current) break;
+                        setAlternate({ grid, value: solution });
+                        break;
                       }
-                    } finally {
-                      setPending(false);
                     }
-                  }}
-                  disabled={environmentCheck === false || !autoSolvable}
-                >
-                  Solve
-                </button>
-              </div>
-            </div>
+                  } finally {
+                    setPending(false);
+                  }
+                }}
+              />
+            </Suspense>
           </>
         )}
       </div>

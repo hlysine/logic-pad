@@ -1,16 +1,13 @@
 import { createContext, memo, useContext, useState } from 'react';
 import Solver from '../data/solver/solver';
-import { allSolvers } from '../data/solver/allSolvers';
 
 interface SolverContext {
-  solver: Solver;
+  solver: Solver | null;
   setSolver: (value: Solver) => void;
 }
 
-const defaultSolver = [...allSolvers.values()][0];
-
 const context = createContext<SolverContext>({
-  solver: defaultSolver,
+  solver: null,
   setSolver: () => {},
 });
 
@@ -25,7 +22,7 @@ export default memo(function SolverContext({
 }: {
   children: React.ReactNode;
 }) {
-  const [solver, setSolver] = useState(() => defaultSolver);
+  const [solver, setSolver] = useState<Solver | null>(null);
 
   return (
     <context.Provider

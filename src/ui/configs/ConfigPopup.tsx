@@ -203,7 +203,7 @@ export default memo(function ConfigPopup() {
         {(configurable instanceof Rule || configurable instanceof Symbol) && (
           <SupportLevel
             validate={!configurable.validateWithSolution}
-            solve={solver.isInstructionSupported(configurable.id)}
+            solve={solver?.isInstructionSupported(configurable.id)}
           />
         )}
         <div className="flex-1" />

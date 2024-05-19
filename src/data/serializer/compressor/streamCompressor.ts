@@ -3,7 +3,7 @@ import CompressorBase from './compressorBase';
 function ensureCompressionStream() {
   if (!window.CompressionStream || !window.DecompressionStream) {
     console.log('CompressionStream not supported. Loading polyfill.');
-    return import('./streamPolyfill');
+    return import('../../../streamPolyfill');
   }
   return Promise.resolve();
 }

@@ -37,8 +37,8 @@ export default memo(function GridConfig({
   setOpen,
 }: GridEdittorModalProps) {
   return (
-    <dialog id="my_modal_2" className={cn('modal', open && 'modal-open')}>
-      <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral">
+    <dialog id="gridModal" className={cn('modal', open && 'modal-open')}>
+      <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral text-neutral-content">
         <form method="dialog">
           <button
             aria-label="Close dialog"

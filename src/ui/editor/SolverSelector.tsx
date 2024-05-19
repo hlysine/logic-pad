@@ -60,7 +60,7 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
           <GoInfo size={18} />
         </button>
         <dialog id="solverModel" className="modal">
-          <div className="modal-box">
+          <div className="modal-box text-base-content">
             <h3 className="font-bold text-xl">Available solvers</h3>
             {[...allSolvers.values()].map(solver => (
               <p key={solver.id} className="py-2 text-left">

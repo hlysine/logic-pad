@@ -1,3 +1,10 @@
+# 19/5/2024
+
+- Optimized site loading and enabled installation as PWA app
+- Added support for Safari 16
+- Fixed the backtrack solver to work with new options in symbols per area rule
+- Added a new curated puzzle
+
 # 18/5/2024
 
 - Fixed incorrect rendering of the thumbnail grid of ban pattern rule

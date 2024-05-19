@@ -11,7 +11,7 @@ async function loadChangelog() {
   changelogText = (
     await import('../../../CHANGELOG.md?raw')
   ).default.replaceAll(/\r\n|\r|\n/g, '\n');
-  const sectionMatch = /(?<=^|\n)# (.*?)\n(.*?)(?=\n#|$)/gs;
+  const sectionMatch = /(?:^|\n)# (.*?)\n(.*?)(?=\n#|$)/gs;
   for (const match of changelogText.matchAll(sectionMatch)) {
     changelogSections.push({
       title: match[1].trim(),

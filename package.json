@@ -23,6 +23,7 @@
     "@vercel/speed-insights": "^1.0.10",
     "animejs": "^3.2.2",
     "base64-arraybuffer": "^1.0.2",
+    "compression-streams-polyfill": "^0.1.7",
     "dedent": "^1.5.3",
     "event-iterator": "^2.0.0",
     "events": "^3.3.0",

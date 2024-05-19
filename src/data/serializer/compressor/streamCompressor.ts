@@ -1,10 +1,19 @@
 import CompressorBase from './compressorBase';
 
+function ensureCompressionStream() {
+  if (!window.CompressionStream || !window.DecompressionStream) {
+    console.log('CompressionStream not supported. Loading polyfill.');
+    return import('./streamPolyfill');
+  }
+  return Promise.resolve();
+}
+
 export default abstract class StreamCompressor extends CompressorBase {
   protected abstract get algorithm(): CompressionFormat;
 
   /* eslint-disable @typescript-eslint/no-floating-promises */
   public async compress(input: string): Promise<string> {
+    await ensureCompressionStream();
     const blobToBase64 = (blob: Blob): Promise<string> =>
       new Promise(resolve => {
         const reader = new FileReader();
@@ -21,6 +30,7 @@ export default abstract class StreamCompressor extends CompressorBase {
   }
 
   public async decompress(input: string): Promise<string> {
+    await ensureCompressionStream();
     const bytes = Uint8Array.from(atob(input), c => c.charCodeAt(0));
     const cs = new DecompressionStream(this.algorithm);
     const writer = cs.writable.getWriter();

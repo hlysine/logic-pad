@@ -518,17 +518,24 @@ declare global {
      * @param position The position to start the flood fill from.
      * @param from The color of the tiles to fill.
      * @param to The color to fill the tiles with.
+     * @param allowFixed Whether to fill fixed tiles.
      * @returns The new grid with the region filled with the new color.
      */
-    floodFill(position: Position, from: Color, to: Color): GridData;
+    floodFill(
+      position: Position,
+      from: Color,
+      to: Color,
+      allowFixed: boolean
+    ): GridData;
     /**
      * Flood fill all tiles with the given color to a new color, even if they are not connected.
      *
      * @param from The color of the tiles to fill.
      * @param to The color to fill the tiles with.
+     * @param allowFixed Whether to fill fixed tiles.
      * @returns The new grid with all tiles filled with the new color.
      */
-    floodFillAll(from: Color, to: Color): GridData;
+    floodFillAll(from: Color, to: Color, allowFixed: boolean): GridData;
     /**
      * Check if the grid has any instructions that require a custom solution.
      * @returns True if the grid has any instructions that require a custom solution, false otherwise.

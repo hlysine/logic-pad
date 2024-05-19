@@ -19,7 +19,7 @@
     <meta name="author" content="Lysine" />
     <meta name="theme-color" content="#414558" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="preload" as="image" href="/logo.svg" />
+    <link rel="preload" as="image" href="/logo.svg" fetchpriority="high" />
 
     <title>Logic Pad</title>
   </head>
@@ -28,8 +28,8 @@
     <script>
       window.global ||= window;
     </script>
-    <script src="/z3-built.js"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <script src="/z3-built.js" fetchpriority="low" defer></script>
+    <script type="module" src="/src/main.tsx" fetchpriority="high"></script>
     <!-- Cloudflare Web Analytics -->
     <script
       defer

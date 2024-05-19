@@ -31,9 +31,8 @@ function computeTileSize(grid: GridData) {
           (window.innerWidth - 120 - 640) / grid.width,
           (window.innerHeight - 180) / grid.height
         );
-  return Math.max(
-    25,
-    Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize)
+  return Math.floor(
+    Math.max(25, Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize))
   );
 }
 

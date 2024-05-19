@@ -213,6 +213,7 @@ export default memo(function PuzzleChecklist() {
               </span>
               {!!solution?.value && (
                 <button
+                  type="button"
                   className="btn btn-sm"
                   onClick={() => {
                     setGrid(solution.value!);
@@ -264,6 +265,7 @@ export default memo(function PuzzleChecklist() {
                 </span>
                 {!!alternate?.value && (
                   <button
+                    type="button"
                     className="btn btn-sm"
                     onClick={() => {
                       setGrid(alternate.value!);

@@ -41,6 +41,8 @@ export default memo(function GridConfig({
       <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral">
         <form method="dialog">
           <button
+            type="button"
+            aria-label="Close dialog"
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={() => setOpen(false)}
           >
@@ -62,6 +64,7 @@ export default memo(function GridConfig({
                               return (
                                 <>
                                   <button
+                                    type="button"
                                     className="btn"
                                     onClick={() => {
                                       setInnerGrid(outerGrid);
@@ -70,6 +73,7 @@ export default memo(function GridConfig({
                                     Copy from main grid
                                   </button>
                                   <button
+                                    type="button"
                                     className="btn btn-primary"
                                     onClick={() => {
                                       setGrid(grid);

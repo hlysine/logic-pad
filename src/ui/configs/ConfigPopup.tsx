@@ -209,7 +209,11 @@ export default memo(function ConfigPopup() {
         <div className="flex-1" />
         {configurable instanceof Symbol && (
           <div className="dropdown dropdown-top">
-            <button tabIndex={0} className="btn btn-outline btn-info">
+            <button
+              type="button"
+              tabIndex={0}
+              className="btn btn-outline btn-info"
+            >
               Add to presets
             </button>
             <div
@@ -224,6 +228,7 @@ export default memo(function ConfigPopup() {
                 onChange={e => setPresetName(e.target.value)}
               />
               <button
+                type="button"
                 className="btn btn-sm btn-outline btn-info"
                 disabled={
                   !!presets.find(p => p.name === presetName) || !presetName
@@ -242,6 +247,7 @@ export default memo(function ConfigPopup() {
           </div>
         )}
         <button
+          type="button"
           className="btn btn-outline btn-error"
           onClick={() => {
             if (configurable instanceof Rule) {

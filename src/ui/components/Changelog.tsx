@@ -27,6 +27,8 @@ const ChangelogButton = lazy(async () => {
       return (
         <>
           <button
+            type="button"
+            aria-label="View changelog"
             className="btn btn-ghost flex flex-col flex-nowrap justify-center items-stretch gap-8 text-left p-4 h-fit border-y border-x-0 border-accent"
             onClick={() =>
               (
@@ -39,7 +41,7 @@ const ChangelogButton = lazy(async () => {
               <h3 className="font-bold text-xl">New updates</h3>
               <span>{changelogSections[0].title}</span>
               <div className="flex-1"></div>
-              <span className="opacity-70">View changelog &gt;&gt;</span>
+              <span className="opacity-80">View changelog &gt;&gt;</span>
             </div>
             <div className="max-h-[5.5rem] text-ellipsis overflow-hidden">
               <Markdown>{changelogSections[0].content}</Markdown>
@@ -48,7 +50,11 @@ const ChangelogButton = lazy(async () => {
           <dialog id="changelogModal" className="modal">
             <div className="modal-box">
               <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <button
+                  type="button"
+                  aria-label="Close dialog"
+                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                >
                   ✕
                 </button>
               </form>
@@ -56,7 +62,9 @@ const ChangelogButton = lazy(async () => {
               <Markdown>{changelogText!}</Markdown>
             </div>
             <form method="dialog" className="modal-backdrop">
-              <button>close</button>
+              <button type="button" aria-label="Close dialog">
+                close
+              </button>
             </form>
           </dialog>
         </>

@@ -23,6 +23,7 @@ export default memo(function BooleanConfig({
       <span>{config.description}</span>
       {value === null ? (
         <button
+          type="button"
           className="btn btn-sm"
           onClick={() => {
             setConfig?.(config.field, config.default ?? false);
@@ -37,6 +38,8 @@ export default memo(function BooleanConfig({
             data-tip="Clear value"
           >
             <button
+              type="button"
+              aria-label="Clear value"
               className="btn btn-sm"
               onClick={() => {
                 setConfig?.(config.field, null);

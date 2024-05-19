@@ -24,6 +24,8 @@ export default memo(function AnimationToggle() {
       }
     >
       <button
+        type="button"
+        aria-label="Toggle fancy animations"
         className={cn(
           'btn btn-square',
           reduceMotion ? 'text-base-content/30' : 'text-base-content'

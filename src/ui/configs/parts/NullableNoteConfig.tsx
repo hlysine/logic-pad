@@ -36,6 +36,7 @@ export default memo(function NullableNoteConfig({
       <span>{config.description}</span>
       {value === null ? (
         <button
+          type="button"
           className="btn btn-sm"
           onClick={() => {
             setConfig?.(config.field, config.default ?? 'C4');
@@ -50,6 +51,8 @@ export default memo(function NullableNoteConfig({
             data-tip="Clear value"
           >
             <button
+              type="button"
+              aria-label="Clear value"
               className="btn btn-sm"
               onClick={() => {
                 setConfig?.(config.field, null);

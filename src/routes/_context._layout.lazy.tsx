@@ -13,7 +13,11 @@ export const Route = createLazyFileRoute('/_context/_layout')({
               to="/"
               className="text-3xl text-neutral-content flex items-center gap-2"
             >
-              <img src="/logo.svg" className="w-8 h-8 inline-block" />
+              <img
+                src="/logo.svg"
+                className="w-8 h-8 inline-block"
+                alt="Logic Pad logo"
+              />
               Logic Pad
             </Link>
           </div>

@@ -20,10 +20,15 @@ export default memo(function PWAPrompt() {
       <FiAlertCircle />
       <span>Update available. Reload site now?</span>
       <div>
-        <button className="btn btn-sm" onClick={() => setRefresh(false)}>
+        <button
+          type="button"
+          className="btn btn-sm"
+          onClick={() => setRefresh(false)}
+        >
           Cancel
         </button>
         <button
+          type="button"
           className="btn btn-sm btn-primary"
           onClick={async () => {
             await navigate({

@@ -27,6 +27,7 @@ export default memo(function GridConfig({
       <span className="flex-1">{config.description}</span>
       {grid === null ? (
         <button
+          type="button"
           className="btn btn-sm"
           onClick={() => {
             setConfig?.(config.field, config.nonNullDefault);
@@ -41,6 +42,8 @@ export default memo(function GridConfig({
             data-tip="Clear value"
           >
             <button
+              type="button"
+              aria-label="Clear value"
               className="btn btn-sm"
               onClick={() => {
                 setConfig?.(config.field, null);
@@ -50,6 +53,7 @@ export default memo(function GridConfig({
             </button>
           </div>
           <button
+            type="button"
             className="btn justify-start flex-nowrap flex"
             onClick={() => setOpen(true)}
           >

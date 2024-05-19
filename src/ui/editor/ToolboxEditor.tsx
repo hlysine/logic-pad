@@ -72,6 +72,8 @@ export default memo(function ToolboxEditor() {
           data-tip="Remove selected preset"
         >
           <button
+            type="button"
+            aria-label="Remove selected preset"
             className="btn btn-square"
             disabled={!selectedPreset}
             onClick={() =>

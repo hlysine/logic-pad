@@ -85,6 +85,7 @@ export default memo(function GridSizeEditor({
         </label>
       </div>
       <button
+        type="button"
         className={cn(
           'btn btn-outline btn-info',
           (grid.width > width || grid.height > height) && 'btn-error',

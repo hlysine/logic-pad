@@ -38,6 +38,8 @@ export default memo(function MusicOverlayPart({
       {checkpointLines.map(line => (
         <button
           key={line.column}
+          type="button"
+          aria-label={`Set checkpoint to column ${line.column}`}
           className="absolute btn btn-circle btn-secondary text-[1em] w-[0.4em] h-[0.4em] min-h-0 -top-[0.4em] pointer-events-auto z-[2]"
           style={{ left: `${line.column - 0.2}em` }}
           onClick={() => setActiveCheckpoint(line.column)}

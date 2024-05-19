@@ -54,12 +54,16 @@ export const Route = createFileRoute('/')({
             <div className="flex flex-wrap shrink-0 grow-0 justify-center gap-8">
               <div className="relative w-32 h-32 inline-block">
                 <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-slow"></div>
-                <img src="/logo.svg" className="absolute inset-0" />
+                <img
+                  src="/logo.svg"
+                  className="absolute inset-0"
+                  alt="Logic Pad logo"
+                />
               </div>
               <div className="flex flex-col gap-4">
-                <span className="text-accent text-4xl lg:text-6xl font-medium">
+                <h1 className="text-accent text-4xl lg:text-6xl font-medium">
                   Logic Pad
-                </span>
+                </h1>
                 <span className="text-xl lg:text-2xl">
                   A modern, open-source web app for grid-based puzzles.
                 </span>
@@ -93,7 +97,7 @@ export const Route = createFileRoute('/')({
           className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 min-h-dvh"
         >
           <div className="flex justify-between items-start flex-wrap">
-            <h3 className="text-2xl lg:text-4xl">Curated Puzzles</h3>
+            <h2 className="text-2xl lg:text-4xl">Curated Puzzles</h2>
             <ul className="menu menu-vertical md:menu-horizontal bg-base-100/15 text-neutral-content rounded-box">
               {puzzleTypeFilters.map(({ name, icon: Icon }) => (
                 <li key={name}>

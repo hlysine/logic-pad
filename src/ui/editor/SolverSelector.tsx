@@ -47,6 +47,8 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
     >
       <div className="flex gap-1 items-center">
         <button
+          type="button"
+          aria-label="Solver info"
           className="btn btn-ghost p-1 min-h-0 h-fit shrink-0 flex gap-1 items-center"
           onClick={() =>
             (
@@ -69,7 +71,9 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
             ))}
             <div className="modal-action">
               <form method="dialog">
-                <button className="btn">Close</button>
+                <button type="button" className="btn">
+                  Close
+                </button>
               </form>
             </div>
           </div>
@@ -86,6 +90,7 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
           ))}
         </select>
         <button
+          type="button"
           className={cn(
             'btn btn-outline btn-info btn-sm',
             environmentCheck === false && 'btn-error'

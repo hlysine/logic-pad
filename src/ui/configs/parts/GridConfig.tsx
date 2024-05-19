@@ -26,6 +26,7 @@ export default memo(function GridConfig({
       <span className="flex-1">{config.description}</span>
       <div className="flex flex-col gap-2">
         <button
+          type="button"
           className="btn justify-start flex-nowrap flex"
           onClick={() => setOpen(true)}
         >

@@ -38,6 +38,7 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
                 <div className="text-xs">Click to load original puzzle</div>
               </div>
               <button
+                type="button"
                 className="btn btn-sm btn-warning"
                 onClick={() =>
                   navigate({

@@ -80,6 +80,8 @@ export default memo(function Tile({
           {partStyles.map(({ style, fixable, focusable }, i) => (
             <button
               key={i}
+              type="button"
+              aria-label={`${data.color} tile`}
               className={cn(
                 'absolute btn no-animation transition-none duration-0 p-0 shadow-none min-h-0 text-[1em]',
                 bg(data.color),

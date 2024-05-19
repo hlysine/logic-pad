@@ -15,7 +15,7 @@ import { HiOutlineViewGridAdd } from 'react-icons/hi';
 export interface PuzzleCardProps {
   grid: GridData;
   metadata: PuzzleMetadata;
-  link: string;
+  data: string;
   className?: string;
 }
 
@@ -42,7 +42,7 @@ export const puzzleTypeFilters = [
 export default memo(function PuzzleCard({
   grid,
   metadata,
-  link,
+  data,
   className,
 }: PuzzleCardProps) {
   const Icon = useMemo(() => {
@@ -64,7 +64,8 @@ export default memo(function PuzzleCard({
         'btn shadow-md bg-base-100/15 hover:bg-base-300/15 text-neutral-content inline-flex h-fit min-h-0 max-w-full',
         className
       )}
-      to={link}
+      to="/solve"
+      search={{ d: data }}
     >
       <Icon size={48} className="m-4" />
       <div className="flex flex-col gap-2 p-4">

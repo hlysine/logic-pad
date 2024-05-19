@@ -1,29 +1,44 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { memo, useRef, useState } from 'react';
+import { Link, createFileRoute } from '@tanstack/react-router';
+import { Suspense, lazy, memo, useRef, useState } from 'react';
 import QuickAccessBar from '../ui/components/QuickAccessBar';
-import Grid from '../ui/grid/Grid';
+import { puzzleTypeFilters } from '../ui/components/PuzzleCard';
+import Changelog from '../ui/components/Changelog';
+import Loading from '../ui/components/Loading';
 import GridData from '../data/grid';
 import GridConnections from '../data/gridConnections';
-import CuratedPuzzles from '../ui/components/CuratedPuzzles';
-import { puzzleTypeFilters } from '../ui/components/PuzzleCard';
-import { defaultGrid, useGrid } from '../ui/GridContext';
-import Changelog from '../ui/components/Changelog';
 
-const grid = GridData.create([
-  '.nwww',
-  'nnwbb',
-  'nnwbw',
-  'nnBwW',
-  '.nnn.',
-]).withConnections(
-  GridConnections.create(['..aaa', '..abb', '..ab.', '.....', '.....'])
-);
+const FrontPageGrid = lazy(async () => {
+  const Grid = (await import('../ui/grid/Grid')).default;
+
+  const grid = GridData.create([
+    '.nwww',
+    'nnwbb',
+    'nnwbw',
+    'nnBwW',
+    '.nnn.',
+  ]).withConnections(
+    GridConnections.create(['..aaa', '..abb', '..ab.', '.....', '.....'])
+  );
+
+  return {
+    default: memo(function FrontPageGrid() {
+      return (
+        <Grid
+          type="canvas"
+          size={100}
+          grid={grid}
+          editable={false}
+          className="absolute left-1/2 xl:right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 shrink -rotate-[5deg] opacity-75 fade-in-fast"
+        />
+      );
+    }),
+  };
+});
+const CuratedPuzzles = lazy(() => import('../ui/components/CuratedPuzzles'));
 
 export const Route = createFileRoute('/')({
   component: memo(function Home() {
     const curatedPuzzles = useRef<HTMLDivElement>(null);
-    const navigate = useNavigate();
-    const { setGrid, setMetadata } = useGrid();
     const [filter, setFilter] = useState<string>('All');
     return (
       <>
@@ -31,17 +46,14 @@ export const Route = createFileRoute('/')({
           <QuickAccessBar className="justify-end px-8 py-2" />
           <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
             <div className="relative order-1 grow shrink self-stretch overflow-visible pointer-events-none -z-10 min-h-64 m-16">
-              <Grid
-                type="canvas"
-                size={100}
-                grid={grid}
-                editable={false}
-                className="absolute left-1/2 xl:right-0 top-1/2 -translate-x-1/2 -translate-y-1/2 shrink -rotate-[5deg] opacity-75"
-              />
+              <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-fast"></div>
+              <Suspense fallback={null}>
+                <FrontPageGrid />
+              </Suspense>
             </div>
             <div className="flex flex-wrap shrink-0 grow-0 justify-center gap-8">
               <div className="relative w-32 h-32 inline-block">
-                <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow"></div>
+                <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-slow"></div>
                 <img src="/logo.svg" className="absolute inset-0" />
               </div>
               <div className="flex flex-col gap-4">
@@ -52,23 +64,13 @@ export const Route = createFileRoute('/')({
                   A modern, open-source web app for grid-based puzzles.
                 </span>
                 <div className="flex flex-wrap gap-4 items-center mt-4">
-                  <button
+                  <Link
                     type="button"
+                    to="/create"
                     className="btn btn-md lg:btn-lg btn-accent"
-                    onClick={async () => {
-                      setGrid(defaultGrid, null);
-                      setMetadata({
-                        title: '',
-                        author: '',
-                        link: '',
-                        description: '',
-                        difficulty: 1,
-                      });
-                      await navigate({ to: '/create' });
-                    }}
                   >
                     Create your own puzzle
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     className="btn btn-md lg:btn-lg btn-accent btn-outline"
@@ -107,7 +109,9 @@ export const Route = createFileRoute('/')({
             </ul>
           </div>
           <div className="flex flex-wrap gap-8 justify-center items-center">
-            <CuratedPuzzles filter={filter} />
+            <Suspense fallback={<Loading />}>
+              <CuratedPuzzles filter={filter} />
+            </Suspense>
           </div>
         </div>
       </>

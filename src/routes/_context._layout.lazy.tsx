@@ -3,7 +3,7 @@ import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import QuickAccessBar from '../ui/components/QuickAccessBar';
 
-export const Route = createLazyFileRoute('/_layout')({
+export const Route = createLazyFileRoute('/_context/_layout')({
   component: memo(function Layout() {
     return (
       <>

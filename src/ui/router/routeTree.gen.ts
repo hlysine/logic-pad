@@ -14,37 +14,47 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './../../routes/__root'
 import { Route as IndexImport } from './../../routes/index'
-import { Route as LayoutSolveImport } from './../../routes/_layout.solve'
-import { Route as LayoutCreateImport } from './../../routes/_layout.create'
+import { Route as ContextLayoutSolveImport } from './../../routes/_context._layout.solve'
+import { Route as ContextLayoutCreateImport } from './../../routes/_context._layout.create'
 
 // Create Virtual Routes
 
-const LayoutLazyImport = createFileRoute('/_layout')()
+const ContextLazyImport = createFileRoute('/_context')()
+const ContextLayoutLazyImport = createFileRoute('/_context/_layout')()
 
 // Create/Update Routes
 
-const LayoutLazyRoute = LayoutLazyImport.update({
-  id: '/_layout',
+const ContextLazyRoute = ContextLazyImport.update({
+  id: '/_context',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./../../routes/_layout.lazy').then((d) => d.Route))
+} as any).lazy(() =>
+  import('./../../routes/_context.lazy').then((d) => d.Route),
+)
 
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const LayoutSolveRoute = LayoutSolveImport.update({
-  path: '/solve',
-  getParentRoute: () => LayoutLazyRoute,
+const ContextLayoutLazyRoute = ContextLayoutLazyImport.update({
+  id: '/_layout',
+  getParentRoute: () => ContextLazyRoute,
 } as any).lazy(() =>
-  import('./../../routes/_layout.solve.lazy').then((d) => d.Route),
+  import('./../../routes/_context._layout.lazy').then((d) => d.Route),
 )
 
-const LayoutCreateRoute = LayoutCreateImport.update({
-  path: '/create',
-  getParentRoute: () => LayoutLazyRoute,
+const ContextLayoutSolveRoute = ContextLayoutSolveImport.update({
+  path: '/solve',
+  getParentRoute: () => ContextLayoutLazyRoute,
 } as any).lazy(() =>
-  import('./../../routes/_layout.create.lazy').then((d) => d.Route),
+  import('./../../routes/_context._layout.solve.lazy').then((d) => d.Route),
+)
+
+const ContextLayoutCreateRoute = ContextLayoutCreateImport.update({
+  path: '/create',
+  getParentRoute: () => ContextLayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../../routes/_context._layout.create.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -55,17 +65,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_layout': {
-      preLoaderRoute: typeof LayoutLazyImport
+    '/_context': {
+      preLoaderRoute: typeof ContextLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_layout/create': {
-      preLoaderRoute: typeof LayoutCreateImport
-      parentRoute: typeof LayoutLazyImport
+    '/_context/_layout': {
+      preLoaderRoute: typeof ContextLayoutLazyImport
+      parentRoute: typeof ContextLazyImport
     }
-    '/_layout/solve': {
-      preLoaderRoute: typeof LayoutSolveImport
-      parentRoute: typeof LayoutLazyImport
+    '/_context/_layout/create': {
+      preLoaderRoute: typeof ContextLayoutCreateImport
+      parentRoute: typeof ContextLayoutLazyImport
+    }
+    '/_context/_layout/solve': {
+      preLoaderRoute: typeof ContextLayoutSolveImport
+      parentRoute: typeof ContextLayoutLazyImport
     }
   }
 }
@@ -74,7 +88,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  LayoutLazyRoute.addChildren([LayoutCreateRoute, LayoutSolveRoute]),
+  ContextLazyRoute.addChildren([
+    ContextLayoutLazyRoute.addChildren([
+      ContextLayoutCreateRoute,
+      ContextLayoutSolveRoute,
+    ]),
+  ]),
 ])
 
 /* prettier-ignore-end */

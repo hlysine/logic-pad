@@ -12,7 +12,7 @@ import InstructionPartOutlet from '../ui/instructions/InstructionPartOutlet';
 import { PartPlacement } from '../ui/instructions/parts/types';
 import ForesightContext from '../ui/ForesightContext';
 
-export const Route = createLazyFileRoute('/_layout/solve')({
+export const Route = createLazyFileRoute('/_context/_layout/solve')({
   component: memo(function SolveMode() {
     const params = Route.useSearch();
     useLinkLoader(params, { allowEmpty: false });

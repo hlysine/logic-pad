@@ -10,7 +10,7 @@ import { IoWarningOutline } from 'react-icons/io5';
 import ShareButton from '../ui/components/ShareButton';
 import { defaultGrid, useGrid } from '../ui/GridContext';
 
-export const Route = createLazyFileRoute('/_layout/create')({
+export const Route = createLazyFileRoute('/_context/_layout/create')({
   component: memo(function CreateMode() {
     const params = Route.useSearch();
     const navigate = useNavigate();

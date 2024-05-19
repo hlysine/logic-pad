@@ -71,7 +71,7 @@ const serialized: string[] = [
   'dfl_lZFda8IwFIb_yjiCVwdp1NQayYV1l7tSoZfSauzCsig12oZ1_33UWhNwQ3YukpynD28-Gmy-wEijBDCYK_VSiK1Jda7ECRDyQu6AAQkqEtRrEjD9UHESJ1rrJNZJnMRX8Cjd6vrdSX-Y9WLKBs9rfl_UK33-zESBFSdo-RDbllN25wFaPur42PEhWh52PHR8hJZPOj5xPPK5lzPxc7x9Q39fj1P_nJHjU7Sc_JIf-X7I8lSllcWKj9HyyLWNNhpQB5r3IOwiRXk8SG1uL-FuXC-zVG-OqTGi0HibOa1ov0eG49ma9ns0mrl_k2XNUHZtay3I1WqbVTst2f-Cy7IbngUDwk7u93J7VsYCowhK6g9gAAjp2bwfCmDwlua5fRWXRhanbSGPRh50I33_AA%3D%3D',
 ];
 
-const curatedPuzzles: { link: string; puzzle: Puzzle }[] = [];
+const curatedPuzzles: { data: string; puzzle: Puzzle }[] = [];
 
 export interface CuratedPuzzlesProps {
   filter?: string;
@@ -90,7 +90,7 @@ export default memo(function CuratedPuzzles({ filter }: CuratedPuzzlesProps) {
           decodeURIComponent(data)
         );
         const puzzle = Serializer.parsePuzzle(decompresed);
-        curatedPuzzles.push({ puzzle, link: data });
+        curatedPuzzles.push({ puzzle, data: decodeURIComponent(data) });
         setPuzzles([
           ...curatedPuzzles.sort(
             (a, b) => a.puzzle.difficulty - b.puzzle.difficulty
@@ -104,13 +104,13 @@ export default memo(function CuratedPuzzles({ filter }: CuratedPuzzlesProps) {
       filter === 'All' ? true : getPuzzleType(puzzle.grid) === filter
     );
   }, [puzzles, filter]);
-  return filteredPuzzles.map(({ puzzle, link }) => (
+  return filteredPuzzles.map(({ puzzle, data }) => (
     <PuzzleCard
       className="min-w-64 transition-all hover:scale-105 hover:rotate-3 hover:shadow-xl"
       key={puzzle.title}
       grid={puzzle.grid}
       metadata={puzzle}
-      link={'/solve?d=' + link}
+      data={data}
     />
   ));
 });

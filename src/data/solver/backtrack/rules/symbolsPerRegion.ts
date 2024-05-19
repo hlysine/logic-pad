@@ -1,4 +1,4 @@
-import { Position } from '../../../primitives';
+import { Comparison, Position } from '../../../primitives';
 import SymbolsPerRegionRule from '../../../rules/symbolsPerRegionRule';
 import Symbol from '../../../symbols/symbol';
 import BTModule, {
@@ -95,7 +95,11 @@ export default class SymbolsPerRegionBTModule extends BTModule {
       }
     }
 
-    if (completed > this.instr.count) return false;
+    if (completed > this.instr.count) {
+      return this.instr.comparison === Comparison.AtLeast;
+    }
+
+    if (this.instr.comparison === Comparison.AtMost) return true;
 
     // Count usable tile
     while (usableTileQueue.length > 0) {

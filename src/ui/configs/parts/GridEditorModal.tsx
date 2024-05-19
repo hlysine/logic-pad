@@ -41,7 +41,6 @@ export default memo(function GridConfig({
       <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral">
         <form method="dialog">
           <button
-            type="button"
             aria-label="Close dialog"
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
             onClick={() => setOpen(false)}

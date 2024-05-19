@@ -51,7 +51,6 @@ const ChangelogButton = lazy(async () => {
             <div className="modal-box">
               <form method="dialog">
                 <button
-                  type="button"
                   aria-label="Close dialog"
                   className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                 >
@@ -62,9 +61,7 @@ const ChangelogButton = lazy(async () => {
               <Markdown>{changelogText!}</Markdown>
             </div>
             <form method="dialog" className="modal-backdrop">
-              <button type="button" aria-label="Close dialog">
-                close
-              </button>
+              <button aria-label="Close dialog">close</button>
             </form>
           </dialog>
         </>

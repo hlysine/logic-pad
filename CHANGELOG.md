@@ -1,3 +1,8 @@
+# 20/5/2024
+
+- Enhanced support for Markdown in puzzle description
+- Added support for `||spoilers||` which can be revealed by solving the puzzle
+
 # 19/5/2024
 
 - Optimized site loading and enabled installation as PWA app

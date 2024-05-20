@@ -2,6 +2,8 @@
 
 - Enhanced support for Markdown in puzzle description
 - Added support for `||spoilers||` which can be revealed by solving the puzzle
+- You can now count gray tiles by holding `ctrl`
+- Added a button to reset the site in case of bugs
 - Fixed myopia arrows sometimes turning green when incomplete
 - Fixed tile count overlay to support older browsers
 

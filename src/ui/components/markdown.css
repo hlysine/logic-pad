@@ -15,7 +15,7 @@
 }
 
 .markdown:not(.spoiler-reveal) .spoiler {
-  @apply bg-base-300 text-transparent select-none;
+  @apply bg-base-300 text-transparent select-none pointer-events-none;
 }
 
 .markdown.spoiler-reveal .spoiler {

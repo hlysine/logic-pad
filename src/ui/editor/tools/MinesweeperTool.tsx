@@ -8,7 +8,7 @@ const sample = instance;
 export default memo(function MinesweeperTool() {
   return (
     <SymbolTool
-      name="Minesweeper Number"
+      name="Minesweeper"
       order={12}
       sample={sample}
       component={MinesweeperSymbol}

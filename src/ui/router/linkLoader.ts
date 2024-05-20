@@ -5,6 +5,7 @@ import { Compressor } from '../../data/serializer/compressor/allCompressors';
 import { Serializer } from '../../data/serializer/allSerializers';
 import { useNavigate } from '@tanstack/react-router';
 import { array } from '../../data/helper';
+import { useGridState } from '../GridStateContext';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',
@@ -67,6 +68,7 @@ export default function useLinkLoader(
 ): LinkLoaderResult | undefined {
   const { setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
+  const { setRevealSpoiler } = useGridState();
   const navigate = useNavigate();
   const [result, setResult] = useState<LinkLoaderResult | undefined>(undefined);
   useEffect(() => {
@@ -94,6 +96,7 @@ export default function useLinkLoader(
           setGrid(grid, null);
         }
         setMetadata(metadata);
+        setRevealSpoiler(false);
         clearHistory(grid);
         if (cleanUrl) await navigate({ search: {} });
       } else if (!allowEmpty) {

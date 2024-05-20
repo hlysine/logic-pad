@@ -1,0 +1,23 @@
+.markdown {
+  @apply leading-normal;
+}
+
+.markdown li {
+  @apply list-disc ms-5;
+}
+
+.markdown h1 {
+  @apply text-lg font-semibold mt-4 mb-2;
+}
+
+.markdown .spoiler {
+  @apply rounded-md;
+}
+
+.markdown:not(.spoiler-reveal) .spoiler {
+  @apply bg-base-300 text-transparent select-none;
+}
+
+.markdown.spoiler-reveal .spoiler {
+  @apply bg-base-300/10;
+}

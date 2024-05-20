@@ -4,9 +4,11 @@ import { FiExternalLink } from 'react-icons/fi';
 import Difficulty from './Difficulty';
 import DocumentTitle from '../components/DocumentTitle';
 import Markdown from '../components/Markdown';
+import { useGridState } from '../GridStateContext';
 
 export default memo(function Metadata() {
   const { metadata } = useGrid();
+  const { revealSpoiler } = useGridState();
 
   return (
     <div className="flex flex-col gap-4 text-neutral-content">
@@ -29,7 +31,9 @@ export default memo(function Metadata() {
           <FiExternalLink size={24} />
         </a>
       )}
-      <Markdown>{metadata.description}</Markdown>
+      <Markdown revealSpoiler={revealSpoiler} className="text-lg">
+        {metadata.description}
+      </Markdown>
     </div>
   );
 });

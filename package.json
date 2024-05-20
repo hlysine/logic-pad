@@ -37,7 +37,7 @@
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.5.0",
     "react-icons": "^5.2.0",
-    "react-remark": "^2.1.0",
+    "react-markdown": "^9.0.1",
     "tone": "^14.9.17",
     "z3-solver": "^4.13.0",
     "zod": "^3.22.4"

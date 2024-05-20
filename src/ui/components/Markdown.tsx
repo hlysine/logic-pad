@@ -1,28 +1,27 @@
 import { Suspense, lazy, memo } from 'react';
-import { type RemarkProps } from 'react-remark';
 import { cn } from '../../utils';
 import Loading from './Loading';
+import type { Options } from 'react-markdown';
 
-export interface MarkdownProps extends RemarkProps {
+export interface MarkdownProps extends Readonly<Options> {
   className?: string;
 }
 
 const MarkdownAsync = lazy(async () => {
-  const { Remark } = await import('react-remark');
+  const { default: Markdown } = await import('react-markdown');
   return {
-    default: memo(function Markdown({
+    default: memo(function MarkdownAsync({
       className,
-      ...remarkProps
+      ...mdProps
     }: MarkdownProps) {
       return (
-        <div
+        <Markdown
+          {...mdProps}
           className={cn(
             '[&_li]:list-disc [&_li]:ms-5 leading-normal [&_h1]:text-lg [&_h1]:font-semibold [&_h1]:mt-4 [&_h1]:mb-2',
             className
           )}
-        >
-          <Remark {...remarkProps} />
-        </div>
+        />
       );
     }),
   };

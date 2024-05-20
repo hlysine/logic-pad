@@ -101,7 +101,7 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
 
     if (!position) return;
     const tile = grid.getTile(position.x, position.y);
-    if (!tile.exists || tile.color === Color.Gray) return;
+    if (!tile.exists) return;
 
     const viewpoint = grid.symbols
       .get(viewpointInstance.id)

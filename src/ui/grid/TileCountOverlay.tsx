@@ -26,7 +26,7 @@ function canvasTextBox(
   color: string,
   fontSize: number
 ) {
-  ctx.font = `${fontSize}px ${document.body.computedStyleMap().get('font-family')!.toString()}`;
+  ctx.font = `${fontSize}px ${window.getComputedStyle(document.body).fontFamily}`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.lineWidth = 5;

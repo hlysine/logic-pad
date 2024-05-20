@@ -2,6 +2,7 @@
 
 - Enhanced support for Markdown in puzzle description
 - Added support for `||spoilers||` which can be revealed by solving the puzzle
+- Fixed myopia arrows sometimes turning green when incomplete
 
 # 19/5/2024
 

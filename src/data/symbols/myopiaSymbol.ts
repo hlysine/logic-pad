@@ -165,6 +165,7 @@ export default class MyopiaSymbol extends Symbol {
     if (
       pointedDirections.length > 0 &&
       otherDirections.length > 0 &&
+      pointedDirections.every(d => map[d].complete) &&
       Math.max(...pointedDirections.map(d => map[d].max)) <
         Math.min(...otherDirections.map(d => map[d].min))
     )

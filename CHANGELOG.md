@@ -2,6 +2,7 @@
 
 - Fixed myopia arrows not treating empty tiles appropriately
 - Massive restructure of codebase to prepare for backend code
+- Fixed bogus tile count when a viewpoint is on a gray tile
 
 # 20/5/2024
 

@@ -1,3 +1,7 @@
+# 21/5/2024
+
+- Fixed myopia arrows not treating empty tiles appropriately
+
 # 20/5/2024
 
 - Enhanced support for Markdown in puzzle description

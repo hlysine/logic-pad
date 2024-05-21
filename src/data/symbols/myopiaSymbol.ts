@@ -115,7 +115,7 @@ export default class MyopiaSymbol extends Symbol {
       grid.iterateDirectionAll(
         pos,
         direction,
-        t => t.color === tile.color,
+        t => !t.exists || t.color === tile.color,
         () => {
           map[direction].min++;
         }
@@ -125,13 +125,15 @@ export default class MyopiaSymbol extends Symbol {
         pos,
         direction,
         t => {
+          if (!t.exists) return true;
           if (t.color === tile.color || t.color === Color.Gray) return true;
           stopped = true;
           return false;
         },
         t => {
           map[direction].max++;
-          if (t.color === Color.Gray) map[direction].complete = false;
+          if (t.exists && t.color === Color.Gray)
+            map[direction].complete = false;
         }
       );
       if (!stopped) map[direction].max = Number.MAX_SAFE_INTEGER;

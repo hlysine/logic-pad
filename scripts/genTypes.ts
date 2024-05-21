@@ -19,7 +19,7 @@ try {
   // bundle the data types into one file
   console.log('Bundling types...');
   dts.bundle({
-    name: 'logic-pad',
+    name: 'logic-pad.gen',
     main: './scripts/temp/' + dataPath + '/**/*.d.ts',
     outputAsModuleFolder: true,
     out: '../../../../' + generatedPath,

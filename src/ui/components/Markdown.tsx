@@ -15,11 +15,7 @@ const MarkdownAsync = lazy(async () => {
   const { default: Markdown } = await import('react-markdown');
 
   const baseProps: Partial<MarkdownProps> = {
-    remarkPlugins: [
-      function (this: any) {
-        spoilerPlugin.apply(this, [{}]);
-      },
-    ],
+    remarkPlugins: [spoilerPlugin],
     remarkRehypeOptions: {
       handlers: {
         spoiler: (_: any, node: { value: string }) => {

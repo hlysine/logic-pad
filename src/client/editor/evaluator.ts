@@ -1,4 +1,4 @@
-import { enclosure } from '../../../generated/enclosure';
+import { enclosure } from './enclosure.gen';
 
 export const examples = [
   'GridData.create(["nnnnn", "nnnnn"])',

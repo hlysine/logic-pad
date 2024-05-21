@@ -1,5 +1,5 @@
-import { ConfigType, configEquals } from '../src/data/config';
-import Configurable from '../src/data/configurable';
+import { ConfigType, configEquals } from '../../../src/data/config';
+import Configurable from '../../../src/data/configurable';
 import {
   allEqual,
   array,
@@ -11,10 +11,10 @@ import {
   orientationToRotation,
   resize,
   unescape,
-} from '../src/data/dataHelper';
-import GridData from '../src/data/grid';
-import GridConnections from '../src/data/gridConnections';
-import Instruction from '../src/data/instruction';
+} from '../../../src/data/dataHelper';
+import GridData from '../../../src/data/grid';
+import GridConnections from '../../../src/data/gridConnections';
+import Instruction from '../../../src/data/instruction';
 import {
   COMPARISONS,
   Color,
@@ -27,54 +27,54 @@ import {
   State,
   directionToggle,
   orientationToggle,
-} from '../src/data/primitives';
-import { MetadataSchema, PuzzleSchema } from '../src/data/puzzle';
+} from '../../../src/data/primitives';
+import { MetadataSchema, PuzzleSchema } from '../../../src/data/puzzle';
 import {
   getShapeVariants,
   normalizeShape,
   positionsToShape,
   shapeEquals,
   tilesToShape,
-} from '../src/data/shapes';
-import TileData from '../src/data/tile';
-import TileConnections from '../src/data/tileConnections';
+} from '../../../src/data/shapes';
+import TileData from '../../../src/data/tile';
+import TileConnections from '../../../src/data/tileConnections';
 import validateGrid, {
   aggregateState,
   applyFinalOverrides,
-} from '../src/data/validate';
-import AreaNumberSymbol from '../src/data/symbols/areaNumberSymbol';
-import CustomIconSymbol from '../src/data/symbols/customIconSymbol';
-import CustomSymbol from '../src/data/symbols/customSymbol';
-import CustomTextSymbol from '../src/data/symbols/customTextSymbol';
-import DartSymbol from '../src/data/symbols/dartSymbol';
-import DirectionLinkerSymbol from '../src/data/symbols/directionLinkerSymbol';
-import GalaxySymbol from '../src/data/symbols/galaxySymbol';
-import { allSymbols } from '../src/data/symbols/index';
-import LetterSymbol from '../src/data/symbols/letterSymbol';
-import LotusSymbol from '../src/data/symbols/lotusSymbol';
-import MinesweeperSymbol from '../src/data/symbols/minesweeperSymbol';
-import MultiEntrySymbol from '../src/data/symbols/multiEntrySymbol';
-import MyopiaSymbol from '../src/data/symbols/myopiaSymbol';
-import NumberSymbol from '../src/data/symbols/numberSymbol';
-import Symbol from '../src/data/symbols/symbol';
-import ViewpointSymbol from '../src/data/symbols/viewpointSymbol';
-import { allSolvers } from '../src/data/solver/allSolvers';
-import Solver from '../src/data/solver/solver';
-import { convertDirection } from '../src/data/solver/z3/utils';
-import Z3Solver from '../src/data/solver/z3/z3Solver';
-import Z3SolverContext from '../src/data/solver/z3/z3SolverContext';
-import AreaNumberModule from '../src/data/solver/z3/modules/areaNumberModule';
-import CellCountModule from '../src/data/solver/z3/modules/cellCountModule';
-import ConnectAllModule from '../src/data/solver/z3/modules/connectAllModule';
-import DartModule from '../src/data/solver/z3/modules/dartModule';
-import { allZ3Modules } from '../src/data/solver/z3/modules/index';
-import LetterModule from '../src/data/solver/z3/modules/letterModule';
-import MyopiaModule from '../src/data/solver/z3/modules/myopiaModule';
-import RegionAreaModule from '../src/data/solver/z3/modules/regionAreaModule';
-import ViewpointModule from '../src/data/solver/z3/modules/viewpointModule';
-import Z3Module from '../src/data/solver/z3/modules/z3Module';
-import UndercluedSolver from '../src/data/solver/underclued/undercluedSolver';
-import BacktrackSolver from '../src/data/solver/backtrack/backtrackSolver';
+} from '../../../src/data/validate';
+import AreaNumberSymbol from '../../../src/data/symbols/areaNumberSymbol';
+import CustomIconSymbol from '../../../src/data/symbols/customIconSymbol';
+import CustomSymbol from '../../../src/data/symbols/customSymbol';
+import CustomTextSymbol from '../../../src/data/symbols/customTextSymbol';
+import DartSymbol from '../../../src/data/symbols/dartSymbol';
+import DirectionLinkerSymbol from '../../../src/data/symbols/directionLinkerSymbol';
+import GalaxySymbol from '../../../src/data/symbols/galaxySymbol';
+import { allSymbols } from '../../../src/data/symbols/index';
+import LetterSymbol from '../../../src/data/symbols/letterSymbol';
+import LotusSymbol from '../../../src/data/symbols/lotusSymbol';
+import MinesweeperSymbol from '../../../src/data/symbols/minesweeperSymbol';
+import MultiEntrySymbol from '../../../src/data/symbols/multiEntrySymbol';
+import MyopiaSymbol from '../../../src/data/symbols/myopiaSymbol';
+import NumberSymbol from '../../../src/data/symbols/numberSymbol';
+import Symbol from '../../../src/data/symbols/symbol';
+import ViewpointSymbol from '../../../src/data/symbols/viewpointSymbol';
+import { allSolvers } from '../../../src/data/solver/allSolvers';
+import Solver from '../../../src/data/solver/solver';
+import { convertDirection } from '../../../src/data/solver/z3/utils';
+import Z3Solver from '../../../src/data/solver/z3/z3Solver';
+import Z3SolverContext from '../../../src/data/solver/z3/z3SolverContext';
+import AreaNumberModule from '../../../src/data/solver/z3/modules/areaNumberModule';
+import CellCountModule from '../../../src/data/solver/z3/modules/cellCountModule';
+import ConnectAllModule from '../../../src/data/solver/z3/modules/connectAllModule';
+import DartModule from '../../../src/data/solver/z3/modules/dartModule';
+import { allZ3Modules } from '../../../src/data/solver/z3/modules/index';
+import LetterModule from '../../../src/data/solver/z3/modules/letterModule';
+import MyopiaModule from '../../../src/data/solver/z3/modules/myopiaModule';
+import RegionAreaModule from '../../../src/data/solver/z3/modules/regionAreaModule';
+import ViewpointModule from '../../../src/data/solver/z3/modules/viewpointModule';
+import Z3Module from '../../../src/data/solver/z3/modules/z3Module';
+import UndercluedSolver from '../../../src/data/solver/underclued/undercluedSolver';
+import BacktrackSolver from '../../../src/data/solver/backtrack/backtrackSolver';
 import BTModule, {
   BTGridData,
   BTTile,
@@ -82,56 +82,56 @@ import BTModule, {
   colorToBTTile,
   createOneTileResult,
   getOppositeColor,
-} from '../src/data/solver/backtrack/data';
-import AreaNumberBTModule from '../src/data/solver/backtrack/symbols/areaNumber';
-import DartBTModule from '../src/data/solver/backtrack/symbols/dart';
-import DirectionLinkerBTModule from '../src/data/solver/backtrack/symbols/directionLinker';
-import GalaxyBTModule from '../src/data/solver/backtrack/symbols/galaxy';
-import LetterBTModule from '../src/data/solver/backtrack/symbols/letter';
-import LotusBTModule from '../src/data/solver/backtrack/symbols/lotus';
-import MinesweeperBTModule from '../src/data/solver/backtrack/symbols/minesweeper';
-import MyopiaBTModule from '../src/data/solver/backtrack/symbols/myopia';
-import ViewpointBTModule from '../src/data/solver/backtrack/symbols/viewpoint';
-import BanPatternBTModule from '../src/data/solver/backtrack/rules/banPattern';
-import CellCountBTModule from '../src/data/solver/backtrack/rules/cellCount';
-import ConnectAllBTModule from '../src/data/solver/backtrack/rules/connectAll';
-import RegionAreaBTModule from '../src/data/solver/backtrack/rules/regionArea';
-import RegionShapeBTModule from '../src/data/solver/backtrack/rules/regionShape';
-import SameShapeBTModule from '../src/data/solver/backtrack/rules/sameShape';
-import SymbolsPerRegionBTModule from '../src/data/solver/backtrack/rules/symbolsPerRegion';
-import UniqueShapeBTModule from '../src/data/solver/backtrack/rules/uniqueShape';
-import { Serializer } from '../src/data/serializer/allSerializers';
-import SerializerBase from '../src/data/serializer/serializerBase';
-import SerializerV0 from '../src/data/serializer/serializer_v0';
-import { Compressor } from '../src/data/serializer/compressor/allCompressors';
-import CompressorBase from '../src/data/serializer/compressor/compressorBase';
-import DeflateCompressor from '../src/data/serializer/compressor/deflateCompressor';
-import GzipCompressor from '../src/data/serializer/compressor/gzipCompressor';
-import StreamCompressor from '../src/data/serializer/compressor/streamCompressor';
-import BanPatternRule from '../src/data/rules/banPatternRule';
-import CellCountRule from '../src/data/rules/cellCountRule';
-import CompletePatternRule from '../src/data/rules/completePatternRule';
-import ConnectAllRule from '../src/data/rules/connectAllRule';
-import CustomRule from '../src/data/rules/customRule';
-import ForesightRule from '../src/data/rules/foresightRule';
-import { allRules } from '../src/data/rules/index';
-import { ControlLine, Row } from '../src/data/rules/musicControlLine';
-import MusicGridRule from '../src/data/rules/musicGridRule';
-import MysteryRule from '../src/data/rules/mysteryRule';
-import OffByXRule from '../src/data/rules/offByXRule';
-import RegionAreaRule from '../src/data/rules/regionAreaRule';
-import RegionShapeRule from '../src/data/rules/regionShapeRule';
-import Rule from '../src/data/rules/rule';
-import SameShapeRule from '../src/data/rules/sameShapeRule';
-import SymbolsPerRegionRule from '../src/data/rules/symbolsPerRegionRule';
-import UndercluedRule from '../src/data/rules/undercluedRule';
-import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
-import { isEventHandler } from '../src/data/events/eventHelper';
-import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
-import { handlesGridChange } from '../src/data/events/onGridChange';
-import { handlesGridResize } from '../src/data/events/onGridResize';
-import { handlesSetGrid } from '../src/data/events/onSetGrid';
-import { handlesSymbolValidation } from '../src/data/events/onSymbolValidation';
+} from '../../../src/data/solver/backtrack/data';
+import AreaNumberBTModule from '../../../src/data/solver/backtrack/symbols/areaNumber';
+import DartBTModule from '../../../src/data/solver/backtrack/symbols/dart';
+import DirectionLinkerBTModule from '../../../src/data/solver/backtrack/symbols/directionLinker';
+import GalaxyBTModule from '../../../src/data/solver/backtrack/symbols/galaxy';
+import LetterBTModule from '../../../src/data/solver/backtrack/symbols/letter';
+import LotusBTModule from '../../../src/data/solver/backtrack/symbols/lotus';
+import MinesweeperBTModule from '../../../src/data/solver/backtrack/symbols/minesweeper';
+import MyopiaBTModule from '../../../src/data/solver/backtrack/symbols/myopia';
+import ViewpointBTModule from '../../../src/data/solver/backtrack/symbols/viewpoint';
+import BanPatternBTModule from '../../../src/data/solver/backtrack/rules/banPattern';
+import CellCountBTModule from '../../../src/data/solver/backtrack/rules/cellCount';
+import ConnectAllBTModule from '../../../src/data/solver/backtrack/rules/connectAll';
+import RegionAreaBTModule from '../../../src/data/solver/backtrack/rules/regionArea';
+import RegionShapeBTModule from '../../../src/data/solver/backtrack/rules/regionShape';
+import SameShapeBTModule from '../../../src/data/solver/backtrack/rules/sameShape';
+import SymbolsPerRegionBTModule from '../../../src/data/solver/backtrack/rules/symbolsPerRegion';
+import UniqueShapeBTModule from '../../../src/data/solver/backtrack/rules/uniqueShape';
+import { Serializer } from '../../../src/data/serializer/allSerializers';
+import SerializerBase from '../../../src/data/serializer/serializerBase';
+import SerializerV0 from '../../../src/data/serializer/serializer_v0';
+import { Compressor } from '../../../src/data/serializer/compressor/allCompressors';
+import CompressorBase from '../../../src/data/serializer/compressor/compressorBase';
+import DeflateCompressor from '../../../src/data/serializer/compressor/deflateCompressor';
+import GzipCompressor from '../../../src/data/serializer/compressor/gzipCompressor';
+import StreamCompressor from '../../../src/data/serializer/compressor/streamCompressor';
+import BanPatternRule from '../../../src/data/rules/banPatternRule';
+import CellCountRule from '../../../src/data/rules/cellCountRule';
+import CompletePatternRule from '../../../src/data/rules/completePatternRule';
+import ConnectAllRule from '../../../src/data/rules/connectAllRule';
+import CustomRule from '../../../src/data/rules/customRule';
+import ForesightRule from '../../../src/data/rules/foresightRule';
+import { allRules } from '../../../src/data/rules/index';
+import { ControlLine, Row } from '../../../src/data/rules/musicControlLine';
+import MusicGridRule from '../../../src/data/rules/musicGridRule';
+import MysteryRule from '../../../src/data/rules/mysteryRule';
+import OffByXRule from '../../../src/data/rules/offByXRule';
+import RegionAreaRule from '../../../src/data/rules/regionAreaRule';
+import RegionShapeRule from '../../../src/data/rules/regionShapeRule';
+import Rule from '../../../src/data/rules/rule';
+import SameShapeRule from '../../../src/data/rules/sameShapeRule';
+import SymbolsPerRegionRule from '../../../src/data/rules/symbolsPerRegionRule';
+import UndercluedRule from '../../../src/data/rules/undercluedRule';
+import UniqueShapeRule from '../../../src/data/rules/uniqueShapeRule';
+import { isEventHandler } from '../../../src/data/events/eventHelper';
+import { handlesFinalValidation } from '../../../src/data/events/onFinalValidation';
+import { handlesGridChange } from '../../../src/data/events/onGridChange';
+import { handlesGridResize } from '../../../src/data/events/onGridResize';
+import { handlesSetGrid } from '../../../src/data/events/onSetGrid';
+import { handlesSymbolValidation } from '../../../src/data/events/onSymbolValidation';
 
 const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConfigType', value: ConfigType },

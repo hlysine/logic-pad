@@ -1,5 +1,9 @@
 import { Project, VariableDeclarationKind } from 'ts-morph';
 import { $, Glob } from 'bun';
+import path from 'path';
+
+const dataPath = 'src/data';
+const generatedPath = 'src/client/editor/enclosure.gen.ts';
 
 interface Module {
   path: string;
@@ -12,8 +16,8 @@ console.log('Scanning data directory...');
 
 const glob = new Glob('**/*.ts');
 const modules: Module[] = [];
-for await (const file of glob.scan('src/data')) {
-  const module = (await import('../src/data/' + file)) as Record<
+for await (const file of glob.scan(dataPath)) {
+  const module = (await import(path.join('../', dataPath, file))) as Record<
     string,
     unknown
   >;
@@ -22,7 +26,13 @@ for await (const file of glob.scan('src/data')) {
     continue;
 
   const result: Module = {
-    path: '../src/data/' + file.replaceAll('.ts', '').replaceAll('\\', '/'),
+    path: path
+      .join(
+        '../../../',
+        dataPath,
+        file.replaceAll('.ts', '').replaceAll('\\', '/')
+      )
+      .replaceAll('\\', '/'),
     module,
     defaultExport: undefined,
     namedExports: [],
@@ -61,7 +71,7 @@ console.log('Composing code...');
 const project = new Project({
   tsConfigFilePath: 'tsconfig.json',
 });
-const sourceFile = project.createSourceFile(`../generated/enclosure.ts`);
+const sourceFile = project.createSourceFile(path.join('../', generatedPath));
 
 sourceFile.addImportDeclarations(
   modules
@@ -106,10 +116,10 @@ sourceFile.addExportDeclaration({
 });
 
 console.log('Writing...');
-await Bun.write('./generated/enclosure.ts', sourceFile.getText());
+await Bun.write(generatedPath, sourceFile.getText());
 
 console.log('Formatting...');
-await $`bunx prettier --write ./generated/enclosure.ts`;
+await $`bunx prettier --write ${generatedPath}`;
 
 console.log('Done!');
 

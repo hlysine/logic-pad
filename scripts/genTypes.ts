@@ -2,11 +2,15 @@
 
 import { $, ShellError } from 'bun';
 import dts from 'dts-bundle';
+import path from 'path';
+
+const dataPath = 'src/data';
+const generatedPath = 'src/client/editor/logic-pad.gen.d.ts';
 
 // remove old files
 console.log('Removing old files...');
 await $`rm -rf ./scripts/temp`.nothrow();
-await $`rm ./generated/logic-pad.d.ts`.nothrow();
+await $`rm ${generatedPath}`.nothrow();
 
 try {
   // compile the whole project
@@ -17,15 +21,13 @@ try {
   console.log('Bundling types...');
   dts.bundle({
     name: 'logic-pad',
-    main: './scripts/temp/src/data/**/*.d.ts',
+    main: './scripts/temp/' + dataPath + '/**/*.d.ts',
     outputAsModuleFolder: true,
-    out: '../../../../generated/logic-pad.d.ts',
+    out: path.join('../../../../', generatedPath),
   });
 
   // wrap the bundled types in a global declaration
-  const filePath = './generated/logic-pad.d.ts';
-
-  let file = await Bun.file(filePath).text();
+  let file = await Bun.file(generatedPath).text();
 
   file = file
     .replace(/export default +(?=class|abstract|function)/gm, 'export ')
@@ -33,19 +35,28 @@ try {
     .replace(/export const instance.+;/gm, '');
   if (!file.startsWith('declare global'))
     file = `
+      /* prettier-ignore-start */
+
+      /* eslint-disable */
+
+      // @ts-nocheck
+
+      // noinspection JSUnusedGlobalSymbols
       declare global {
         ${file}
         export { Symbol as _Symbol };
       }
       export {};
+
+      /* prettier-ignore-end */
     `;
   file = file.replace(/\r\n/g, '\n');
 
-  await Bun.write(filePath, file);
+  await Bun.write(generatedPath, file);
 
   // format the file
   console.log('Formatting types...');
-  await $`bunx prettier --write ${filePath}`;
+  await $`bunx prettier --write ${generatedPath}`;
 } catch (err) {
   console.error(err);
   if (err instanceof ShellError) {

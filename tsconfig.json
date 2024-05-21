@@ -18,8 +18,10 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["vite/client", "vite-plugin-pwa/react"]
   },
-  "include": ["src", "generated/enclosure.ts"],
+  "include": ["src"],
+  "exclude": ["**/*.gen.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

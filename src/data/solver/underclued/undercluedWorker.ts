@@ -57,7 +57,7 @@ function tryToBacktrack(
   assumptions: number[]
 ): [GridData, number[]] {
   while (assumptions.length > 0) {
-    const coords = posToCoords(assumptions.at(-1), grid.width);
+    const coords = posToCoords(assumptions[assumptions.length - 1], grid.width);
     if (grid.getTile(coords[0], coords[1]).color === Color.Light) {
       grid = grid.setTile(coords[0], coords[1], tile =>
         tile.withColor(Color.Gray)

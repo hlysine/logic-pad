@@ -2,7 +2,6 @@
 
 import { $, ShellError } from 'bun';
 import dts from 'dts-bundle';
-import path from 'path';
 
 const dataPath = 'src/data';
 const generatedPath = 'src/client/editor/logic-pad.gen.d.ts';
@@ -23,7 +22,7 @@ try {
     name: 'logic-pad',
     main: './scripts/temp/' + dataPath + '/**/*.d.ts',
     outputAsModuleFolder: true,
-    out: path.join('../../../../', generatedPath),
+    out: '../../../../' + generatedPath,
   });
 
   // wrap the bundled types in a global declaration

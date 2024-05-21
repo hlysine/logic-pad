@@ -1,6 +1,7 @@
 # 21/5/2024
 
 - Fixed myopia arrows not treating empty tiles appropriately
+- Massive restructure of codebase to prepare for backend code
 
 # 20/5/2024
 

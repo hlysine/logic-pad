@@ -2,7 +2,7 @@ import Rule, { SearchVariant } from './rule';
 import GridData from '../grid';
 import { AnyConfig, ConfigType } from '../config';
 import { Color, Comparison, Position, RuleState, State } from '../primitives';
-import { array } from '../helper';
+import { array } from '../dataHelper';
 import LetterSymbol from '../symbols/letterSymbol';
 import Symbol from '../symbols/symbol';
 import GridConnections from '../gridConnections';

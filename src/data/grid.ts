@@ -2,7 +2,7 @@ import { handlesGridChange } from './events/onGridChange';
 import { handlesGridResize } from './events/onGridResize';
 import { handlesSetGrid } from './events/onSetGrid';
 import GridConnections from './gridConnections';
-import { array, move } from './helper';
+import { array, move } from './dataHelper';
 import { Color, Direction, Orientation, Position } from './primitives';
 import Rule from './rules/rule';
 import Symbol from './symbols/symbol';

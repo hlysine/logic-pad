@@ -1,4 +1,4 @@
-import { move } from '../../../helper';
+import { move } from '../../../dataHelper';
 import { ORIENTATIONS, Orientation } from '../../../primitives';
 import MyopiaSymbol from '../../../symbols/myopiaSymbol';
 import BTModule, {

@@ -1,6 +1,6 @@
 import GridData from '../grid';
 import Instruction from '../instruction';
-import { isEventHandler } from './helper';
+import { isEventHandler } from './eventHelper';
 
 export interface GridResizeHandler {
   /**

@@ -1,5 +1,5 @@
 import GridData from '../../grid';
-import { array } from '../../helper';
+import { array } from '../../dataHelper';
 import { Color, Position } from '../../primitives';
 import BanPatternRule, {
   instance as banPatternInstance,

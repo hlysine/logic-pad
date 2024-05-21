@@ -7,7 +7,7 @@ import DartSymbol, {
 } from '../../../symbols/dartSymbol';
 import { Point, reduceCells } from 'grilops';
 import { Color } from '../../../primitives';
-import { move } from '../../../helper';
+import { move } from '../../../dataHelper';
 import { convertDirection } from '../utils';
 
 export default class DartModule extends Z3Module {

@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import { move } from '../helper';
+import { move } from '../dataHelper';
 import { Color, DIRECTIONS } from '../primitives';
 import NumberSymbol from './numberSymbol';
 

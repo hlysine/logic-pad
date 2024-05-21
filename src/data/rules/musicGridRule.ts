@@ -3,7 +3,7 @@ import { GridChangeHandler } from '../events/onGridChange';
 import { GridResizeHandler } from '../events/onGridResize';
 import { SetGridHandler } from '../events/onSetGrid';
 import GridData from '../grid';
-import { resize } from '../helper';
+import { resize } from '../dataHelper';
 import { Color, RuleState, State } from '../primitives';
 import CustomIconSymbol from '../symbols/customIconSymbol';
 import { ControlLine, Row } from './musicControlLine';

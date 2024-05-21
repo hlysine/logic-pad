@@ -3,7 +3,7 @@ import { FinalValidationHandler } from '../events/onFinalValidation';
 import { GridChangeHandler } from '../events/onGridChange';
 import { GridResizeHandler } from '../events/onGridResize';
 import GridData from '../grid';
-import { array } from '../helper';
+import { array } from '../dataHelper';
 import { Color, GridState, RuleState, State } from '../primitives';
 import CustomTextSymbol from '../symbols/customTextSymbol';
 import Rule, { SearchVariant } from './rule';

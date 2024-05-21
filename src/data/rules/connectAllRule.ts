@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
-import { array, minBy } from '../helper';
+import { array, minBy } from '../dataHelper';
 import { Color, Position, RuleState, State } from '../primitives';
 import Rule, { SearchVariant } from './rule';
 

@@ -1,7 +1,7 @@
 import GridData from '../grid';
 import Instruction from '../instruction';
 import { GridState } from '../primitives';
-import { isEventHandler } from './helper';
+import { isEventHandler } from './eventHelper';
 
 export interface FinalValidationHandler {
   /**

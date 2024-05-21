@@ -12,7 +12,7 @@ import { allZ3Modules } from './modules';
 import { Color } from '../../primitives';
 import { Model, init } from 'z3-solver';
 import Z3SolverContext from './z3SolverContext';
-import { array } from '../../helper';
+import { array } from '../../dataHelper';
 
 export default class Z3Solver extends Solver {
   public readonly id = 'z3';

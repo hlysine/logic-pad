@@ -17,7 +17,7 @@ import {
   directionToggle,
   orientationToggle,
 } from '../primitives';
-import { array, escape, unescape } from '../helper';
+import { array, escape, unescape } from '../dataHelper';
 import { allRules } from '../rules';
 import { allSymbols } from '../symbols';
 import SerializerBase from './serializerBase';

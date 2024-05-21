@@ -1,4 +1,4 @@
-import { move } from '../../../helper';
+import { move } from '../../../dataHelper';
 import DartSymbol from '../../../symbols/dartSymbol';
 import BTModule, {
   BTColor,

@@ -1,4 +1,4 @@
-import { minBy } from '../../helper';
+import { minBy } from '../../dataHelper';
 import CompressorBase from './compressorBase';
 import GzipCompressor from './gzipCompressor';
 import DeflateCompressor from './deflateCompressor';

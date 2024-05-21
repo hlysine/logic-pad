@@ -2,7 +2,7 @@ import GridData from '../grid';
 import { State } from '../primitives';
 import Rule from '../rules/rule';
 import Symbol from '../symbols/symbol';
-import { isEventHandler } from './helper';
+import { isEventHandler } from './eventHelper';
 
 export interface SymbolValidationHandler {
   /**

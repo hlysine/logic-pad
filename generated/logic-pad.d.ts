@@ -144,6 +144,107 @@ declare global {
     equals(other: Configurable): boolean;
   }
 
+  /**
+   * Offset the given position by a given step in the given direction.
+   * @param position The position to offset.
+   * @param direction The direction to offset in.
+   * @param step The distance to offset by.
+   * @returns The offset position.
+   */
+  export function move(
+    position: Position,
+    direction: Direction | Orientation,
+    step?: number
+  ): {
+    x: number;
+    y: number;
+  };
+  /**
+   * Convert the given direction to a rotation in degrees.
+   * @param direction The direction to convert.
+   * @returns The rotation in degrees.
+   */
+  export function directionToRotation(direction: Direction): 0 | 270 | 90 | 180;
+  /**
+   * Convert the given orientation to a rotation in degrees.
+   * @param orientation The orientation to convert.
+   * @returns The rotation in degrees.
+   */
+  export function orientationToRotation(
+    orientation: Orientation
+  ): 0 | 270 | 90 | 180 | 225 | 125 | 315 | 45;
+  /**
+   * Create a new 2D array with the given dimensions and values.
+   * @param width The width of the array.
+   * @param height The height of the array.
+   * @param value A function that returns the value for each x,y coordinate.
+   * @returns The 2D array.
+   */
+  export function array<T>(
+    width: number,
+    height: number,
+    value: (x: number, y: number) => T
+  ): T[][];
+  /**
+   * Resize the given array to the new size, cutting off or padding with the default value.
+   * @param array The array to resize.
+   * @param newSize The new size of the array.
+   * @param defaultValue A function that returns the default value for each new element.
+   * @returns The resized array.
+   */
+  export function resize<T>(
+    array: T[],
+    newSize: number,
+    defaultValue: () => T
+  ): T[];
+  export function resize<T>(
+    array: readonly T[],
+    newSize: number,
+    defaultValue: () => T
+  ): readonly T[];
+  /**
+   * Check if all the given values are equal.
+   * @param values The values to compare.
+   * @returns Whether all the values are equal.
+   */
+  export function allEqual<T>(...values: T[]): boolean;
+  /**
+   * Return the first element of the array which has the minimum mapped value.
+   *
+   * @param values The array of values.
+   * @param mapper The function to map each value to a number.
+   * @returns The first element with the minimum mapped value.
+   */
+  export function minBy<T>(
+    values: readonly T[],
+    mapper: (element: T) => number
+  ): T | undefined;
+  /**
+   * Return the first element of the array which has the maximum mapped value.
+   *
+   * @param values The array of values.
+   * @param mapper The function to map each value to a number.
+   * @returns The first element with the maximum mapped value.
+   */
+  export function maxBy<T>(
+    values: readonly T[],
+    mapper: (element: T) => number
+  ): T | undefined;
+  /**
+   * Escape the given text by replacing the specified characters with HTML escape sequences.
+   * @param text The text to escape.
+   * @param escapeCharacters The characters to escape.
+   * @returns The escaped text.
+   */
+  export function escape(text: string, escapeCharacters?: string): string;
+  /**
+   * Unescape the given text by replacing HTML escape sequences with the corresponding characters.
+   * @param text The text to unescape.
+   * @param escapeCharacters The characters to unescape. This should match the characters escaped by the `escape` function.
+   * @returns The unescaped text.
+   */
+  export function unescape(text: string, escapeCharacters?: string): string;
+
   export function isEventHandler<T>(val: unknown, event: string): val is T;
 
   export interface FinalValidationHandler {
@@ -675,107 +776,6 @@ declare global {
     removeColumn(index: number): GridConnections;
     removeRow(index: number): GridConnections;
   }
-
-  /**
-   * Offset the given position by a given step in the given direction.
-   * @param position The position to offset.
-   * @param direction The direction to offset in.
-   * @param step The distance to offset by.
-   * @returns The offset position.
-   */
-  export function move(
-    position: Position,
-    direction: Direction | Orientation,
-    step?: number
-  ): {
-    x: number;
-    y: number;
-  };
-  /**
-   * Convert the given direction to a rotation in degrees.
-   * @param direction The direction to convert.
-   * @returns The rotation in degrees.
-   */
-  export function directionToRotation(direction: Direction): 0 | 270 | 90 | 180;
-  /**
-   * Convert the given orientation to a rotation in degrees.
-   * @param orientation The orientation to convert.
-   * @returns The rotation in degrees.
-   */
-  export function orientationToRotation(
-    orientation: Orientation
-  ): 0 | 270 | 90 | 180 | 225 | 125 | 315 | 45;
-  /**
-   * Create a new 2D array with the given dimensions and values.
-   * @param width The width of the array.
-   * @param height The height of the array.
-   * @param value A function that returns the value for each x,y coordinate.
-   * @returns The 2D array.
-   */
-  export function array<T>(
-    width: number,
-    height: number,
-    value: (x: number, y: number) => T
-  ): T[][];
-  /**
-   * Resize the given array to the new size, cutting off or padding with the default value.
-   * @param array The array to resize.
-   * @param newSize The new size of the array.
-   * @param defaultValue A function that returns the default value for each new element.
-   * @returns The resized array.
-   */
-  export function resize<T>(
-    array: T[],
-    newSize: number,
-    defaultValue: () => T
-  ): T[];
-  export function resize<T>(
-    array: readonly T[],
-    newSize: number,
-    defaultValue: () => T
-  ): readonly T[];
-  /**
-   * Check if all the given values are equal.
-   * @param values The values to compare.
-   * @returns Whether all the values are equal.
-   */
-  export function allEqual<T>(...values: T[]): boolean;
-  /**
-   * Return the first element of the array which has the minimum mapped value.
-   *
-   * @param values The array of values.
-   * @param mapper The function to map each value to a number.
-   * @returns The first element with the minimum mapped value.
-   */
-  export function minBy<T>(
-    values: readonly T[],
-    mapper: (element: T) => number
-  ): T | undefined;
-  /**
-   * Return the first element of the array which has the maximum mapped value.
-   *
-   * @param values The array of values.
-   * @param mapper The function to map each value to a number.
-   * @returns The first element with the maximum mapped value.
-   */
-  export function maxBy<T>(
-    values: readonly T[],
-    mapper: (element: T) => number
-  ): T | undefined;
-  /**
-   * Escape the given text by replacing the specified characters with HTML escape sequences.
-   * @param text The text to escape.
-   * @param escapeCharacters The characters to escape.
-   * @returns The escaped text.
-   */
-  export function escape(text: string, escapeCharacters?: string): string;
-  /**
-   * Unescape the given text by replacing HTML escape sequences with the corresponding characters.
-   * @param text The text to unescape.
-   * @param escapeCharacters The characters to unescape. This should match the characters escaped by the `escape` function.
-   * @returns The unescaped text.
-   */
-  export function unescape(text: string, escapeCharacters?: string): string;
 
   export abstract class Instruction extends Configurable {
     abstract get id(): string;

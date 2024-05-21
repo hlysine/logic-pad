@@ -1,7 +1,5 @@
 import { ConfigType, configEquals } from '../src/data/config';
 import Configurable from '../src/data/configurable';
-import GridData from '../src/data/grid';
-import GridConnections from '../src/data/gridConnections';
 import {
   allEqual,
   array,
@@ -13,7 +11,9 @@ import {
   orientationToRotation,
   resize,
   unescape,
-} from '../src/data/helper';
+} from '../src/data/dataHelper';
+import GridData from '../src/data/grid';
+import GridConnections from '../src/data/gridConnections';
 import Instruction from '../src/data/instruction';
 import {
   COMPARISONS,
@@ -126,7 +126,7 @@ import SameShapeRule from '../src/data/rules/sameShapeRule';
 import SymbolsPerRegionRule from '../src/data/rules/symbolsPerRegionRule';
 import UndercluedRule from '../src/data/rules/undercluedRule';
 import UniqueShapeRule from '../src/data/rules/uniqueShapeRule';
-import { isEventHandler } from '../src/data/events/helper';
+import { isEventHandler } from '../src/data/events/eventHelper';
 import { handlesFinalValidation } from '../src/data/events/onFinalValidation';
 import { handlesGridChange } from '../src/data/events/onGridChange';
 import { handlesGridResize } from '../src/data/events/onGridResize';
@@ -137,8 +137,6 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'ConfigType', value: ConfigType },
   { name: 'configEquals', value: configEquals },
   { name: 'Configurable', value: Configurable },
-  { name: 'GridData', value: GridData },
-  { name: 'GridConnections', value: GridConnections },
   { name: 'allEqual', value: allEqual },
   { name: 'array', value: array },
   { name: 'directionToRotation', value: directionToRotation },
@@ -149,6 +147,8 @@ const enclosure: { name: string; value: unknown }[] = [
   { name: 'orientationToRotation', value: orientationToRotation },
   { name: 'resize', value: resize },
   { name: 'unescape', value: unescape },
+  { name: 'GridData', value: GridData },
+  { name: 'GridConnections', value: GridConnections },
   { name: 'Instruction', value: Instruction },
   { name: 'COMPARISONS', value: COMPARISONS },
   { name: 'Color', value: Color },

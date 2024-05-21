@@ -8,7 +8,7 @@ import MyopiaSymbol, {
 import { Point, reduceCells } from 'grilops';
 import { DIRECTIONS, ORIENTATIONS } from '../../../primitives';
 import { convertDirection } from '../utils';
-import { move } from '../../../helper';
+import { move } from '../../../dataHelper';
 
 export default class MyopiaModule extends Z3Module {
   public readonly id = myopiaInstance.id;

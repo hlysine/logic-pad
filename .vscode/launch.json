@@ -7,9 +7,10 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Vite Debug",
+      "name": "Debug logic-pad",
       "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "bun: dev"
     }
   ]
 }

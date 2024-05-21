@@ -10,7 +10,8 @@ export default defineConfig({
     million.vite({ auto: true }),
     react(),
     TanStackRouterVite({
-      generatedRouteTree: 'src/ui/router/routeTree.gen.ts',
+      routesDirectory: './src/client/routes',
+      generatedRouteTree: './src/client/router/routeTree.gen.ts',
     }),
     VitePWA({
       registerType: 'prompt',

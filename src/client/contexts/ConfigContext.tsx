@@ -1,0 +1,151 @@
+import { createContext, memo, useContext, useState } from 'react';
+import GridData from '../../data/grid.ts';
+import Rule from '../../data/rules/rule.ts';
+import Symbol from '../../data/symbols/symbol.ts';
+import Configurable from '../../data/configurable.ts';
+import MusicGridRule, {
+  instance as musicGridInstance,
+} from '../../data/rules/musicGridRule.ts';
+import { ControlLine, Row } from '../../data/rules/musicControlLine.ts';
+
+export type ConfigurableLocation =
+  | {
+      type: 'rule';
+      index: number;
+    }
+  | {
+      type: 'symbol';
+      id: string;
+      index: number;
+    }
+  | {
+      type: 'controlLine';
+      column: number;
+    }
+  | {
+      type: 'row';
+      column: number;
+      row: number;
+    };
+
+export function getConfigurable(
+  grid: GridData,
+  location: ConfigurableLocation
+) {
+  if (location.type === 'rule') {
+    return grid.rules[location.index];
+  } else if (location.type === 'symbol') {
+    const list = grid.symbols.get(location.id);
+    if (!list) return undefined;
+    return list[location.index];
+  } else if (location.type === 'controlLine') {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    return musicGrid.controlLines.find(line => line.column === location.column);
+  } else if (location.type === 'row') {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    const line = musicGrid.controlLines.find(
+      line => line.column === location.column
+    );
+    if (!line) return undefined;
+    return line.rows[location.row];
+  }
+}
+
+export function getConfigurableLocation(
+  grid: GridData,
+  configurable: Rule | Symbol | ControlLine
+): ConfigurableLocation | undefined;
+export function getConfigurableLocation(
+  grid: GridData,
+  configurable: Row,
+  line: ControlLine
+): ConfigurableLocation | undefined;
+export function getConfigurableLocation(
+  grid: GridData,
+  configurable: Configurable,
+  line?: ControlLine
+): ConfigurableLocation | undefined {
+  if (configurable instanceof Rule) {
+    return {
+      type: 'rule',
+      index: grid.rules.indexOf(configurable),
+    };
+  } else if (configurable instanceof Symbol) {
+    const list = grid.symbols.get(configurable.id);
+    if (!list) return undefined;
+    return {
+      type: 'symbol',
+      id: configurable.id,
+      index: list.indexOf(configurable),
+    };
+  } else if (configurable instanceof ControlLine) {
+    const musicGrid = grid.rules.find(
+      rule => rule.id === musicGridInstance.id
+    ) as MusicGridRule | undefined;
+    if (!musicGrid) return undefined;
+    return {
+      type: 'controlLine',
+      column: configurable.column,
+    };
+  } else if (configurable instanceof Row) {
+    if (!line) return undefined;
+    return {
+      type: 'row',
+      column: line.column,
+      row: line.rows.indexOf(configurable),
+    };
+  }
+  return undefined;
+}
+
+interface ConfigContext {
+  location: ConfigurableLocation | undefined;
+  ref: React.RefObject<HTMLElement> | undefined;
+  setLocation: (value: ConfigurableLocation | undefined) => void;
+  setRef: (value: React.RefObject<HTMLElement> | undefined) => void;
+}
+
+const context = createContext<ConfigContext>({
+  location: undefined,
+  ref: undefined,
+  setLocation: () => {},
+  setRef: () => {},
+});
+
+export const useConfig = () => {
+  return useContext(context);
+};
+
+export const ConfigConsumer = context.Consumer;
+
+export default memo(function ConfigContext({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [location, setLocation] = useState<ConfigurableLocation | undefined>(
+    undefined
+  );
+  const [ref, setRef] = useState<React.RefObject<HTMLElement> | undefined>(
+    undefined
+  );
+
+  return (
+    <context.Provider
+      value={{
+        location,
+        ref,
+        setLocation,
+        setRef,
+      }}
+    >
+      {children}
+    </context.Provider>
+  );
+});

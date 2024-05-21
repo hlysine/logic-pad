@@ -3,7 +3,7 @@
 import { $, ShellError } from 'bun';
 import dts from 'dts-bundle';
 
-const dataPath = 'data';
+const dataPath = 'src/data';
 const generatedPath = 'src/client/editor/logic-pad.gen.d.ts';
 
 // remove old files
@@ -20,9 +20,10 @@ try {
   console.log('Bundling types...');
   dts.bundle({
     name: 'logic-pad',
-    main: './scripts/temp/' + dataPath + '/**/*.d.ts',
+    main:
+      './scripts/temp/' + dataPath.split('/').slice(1).join('/') + '/**/*.d.ts',
     outputAsModuleFolder: true,
-    out: '../../../' + generatedPath,
+    out: '../'.repeat((dataPath.match(/\//g) ?? []).length + 2) + generatedPath,
   });
 
   // wrap the bundled types in a global declaration

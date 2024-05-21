@@ -1,7 +1,7 @@
 import { AnyConfig, ConfigType } from '../config';
 import GridData from '../grid';
 import { move } from '../dataHelper';
-import { Color, DIRECTIONS } from '../primitives';
+import { Color, DIRECTIONS, Position } from '../primitives';
 import NumberSymbol from './numberSymbol';
 
 export default class ViewpointSymbol extends NumberSymbol {
@@ -65,13 +65,11 @@ export default class ViewpointSymbol extends NumberSymbol {
     return ViewpointSymbol.EXAMPLE_GRID;
   }
 
-  public countTiles(grid: GridData): { completed: number; possible: number } {
-    if (Math.floor(this.x) !== this.x || Math.floor(this.y) !== this.y)
-      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
-    const pos = { x: this.x, y: this.y };
-    const color = grid.getTile(this.x, this.y).color;
-    if (color === Color.Gray)
-      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
+  private countForColor(
+    grid: GridData,
+    color: Color,
+    pos: Position
+  ): { completed: number; possible: number } {
     let minSize = 1;
     let maxSize = 1;
     for (const direction of DIRECTIONS) {
@@ -91,6 +89,22 @@ export default class ViewpointSymbol extends NumberSymbol {
       );
     }
     return { completed: minSize, possible: maxSize };
+  }
+
+  public countTiles(grid: GridData): { completed: number; possible: number } {
+    if (Math.floor(this.x) !== this.x || Math.floor(this.y) !== this.y)
+      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
+    const pos = { x: this.x, y: this.y };
+    const color = grid.getTile(this.x, this.y).color;
+    if (color === Color.Gray) {
+      const dark = this.countForColor(grid, Color.Dark, pos);
+      const light = this.countForColor(grid, Color.Light, pos);
+      return {
+        completed: Math.min(dark.completed, light.completed),
+        possible: Math.max(dark.possible, light.possible),
+      };
+    }
+    return this.countForColor(grid, color, pos);
   }
 
   public copyWith({

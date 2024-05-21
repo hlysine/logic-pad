@@ -231,7 +231,7 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
         textX,
         textY,
         position.x < 2 ? 'left' : 'right',
-        `${count.completed}/${count.possible}`,
+        `${count.completed}/${count.possible === Number.MAX_SAFE_INTEGER ? '?' : count.possible}`,
         accentColor,
         30
       );

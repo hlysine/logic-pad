@@ -23,9 +23,11 @@ async function generateImports(config: Config) {
 
   for (const entry of config.entries) {
     const modules: Module[] = [];
-    for (const file of await fg([...entry.glob, `!${entry.generated}`], {
+    const files = await fg([...entry.glob, `!${entry.generated}`], {
       cwd: entry.cwd,
-    })) {
+    });
+    files.sort();
+    for (const file of files) {
       const module = (await import(
         path.resolve(process.cwd(), entry.cwd, file)
       )) as Record<string, unknown>;

@@ -20,7 +20,9 @@ async function generateEnclosure(dataPath: string, generatedPath: string) {
   const now = performance.now();
 
   const modules: Module[] = [];
-  for (const file of await fg(['**/*.ts', '!**/*.gen.ts'], { cwd: dataPath })) {
+  const files = await fg(['**/*.ts', '!**/*.gen.ts'], { cwd: dataPath });
+  files.sort();
+  for (const file of files) {
     const module = (await import(
       path.resolve(process.cwd(), dataPath, file)
     )) as Record<string, unknown>;

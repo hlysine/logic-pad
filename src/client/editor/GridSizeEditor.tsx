@@ -57,14 +57,16 @@ export default memo(function GridSizeEditor({
           </div>
           <input
             type="number"
-            min={0}
+            min="0"
             step={1}
             className={cn(
               'input input-bordered w-full max-w-xs min-w-0',
               getInputSize(size)
             )}
             value={width}
-            onChange={e => setWidth(+e.target.value)}
+            onChange={e => {
+              setWidth(Math.max(0, +e.target.value));
+            }}
           />
         </label>
         <label className="form-control w-full max-w-xs">
@@ -73,14 +75,16 @@ export default memo(function GridSizeEditor({
           </div>
           <input
             type="number"
-            min={0}
+            min="0"
             step={1}
             className={cn(
               'input input-bordered w-full max-w-xs min-w-0',
               getInputSize(size)
             )}
             value={height}
-            onChange={e => setHeight(+e.target.value)}
+            onChange={e => {
+              setHeight(Math.max(0, +e.target.value));
+            }}
           />
         </label>
       </div>
@@ -92,7 +96,9 @@ export default memo(function GridSizeEditor({
           getButtonSize(size)
         )}
         disabled={grid.width === width && grid.height === height}
-        onClick={() => setGrid(grid.resize(width, height))}
+        onClick={() => {
+          setGrid(grid.resize(width, height));
+        }}
       >
         Resize
       </button>

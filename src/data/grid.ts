@@ -499,6 +499,9 @@ export default class GridData {
    * @returns The new grid with the new dimensions.
    */
   public resize(width: number, height: number): this {
+    if (width < 0 || height < 0)
+      throw new Error(`Invalid grid size: ${width}x${height}`);
+
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let newGrid: GridData = this;
     while (newGrid.width < width) newGrid = newGrid.insertColumn(newGrid.width);

@@ -53,8 +53,9 @@ export default memo(
         const { current } = overlayRef;
         const resizeHandler = () => {
           const divWidth = current.offsetWidth;
-          setTileSize(divWidth / width);
-          onResize?.(divWidth / width);
+          const newSize = width === 0 ? 0 : divWidth / width;
+          setTileSize(newSize);
+          onResize?.(newSize);
         };
         resizeHandler();
         const observer = new ResizeObserver(resizeHandler);

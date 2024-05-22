@@ -1,3 +1,8 @@
+# 22/5/2024
+
+- Internal rework of the code generation mechanism
+- All solvers now ignore rules that do not affect the solution
+
 # 21/5/2024
 
 - Fixed myopia arrows not treating empty tiles appropriately

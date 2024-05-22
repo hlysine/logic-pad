@@ -121,6 +121,8 @@ function translateToBTGridData(grid: GridData): BTGridData {
   }
 
   for (const rule of grid.rules) {
+    if (!rule.necessaryForCompletion) continue;
+
     let module: BTModule | undefined;
     if (rule.id === connectAllInstance.id) {
       module = new ConnectAllBTModule(rule as ConnectAllRule);

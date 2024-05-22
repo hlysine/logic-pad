@@ -78,7 +78,12 @@ export default abstract class Solver {
    * @returns `true` if the grid is supported, or `false` otherwise.
    */
   public isGridSupported(grid: GridData): boolean {
-    if (grid.rules.some(rule => !this.isInstructionSupported(rule.id))) {
+    if (
+      grid.rules.some(
+        rule =>
+          rule.necessaryForCompletion && !this.isInstructionSupported(rule.id)
+      )
+    ) {
       return false;
     }
     if ([...grid.symbols.keys()].some(id => !this.isInstructionSupported(id))) {

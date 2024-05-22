@@ -102,9 +102,10 @@ export default class Z3Solver extends Solver {
       }
     });
 
-    [...new Set(grid.rules.map(r => r.id))].forEach(ruleId =>
-      allZ3Modules.get(ruleId)!.encode(grid, ctx)
-    );
+    [...new Set(grid.rules.map(r => r.id))].forEach(ruleId => {
+      if (!allZ3Modules.has(ruleId)) return;
+      allZ3Modules.get(ruleId)!.encode(grid, ctx);
+    });
 
     [...grid.symbols.keys()].forEach(symbolId =>
       allZ3Modules.get(symbolId)!.encode(grid, ctx)

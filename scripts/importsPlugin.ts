@@ -1,7 +1,7 @@
 import { Plugin } from 'vite';
 import path from 'path';
 import fg from 'fast-glob';
-import { extractName } from './scriptHelper';
+import { extractName, stripExtension } from './scriptHelper';
 
 export interface Config {
   entries: {
@@ -29,7 +29,7 @@ async function generateImports(config: Config) {
     files.sort();
     for (const file of files) {
       const module = (await import(
-        path.resolve(process.cwd(), entry.cwd, file)
+        stripExtension(path.resolve(process.cwd(), entry.cwd, file))
       )) as Record<string, unknown>;
 
       const name = extractName(module[entry.import]);
@@ -54,15 +54,12 @@ async function generateImports(config: Config) {
 ${
   entry.import === 'default'
     ? modules
-        .map(
-          m =>
-            `export ${m.name} from './${m.path.split('.').slice(0, -1).join('.')}';`
-        )
+        .map(m => `export ${m.name} from './${stripExtension(m.path)}';`)
         .join('\n')
     : modules
         .map(
           m =>
-            `export { ${entry.import} as ${m.name} } from './${m.path.split('.').slice(0, -1).join('.')}';`
+            `export { ${entry.import} as ${m.name} } from './${stripExtension(m.path)}';`
         )
         .join('\n')
 }`;

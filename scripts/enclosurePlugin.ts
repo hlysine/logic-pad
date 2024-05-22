@@ -1,7 +1,7 @@
 import { Plugin } from 'vite';
 import path from 'path';
 import fg from 'fast-glob';
-import { extractName } from './scriptHelper';
+import { extractName, stripExtension } from './scriptHelper';
 
 export interface Config {
   dataPath: string;
@@ -24,7 +24,7 @@ async function generateEnclosure(dataPath: string, generatedPath: string) {
   files.sort();
   for (const file of files) {
     const module = (await import(
-      path.resolve(process.cwd(), dataPath, file)
+      stripExtension(path.resolve(process.cwd(), dataPath, file))
     )) as Record<string, unknown>;
 
     if (typeof module !== 'object' || module === null || module === undefined)

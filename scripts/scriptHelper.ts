@@ -9,3 +9,7 @@ export function extractName(value: unknown) {
   else if ('constructor' in value && 'name' in value.constructor)
     return value.constructor.name;
 }
+
+export function stripExtension(path: string) {
+  return path.split('.').slice(0, -1).join('.');
+}

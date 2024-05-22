@@ -5,6 +5,7 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
 import { EnclosurePlugin } from './scripts/enclosurePlugin';
 import { ImportsPlugin } from './scripts/importsPlugin';
+import { stopVitePlugin } from './scripts/stopVitePlugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -81,6 +82,7 @@ export default defineConfig({
         ],
       },
     }),
+    stopVitePlugin(),
   ],
   server: {
     headers: {

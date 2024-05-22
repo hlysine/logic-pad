@@ -2,6 +2,7 @@
 
 - Internal rework of the code generation mechanism
 - All solvers now ignore rules that do not affect the solution
+- Disallowed grid of negative size
 
 # 21/5/2024
 

@@ -43,13 +43,7 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: [
-        'favicon.ico',
-        'apple-touch-icon-180x180.png',
-        'z3-built.js',
-        'z3-built.wasm',
-        'z3-built.worker.js',
-      ],
+      includeAssets: ['favicon.ico', 'apple-touch-icon-180x180.png'],
       manifest: {
         name: 'Logic Pad',
         short_name: 'Logic Pad',

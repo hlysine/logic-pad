@@ -1,12 +1,5 @@
 import Rule from './rule';
-
-let rules: Record<string, Rule | undefined> = {};
-
-if (!('process' in globalThis))
-  rules = import.meta.glob<Rule | undefined>(['./**/*.ts', '!./index.ts'], {
-    import: 'instance',
-    eager: true,
-  });
+import * as rules from './rules.gen';
 
 const allRules = new Map<string, Rule>();
 

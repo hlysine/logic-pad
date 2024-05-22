@@ -1,15 +1,5 @@
 import Z3Module from './z3Module';
-
-let modules: Record<string, Z3Module | undefined> = {};
-
-if (!('process' in globalThis))
-  modules = import.meta.glob<Z3Module | undefined>(
-    ['./**/*.ts', '!./index.ts'],
-    {
-      import: 'instance',
-      eager: true,
-    }
-  );
+import * as modules from './modules.gen';
 
 const allZ3Modules = new Map<string, Z3Module>();
 

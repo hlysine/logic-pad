@@ -3,10 +3,38 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
+import { EnclosurePlugin } from './scripts/enclosurePlugin';
+import { ImportsPlugin } from './scripts/importsPlugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    ImportsPlugin({
+      entries: [
+        {
+          cwd: 'src/data/symbols',
+          generated: 'symbols.gen.ts',
+          import: 'instance',
+          glob: ['./**/*.ts', '!./index.ts'],
+        },
+        {
+          cwd: 'src/data/rules',
+          generated: 'rules.gen.ts',
+          import: 'instance',
+          glob: ['./**/*.ts', '!./index.ts'],
+        },
+        {
+          cwd: 'src/data/solver/z3/modules',
+          generated: 'modules.gen.ts',
+          import: 'instance',
+          glob: ['./**/*.ts', '!./index.ts'],
+        },
+      ],
+    }),
+    EnclosurePlugin({
+      dataPath: 'src/data',
+      generatedPath: 'src/client/editor/enclosure.gen.ts',
+    }),
     million.vite({ auto: true }),
     react(),
     TanStackRouterVite({

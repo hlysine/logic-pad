@@ -1,12 +1,5 @@
 import Symbol from './symbol';
-
-let symbols: Record<string, Symbol | undefined> = {};
-
-if (!('process' in globalThis))
-  symbols = import.meta.glob<Symbol | undefined>(['./**/*.ts', '!./index.ts'], {
-    import: 'instance',
-    eager: true,
-  });
+import * as symbols from './symbols.gen';
 
 const allSymbols = new Map<string, Symbol>();
 

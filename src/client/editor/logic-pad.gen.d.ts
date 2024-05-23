@@ -926,17 +926,17 @@ declare global {
     'strict',
     z.ZodTypeAny,
     {
-      link: string;
       description: string;
       title: string;
       author: string;
+      link: string;
       difficulty: number;
     },
     {
-      link: string;
       description: string;
       title: string;
       author: string;
+      link: string;
       difficulty: number;
     }
   >;
@@ -953,20 +953,20 @@ declare global {
     'strict',
     z.ZodTypeAny,
     {
-      link: string;
       description: string;
       grid: GridData;
       title: string;
       author: string;
+      link: string;
       difficulty: number;
       solution: GridData | null;
     },
     {
-      link: string;
       description: string;
       grid: GridData;
       title: string;
       author: string;
+      link: string;
       difficulty: number;
       solution: GridData | null;
     }

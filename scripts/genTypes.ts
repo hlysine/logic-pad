@@ -14,7 +14,9 @@ await $`rm ${generatedPath}`.nothrow();
 try {
   // compile the whole project
   console.log('Generating types...');
-  await $`bunx --bun tsc --declaration --emitDeclarationOnly --noEmit false --outDir ./scripts/temp`;
+  await $`bunx --bun tsc -p tsconfig.data.json --declaration --emitDeclarationOnly --noEmit false --outDir ./scripts/temp`.throws(
+    true
+  );
 
   // bundle the data types into one file
   console.log('Bundling types...');

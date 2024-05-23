@@ -21,7 +21,7 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client", "vite-plugin-pwa/react"]
   },
-  "include": ["src"],
+  "include": ["src", "api"],
   "exclude": ["**/*.gen.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

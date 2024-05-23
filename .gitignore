@@ -24,3 +24,5 @@ dist-ssr
 
 references
 scripts/temp
+
+.env

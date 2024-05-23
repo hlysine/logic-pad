@@ -7,5 +7,5 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
-const env = await envSchema.parseAsync(process.env);
+const env = envSchema.parse(process.env);
 export default env;

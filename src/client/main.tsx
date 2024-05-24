@@ -25,7 +25,7 @@ declare module '@tanstack/react-router' {
 }
 
 function Redirector() {
-  if (window.location.hostname === import.meta.env.VITE_VERCEL_URL) {
+  if (window.location.host === import.meta.env.VITE_VERCEL_URL) {
     window.location.href = window.location.href.replace(
       import.meta.env.VITE_VERCEL_URL as string,
       import.meta.env.VITE_VERCEL_PROJECT_PRODUCTION_URL as string

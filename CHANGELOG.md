@@ -1,3 +1,8 @@
+# 24/5/2024
+
+- Scaffolding for backend
+- Logic Pad is now accessible at <logic-pad.com>
+
 # 22/5/2024
 
 - Internal rework of the code generation mechanism

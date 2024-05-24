@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  VITE_VERCEL_URL: z.string(),
+  VITE_VERCEL_PROJECT_PRODUCTION_URL: z.string(),
   PORT: z.coerce.number().default(3000),
 });
 

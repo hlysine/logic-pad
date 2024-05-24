@@ -2,7 +2,7 @@
  * This file is the entrypoint for all Vercel Functions.
  */
 
-import app from '../src/server/index';
+import app from '../src/server/app';
 
 export const config = { runtime: 'edge' };
 

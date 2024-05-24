@@ -21,7 +21,7 @@
     "bun": ">=1.1.0"
   },
   "dependencies": {
-    "@hlysine/bun-vercel": "^1.0.0-alpha.6",
+    "@hlysine/bun-vercel": "^1.0.0-alpha.7",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.22.1",
     "@tanstack/router-devtools": "^1.22.2",

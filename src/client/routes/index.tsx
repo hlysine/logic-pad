@@ -6,6 +6,7 @@ import Changelog from '../components/Changelog';
 import Loading from '../components/Loading';
 import GridData from '../../data/grid';
 import GridConnections from '../../data/gridConnections';
+import useLinkLoader from '../router/linkLoader';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -40,6 +41,8 @@ export const Route = createFileRoute('/')({
   component: memo(function Home() {
     const curatedPuzzles = useRef<HTMLDivElement>(null);
     const [filter, setFilter] = useState<string>('All');
+    const search = Route.useSearch();
+    useLinkLoader(search, { cleanUrl: true, allowEmpty: true });
     return (
       <>
         <div className="flex flex-col min-h-dvh shrink-0">

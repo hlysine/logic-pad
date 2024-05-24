@@ -4,6 +4,7 @@
     { "source": "/api/(.*)", "destination": "/api" },
     { "source": "/(.*)", "destination": "/" }
   ],
+  "outputDirectory": "dist",
   "headers": [
     {
       "source": "/(.*)",

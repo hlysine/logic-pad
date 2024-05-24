@@ -13,7 +13,7 @@
           "background": {
             "activeOnStart": true,
             "beginsPattern": "VITE v",
-            "endsPattern": "to show help"
+            "endsPattern": "ready in"
           }
         }
       ],

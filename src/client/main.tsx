@@ -24,9 +24,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+function Redirector() {
+  if (window.location.hostname === import.meta.env.VITE_VERCEL_URL) {
+    window.location.href = window.location.href.replace(
+      import.meta.env.VITE_VERCEL_URL as string,
+      import.meta.env.VITE_VERCEL_PROJECT_PRODUCTION_URL as string
+    );
+  }
+  return null;
+}
+
 ReactDOM.createRoot(document.getElementById('app')!).render(
   <React.StrictMode>
     <>
+      <Redirector />
       <div id="color-ref-error" className="text-error hidden">
         {/* For canvas components to retrieve this color */}
       </div>

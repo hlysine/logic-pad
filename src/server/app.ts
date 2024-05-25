@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 
-const app = new Elysia({ prefix: '/api' });
-app.get('/ping', () => null);
+const createApp = <App extends Elysia<'/api'>>(app: App) => {
+  app.get('/ping', () => null);
+};
 
-export default app;
+export default createApp;

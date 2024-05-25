@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "client:dev": "bunx --bun vite",
-    "server:dev": "bun --watch src/server/index.ts",
+    "server:dev": "bun --watch src/server/standalone.ts",
     "dev": "concurrently \"bun:*:dev\"",
-    "start": "bun src/server/index.ts",
+    "start": "bun src/server/standalone.ts",
     "client:build": "bun run codegen && bunx --bun tsc && bunx --bun vite build",
     "server:build": "bun-vercel ./src/server/vercel.ts --funcPath api",
     "build": "bun run client:build && bun run server:build",
@@ -23,6 +23,8 @@
   "dependencies": {
     "@hlysine/bun-vercel": "^1.0.0-alpha.8",
     "@monaco-editor/react": "^4.6.0",
+    "@tanstack/react-query": "^5.37.1",
+    "@tanstack/react-query-devtools": "^5.37.1",
     "@tanstack/react-router": "^1.22.1",
     "@tanstack/router-devtools": "^1.22.2",
     "@tonejs/piano": "^0.2.1",
@@ -51,6 +53,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.35.6",
     "@tanstack/router-vite-plugin": "^1.20.5",
     "@types/animejs": "^3.1.12",
     "@types/bun": "^1.0.12",

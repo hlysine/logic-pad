@@ -4,11 +4,13 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { Compressor } from '../../data/serializer/compressor/allCompressors';
 import { Serializer } from '../../data/serializer/allSerializers';
 import { useGrid } from '../contexts/GridContext.tsx';
+import { useRouter } from '@tanstack/react-router';
 
 export default memo(function PWAPrompt() {
   const { needRefresh, updateServiceWorker } = useRegisterSW();
   const { metadata, grid, solution } = useGrid();
   const [refresh, setRefresh] = needRefresh;
+  const router = useRouter();
   if (!refresh) return null;
   return (
     <div
@@ -29,9 +31,7 @@ export default memo(function PWAPrompt() {
           type="button"
           className="btn btn-sm btn-primary"
           onClick={async () => {
-            window.history.pushState(
-              null,
-              '',
+            router.history.push(
               `${window.location.origin}${window.location.pathname}?d=${await Compressor.compress(
                 Serializer.stringifyPuzzle({ ...metadata, grid, solution })
               )}`

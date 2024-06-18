@@ -5,8 +5,12 @@ import { cn } from '../../client/uiHelper.ts';
 import Grid from '../grid/Grid';
 import SymbolOverlay from '../grid/SymbolOverlay';
 import AnnotatedText from '../components/AnnotatedText';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 export interface InstructionProps {
+  id: string | number;
+  editable: boolean;
   instruction: InstructionData;
   state?: State;
   children?: React.ReactNode;
@@ -27,6 +31,8 @@ function instructionBg(state: State) {
 }
 
 export default memo(function Instruction({
+  id,
+  editable,
   instruction,
   state,
   children,
@@ -37,8 +43,21 @@ export default memo(function Instruction({
     () => instruction.createExampleGrid(),
     [instruction]
   );
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
   return (
     <div
+      ref={editable ? setNodeRef : null}
+      style={
+        editable
+          ? {
+              transform: CSS.Transform.toString(transform),
+              transition,
+            }
+          : {}
+      }
+      {...(editable ? attributes : {})}
+      {...(editable ? listeners : {})}
       className={cn(
         'flex flex-col w-[320px] items-stretch shrink-0',
         className

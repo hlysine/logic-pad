@@ -9,7 +9,8 @@ export default memo(function MyopiaTool() {
   return (
     <SymbolTool
       name="Myopia"
-      order={11}
+      order={12}
+      hotkey="j"
       sample={sample}
       component={MyopiaSymbol}
     />

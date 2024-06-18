@@ -6,6 +6,21 @@ import { useGridState } from '../contexts/GridStateContext.tsx';
 import Instruction from './Instruction';
 import EditTarget from './EditTarget';
 import { cn } from '../../client/uiHelper.ts';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import RuleData from '../../data/rules/rule.ts';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -19,15 +34,29 @@ export interface InstructionListProps {
   editable?: boolean;
 }
 
+interface SortableItem {
+  id: string | number;
+  rule: RuleData;
+}
+
 export default memo(function InstructionList({
   editable,
 }: InstructionListProps) {
   editable = editable ?? false;
-  const { grid } = useGrid();
+  const { grid, setGrid } = useGrid();
   const { state } = useGridState();
-  const filteredRules = useMemo(() => {
-    if (editable) return grid.rules;
-    return grid.rules.filter(rule => rule.visibleWhenSolving);
+  const filteredRules = useMemo<SortableItem[]>(() => {
+    if (editable)
+      return grid.rules.map((rule, i) => ({
+        id: i,
+        rule,
+      }));
+    return grid.rules
+      .filter(rule => rule.visibleWhenSolving)
+      .map((rule, i) => ({
+        id: i,
+        rule,
+      }));
   }, [grid.rules, editable]);
   const hasSymbols = useMemo(() => {
     if (grid.symbols.size === 0) return false;
@@ -87,27 +116,70 @@ export default memo(function InstructionList({
     }
     return map;
   }, [symbolMergeMap, state]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const wrapWithDraggable = (children: React.ReactNode) => (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={e => {
+        const { active, over } = e;
+
+        if (over && active.id !== over.id) {
+          setGrid(
+            grid.withRules(
+              arrayMove(
+                grid.rules.slice(),
+                filteredRules.map(r => r.id).indexOf(active.id),
+                filteredRules.map(r => r.id).indexOf(over.id)
+              )
+            )
+          );
+        }
+      }}
+    >
+      <SortableContext
+        items={filteredRules}
+        strategy={verticalListSortingStrategy}
+      >
+        {children}
+      </SortableContext>
+    </DndContext>
+  );
+
   return (
     <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto py-[1px]">
       {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
       <div className="flex flex-col shrink-0 items-end justify-start">
         {filteredRules.length > 0 && <Title>Rules</Title>}
-        {filteredRules.map((rule, i) => (
-          <Instruction
-            key={rule.id + i.toString()}
-            instruction={rule}
-            state={state?.rules[i]?.state}
-            className={cn(rule.visibleWhenSolving || 'opacity-60')}
-          >
-            {editable && <EditTarget configurable={rule} />}
-          </Instruction>
-        ))}
+        {(editable ? wrapWithDraggable : (t: React.ReactNode) => t)(
+          filteredRules.map(({ rule, id }, i) => (
+            <Instruction
+              key={rule.id + i.toString()}
+              editable={editable}
+              id={id}
+              instruction={rule}
+              state={state?.rules[i]?.state}
+              className={cn(rule.visibleWhenSolving || 'opacity-60')}
+            >
+              {editable && <EditTarget configurable={rule} />}
+            </Instruction>
+          ))
+        )}
         {hasSymbols && <Title>Symbols</Title>}
         {[...symbolMergeMap.entries()].flatMap(([key, value]) =>
           value.map(
             (group, i) =>
               grid.symbols.get(key)![group[0]].explanation.length > 0 && (
                 <Instruction
+                  id={i}
+                  editable={false}
                   key={key + group[0].toString()}
                   instruction={grid.symbols.get(key)![group[0]]}
                   state={symbolStateMap.get(key)?.[i]}

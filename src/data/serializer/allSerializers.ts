@@ -1,5 +1,6 @@
 import GridData from '../grid';
 import { Puzzle } from '../puzzle';
+import Rule from '../rules/rule';
 import Symbol from '../symbols/symbol';
 import SerializerV0 from './serializer_v0';
 import SerializerBase from './serializerBase';
@@ -34,6 +35,13 @@ function selectSerializer(input: string): {
  * It uses the default serializer when stringifying puzzles, and select the correct deserializer when parsing puzzles.
  */
 const Serializer = {
+  stringifyRule(rule: Rule): string {
+    return `${defaultSerializer.version}_${defaultSerializer.stringifyRule(rule)}`;
+  },
+  parseRule(input: string): Rule {
+    const { serializer, data } = selectSerializer(input);
+    return serializer.parseRule(data);
+  },
   stringifySymbol(symbol: Symbol): string {
     return `${defaultSerializer.version}_${defaultSerializer.stringifySymbol(symbol)}`;
   },

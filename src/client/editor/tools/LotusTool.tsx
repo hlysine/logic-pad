@@ -9,7 +9,8 @@ export default memo(function LotusTool() {
   return (
     <SymbolTool
       name="Lotus"
-      order={9}
+      order={10}
+      hotkey="g"
       sample={sample}
       component={LotusSymbol}
     />

@@ -7,6 +7,12 @@ const sample = instance;
 
 export default memo(function DartTool() {
   return (
-    <SymbolTool name="Dart" order={8} sample={sample} component={DartSymbol} />
+    <SymbolTool
+      name="Dart"
+      order={9}
+      hotkey="f"
+      sample={sample}
+      component={DartSymbol}
+    />
   );
 });

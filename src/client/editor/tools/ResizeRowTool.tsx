@@ -1,8 +1,8 @@
 import { memo, useState } from 'react';
 import ToolboxItem from '../ToolboxItem';
-import { useGrid } from '../../contexts/GridContext.tsx';
-import { GiResize } from 'react-icons/gi';
+import { useGrid } from '../../contexts/GridContext';
 import { IoMdAdd, IoMdRemove } from 'react-icons/io';
+import { TbRowInsertTop } from 'react-icons/tb';
 
 interface ResizeAction {
   type: 'insert' | 'remove';
@@ -10,7 +10,11 @@ interface ResizeAction {
   index: number;
 }
 
-function ResizeToolOverlay() {
+export interface ResizeToolOverlayProps {
+  direction: 'row' | 'column';
+}
+
+export function ResizeToolOverlay({ direction }: ResizeToolOverlayProps) {
   const { grid, setGrid } = useGrid();
   const [action, setAction] = useState<ResizeAction | null>(null);
 
@@ -45,10 +49,6 @@ function ResizeToolOverlay() {
         }}
         onPointerMove={e => {
           let { x, y } = getPointerLocation(e);
-          const direction =
-            Math.abs(x - grid.width / 2) > Math.abs(y - grid.height / 2)
-              ? 'column'
-              : 'row';
           x = Math.floor((x - 0.25) / 0.5) * 0.5;
           y = Math.floor((y - 0.25) / 0.5) * 0.5;
           const index = direction === 'column' ? Math.ceil(x) : Math.ceil(y);
@@ -118,18 +118,18 @@ function ResizeToolOverlay() {
   );
 }
 
-export default memo(function MergeTool() {
+export default memo(function ResizeRowTool() {
   return (
     <ToolboxItem
-      id="resize"
-      order={4}
-      name="Resize grid"
+      id="resize_row"
+      order={3}
+      name="Resize row"
       description="Click between tiles to insert. Click on tiles to remove."
-      hotkey="f"
-      gridOverlay={<ResizeToolOverlay />}
+      hotkey="e"
+      gridOverlay={<ResizeToolOverlay direction="row" />}
       onTileClick={null}
     >
-      <GiResize />
+      <TbRowInsertTop />
     </ToolboxItem>
   );
 });

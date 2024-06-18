@@ -125,7 +125,8 @@ export default memo(function MusicNoteTool() {
   return (
     <ToolboxItem
       id="music_note"
-      order={16}
+      order={17}
+      hotkey="b"
       name="Music Note"
       description="Left click to place a note. Click again to configure it."
       gridOverlay={<NoteOverlay />}

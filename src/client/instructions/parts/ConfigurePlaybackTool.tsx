@@ -104,7 +104,8 @@ export default memo(function ConfigurePlaybackTool() {
   return (
     <ToolboxItem
       id="music_playback"
-      order={15}
+      order={16}
+      hotkey="v"
       name="Configure playback"
       description="Click on a column to add a control line. Configure the line for playback."
       gridOverlay={<PlaybackOverlay />}

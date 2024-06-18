@@ -2,6 +2,8 @@
 
 - Added the ability to reorder rules
 - Changed the control scheme of the merge tool to work on mobile
+- Split resize tool into row and column variants
+- Reworked hotkeys for tools
 
 # 24/5/2024
 

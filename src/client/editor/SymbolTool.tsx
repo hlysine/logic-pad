@@ -15,6 +15,7 @@ import { SymbolProps } from '../symbols';
 export interface SymbolToolProps {
   name: string;
   id?: string;
+  hotkey?: string;
   sample: Symbol;
   component: React.NamedExoticComponent<SymbolProps<any>>;
   order?: number;
@@ -23,6 +24,7 @@ export interface SymbolToolProps {
 export default memo(function SymbolTool({
   name,
   id,
+  hotkey,
   sample,
   component: Component,
   order,
@@ -34,6 +36,7 @@ export default memo(function SymbolTool({
       name={name}
       description="Left click to place a symbol. Click again to configure it."
       order={order}
+      hotkey={hotkey}
       gridOverlay={
         <ConfigConsumer>
           {({ setLocation, setRef }) => {

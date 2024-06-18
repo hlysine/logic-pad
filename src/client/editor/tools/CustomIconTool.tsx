@@ -9,7 +9,8 @@ export default memo(function CustomIconTool() {
   return (
     <SymbolTool
       name="Custom Icon"
-      order={14}
+      order={15}
+      hotkey="c"
       sample={sample}
       component={CustomIconSymbol}
     />

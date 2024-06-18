@@ -71,10 +71,10 @@ export default memo(function MergeTool() {
   return (
     <ToolboxItem
       id="merge"
-      order={3}
+      order={5}
       name="Merge tiles"
       description="Left click a gap to merge tiles. Right click to split tiles."
-      hotkey="d"
+      hotkey="t"
       gridOverlay={<MergeToolOverlay />}
       onTileClick={null}
     >

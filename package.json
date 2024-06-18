@@ -21,6 +21,7 @@
     "bun": ">=1.1.0"
   },
   "dependencies": {
+    "@dnd-kit/sortable": "^8.0.0",
     "@hlysine/bun-vercel": "^1.0.0-alpha.8",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.22.1",

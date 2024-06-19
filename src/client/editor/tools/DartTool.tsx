@@ -10,7 +10,7 @@ export default memo(function DartTool() {
     <SymbolTool
       name="Dart"
       order={9}
-      hotkey="f"
+      hotkey="4"
       sample={sample}
       component={DartSymbol}
     />

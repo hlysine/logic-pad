@@ -10,7 +10,7 @@ export default memo(function GalaxyTool() {
     <SymbolTool
       name="Galaxy"
       order={11}
-      hotkey="h"
+      hotkey="6"
       sample={sample}
       component={GalaxySymbol}
     />

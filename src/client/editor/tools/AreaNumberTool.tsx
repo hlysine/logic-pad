@@ -10,7 +10,7 @@ export default memo(function AreaNumberTool() {
     <SymbolTool
       name="Area Number"
       order={6}
-      hotkey="a"
+      hotkey="1"
       sample={sample}
       component={AreaNumberSymbol}
     />

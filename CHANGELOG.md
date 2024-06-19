@@ -1,3 +1,7 @@
+# 19/6/2024
+
+- Reworked hotkeys again to avoid clashing with undo/reset
+
 # 18/6/2024
 
 - Added the ability to reorder rules

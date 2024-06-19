@@ -12,7 +12,7 @@ export default memo(function TileTool() {
       order={2}
       name="Edit tile"
       description="Left click to set a tile as given. Right click to remove a tile."
-      hotkey="w"
+      hotkey="s"
       gridOverlay={
         <GridConsumer>
           {({ grid, setGrid }) => {

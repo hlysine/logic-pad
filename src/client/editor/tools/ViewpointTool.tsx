@@ -10,7 +10,7 @@ export default memo(function ViewpointTool() {
     <SymbolTool
       name="Viewpoint"
       order={8}
-      hotkey="d"
+      hotkey="3"
       sample={sample}
       component={ViewpointSymbol}
     />

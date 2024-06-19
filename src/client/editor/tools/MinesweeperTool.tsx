@@ -10,7 +10,7 @@ export default memo(function MinesweeperTool() {
     <SymbolTool
       name="Minesweeper"
       order={13}
-      hotkey="z"
+      hotkey="8"
       sample={sample}
       component={MinesweeperSymbol}
     />

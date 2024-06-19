@@ -10,7 +10,7 @@ export default memo(function LetterTool() {
     <SymbolTool
       name="Letter"
       order={7}
-      hotkey="s"
+      hotkey="2"
       sample={sample}
       component={LetterSymbol}
     />

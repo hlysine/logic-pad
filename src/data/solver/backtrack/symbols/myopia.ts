@@ -63,7 +63,7 @@ export default class MyopiaBTModule extends BTModule {
       return [min, stopped ? max : Number.MAX_SAFE_INTEGER, connected];
     };
 
-    const allDirections = this.instr.containsDiagonal
+    const allDirections = this.instr.diagonals
       ? ORIENTATIONS
       : [Orientation.Up, Orientation.Down, Orientation.Left, Orientation.Right];
 

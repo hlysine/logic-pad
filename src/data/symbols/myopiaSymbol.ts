@@ -9,9 +9,9 @@ import {
   State,
   orientationToggle,
 } from '../primitives';
-import Symbol from './symbol';
+import MultiEntrySymbol from './multiEntrySymbol';
 
-export default class MyopiaSymbol extends Symbol {
+export default class MyopiaSymbol extends MultiEntrySymbol {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -28,6 +28,13 @@ export default class MyopiaSymbol extends Symbol {
       configurable: false,
     },
     {
+      type: ConfigType.Boolean,
+      default: false,
+      field: 'diagonals',
+      description: 'Include diagonal directions',
+      configurable: true,
+    },
+    {
       type: ConfigType.OrientationToggle,
       default: orientationToggle(Orientation.Up, Orientation.Right),
       field: 'directions',
@@ -41,9 +48,22 @@ export default class MyopiaSymbol extends Symbol {
       new MyopiaSymbol(
         1,
         1,
+        false,
         orientationToggle(Orientation.Up, Orientation.Left)
       ),
-      new MyopiaSymbol(4, 3, orientationToggle(Orientation.Up)),
+      new MyopiaSymbol(4, 3, false, orientationToggle(Orientation.Up)),
+    ])
+  );
+
+  private static readonly EXAMPLE_DIAGONAL_GRID = Object.freeze(
+    GridData.create(['wbwww', 'bwwwb', 'wwwww', 'wbwww']).withSymbols([
+      new MyopiaSymbol(
+        1,
+        2,
+        true,
+        orientationToggle(Orientation.UpLeft, Orientation.Down)
+      ),
+      new MyopiaSymbol(3, 2, true, orientationToggle(Orientation.UpRight)),
     ])
   );
 
@@ -51,15 +71,24 @@ export default class MyopiaSymbol extends Symbol {
    * **Viewpoint Numbers count visible cells in the four directions**
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
+   * @param diagonals - Whether the symbol should consider diagonal directions.
    * @param directions - The directions in which an arrow is pointing.
    */
   public constructor(
     x: number,
     y: number,
+    public readonly diagonals: boolean,
     public readonly directions: OrientationToggle
   ) {
     super(x, y);
     this.directions = directions;
+    this.diagonals =
+      directions[Orientation.DownLeft] ||
+      directions[Orientation.DownRight] ||
+      directions[Orientation.UpLeft] ||
+      directions[Orientation.UpRight]
+        ? true
+        : diagonals;
   }
 
   public get id(): string {
@@ -71,7 +100,9 @@ export default class MyopiaSymbol extends Symbol {
   }
 
   public get explanation(): string {
-    return '*Myopia arrows* point to *all* the closest cells of the opposite color';
+    return this.diagonals
+      ? '*Framed myopia arrows* point to *all* the closest opposite cells in 8 directions'
+      : '*Myopia arrows* point to *all* the closest cells of the opposite color';
   }
 
   public get configs(): readonly AnyConfig[] | null {
@@ -79,23 +110,16 @@ export default class MyopiaSymbol extends Symbol {
   }
 
   public createExampleGrid(): GridData {
-    return MyopiaSymbol.EXAMPLE_GRID;
-  }
-
-  public get containsDiagonal(): boolean {
-    return (
-      this.directions[Orientation.UpLeft] ||
-      this.directions[Orientation.UpRight] ||
-      this.directions[Orientation.DownLeft] ||
-      this.directions[Orientation.DownRight]
-    );
+    return this.diagonals
+      ? MyopiaSymbol.EXAMPLE_DIAGONAL_GRID
+      : MyopiaSymbol.EXAMPLE_GRID;
   }
 
   public validateSymbol(grid: GridData): State {
     const tile = grid.getTile(this.x, this.y);
     if (!tile.exists || tile.color === Color.Gray) return State.Incomplete;
 
-    const allDirections = this.containsDiagonal
+    const allDirections = this.diagonals
       ? ORIENTATIONS
       : [Orientation.Up, Orientation.Down, Orientation.Left, Orientation.Right];
 
@@ -179,15 +203,18 @@ export default class MyopiaSymbol extends Symbol {
   public copyWith({
     x,
     y,
+    diagonals,
     directions,
   }: {
     x?: number;
     y?: number;
+    diagonals?: boolean;
     directions?: OrientationToggle;
   }): this {
     return new MyopiaSymbol(
       x ?? this.x,
       y ?? this.y,
+      diagonals ?? this.diagonals,
       directions ?? this.directions
     ) as this;
   }
@@ -195,10 +222,15 @@ export default class MyopiaSymbol extends Symbol {
   public withDirections(directions: OrientationToggle): this {
     return this.copyWith({ directions });
   }
+
+  public withDiagonals(diagonals: boolean): this {
+    return this.copyWith({ diagonals });
+  }
 }
 
 export const instance = new MyopiaSymbol(
   0,
   0,
+  false,
   orientationToggle(Orientation.Up, Orientation.Right)
 );

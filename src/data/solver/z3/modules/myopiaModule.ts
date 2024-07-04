@@ -56,7 +56,7 @@ export default class MyopiaModule extends Z3Module {
           )
         );
       });
-      (symbol.containsDiagonal ? ORIENTATIONS : DIRECTIONS)
+      (symbol.diagonals ? ORIENTATIONS : DIRECTIONS)
         .filter(d => !symbol.directions[d])
         .forEach(direction => {
           otherTerms.push(

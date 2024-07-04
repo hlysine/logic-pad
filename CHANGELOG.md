@@ -1,3 +1,8 @@
+# 4/7/2024
+
+- Added a toggle in myopia arrows to check diagonals
+- Added a small padding between instructions
+
 # 19/6/2024
 
 - Reworked hotkeys again to avoid clashing with undo/reset

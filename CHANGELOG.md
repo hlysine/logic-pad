@@ -1,3 +1,7 @@
+# 26/8/2024
+
+- Fixed the theme switcher not highlighting the current theme
+
 # 4/7/2024
 
 - Added a toggle in myopia arrows to check diagonals

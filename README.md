@@ -6,8 +6,6 @@ This is intended as an unofficial companion to Islands of Insight, allowing you 
 It is not a replacement of the full game.
 You are strongly recommended to discover the grid rules in-game before using Logic Pad.
 
-Note that this app is still early in development and major refactors are planned.
-
 ## Developing Logic Pad
 
 [Bun >=v1.1.0](https://bun.sh/) is required for this project.

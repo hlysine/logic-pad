@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <meta name="title" content="Logic Pad" />
     <meta
       name="description"
@@ -29,7 +32,11 @@
       window.global ||= window;
     </script>
     <script src="/z3-built.js" fetchpriority="low" defer></script>
-    <script type="module" src="/src/client/main.tsx" fetchpriority="high"></script>
+    <script
+      type="module"
+      src="/src/client/main.tsx"
+      fetchpriority="high"
+    ></script>
     <!-- Cloudflare Web Analytics -->
     <script
       defer

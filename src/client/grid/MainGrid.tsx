@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import StateRing from './StateRing.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Grid from './Grid';
@@ -14,6 +14,7 @@ import TileCountOverlay from './TileCountOverlay';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import ErrorOverlay from './ErrorOverlay';
+import { usePinch } from '@use-gesture/react';
 
 export interface MainGridProps {
   useToolboxClick: boolean;
@@ -42,13 +43,15 @@ export default memo(function MainGrid({
 }: MainGridProps) {
   const gridContext = useGrid();
   const { grid } = gridContext;
-  const { scale } = useDisplay();
+  const { scale, setScale } = useDisplay();
   const { onTileClick } = useToolbox();
   const [tileConfig, setTileConfig] = useState<{
     width: number;
     height: number;
     tileSize: number;
   }>({ width: 0, height: 0, tileSize: 0 });
+
+  const stateRingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const resizeHandler = () =>
@@ -57,10 +60,52 @@ export default memo(function MainGrid({
         height: grid.height,
         tileSize: computeTileSize(grid),
       });
+    const preventDefault = (e: Event) => e.preventDefault();
     window.addEventListener('resize', resizeHandler);
+    window.addEventListener('gesturestart', preventDefault);
+    window.addEventListener('gesturechange', preventDefault);
     resizeHandler();
-    return () => window.removeEventListener('resize', resizeHandler);
+    return () => {
+      window.removeEventListener('resize', resizeHandler);
+      window.removeEventListener('gesturestart', preventDefault);
+      window.removeEventListener('gesturechange', preventDefault);
+    };
   }, [grid]);
+
+  const bind = usePinch(
+    ({ offset: [newScale] }) => {
+      setScale(newScale);
+    },
+    {
+      scaleBounds: { min: 2 ** -2, max: 2 ** 2 },
+      pinchOnWheel: false,
+      rubberband: true,
+      pointer: { touch: true },
+      from: [scale, 0],
+      preventDefault: true,
+    }
+  );
+
+  useEffect(() => {
+    const wheelHandler = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        setScale(
+          Math.min(
+            2 ** 2,
+            Math.max(2 ** -2, scale * (e.deltaY > 0 ? 1 / 1.1 : 1.1))
+          )
+        );
+      }
+    };
+    const ring = stateRingRef.current;
+    ring?.addEventListener('wheel', wheelHandler, {
+      passive: false,
+    });
+    return () => {
+      ring?.removeEventListener('wheel', wheelHandler);
+    };
+  });
 
   if (
     tileConfig.tileSize === 0 ||
@@ -70,7 +115,12 @@ export default memo(function MainGrid({
     return <Loading />;
 
   return (
-    <StateRing width={grid.width} height={grid.height}>
+    <StateRing
+      ref={stateRingRef}
+      width={grid.width}
+      height={grid.height}
+      {...bind()}
+    >
       <Grid
         size={Math.round(tileConfig.tileSize * scale)}
         grid={grid}

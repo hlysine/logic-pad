@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "client:dev": "bunx --bun vite",
+    "client:dev": "bunx --bun vite --host",
     "server:dev": "bun --watch src/server/index.ts",
     "dev": "concurrently \"bun:*:dev\"",
     "start": "bun src/server/index.ts",
@@ -27,6 +27,7 @@
     "@tanstack/react-router": "^1.22.1",
     "@tanstack/router-devtools": "^1.22.2",
     "@tonejs/piano": "^0.2.1",
+    "@use-gesture/react": "^10.3.1",
     "@vercel/speed-insights": "^1.0.10",
     "animejs": "^3.2.2",
     "base64-arraybuffer": "^1.0.2",

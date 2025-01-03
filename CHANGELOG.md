@@ -1,3 +1,7 @@
+# 3/1/2025
+
+- Allow the grid to be resized by gestures/ctrl+scroll wheel
+
 # 26/8/2024
 
 - Fixed the theme switcher not highlighting the current theme

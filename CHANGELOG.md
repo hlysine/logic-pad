@@ -1,3 +1,7 @@
+# 5/1/2025
+
+- Moved the core API of Logic Pad to a separate package at https://github.com/hlysine/logic-core
+
 # 3/1/2025
 
 - Allow the grid to be resized by gestures/ctrl+scroll wheel

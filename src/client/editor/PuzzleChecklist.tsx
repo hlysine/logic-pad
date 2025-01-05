@@ -11,13 +11,13 @@ import { useEmbed } from '../contexts/EmbedContext.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Accordion from '../components/Accordion';
 import { useGridState } from '../contexts/GridStateContext.tsx';
-import { Color, State } from '../../data/primitives';
+import { Color, State } from '@logic-pad/core/data/primitives.js';
 import { BiSolidFlagCheckered } from 'react-icons/bi';
 import { BsCreditCard2Front, BsPatchCheckFill } from 'react-icons/bs';
 import { FaCircleHalfStroke } from 'react-icons/fa6';
-import { MetadataSchema } from '../../data/puzzle';
+import { MetadataSchema } from '@logic-pad/core/data/puzzle.js';
 import { RiRobot2Fill } from 'react-icons/ri';
-import GridData from '../../data/grid';
+import GridData from '@logic-pad/core/data/grid.js';
 import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
 import { useSolver } from '../contexts/SolverContext.tsx';
@@ -320,6 +320,8 @@ export default memo(function PuzzleChecklist() {
                         break;
                       }
                     }
+                  } catch (ex) {
+                    console.error(ex);
                   } finally {
                     setPending(false);
                   }

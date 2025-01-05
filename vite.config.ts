@@ -1,41 +1,12 @@
 import million from 'million/compiler';
-import { defineConfig } from 'vite';
+import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
-import { EnclosurePlugin } from './scripts/enclosurePlugin';
-import { ImportsPlugin } from './scripts/importsPlugin';
-import { stopVitePlugin } from './scripts/stopVitePlugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    ImportsPlugin({
-      entries: [
-        {
-          cwd: 'src/data/symbols',
-          generated: 'symbols.gen.ts',
-          import: 'instance',
-          glob: ['./**/*.ts', '!./index.ts'],
-        },
-        {
-          cwd: 'src/data/rules',
-          generated: 'rules.gen.ts',
-          import: 'instance',
-          glob: ['./**/*.ts', '!./index.ts'],
-        },
-        {
-          cwd: 'src/data/solver/z3/modules',
-          generated: 'modules.gen.ts',
-          import: 'instance',
-          glob: ['./**/*.ts', '!./index.ts'],
-        },
-      ],
-    }),
-    EnclosurePlugin({
-      dataPath: 'src/data',
-      generatedPath: 'src/client/editor/enclosure.gen.ts',
-    }),
     million.vite({ auto: true }),
     react(),
     TanStackRouterVite({
@@ -82,12 +53,18 @@ export default defineConfig({
         ],
       },
     }),
-    stopVitePlugin(),
   ],
   server: {
     headers: {
       'Cross-Origin-Opener-Policy': 'same-origin',
       'Cross-Origin-Embedder-Policy': 'require-corp',
     },
+    fs: {
+      allow: [searchForWorkspaceRoot(process.cwd()), './', '../logic-core'], // allow serving files from the logic-core package for local testing
+    },
+  },
+  optimizeDeps: {
+    exclude: ['@logic-pad/core'],
+    include: ['event-iterator', 'z3-solver'],
   },
 });

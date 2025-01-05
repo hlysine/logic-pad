@@ -3,8 +3,8 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import { GoInfo } from 'react-icons/go';
-import Solver from '../../data/solver/solver';
-import { allSolvers } from '../../data/solver/allSolvers';
+import Solver from '@logic-pad/core/data/solver/solver.js';
+import { allSolvers } from '@logic-pad/core/data/solver/allSolvers.js';
 
 export interface SolverSelectorProps {
   onSolve?: (solver: Solver) => void;

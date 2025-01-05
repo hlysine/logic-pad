@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { Position } from '../../data/primitives';
-import { array } from '../../data/dataHelper';
+import { Position } from '@logic-pad/core/data/primitives.js';
+import { array } from '@logic-pad/core/data/dataHelper.js';
 import GridCanvasOverlay, { RawCanvasRef } from './GridCanvasOverlay';
 
 export interface OutlineOverlayProps {

@@ -1,8 +1,8 @@
 import { createContext, memo, useCallback, useContext, useState } from 'react';
-import { Color } from '../../data/primitives.ts';
+import { Color } from '@logic-pad/core/data/primitives.js';
 import { GridContext } from './GridContext.tsx';
-import Symbol from '../../data/symbols/symbol.ts';
-import { Serializer } from '../../data/serializer/allSerializers.ts';
+import Symbol from '@logic-pad/core/data/symbols/symbol.js';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
 
 type Presets = { name: string; symbol: Symbol }[];
 

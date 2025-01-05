@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
-import { allRules } from '../../data/rules';
+import { allRules } from '@logic-pad/core/data/rules/index.js';
 import { useGrid } from '../contexts/GridContext.tsx';
-import Rule from '../../data/rules/rule';
+import Rule from '@logic-pad/core/data/rules/rule.js';
 import Autocomplete from '../components/Autocomplete';
 
 const ruleList = [...allRules.values()].flatMap(rule => rule.searchVariants);

@@ -1,4 +1,4 @@
-import Instruction from '../../../data/instruction';
+import Instruction from '@logic-pad/core/data/instruction.js';
 
 export enum PartPlacement {
   LeftPanel = 'left-panel',

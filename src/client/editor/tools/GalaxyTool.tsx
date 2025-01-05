@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '../../../data/symbols/galaxySymbol';
+import { instance } from '@logic-pad/core/data/symbols/galaxySymbol.js';
 import GalaxySymbol from '../../symbols/GalaxySymbol';
 
 const sample = instance;

@@ -1,5 +1,5 @@
 import { createContext, memo, useContext, useState } from 'react';
-import { GridState, State } from '../../data/primitives.ts';
+import { GridState, State } from '@logic-pad/core/data/primitives.js';
 
 interface GridStateContext {
   state: GridState;

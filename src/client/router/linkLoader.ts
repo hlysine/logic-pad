@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { useEdit } from '../contexts/EditContext.tsx';
-import { Compressor } from '../../data/serializer/compressor/allCompressors';
-import { Serializer } from '../../data/serializer/allSerializers';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
 import { useNavigate } from '@tanstack/react-router';
-import { array } from '../../data/dataHelper';
+import { array } from '@logic-pad/core/data/dataHelper.js';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 
 export enum SolutionHandling {

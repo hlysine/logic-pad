@@ -2,13 +2,18 @@ import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext.tsx';
 import GridCanvasOverlay, { RawCanvasRef } from './GridCanvasOverlay';
 import { useHotkeys } from 'react-hotkeys-hook';
-import { Color, DIRECTIONS, Direction, Position } from '../../data/primitives';
-import GridData from '../../data/grid';
+import {
+  Color,
+  DIRECTIONS,
+  Direction,
+  Position,
+} from '@logic-pad/core/data/primitives.js';
+import GridData from '@logic-pad/core/data/grid.js';
 import { mousePosition } from '../../client/uiHelper.ts';
 import ViewpointSymbol, {
   instance as viewpointInstance,
-} from '../../data/symbols/viewpointSymbol';
-import { move } from '../../data/dataHelper';
+} from '@logic-pad/core/data/symbols/viewpointSymbol.js';
+import { move } from '@logic-pad/core/data/dataHelper.js';
 
 export interface TileCountOverlayProps {
   grid: GridData;

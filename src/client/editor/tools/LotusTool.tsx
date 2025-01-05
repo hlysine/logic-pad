@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '../../../data/symbols/lotusSymbol';
+import { instance } from '@logic-pad/core/data/symbols/lotusSymbol.js';
 import LotusSymbol from '../../symbols/LotusSymbol';
 
 const sample = instance;

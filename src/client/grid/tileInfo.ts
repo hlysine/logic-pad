@@ -1,4 +1,4 @@
-import TileConnections from '../../data/tileConnections';
+import TileConnections from '@logic-pad/core/data/tileConnections.js';
 
 export const TR = 1;
 export const TL = 1 << 1;

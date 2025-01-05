@@ -4,8 +4,8 @@ import QuickAccessBar from '../components/QuickAccessBar';
 import { puzzleTypeFilters } from '../components/PuzzleCard';
 import Changelog from '../components/Changelog';
 import Loading from '../components/Loading';
-import GridData from '../../data/grid';
-import GridConnections from '../../data/gridConnections';
+import GridData from '@logic-pad/core/data/grid.js';
+import GridConnections from '@logic-pad/core/data/gridConnections.js';
 import useLinkLoader from '../router/linkLoader';
 
 const FrontPageGrid = lazy(async () => {

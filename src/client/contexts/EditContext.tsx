@@ -1,5 +1,5 @@
 import { createContext, memo, useContext, useState } from 'react';
-import GridData from '../../data/grid.ts';
+import GridData from '@logic-pad/core/data/grid.js';
 
 interface EditContext {
   undoStack: GridData[];

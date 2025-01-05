@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ConfigType, StringConfig } from '../../../data/config';
-import Configurable from '../../../data/configurable';
+import { ConfigType, StringConfig } from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
 
 export interface StringConfigProps {
   configurable: Configurable;

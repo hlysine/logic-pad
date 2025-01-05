@@ -1,4 +1,4 @@
-import { Color } from '../../data/primitives';
+import { Color } from '@logic-pad/core/data/primitives.js';
 import { GridContext } from '../contexts/GridContext.tsx';
 
 export default function handleTileClick(

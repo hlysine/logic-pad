@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import DartSymbolData from '../../data/symbols/dartSymbol';
-import { Orientation } from '../../data/primitives';
+import DartSymbolData from '@logic-pad/core/data/symbols/dartSymbol.js';
+import { Orientation } from '@logic-pad/core/data/primitives.js';
 import {
   HiMiniArrowLongDown,
   HiMiniArrowLongLeft,

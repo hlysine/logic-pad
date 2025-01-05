@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ConfigType, NullableNoteConfig } from '../../../data/config';
-import Configurable from '../../../data/configurable';
+import { ConfigType, NullableNoteConfig } from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
 import Autocomplete from '../../components/Autocomplete';
 import { FaTrashCan } from 'react-icons/fa6';
 

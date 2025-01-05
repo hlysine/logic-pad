@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react';
-import { Color } from '../../data/primitives';
+import { Color } from '@logic-pad/core/data/primitives.js';
 import mouseContext from './MouseContext';
 
 export interface PointerCaptureOverlayProps {

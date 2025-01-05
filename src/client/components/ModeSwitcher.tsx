@@ -1,9 +1,9 @@
 import { memo } from 'react';
 import { useRouterState, useSearch, useNavigate } from '@tanstack/react-router';
-import { Mode } from '../../data/primitives';
+import { Mode } from '@logic-pad/core/data/primitives.js';
 import { cn } from '../../client/uiHelper.ts';
-import { Serializer } from '../../data/serializer/allSerializers';
-import { Compressor } from '../../data/serializer/compressor/allCompressors';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
 import { useGrid } from '../contexts/GridContext.tsx';
 
 export interface ModeButtonProps {

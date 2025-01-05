@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import CustomTextSymbolData from '../../data/symbols/customTextSymbol';
+import CustomTextSymbolData from '@logic-pad/core/data/symbols/customTextSymbol.js';
 
 export interface CustomTextProps {
   textClass: string;

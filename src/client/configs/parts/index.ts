@@ -1,5 +1,5 @@
-import { AnyConfig, ConfigType } from '../../../data/config';
-import Configurable from '../../../data/configurable';
+import { AnyConfig, ConfigType } from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
 
 export interface ConfigProps<T extends AnyConfig> {
   configurable: Configurable;

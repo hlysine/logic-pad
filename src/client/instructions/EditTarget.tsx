@@ -4,8 +4,8 @@ import {
   useConfig,
 } from '../contexts/ConfigContext.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
-import Configurable from '../../data/configurable';
-import Symbol from '../../data/symbols/symbol';
+import Configurable from '@logic-pad/core/data/configurable.js';
+import Symbol from '@logic-pad/core/data/symbols/symbol.js';
 
 export interface EditTargetProps {
   configurable: Configurable;

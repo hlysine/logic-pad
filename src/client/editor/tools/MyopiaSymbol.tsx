@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '../../../data/symbols/myopiaSymbol';
+import { instance } from '@logic-pad/core/data/symbols/myopiaSymbol.js';
 import MyopiaSymbol from '../../symbols/MyopiaSymbol';
 
 const sample = instance;

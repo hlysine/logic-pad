@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '../../../data/symbols/customIconSymbol';
+import { instance } from '@logic-pad/core/data/symbols/customIconSymbol.js';
 import CustomIconSymbol from '../../symbols/CustomIconSymbol';
 
 const sample = instance;

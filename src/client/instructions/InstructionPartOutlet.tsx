@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react';
 import { PartPlacement } from './parts/types';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { PartComponent, allParts } from './parts';
-import Instruction from '../../data/instruction';
+import Instruction from '@logic-pad/core/data/instruction.js';
 
 export interface InstructionPartOutletProps {
   placement: PartPlacement;

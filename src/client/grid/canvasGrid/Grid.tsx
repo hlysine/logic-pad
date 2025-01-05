@@ -1,12 +1,12 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
-import { array } from '../../../data/dataHelper';
+import { array } from '@logic-pad/core/data/dataHelper.js';
 import { cn } from '../../../client/uiHelper.ts';
 import { type GridProps } from '../Grid';
 import PointerCaptureOverlay from '../PointerCaptureOverlay';
 import { useTheme } from '../../contexts/ThemeContext.tsx';
 import { ColorInfo, clearTile, renderTile } from './tile';
-import GridData from '../../../data/grid';
-import TileConnections from '../../../data/tileConnections';
+import GridData from '@logic-pad/core/data/grid.js';
+import TileConnections from '@logic-pad/core/data/tileConnections.js';
 
 interface GridRenderData {
   grid: GridData;

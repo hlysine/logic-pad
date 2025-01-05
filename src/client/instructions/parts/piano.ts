@@ -1,8 +1,8 @@
-import MusicGridRule from '../../../data/rules/musicGridRule';
+import MusicGridRule from '@logic-pad/core/data/rules/musicGridRule.js';
 import { Piano } from '@tonejs/piano';
-import GridData from '../../../data/grid';
+import GridData from '@logic-pad/core/data/grid.js';
 import * as Tone from 'tone';
-import { Color } from '../../../data/primitives';
+import { Color } from '@logic-pad/core/data/primitives.js';
 
 type EventData =
   | { type: 'pedal'; value: boolean }

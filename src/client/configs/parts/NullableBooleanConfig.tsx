@@ -1,6 +1,9 @@
 import { memo } from 'react';
-import { ConfigType, NullableBooleanConfig } from '../../../data/config';
-import Configurable from '../../../data/configurable';
+import {
+  ConfigType,
+  NullableBooleanConfig,
+} from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
 import { FaTrashCan } from 'react-icons/fa6';
 
 export interface NullableBooleanConfigProps {

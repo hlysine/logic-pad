@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
-import { ConfigType, NullableGridConfig } from '../../../data/config';
-import Configurable from '../../../data/configurable';
-import GridData from '../../../data/grid';
+import { ConfigType, NullableGridConfig } from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
+import GridData from '@logic-pad/core/data/grid.js';
 import { FiExternalLink } from 'react-icons/fi';
 import GridEditorModal from './GridEditorModal';
 import { FaTrashCan } from 'react-icons/fa6';

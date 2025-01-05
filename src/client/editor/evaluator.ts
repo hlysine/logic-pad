@@ -1,4 +1,4 @@
-import { enclosure } from './enclosure.gen';
+import * as enclosure from '@logic-pad/core';
 
 export const examples = [
   'GridData.create(["nnnnn", "nnnnn"])',
@@ -34,7 +34,7 @@ export const examples = [
 
 const blacklist = ['Symbol', 'Object'];
 
-enclosure.forEach(({ name, value }) => {
+Object.entries(enclosure).forEach(([name, value]) => {
   if (blacklist.includes(name)) name = `_${name}`;
   (globalThis as Record<string, unknown>)[name] = value;
 });

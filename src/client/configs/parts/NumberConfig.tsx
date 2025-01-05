@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ConfigType, NumberConfig } from '../../../data/config';
-import Configurable from '../../../data/configurable';
+import { ConfigType, NumberConfig } from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
 
 export interface NumberConfigProps {
   configurable: Configurable;

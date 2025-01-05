@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import { ConfigType, BooleanConfig } from '../../../data/config';
-import Configurable from '../../../data/configurable';
+import { ConfigType, BooleanConfig } from '@logic-pad/core/data/config.js';
+import Configurable from '@logic-pad/core/data/configurable.js';
 
 export interface BooleanConfigProps {
   configurable: Configurable;

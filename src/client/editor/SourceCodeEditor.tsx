@@ -1,16 +1,16 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { Puzzle, PuzzleSchema } from '../../data/puzzle';
-import { Compressor } from '../../data/serializer/compressor/allCompressors';
-import { Serializer } from '../../data/serializer/allSerializers';
+import { Puzzle, PuzzleSchema } from '@logic-pad/core/data/puzzle.js';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
 import { ZodError } from 'zod';
 import evaluate, { examples } from './evaluator';
 import { SUPPORTED_THEMES, useTheme } from '../contexts/ThemeContext.tsx';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import handleTileClick from '../grid/handleTileClick';
 import { useGrid } from '../contexts/GridContext.tsx';
-import { array } from '../../data/dataHelper';
+import { array } from '@logic-pad/core/data/dataHelper.js';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -90,7 +90,7 @@ export default memo(function SourceCodeEditor({
       strict: true,
     });
 
-    import('./logic-pad.gen.d.ts?raw')
+    import('@logic-pad/core/assets/logic-core.global.d.ts?raw')
       .then(({ default: def }) => {
         monaco.languages.typescript.javascriptDefaults.addExtraLib(
           def,

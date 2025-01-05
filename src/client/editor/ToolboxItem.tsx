@@ -1,7 +1,7 @@
 import { memo, useEffect } from 'react';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
-import { Color } from '../../data/primitives';
+import { Color } from '@logic-pad/core/data/primitives.js';
 import { GridContext } from '../contexts/GridContext.tsx';
 import { useHotkeys } from 'react-hotkeys-hook';
 

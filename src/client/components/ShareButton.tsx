@@ -1,8 +1,8 @@
 import { memo, useEffect, useState } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
-import { Compressor } from '../../data/serializer/compressor/allCompressors';
-import { Serializer } from '../../data/serializer/allSerializers';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
 
 export default memo(function ShareButton() {
   const [tooltip, setTooltip] = useState<string | null>(null);

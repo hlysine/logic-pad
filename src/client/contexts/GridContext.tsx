@@ -1,10 +1,10 @@
 import { createContext, memo, useContext, useEffect, useState } from 'react';
-import GridData from '../../data/grid.ts';
+import GridData from '@logic-pad/core/data/grid.js';
 import { useEdit } from './EditContext.tsx';
-import { PuzzleMetadata } from '../../data/puzzle.ts';
-import validateGrid from '../../data/validate.ts';
+import { PuzzleMetadata } from '@logic-pad/core/data/puzzle.js';
+import validateGrid from '@logic-pad/core/data/validate.js';
 import { useGridState } from './GridStateContext.tsx';
-import { handlesSetGrid } from '../../data/events/onSetGrid.ts';
+import { handlesSetGrid } from '@logic-pad/core/data/events/onSetGrid.js';
 
 export interface GridContext {
   grid: GridData;

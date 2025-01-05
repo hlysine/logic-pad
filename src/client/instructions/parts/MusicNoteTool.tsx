@@ -3,12 +3,15 @@ import ToolboxItem from '../../editor/ToolboxItem';
 import { PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
   instance as musicGridInstance,
-} from '../../../data/rules/musicGridRule';
+} from '@logic-pad/core/data/rules/musicGridRule.js';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import GridOverlay from '../../grid/GridOverlay';
 import PointerCaptureOverlay from '../../grid/PointerCaptureOverlay';
-import { Color } from '../../../data/primitives';
-import { ControlLine, Row } from '../../../data/rules/musicControlLine';
+import { Color } from '@logic-pad/core/data/primitives.js';
+import {
+  ControlLine,
+  Row,
+} from '@logic-pad/core/data/rules/musicControlLine.js';
 import {
   getConfigurableLocation,
   useConfig,

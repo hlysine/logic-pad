@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import DirectionLinkerSymbolData from '../../data/symbols/directionLinkerSymbol';
+import DirectionLinkerSymbolData from '@logic-pad/core/data/symbols/directionLinkerSymbol.js';
 
 export interface DirectionLinkerProps {
   textClass: string;

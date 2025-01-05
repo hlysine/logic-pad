@@ -1,6 +1,6 @@
 import { createContext, memo, useContext, useState } from 'react';
-import { Position } from '../../data/primitives.ts';
-import GridData from '../../data/grid.ts';
+import { Position } from '@logic-pad/core/data/primitives.js';
+import GridData from '@logic-pad/core/data/grid.js';
 
 interface ForesightContext {
   grid: GridData | null;

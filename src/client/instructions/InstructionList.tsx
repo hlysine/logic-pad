@@ -1,7 +1,7 @@
-import { State } from '../../data/primitives';
+import { State } from '@logic-pad/core/data/primitives.js';
 import { memo, useMemo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
-import MultiEntrySymbol from '../../data/symbols/multiEntrySymbol';
+import MultiEntrySymbol from '@logic-pad/core/data/symbols/multiEntrySymbol.js';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import Instruction from './Instruction';
 import EditTarget from './EditTarget';
@@ -20,7 +20,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import RuleData from '../../data/rules/rule.ts';
+import RuleData from '@logic-pad/core/data/rules/rule.js';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (

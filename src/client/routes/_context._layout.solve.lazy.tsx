@@ -1,7 +1,7 @@
 import InstructionList from '../instructions/InstructionList';
 import EditControls from '../components/EditControls';
 import MainGrid from '../grid/MainGrid';
-import Metadata from '../metadata/Metadata';
+import Metadata from '../metadata/Metadata.tsx';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader from '../router/linkLoader';

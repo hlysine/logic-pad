@@ -1,8 +1,8 @@
 import { memo, useEffect, useMemo, useState } from 'react';
 import PuzzleCard, { getPuzzleType } from './PuzzleCard';
-import { Puzzle } from '../../data/puzzle';
-import { Serializer } from '../../data/serializer/allSerializers';
-import { Compressor } from '../../data/serializer/compressor/allCompressors';
+import { Puzzle } from '@logic-pad/core/data/puzzle.js';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
 
 const serialized: string[] = [
   // Barricaded - Lysine - 5/10 - Underclued

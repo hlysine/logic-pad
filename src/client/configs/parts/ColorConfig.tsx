@@ -1,8 +1,8 @@
 import { memo } from 'react';
-import { ColorConfig, ConfigType } from '../../../data/config';
-import { Color } from '../../../data/primitives';
+import { ColorConfig, ConfigType } from '@logic-pad/core/data/config.js';
+import { Color } from '@logic-pad/core/data/primitives.js';
 import { cn } from '../../../client/uiHelper.ts';
-import Configurable from '../../../data/configurable';
+import Configurable from '@logic-pad/core/data/configurable.js';
 
 export interface ColorConfigProps {
   configurable: Configurable;

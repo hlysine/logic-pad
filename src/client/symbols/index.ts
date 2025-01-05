@@ -1,5 +1,5 @@
-import Symbol from '../../data/symbols/symbol';
-import { allSymbols as allSymbolData } from '../../data/symbols';
+import Symbol from '@logic-pad/core/data/symbols/symbol.js';
+import { allSymbols as allSymbolData } from '@logic-pad/core/data/symbols/index.js';
 
 export interface SymbolProps<T extends Symbol> {
   textClass: string;

@@ -1,7 +1,7 @@
-import GridData from '../../data/grid';
+import GridData from '@logic-pad/core/data/grid.js';
 import Symbol from '../symbols/Symbol';
 import GridOverlay from './GridOverlay';
-import { Color, GridState, State } from '../../data/primitives';
+import { Color, GridState, State } from '@logic-pad/core/data/primitives.js';
 import { memo } from 'react';
 import { cn } from '../uiHelper';
 

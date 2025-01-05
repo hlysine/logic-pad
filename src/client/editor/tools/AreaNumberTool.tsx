@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { instance } from '../../../data/symbols/areaNumberSymbol';
+import { instance } from '@logic-pad/core/data/symbols/areaNumberSymbol.js';
 import SymbolTool from '../SymbolTool';
 import AreaNumberSymbol from '../../symbols/AreaNumberSymbol';
 

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import Difficulty from '../metadata/Difficulty';
+import Difficulty from '../metadata/Difficulty.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 

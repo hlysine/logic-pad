@@ -47,7 +47,7 @@ const radialGradientPlugin = plugin(
 );
 
 const tailwindConfig = {
-  content: ['./index.html', './src/client/**/*.{js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/client/**/*.{js.jsx,tsx}'],
   theme: {
     extend: {
       boxShadow: {

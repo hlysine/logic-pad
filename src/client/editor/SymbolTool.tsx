@@ -1,12 +1,12 @@
 import { memo } from 'react';
-import Symbol from '../../data/symbols/symbol';
+import Symbol from '@logic-pad/core/data/symbols/symbol.js';
 import ToolboxItem from './ToolboxItem';
 import {
   ConfigConsumer,
   getConfigurableLocation,
 } from '../contexts/ConfigContext.tsx';
 import { GridConsumer } from '../contexts/GridContext.tsx';
-import { Color } from '../../data/primitives';
+import { Color } from '@logic-pad/core/data/primitives.js';
 import { eq, mousePosition } from '../../client/uiHelper.ts';
 import PointerCaptureOverlay from '../grid/PointerCaptureOverlay';
 import handleTileClick from '../grid/handleTileClick';

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '../../../data/symbols/dartSymbol';
+import { instance } from '@logic-pad/core/data/symbols/dartSymbol.js';
 import DartSymbol from '../../symbols/DartSymbol';
 
 const sample = instance;

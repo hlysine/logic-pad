@@ -1,8 +1,6 @@
 import { Suspense, lazy, memo, useMemo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import CustomIconSymbolData, {
-  IconString,
-} from '../../data/symbols/customIconSymbol';
+import CustomIconSymbolData from '@logic-pad/core/data/symbols/customIconSymbol.js';
 import { IconBaseProps } from 'react-icons';
 import Loading from '../components/Loading';
 
@@ -14,8 +12,8 @@ export interface CustomIconProps {
 const MdIcon = lazy(async () => {
   const Md = await import('react-icons/md');
   return {
-    default: ({ icon, ...rest }: IconBaseProps & { icon: IconString }) => {
-      let Icon = Md[icon];
+    default: ({ icon, ...rest }: IconBaseProps & { icon: string }) => {
+      let Icon = Md[icon as Exclude<keyof typeof Md, 'default'>];
       if (!Icon) Icon = Md.MdQuestionMark;
       return <Icon {...rest} />;
     },

@@ -8,12 +8,11 @@
     "server:dev": "bun --watch src/server/index.ts",
     "dev": "concurrently \"bun:*:dev\"",
     "start": "bun src/server/index.ts",
-    "client:build": "bun run codegen && bunx --bun tsc && bunx --bun vite build",
+    "client:build": "bunx --bun tsc && bunx --bun vite build",
     "server:build": "bun-vercel ./src/server/vercel.ts --funcPath api",
     "build": "bun run client:build && bun run server:build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "client:preview": "bunx --bun vite preview",
-    "codegen": "bun ./scripts/genTypes.ts",
     "check-bundle": "bunx vite-bundle-visualizer",
     "pwa-gen": "npx @vite-pwa/assets-generator --preset minimal-2023 public/logo.svg"
   },
@@ -23,6 +22,7 @@
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",
     "@hlysine/bun-vercel": "^1.0.0-alpha.8",
+    "@logic-pad/core": "^0.1.2",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.22.1",
     "@tanstack/router-devtools": "^1.22.2",

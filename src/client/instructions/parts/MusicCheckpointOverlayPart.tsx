@@ -1,7 +1,7 @@
 import { PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
   instance as musicGridInstance,
-} from '../../../data/rules/musicGridRule';
+} from '@logic-pad/core/data/rules/musicGridRule.js';
 import { memo, useEffect, useMemo, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
 import GridOverlay from '../../grid/GridOverlay';

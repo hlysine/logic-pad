@@ -1,5 +1,5 @@
 import { allSymbols, SymbolProps } from '.';
-import SymbolData from '@logic-pad/core/data/symbols/symbol.js';
+import SymbolData from '@logic-pad/core/data/symbols/symbol';
 import { memo, useMemo } from 'react';
 
 export default memo(function Symbol({

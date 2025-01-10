@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
-import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { useGrid } from '../contexts/GridContext.tsx';
 
 export default memo(function PWAPrompt() {

@@ -1,5 +1,5 @@
 import { createContext, memo, useContext, useState } from 'react';
-import Solver from '@logic-pad/core/data/solver/solver.js';
+import Solver from '@logic-pad/core/data/solver/solver';
 
 interface SolverContext {
   solver: Solver | null;

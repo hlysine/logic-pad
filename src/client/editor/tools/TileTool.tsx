@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import ToolboxItem from '../ToolboxItem';
-import { Color } from '@logic-pad/core/data/primitives.js';
+import { Color } from '@logic-pad/core/data/primitives';
 import { RiEditBoxFill } from 'react-icons/ri';
 import { GridConsumer } from '../../contexts/GridContext.tsx';
 import PointerCaptureOverlay from '../../grid/PointerCaptureOverlay';

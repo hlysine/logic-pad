@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import LetterSymbolData from '@logic-pad/core/data/symbols/letterSymbol.js';
+import LetterSymbolData from '@logic-pad/core/data/symbols/letterSymbol';
 
 export interface LetterProps {
   textClass: string;

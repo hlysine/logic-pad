@@ -3,10 +3,20 @@ import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
+import path from 'path';
+import { replaceCodePlugin } from 'vite-plugin-replace';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    replaceCodePlugin({
+      replacements: [
+        {
+          from: 'Worker.js', // 'js' extension is required when @logic-pad/core is compiled by tsc
+          to: 'Worker.ts', // but vite uses 'ts' extension for worker imports
+        },
+      ],
+    }),
     million.vite({ auto: true }),
     react(),
     TanStackRouterVite({
@@ -66,5 +76,23 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['@logic-pad/core'],
     include: ['event-iterator', 'z3-solver'],
+  },
+  resolve: {
+    alias: [
+      {
+        find: '@logic-pad/core/assets',
+        replacement: path.join(
+          searchForWorkspaceRoot(process.cwd()),
+          './packages/logic-core/assets'
+        ),
+      },
+      {
+        find: '@logic-pad/core',
+        replacement: path.join(
+          searchForWorkspaceRoot(process.cwd()),
+          './packages/logic-core/src'
+        ),
+      },
+    ],
   },
 });

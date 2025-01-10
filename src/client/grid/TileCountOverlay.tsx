@@ -7,13 +7,13 @@ import {
   DIRECTIONS,
   Direction,
   Position,
-} from '@logic-pad/core/data/primitives.js';
-import GridData from '@logic-pad/core/data/grid.js';
+} from '@logic-pad/core/data/primitives';
+import GridData from '@logic-pad/core/data/grid';
 import { mousePosition } from '../../client/uiHelper.ts';
 import ViewpointSymbol, {
   instance as viewpointInstance,
-} from '@logic-pad/core/data/symbols/viewpointSymbol.js';
-import { move } from '@logic-pad/core/data/dataHelper.js';
+} from '@logic-pad/core/data/symbols/viewpointSymbol';
+import { move } from '@logic-pad/core/data/dataHelper';
 
 export interface TileCountOverlayProps {
   grid: GridData;

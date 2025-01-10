@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { AnyConfig } from '@logic-pad/core/data/config.js';
+import { AnyConfig } from '@logic-pad/core/data/config';
 import { allConfigs, ConfigProps } from '.';
 
 export default memo(function Config({

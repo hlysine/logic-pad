@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
-import { ConfigType, GridConfig } from '@logic-pad/core/data/config.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
-import GridData from '@logic-pad/core/data/grid.js';
+import { ConfigType, GridConfig } from '@logic-pad/core/data/config';
+import Configurable from '@logic-pad/core/data/configurable';
+import GridData from '@logic-pad/core/data/grid';
 import { FiExternalLink } from 'react-icons/fi';
 import GridEditorModal from './GridEditorModal';
 

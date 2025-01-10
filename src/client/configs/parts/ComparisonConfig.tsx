@@ -1,7 +1,7 @@
 import { memo } from 'react';
-import { ConfigType, ComparisonConfig } from '@logic-pad/core/data/config.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
-import { COMPARISONS, Comparison } from '@logic-pad/core/data/primitives.js';
+import { ConfigType, ComparisonConfig } from '@logic-pad/core/data/config';
+import Configurable from '@logic-pad/core/data/configurable';
+import { COMPARISONS, Comparison } from '@logic-pad/core/data/primitives';
 
 export interface ComparisonConfigProps {
   configurable: Configurable;

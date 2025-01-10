@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '@logic-pad/core/data/symbols/letterSymbol.js';
+import { instance } from '@logic-pad/core/data/symbols/letterSymbol';
 import LetterSymbol from '../../symbols/LetterSymbol';
 
 const sample = instance;

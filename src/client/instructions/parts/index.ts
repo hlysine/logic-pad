@@ -1,5 +1,5 @@
 import { InstructionPartProps, PartPlacement, PartSpec } from './types';
-import Instruction from '@logic-pad/core/data/instruction.js';
+import Instruction from '@logic-pad/core/data/instruction';
 
 export type PartComponent = React.NamedExoticComponent<
   InstructionPartProps<Instruction>

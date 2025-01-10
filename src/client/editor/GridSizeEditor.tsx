@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import GridData from '@logic-pad/core/data/grid.js';
+import GridData from '@logic-pad/core/data/grid';
 
 export interface GridSizeEditorProps {
   grid: GridData;

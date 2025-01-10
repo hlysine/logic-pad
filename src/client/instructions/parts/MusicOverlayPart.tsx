@@ -1,12 +1,12 @@
 import { PartPlacement, PartSpec } from './types';
-import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule.js';
+import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
 import { useTheme } from '../../contexts/ThemeContext.tsx';
 import { playbackState } from './piano';
-import { Color } from '@logic-pad/core/data/primitives.js';
+import { Color } from '@logic-pad/core/data/primitives';
 
 const BLEED = 5;
 

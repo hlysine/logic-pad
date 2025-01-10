@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import GridData from '@logic-pad/core/data/grid.js';
-import { Color } from '@logic-pad/core/data/primitives.js';
+import GridData from '@logic-pad/core/data/grid';
+import { Color } from '@logic-pad/core/data/primitives';
 import CanvasGrid from './canvasGrid/Grid';
 import DOMGrid from './domGrid/Grid';
 import { prefersReducedMotion } from '../../client/uiHelper.ts';

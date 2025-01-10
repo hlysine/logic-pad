@@ -1,6 +1,6 @@
 import { forwardRef, memo, useEffect } from 'react';
 import { cn, prefersReducedMotion } from '../uiHelper.ts';
-import { State } from '@logic-pad/core/data/primitives.js';
+import { State } from '@logic-pad/core/data/primitives';
 import anime from 'animejs';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 

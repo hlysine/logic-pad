@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import ViewpointSymbolData from '@logic-pad/core/data/symbols/viewpointSymbol.js';
+import ViewpointSymbolData from '@logic-pad/core/data/symbols/viewpointSymbol';
 import {
   FiChevronUp,
   FiChevronDown,

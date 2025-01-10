@@ -24,6 +24,5 @@ bun dev
 # You can now develop with hot module reload
 ```
 
-In addition to the bundled JS code, the code editor also requires a TS type declaration file to
-display documentation and type info. If you have modified anything in `src/data`, you should
-regenerate the type definition with `bun build-types`
+Several files in this project are automatically generated. If you have modified anything in `package/logic-core`, you
+should regenerate those files with `bun build` in the logic-core subpackage.

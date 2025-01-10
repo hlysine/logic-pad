@@ -3,11 +3,11 @@ import { useGrid } from '../../contexts/GridContext.tsx';
 import { PartPlacement, PartSpec } from './types';
 import ForesightRule, {
   instance as foresightInstance,
-} from '@logic-pad/core/data/rules/foresightRule.js';
+} from '@logic-pad/core/data/rules/foresightRule';
 import { useForesight } from '../../contexts/ForesightContext.tsx';
 import { IoIosEye } from 'react-icons/io';
-import { Color, Position } from '@logic-pad/core/data/primitives.js';
-import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule.js';
+import { Color, Position } from '@logic-pad/core/data/primitives';
+import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 
 export interface ForesightControlsPartProps {
   instruction: ForesightRule;

@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import GridData from '@logic-pad/core/data/grid.js';
+import GridData from '@logic-pad/core/data/grid';
 import { cn } from '../../../client/uiHelper.ts';
 import EmbedContext, { useEmbed } from '../../contexts/EmbedContext.tsx';
 import PuzzleEditor from '../../editor/PuzzleEditor';

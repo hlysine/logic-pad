@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react';
-import { ConfigType, IconConfig } from '@logic-pad/core/data/config.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
+import { ConfigType, IconConfig } from '@logic-pad/core/data/config';
+import Configurable from '@logic-pad/core/data/configurable';
 import Autocomplete from '../../components/Autocomplete';
 
 export interface IconConfigProps {

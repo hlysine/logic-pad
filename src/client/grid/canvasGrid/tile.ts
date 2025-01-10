@@ -1,6 +1,6 @@
-import { Color } from '@logic-pad/core/data/primitives.js';
-import TileData from '@logic-pad/core/data/tile.js';
-import TileConnections from '@logic-pad/core/data/tileConnections.js';
+import { Color } from '@logic-pad/core/data/primitives';
+import TileData from '@logic-pad/core/data/tile';
+import TileConnections from '@logic-pad/core/data/tileConnections';
 import {
   TL,
   TR,

@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react';
 import Tile from './Tile';
-import { Color } from '@logic-pad/core/data/primitives.js';
-import { array } from '@logic-pad/core/data/dataHelper.js';
+import { Color } from '@logic-pad/core/data/primitives';
+import { array } from '@logic-pad/core/data/dataHelper';
 import { cn } from '../../../client/uiHelper.ts';
 import { type GridProps } from '../Grid';
 

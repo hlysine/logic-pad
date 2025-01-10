@@ -1,16 +1,16 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { Puzzle, PuzzleSchema } from '@logic-pad/core/data/puzzle.js';
-import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors.js';
-import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.js';
+import { Puzzle, PuzzleSchema } from '@logic-pad/core/data/puzzle';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { ZodError } from 'zod';
 import evaluate, { examples } from './evaluator';
 import { SUPPORTED_THEMES, useTheme } from '../contexts/ThemeContext.tsx';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import handleTileClick from '../grid/handleTileClick';
 import { useGrid } from '../contexts/GridContext.tsx';
-import { array } from '@logic-pad/core/data/dataHelper.js';
+import { array } from '@logic-pad/core/data/dataHelper';
 
 const defaultCode = `/** @type Puzzle */
 ({

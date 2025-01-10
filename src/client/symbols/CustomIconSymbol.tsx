@@ -1,6 +1,6 @@
 import { Suspense, lazy, memo, useMemo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import CustomIconSymbolData from '@logic-pad/core/data/symbols/customIconSymbol.js';
+import CustomIconSymbolData from '@logic-pad/core/data/symbols/customIconSymbol';
 import { IconBaseProps } from 'react-icons';
 import Loading from '../components/Loading';
 

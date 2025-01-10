@@ -2,15 +2,15 @@ import { memo } from 'react';
 import {
   OrientationToggleConfig,
   ConfigType,
-} from '@logic-pad/core/data/config.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
+} from '@logic-pad/core/data/config';
+import Configurable from '@logic-pad/core/data/configurable';
 import {
   Orientation,
   OrientationToggle,
-} from '@logic-pad/core/data/primitives.js';
+} from '@logic-pad/core/data/primitives';
 import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
-import { orientationToRotation } from '@logic-pad/core/data/dataHelper.js';
+import { orientationToRotation } from '@logic-pad/core/data/dataHelper';
 
 export interface OrientationToggleConfigProps {
   configurable: Configurable;

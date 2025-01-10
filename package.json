@@ -3,6 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://logic-pad.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hlysine/logic-pad.git"
+  },
+  "license": "AGPL-3.0-only",
   "scripts": {
     "client:dev": "bunx --bun vite --host",
     "server:dev": "bun --watch src/server/index.ts",
@@ -22,7 +28,6 @@
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",
     "@hlysine/bun-vercel": "^1.0.0-alpha.8",
-    "@logic-pad/core": "^0.1.2",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.22.1",
     "@tanstack/router-devtools": "^1.22.2",
@@ -89,7 +94,8 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
-    "vite-plugin-pwa": "^0.19.8"
+    "vite-plugin-pwa": "^0.19.8",
+    "vite-plugin-replace": "^0.1.1"
   },
   "trustedDependencies": [
     "@vercel/speed-insights",

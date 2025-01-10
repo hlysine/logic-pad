@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import { Position } from '@logic-pad/core/data/primitives.js';
+import { Position } from '@logic-pad/core/data/primitives';
 import OutlineOverlay from './OutlineOverlay';
 import { useTheme } from '../contexts/ThemeContext.tsx';
 

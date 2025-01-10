@@ -1,7 +1,7 @@
 import { PartPlacement, PartSpec } from './types';
 import { memo, useMemo } from 'react';
 import OutlineOverlay from '../../grid/OutlineOverlay';
-import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule.js';
+import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
 import { useTheme } from '../../contexts/ThemeContext.tsx';
 import { useForesight } from '../../contexts/ForesightContext.tsx';
 import { useGrid } from '../../contexts/GridContext.tsx';

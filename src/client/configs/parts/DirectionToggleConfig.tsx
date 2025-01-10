@@ -1,13 +1,10 @@
 import { memo } from 'react';
-import {
-  DirectionToggleConfig,
-  ConfigType,
-} from '@logic-pad/core/data/config.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
-import { Direction, DirectionToggle } from '@logic-pad/core/data/primitives.js';
+import { DirectionToggleConfig, ConfigType } from '@logic-pad/core/data/config';
+import Configurable from '@logic-pad/core/data/configurable';
+import { Direction, DirectionToggle } from '@logic-pad/core/data/primitives';
 import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
-import { directionToRotation } from '@logic-pad/core/data/dataHelper.js';
+import { directionToRotation } from '@logic-pad/core/data/dataHelper';
 
 export interface DirectionToggleConfigProps {
   configurable: Configurable;

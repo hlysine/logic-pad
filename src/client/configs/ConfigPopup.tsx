@@ -1,20 +1,17 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { getConfigurable, useConfig } from '../contexts/ConfigContext.tsx';
 import Config from './parts/Config';
-import Rule from '@logic-pad/core/data/rules/rule.js';
+import Rule from '@logic-pad/core/data/rules/rule';
 import { useGrid } from '../contexts/GridContext.tsx';
-import Symbol from '@logic-pad/core/data/symbols/symbol.js';
+import Symbol from '@logic-pad/core/data/symbols/symbol';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
-import {
-  ControlLine,
-  Row,
-} from '@logic-pad/core/data/rules/musicControlLine.js';
+import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
 import MusicGridRule, {
   instance as musicGridInstance,
-} from '@logic-pad/core/data/rules/musicGridRule.js';
+} from '@logic-pad/core/data/rules/musicGridRule';
 
 const gap = 8;
 

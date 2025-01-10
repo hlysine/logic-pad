@@ -1,15 +1,12 @@
 import { createContext, memo, useContext, useState } from 'react';
-import GridData from '@logic-pad/core/data/grid.js';
-import Rule from '@logic-pad/core/data/rules/rule.js';
-import Symbol from '@logic-pad/core/data/symbols/symbol.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
+import GridData from '@logic-pad/core/data/grid';
+import Rule from '@logic-pad/core/data/rules/rule';
+import Symbol from '@logic-pad/core/data/symbols/symbol';
+import Configurable from '@logic-pad/core/data/configurable';
 import MusicGridRule, {
   instance as musicGridInstance,
-} from '@logic-pad/core/data/rules/musicGridRule.js';
-import {
-  ControlLine,
-  Row,
-} from '@logic-pad/core/data/rules/musicControlLine.js';
+} from '@logic-pad/core/data/rules/musicGridRule';
+import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
 
 export type ConfigurableLocation =
   | {

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import AreaNumberSymbolData from '@logic-pad/core/data/symbols/areaNumberSymbol.js';
+import AreaNumberSymbolData from '@logic-pad/core/data/symbols/areaNumberSymbol';
 
 export interface AreaNumberProps {
   textClass: string;

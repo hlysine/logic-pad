@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react';
-import InstructionData from '@logic-pad/core/data/instruction.js';
-import { State } from '@logic-pad/core/data/primitives.js';
+import InstructionData from '@logic-pad/core/data/instruction';
+import { State } from '@logic-pad/core/data/primitives';
 import { cn } from '../../client/uiHelper.ts';
 import Grid from '../grid/Grid';
 import SymbolOverlay from '../grid/SymbolOverlay';

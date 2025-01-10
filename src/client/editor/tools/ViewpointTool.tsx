@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import SymbolTool from '../SymbolTool';
-import { instance } from '@logic-pad/core/data/symbols/viewpointSymbol.js';
+import { instance } from '@logic-pad/core/data/symbols/viewpointSymbol';
 import ViewpointSymbol from '../../symbols/ViewpointSymbol';
 
 const sample = instance;

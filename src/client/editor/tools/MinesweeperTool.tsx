@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { instance } from '@logic-pad/core/data/symbols/minesweeperSymbol.js';
+import { instance } from '@logic-pad/core/data/symbols/minesweeperSymbol';
 import SymbolTool from '../SymbolTool';
 import MinesweeperSymbol from '../../symbols/MinesweeperSymbol';
 

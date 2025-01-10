@@ -1,4 +1,4 @@
-import { Color } from '@logic-pad/core/data/primitives.js';
+import { Color } from '@logic-pad/core/data/primitives';
 
 class MouseContext {
   color: Color | null;

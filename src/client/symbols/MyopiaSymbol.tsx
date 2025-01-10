@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import MyopiaSymbolData from '@logic-pad/core/data/symbols/myopiaSymbol.js';
+import MyopiaSymbolData from '@logic-pad/core/data/symbols/myopiaSymbol';
 import {
   FaLongArrowAltUp,
   FaLongArrowAltDown,
   FaLongArrowAltLeft,
   FaLongArrowAltRight,
 } from 'react-icons/fa';
-import { ORIENTATIONS } from '@logic-pad/core/data/primitives.js';
+import { ORIENTATIONS } from '@logic-pad/core/data/primitives';
 import { RiCheckboxBlankFill } from 'react-icons/ri';
 import {
   TbChevronDownLeft,

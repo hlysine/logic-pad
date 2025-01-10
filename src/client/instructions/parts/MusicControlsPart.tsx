@@ -3,12 +3,12 @@ import { useGrid } from '../../contexts/GridContext.tsx';
 import { InstructionPartProps, PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
   instance as musicGridInstance,
-} from '@logic-pad/core/data/rules/musicGridRule.js';
+} from '@logic-pad/core/data/rules/musicGridRule';
 import { RiHeadphoneFill, RiStopLargeFill } from 'react-icons/ri';
 import { FaPlay } from 'react-icons/fa';
 import Loading from '../../components/Loading';
-import { Color } from '@logic-pad/core/data/primitives.js';
-import { array } from '@logic-pad/core/data/dataHelper.js';
+import { Color } from '@logic-pad/core/data/primitives';
+import { array } from '@logic-pad/core/data/dataHelper';
 import {
   CachedPlayback,
   cleanUp,
@@ -19,7 +19,7 @@ import {
   playImmediate,
   playbackState,
 } from './piano';
-import GridData from '@logic-pad/core/data/grid.js';
+import GridData from '@logic-pad/core/data/grid';
 import * as Tone from 'tone';
 
 export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;

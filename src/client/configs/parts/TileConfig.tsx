@@ -1,9 +1,9 @@
 import { memo } from 'react';
-import { ConfigType, TileConfig } from '@logic-pad/core/data/config.js';
-import Configurable from '@logic-pad/core/data/configurable.js';
-import { Color } from '@logic-pad/core/data/primitives.js';
+import { ConfigType, TileConfig } from '@logic-pad/core/data/config';
+import Configurable from '@logic-pad/core/data/configurable';
+import { Color } from '@logic-pad/core/data/primitives';
 import Grid from '../../grid/Grid';
-import GridData from '@logic-pad/core/data/grid.js';
+import GridData from '@logic-pad/core/data/grid';
 import GridSizeEditor from '../../editor/GridSizeEditor';
 
 export interface TileConfigProps {

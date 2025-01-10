@@ -1,6 +1,6 @@
 import { memo, useRef } from 'react';
 import ToolboxItem from '../ToolboxItem';
-import { Color, Position } from '@logic-pad/core/data/primitives.js';
+import { Color, Position } from '@logic-pad/core/data/primitives';
 import { RiMergeCellsHorizontal } from 'react-icons/ri';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import PointerCaptureOverlay from '../../grid/PointerCaptureOverlay';

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import MinesweeperSymbolData from '@logic-pad/core/data/symbols/minesweeperSymbol.js';
+import MinesweeperSymbolData from '@logic-pad/core/data/symbols/minesweeperSymbol';
 
 export interface MinesweeperProps {
   textClass: string;

@@ -1,9 +1,9 @@
 import { memo, useMemo } from 'react';
 import { HiOutlineLightBulb } from 'react-icons/hi';
 import { useGrid } from '../../contexts/GridContext.tsx';
-import { Color } from '@logic-pad/core/data/primitives.js';
+import { Color } from '@logic-pad/core/data/primitives';
 import { PartPlacement, PartSpec } from './types';
-import { instance as undercluedInstance } from '@logic-pad/core/data/rules/undercluedRule.js';
+import { instance as undercluedInstance } from '@logic-pad/core/data/rules/undercluedRule';
 
 export default memo(function UndercluedPart() {
   const { grid, solution } = useGrid();

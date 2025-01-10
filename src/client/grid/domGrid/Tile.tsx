@@ -1,9 +1,9 @@
 import { memo, useMemo } from 'react';
-import TileData from '@logic-pad/core/data/tile.js';
+import TileData from '@logic-pad/core/data/tile';
 import { cn } from '../../../client/uiHelper.ts';
 import mouseContext from '../MouseContext';
-import { Color } from '@logic-pad/core/data/primitives.js';
-import TileConnections from '@logic-pad/core/data/tileConnections.js';
+import { Color } from '@logic-pad/core/data/primitives';
+import TileConnections from '@logic-pad/core/data/tileConnections';
 import './tile.css';
 import {
   BL,

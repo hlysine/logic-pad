@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../../client/uiHelper.ts';
-import GalaxySymbolData from '@logic-pad/core/data/symbols/galaxySymbol.js';
+import GalaxySymbolData from '@logic-pad/core/data/symbols/galaxySymbol';
 import { TbGalaxy } from 'react-icons/tb';
 
 export interface GalaxyProps {

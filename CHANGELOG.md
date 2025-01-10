@@ -1,3 +1,8 @@
+# 10/1/2025
+
+- Fixed myopia rule in the backtrack solver
+- Include the API of Logic Pad in the same repo using a monorepo setup
+
 # 5/1/2025
 
 - Moved the core API of Logic Pad to a separate package at https://github.com/hlysine/logic-core

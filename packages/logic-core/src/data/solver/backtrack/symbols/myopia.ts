@@ -40,17 +40,14 @@ export default class MyopiaBTModule extends BTModule {
         const curTile = grid.getTile(pos.x, pos.y);
 
         if (connected) {
-          if (tile === curTile) {
+          if (tile === curTile || curTile === BTTile.NonExist) {
             min += 1;
           } else {
             connected = false;
           }
         }
 
-        if (
-          getOppositeColor(tile as BTColor) === curTile ||
-          curTile === BTTile.NonExist
-        ) {
+        if (getOppositeColor(tile as BTColor) === curTile) {
           stopped = true;
           break;
         }

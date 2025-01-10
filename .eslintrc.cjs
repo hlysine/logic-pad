@@ -14,7 +14,12 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
+    project: [
+      './tsconfig.json',
+      './tsconfig.node.json',
+      './packages/logic-core/tsconfig.json',
+      './packages/logic-core/tsconfig.node.json',
+    ],
     tsconfigRootDir: __dirname,
   },
   settings: {
@@ -24,7 +29,12 @@ module.exports = {
     'import/resolver': {
       typescript: {
         alwaysTryTypes: true,
-        project: ['tsconfig.json', 'tsconfig.node.json'],
+        project: [
+          'tsconfig.json',
+          'tsconfig.node.json',
+          './packages/logic-core/tsconfig.json',
+          './packages/logic-core/tsconfig.node.json',
+        ],
       },
     },
   },

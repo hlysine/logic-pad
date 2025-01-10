@@ -1,3 +1,7 @@
+# 0.1.4
+
+- Fixed myopia rule in backtrack solver
+
 # 0.1.3
 
 - Add package metadata

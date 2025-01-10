@@ -27,6 +27,6 @@
     }
   },
   "include": ["src", "api"],
-  "exclude": ["**/*.gen.d.ts"],
+  "exclude": ["**/*.global.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,5 +1,5 @@
-/dist
-/node_modules
-/build
-/scripts/temp
-*.gen.d.ts
+**/dist/
+**/node_modules/
+**/build/
+**/scripts/temp/
+**/*.global.d.ts

@@ -12,7 +12,6 @@
   "include": [
     "vite.config.ts",
     ".eslintrc.cjs",
-    "scripts",
     "tailwind.config.ts",
     "postcss.config.js"
   ]

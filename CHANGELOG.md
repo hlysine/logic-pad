@@ -1,3 +1,7 @@
+# 12/1/2025
+
+- Fixed ban pattern rule in the backtrack solver
+
 # 10/1/2025
 
 - Fixed myopia rule in the backtrack solver

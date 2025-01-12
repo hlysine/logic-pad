@@ -17,8 +17,24 @@ export default class BanPatternBTModule extends BTModule {
     this.instr = instr;
   }
 
-  public checkGlobal(_: BTGridData): CheckResult | false {
-    // TODO: Impl this properly
+  public checkGlobal(grid: BTGridData): CheckResult | false {
+    for (const pattern of this.instr.cache) {
+      for (let y = 0; y <= grid.height - pattern.height; y++) {
+        for (let x = 0; x <= grid.width - pattern.width; x++) {
+          let match = true;
+          for (const tile of pattern.elements) {
+            const t = grid.getTile(x + tile.x, y + tile.y);
+            if (t !== colorToBTTile(tile.color)) {
+              match = false;
+              break;
+            }
+          }
+          if (match) {
+            return false;
+          }
+        }
+      }
+    }
     return { tilesNeedCheck: null, ratings: null };
   }
 

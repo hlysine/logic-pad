@@ -304,7 +304,7 @@ function solveUnderclued(input: GridData): GridData | null {
   }
 
   let grid = input;
-  let count = 0;
+  // let count = 0;
 
   const possibles: PossibleState[][] = array(grid.width, grid.height, () => ({
     dark: false,
@@ -312,7 +312,7 @@ function solveUnderclued(input: GridData): GridData | null {
   }));
 
   function search(x: number, y: number, tile: TileData, color: Color): boolean {
-    count++;
+    // count++;
 
     // console.log(`Trying (${x}, ${y}) with ${color}`);
 
@@ -361,7 +361,7 @@ function solveUnderclued(input: GridData): GridData | null {
     }
   }
 
-  console.log(`Solve count: ${count}`);
+  // console.log(`Solve count: ${count}`);
 
   return grid;
 }
@@ -378,12 +378,12 @@ function solve(grid: GridData, solutionFn: (grid: GridData) => boolean) {
 onmessage = e => {
   const grid = Serializer.parseGrid(e.data as string);
 
-  console.time('Solve time');
+  // console.time('Solve time');
 
   let count = 0;
 
   solve(grid, solution => {
-    if (count === 0) console.timeLog('Solve time', 'First solution');
+    // if (count === 0) console.timeLog('Solve time', 'First solution');
 
     postMessage(Serializer.stringifyGrid(solution));
 
@@ -391,7 +391,7 @@ onmessage = e => {
     return count < 2;
   });
 
-  console.timeEnd('Solve time');
+  // console.timeEnd('Solve time');
 
   postMessage(null);
 };

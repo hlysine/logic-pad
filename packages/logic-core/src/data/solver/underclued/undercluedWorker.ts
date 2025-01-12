@@ -95,20 +95,20 @@ function computeSolution(initialGrid: GridData): GridData {
       assumptions,
       canAssump
     );
-    console.log(
-      currentGrid.tiles
-        .map(row =>
-          row
-            .map(t => {
-              const color = t.color === Color.Light ? 'w' : 'b';
-              if (t.color === Color.Gray) return 'n';
-              if (!t.exists) return '.';
-              return t.fixed ? color.toUpperCase() : color;
-            })
-            .join('')
-        )
-        .join('\n')
-    );
+    // console.log(
+    //   currentGrid.tiles
+    //     .map(row =>
+    //       row
+    //         .map(t => {
+    //           const color = t.color === Color.Light ? 'w' : 'b';
+    //           if (t.color === Color.Gray) return 'n';
+    //           if (!t.exists) return '.';
+    //           return t.fixed ? color.toUpperCase() : color;
+    //         })
+    //         .join('')
+    //     )
+    //     .join('\n')
+    // );
     if (!anyNewGrid) {
       break;
     }
@@ -136,20 +136,20 @@ function computeSolution(initialGrid: GridData): GridData {
       tile.withColor(color)
     );
   });
-  console.log(
-    solutionGrid.tiles
-      .map(row =>
-        row
-          .map(t => {
-            const color = t.color === Color.Light ? 'w' : 'b';
-            if (t.color === Color.Gray) return 'n';
-            if (!t.exists) return '.';
-            return t.fixed ? color.toUpperCase() : color;
-          })
-          .join('')
-      )
-      .join('\n')
-  );
+  // console.log(
+  //   solutionGrid.tiles
+  //     .map(row =>
+  //       row
+  //         .map(t => {
+  //           const color = t.color === Color.Light ? 'w' : 'b';
+  //           if (t.color === Color.Gray) return 'n';
+  //           if (!t.exists) return '.';
+  //           return t.fixed ? color.toUpperCase() : color;
+  //         })
+  //         .join('')
+  //     )
+  //     .join('\n')
+  // );
   return solutionGrid;
 }
 

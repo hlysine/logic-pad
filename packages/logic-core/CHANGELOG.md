@@ -1,6 +1,7 @@
 # 0.1.5
 
 - Fixed ban pattern rule in backtrack solver
+- Fixed dart symbol in backtrack solver
 
 # 0.1.4
 

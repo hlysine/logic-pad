@@ -1,6 +1,7 @@
 # 12/1/2025
 
 - Fixed ban pattern rule in the backtrack solver
+- Fixed dart symbol in backtrack solver
 
 # 10/1/2025
 

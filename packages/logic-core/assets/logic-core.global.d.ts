@@ -1939,8 +1939,6 @@ declare global {
   }
   export declare class DartBTModule extends BTModule {
     instr: DartSymbol;
-    private cachedCheckResult?;
-    private cachedState?;
     constructor(instr: DartSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
     private buildCheckAndRating;

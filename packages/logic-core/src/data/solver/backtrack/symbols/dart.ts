@@ -13,9 +13,6 @@ import BTModule, {
 export default class DartBTModule extends BTModule {
   public instr: DartSymbol;
 
-  private cachedCheckResult?: CheckResult;
-  private cachedState?: { completed: number; empty: number };
-
   public constructor(instr: DartSymbol) {
     super();
     this.instr = instr;
@@ -50,16 +47,7 @@ export default class DartBTModule extends BTModule {
 
     if (completed + empty < this.instr.number) return false;
 
-    if (
-      !this.cachedCheckResult ||
-      this.cachedState?.completed !== completed ||
-      this.cachedState?.empty !== empty
-    ) {
-      this.cachedCheckResult = this.buildCheckAndRating(grid);
-      this.cachedState = { completed, empty };
-    }
-
-    return this.cachedCheckResult;
+    return this.buildCheckAndRating(grid);
   }
 
   private buildCheckAndRating(grid: BTGridData): CheckResult {

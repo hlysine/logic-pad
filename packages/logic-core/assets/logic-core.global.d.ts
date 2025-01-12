@@ -1801,7 +1801,7 @@ declare global {
   export declare class BanPatternBTModule extends BTModule {
     instr: BanPatternRule;
     constructor(instr: BanPatternRule);
-    checkGlobal(_: BTGridData): CheckResult | false;
+    checkGlobal(grid: BTGridData): CheckResult | false;
     checkLocal(grid: BTGridData, positions: Position$1[]): CheckResult | false;
   }
   export declare class CellCountBTModule extends BTModule {
@@ -1940,6 +1940,7 @@ declare global {
   export declare class DartBTModule extends BTModule {
     instr: DartSymbol;
     private cachedCheckResult?;
+    private cachedState?;
     constructor(instr: DartSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
     private buildCheckAndRating;

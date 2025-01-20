@@ -14,13 +14,13 @@ export default memo(function Metadata() {
     <div className="flex flex-col gap-4 text-neutral-content">
       <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
       <Difficulty value={metadata.difficulty} />
-      <h1 className="text-4xl">{metadata.title}</h1>
-      <div className="badge badge-secondary badge-lg rounded-lg">
+      <h1 className="text-4xl flex-shrink-0">{metadata.title}</h1>
+      <div className="badge badge-secondary badge-lg rounded-lg flex-shrink-0">
         {metadata.author}
       </div>
       {metadata.link.trim().length > 0 && (
         <a
-          className="btn btn-ghost justify-start flex-nowrap flex"
+          className="btn btn-ghost justify-start flex-nowrap flex flex-shrink-0"
           href={metadata.link}
           target="_blank"
           rel="noreferrer"
@@ -31,9 +31,11 @@ export default memo(function Metadata() {
           <FiExternalLink size={24} />
         </a>
       )}
-      <Markdown revealSpoiler={revealSpoiler} className="text-lg">
-        {metadata.description}
-      </Markdown>
+      <div className="overflow-y-auto">
+        <Markdown revealSpoiler={revealSpoiler} className="text-lg">
+          {metadata.description}
+        </Markdown>
+      </div>
     </div>
   );
 });

@@ -1,3 +1,7 @@
+# 20/1/2025
+
+- Fixed text overflow in puzzle description
+
 # 12/1/2025
 
 - Fixed ban pattern rule in the backtrack solver

@@ -7,7 +7,6 @@ import ForesightRule, {
 import { useForesight } from '../../contexts/ForesightContext.tsx';
 import { IoIosEye } from 'react-icons/io';
 import { Color, Position } from '@logic-pad/core/data/primitives';
-import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 
 export interface ForesightControlsPartProps {
   instruction: ForesightRule;
@@ -82,9 +81,7 @@ export default memo(function ForesightControlsPart({
             onClick={() => {
               setCharges(c => c - 1);
               const errors: Position[] = [];
-              const noGray = !!grid.rules.find(
-                r => r.id === musicGridInstance.id
-              );
+              const noGray = !!grid.musicGrid.value;
               grid.forEach((tile, x, y) => {
                 const solutionTile = solution.getTile(x, y);
                 if (

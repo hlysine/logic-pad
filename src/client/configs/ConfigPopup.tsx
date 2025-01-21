@@ -9,9 +9,6 @@ import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
-import MusicGridRule, {
-  instance as musicGridInstance,
-} from '@logic-pad/core/data/rules/musicGridRule';
 
 const gap = 8;
 
@@ -157,9 +154,7 @@ export default memo(function ConfigPopup() {
                 const newControlLine = configurable.copyWith({
                   [field]: value,
                 });
-                const musicGrid = grid.rules.find(
-                  rule => rule.id === musicGridInstance.id
-                ) as MusicGridRule | undefined;
+                const musicGrid = grid.musicGrid.value;
                 if (!musicGrid) return;
                 setGrid(
                   grid.replaceRule(
@@ -171,9 +166,7 @@ export default memo(function ConfigPopup() {
                 const newControlLine = configurable.copyWith({
                   [field]: value,
                 });
-                const musicGrid = grid.rules.find(
-                  rule => rule.id === musicGridInstance.id
-                ) as MusicGridRule | undefined;
+                const musicGrid = grid.musicGrid.value;
                 if (!musicGrid) return;
                 if (location?.type !== 'row') return;
                 const line = musicGrid.controlLines.find(
@@ -255,9 +248,7 @@ export default memo(function ConfigPopup() {
             } else if (configurable instanceof Symbol) {
               setGrid(grid.removeSymbol(configurable));
             } else if (configurable instanceof ControlLine) {
-              const musicGrid = grid.rules.find(
-                rule => rule.id === musicGridInstance.id
-              ) as MusicGridRule | undefined;
+              const musicGrid = grid.musicGrid.value;
               if (!musicGrid) return;
               const newLine = configurable.copyWith({
                 bpm: null,
@@ -288,9 +279,7 @@ export default memo(function ConfigPopup() {
                 );
               }
             } else if (configurable instanceof Row) {
-              const musicGrid = grid.rules.find(
-                rule => rule.id === musicGridInstance.id
-              ) as MusicGridRule | undefined;
+              const musicGrid = grid.musicGrid.value;
               if (!musicGrid) return;
               if (location?.type !== 'row') return;
               const line = musicGrid.controlLines.find(

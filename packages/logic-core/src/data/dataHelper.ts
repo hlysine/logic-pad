@@ -226,3 +226,22 @@ export function unescape(text: string, escapeCharacters = '=,:|') {
   }
   return result + text.substring(index);
 }
+
+export class CachedAccess<T> {
+  private static readonly UNCACHED = Symbol('uncached');
+
+  private cache: T | typeof CachedAccess.UNCACHED = CachedAccess.UNCACHED;
+
+  private constructor(private readonly getter: () => T) {}
+
+  public static of<T>(getter: () => T) {
+    return new CachedAccess(getter);
+  }
+
+  public get value() {
+    if (this.cache === CachedAccess.UNCACHED) {
+      this.cache = this.getter();
+    }
+    return this.cache;
+  }
+}

@@ -1,9 +1,7 @@
 import { memo } from 'react';
 import ToolboxItem from '../../editor/ToolboxItem';
 import { PartPlacement, PartSpec } from './types';
-import MusicGridRule, {
-  instance as musicGridInstance,
-} from '@logic-pad/core/data/rules/musicGridRule';
+import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import GridOverlay from '../../grid/GridOverlay';
 import { PiMetronomeFill } from 'react-icons/pi';
@@ -20,9 +18,7 @@ import { IoMdFlag } from 'react-icons/io';
 const PlaybackOverlay = memo(function PlaybackOverlay() {
   const { setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
-  const musicGrid = grid.rules.find(
-    rule => rule.id === musicGridInstance.id
-  ) as MusicGridRule | undefined;
+  const musicGrid = grid.musicGrid.value;
   if (!musicGrid) return null;
   return (
     <>

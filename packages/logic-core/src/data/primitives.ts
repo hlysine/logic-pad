@@ -10,6 +10,15 @@ export interface Edge {
   readonly y2: number;
 }
 
+/**
+ * Major rules are frequently referenced in grids to provide additional UI.
+ */
+export enum MajorRule {
+  MusicGrid = 'music',
+  CompletePattern = 'complete_pattern',
+  Underclued = 'underclued',
+}
+
 export enum State {
   Error = 'error',
   Satisfied = 'satisfied',

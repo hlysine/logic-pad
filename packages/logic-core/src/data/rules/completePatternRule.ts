@@ -1,5 +1,5 @@
 import GridData from '../grid.js';
-import { RuleState, State } from '../primitives.js';
+import { MajorRule, RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class CompletePatternRule extends Rule {
@@ -21,7 +21,7 @@ export default class CompletePatternRule extends Rule {
   }
 
   public get id(): string {
-    return `complete_pattern`;
+    return MajorRule.CompletePattern;
   }
 
   public get explanation(): string {

@@ -1,3 +1,9 @@
+# 23/1/2025
+
+- Settings rework: toggles now live in a settings dialog which you can open from the quick access bar on the top right corner
+- Added a setting to disable exit confirmation
+- Added a setting to invert primary colors by default
+
 # 20/1/2025
 
 - Fixed text overflow in puzzle description

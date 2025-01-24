@@ -126,6 +126,10 @@ export default class OffByXRule
     }
   }
 
+  public get isSingleton(): boolean {
+    return true;
+  }
+
   public copyWith({ number }: { number?: number }): this {
     return new OffByXRule(number ?? this.number) as this;
   }

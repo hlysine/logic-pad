@@ -87,6 +87,10 @@ export default class ForesightRule extends Rule {
     return false;
   }
 
+  public get isSingleton(): boolean {
+    return true;
+  }
+
   public copyWith({
     count,
     regenInterval,

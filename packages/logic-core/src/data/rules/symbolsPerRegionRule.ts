@@ -234,7 +234,10 @@ export default class SymbolsPerRegionRule extends Rule {
     for (const symbolKind of grid.symbols.values()) {
       if (
         symbolKind.some(
-          symbol => Math.floor(symbol.x) === x && Math.floor(symbol.y) === y
+          symbol =>
+            Math.floor(symbol.x) === x &&
+            Math.floor(symbol.y) === y &&
+            symbol.necessaryForCompletion
         )
       ) {
         count++;

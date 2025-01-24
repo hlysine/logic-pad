@@ -24,7 +24,9 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
       () =>
         siteOptions.bypassExitConfirmation ||
         window.confirm('Are you sure you want to leave?'),
-      !params.d && !grid.equals(defaultGrid)
+      !params.d &&
+        !grid.equals(defaultGrid) &&
+        !siteOptions.bypassExitConfirmation
     );
 
     return (

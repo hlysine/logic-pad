@@ -11,6 +11,7 @@ export { instance as CustomIconSymbol } from './customIconSymbol.js';
 export { instance as CustomTextSymbol } from './customTextSymbol.js';
 export { instance as DartSymbol } from './dartSymbol.js';
 export { instance as GalaxySymbol } from './galaxySymbol.js';
+export { instance as HiddenSymbol } from './hiddenSymbol.js';
 export { instance as LetterSymbol } from './letterSymbol.js';
 export { instance as LotusSymbol } from './lotusSymbol.js';
 export { instance as MinesweeperSymbol } from './minesweeperSymbol.js';

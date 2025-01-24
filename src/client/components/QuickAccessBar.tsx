@@ -1,9 +1,8 @@
 import { Suspense, lazy, memo } from 'react';
 import { FaGithub } from 'react-icons/fa';
-import AnimationToggle from './AnimationToggle';
 import { cn } from '../../client/uiHelper.ts';
 import Loading from './Loading';
-import ResetSite from './ResetSite';
+import Settings from './Settings.tsx';
 const ThemeSwitcher = lazy(() => import('./ThemeSwitcher'));
 
 export interface QuickAccessBarProps {
@@ -15,8 +14,7 @@ export default memo(function QuickAccessBar({
 }: QuickAccessBarProps) {
   return (
     <div className={cn('flex items-center gap-1', className)}>
-      <ResetSite />
-      <AnimationToggle />
+      <Settings />
       <Suspense fallback={<Loading className="w-24" />}>
         <ThemeSwitcher />
       </Suspense>

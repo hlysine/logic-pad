@@ -1,4 +1,5 @@
 import { Color } from '@logic-pad/core/data/primitives';
+import { siteOptions } from '../uiHelper';
 
 class MouseContext {
   color: Color | null;
@@ -8,7 +9,7 @@ class MouseContext {
   constructor() {
     this.color = null;
     this.replacing = false;
-    this.inverted = false;
+    this.inverted = siteOptions.flipPrimaryMouseButton;
   }
 
   setColor(color: Color | null, replacing: boolean) {

@@ -9,6 +9,7 @@ import PuzzleEditor from '../editor/PuzzleEditor';
 import { IoWarningOutline } from 'react-icons/io5';
 import ShareButton from '../components/ShareButton';
 import { defaultGrid, useGrid } from '../contexts/GridContext.tsx';
+import { siteOptions } from '../uiHelper.ts';
 
 export const Route = createLazyFileRoute('/_context/_layout/create')({
   component: memo(function CreateMode() {
@@ -20,7 +21,9 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
     });
     const { grid } = useGrid();
     useBlocker(
-      () => window.confirm('Are you sure you want to leave?'),
+      () =>
+        siteOptions.bypassExitConfirmation ||
+        window.confirm('Are you sure you want to leave?'),
       !params.d && !grid.equals(defaultGrid)
     );
 

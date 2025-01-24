@@ -22,6 +22,10 @@ export function eq(a: number, b: number) {
 export const siteOptions = {
   reducedMotionOverride:
     window.localStorage.getItem('reducedMotion') === 'true',
+  bypassExitConfirmation:
+    window.localStorage.getItem('bypassExitConfirmation') === 'true',
+  flipPrimaryMouseButton:
+    window.localStorage.getItem('flipPrimaryMouseButton') === 'true',
 };
 
 export const externalReducedMotion = () =>

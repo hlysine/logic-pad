@@ -1,6 +1,11 @@
+# 0.2.0
+
+- Added Hidden symbol
+- Added caches for major rules in GridData
+
 # 0.1.6
 
-- Fix dart symbol again in backtrack solver
+- Fixed dart symbol again in backtrack solver
 
 # 0.1.5
 
@@ -13,9 +18,9 @@
 
 # 0.1.3
 
-- Add package metadata
-- Update readme
-- Merge into the logic-pad repository
+- Added package metadata
+- Updated readme
+- Merged into the logic-pad repository
 
 # 0.1.0
 

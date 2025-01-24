@@ -1,3 +1,9 @@
+# 24/1/2025
+
+- Added the Hidden symbol which hides other symbols until the tile is colored correctly
+- Fixed a bug causing the exit confirmation setting to be ignored
+- You can no longer have more than one off-by-X or foresight rules
+
 # 23/1/2025
 
 - Settings rework: toggles now live in a settings dialog which you can open from the quick access bar on the top right corner

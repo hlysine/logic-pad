@@ -41,7 +41,7 @@ export default class HiddenSymbol
   );
 
   /**
-   * **Hidden Symbols: color cells correctly to reveal symbol**
+   * **Hidden Symbols: color cells correctly to reveal more clues**
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
@@ -61,7 +61,7 @@ export default class HiddenSymbol
   }
 
   public get explanation(): string {
-    return '*Hidden Symbols*: color cells correctly to reveal symbol';
+    return '*Hidden Symbols*: color cells correctly to reveal more clues';
   }
 
   public get configs(): readonly AnyConfig[] | null {
@@ -78,6 +78,10 @@ export default class HiddenSymbol
 
   public get visibleWhenSolving(): boolean {
     return false;
+  }
+
+  public get sortOrder(): number {
+    return 0;
   }
 
   public validateSymbol(grid: GridData): State {

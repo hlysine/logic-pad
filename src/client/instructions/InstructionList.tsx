@@ -67,6 +67,13 @@ export default memo(function InstructionList({
     }
     return false;
   }, [grid]);
+  const symbolSortOrder = useMemo(() => {
+    return [...grid.symbols.keys()].sort((a, b) => {
+      const aOrder = grid.symbols.get(a)![0].sortOrder;
+      const bOrder = grid.symbols.get(b)![0].sortOrder;
+      return aOrder - bOrder;
+    });
+  }, [grid]);
   const symbolMergeMap = useMemo(() => {
     const map = new Map<string, number[][]>();
     for (const [key, value] of grid.symbols ?? []) {
@@ -173,8 +180,9 @@ export default memo(function InstructionList({
           ))
         )}
         {hasSymbols && <Title>Symbols</Title>}
-        {[...symbolMergeMap.entries()].flatMap(([key, value]) =>
-          value.map(
+        {symbolSortOrder.flatMap(key => {
+          const value = symbolMergeMap.get(key)!;
+          return value.map(
             (group, i) =>
               grid.symbols.get(key)![group[0]].explanation.length > 0 && (
                 <Instruction
@@ -185,8 +193,8 @@ export default memo(function InstructionList({
                   state={symbolStateMap.get(key)?.[i]}
                 />
               )
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );

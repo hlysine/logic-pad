@@ -3,9 +3,6 @@ import GridData from '@logic-pad/core/data/grid';
 import Rule from '@logic-pad/core/data/rules/rule';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
 import Configurable from '@logic-pad/core/data/configurable';
-import MusicGridRule, {
-  instance as musicGridInstance,
-} from '@logic-pad/core/data/rules/musicGridRule';
 import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
 
 export type ConfigurableLocation =
@@ -39,15 +36,11 @@ export function getConfigurable(
     if (!list) return undefined;
     return list[location.index];
   } else if (location.type === 'controlLine') {
-    const musicGrid = grid.rules.find(
-      rule => rule.id === musicGridInstance.id
-    ) as MusicGridRule | undefined;
+    const musicGrid = grid.musicGrid.value;
     if (!musicGrid) return undefined;
     return musicGrid.controlLines.find(line => line.column === location.column);
   } else if (location.type === 'row') {
-    const musicGrid = grid.rules.find(
-      rule => rule.id === musicGridInstance.id
-    ) as MusicGridRule | undefined;
+    const musicGrid = grid.musicGrid.value;
     if (!musicGrid) return undefined;
     const line = musicGrid.controlLines.find(
       line => line.column === location.column
@@ -85,9 +78,7 @@ export function getConfigurableLocation(
       index: list.indexOf(configurable),
     };
   } else if (configurable instanceof ControlLine) {
-    const musicGrid = grid.rules.find(
-      rule => rule.id === musicGridInstance.id
-    ) as MusicGridRule | undefined;
+    const musicGrid = grid.musicGrid.value;
     if (!musicGrid) return undefined;
     return {
       type: 'controlLine',

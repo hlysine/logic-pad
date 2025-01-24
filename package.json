@@ -36,6 +36,7 @@
     "@vercel/speed-insights": "^1.0.10",
     "animejs": "^3.2.2",
     "base64-arraybuffer": "^1.0.2",
+    "caniuse-lite": "^1.0.30001695",
     "compression-streams-polyfill": "^0.1.7",
     "dedent": "^1.5.3",
     "elysia": "^1.0.21",

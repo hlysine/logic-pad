@@ -19,10 +19,6 @@ export default abstract class Rule extends Instruction {
     };
   }
 
-  public get visibleWhenSolving(): boolean {
-    return true;
-  }
-
   /**
    * Whether only one instance of this rule is allowed in a grid.
    */

@@ -6,17 +6,18 @@
 
 import { ConfigType, configEquals } from './data/config.js';
 import Configurable from './data/configurable.js';
-import { allEqual, array, directionToRotation, escape, maxBy, minBy, move, orientationToRotation, resize, unescape } from './data/dataHelper.js';
+import { CachedAccess, allEqual, array, directionToRotation, escape, maxBy, minBy, move, orientationToRotation, resize, unescape } from './data/dataHelper.js';
 import { isEventHandler } from './data/events/eventHelper.js';
 import { handlesFinalValidation } from './data/events/onFinalValidation.js';
 import { handlesGridChange } from './data/events/onGridChange.js';
 import { handlesGridResize } from './data/events/onGridResize.js';
 import { handlesSetGrid } from './data/events/onSetGrid.js';
+import { handlesSymbolDisplay } from './data/events/onSymbolDisplay.js';
 import { handlesSymbolValidation } from './data/events/onSymbolValidation.js';
 import GridData from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import Instruction from './data/instruction.js';
-import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, Mode, ORIENTATIONS, Orientation, State, directionToggle, orientationToggle } from './data/primitives.js';
+import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, directionToggle, orientationToggle } from './data/primitives.js';
 import { MetadataSchema, PuzzleSchema } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
@@ -87,6 +88,7 @@ import CustomTextSymbol from './data/symbols/customTextSymbol.js';
 import DartSymbol from './data/symbols/dartSymbol.js';
 import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol.js';
 import GalaxySymbol from './data/symbols/galaxySymbol.js';
+import HiddenSymbol from './data/symbols/hiddenSymbol.js';
 import { allSymbols } from './data/symbols/index.js';
 import LetterSymbol from './data/symbols/letterSymbol.js';
 import LotusSymbol from './data/symbols/lotusSymbol.js';
@@ -104,6 +106,7 @@ export {
   ConfigType,
   configEquals,
   Configurable,
+  CachedAccess,
   allEqual,
   array,
   directionToRotation,
@@ -119,6 +122,7 @@ export {
   handlesGridChange,
   handlesGridResize,
   handlesSetGrid,
+  handlesSymbolDisplay,
   handlesSymbolValidation,
   GridData,
   GridConnections,
@@ -128,6 +132,7 @@ export {
   Comparison,
   DIRECTIONS,
   Direction,
+  MajorRule,
   Mode,
   ORIENTATIONS,
   Orientation,
@@ -216,6 +221,7 @@ export {
   DartSymbol,
   DirectionLinkerSymbol,
   GalaxySymbol,
+  HiddenSymbol,
   allSymbols,
   LetterSymbol,
   LotusSymbol,

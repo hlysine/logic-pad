@@ -11,6 +11,7 @@ import { eq, mousePosition } from '../../client/uiHelper.ts';
 import PointerCaptureOverlay from '../grid/PointerCaptureOverlay';
 import handleTileClick from '../grid/handleTileClick';
 import { SymbolProps } from '../symbols';
+import { GridData } from '@logic-pad/core/index.ts';
 
 export interface SymbolToolProps {
   name: string;
@@ -19,6 +20,7 @@ export interface SymbolToolProps {
   sample: Symbol;
   component: React.NamedExoticComponent<SymbolProps<any>>;
   order?: number;
+  onNewSymbol?: (symbol: Symbol, grid: GridData) => Symbol;
 }
 
 export default memo(function SymbolTool({
@@ -28,6 +30,7 @@ export default memo(function SymbolTool({
   sample,
   component: Component,
   order,
+  onNewSymbol,
 }: SymbolToolProps) {
   id = id ?? sample.id;
   return (
@@ -80,7 +83,15 @@ export default memo(function SymbolTool({
                               ) as HTMLElement,
                           });
                         } else if (to === Color.Dark) {
-                          setGrid(grid.addSymbol(sample.copyWith({ x, y })));
+                          if (onNewSymbol) {
+                            setGrid(
+                              grid.addSymbol(
+                                onNewSymbol(sample.copyWith({ x, y }), grid)
+                              )
+                            );
+                          } else {
+                            setGrid(grid.addSymbol(sample.copyWith({ x, y })));
+                          }
                         }
                       }}
                     />

@@ -2,11 +2,20 @@ import { handlesGridChange } from './events/onGridChange.js';
 import { handlesGridResize } from './events/onGridResize.js';
 import { handlesSetGrid } from './events/onSetGrid.js';
 import GridConnections from './gridConnections.js';
-import { array, move } from './dataHelper.js';
-import { Color, Direction, Orientation, Position } from './primitives.js';
+import { CachedAccess, array, move } from './dataHelper.js';
+import {
+  Color,
+  Direction,
+  MajorRule,
+  Orientation,
+  Position,
+} from './primitives.js';
 import Rule from './rules/rule.js';
 import Symbol from './symbols/symbol.js';
 import TileData from './tile.js';
+import MusicGridRule from './rules/musicGridRule.js';
+import CompletePatternRule from './rules/completePatternRule.js';
+import UndercluedRule from './rules/undercluedRule.js';
 
 const NEIGHBOR_OFFSETS: Position[] = [
   { x: -1, y: 0 },
@@ -20,6 +29,36 @@ export default class GridData {
   public readonly connections: GridConnections;
   public readonly symbols: ReadonlyMap<string, readonly Symbol[]>;
   public readonly rules: readonly Rule[];
+
+  // Important rules are cached for quick access
+  /* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
+
+  public readonly musicGrid: CachedAccess<MusicGridRule | undefined> =
+    CachedAccess.of(
+      () =>
+        this.findRule(rule => rule.id === MajorRule.MusicGrid) as
+          | MusicGridRule
+          | undefined
+    );
+
+  public readonly completePattern: CachedAccess<
+    CompletePatternRule | undefined
+  > = CachedAccess.of(
+    () =>
+      this.findRule(rule => rule.id === MajorRule.CompletePattern) as
+        | CompletePatternRule
+        | undefined
+  );
+
+  public readonly underclued: CachedAccess<UndercluedRule | undefined> =
+    CachedAccess.of(
+      () =>
+        this.findRule(rule => rule.id === MajorRule.Underclued) as
+          | UndercluedRule
+          | undefined
+    );
+
+  /* eslint-enable @typescript-eslint/no-unsafe-enum-comparison */
 
   /**
    * Create a new grid with tiles, connections, symbols and rules.

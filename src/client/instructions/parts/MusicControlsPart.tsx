@@ -79,9 +79,7 @@ const MusicControls = lazy(async function () {
                   stopAll(playbackState.playback);
                 } else {
                   if (instruction.track) {
-                    const musicGrid = instruction.track.findRule(
-                      r => r.id === musicGridInstance.id
-                    ) as MusicGridRule | undefined;
+                    const musicGrid = instruction.track.musicGrid.value;
                     if (!musicGrid) return;
                     playbackState.playback = playGrid(
                       instruction.track,

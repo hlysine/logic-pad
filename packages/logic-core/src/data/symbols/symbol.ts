@@ -39,8 +39,18 @@ export default abstract class Symbol
     }
   }
 
+  /**
+   * The step size for the x and y coordinates of the symbol.
+   */
   public get placementStep(): number {
     return 0.5;
+  }
+
+  /**
+   * The order in which symbols are displayed on the instruction list. Lower values are displayed first.
+   */
+  public get sortOrder(): number {
+    return this.id.charCodeAt(0);
   }
 
   public withX(x: number): this {

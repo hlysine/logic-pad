@@ -1,5 +1,5 @@
 import GridData from '../grid.js';
-import { RuleState, State } from '../primitives.js';
+import { MajorRule, RuleState, State } from '../primitives.js';
 import AreaNumberSymbol from '../symbols/areaNumberSymbol.js';
 import CustomTextSymbol from '../symbols/customTextSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
@@ -28,7 +28,7 @@ export default class UndercluedRule extends Rule {
   }
 
   public get id(): string {
-    return `underclued`;
+    return MajorRule.Underclued;
   }
 
   public get explanation(): string {

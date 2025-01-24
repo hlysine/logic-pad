@@ -22,6 +22,14 @@ declare global {
     readonly x2: number;
     readonly y2: number;
   }
+  /**
+   * Major rules are frequently referenced in grids to provide additional UI.
+   */
+  export declare enum MajorRule {
+    MusicGrid = 'music',
+    CompletePattern = 'complete_pattern',
+    Underclued = 'underclued',
+  }
   export declare enum State {
     Error = 'error',
     Satisfied = 'satisfied',
@@ -165,6 +173,116 @@ declare global {
     removeColumn(index: number): GridConnections;
     removeRow(index: number): GridConnections;
   }
+  /**
+   * Offset the given position by a given step in the given direction.
+   * @param position The position to offset.
+   * @param direction The direction to offset in.
+   * @param step The distance to offset by.
+   * @returns The offset position.
+   */
+  export declare function move(
+    position: Position$1,
+    direction: Direction | Orientation,
+    step?: number
+  ): {
+    x: number;
+    y: number;
+  };
+  /**
+   * Convert the given direction to a rotation in degrees.
+   * @param direction The direction to convert.
+   * @returns The rotation in degrees.
+   */
+  export declare function directionToRotation(
+    direction: Direction
+  ): 0 | 270 | 90 | 180;
+  /**
+   * Convert the given orientation to a rotation in degrees.
+   * @param orientation The orientation to convert.
+   * @returns The rotation in degrees.
+   */
+  export declare function orientationToRotation(
+    orientation: Orientation
+  ): 0 | 270 | 90 | 180 | 225 | 125 | 315 | 45;
+  /**
+   * Create a new 2D array with the given dimensions and values.
+   * @param width The width of the array.
+   * @param height The height of the array.
+   * @param value A function that returns the value for each x,y coordinate.
+   * @returns The 2D array.
+   */
+  export declare function array<T>(
+    width: number,
+    height: number,
+    value: (x: number, y: number) => T
+  ): T[][];
+  /**
+   * Resize the given array to the new size, cutting off or padding with the default value.
+   * @param array The array to resize.
+   * @param newSize The new size of the array.
+   * @param defaultValue A function that returns the default value for each new element.
+   * @returns The resized array.
+   */
+  export declare function resize<T>(
+    array: T[],
+    newSize: number,
+    defaultValue: () => T
+  ): T[];
+  export declare function resize<T>(
+    array: readonly T[],
+    newSize: number,
+    defaultValue: () => T
+  ): readonly T[];
+  /**
+   * Check if all the given values are equal.
+   * @param values The values to compare.
+   * @returns Whether all the values are equal.
+   */
+  export declare function allEqual<T>(...values: T[]): boolean;
+  /**
+   * Return the first element of the array which has the minimum mapped value.
+   *
+   * @param values The array of values.
+   * @param mapper The function to map each value to a number.
+   * @returns The first element with the minimum mapped value.
+   */
+  export declare function minBy<T>(
+    values: readonly T[],
+    mapper: (element: T) => number
+  ): T | undefined;
+  /**
+   * Return the first element of the array which has the maximum mapped value.
+   *
+   * @param values The array of values.
+   * @param mapper The function to map each value to a number.
+   * @returns The first element with the maximum mapped value.
+   */
+  export declare function maxBy<T>(
+    values: readonly T[],
+    mapper: (element: T) => number
+  ): T | undefined;
+  /**
+   * Escape the given text by replacing the specified characters with HTML escape sequences.
+   * @param text The text to escape.
+   * @param escapeCharacters The characters to escape.
+   * @returns The escaped text.
+   */
+  declare function escape$1(text: string, escapeCharacters?: string): string;
+  /**
+   * Unescape the given text by replacing HTML escape sequences with the corresponding characters.
+   * @param text The text to unescape.
+   * @param escapeCharacters The characters to unescape. This should match the characters escaped by the `escape` function.
+   * @returns The unescaped text.
+   */
+  declare function unescape$1(text: string, escapeCharacters?: string): string;
+  export declare class CachedAccess<T> {
+    private readonly getter;
+    private static readonly UNCACHED;
+    private cache;
+    private constructor();
+    static of<T>(getter: () => T): CachedAccess<T>;
+    get value(): T;
+  }
   export declare abstract class Configurable {
     get configs(): readonly AnyConfig[] | null;
     abstract copyWith(props: Record<string, unknown>): this;
@@ -185,6 +303,7 @@ declare global {
      */
     get validateWithSolution(): boolean;
     get necessaryForCompletion(): boolean;
+    get visibleWhenSolving(): boolean;
     /**
      * Check if this instruction is equal to another instruction by comparing their IDs and configs.
      *
@@ -201,7 +320,6 @@ declare global {
     abstract validateGrid(grid: GridData): RuleState;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
-    get visibleWhenSolving(): boolean;
     /**
      * Whether only one instance of this rule is allowed in a grid.
      */
@@ -235,7 +353,14 @@ declare global {
       direction: 'row' | 'column',
       index: number
     ): this | null;
+    /**
+     * The step size for the x and y coordinates of the symbol.
+     */
     get placementStep(): number;
+    /**
+     * The order in which symbols are displayed on the instruction list. Lower values are displayed first.
+     */
+    get sortOrder(): number;
     withX(x: number): this;
     withY(y: number): this;
     withPosition(x: number, y: number): this;
@@ -269,6 +394,181 @@ declare global {
     equals(other: TileData): boolean;
     static create(char: string): TileData;
   }
+  export interface GridChangeHandler {
+    onGridChange(newGrid: GridData): this;
+  }
+  export declare function handlesGridChange<T extends Instruction>(
+    val: T
+  ): val is T & GridChangeHandler;
+  export interface SetGridHandler {
+    onSetGrid(oldGrid: GridData, newGrid: GridData): GridData;
+  }
+  export declare function handlesSetGrid<T extends Instruction>(
+    val: T
+  ): val is T & SetGridHandler;
+  export declare class Row extends Configurable {
+    /**
+     * The note to play at this row, or null to keep the current note from the previous control line.
+     * If this is null from the first control line, the note will be silent.
+     */
+    readonly note: string | null;
+    /**
+     * The velocity to play the note at, or null to keep the current velocity from the previous control line.
+     * Ranges from 0 to 1
+     */
+    readonly velocity: number | null;
+    private static readonly CONFIGS;
+    constructor(
+      /**
+       * The note to play at this row, or null to keep the current note from the previous control line.
+       * If this is null from the first control line, the note will be silent.
+       */
+      note: string | null,
+      /**
+       * The velocity to play the note at, or null to keep the current velocity from the previous control line.
+       * Ranges from 0 to 1
+       */
+      velocity: number | null
+    );
+    get configs(): readonly AnyConfig[] | null;
+    copyWith({
+      note,
+      velocity,
+    }: {
+      note?: string | null;
+      velocity?: number | null;
+    }): this;
+  }
+  export declare class ControlLine extends Configurable {
+    readonly column: number;
+    readonly bpm: number | null;
+    readonly pedal: boolean | null;
+    readonly checkpoint: boolean;
+    readonly rows: readonly Row[];
+    private static readonly CONFIGS;
+    /**
+     * Configure playback settings, taking effect at the given column (inclusive)
+     * @param column The column at which the settings take effect
+     * @param bpm The new beats per minute, or null to keep the current value from the previous control line
+     * @param pedal Whether the pedal is pressed, or null to keep the current value from the previous control line
+     * @param checkpoint Whether this control line is a checkpoint
+     * @param rows The notes to play at each row. This list is automatically resized to match the height of the grid. You may pass in an empty list if none of the rows need to be changed.
+     */
+    constructor(
+      column: number,
+      bpm: number | null,
+      pedal: boolean | null,
+      checkpoint: boolean,
+      rows: readonly Row[]
+    );
+    get configs(): readonly AnyConfig[] | null;
+    copyWith({
+      column,
+      bpm,
+      pedal,
+      checkpoint,
+      rows,
+    }: {
+      column?: number;
+      bpm?: number | null;
+      pedal?: boolean | null;
+      checkpoint?: boolean;
+      rows?: readonly Row[];
+    }): this;
+    withColumn(column: number): this;
+    withBpm(bpm: number | null): this;
+    withPedal(pedal: boolean | null): this;
+    withCheckpoint(checkpoint: boolean): this;
+    withRows(rows: readonly Row[]): this;
+    equals(other: ControlLine): boolean;
+    get isEmpty(): boolean;
+  }
+  export declare class MusicGridRule
+    extends Rule
+    implements GridChangeHandler, SetGridHandler, GridResizeHandler
+  {
+    readonly controlLines: readonly ControlLine[];
+    readonly track: GridData | null;
+    private static readonly EXAMPLE_GRID;
+    private static readonly CONFIGS;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Music Grid: Listen to the solution**
+     * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
+     * @param track The grid to be played when "listen" is clicked. Set as null to play the solution.
+     */
+    constructor(controlLines: readonly ControlLine[], track: GridData | null);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_grid: GridData): RuleState;
+    onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData;
+    onGridChange(newGrid: GridData): this;
+    onGridResize(
+      _grid: GridData,
+      mode: 'insert' | 'remove',
+      direction: 'row' | 'column',
+      index: number
+    ): this | null;
+    /**
+     * Add or replace a control line.
+     * @param controlLine The control line to set.
+     * @returns A new rule with the control line set.
+     */
+    setControlLine(controlLine: ControlLine): this;
+    withTrack(track: GridData | null): this;
+    copyWith({
+      controlLines,
+      track,
+    }: {
+      controlLines?: readonly ControlLine[];
+      track?: GridData | null;
+    }): this;
+    get validateWithSolution(): boolean;
+    get isSingleton(): boolean;
+    static mergeControlLines(...lines: ControlLine[]): ControlLine;
+    static deduplicateControlLines(
+      lines: readonly ControlLine[]
+    ): ControlLine[];
+  }
+  export declare class CompletePatternRule extends Rule {
+    private static readonly EXAMPLE_GRID;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Complete the pattern**
+     *
+     * This rule validates answers based on the provided solution.
+     */
+    constructor();
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_grid: GridData): RuleState;
+    copyWith(_: object): this;
+    get validateWithSolution(): boolean;
+    get isSingleton(): boolean;
+  }
+  export declare class UndercluedRule extends Rule {
+    private static readonly EXAMPLE_GRID;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Underclued Grid: Mark only what is definitely true**
+     *
+     * This rule validates answers based on the provided solution.
+     */
+    constructor();
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_grid: GridData): RuleState;
+    copyWith(_: object): this;
+    get validateWithSolution(): boolean;
+    get isSingleton(): boolean;
+  }
   export declare class GridData {
     readonly width: number;
     readonly height: number;
@@ -276,6 +576,9 @@ declare global {
     readonly connections: GridConnections;
     readonly symbols: ReadonlyMap<string, readonly Symbol$1[]>;
     readonly rules: readonly Rule[];
+    readonly musicGrid: CachedAccess<MusicGridRule | undefined>;
+    readonly completePattern: CachedAccess<CompletePatternRule | undefined>;
+    readonly underclued: CachedAccess<UndercluedRule | undefined>;
     /**
      * Create a new grid with tiles, connections, symbols and rules.
      * @param width The width of the grid.
@@ -693,83 +996,6 @@ declare global {
       symbols: ReadonlyMap<string, readonly Symbol$1[]>
     ): Map<string, Symbol$1[]>;
   }
-  export declare class Row extends Configurable {
-    /**
-     * The note to play at this row, or null to keep the current note from the previous control line.
-     * If this is null from the first control line, the note will be silent.
-     */
-    readonly note: string | null;
-    /**
-     * The velocity to play the note at, or null to keep the current velocity from the previous control line.
-     * Ranges from 0 to 1
-     */
-    readonly velocity: number | null;
-    private static readonly CONFIGS;
-    constructor(
-      /**
-       * The note to play at this row, or null to keep the current note from the previous control line.
-       * If this is null from the first control line, the note will be silent.
-       */
-      note: string | null,
-      /**
-       * The velocity to play the note at, or null to keep the current velocity from the previous control line.
-       * Ranges from 0 to 1
-       */
-      velocity: number | null
-    );
-    get configs(): readonly AnyConfig[] | null;
-    copyWith({
-      note,
-      velocity,
-    }: {
-      note?: string | null;
-      velocity?: number | null;
-    }): this;
-  }
-  export declare class ControlLine extends Configurable {
-    readonly column: number;
-    readonly bpm: number | null;
-    readonly pedal: boolean | null;
-    readonly checkpoint: boolean;
-    readonly rows: readonly Row[];
-    private static readonly CONFIGS;
-    /**
-     * Configure playback settings, taking effect at the given column (inclusive)
-     * @param column The column at which the settings take effect
-     * @param bpm The new beats per minute, or null to keep the current value from the previous control line
-     * @param pedal Whether the pedal is pressed, or null to keep the current value from the previous control line
-     * @param checkpoint Whether this control line is a checkpoint
-     * @param rows The notes to play at each row. This list is automatically resized to match the height of the grid. You may pass in an empty list if none of the rows need to be changed.
-     */
-    constructor(
-      column: number,
-      bpm: number | null,
-      pedal: boolean | null,
-      checkpoint: boolean,
-      rows: readonly Row[]
-    );
-    get configs(): readonly AnyConfig[] | null;
-    copyWith({
-      column,
-      bpm,
-      pedal,
-      checkpoint,
-      rows,
-    }: {
-      column?: number;
-      bpm?: number | null;
-      pedal?: boolean | null;
-      checkpoint?: boolean;
-      rows?: readonly Row[];
-    }): this;
-    withColumn(column: number): this;
-    withBpm(bpm: number | null): this;
-    withPedal(pedal: boolean | null): this;
-    withCheckpoint(checkpoint: boolean): this;
-    withRows(rows: readonly Row[]): this;
-    equals(other: ControlLine): boolean;
-    get isEmpty(): boolean;
-  }
   export declare enum ConfigType {
     Boolean = 'boolean',
     NullableBoolean = 'nullableBoolean',
@@ -889,108 +1115,6 @@ declare global {
     a: C['default'],
     b: C['default']
   ): boolean;
-  /**
-   * Offset the given position by a given step in the given direction.
-   * @param position The position to offset.
-   * @param direction The direction to offset in.
-   * @param step The distance to offset by.
-   * @returns The offset position.
-   */
-  export declare function move(
-    position: Position$1,
-    direction: Direction | Orientation,
-    step?: number
-  ): {
-    x: number;
-    y: number;
-  };
-  /**
-   * Convert the given direction to a rotation in degrees.
-   * @param direction The direction to convert.
-   * @returns The rotation in degrees.
-   */
-  export declare function directionToRotation(
-    direction: Direction
-  ): 0 | 270 | 90 | 180;
-  /**
-   * Convert the given orientation to a rotation in degrees.
-   * @param orientation The orientation to convert.
-   * @returns The rotation in degrees.
-   */
-  export declare function orientationToRotation(
-    orientation: Orientation
-  ): 0 | 270 | 90 | 180 | 225 | 125 | 315 | 45;
-  /**
-   * Create a new 2D array with the given dimensions and values.
-   * @param width The width of the array.
-   * @param height The height of the array.
-   * @param value A function that returns the value for each x,y coordinate.
-   * @returns The 2D array.
-   */
-  export declare function array<T>(
-    width: number,
-    height: number,
-    value: (x: number, y: number) => T
-  ): T[][];
-  /**
-   * Resize the given array to the new size, cutting off or padding with the default value.
-   * @param array The array to resize.
-   * @param newSize The new size of the array.
-   * @param defaultValue A function that returns the default value for each new element.
-   * @returns The resized array.
-   */
-  export declare function resize<T>(
-    array: T[],
-    newSize: number,
-    defaultValue: () => T
-  ): T[];
-  export declare function resize<T>(
-    array: readonly T[],
-    newSize: number,
-    defaultValue: () => T
-  ): readonly T[];
-  /**
-   * Check if all the given values are equal.
-   * @param values The values to compare.
-   * @returns Whether all the values are equal.
-   */
-  export declare function allEqual<T>(...values: T[]): boolean;
-  /**
-   * Return the first element of the array which has the minimum mapped value.
-   *
-   * @param values The array of values.
-   * @param mapper The function to map each value to a number.
-   * @returns The first element with the minimum mapped value.
-   */
-  export declare function minBy<T>(
-    values: readonly T[],
-    mapper: (element: T) => number
-  ): T | undefined;
-  /**
-   * Return the first element of the array which has the maximum mapped value.
-   *
-   * @param values The array of values.
-   * @param mapper The function to map each value to a number.
-   * @returns The first element with the maximum mapped value.
-   */
-  export declare function maxBy<T>(
-    values: readonly T[],
-    mapper: (element: T) => number
-  ): T | undefined;
-  /**
-   * Escape the given text by replacing the specified characters with HTML escape sequences.
-   * @param text The text to escape.
-   * @param escapeCharacters The characters to escape.
-   * @returns The escaped text.
-   */
-  declare function escape$1(text: string, escapeCharacters?: string): string;
-  /**
-   * Unescape the given text by replacing HTML escape sequences with the corresponding characters.
-   * @param text The text to unescape.
-   * @param escapeCharacters The characters to unescape. This should match the characters escaped by the `escape` function.
-   * @returns The unescaped text.
-   */
-  declare function unescape$1(text: string, escapeCharacters?: string): string;
   export declare function isEventHandler<T>(
     val: unknown,
     event: string
@@ -1012,18 +1136,24 @@ declare global {
   export declare function handlesFinalValidation<T extends Instruction>(
     val: T
   ): val is T & FinalValidationHandler;
-  export interface GridChangeHandler {
-    onGridChange(newGrid: GridData): this;
+  export interface SymbolDisplayHandler {
+    /**
+     * Controls whether a symbol should be visible in the grid.
+     *
+     * @param grid The grid that is being displayed.
+     * @param symbol The symbol that is being displayed.
+     * @param editing Whether the grid is being edited.
+     * @returns True if the symbol should be displayed, false otherwise. The symbol will not be displayed if any handler returns false.
+     */
+    onSymbolDisplay(
+      grid: GridData,
+      symbol: Symbol$1,
+      editing: boolean
+    ): boolean;
   }
-  export declare function handlesGridChange<T extends Instruction>(
+  export declare function handlesSymbolDisplay<T extends Instruction>(
     val: T
-  ): val is T & GridChangeHandler;
-  export interface SetGridHandler {
-    onSetGrid(oldGrid: GridData, newGrid: GridData): GridData;
-  }
-  export declare function handlesSetGrid<T extends Instruction>(
-    val: T
-  ): val is T & SetGridHandler;
+  ): val is T & SymbolDisplayHandler;
   export interface SymbolValidationHandler {
     /**
      * Overrides the validation of symbols.
@@ -1205,24 +1335,6 @@ declare global {
     withColor(color: Color): this;
     withCount(count: number): this;
   }
-  export declare class CompletePatternRule extends Rule {
-    private static readonly EXAMPLE_GRID;
-    private static readonly SEARCH_VARIANTS;
-    /**
-     * **Complete the pattern**
-     *
-     * This rule validates answers based on the provided solution.
-     */
-    constructor();
-    get id(): string;
-    get explanation(): string;
-    createExampleGrid(): GridData;
-    get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
-    copyWith(_: object): this;
-    get validateWithSolution(): boolean;
-    get isSingleton(): boolean;
-  }
   export declare class ConnectAllRule extends Rule {
     readonly color: Color;
     private static readonly CONFIGS;
@@ -1293,6 +1405,7 @@ declare global {
     get searchVariants(): SearchVariant[];
     validateGrid(_grid: GridData): RuleState;
     get necessaryForCompletion(): boolean;
+    get isSingleton(): boolean;
     copyWith({
       count,
       regenInterval,
@@ -1304,56 +1417,6 @@ declare global {
     }): this;
   }
   export declare const allRules: Map<string, Rule>;
-  export declare class MusicGridRule
-    extends Rule
-    implements GridChangeHandler, SetGridHandler, GridResizeHandler
-  {
-    readonly controlLines: readonly ControlLine[];
-    readonly track: GridData | null;
-    private static readonly EXAMPLE_GRID;
-    private static readonly CONFIGS;
-    private static readonly SEARCH_VARIANTS;
-    /**
-     * **Music Grid: Listen to the solution**
-     * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
-     * @param track The grid to be played when "listen" is clicked. Set as null to play the solution.
-     */
-    constructor(controlLines: readonly ControlLine[], track: GridData | null);
-    get id(): string;
-    get explanation(): string;
-    get configs(): readonly AnyConfig[] | null;
-    createExampleGrid(): GridData;
-    get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
-    onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData;
-    onGridChange(newGrid: GridData): this;
-    onGridResize(
-      _grid: GridData,
-      mode: 'insert' | 'remove',
-      direction: 'row' | 'column',
-      index: number
-    ): this | null;
-    /**
-     * Add or replace a control line.
-     * @param controlLine The control line to set.
-     * @returns A new rule with the control line set.
-     */
-    setControlLine(controlLine: ControlLine): this;
-    withTrack(track: GridData | null): this;
-    copyWith({
-      controlLines,
-      track,
-    }: {
-      controlLines?: readonly ControlLine[];
-      track?: GridData | null;
-    }): this;
-    get validateWithSolution(): boolean;
-    get isSingleton(): boolean;
-    static mergeControlLines(...lines: ControlLine[]): ControlLine;
-    static deduplicateControlLines(
-      lines: readonly ControlLine[]
-    ): ControlLine[];
-  }
   export declare class MysteryRule
     extends Rule
     implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
@@ -1423,6 +1486,7 @@ declare global {
       symbol: Symbol$1,
       _validator: (grid: GridData) => State
     ): State | undefined;
+    get isSingleton(): boolean;
     copyWith({ number }: { number?: number }): this;
     withNumber(number: number): this;
   }
@@ -1522,24 +1586,6 @@ declare global {
     withCount(count: number): this;
     withComparison(comparison: Comparison): this;
     private static countAllSymbolsOfPosition;
-  }
-  export declare class UndercluedRule extends Rule {
-    private static readonly EXAMPLE_GRID;
-    private static readonly SEARCH_VARIANTS;
-    /**
-     * **Underclued Grid: Mark only what is definitely true**
-     *
-     * This rule validates answers based on the provided solution.
-     */
-    constructor();
-    get id(): string;
-    get explanation(): string;
-    createExampleGrid(): GridData;
-    get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
-    copyWith(_: object): this;
-    get validateWithSolution(): boolean;
-    get isSingleton(): boolean;
   }
   export declare class UniqueShapeRule extends RegionShapeRule {
     private static readonly CONFIGS;
@@ -5839,6 +5885,39 @@ declare global {
     }): this;
     withText(text: string): this;
     withRotation(rotation: number): this;
+  }
+  export declare class HiddenSymbol
+    extends Symbol$1
+    implements SymbolDisplayHandler
+  {
+    readonly x: number;
+    readonly y: number;
+    readonly color: Color;
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID;
+    /**
+     * **Hidden Symbols: color cells correctly to reveal more clues**
+     *
+     * @param x - The x-coordinate of the symbol.
+     * @param y - The y-coordinate of the symbol.
+     * @param color - The target color of the cell.
+     */
+    constructor(x: number, y: number, color: Color);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get necessaryForCompletion(): boolean;
+    get visibleWhenSolving(): boolean;
+    get sortOrder(): number;
+    validateSymbol(grid: GridData): State;
+    onSymbolDisplay(
+      grid: GridData,
+      symbol: Symbol$1,
+      editing: boolean
+    ): boolean;
+    copyWith({ x, y, color }: { x?: number; y?: number; color?: Color }): this;
+    withColor(color: Color): this;
   }
   export declare const allSymbols: Map<string, Symbol$1>;
   export declare function aggregateState(

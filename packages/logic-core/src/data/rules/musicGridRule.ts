@@ -4,7 +4,7 @@ import { GridResizeHandler } from '../events/onGridResize.js';
 import { SetGridHandler } from '../events/onSetGrid.js';
 import GridData from '../grid.js';
 import { resize } from '../dataHelper.js';
-import { Color, RuleState, State } from '../primitives.js';
+import { Color, MajorRule, RuleState, State } from '../primitives.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import { ControlLine, Row } from './musicControlLine.js';
 import Rule, { SearchVariant } from './rule.js';
@@ -75,7 +75,7 @@ export default class MusicGridRule
   }
 
   public get id(): string {
-    return `music`;
+    return MajorRule.MusicGrid;
   }
 
   public get explanation(): string {

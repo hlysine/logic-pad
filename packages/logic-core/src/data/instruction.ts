@@ -19,6 +19,10 @@ export default abstract class Instruction extends Configurable {
     return true;
   }
 
+  public get visibleWhenSolving(): boolean {
+    return true;
+  }
+
   /**
    * Check if this instruction is equal to another instruction by comparing their IDs and configs.
    *

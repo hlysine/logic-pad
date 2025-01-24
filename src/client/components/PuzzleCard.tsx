@@ -3,9 +3,6 @@ import GridData from '@logic-pad/core/data/grid';
 import { PuzzleMetadata } from '@logic-pad/core/data/puzzle';
 import Difficulty from '../metadata/Difficulty.tsx';
 import { TbLayoutGrid, TbLayoutGridRemove } from 'react-icons/tb';
-import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
-import { instance as completePatternInstance } from '@logic-pad/core/data/rules/completePatternRule';
-import { instance as undercluedInstance } from '@logic-pad/core/data/rules/undercluedRule';
 import { FaMusic } from 'react-icons/fa6';
 import { PiCheckerboardFill } from 'react-icons/pi';
 import { Link } from '@tanstack/react-router';
@@ -20,11 +17,11 @@ export interface PuzzleCardProps {
 }
 
 export function getPuzzleType(grid: GridData) {
-  if (grid.rules.find(r => r.id === musicGridInstance.id)) {
+  if (grid.musicGrid.value) {
     return 'Music';
-  } else if (grid.rules.find(r => r.id === completePatternInstance.id)) {
+  } else if (grid.completePattern.value) {
     return 'Pattern';
-  } else if (grid.rules.find(r => r.id === undercluedInstance.id)) {
+  } else if (grid.underclued.value) {
     return 'Underclued';
   } else {
     return 'Logic';

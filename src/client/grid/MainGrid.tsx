@@ -136,7 +136,11 @@ export default memo(function MainGrid({
         <GridStateConsumer>
           {({ state }) => (
             <>
-              <SymbolOverlay grid={grid} state={state.symbols} />
+              <SymbolOverlay
+                grid={grid}
+                state={state.symbols}
+                editable={useToolboxClick}
+              />
               <ErrorOverlay
                 positions={
                   state.rules

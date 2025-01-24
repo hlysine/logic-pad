@@ -353,7 +353,14 @@ declare global {
       direction: 'row' | 'column',
       index: number
     ): this | null;
+    /**
+     * The step size for the x and y coordinates of the symbol.
+     */
     get placementStep(): number;
+    /**
+     * The order in which symbols are displayed on the instruction list. Lower values are displayed first.
+     */
+    get sortOrder(): number;
     withX(x: number): this;
     withY(y: number): this;
     withPosition(x: number, y: number): this;
@@ -1135,9 +1142,14 @@ declare global {
      *
      * @param grid The grid that is being displayed.
      * @param symbol The symbol that is being displayed.
+     * @param editing Whether the grid is being edited.
      * @returns True if the symbol should be displayed, false otherwise. The symbol will not be displayed if any handler returns false.
      */
-    onSymbolDisplay(grid: GridData, symbol: Symbol$1): boolean;
+    onSymbolDisplay(
+      grid: GridData,
+      symbol: Symbol$1,
+      editing: boolean
+    ): boolean;
   }
   export declare function handlesSymbolDisplay<T extends Instruction>(
     val: T
@@ -5884,7 +5896,7 @@ declare global {
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
-     * **Hidden Symbols: color cells correctly to reveal symbol**
+     * **Hidden Symbols: color cells correctly to reveal more clues**
      *
      * @param x - The x-coordinate of the symbol.
      * @param y - The y-coordinate of the symbol.
@@ -5897,8 +5909,13 @@ declare global {
     createExampleGrid(): GridData;
     get necessaryForCompletion(): boolean;
     get visibleWhenSolving(): boolean;
+    get sortOrder(): number;
     validateSymbol(grid: GridData): State;
-    onSymbolDisplay(grid: GridData, symbol: Symbol$1): boolean;
+    onSymbolDisplay(
+      grid: GridData,
+      symbol: Symbol$1,
+      editing: boolean
+    ): boolean;
     copyWith({ x, y, color }: { x?: number; y?: number; color?: Color }): this;
     withColor(color: Color): this;
   }

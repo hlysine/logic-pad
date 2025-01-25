@@ -31,51 +31,45 @@ export default memo(function SymbolOverlay({
   return (
     <GridOverlay>
       {[...grid.symbols.values()].flatMap(symbols =>
-        symbols
-          .filter(s => s.visibleWhenSolving || editable)
-          .filter(s => {
-            for (const [_, value] of grid.symbols.entries()) {
-              for (const symbol of value) {
-                if (
-                  handlesSymbolDisplay(symbol) &&
-                  !symbol.onSymbolDisplay(grid, s, editable)
-                ) {
-                  return false;
-                }
-              }
-            }
-            for (const rule of grid.rules) {
+        symbols.map((symbol, i) => {
+          if (!symbol.visibleWhenSolving && !editable) return null;
+          for (const [_, value] of grid.symbols.entries()) {
+            for (const s of value) {
               if (
-                handlesSymbolDisplay(rule) &&
-                !rule.onSymbolDisplay(grid, s, editable)
+                handlesSymbolDisplay(s) &&
+                !s.onSymbolDisplay(grid, symbol, editable)
               ) {
-                return false;
+                return null;
               }
             }
-            return true;
-          })
-          .map((symbol, i) => {
-            let symbolState = state?.get(symbol.id)?.[i];
-            if (!symbolState) symbolState = State.Incomplete;
-            const tile = grid.getTile(
-              Math.floor(symbol.x),
-              Math.floor(symbol.y)
-            );
-            return (
-              <Symbol
-                key={`${symbol.id}(${symbol.x},${symbol.y})`}
-                textClass={cn(
-                  symbolState === State.Error
-                    ? 'text-error'
-                    : symbolState === State.Satisfied
-                      ? 'text-success'
-                      : fg(tile.exists ? tile.color : Color.Gray),
-                  editable && !symbol.visibleWhenSolving ? 'opacity-60' : ''
-                )}
-                symbol={symbol}
-              />
-            );
-          })
+          }
+          for (const rule of grid.rules) {
+            if (
+              handlesSymbolDisplay(rule) &&
+              !rule.onSymbolDisplay(grid, symbol, editable)
+            ) {
+              return null;
+            }
+          }
+
+          let symbolState = state?.get(symbol.id)?.[i];
+          if (!symbolState) symbolState = State.Incomplete;
+          const tile = grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y));
+          return (
+            <Symbol
+              key={`${symbol.id}(${symbol.x},${symbol.y})`}
+              textClass={cn(
+                symbolState === State.Error
+                  ? 'text-error'
+                  : symbolState === State.Satisfied
+                    ? 'text-success'
+                    : fg(tile.exists ? tile.color : Color.Gray),
+                editable && !symbol.visibleWhenSolving ? 'opacity-60' : ''
+              )}
+              symbol={symbol}
+            />
+          );
+        })
       )}
     </GridOverlay>
   );

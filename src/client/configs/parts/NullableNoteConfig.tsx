@@ -13,7 +13,7 @@ export interface NullableNoteConfigProps {
 const letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
 const accidentals = ['bb', 'b', '', '#', 'x'];
 const octaves = [-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-const noteNames: string[] = [];
+const noteNames: string[] = ['hihat', 'kick', 'snare', 'crash', 'tom'];
 letters.forEach(letter => {
   accidentals.forEach(accidental => {
     octaves.forEach(octave => {

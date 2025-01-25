@@ -5,7 +5,7 @@ import MusicGridRule, {
 import { memo, useEffect, useMemo, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
 import GridOverlay from '../../grid/GridOverlay';
-import { playbackState } from './piano';
+import { playbackState } from './instruments';
 
 export interface MusicCheckpointOverlayPartProps {
   instruction: MusicGridRule;

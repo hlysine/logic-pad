@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
 import { useTheme } from '../../contexts/ThemeContext.tsx';
-import { playbackState } from './piano';
+import { playbackState } from './instruments.ts';
 import { Color } from '@logic-pad/core/data/primitives';
 
 const BLEED = 5;

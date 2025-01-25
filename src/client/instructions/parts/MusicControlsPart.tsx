@@ -18,7 +18,7 @@ import {
   playGrid,
   playImmediate,
   playbackState,
-} from './piano';
+} from './instruments.ts';
 import GridData from '@logic-pad/core/data/grid';
 import * as Tone from 'tone';
 

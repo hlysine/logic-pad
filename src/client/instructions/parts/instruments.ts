@@ -41,6 +41,15 @@ export const pianoImmediate = new Piano({
   maxPolyphony: 32,
 }).toDestination();
 
+export const drum = {
+  snare: new Tone.Player('/samples/snare.wav').toDestination(),
+  kick: new Tone.Player('/samples/kick.wav').toDestination(),
+  hihat: new Tone.Player('/samples/hihat.wav').toDestination(),
+  crash: new Tone.Player('/samples/crash.wav').toDestination(),
+  tom: new Tone.Player('/samples/tom.wav').toDestination(),
+  rim: new Tone.Player('/samples/rim.wav').toDestination(),
+};
+
 export function encodePlayback(
   grid: GridData,
   musicGrid: MusicGridRule,
@@ -138,14 +147,22 @@ export function encodePlayback(
             }
             break;
           case 'keydown':
-            piano.keyDown({
-              note: event.value,
-              velocity: event.velocity,
-              time,
-            });
+            if (event.value in drum) {
+              drum[event.value as keyof typeof drum].start(time, 0);
+            } else {
+              piano.keyDown({
+                note: event.value,
+                velocity: event.velocity,
+                time,
+              });
+            }
             break;
           case 'keyup':
-            piano.keyUp({ note: event.value, time });
+            if (event.value in drum) {
+              drum[event.value as keyof typeof drum].stop(time);
+            } else {
+              piano.keyUp({ note: event.value, time });
+            }
             break;
           case 'complete':
             onComplete?.();
@@ -219,7 +236,11 @@ export function encodeImmediate(
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
         const targetPiano = pedal ? pianoImmediatePedal : pianoImmediate;
-        targetPiano.keyDown({ note: row.note, velocity: row.velocity });
+        if (row.note in drum) {
+          drum[row.note as keyof typeof drum].start(0, 0);
+        } else {
+          targetPiano.keyDown({ note: row.note, velocity: row.velocity });
+        }
         remainingPolyphony--;
         let endPos = { x, y };
         while (
@@ -233,11 +254,15 @@ export function encodeImmediate(
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
         const time = `+${(((endPos.x + 1) / 2 - x / 2) * 120 * 120) / Tone.getTransport().bpm.value / bpm}`;
-        targetPiano.keyUp({
-          note: row.note,
-          velocity: row.velocity,
-          time,
-        });
+        if (row.note in drum) {
+          drum[row.note as keyof typeof drum].stop(time);
+        } else {
+          targetPiano.keyUp({
+            note: row.note,
+            velocity: row.velocity,
+            time,
+          });
+        }
       }
     });
   }

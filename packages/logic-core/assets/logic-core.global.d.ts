@@ -2011,7 +2011,6 @@ declare global {
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
-    private getColor;
     private deltaCoordinate;
     validateSymbol(grid: GridData): State;
     copyWith({ x, y }: { x?: number; y?: number }): this;
@@ -2020,6 +2019,8 @@ declare global {
   export declare abstract class DirectionLinkerBTModule extends BTModule {
     instr: DirectionLinkerSymbol;
     constructor(instr: DirectionLinkerSymbol);
+    private initialPositions;
+    private getInitialPositions;
     checkGlobal(grid: BTGridData): CheckResult | false;
     protected abstract movePos(
       grid: BTGridData,
@@ -2127,6 +2128,8 @@ declare global {
       x: number,
       y: number
     ): Position$1 | null;
+    private getTileSafe;
+    checkGlobal(grid: BTGridData): false | CheckResult;
   }
   export declare class MinesweeperSymbol extends NumberSymbol {
     private static readonly CONFIGS;

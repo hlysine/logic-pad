@@ -1,15 +1,48 @@
 import GridData from '@logic-pad/core/data/grid';
 import Symbol from '../symbols/Symbol';
 import GridOverlay from './GridOverlay';
-import { Color, GridState, State } from '@logic-pad/core/data/primitives';
+import {
+  Color,
+  GridState,
+  State,
+  Position,
+} from '@logic-pad/core/data/primitives';
 import { handlesSymbolDisplay } from '@logic-pad/core/data/events/onSymbolDisplay';
 import { memo } from 'react';
 import { cn } from '../uiHelper';
+import SymbolData from '@logic-pad/core/data/symbols/symbol';
 
 export interface SymbolOverlayProps {
   grid: GridData;
   state?: GridState['symbols'];
   editable: boolean;
+}
+
+function forceGrayFg(symbol: SymbolData, grid: GridData) {
+  const toCheck: Position[] = [];
+  if (symbol.x % 1 !== 0 && symbol.y % 1 !== 0) {
+    toCheck.push({ x: Math.floor(symbol.x), y: Math.floor(symbol.y) });
+    toCheck.push({ x: Math.ceil(symbol.x), y: Math.ceil(symbol.y) });
+    toCheck.push({ x: Math.floor(symbol.x), y: Math.ceil(symbol.y) });
+    toCheck.push({ x: Math.ceil(symbol.x), y: Math.floor(symbol.y) });
+  } else if (symbol.x % 1 !== 0) {
+    toCheck.push({ x: Math.floor(symbol.x), y: symbol.y });
+    toCheck.push({ x: Math.ceil(symbol.x), y: symbol.y });
+  } else if (symbol.y % 1 !== 0) {
+    toCheck.push({ x: symbol.x, y: Math.floor(symbol.y) });
+    toCheck.push({ x: symbol.x, y: Math.ceil(symbol.y) });
+  } else {
+    toCheck.push({ x: symbol.x, y: symbol.y });
+  }
+  let color: Color | null = null;
+  for (const pos of toCheck) {
+    if (!grid.isPositionValid(pos.x, pos.y)) return true;
+    const tile = grid.getTile(pos.x, pos.y);
+    if (!tile.exists) return true;
+    if (color === null) color = tile.color;
+    else if (color !== tile.color) return true;
+  }
+  return false;
 }
 
 function fg(color: Color) {
@@ -63,7 +96,7 @@ export default memo(function SymbolOverlay({
                   ? 'text-error'
                   : symbolState === State.Satisfied
                     ? 'text-success'
-                    : fg(tile.exists ? tile.color : Color.Gray),
+                    : fg(forceGrayFg(symbol, grid) ? Color.Gray : tile.color),
                 editable && !symbol.visibleWhenSolving ? 'opacity-60' : ''
               )}
               symbol={symbol}

@@ -120,6 +120,26 @@ export default class LotusSymbol extends DirectionLinkerSymbol {
   }
 
   public validateSymbol(grid: GridData): State {
+    if (
+      this.orientation === Orientation.DownLeft ||
+      this.orientation === Orientation.DownRight ||
+      this.orientation === Orientation.UpLeft ||
+      this.orientation === Orientation.UpRight
+    ) {
+      if (this.x % 1 === 0 || this.y % 1 === 0)
+        if (this.x % 1 !== 0 || this.y % 1 !== 0) {
+          if (
+            !grid.getTile(Math.floor(this.x), Math.floor(this.y)).exists &&
+            !grid.getTile(Math.ceil(this.x), Math.ceil(this.y)).exists &&
+            !grid.getTile(Math.floor(this.x), Math.ceil(this.y)).exists &&
+            !grid.getTile(Math.ceil(this.x), Math.floor(this.y)).exists
+          ) {
+            return State.Satisfied;
+          } else {
+            return State.Error;
+          }
+        }
+    }
     return super.validateSymbol(grid);
   }
 

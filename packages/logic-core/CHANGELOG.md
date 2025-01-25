@@ -1,3 +1,7 @@
+# 0.2.2
+
+- Added support for dual-color galaxies and lotuses
+
 # 0.2.1
 
 - Added a config in Hidden symbol to reveal location

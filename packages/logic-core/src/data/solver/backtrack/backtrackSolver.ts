@@ -66,7 +66,7 @@ export default class BacktrackSolver extends Solver {
 
         worker.addEventListener('error', (e: ErrorEvent) => {
           alert(`Error while solving!\n${e.message}`);
-          fail(new Error(e.message));
+          fail(e as unknown as Error);
         });
       });
 

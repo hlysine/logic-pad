@@ -1,6 +1,6 @@
 import { Orientation, Position } from '../../../primitives.js';
 import LotusSymbol from '../../../symbols/lotusSymbol.js';
-import { BTGridData } from '../data.js';
+import { BTGridData, BTTile, CheckResult } from '../data.js';
 import DirectionLinkerBTModule from './directionLinker.js';
 
 export default class LotusBTModule extends DirectionLinkerBTModule {
@@ -39,5 +39,49 @@ export default class LotusBTModule extends DirectionLinkerBTModule {
     }
 
     return grid.isInBound(pos.x, pos.y) ? pos : null;
+  }
+
+  private getTileSafe(grid: BTGridData, x: number, y: number): BTTile {
+    return grid.isInBound(x, y) ? grid.getTile(x, y) : BTTile.NonExist;
+  }
+
+  public checkGlobal(grid: BTGridData): false | CheckResult {
+    if (
+      this.instr.orientation === Orientation.DownLeft ||
+      this.instr.orientation === Orientation.DownRight ||
+      this.instr.orientation === Orientation.UpLeft ||
+      this.instr.orientation === Orientation.UpRight
+    ) {
+      if (this.instr.x % 1 === 0 || this.instr.y % 1 === 0)
+        if (this.instr.x % 1 !== 0 || this.instr.y % 1 !== 0) {
+          if (
+            this.getTileSafe(
+              grid,
+              Math.floor(this.instr.x),
+              Math.floor(this.instr.y)
+            ) === BTTile.NonExist &&
+            this.getTileSafe(
+              grid,
+              Math.ceil(this.instr.x),
+              Math.ceil(this.instr.y)
+            ) === BTTile.NonExist &&
+            this.getTileSafe(
+              grid,
+              Math.floor(this.instr.x),
+              Math.ceil(this.instr.y)
+            ) === BTTile.NonExist &&
+            this.getTileSafe(
+              grid,
+              Math.ceil(this.instr.x),
+              Math.floor(this.instr.y)
+            ) === BTTile.NonExist
+          ) {
+            return { tilesNeedCheck: null, ratings: null };
+          } else {
+            return false;
+          }
+        }
+    }
+    return super.checkGlobal(grid);
   }
 }

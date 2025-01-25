@@ -7,7 +7,28 @@ export type DirectionLinkerMap = {
   [key in Direction]: Direction;
 };
 
-type Turtle = [Position, Position];
+type Turtle = {
+  pos1: Position;
+  color1: Color | null;
+  pos2: Position;
+  color2: Color | null;
+};
+
+function getColor(c: Position, grid: GridData): Color | null {
+  if (!grid.isPositionValid(c.x, c.y) || !grid.getTile(c.x, c.y).exists) {
+    return null;
+  }
+  return grid.getTile(c.x, c.y).color;
+}
+
+function makeTurtle(pos1: Position, pos2: Position, grid: GridData): Turtle {
+  return {
+    pos1,
+    color1: getColor(pos1, grid),
+    pos2,
+    color2: getColor(pos2, grid),
+  };
+}
 
 export default class DirectionLinkerSymbol extends Symbol {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
@@ -84,13 +105,6 @@ export default class DirectionLinkerSymbol extends Symbol {
     return DirectionLinkerSymbol.EXAMPLE_GRID;
   }
 
-  private getColor(c: Position, grid: GridData): Color | null {
-    if (!grid.isPositionValid(c.x, c.y) || !grid.getTile(c.x, c.y).exists) {
-      return null;
-    }
-    return grid.getTile(c.x, c.y).color;
-  }
-
   private deltaCoordinate(c: Position, direction: Direction): Position {
     return {
       x: c.x + DirectionLinkerSymbol.directionDeltas[direction].dx,
@@ -109,66 +123,79 @@ export default class DirectionLinkerSymbol extends Symbol {
     // If no turtle remains, go to final state
     // Final state is State.Satisfied if no gray cell is found, State.Incomplete otherwise
 
-    const baseColor = grid.getTile(
-      Math.round(this.x),
-      Math.round(this.y)
-    ).color;
-    if (baseColor === Color.Gray) {
+    let checkedCouples: Turtle[] = this.getInitialCheckedCouples(
+      this.x,
+      this.y,
+      grid
+    );
+    if (
+      checkedCouples.some(
+        ({ color1, color2 }) =>
+          (color1 === null && color2 !== null) ||
+          (color1 !== null && color2 === null)
+      )
+    ) {
+      return State.Error;
+    }
+    if (
+      checkedCouples.some(
+        ({ color1, color2 }) => color1 === Color.Gray || color2 === Color.Gray
+      )
+    ) {
       return State.Incomplete;
     }
-
-    const checkedCouples: Turtle[] = this.getInitialCheckedCouples(
-      this.x,
-      this.y
+    checkedCouples = checkedCouples.filter(
+      ({ color1, color2 }) => color1 !== null && color2 !== null
     );
-    const queue: Turtle[] = checkedCouples.map(([p1, p2]) => [
-      { ...p1 },
-      { ...p2 },
-    ]);
+    const queue: Turtle[] = checkedCouples.slice();
 
     let grayFound = false;
 
     while (queue.length > 0) {
       const turtle = queue.shift()!;
-      const [c1, c2] = turtle;
-      const color1 = this.getColor(c1, grid);
-      const color2 = this.getColor(c2, grid);
-      const colorSet = new Set([color1, color2]);
-      if (colorSet.has(null) && !colorSet.has(baseColor)) {
-        colorSet.delete(null);
-      }
-
-      if (colorSet.size === 2 && !colorSet.has(Color.Gray)) {
-        return State.Error;
-      }
-
-      if (colorSet.has(Color.Gray)) {
+      const { pos1, pos2, color1: baseColor1, color2: baseColor2 } = turtle;
+      const color1 = getColor(pos1, grid);
+      const color2 = getColor(pos2, grid);
+      if (color1 === Color.Gray || color2 === Color.Gray) {
         grayFound = true;
+      } else if (color1 === null || color2 === null) {
+        if (
+          (color1 === null && color2 === baseColor2) ||
+          (color2 === null && color1 === baseColor1)
+        ) {
+          return State.Error;
+        }
+      } else if (color1 !== baseColor1 || color2 !== baseColor2) {
+        if (color1 === baseColor1 || color2 === baseColor2) {
+          return State.Error;
+        }
       }
 
-      if (color1 === baseColor) {
+      if (color1 === baseColor1) {
         const directions = Object.keys(this.linkedDirections) as Direction[];
         for (const direction of directions) {
-          const newTurtle: Turtle = [
-            this.deltaCoordinate(c1, direction),
-            this.deltaCoordinate(c2, this.linkedDirections[direction]),
-          ];
+          const newTurtle: Turtle = {
+            pos1: this.deltaCoordinate(pos1, direction),
+            pos2: this.deltaCoordinate(pos2, this.linkedDirections[direction]),
+            color1: baseColor1,
+            color2: baseColor2,
+          };
           if (
             checkedCouples.some(
-              ([c1, c2]) =>
-                c1.x === newTurtle[0].x &&
-                c1.y === newTurtle[0].y &&
-                c2.x === newTurtle[1].x &&
-                c2.y === newTurtle[1].y
+              ({ pos1, pos2 }) =>
+                pos1.x === newTurtle.pos1.x &&
+                pos1.y === newTurtle.pos1.y &&
+                pos2.x === newTurtle.pos2.x &&
+                pos2.y === newTurtle.pos2.y
             ) ||
-            (c1.x === newTurtle[1].x &&
-              c1.y === newTurtle[1].y &&
-              c2.x === newTurtle[0].x &&
-              c2.y === newTurtle[0].y)
+            (pos1.x === newTurtle.pos2.x &&
+              pos1.y === newTurtle.pos2.y &&
+              pos2.x === newTurtle.pos1.x &&
+              pos2.y === newTurtle.pos1.y)
           ) {
             continue;
           }
-          checkedCouples.push([newTurtle[0], newTurtle[1]]);
+          checkedCouples.push(newTurtle);
           queue.push(newTurtle);
         }
       }
@@ -181,21 +208,20 @@ export default class DirectionLinkerSymbol extends Symbol {
     return new DirectionLinkerSymbol(x ?? this.x, y ?? this.y) as this;
   }
 
-  private getInitialCheckedCouples(x: number, y: number): Turtle[] {
+  private getInitialCheckedCouples(
+    x: number,
+    y: number,
+    grid: GridData
+  ): Turtle[] {
     // 1x1
     if (x % 1 === 0 && y % 1 === 0) {
-      return [
-        [
-          { x, y },
-          { x, y },
-        ],
-      ];
+      return [makeTurtle({ x, y }, { x, y }, grid)];
     }
 
     // 1x2
     if (x % 1 === 0) {
       return [
-        [
+        makeTurtle(
           { x, y: y - 0.5 },
           {
             x,
@@ -206,14 +232,15 @@ export default class DirectionLinkerSymbol extends Symbol {
                 ? -0.5
                 : 0.5),
           },
-        ],
+          grid
+        ),
       ];
     }
 
     // 2x1
     if (y % 1 === 0) {
       return [
-        [
+        makeTurtle(
           { x: x - 0.5, y },
           {
             x:
@@ -224,7 +251,8 @@ export default class DirectionLinkerSymbol extends Symbol {
                 : 0.5),
             y,
           },
-        ],
+          grid
+        ),
       ];
     }
 
@@ -234,14 +262,16 @@ export default class DirectionLinkerSymbol extends Symbol {
       this.linkedDirections[Direction.Right] === Direction.Right
     ) {
       return [
-        [
+        makeTurtle(
           { x: x - 0.5, y: y - 0.5 },
           { x: x - 0.5, y: y + 0.5 },
-        ],
-        [
+          grid
+        ),
+        makeTurtle(
           { x: x + 0.5, y: y - 0.5 },
           { x: x + 0.5, y: y + 0.5 },
-        ],
+          grid
+        ),
       ];
     }
     if (
@@ -249,14 +279,16 @@ export default class DirectionLinkerSymbol extends Symbol {
       this.linkedDirections[Direction.Down] === Direction.Down
     ) {
       return [
-        [
+        makeTurtle(
           { x: x - 0.5, y: y - 0.5 },
           { x: x + 0.5, y: y - 0.5 },
-        ],
-        [
+          grid
+        ),
+        makeTurtle(
           { x: x - 0.5, y: y + 0.5 },
           { x: x + 0.5, y: y + 0.5 },
-        ],
+          grid
+        ),
       ];
     } else if (
       (this.linkedDirections[Direction.Up] === Direction.Left &&
@@ -265,21 +297,16 @@ export default class DirectionLinkerSymbol extends Symbol {
         this.linkedDirections[Direction.Right] === Direction.Up)
     ) {
       return [
-        [
+        makeTurtle(
           { x: x - 0.5, y: y - 0.5 },
           { x: x - 0.5, y: y - 0.5 },
-        ],
+          grid
+        ),
       ];
     }
     return [
-      [
-        { x: x - 0.5, y: y - 0.5 },
-        { x: x + 0.5, y: y + 0.5 },
-      ],
-      [
-        { x: x - 0.5, y: y + 0.5 },
-        { x: x + 0.5, y: y - 0.5 },
-      ],
+      makeTurtle({ x: x - 0.5, y: y - 0.5 }, { x: x + 0.5, y: y + 0.5 }, grid),
+      makeTurtle({ x: x - 0.5, y: y + 0.5 }, { x: x + 0.5, y: y - 0.5 }, grid),
     ];
   }
 }

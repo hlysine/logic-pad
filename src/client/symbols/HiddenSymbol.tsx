@@ -12,7 +12,7 @@ export default memo(function LetterSymbol({ textClass }: LetterProps) {
   return (
     <div
       className={cn(
-        'absolute flex justify-center items-center w-full h-full pointer-events-none',
+        'absolute flex justify-center items-center w-full h-full pointer-events-none opacity-30',
         textClass
       )}
     >

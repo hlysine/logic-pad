@@ -1,3 +1,7 @@
+# 0.2.1
+
+- Added a config in Hidden symbol to reveal location
+
 # 0.2.0
 
 - Added Hidden symbol

@@ -32,6 +32,13 @@ export default class HiddenSymbol
       description: 'Show on color',
       configurable: true,
     },
+    {
+      type: ConfigType.Boolean,
+      default: false,
+      field: 'revealLocation',
+      description: 'Reveal symbol location',
+      configurable: true,
+    },
   ]);
 
   private static readonly EXAMPLE_GRID = Object.freeze(
@@ -46,14 +53,17 @@ export default class HiddenSymbol
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
    * @param color - The target color of the cell.
+   * @param revealLocation - Whether to reveal the location of the symbol.
    */
   public constructor(
     public readonly x: number,
     public readonly y: number,
-    public readonly color: Color
+    public readonly color: Color,
+    public readonly revealLocation = false
   ) {
     super(x, y);
     this.color = color;
+    this.revealLocation = revealLocation;
   }
 
   public get id(): string {
@@ -77,7 +87,7 @@ export default class HiddenSymbol
   }
 
   public get visibleWhenSolving(): boolean {
-    return false;
+    return this.revealLocation;
   }
 
   public get sortOrder(): number {
@@ -97,33 +107,44 @@ export default class HiddenSymbol
     symbol: Symbol,
     editing: boolean
   ): boolean {
-    if (symbol.id === this.id || editing) return true;
+    if (editing) return true;
     const thisX = Math.floor(this.x);
     const thisY = Math.floor(this.y);
     const symX = Math.floor(symbol.x);
     const symY = Math.floor(symbol.y);
     if (thisX !== symX || thisY !== symY) return true;
-    return grid.getTile(thisX, thisY).color === this.color;
+    const colorMatch = grid.getTile(thisX, thisY).color === this.color;
+    if (symbol.id === this.id) {
+      return !colorMatch;
+    }
+    return colorMatch;
   }
 
   public copyWith({
     x,
     y,
     color,
+    revealLocation,
   }: {
     x?: number;
     y?: number;
     color?: Color;
+    revealLocation?: boolean;
   }): this {
     return new HiddenSymbol(
       x ?? this.x,
       y ?? this.y,
-      color ?? this.color
+      color ?? this.color,
+      revealLocation ?? this.revealLocation
     ) as this;
   }
 
   public withColor(color: Color): this {
     return this.copyWith({ color });
+  }
+
+  public withRevealLocation(revealLocation: boolean): this {
+    return this.copyWith({ revealLocation });
   }
 }
 

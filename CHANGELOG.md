@@ -2,6 +2,7 @@
 
 - Added drum samples (kick, snare, hihat, crash, tom, rim) to music grids
 - Fixed symbol colors on hidden tiles
+- Added a config in the Hidden symbol to reveal location
 
 # 24/1/2025
 

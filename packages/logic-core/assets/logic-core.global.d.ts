@@ -5893,6 +5893,7 @@ declare global {
     readonly x: number;
     readonly y: number;
     readonly color: Color;
+    readonly revealLocation: boolean;
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -5901,8 +5902,9 @@ declare global {
      * @param x - The x-coordinate of the symbol.
      * @param y - The y-coordinate of the symbol.
      * @param color - The target color of the cell.
+     * @param revealLocation - Whether to reveal the location of the symbol.
      */
-    constructor(x: number, y: number, color: Color);
+    constructor(x: number, y: number, color: Color, revealLocation?: boolean);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
@@ -5916,8 +5918,19 @@ declare global {
       symbol: Symbol$1,
       editing: boolean
     ): boolean;
-    copyWith({ x, y, color }: { x?: number; y?: number; color?: Color }): this;
+    copyWith({
+      x,
+      y,
+      color,
+      revealLocation,
+    }: {
+      x?: number;
+      y?: number;
+      color?: Color;
+      revealLocation?: boolean;
+    }): this;
     withColor(color: Color): this;
+    withRevealLocation(revealLocation: boolean): this;
   }
   export declare const allSymbols: Map<string, Symbol$1>;
   export declare function aggregateState(

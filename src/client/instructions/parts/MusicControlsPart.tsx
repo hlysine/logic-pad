@@ -48,11 +48,15 @@ const MusicControls = lazy(async function () {
       );
 
       useEffect(() => {
-        if (previousGrid.current && !previousGrid.current.colorEquals(grid)) {
+        if (
+          previousGrid.current &&
+          !previousGrid.current.colorEquals(grid) &&
+          playState === 'none'
+        ) {
           playImmediate(grid, previousGrid.current, instruction);
         }
         previousGrid.current = grid;
-      }, [grid, instruction]);
+      }, [grid, instruction, playState]);
 
       const stopAll = (playback: CachedPlayback | undefined) => {
         cleanUp(playback);

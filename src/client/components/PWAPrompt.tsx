@@ -29,14 +29,12 @@ export default memo(function PWAPrompt() {
           type="button"
           className="btn btn-sm btn-primary"
           onClick={async () => {
-            window.history.pushState(
-              null,
-              '',
-              `${window.location.origin}${window.location.pathname}?d=${await Compressor.compress(
-                Serializer.stringifyPuzzle({ ...metadata, grid, solution })
-              )}`
-            );
+            const newLocation = `${window.location.origin}${window.location.pathname}?d=${await Compressor.compress(
+              Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+            )}`;
+            window.history.pushState(null, '', newLocation);
             await updateServiceWorker(true);
+            window.location.replace(newLocation);
           }}
         >
           Reload

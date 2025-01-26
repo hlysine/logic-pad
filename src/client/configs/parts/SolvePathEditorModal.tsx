@@ -16,6 +16,7 @@ import InstructionPartOutlet from '../../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../../instructions/parts/types';
 import Metadata from '../../metadata/Metadata';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
+import SolvePathContext from '../../contexts/SolvePathContext';
 
 export interface SolvePathEditorModalProps {
   solvePath: Position[];
@@ -66,26 +67,28 @@ export default memo(function SolvePathEditorModal({
                   <EditContext>
                     <GridStateContext>
                       <GridContext>
-                        <EmbedLoader grid={outerGrid} />
-                        <ThreePaneLayout
-                          left={
-                            <>
-                              <DocumentTitle>Logic Pad</DocumentTitle>
-                              <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
-                                <Metadata />
+                        <SolvePathContext>
+                          <EmbedLoader grid={outerGrid} />
+                          <ThreePaneLayout
+                            left={
+                              <>
+                                <DocumentTitle>Logic Pad</DocumentTitle>
+                                <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
+                                  <Metadata />
+                                  <InstructionPartOutlet
+                                    placement={PartPlacement.LeftPanel}
+                                  />
+                                </div>
                                 <InstructionPartOutlet
-                                  placement={PartPlacement.LeftPanel}
+                                  placement={PartPlacement.LeftBottom}
                                 />
-                              </div>
-                              <InstructionPartOutlet
-                                placement={PartPlacement.LeftBottom}
-                              />
-                              <TouchControls />
-                            </>
-                          }
-                          center={<MainGrid useToolboxClick={false} />}
-                          right={<InstructionList />}
-                        />
+                                <TouchControls />
+                              </>
+                            }
+                            center={<MainGrid useToolboxClick={false} />}
+                            right={<InstructionList />}
+                          />
+                        </SolvePathContext>
                       </GridContext>
                     </GridStateContext>
                   </EditContext>

@@ -11,6 +11,7 @@ import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import ForesightContext from '../contexts/ForesightContext';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
+import SolvePathContext from '../contexts/SolvePathContext';
 
 export const Route = createLazyFileRoute('/_context/_layout/perfection')({
   component: memo(function PerfectionMode() {
@@ -33,21 +34,23 @@ export const Route = createLazyFileRoute('/_context/_layout/perfection')({
 
     return (
       <ForesightContext>
-        <ThreePaneLayout
-          left={
-            <>
-              <DocumentTitle>Logic Pad</DocumentTitle>
-              <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
-                <Metadata />
-                <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
-              </div>
-              <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
-              <TouchControls />
-            </>
-          }
-          center={<MainGrid useToolboxClick={false} />}
-          right={<InstructionList />}
-        />
+        <SolvePathContext>
+          <ThreePaneLayout
+            left={
+              <>
+                <DocumentTitle>Logic Pad</DocumentTitle>
+                <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
+                  <Metadata />
+                  <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
+                </div>
+                <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
+                <TouchControls />
+              </>
+            }
+            center={<MainGrid useToolboxClick={false} />}
+            right={<InstructionList />}
+          />
+        </SolvePathContext>
       </ForesightContext>
     );
   }),

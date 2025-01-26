@@ -11,7 +11,7 @@ import DisplayContext from '../../contexts/DisplayContext.tsx';
 import EditContext from '../../contexts/EditContext.tsx';
 import GridStateContext from '../../contexts/GridStateContext.tsx';
 
-export interface GridEdittorModalProps {
+export interface GridEditorModalProps {
   grid: GridData;
   setGrid: (grid: GridData) => void;
   open: boolean;
@@ -33,12 +33,12 @@ function EmbedLoader({ grid }: { grid: GridData }) {
   return null;
 }
 
-export default memo(function GridConfig({
+export default memo(function GridEditorModal({
   grid,
   setGrid,
   open,
   setOpen,
-}: GridEdittorModalProps) {
+}: GridEditorModalProps) {
   return (
     <dialog id="gridModal" className={cn('modal', open && 'modal-open')}>
       <div className="modal-box w-[calc(100%-4rem)] h-full max-w-none bg-neutral text-neutral-content">

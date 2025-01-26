@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useGrid } from '../contexts/GridContext.tsx';
-import { useEdit } from '../contexts/EditContext.tsx';
+import { useGrid } from '../contexts/GridContext';
+import { useEdit } from '../contexts/EditContext';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { useNavigate } from '@tanstack/react-router';
 import { array } from '@logic-pad/core/data/dataHelper';
-import { useGridState } from '../contexts/GridStateContext.tsx';
+import { useGridState } from '../contexts/GridStateContext';
+import { Puzzle } from '@logic-pad/core/data/puzzle';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',
@@ -56,6 +57,10 @@ interface LinkLoaderParams {
    * Whether to allow loading empty puzzles.
    */
   allowEmpty?: boolean;
+  /**
+   * Function to modify the loaded puzzle.
+   */
+  modifyPuzzle?: (puzzle: Puzzle) => Puzzle;
 }
 
 export default function useLinkLoader(
@@ -64,6 +69,7 @@ export default function useLinkLoader(
     cleanUrl = false,
     solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
     allowEmpty = true,
+    modifyPuzzle = puzzle => puzzle,
   }: LinkLoaderParams = {}
 ): LinkLoaderResult | undefined {
   const { setGrid, setMetadata } = useGrid();
@@ -80,8 +86,9 @@ export default function useLinkLoader(
       if (params.d) {
         const behavior = params.loader ?? solutionBehavior;
         const decompressed = await Compressor.decompress(params.d);
-        const { grid, solution, ...metadata } =
-          Serializer.parsePuzzle(decompressed);
+        const { grid, solution, ...metadata } = modifyPuzzle(
+          Serializer.parsePuzzle(decompressed)
+        );
         if (behavior === SolutionHandling.LoadVisible && solution) {
           const tiles = array(grid.width, grid.height, (x, y) => {
             const tile = grid.getTile(x, y);

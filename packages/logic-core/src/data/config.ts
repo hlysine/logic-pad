@@ -8,6 +8,7 @@ import {
   ORIENTATIONS,
   Orientation,
   OrientationToggle,
+  Position,
 } from './primitives.js';
 import { ControlLine } from './rules/musicControlLine.js';
 
@@ -29,6 +30,7 @@ export enum ConfigType {
   Icon = 'icon',
   ControlLines = 'controlLines',
   NullableNote = 'nullableNote',
+  NullableSolvePath = 'nullableSolvePath',
 }
 
 export interface Config<T> {
@@ -118,6 +120,10 @@ export interface NullableNoteConfig extends Config<string | null> {
   readonly type: ConfigType.NullableNote;
 }
 
+export interface NullableSolvePathConfig extends Config<Position[] | null> {
+  readonly type: ConfigType.NullableSolvePath;
+}
+
 export type AnyConfig =
   | BooleanConfig
   | NullableBooleanConfig
@@ -135,7 +141,8 @@ export type AnyConfig =
   | NullableGridConfig
   | IconConfig
   | ControlLinesConfig
-  | NullableNoteConfig;
+  | NullableNoteConfig
+  | NullableSolvePathConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.
@@ -172,6 +179,16 @@ export function configEquals<C extends AnyConfig>(
   if (type === ConfigType.OrientationToggle) {
     return ORIENTATIONS.every(
       dir => (a as OrientationToggle)[dir] === (b as OrientationToggle)[dir]
+    );
+  }
+  if (type === ConfigType.NullableSolvePath) {
+    if (a === null && b === null) return true;
+    if (a === null || b === null) return false;
+    const aPath = a as Position[];
+    const bPath = b as Position[];
+    if (aPath.length !== bPath.length) return false;
+    return aPath.every(
+      (pos, i) => pos.x === bPath[i].x && pos.y === bPath[i].y
     );
   }
   return a === b;

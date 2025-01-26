@@ -1,5 +1,4 @@
 import InstructionList from '../instructions/InstructionList';
-import EditControls from '../components/EditControls';
 import MainGrid from '../grid/MainGrid';
 import Metadata from '../metadata/Metadata';
 import { createLazyFileRoute } from '@tanstack/react-router';
@@ -11,11 +10,27 @@ import DocumentTitle from '../components/DocumentTitle';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import ForesightContext from '../contexts/ForesightContext';
+import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
 
-export const Route = createLazyFileRoute('/_context/_layout/solve')({
-  component: memo(function SolveMode() {
+export const Route = createLazyFileRoute('/_context/_layout/perfection')({
+  component: memo(function PerfectionMode() {
     const params = Route.useSearch();
-    useLinkLoader(params, { allowEmpty: false });
+    useLinkLoader(params, {
+      allowEmpty: false,
+      modifyPuzzle: puzzle => {
+        puzzle.grid = puzzle.grid.withRules(rules => [
+          new PerfectionRule(),
+          ...rules,
+        ]);
+        puzzle.solution =
+          puzzle.solution?.withRules(rules => [
+            new PerfectionRule(),
+            ...rules,
+          ]) ?? null;
+        return puzzle;
+      },
+    });
+
     return (
       <ForesightContext>
         <ThreePaneLayout
@@ -28,7 +43,6 @@ export const Route = createLazyFileRoute('/_context/_layout/solve')({
               </div>
               <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
               <TouchControls />
-              <EditControls />
             </>
           }
           center={<MainGrid useToolboxClick={false} />}

@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './../routes/__root'
 import { Route as IndexImport } from './../routes/index'
 import { Route as ContextLayoutSolveImport } from './../routes/_context._layout.solve'
+import { Route as ContextLayoutPerfectionImport } from './../routes/_context._layout.perfection'
 import { Route as ContextLayoutCreateImport } from './../routes/_context._layout.create'
 
 // Create Virtual Routes
@@ -48,6 +49,13 @@ const ContextLayoutSolveRoute = ContextLayoutSolveImport.update({
   import('./../routes/_context._layout.solve.lazy').then((d) => d.Route),
 )
 
+const ContextLayoutPerfectionRoute = ContextLayoutPerfectionImport.update({
+  path: '/perfection',
+  getParentRoute: () => ContextLayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_context._layout.perfection.lazy').then((d) => d.Route),
+)
+
 const ContextLayoutCreateRoute = ContextLayoutCreateImport.update({
   path: '/create',
   getParentRoute: () => ContextLayoutLazyRoute,
@@ -75,6 +83,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContextLayoutCreateImport
       parentRoute: typeof ContextLayoutLazyImport
     }
+    '/_context/_layout/perfection': {
+      preLoaderRoute: typeof ContextLayoutPerfectionImport
+      parentRoute: typeof ContextLayoutLazyImport
+    }
     '/_context/_layout/solve': {
       preLoaderRoute: typeof ContextLayoutSolveImport
       parentRoute: typeof ContextLayoutLazyImport
@@ -89,6 +101,7 @@ export const routeTree = rootRoute.addChildren([
   ContextLazyRoute.addChildren([
     ContextLayoutLazyRoute.addChildren([
       ContextLayoutCreateRoute,
+      ContextLayoutPerfectionRoute,
       ContextLayoutSolveRoute,
     ]),
   ]),

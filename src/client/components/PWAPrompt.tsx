@@ -32,9 +32,11 @@ export default memo(function PWAPrompt() {
             const newLocation = `${window.location.origin}${window.location.pathname}?d=${await Compressor.compress(
               Serializer.stringifyPuzzle({ ...metadata, grid, solution })
             )}`;
-            window.history.pushState(null, '', newLocation);
-            await updateServiceWorker(true);
-            window.location.replace(newLocation);
+            try {
+              await updateServiceWorker(false);
+            } finally {
+              window.location.replace(newLocation);
+            }
           }}
         >
           Reload

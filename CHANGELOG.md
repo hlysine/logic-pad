@@ -1,3 +1,9 @@
+# 26/1/2025
+
+- Added small variance in music grid playback to hopefully make chords more prominent
+- Mute individual tiles when the whole music grid is playing
+- Added a small fix for load errors during future deployments
+
 # 25/1/2025
 
 - Added drum samples (kick, snare, hihat, crash, tom, rim) to music grids

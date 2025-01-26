@@ -1,5 +1,5 @@
 import MusicGridRule from '@logic-pad/core/data/rules/musicGridRule';
-import { Piano } from '@tonejs/piano';
+import { Piano } from '@hlysine/piano';
 import GridData from '@logic-pad/core/data/grid';
 import * as Tone from 'tone';
 import { Color } from '@logic-pad/core/data/primitives';
@@ -40,6 +40,12 @@ export const pianoImmediate = new Piano({
   velocities: 5,
   maxPolyphony: 32,
 }).toDestination();
+
+function nudge(note: string): number {
+  const n = Number(note.at(-1));
+  if (Number.isNaN(n)) return 0;
+  return (8 - n) / 6;
+}
 
 export const drum = {
   snare: new Tone.Player('/samples/snare.wav').toDestination(),
@@ -103,7 +109,7 @@ export function encodePlayback(
         tile.color === Color.Dark &&
         !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        addEvent(x / 2, {
+        addEvent(x / 2 + (nudge(row.note) * 0.02 * bpm) / 120, {
           type: 'keydown',
           value: row.note,
           velocity: row.velocity,
@@ -119,7 +125,7 @@ export function encodePlayback(
         ) {
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
-        addEvent((endPos.x + 1) / 2, {
+        addEvent((endPos.x + 1) / 2 + (nudge(row.note) * 0.02 * bpm) / 120, {
           type: 'keyup',
           value: row.note,
         });
@@ -151,7 +157,8 @@ export function encodePlayback(
               drum[event.value as keyof typeof drum].start(time, 0);
             } else {
               piano.keyDown({
-                note: event.value,
+                midi:
+                  Tone.Midi(event.value).toMidi() + nudge(event.value) * 0.01,
                 velocity: event.velocity,
                 time,
               });
@@ -161,7 +168,11 @@ export function encodePlayback(
             if (event.value in drum) {
               drum[event.value as keyof typeof drum].stop(time);
             } else {
-              piano.keyUp({ note: event.value, time });
+              piano.keyUp({
+                midi:
+                  Tone.Midi(event.value).toMidi() + nudge(event.value) * 0.01,
+                time,
+              });
             }
             break;
           case 'complete':

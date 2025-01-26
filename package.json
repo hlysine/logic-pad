@@ -28,10 +28,10 @@
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",
     "@hlysine/bun-vercel": "^1.0.0-alpha.8",
+    "@hlysine/piano": "^0.2.1",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.22.1",
     "@tanstack/router-devtools": "^1.22.2",
-    "@tonejs/piano": "^0.2.1",
     "@use-gesture/react": "^10.3.1",
     "@vercel/speed-insights": "^1.0.10",
     "animejs": "^3.2.2",

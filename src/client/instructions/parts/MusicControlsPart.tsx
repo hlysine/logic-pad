@@ -12,6 +12,7 @@ import { array } from '@logic-pad/core/data/dataHelper';
 import {
   CachedPlayback,
   cleanUp,
+  drum,
   piano,
   pianoImmediate,
   pianoImmediatePedal,
@@ -28,6 +29,14 @@ const MusicControls = lazy(async function () {
   await piano.load();
   await pianoImmediate.load();
   await pianoImmediatePedal.load();
+  await new Promise<void>(resolve => {
+    const interval = setInterval(() => {
+      if (Object.values(drum).every(player => player.loaded)) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 100);
+  });
   return {
     default: memo(function MusicControls({
       instruction,

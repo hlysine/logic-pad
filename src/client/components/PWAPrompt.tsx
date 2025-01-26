@@ -33,7 +33,6 @@ export default memo(function PWAPrompt() {
               Serializer.stringifyPuzzle({ ...metadata, grid, solution })
             )}`;
             try {
-              window.history.pushState(null, '', newLocation);
               await updateServiceWorker(false);
             } finally {
               window.location.replace(newLocation);

@@ -7,6 +7,7 @@ import Loading from '../components/Loading';
 import GridData from '@logic-pad/core/data/grid';
 import GridConnections from '@logic-pad/core/data/gridConnections';
 import useLinkLoader from '../router/linkLoader';
+import PWAPrompt from '../components/PWAPrompt';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -46,6 +47,7 @@ export const Route = createFileRoute('/')({
     return (
       <>
         <div className="flex flex-col min-h-dvh shrink-0">
+          <PWAPrompt />
           <QuickAccessBar className="justify-end px-8 py-2" />
           <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
             <div className="relative order-1 grow shrink self-stretch overflow-visible pointer-events-none -z-10 min-h-64 m-16">

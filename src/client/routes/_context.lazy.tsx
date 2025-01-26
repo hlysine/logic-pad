@@ -5,6 +5,7 @@ import EditContext from '../contexts/EditContext.tsx';
 import GridContext from '../contexts/GridContext.tsx';
 import GridStateContext from '../contexts/GridStateContext.tsx';
 import SolverContext from '../contexts/SolverContext.tsx';
+import PWAPrompt from '../components/PWAPrompt.tsx';
 
 export const Route = createLazyFileRoute('/_context')({
   component: memo(function Context() {
@@ -14,6 +15,7 @@ export const Route = createLazyFileRoute('/_context')({
           <GridStateContext>
             <GridContext>
               <SolverContext>
+                <PWAPrompt />
                 <Outlet />
               </SolverContext>
             </GridContext>

@@ -6,6 +6,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './router/routeTree.gen';
 import NotFound from './router/NotFound';
 import { themeKey } from './contexts/ThemeContext.tsx';
+import { cleanReload } from './components/settings/ResetSite.tsx';
 
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
@@ -33,6 +34,14 @@ function Redirector() {
   }
   return null;
 }
+
+/**
+ * Reload the page when a preload error occurs. This usually happens during a new deployment when the user still
+ * has the old version of the site open.
+ */
+window.addEventListener('vite:preloadError', async () => {
+  await cleanReload();
+});
 
 ReactDOM.createRoot(document.getElementById('app')!).render(
   <React.StrictMode>

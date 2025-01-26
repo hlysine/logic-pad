@@ -1,5 +1,20 @@
 import { memo } from 'react';
 
+export async function cleanReload() {
+  try {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    console.log(`Unregistering ${registrations.length} service workers`);
+    await Promise.all(
+      registrations.map(r => {
+        return r.unregister();
+      })
+    );
+  } finally {
+    // @ts-expect-error - for the few browsers that still support this option
+    window.location.reload(true);
+  }
+}
+
 export default memo(function ResetSite() {
   return (
     <div
@@ -42,20 +57,7 @@ export default memo(function ResetSite() {
               <button
                 type="button"
                 className="btn btn-error"
-                onClick={async () => {
-                  const registrations =
-                    await navigator.serviceWorker.getRegistrations();
-                  console.log(
-                    `Unregistering ${registrations.length} service workers`
-                  );
-                  await Promise.all(
-                    registrations.map(r => {
-                      return r.unregister();
-                    })
-                  );
-                  // @ts-expect-error - for the few browsers that still support this option
-                  window.location.reload(true);
-                }}
+                onClick={cleanReload}
               >
                 Reset and reload
               </button>

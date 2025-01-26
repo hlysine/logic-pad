@@ -3,6 +3,7 @@
 - Added small variance in music grid playback to hopefully make chords more prominent
 - Mute individual tiles when the whole music grid is playing
 - Added a small fix for load errors during future deployments
+- Site updates now preserve your current puzzle (but still reset the solve progress)
 
 # 25/1/2025
 

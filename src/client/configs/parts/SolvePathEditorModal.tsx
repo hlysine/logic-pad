@@ -4,18 +4,21 @@ import EmbedContext from '../../contexts/EmbedContext';
 import GridContext, { GridConsumer, useGrid } from '../../contexts/GridContext';
 import DisplayContext from '../../contexts/DisplayContext';
 import GridStateContext from '../../contexts/GridStateContext';
-import { Position } from '@logic-pad/core/data/primitives';
+import { Color, Position } from '@logic-pad/core/data/primitives';
 import PerfectionRule, {
   instance as perfectionInstance,
 } from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../../screens/PerfectionScreen';
-import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
+import ForesightRule, {
+  instance as foresightInstance,
+} from '@logic-pad/core/data/rules/foresightRule';
 import {
   SolvePathConsumer,
   useSolvePath,
 } from '../../contexts/SolvePathContext';
 import EditContext from '../../contexts/EditContext';
 import { useDelta } from 'react-delta-hooks';
+import { GridData } from '@logic-pad/core/index';
 
 export interface SolvePathEditorModalProps {
   solvePath: Position[];
@@ -55,6 +58,51 @@ function DialogClose({ setOpen }: { setOpen: (open: boolean) => void }) {
   return null;
 }
 
+function prepareGrid(
+  grid: GridData,
+  respectSolvePath: boolean
+): { grid: GridData; solution: GridData | null } {
+  const newGrid = grid.withRules(rules => [
+    new PerfectionRule(),
+    ...rules.filter(r => r.id !== foresightInstance.id),
+  ]);
+  if (respectSolvePath) {
+    const foresight = grid.findRule(r => r.id === foresightInstance.id) as
+      | ForesightRule
+      | undefined;
+    if (!foresight) {
+      return prepareGrid(newGrid, false);
+    }
+    const resetGrid = newGrid.withTiles(tiles =>
+      tiles.map((row, y) =>
+        row.map((tile, x) => {
+          if (
+            !tile.exists ||
+            tile.fixed ||
+            foresight.solvePath.some(p => p.x === x && p.y === y)
+          ) {
+            return tile;
+          } else {
+            return tile.withColor(Color.Gray);
+          }
+        })
+      )
+    );
+    if (resetGrid.colorEquals(newGrid)) {
+      return { grid: newGrid, solution: null };
+    } else {
+      return { grid: resetGrid, solution: newGrid };
+    }
+  } else {
+    const resetGrid = newGrid.resetTiles();
+    if (resetGrid.colorEquals(newGrid)) {
+      return { grid: newGrid, solution: null };
+    } else {
+      return { grid: resetGrid, solution: newGrid };
+    }
+  }
+}
+
 export default memo(function SolvePathEditorModal({
   solvePath,
   setSolvePath,
@@ -65,7 +113,8 @@ export default memo(function SolvePathEditorModal({
 
   const openDelta = useDelta(open);
   useEffect(() => {
-    if (openDelta && !openDelta.curr && openDelta.prev) {
+    if (!openDelta) return;
+    if (!openDelta.curr && openDelta.prev) {
       setSolvePath(tempSolvePath);
     }
   }, [openDelta, setSolvePath, tempSolvePath]);
@@ -85,20 +134,14 @@ export default memo(function SolvePathEditorModal({
         {open && (
           <GridConsumer>
             {({ grid: outerGrid, metadata }) => {
-              const newGrid = outerGrid.withRules(rules => [
-                new PerfectionRule(),
-                ...rules.filter(r => r.id !== foresightInstance.id),
-              ]);
-              const resetGrid = newGrid.resetTiles();
-
               return (
                 <EmbedContext>
                   <DisplayContext>
                     <EditContext>
                       <GridStateContext>
                         <GridContext
-                          grid={resetGrid}
-                          solution={resetGrid.equals(newGrid) ? null : newGrid}
+                          grid={() => prepareGrid(outerGrid, true).grid}
+                          solution={() => prepareGrid(outerGrid, true).solution}
                           metadata={metadata}
                         >
                           <PerfectionScreen>
@@ -119,16 +162,7 @@ export default memo(function SolvePathEditorModal({
                                           className="btn"
                                           onClick={() => {
                                             setInnerGrid(
-                                              outerGrid
-                                                .withRules(rules => [
-                                                  new PerfectionRule(),
-                                                  ...rules.filter(
-                                                    r =>
-                                                      r.id !==
-                                                      foresightInstance.id
-                                                  ),
-                                                ])
-                                                .resetTiles()
+                                              prepareGrid(outerGrid, false).grid
                                             );
                                             setTempSolvePath([]);
                                             setSolvePath([]);

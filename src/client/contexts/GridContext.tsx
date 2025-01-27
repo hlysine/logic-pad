@@ -46,8 +46,8 @@ export default memo(function GridContext({
   metadata: initialMetadata,
 }: {
   children: React.ReactNode;
-  grid?: GridData;
-  solution?: GridData | null;
+  grid?: GridData | (() => GridData);
+  solution?: GridData | null | (() => GridData | null);
   metadata?: PuzzleMetadata;
 }) {
   const { recordEdit, clearHistory } = useEdit();

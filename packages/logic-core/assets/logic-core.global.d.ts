@@ -112,6 +112,30 @@ declare global {
     Create = 'create',
     Solve = 'solve',
   }
+  export declare class GridZones {
+    readonly edges: readonly Edge[];
+    constructor(edges?: readonly Edge[]);
+    addEdge(edge: Edge): GridZones;
+    removeEdge(edge: Edge): GridZones;
+    hasEdge(edge: Edge): boolean;
+    getEdgesAt({ x, y }: Position$1): readonly Edge[];
+    /**
+     * Check if two GridZones objects are equal.
+     * @param other The other GridZones object to compare to.
+     * @returns Whether the two objects are equal.
+     */
+    equals(other: GridZones): boolean;
+    /**
+     * Deduplicate an array of edges.
+     * @param edges The array of edges to deduplicate.
+     * @returns The deduplicated array of edges.
+     */
+    static deduplicateEdges(edges: readonly Edge[]): readonly Edge[];
+    insertColumn(index: number): GridZones;
+    insertRow(index: number): GridZones;
+    removeColumn(index: number): GridZones;
+    removeRow(index: number): GridZones;
+  }
   export declare class TileConnections {
     [y: number]: {
       [x: number]: boolean;
@@ -137,13 +161,10 @@ declare global {
     set bottomRight(value: boolean);
     equals(other: TileConnections): boolean;
   }
-  export declare class GridConnections {
-    readonly edges: readonly Edge[];
+  export declare class GridConnections extends GridZones {
     constructor(edges?: readonly Edge[]);
     addEdge(edge: Edge): GridConnections;
     removeEdge(edge: Edge): GridConnections;
-    isConnected(edge: Edge): boolean;
-    getConnectionsAt({ x, y }: Position$1): readonly Edge[];
     getForTile({ x, y }: Position$1): TileConnections;
     getConnectedTiles({ x, y }: Position$1): readonly Position$1[];
     /**
@@ -156,18 +177,6 @@ declare global {
      * @returns The created connections. You can apply this to a GridData object using GridData.withConnections.
      */
     static create(array: string[]): GridConnections;
-    /**
-     * Check if two GridConnections objects are equal.
-     * @param other The other GridConnections object to compare to.
-     * @returns Whether the two objects are equal.
-     */
-    equals(other: GridConnections): boolean;
-    /**
-     * Deduplicate an array of edges.
-     * @param edges The array of edges to deduplicate.
-     * @returns The deduplicated array of edges.
-     */
-    static deduplicateEdges(edges: readonly Edge[]): readonly Edge[];
     insertColumn(index: number): GridConnections;
     insertRow(index: number): GridConnections;
     removeColumn(index: number): GridConnections;
@@ -590,6 +599,7 @@ declare global {
     readonly height: number;
     readonly tiles: readonly (readonly TileData[])[];
     readonly connections: GridConnections;
+    readonly zones: GridZones;
     readonly symbols: ReadonlyMap<string, readonly Symbol$1[]>;
     readonly rules: readonly Rule[];
     readonly musicGrid: CachedAccess<MusicGridRule | undefined>;
@@ -601,6 +611,7 @@ declare global {
      * @param height The height of the grid.
      * @param tiles The tiles of the grid.
      * @param connections The connections of the grid, which determines which tiles are merged.
+     * @param zones The zones of the grid.
      * @param symbols The symbols in the grid.
      * @param rules The rules of the grid.
      */
@@ -609,6 +620,7 @@ declare global {
       height: number,
       tiles?: readonly (readonly TileData[])[],
       connections?: GridConnections,
+      zones?: GridZones,
       symbols?: ReadonlyMap<string, readonly Symbol$1[]>,
       rules?: readonly Rule[]
     );
@@ -622,6 +634,7 @@ declare global {
       height,
       tiles,
       connections,
+      zones,
       symbols,
       rules,
     }: {
@@ -629,6 +642,7 @@ declare global {
       height?: number;
       tiles?: readonly (readonly TileData[])[];
       connections?: GridConnections;
+      zones?: GridZones;
       symbols?: ReadonlyMap<string, readonly Symbol$1[]>;
       rules?: readonly Rule[];
     }): GridData;
@@ -676,6 +690,12 @@ declare global {
         | GridConnections
         | ((value: GridConnections) => GridConnections)
     ): GridData;
+    /**
+     * Add or modify the zones in the grid.
+     * @param zones The new zones to add or modify.
+     * @returns The new grid with the new zones.
+     */
+    withZones(zones: GridZones | ((value: GridZones) => GridZones)): GridData;
     /**
      * Add or modify the symbols in the grid.
      * @param symbols The new symbols to add or modify.
@@ -1039,7 +1059,6 @@ declare global {
     ControlLines = 'controlLines',
     NullableNote = 'nullableNote',
     SolvePath = 'solvePath',
-    Edges = 'edges',
   }
   export interface Config<T> {
     readonly type: ConfigType;
@@ -1113,9 +1132,6 @@ declare global {
   export interface SolvePathConfig extends Config<Position$1[]> {
     readonly type: ConfigType.SolvePath;
   }
-  export interface EdgesConfig extends Config<Edge[]> {
-    readonly type: ConfigType.Edges;
-  }
   export type AnyConfig =
     | BooleanConfig
     | NullableBooleanConfig
@@ -1134,8 +1150,7 @@ declare global {
     | IconConfig
     | ControlLinesConfig
     | NullableNoteConfig
-    | SolvePathConfig
-    | EdgesConfig;
+    | SolvePathConfig;
   /**
    * Compare two config values for equality, using an appropriate method for the config type.
    *
@@ -1347,7 +1362,6 @@ declare global {
   }
   export declare class CellCountPerZoneRule extends Rule {
     readonly color: Color;
-    readonly edges: readonly Edge[];
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
@@ -1357,26 +1371,16 @@ declare global {
      * **Every zone has the same number of &lt;color&gt; cells.**
      *
      * @param color - The color of the cells to count.
-     * @param edges - The edges of the zones to count.
      */
-    constructor(color: Color, edges: readonly Edge[]);
+    constructor(color: Color);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
-    copyWith({
-      color,
-      edges,
-    }: {
-      color?: Color;
-      edges?: readonly Edge[];
-    }): this;
+    copyWith({ color }: { color?: Color }): this;
     withColor(color: Color): this;
-    withEdges(
-      edges: readonly Edge[] | ((edges: readonly Edge[]) => readonly Edge[])
-    ): this;
   }
   export declare class CellCountRule extends Rule {
     readonly color: Color;
@@ -1792,6 +1796,8 @@ declare global {
     abstract parseSymbol(str: string): Symbol$1;
     abstract stringifyConnections(connections: GridConnections): string;
     abstract parseConnections(input: string): GridConnections;
+    abstract stringifyZones(zones: GridZones): string;
+    abstract parseZones(input: string): GridZones;
     abstract stringifyTiles(tiles: readonly (readonly TileData[])[]): string;
     abstract parseTiles(input: string): TileData[][];
     abstract stringifyRules(rules: readonly Rule[]): string;
@@ -1823,6 +1829,8 @@ declare global {
     parseSymbol(str: string): Symbol$1;
     stringifyConnections(connections: GridConnections): string;
     parseConnections(input: string): GridConnections;
+    stringifyZones(zones: GridZones): string;
+    parseZones(input: string): GridZones;
     stringifyTiles(tiles: readonly (readonly TileData[])[]): string;
     parseTiles(input: string): TileData[][];
     stringifyRules(rules: readonly Rule[]): string;

@@ -1,3 +1,8 @@
+# 27/1/2025
+
+- Added the perfection mode in which all cell colors are final (accessible in the `/perfection` page)
+- Enhanced the foresight rule to consider solve paths
+
 # 26/1/2025
 
 - Added small variance in music grid playback to hopefully make chords more prominent

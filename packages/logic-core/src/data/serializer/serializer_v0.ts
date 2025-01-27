@@ -16,6 +16,7 @@ import {
   OrientationToggle,
   directionToggle,
   orientationToggle,
+  Position,
 } from '../primitives.js';
 import { array, escape, unescape } from '../dataHelper.js';
 import { allRules } from '../rules/index.js';
@@ -236,6 +237,20 @@ export default class SerializerV0 extends SerializerBase {
               .join(':')
           )
         );
+      case ConfigType.SolvePath:
+        return (
+          config.field +
+          '=' +
+          escape(
+            (
+              instruction[
+                config.field as keyof Instruction
+              ] as unknown as Position[]
+            )
+              ?.map(pos => `${pos.x}_${pos.y}`)
+              .join('/') ?? ''
+          )
+        );
     }
   }
 
@@ -297,6 +312,16 @@ export default class SerializerV0 extends SerializerBase {
         ];
       case ConfigType.NullableNote:
         return [config.field, value === '' ? null : unescape(value)];
+      case ConfigType.SolvePath:
+        return [
+          config.field,
+          value === ''
+            ? []
+            : value.split('/').map(pos => {
+                const [x, y] = pos.split('_');
+                return { x: Number(x), y: Number(y) };
+              }),
+        ];
     }
   }
 

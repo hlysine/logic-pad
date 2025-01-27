@@ -1,3 +1,8 @@
+# 0.3.0
+
+- Added the perfection rule
+- Added support for solve paths in the foresight rule
+
 # 0.2.2
 
 - Added support for dual-color galaxies and lotuses

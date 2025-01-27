@@ -6,7 +6,7 @@ import { useTheme } from '../../contexts/ThemeContext.tsx';
 import { useForesight } from '../../contexts/ForesightContext.tsx';
 import { useGrid } from '../../contexts/GridContext.tsx';
 
-export default memo(function MusicOverlayPart() {
+export default memo(function ForesightOverlayPart() {
   const { theme } = useTheme();
   const { grid } = useGrid();
   const { position } = useForesight();

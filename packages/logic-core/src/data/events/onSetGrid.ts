@@ -3,7 +3,11 @@ import Instruction from '../instruction.js';
 import { isEventHandler } from './eventHelper.js';
 
 export interface SetGridHandler {
-  onSetGrid(oldGrid: GridData, newGrid: GridData): GridData;
+  onSetGrid(
+    oldGrid: GridData,
+    newGrid: GridData,
+    solution: GridData | null
+  ): GridData;
 }
 
 export function handlesSetGrid<T extends Instruction>(

@@ -2,27 +2,29 @@ import InstructionList from '../instructions/InstructionList';
 import EditControls from '../components/EditControls';
 import MainGrid from '../grid/MainGrid';
 import RulerOverlay from '../grid/RulerOverlay';
-import { GridConsumer } from '../contexts/GridContext.tsx';
+import { GridConsumer } from '../contexts/GridContext';
 import InstructionSearch from '../instructions/InstructionSearch';
 import { memo } from 'react';
-import ThreePaneLayout from '../components/ThreePaneLayout.tsx';
+import ThreePaneLayout from '../components/ThreePaneLayout';
 import DocumentTitle from '../components/DocumentTitle';
 import TouchControls from '../components/TouchControls';
-import ConfigContext from '../contexts/ConfigContext.tsx';
+import ConfigContext from '../contexts/ConfigContext';
 import ConfigPopup from '../configs/ConfigPopup';
-import EditorPane from './EditorPane';
-import ToolboxContext from '../contexts/ToolboxContext.tsx';
-import ToolboxOverlay from './ToolboxOverlay';
-import { useEmbed } from '../contexts/EmbedContext.tsx';
-import PuzzleChecklist from './PuzzleChecklist';
+import EditorPane from '../editor/EditorPane';
+import ToolboxContext from '../contexts/ToolboxContext';
+import ToolboxOverlay from '../editor/ToolboxOverlay';
+import { useEmbed } from '../contexts/EmbedContext';
+import PuzzleChecklist from '../editor/PuzzleChecklist';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 
-export interface PuzzleEditorProps {
+export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
 }
 
-export default memo(function PuzzleEditor({ children }: PuzzleEditorProps) {
+export default memo(function PuzzleEditorScreen({
+  children,
+}: PuzzleEditorScreenProps) {
   const { features } = useEmbed();
   return (
     <ToolboxContext>

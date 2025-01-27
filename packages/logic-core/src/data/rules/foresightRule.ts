@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
-import { RuleState, State } from '../primitives.js';
+import { RuleState, State, Position } from '../primitives.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
@@ -35,6 +35,13 @@ export default class ForesightRule extends Rule {
       description: 'Start with full foresight',
       configurable: true,
     },
+    {
+      type: ConfigType.SolvePath,
+      default: [],
+      field: 'solvePath',
+      description: 'Intended solve path',
+      configurable: true,
+    },
   ]);
 
   private static readonly SEARCH_VARIANTS = [
@@ -47,12 +54,14 @@ export default class ForesightRule extends Rule {
   public constructor(
     public readonly count: number,
     public readonly regenInterval: number,
-    public readonly startFull: boolean
+    public readonly startFull: boolean,
+    public readonly solvePath: Position[] = []
   ) {
     super();
     this.count = count;
     this.regenInterval = regenInterval;
     this.startFull = startFull;
+    this.solvePath = solvePath;
   }
 
   public get id(): string {
@@ -95,15 +104,18 @@ export default class ForesightRule extends Rule {
     count,
     regenInterval,
     startFull,
+    solvePath,
   }: {
     count?: number;
     regenInterval?: number;
     startFull?: boolean;
+    solvePath?: Position[];
   }): this {
     return new ForesightRule(
       count ?? this.count,
       regenInterval ?? this.regenInterval,
-      startFull ?? this.startFull
+      startFull ?? this.startFull,
+      solvePath ?? this.solvePath
     ) as this;
   }
 }

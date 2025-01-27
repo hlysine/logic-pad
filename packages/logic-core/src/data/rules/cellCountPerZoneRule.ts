@@ -1,9 +1,15 @@
 import { AnyConfig, ConfigType } from '../config.js';
-import GridData from '../grid.js';
+import { array } from '../dataHelper.js';
+import GridData, { NEIGHBOR_OFFSETS } from '../grid.js';
 import GridConnections from '../gridConnections.js';
-import { Color, Edge, RuleState, State } from '../primitives.js';
+import { Color, Edge, RuleState, State, Position } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
+interface Zone {
+  positions: Position[];
+  completed: number;
+  possible: number;
+}
 export default class CellCountPerZoneRule extends Rule {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
@@ -101,8 +107,75 @@ export default class CellCountPerZoneRule extends Rule {
     return CellCountPerZoneRule.SEARCH_VARIANTS;
   }
 
-  public validateGrid(_grid: GridData): RuleState {
-    return { state: State.Incomplete }; // todo
+  public validateGrid(grid: GridData): RuleState {
+    let complete = true;
+    const visited = array(
+      grid.width,
+      grid.height,
+      (i, j) => !grid.getTile(i, j).exists
+    );
+    const zones: Zone[] = [];
+    while (true) {
+      const seed = grid.find((_tile, x, y) => !visited[y][x]);
+      if (!seed) break;
+      const zone: Zone = {
+        positions: [],
+        completed: 0,
+        possible: 0,
+      };
+      const stack = [seed];
+      while (stack.length > 0) {
+        const { x, y } = stack.pop()!;
+        if (visited[y][x]) continue;
+        visited[y][x] = true;
+        zone.positions.push({ x, y });
+        if (grid.getTile(x, y).color === this.color) {
+          zone.completed++;
+        } else if (grid.getTile(x, y).color === Color.Gray) {
+          zone.possible++;
+          complete = false;
+        }
+        for (const offset of NEIGHBOR_OFFSETS) {
+          const next = { x: x + offset.x, y: y + offset.y };
+          if (
+            !this.edges.some(
+              e =>
+                (e.x1 === x &&
+                  e.y1 === y &&
+                  e.x2 === next.x &&
+                  e.y2 === next.y) ||
+                (e.x1 === next.x && e.y1 === next.y && e.x2 === x && e.y2 === y)
+            )
+          ) {
+            const nextTile = grid.getTile(next.x, next.y);
+            if (nextTile.exists) {
+              stack.push(next);
+            }
+          }
+        }
+      }
+      zones.push(zone);
+    }
+    if (zones.length <= 1) {
+      return { state: complete ? State.Satisfied : State.Incomplete };
+    } else {
+      const errorZone = zones.find(z =>
+        zones.some(
+          zz =>
+            zz !== z &&
+            (zz.completed > z.completed + z.possible ||
+              zz.completed + zz.possible < z.completed)
+        )
+      );
+      if (errorZone) {
+        return {
+          state: State.Error,
+          positions: errorZone.positions,
+        };
+      } else {
+        return { state: complete ? State.Satisfied : State.Incomplete };
+      }
+    }
   }
 
   public copyWith({

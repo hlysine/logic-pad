@@ -17,7 +17,7 @@ import MusicGridRule from './rules/musicGridRule.js';
 import CompletePatternRule from './rules/completePatternRule.js';
 import UndercluedRule from './rules/undercluedRule.js';
 
-const NEIGHBOR_OFFSETS: Position[] = [
+export const NEIGHBOR_OFFSETS: Position[] = [
   { x: -1, y: 0 },
   { x: 1, y: 0 },
   { x: 0, y: -1 },
@@ -636,12 +636,7 @@ export default class GridData {
       if (ret !== undefined) return ret;
       for (const offset of NEIGHBOR_OFFSETS) {
         const next = { x: x + offset.x, y: y + offset.y };
-        if (
-          next.x >= 0 &&
-          next.x < this.width &&
-          next.y >= 0 &&
-          next.y < this.height
-        ) {
+        if (this.isPositionValid(next.x, next.y)) {
           const nextTile = this.getTile(next.x, next.y);
           if (nextTile.exists && predicate(nextTile)) stack.push(next);
         }

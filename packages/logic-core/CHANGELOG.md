@@ -1,3 +1,7 @@
+# 0.4.1
+
+- Changed zones to be a grid attribute rather than a config of the cell count per zone rule
+
 # 0.4.0
 
 - Added the cell count per zone rule

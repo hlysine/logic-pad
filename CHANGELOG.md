@@ -3,6 +3,7 @@
 - Added the perfection mode in which all cell colors are final (accessible in the `/perfection` page)
 - Enhanced the foresight rule to consider solve paths
 - Added cell count per zone rule
+- Changed zones internally to be a grid attribute
 
 # 26/1/2025
 

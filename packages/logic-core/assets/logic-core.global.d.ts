@@ -401,7 +401,11 @@ declare global {
     val: T
   ): val is T & GridChangeHandler;
   export interface SetGridHandler {
-    onSetGrid(oldGrid: GridData, newGrid: GridData): GridData;
+    onSetGrid(
+      oldGrid: GridData,
+      newGrid: GridData,
+      solution: GridData | null
+    ): GridData;
   }
   export declare function handlesSetGrid<T extends Instruction>(
     val: T
@@ -504,7 +508,11 @@ declare global {
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
     validateGrid(_grid: GridData): RuleState;
-    onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData;
+    onSetGrid(
+      _oldGrid: GridData,
+      newGrid: GridData,
+      _solution: GridData | null
+    ): GridData;
     onGridChange(newGrid: GridData): this;
     onGridResize(
       _grid: GridData,
@@ -945,6 +953,14 @@ declare global {
      */
     colorEquals(grid: GridData): boolean;
     /**
+     * Check if this grid conforms to the given solution, or an incomplete version of the solution.
+     * Symbols and rules are not validated.
+     *
+     * @param solution The solution to compare with.
+     * @returns True if the grid conforms to the solution, false otherwise.
+     */
+    solutionMatches(solution: GridData): boolean;
+    /**
      * Check if this grid is equal to another grid in terms of size, tile colors, connections, symbols, and rules.
      *
      * @param other The grid to compare with.
@@ -1014,6 +1030,7 @@ declare global {
     Icon = 'icon',
     ControlLines = 'controlLines',
     NullableNote = 'nullableNote',
+    SolvePath = 'solvePath',
   }
   export interface Config<T> {
     readonly type: ConfigType;
@@ -1084,6 +1101,9 @@ declare global {
   export interface NullableNoteConfig extends Config<string | null> {
     readonly type: ConfigType.NullableNote;
   }
+  export interface SolvePathConfig extends Config<Position$1[]> {
+    readonly type: ConfigType.SolvePath;
+  }
   export type AnyConfig =
     | BooleanConfig
     | NullableBooleanConfig
@@ -1101,7 +1121,8 @@ declare global {
     | NullableGridConfig
     | IconConfig
     | ControlLinesConfig
-    | NullableNoteConfig;
+    | NullableNoteConfig
+    | SolvePathConfig;
   /**
    * Compare two config values for equality, using an appropriate method for the config type.
    *
@@ -1390,13 +1411,19 @@ declare global {
     readonly count: number;
     readonly regenInterval: number;
     readonly startFull: boolean;
+    readonly solvePath: Position$1[];
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
     /**
      * **Foresight: Show hints**
      */
-    constructor(count: number, regenInterval: number, startFull: boolean);
+    constructor(
+      count: number,
+      regenInterval: number,
+      startFull: boolean,
+      solvePath?: Position$1[]
+    );
     get id(): string;
     get explanation(): string;
     get visibleWhenSolving(): boolean;
@@ -1410,10 +1437,12 @@ declare global {
       count,
       regenInterval,
       startFull,
+      solvePath,
     }: {
       count?: number;
       regenInterval?: number;
       startFull?: boolean;
+      solvePath?: Position$1[];
     }): this;
   }
   export declare const allRules: Map<string, Rule>;
@@ -1489,6 +1518,45 @@ declare global {
     get isSingleton(): boolean;
     copyWith({ number }: { number?: number }): this;
     withNumber(number: number): this;
+  }
+  export declare class PerfectionRule
+    extends Rule
+    implements SetGridHandler, FinalValidationHandler
+  {
+    private static readonly EXAMPLE_GRID;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Quest for Perfection: cell colors are final**
+     */
+    constructor();
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    get necessaryForCompletion(): boolean;
+    get isSingleton(): boolean;
+    validateGrid(grid: GridData): RuleState;
+    /**
+     * If the grid passes validation but is different from the solution, indicate the error in the final state.
+     */
+    onFinalValidation(
+      grid: GridData,
+      solution: GridData | null,
+      state: GridState
+    ): GridState;
+    private fixTiles;
+    /**
+     * Force all tiles to be fixed.
+     *
+     * If the grid is already wrong, prevent the player from changing it further.
+     */
+    onSetGrid(
+      oldGrid: GridData,
+      newGrid: GridData,
+      solution: GridData | null
+    ): GridData;
+    copyWith(_: object): this;
   }
   export declare class RegionAreaRule extends Rule {
     readonly color: Color;

@@ -30,6 +30,7 @@ import { ControlLine, Row } from './data/rules/musicControlLine.js';
 import MusicGridRule from './data/rules/musicGridRule.js';
 import MysteryRule from './data/rules/mysteryRule.js';
 import OffByXRule from './data/rules/offByXRule.js';
+import PerfectionRule from './data/rules/perfectionRule.js';
 import RegionAreaRule from './data/rules/regionAreaRule.js';
 import RegionShapeRule from './data/rules/regionShapeRule.js';
 import Rule from './data/rules/rule.js';
@@ -153,6 +154,7 @@ export {
   MusicGridRule,
   MysteryRule,
   OffByXRule,
+  PerfectionRule,
   RegionAreaRule,
   RegionShapeRule,
   Rule,

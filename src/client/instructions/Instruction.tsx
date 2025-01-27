@@ -9,6 +9,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { PartPlacement } from './parts/types.ts';
 import InstructionPartOutlet from './InstructionPartOutlet.tsx';
+import GridZoneOverlay from '../grid/GridZoneOverlay.tsx';
 
 export interface InstructionProps {
   id: string | number;
@@ -98,6 +99,7 @@ export default memo(function Instruction({
                 grid={exampleGrid}
                 placement={PartPlacement.GridOverlay}
               />
+              <GridZoneOverlay grid={exampleGrid} />
             </Grid>
           )}
         </div>

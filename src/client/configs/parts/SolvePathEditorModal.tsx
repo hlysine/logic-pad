@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import { cn } from '../../uiHelper';
 import EmbedContext from '../../contexts/EmbedContext';
-import GridContext, { GridConsumer } from '../../contexts/GridContext';
+import GridContext, { GridConsumer, useGrid } from '../../contexts/GridContext';
 import DisplayContext from '../../contexts/DisplayContext';
 import GridStateContext from '../../contexts/GridStateContext';
 import { Position } from '@logic-pad/core/data/primitives';
@@ -41,6 +41,14 @@ function SolvePathUpdater({
   useEffect(() => {
     if (newSolvePath !== oldSolvePath) setSolvePath(newSolvePath);
   }, [newSolvePath, oldSolvePath, setSolvePath]);
+  return null;
+}
+
+function DialogClose({ setOpen }: { setOpen: (open: boolean) => void }) {
+  const { grid } = useGrid();
+  useEffect(() => {
+    if (!grid.findRule(r => r.id === perfectionInstance.id)) setOpen(false);
+  }, [grid, setOpen]);
   return null;
 }
 
@@ -90,20 +98,9 @@ export default memo(function SolvePathEditorModal({
                           solution={resetGrid.equals(newGrid) ? null : newGrid}
                           metadata={metadata}
                         >
-                          <PerfectionScreen alwaysAllowUndo={true}>
+                          <PerfectionScreen>
                             <EmbedLoader solvePath={solvePath} />
-                            <GridConsumer>
-                              {({ grid }) => {
-                                // exit the modal if the user undo's too far
-                                if (
-                                  !grid.findRule(
-                                    r => r.id === perfectionInstance.id
-                                  )
-                                )
-                                  setOpen(false);
-                                return null;
-                              }}
-                            </GridConsumer>
+                            <DialogClose setOpen={setOpen} />
                             <SolvePathUpdater
                               oldSolvePath={tempSolvePath}
                               setSolvePath={setTempSolvePath}

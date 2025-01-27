@@ -6,7 +6,6 @@ interface SolvePathContext {
   setSolvePath: (solvePath: Position[]) => void;
   visualizeSolvePath: boolean;
   setVisualizeSolvePath: (visualizeSolvePath: boolean) => void;
-  alwaysAllowUndo: boolean;
 }
 
 const context = createContext<SolvePathContext>({
@@ -14,7 +13,6 @@ const context = createContext<SolvePathContext>({
   setSolvePath: () => {},
   visualizeSolvePath: false,
   setVisualizeSolvePath: () => {},
-  alwaysAllowUndo: false,
 });
 
 export const useSolvePath = () => {
@@ -25,10 +23,8 @@ export const SolvePathConsumer = context.Consumer;
 
 export default memo(function SolvePathContext({
   children,
-  alwaysAllowUndo = false,
 }: {
   children: React.ReactNode;
-  alwaysAllowUndo?: boolean;
 }) {
   const [solvePath, setSolvePath] = useState<Position[]>([]);
   const [visualizeSolvePath, setVisualizeSolvePath] = useState<boolean>(false);
@@ -40,7 +36,6 @@ export default memo(function SolvePathContext({
         setSolvePath,
         visualizeSolvePath,
         setVisualizeSolvePath,
-        alwaysAllowUndo,
       }}
     >
       {children}

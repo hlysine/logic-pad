@@ -247,8 +247,8 @@ export default class SerializerV0 extends SerializerBase {
                 config.field as keyof Instruction
               ] as unknown as Position[]
             )
-              .map(pos => `${pos.x}_${pos.y}`)
-              .join('/')
+              ?.map(pos => `${pos.x}_${pos.y}`)
+              .join('/') ?? ''
           )
         );
     }
@@ -315,10 +315,12 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.SolvePath:
         return [
           config.field,
-          value.split('/').map(pos => {
-            const [x, y] = pos.split('_');
-            return { x: Number(x), y: Number(y) };
-          }),
+          value === ''
+            ? []
+            : value.split('/').map(pos => {
+                const [x, y] = pos.split('_');
+                return { x: Number(x), y: Number(y) };
+              }),
         ];
     }
   }

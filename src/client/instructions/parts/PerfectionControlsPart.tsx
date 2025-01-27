@@ -20,13 +20,8 @@ export default memo(function PerfectionControlsPart() {
   const { grid, setGridRaw } = useGrid();
   const { state } = useGridState();
   const { undo } = useEdit();
-  const {
-    solvePath,
-    setSolvePath,
-    visualizeSolvePath,
-    setVisualizeSolvePath,
-    alwaysAllowUndo,
-  } = useSolvePath();
+  const { solvePath, setSolvePath, visualizeSolvePath, setVisualizeSolvePath } =
+    useSolvePath();
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,12 +32,15 @@ export default memo(function PerfectionControlsPart() {
   }, [tooltip]);
 
   const handleUndo = () => {
-    if (state.final !== State.Error && !alwaysAllowUndo) return;
+    if (state.final !== State.Error) return;
     const result = undo(grid);
     if (result) setGridRaw(result);
   };
 
-  useHotkeys('z', handleUndo, { preventDefault: true });
+  useHotkeys('z', handleUndo, {
+    enabled: () => state.final === State.Error,
+    preventDefault: true,
+  });
 
   const gridDelta = useDelta(grid);
   useEffect(() => {

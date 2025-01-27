@@ -26,15 +26,19 @@ const ModeButton = memo(function ModeButton({
       type="button"
       role="tab"
       onClick={async () => {
-        await navigate({
-          to: link,
-          search: {
-            ...search,
-            d: await Compressor.compress(
-              Serializer.stringifyPuzzle({ ...metadata, grid, solution })
-            ),
-          },
-        });
+        if ('d' in search && search.d) {
+          await navigate({ to: link, search });
+        } else {
+          await navigate({
+            to: link,
+            search: {
+              ...search,
+              d: await Compressor.compress(
+                Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+              ),
+            },
+          });
+        }
       }}
       className={cn('tab w-36 capitalize', active && 'tab-active')}
     >

@@ -7,6 +7,7 @@ import { GridConsumer } from '../contexts/GridContext';
 import MainGrid from '../grid/MainGrid';
 import InstructionList from '../instructions/InstructionList';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
+import BanPerfectionRulePart from '../instructions/parts/BanPerfectionRulePart';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 
@@ -43,6 +44,7 @@ export default function SolveScreen({ children }: SolveScreenProps) {
             {children}
             <TouchControls />
             <EditControls />
+            <BanPerfectionRulePart />
           </>
         }
         center={<MainGrid useToolboxClick={false} />}

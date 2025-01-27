@@ -53,7 +53,7 @@ export default memo(function EditContext({
       setLastGrid(grid);
       return;
     }
-    if (lastGrid === grid) return;
+    if (lastGrid.equals(grid)) return;
     addToUndoStack(lastGrid);
     setLastGrid(grid);
     setRedoStack([]);

@@ -1,13 +1,11 @@
 import { memo, useEffect, useState } from 'react';
 import { cn } from '../../uiHelper';
 import EmbedContext from '../../contexts/EmbedContext';
-import GridContext, { GridConsumer, useGrid } from '../../contexts/GridContext';
+import GridContext, { GridConsumer } from '../../contexts/GridContext';
 import DisplayContext from '../../contexts/DisplayContext';
 import GridStateContext from '../../contexts/GridStateContext';
 import { Color, Position } from '@logic-pad/core/data/primitives';
-import PerfectionRule, {
-  instance as perfectionInstance,
-} from '@logic-pad/core/data/rules/perfectionRule';
+import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../../screens/PerfectionScreen';
 import ForesightRule, {
   instance as foresightInstance,
@@ -47,14 +45,6 @@ function SolvePathUpdater({
   useEffect(() => {
     if (newSolvePath !== oldSolvePath) setSolvePath(newSolvePath);
   }, [newSolvePath, oldSolvePath, setSolvePath]);
-  return null;
-}
-
-function DialogClose({ setOpen }: { setOpen: (open: boolean) => void }) {
-  const { grid } = useGrid();
-  useEffect(() => {
-    if (!grid.findRule(r => r.id === perfectionInstance.id)) setOpen(false);
-  }, [grid, setOpen]);
   return null;
 }
 
@@ -103,6 +93,16 @@ function prepareGrid(
   }
 }
 
+function lockGrid(grid: GridData): GridData {
+  return grid.withTiles(tiles =>
+    tiles.map(row =>
+      row.map(tile =>
+        tile.exists && tile.color !== Color.Gray ? tile.withFixed(true) : tile
+      )
+    )
+  );
+}
+
 export default memo(function SolvePathEditorModal({
   solvePath,
   setSolvePath,
@@ -140,13 +140,14 @@ export default memo(function SolvePathEditorModal({
                     <EditContext>
                       <GridStateContext>
                         <GridContext
-                          grid={() => prepareGrid(outerGrid, true).grid}
+                          grid={() =>
+                            lockGrid(prepareGrid(outerGrid, true).grid)
+                          }
                           solution={() => prepareGrid(outerGrid, true).solution}
                           metadata={metadata}
                         >
                           <PerfectionScreen>
                             <EmbedLoader solvePath={solvePath} />
-                            <DialogClose setOpen={setOpen} />
                             <SolvePathUpdater
                               oldSolvePath={tempSolvePath}
                               setSolvePath={setTempSolvePath}

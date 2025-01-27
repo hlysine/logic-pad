@@ -17,6 +17,7 @@ import { useEmbed } from '../contexts/EmbedContext';
 import PuzzleChecklist from '../editor/PuzzleChecklist';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
+import BanPerfectionRulePart from '../instructions/parts/BanPerfectionRulePart';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -54,6 +55,7 @@ export default memo(function PuzzleEditorScreen({
               </div>
               <TouchControls />
               <EditControls />
+              <BanPerfectionRulePart />
             </>
           }
           center={

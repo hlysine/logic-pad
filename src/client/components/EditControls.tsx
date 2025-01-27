@@ -4,10 +4,13 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useEdit } from '../contexts/EditContext.tsx';
+import { useSearch } from '@tanstack/react-router';
+import { Compressor, GridData, Serializer } from '@logic-pad/core/index.ts';
 
 export default memo(function EditControls() {
   const { grid, setGrid, setGridRaw } = useGrid();
   const { undoStack, redoStack, undo: undoEdit, redo: redoEdit } = useEdit();
+  const search = useSearch({ from: undefined, strict: false });
 
   const undo = () => {
     const result = undoEdit(grid);
@@ -19,8 +22,15 @@ export default memo(function EditControls() {
     if (result) setGridRaw(result);
   };
 
-  const restart = () => {
-    const reset = grid.resetTiles();
+  const restart = async () => {
+    let reset: GridData;
+    if ('d' in search && search.d) {
+      reset = grid.withTiles(
+        Serializer.parsePuzzle(await Compressor.decompress(search.d)).grid.tiles
+      );
+    } else {
+      reset = grid.resetTiles();
+    }
     if (reset === grid) return;
     setGrid(reset);
   };

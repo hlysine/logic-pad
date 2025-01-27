@@ -11,36 +11,18 @@ import { useGrid } from '../../contexts/GridContext';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useSolvePath } from '../../contexts/SolvePathContext';
 import { useDelta } from 'react-delta-hooks';
-import { useRouterState } from '@tanstack/react-router';
 
 export interface PerfectionControlsPartProps {
   instruction: PerfectionRule;
 }
 
 export default memo(function PerfectionControlsPart() {
-  const { grid, solution, setGridRaw } = useGrid();
+  const { grid, setGridRaw } = useGrid();
   const { state } = useGridState();
   const { undo } = useEdit();
   const { solvePath, setSolvePath, visualizeSolvePath, setVisualizeSolvePath } =
     useSolvePath();
   const [tooltip, setTooltip] = useState<string | null>(null);
-
-  const router = useRouterState();
-
-  useEffect(() => {
-    if (router.location.pathname !== '/perfection') {
-      if (grid.findRule(r => r.id === perfectionInstance.id)) {
-        setGridRaw(
-          grid.withRules(rules =>
-            rules.filter(r => r.id !== perfectionInstance.id)
-          ),
-          solution?.withRules(rules =>
-            rules.filter(r => r.id !== perfectionInstance.id)
-          )
-        );
-      }
-    }
-  }, [router.location.pathname, grid, solution, setGridRaw]);
 
   useEffect(() => {
     if (tooltip) {
@@ -65,11 +47,6 @@ export default memo(function PerfectionControlsPart() {
     if (!gridDelta) return;
     if (!gridDelta.prev) return;
     if (gridDelta.prev === gridDelta.curr) return;
-    console.log(
-      'Comparing grid delta',
-      { width: gridDelta.prev.width, height: gridDelta.prev.height },
-      { width: gridDelta.curr.width, height: gridDelta.curr.height }
-    );
     const positionsRemoved: Position[] = [];
     const positionsAdded: Position[] = [];
     let newSolvePath = solvePath.slice();

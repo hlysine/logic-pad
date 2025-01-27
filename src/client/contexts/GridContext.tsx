@@ -66,7 +66,7 @@ export default memo(function GridContext({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setGridRaw: GridContext['setGridRaw'] = (newGrid, sol) => {
+  const invokeSetGrid = (newGrid: GridData, sol?: GridData | null) => {
     newGrid.symbols.forEach(list => {
       list.forEach(symbol => {
         if (handlesSetGrid(symbol)) {
@@ -87,9 +87,15 @@ export default memo(function GridContext({
         );
       }
     });
+    return newGrid;
+  };
+
+  const setGridRaw = (newGrid: GridData, sol?: GridData | null) => {
+    newGrid = invokeSetGrid(newGrid, sol);
     setGrid(newGrid);
     if (sol !== undefined) setSolution(sol);
     setState(validateGrid(newGrid, sol === undefined ? solution : sol));
+    return newGrid;
   };
 
   return (
@@ -99,8 +105,7 @@ export default memo(function GridContext({
         solution,
         metadata,
         setGrid: (grid, sol) => {
-          recordEdit(grid);
-          setGridRaw(grid, sol);
+          recordEdit(setGridRaw(grid, sol));
         },
         setGridRaw,
         setMetadata,

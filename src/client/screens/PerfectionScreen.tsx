@@ -1,4 +1,5 @@
 import DocumentTitle from '../components/DocumentTitle';
+import EditControls from '../components/EditControls';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
 import { GridConsumer } from '../contexts/GridContext';
@@ -40,6 +41,7 @@ export default function PerfectionScreen({ children }: PerfectionScreenProps) {
               )}
             </GridConsumer>
             <TouchControls />
+            <EditControls />
           </>
         }
         center={<MainGrid useToolboxClick={false} />}

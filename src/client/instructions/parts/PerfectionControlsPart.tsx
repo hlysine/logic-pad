@@ -156,8 +156,8 @@ export default memo(function PerfectionControlsPart() {
                 disabled={progress < 100}
                 onClick={async () => {
                   const output = solvePath
-                    .map(({ x, y }) => `${x},${y}`)
-                    .join('/');
+                    .map(({ x, y }) => `${x}:${y}`)
+                    .join(', ');
                   await navigator.clipboard.writeText(output);
                   setTooltip('Copied!');
                 }}

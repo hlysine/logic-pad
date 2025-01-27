@@ -242,15 +242,13 @@ export default class SerializerV0 extends SerializerBase {
           config.field +
           '=' +
           escape(
-            !instruction[config.field as keyof Instruction]
-              ? ''
-              : (
-                  instruction[
-                    config.field as keyof Instruction
-                  ] as unknown as Position[]
-                )
-                  .map(pos => `${pos.x}_${pos.y}`)
-                  .join('/')
+            (
+              instruction[
+                config.field as keyof Instruction
+              ] as unknown as Position[]
+            )
+              .map(pos => `${pos.x}_${pos.y}`)
+              .join('/')
           )
         );
     }

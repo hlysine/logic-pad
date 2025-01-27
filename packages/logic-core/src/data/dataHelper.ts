@@ -1,4 +1,4 @@
-import { Direction, Orientation, Position } from './primitives.js';
+import { Direction, Edge, Orientation, Position } from './primitives.js';
 
 /**
  * Offset the given position by a given step in the given direction.
@@ -34,6 +34,19 @@ export function move(
     case Orientation.DownRight:
       return { x: position.x + step, y: position.y + step };
   }
+}
+
+/**
+ * Check if two edges are the same, regardless of direction.
+ * @param a The first edge.
+ * @param b The second edge.
+ * @returns Whether the edges are the same.
+ */
+export function isSameEdge(a: Edge, b: Edge): boolean {
+  return (
+    (a.x1 === b.x1 && a.y1 === b.y1 && a.x2 === b.x2 && a.y2 === b.y2) ||
+    (a.x1 === b.x2 && a.y1 === b.y2 && a.x2 === b.x1 && a.y2 === b.y1)
+  );
 }
 
 /**

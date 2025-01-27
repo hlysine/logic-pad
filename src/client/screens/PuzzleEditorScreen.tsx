@@ -35,8 +35,22 @@ export default memo(function PuzzleEditorScreen({
               <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
               <EditorPane />
               <div className="shrink-0 flex-col gap-1 hidden has-[*]:flex">
-                <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
-                <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
+                <GridConsumer>
+                  {({ grid }) => (
+                    <InstructionPartOutlet
+                      grid={grid}
+                      placement={PartPlacement.LeftPanel}
+                    />
+                  )}
+                </GridConsumer>
+                <GridConsumer>
+                  {({ grid }) => (
+                    <InstructionPartOutlet
+                      grid={grid}
+                      placement={PartPlacement.LeftBottom}
+                    />
+                  )}
+                </GridConsumer>
               </div>
               <TouchControls />
               <EditControls />

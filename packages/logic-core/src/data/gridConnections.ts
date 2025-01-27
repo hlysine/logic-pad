@@ -1,12 +1,6 @@
+import { isSameEdge } from './dataHelper.js';
 import { Edge, Position } from './primitives.js';
 import TileConnections from './tileConnections.js';
-
-function isSameEdge(a: Edge, b: Edge): boolean {
-  return (
-    (a.x1 === b.x1 && a.y1 === b.y1 && a.x2 === b.x2 && a.y2 === b.y2) ||
-    (a.x1 === b.x2 && a.y1 === b.y2 && a.x2 === b.x1 && a.y2 === b.y1)
-  );
-}
 
 export default class GridConnections {
   public readonly edges: readonly Edge[];

@@ -1,17 +1,18 @@
 import { memo, useMemo } from 'react';
 import { PartPlacement } from './parts/types';
-import { useGrid } from '../contexts/GridContext.tsx';
 import { PartComponent, allParts } from './parts';
 import Instruction from '@logic-pad/core/data/instruction';
+import GridData from '@logic-pad/core/data/grid';
 
 export interface InstructionPartOutletProps {
   placement: PartPlacement;
+  grid: GridData;
 }
 
 export default memo(function InstructionPartOutlet({
   placement,
+  grid,
 }: InstructionPartOutletProps) {
-  const { grid } = useGrid();
   const components = useMemo(() => {
     const result: [PartComponent, Instruction][] = [];
     grid.symbols.forEach((value, key) => {

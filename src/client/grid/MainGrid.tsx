@@ -141,7 +141,14 @@ export default memo(function MainGrid({
                 state={state.symbols}
                 editable={useToolboxClick}
               />
-              <InstructionPartOutlet placement={PartPlacement.GridOverlay} />
+              <InstructionPartOutlet
+                grid={grid}
+                placement={PartPlacement.GridOverlay}
+              />
+              <InstructionPartOutlet
+                grid={grid}
+                placement={PartPlacement.MainGridOverlay}
+              />
               <ErrorOverlay
                 positions={
                   state.rules

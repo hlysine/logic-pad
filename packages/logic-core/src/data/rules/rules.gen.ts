@@ -7,6 +7,7 @@
 // noinspection JSUnusedGlobalSymbols
 
 export { instance as BanPatternRule } from './banPatternRule.js';
+export { instance as CellCountPerZoneRule } from './cellCountPerZoneRule.js';
 export { instance as CellCountRule } from './cellCountRule.js';
 export { instance as CompletePatternRule } from './completePatternRule.js';
 export { instance as ConnectAllRule } from './connectAllRule.js';

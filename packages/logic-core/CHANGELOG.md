@@ -1,3 +1,7 @@
+# 0.4.0
+
+- Added the cell count per zone rule
+
 # 0.3.0
 
 - Added the perfection rule

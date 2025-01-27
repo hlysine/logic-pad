@@ -6,7 +6,7 @@
 
 import { ConfigType, configEquals } from './data/config.js';
 import Configurable from './data/configurable.js';
-import { CachedAccess, allEqual, array, directionToRotation, escape, maxBy, minBy, move, orientationToRotation, resize, unescape } from './data/dataHelper.js';
+import { CachedAccess, allEqual, array, directionToRotation, escape, isSameEdge, maxBy, minBy, move, orientationToRotation, resize, unescape } from './data/dataHelper.js';
 import { isEventHandler } from './data/events/eventHelper.js';
 import { handlesFinalValidation } from './data/events/onFinalValidation.js';
 import { handlesGridChange } from './data/events/onGridChange.js';
@@ -20,6 +20,7 @@ import Instruction from './data/instruction.js';
 import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, directionToggle, orientationToggle } from './data/primitives.js';
 import { MetadataSchema, PuzzleSchema } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
+import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
 import CompletePatternRule from './data/rules/completePatternRule.js';
 import ConnectAllRule from './data/rules/connectAllRule.js';
@@ -112,6 +113,7 @@ export {
   array,
   directionToRotation,
   escape,
+  isSameEdge,
   maxBy,
   minBy,
   move,
@@ -143,6 +145,7 @@ export {
   MetadataSchema,
   PuzzleSchema,
   BanPatternRule,
+  CellCountPerZoneRule,
   CellCountRule,
   CompletePatternRule,
   ConnectAllRule,

@@ -36,8 +36,8 @@ export default class ForesightRule extends Rule {
       configurable: true,
     },
     {
-      type: ConfigType.NullableSolvePath,
-      default: null,
+      type: ConfigType.SolvePath,
+      default: [],
       field: 'solvePath',
       description: 'Intended solve path',
       configurable: true,
@@ -55,7 +55,7 @@ export default class ForesightRule extends Rule {
     public readonly count: number,
     public readonly regenInterval: number,
     public readonly startFull: boolean,
-    public readonly solvePath?: Position[] | null
+    public readonly solvePath: Position[] = []
   ) {
     super();
     this.count = count;
@@ -109,7 +109,7 @@ export default class ForesightRule extends Rule {
     count?: number;
     regenInterval?: number;
     startFull?: boolean;
-    solvePath?: Position[] | null;
+    solvePath?: Position[];
   }): this {
     return new ForesightRule(
       count ?? this.count,

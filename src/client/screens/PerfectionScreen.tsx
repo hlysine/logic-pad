@@ -10,11 +10,15 @@ import Metadata from '../metadata/Metadata';
 
 export interface PerfectionScreenProps {
   children?: React.ReactNode;
+  alwaysAllowUndo?: boolean;
 }
 
-export default function PerfectionScreen({ children }: PerfectionScreenProps) {
+export default function PerfectionScreen({
+  children,
+  alwaysAllowUndo,
+}: PerfectionScreenProps) {
   return (
-    <SolvePathContext>
+    <SolvePathContext alwaysAllowUndo={alwaysAllowUndo}>
       <ThreePaneLayout
         left={
           <>

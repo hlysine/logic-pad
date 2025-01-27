@@ -41,15 +41,25 @@ export const GridConsumer = context.Consumer;
 
 export default memo(function GridContext({
   children,
+  grid: initialGrid,
+  solution: initialSolution,
+  metadata: initialMetadata,
 }: {
   children: React.ReactNode;
+  grid?: GridData;
+  solution?: GridData | null;
+  metadata?: PuzzleMetadata;
 }) {
   const { recordEdit, clearHistory } = useEdit();
   const { setState } = useGridState();
 
-  const [grid, setGrid] = useState(defaultGrid);
-  const [solution, setSolution] = useState<GridData | null>(null);
-  const [metadata, setMetadata] = useState<PuzzleMetadata>(defaultMetadata);
+  const [grid, setGrid] = useState(initialGrid ?? defaultGrid);
+  const [solution, setSolution] = useState<GridData | null>(
+    initialSolution === undefined ? null : initialSolution
+  );
+  const [metadata, setMetadata] = useState<PuzzleMetadata>(
+    initialMetadata ?? defaultMetadata
+  );
 
   useEffect(() => {
     clearHistory(grid);

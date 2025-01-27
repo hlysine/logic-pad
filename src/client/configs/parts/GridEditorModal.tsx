@@ -3,10 +3,7 @@ import GridData from '@logic-pad/core/data/grid';
 import { cn } from '../../../client/uiHelper.ts';
 import EmbedContext, { useEmbed } from '../../contexts/EmbedContext.tsx';
 import PuzzleEditorScreen from '../../screens/PuzzleEditorScreen.tsx';
-import GridContext, {
-  GridConsumer,
-  useGrid,
-} from '../../contexts/GridContext.tsx';
+import GridContext, { GridConsumer } from '../../contexts/GridContext.tsx';
 import DisplayContext from '../../contexts/DisplayContext.tsx';
 import EditContext from '../../contexts/EditContext.tsx';
 import GridStateContext from '../../contexts/GridStateContext.tsx';
@@ -18,16 +15,14 @@ export interface GridEditorModalProps {
   setOpen: (open: boolean) => void;
 }
 
-function EmbedLoader({ grid }: { grid: GridData }) {
+function EmbedLoader() {
   const { setFeatures } = useEmbed();
-  const { setGrid } = useGrid();
   useEffect(() => {
     setFeatures({
       instructions: false,
       metadata: false,
       checklist: false,
     });
-    setGrid(grid, null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return null;
@@ -58,8 +53,8 @@ export default memo(function GridEditorModal({
                 <DisplayContext>
                   <EditContext>
                     <GridStateContext>
-                      <GridContext>
-                        <EmbedLoader grid={grid} />
+                      <GridContext grid={grid} solution={null}>
+                        <EmbedLoader />
                         <PuzzleEditorScreen>
                           <GridConsumer>
                             {({ grid, setGrid: setInnerGrid }) => {

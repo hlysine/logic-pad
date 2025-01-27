@@ -20,8 +20,13 @@ export default memo(function PerfectionControlsPart() {
   const { grid, setGridRaw } = useGrid();
   const { state } = useGridState();
   const { undo } = useEdit();
-  const { solvePath, setSolvePath, visualizeSolvePath, setVisualizeSolvePath } =
-    useSolvePath();
+  const {
+    solvePath,
+    setSolvePath,
+    visualizeSolvePath,
+    setVisualizeSolvePath,
+    alwaysAllowUndo,
+  } = useSolvePath();
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,7 +37,7 @@ export default memo(function PerfectionControlsPart() {
   }, [tooltip]);
 
   const handleUndo = () => {
-    if (state.final !== State.Error) return;
+    if (state.final !== State.Error && !alwaysAllowUndo) return;
     const result = undo(grid);
     if (result) setGridRaw(result);
   };
@@ -75,6 +80,13 @@ export default memo(function PerfectionControlsPart() {
       }
     }
     if (positionsAdded.length > 0) {
+      if (
+        solvePath.some(pos =>
+          positionsAdded.some(p => p.x === pos.x && p.y === pos.y)
+        )
+      ) {
+        newSolvePath = [];
+      }
       newSolvePath.push(...positionsAdded);
     }
     setSolvePath(newSolvePath);
@@ -104,8 +116,6 @@ export default memo(function PerfectionControlsPart() {
       )}
       <div className="grow-0 shrink-0 bg-primary/10 flex flex-col items-stretch gap-1">
         <div className="flex flex-col gap-4 justify-around mx-4 my-2 items-stretch">
-          {/* todo: toggle to visualize solve path */}
-          {/* todo: button to copy solve path */}
           <div className="form-control">
             <label className="label cursor-pointer">
               <span className="label-text">Visualize solve path</span>

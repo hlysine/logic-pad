@@ -237,7 +237,7 @@ export default class SerializerV0 extends SerializerBase {
               .join(':')
           )
         );
-      case ConfigType.NullableSolvePath:
+      case ConfigType.SolvePath:
         return (
           config.field +
           '=' +
@@ -314,15 +314,13 @@ export default class SerializerV0 extends SerializerBase {
         ];
       case ConfigType.NullableNote:
         return [config.field, value === '' ? null : unescape(value)];
-      case ConfigType.NullableSolvePath:
+      case ConfigType.SolvePath:
         return [
           config.field,
-          value === ''
-            ? null
-            : value.split('/').map(pos => {
-                const [x, y] = pos.split('_');
-                return { x: Number(x), y: Number(y) };
-              }),
+          value.split('/').map(pos => {
+            const [x, y] = pos.split('_');
+            return { x: Number(x), y: Number(y) };
+          }),
         ];
     }
   }

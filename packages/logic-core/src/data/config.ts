@@ -30,7 +30,7 @@ export enum ConfigType {
   Icon = 'icon',
   ControlLines = 'controlLines',
   NullableNote = 'nullableNote',
-  NullableSolvePath = 'nullableSolvePath',
+  SolvePath = 'solvePath',
 }
 
 export interface Config<T> {
@@ -120,8 +120,8 @@ export interface NullableNoteConfig extends Config<string | null> {
   readonly type: ConfigType.NullableNote;
 }
 
-export interface NullableSolvePathConfig extends Config<Position[] | null> {
-  readonly type: ConfigType.NullableSolvePath;
+export interface SolvePathConfig extends Config<Position[]> {
+  readonly type: ConfigType.SolvePath;
 }
 
 export type AnyConfig =
@@ -142,7 +142,7 @@ export type AnyConfig =
   | IconConfig
   | ControlLinesConfig
   | NullableNoteConfig
-  | NullableSolvePathConfig;
+  | SolvePathConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.
@@ -181,9 +181,7 @@ export function configEquals<C extends AnyConfig>(
       dir => (a as OrientationToggle)[dir] === (b as OrientationToggle)[dir]
     );
   }
-  if (type === ConfigType.NullableSolvePath) {
-    if (a === null && b === null) return true;
-    if (a === null || b === null) return false;
+  if (type === ConfigType.SolvePath) {
     const aPath = a as Position[];
     const bPath = b as Position[];
     if (aPath.length !== bPath.length) return false;

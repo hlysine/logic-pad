@@ -10,7 +10,10 @@ import PerfectionRule, {
 } from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../../screens/PerfectionScreen';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
-import { useSolvePath } from '../../contexts/SolvePathContext';
+import {
+  SolvePathConsumer,
+  useSolvePath,
+} from '../../contexts/SolvePathContext';
 import EditContext from '../../contexts/EditContext';
 import { useDelta } from 'react-delta-hooks';
 
@@ -105,6 +108,49 @@ export default memo(function SolvePathEditorModal({
                               oldSolvePath={tempSolvePath}
                               setSolvePath={setTempSolvePath}
                             />
+                            <SolvePathConsumer>
+                              {({ setSolvePath }) => (
+                                <GridConsumer>
+                                  {({ setGrid: setInnerGrid }) => {
+                                    return (
+                                      <>
+                                        <button
+                                          type="button"
+                                          className="btn"
+                                          onClick={() => {
+                                            setInnerGrid(
+                                              outerGrid
+                                                .withRules(rules => [
+                                                  new PerfectionRule(),
+                                                  ...rules.filter(
+                                                    r =>
+                                                      r.id !==
+                                                      foresightInstance.id
+                                                  ),
+                                                ])
+                                                .resetTiles()
+                                            );
+                                            setTempSolvePath([]);
+                                            setSolvePath([]);
+                                          }}
+                                        >
+                                          Reset progress
+                                        </button>
+                                        <button
+                                          type="button"
+                                          className="btn btn-primary"
+                                          onClick={() => {
+                                            setOpen(false);
+                                          }}
+                                        >
+                                          Save and exit
+                                        </button>
+                                      </>
+                                    );
+                                  }}
+                                </GridConsumer>
+                              )}
+                            </SolvePathConsumer>
                           </PerfectionScreen>
                         </GridContext>
                       </GridStateContext>

@@ -98,7 +98,11 @@ export default class MusicGridRule
     return { state: State.Incomplete };
   }
 
-  public onSetGrid(_oldGrid: GridData, newGrid: GridData): GridData {
+  public onSetGrid(
+    _oldGrid: GridData,
+    newGrid: GridData,
+    _solution: GridData | null
+  ): GridData {
     if (newGrid.getTileCount(true, undefined, Color.Gray) === 0) return newGrid;
     const tiles = newGrid.tiles.map(row =>
       row.map(tile =>

@@ -813,13 +813,13 @@ export default class GridData {
     this.symbols.forEach(list => {
       list.forEach(symbol => {
         if (handlesSetGrid(symbol)) {
-          newGrid = symbol.onSetGrid(this, newGrid);
+          newGrid = symbol.onSetGrid(this, newGrid, null);
         }
       });
     });
     this.rules.forEach(rule => {
       if (handlesSetGrid(rule)) {
-        newGrid = rule.onSetGrid(this, newGrid);
+        newGrid = rule.onSetGrid(this, newGrid, null);
       }
     });
     return newGrid as this;
@@ -957,6 +957,27 @@ export default class GridData {
             tile.color === grid.getTile(x, y).color
         )
       )
+    );
+  }
+
+  /**
+   * Check if this grid conforms to the given solution, or an incomplete version of the solution.
+   * Symbols and rules are not validated.
+   *
+   * @param solution The solution to compare with.
+   * @returns True if the grid conforms to the solution, false otherwise.
+   */
+  public solutionMatches(solution: GridData): boolean {
+    if (this.width !== solution.width) return false;
+    if (this.height !== solution.height) return false;
+    return this.tiles.every((row, y) =>
+      row.every((tile, x) => {
+        const solutionTile = solution.getTile(x, y);
+        if (!solutionTile.exists) return true;
+        if (tile.color === Color.Gray) return true;
+        if (solutionTile.color !== tile.color) return false;
+        return true;
+      })
     );
   }
 

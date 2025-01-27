@@ -2,7 +2,7 @@ import { memo, useEffect } from 'react';
 import GridData from '@logic-pad/core/data/grid';
 import { cn } from '../../../client/uiHelper.ts';
 import EmbedContext, { useEmbed } from '../../contexts/EmbedContext.tsx';
-import PuzzleEditor from '../../editor/PuzzleEditor';
+import PuzzleEditorScreen from '../../screens/PuzzleEditorScreen.tsx';
 import GridContext, {
   GridConsumer,
   useGrid,
@@ -60,7 +60,7 @@ export default memo(function GridEditorModal({
                     <GridStateContext>
                       <GridContext>
                         <EmbedLoader grid={grid} />
-                        <PuzzleEditor>
+                        <PuzzleEditorScreen>
                           <GridConsumer>
                             {({ grid, setGrid: setInnerGrid }) => {
                               return (
@@ -88,7 +88,7 @@ export default memo(function GridEditorModal({
                               );
                             }}
                           </GridConsumer>
-                        </PuzzleEditor>
+                        </PuzzleEditorScreen>
                       </GridContext>
                     </GridStateContext>
                   </EditContext>

@@ -60,13 +60,21 @@ export default memo(function GridContext({
     newGrid.symbols.forEach(list => {
       list.forEach(symbol => {
         if (handlesSetGrid(symbol)) {
-          newGrid = symbol.onSetGrid(grid, newGrid);
+          newGrid = symbol.onSetGrid(
+            grid,
+            newGrid,
+            sol === undefined ? solution : sol
+          );
         }
       });
     });
     newGrid.rules.forEach(rule => {
       if (handlesSetGrid(rule)) {
-        newGrid = rule.onSetGrid(grid, newGrid);
+        newGrid = rule.onSetGrid(
+          grid,
+          newGrid,
+          sol === undefined ? solution : sol
+        );
       }
     });
     setGrid(newGrid);

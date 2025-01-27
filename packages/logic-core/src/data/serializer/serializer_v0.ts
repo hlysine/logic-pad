@@ -242,7 +242,7 @@ export default class SerializerV0 extends SerializerBase {
           config.field +
           '=' +
           escape(
-            instruction[config.field as keyof Instruction] === null
+            !instruction[config.field as keyof Instruction]
               ? ''
               : (
                   instruction[

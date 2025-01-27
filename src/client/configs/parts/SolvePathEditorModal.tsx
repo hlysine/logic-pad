@@ -7,16 +7,9 @@ import DisplayContext from '../../contexts/DisplayContext';
 import EditContext from '../../contexts/EditContext';
 import GridStateContext from '../../contexts/GridStateContext';
 import { Position } from '@logic-pad/core/data/primitives';
-import DocumentTitle from '../../components/DocumentTitle';
-import ThreePaneLayout from '../../components/ThreePaneLayout';
-import TouchControls from '../../components/TouchControls';
-import MainGrid from '../../grid/MainGrid';
-import InstructionList from '../../instructions/InstructionList';
-import InstructionPartOutlet from '../../instructions/InstructionPartOutlet';
-import { PartPlacement } from '../../instructions/parts/types';
-import Metadata from '../../metadata/Metadata';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
-import SolvePathContext from '../../contexts/SolvePathContext';
+import PerfectionScreen from '../../screens/PerfectionScreen';
+import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
 
 export interface SolvePathEditorModalProps {
   solvePath: Position[];
@@ -35,7 +28,10 @@ function EmbedLoader({ grid }: { grid: GridData }) {
       checklist: false,
     });
     setGrid(
-      grid.withRules(rules => [new PerfectionRule(), ...rules]),
+      grid.withRules(rules => [
+        new PerfectionRule(),
+        ...rules.filter(r => r.id !== foresightInstance.id),
+      ]),
       null
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,28 +63,9 @@ export default memo(function SolvePathEditorModal({
                   <EditContext>
                     <GridStateContext>
                       <GridContext>
-                        <SolvePathContext>
+                        <PerfectionScreen>
                           <EmbedLoader grid={outerGrid} />
-                          <ThreePaneLayout
-                            left={
-                              <>
-                                <DocumentTitle>Logic Pad</DocumentTitle>
-                                <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
-                                  <Metadata />
-                                  <InstructionPartOutlet
-                                    placement={PartPlacement.LeftPanel}
-                                  />
-                                </div>
-                                <InstructionPartOutlet
-                                  placement={PartPlacement.LeftBottom}
-                                />
-                                <TouchControls />
-                              </>
-                            }
-                            center={<MainGrid useToolboxClick={false} />}
-                            right={<InstructionList />}
-                          />
-                        </SolvePathContext>
+                        </PerfectionScreen>
                       </GridContext>
                     </GridStateContext>
                   </EditContext>

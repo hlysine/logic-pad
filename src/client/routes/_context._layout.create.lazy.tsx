@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader, { SolutionHandling } from '../router/linkLoader';
-import PuzzleEditor from '../editor/PuzzleEditor';
+import PuzzleEditorScreen from '../screens/PuzzleEditorScreen.tsx';
 import { IoWarningOutline } from 'react-icons/io5';
 import ShareButton from '../components/ShareButton';
 import { defaultGrid, useGrid } from '../contexts/GridContext.tsx';
@@ -30,7 +30,7 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
     );
 
     return (
-      <PuzzleEditor>
+      <PuzzleEditorScreen>
         {linkResult && linkResult.solutionStripped && (
           <div
             className="tooltip tooltip-top tooltip-info flex shrink-0"
@@ -58,7 +58,7 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
           </div>
         )}
         <ShareButton />
-      </PuzzleEditor>
+      </PuzzleEditorScreen>
     );
   }),
 });

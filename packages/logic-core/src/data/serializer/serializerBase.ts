@@ -4,6 +4,7 @@ import Rule from '../rules/rule.js';
 import TileData from '../tile.js';
 import Symbol from '../symbols/symbol.js';
 import { Puzzle } from '../puzzle.js';
+import GridZones from '../gridZones.js';
 
 export default abstract class SerializerBase {
   public abstract get version(): number;
@@ -15,6 +16,8 @@ export default abstract class SerializerBase {
   public abstract parseSymbol(str: string): Symbol;
   public abstract stringifyConnections(connections: GridConnections): string;
   public abstract parseConnections(input: string): GridConnections;
+  public abstract stringifyZones(zones: GridZones): string;
+  public abstract parseZones(input: string): GridZones;
   public abstract stringifyTiles(
     tiles: readonly (readonly TileData[])[]
   ): string;

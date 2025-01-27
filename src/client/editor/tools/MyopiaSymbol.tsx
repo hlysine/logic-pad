@@ -9,7 +9,7 @@ export default memo(function MyopiaTool() {
   return (
     <SymbolTool
       name="Myopia"
-      order={12}
+      order={13}
       hotkey="7"
       sample={sample}
       component={MyopiaSymbol}

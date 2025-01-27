@@ -11,7 +11,7 @@ export default memo(function HiddenTool() {
   return (
     <SymbolTool
       name="Hidden"
-      order={16}
+      order={17}
       hotkey="="
       sample={sample}
       component={HiddenSymbol}

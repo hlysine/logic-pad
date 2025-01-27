@@ -107,7 +107,7 @@ export function encodePlayback(
       if (
         tile.exists &&
         tile.color === Color.Dark &&
-        !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
+        !grid.connections.hasEdge({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
         addEvent(x / 2 + (nudge(row.note) * 0.02 * bpm) / 120, {
           type: 'keydown',
@@ -116,7 +116,7 @@ export function encodePlayback(
         });
         let endPos = { x, y };
         while (
-          grid.connections.isConnected({
+          grid.connections.hasEdge({
             x1: endPos.x,
             y1: endPos.y,
             x2: endPos.x + 1,
@@ -244,7 +244,7 @@ export function encodeImmediate(
         tile.exists &&
         tile.color === Color.Dark &&
         (!oldTile.exists || oldTile.color !== Color.Dark) &&
-        !grid.connections.isConnected({ x1: x, y1: y, x2: x - 1, y2: y })
+        !grid.connections.hasEdge({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
         const targetPiano = pedal ? pianoImmediatePedal : pianoImmediate;
         if (row.note in drum) {
@@ -255,7 +255,7 @@ export function encodeImmediate(
         remainingPolyphony--;
         let endPos = { x, y };
         while (
-          grid.connections.isConnected({
+          grid.connections.hasEdge({
             x1: endPos.x,
             y1: endPos.y,
             x2: endPos.x + 1,

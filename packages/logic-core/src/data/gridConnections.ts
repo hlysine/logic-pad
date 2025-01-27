@@ -1,12 +1,11 @@
 import { isSameEdge } from './dataHelper.js';
+import GridZones from './gridZones.js';
 import { Edge, Position } from './primitives.js';
 import TileConnections from './tileConnections.js';
 
-export default class GridConnections {
-  public readonly edges: readonly Edge[];
-
+export default class GridConnections extends GridZones {
   public constructor(edges?: readonly Edge[]) {
-    this.edges = GridConnections.deduplicateEdges(edges ?? []);
+    super(edges);
   }
 
   public addEdge(edge: Edge): GridConnections {
@@ -20,29 +19,18 @@ export default class GridConnections {
     return new GridConnections(this.edges.filter(e => !isSameEdge(e, edge)));
   }
 
-  public isConnected(edge: Edge): boolean {
-    if (edge.x1 === edge.x2 && edge.y1 === edge.y2) return true;
-    return this.edges.some(e => isSameEdge(e, edge));
-  }
-
-  public getConnectionsAt({ x, y }: Position): readonly Edge[] {
-    return this.edges.filter(
-      e => (e.x1 === x && e.y1 === y) || (e.x2 === x && e.y2 === y)
-    );
-  }
-
   public getForTile({ x, y }: Position): TileConnections {
     const result = new TileConnections();
 
     // Get all connections within 2 steps of the tile
-    const edges = this.getConnectionsAt({ x, y });
+    const edges = this.getEdgesAt({ x, y });
     const edges2 = [
       ...edges,
       ...edges.flatMap(edge => {
         if (edge.x1 === x && edge.y1 === y) {
-          return this.getConnectionsAt({ x: edge.x2, y: edge.y2 });
+          return this.getEdgesAt({ x: edge.x2, y: edge.y2 });
         } else {
-          return this.getConnectionsAt({ x: edge.x1, y: edge.y1 });
+          return this.getEdgesAt({ x: edge.x1, y: edge.y1 });
         }
       }),
     ];
@@ -93,7 +81,7 @@ export default class GridConnections {
       }
       visited.add(`${current.x},${current.y}`);
       result.push(current);
-      const edges = this.getConnectionsAt(current);
+      const edges = this.getEdgesAt(current);
       for (const edge of edges) {
         if (edge.x1 === current.x && edge.y1 === current.y) {
           queue.push({ x: edge.x2, y: edge.y2 });
@@ -130,30 +118,6 @@ export default class GridConnections {
       }
     }
     return new GridConnections(edges);
-  }
-
-  /**
-   * Check if two GridConnections objects are equal.
-   * @param other The other GridConnections object to compare to.
-   * @returns Whether the two objects are equal.
-   */
-  public equals(other: GridConnections): boolean {
-    if (this.edges.length !== other.edges.length) return false;
-    for (const edge of this.edges) {
-      if (!other.isConnected(edge)) return false;
-    }
-    return true;
-  }
-
-  /**
-   * Deduplicate an array of edges.
-   * @param edges The array of edges to deduplicate.
-   * @returns The deduplicated array of edges.
-   */
-  public static deduplicateEdges(edges: readonly Edge[]): readonly Edge[] {
-    return edges.filter(
-      (edge, index) => edges.findIndex(e => isSameEdge(e, edge)) === index
-    );
   }
 
   public insertColumn(index: number): GridConnections {

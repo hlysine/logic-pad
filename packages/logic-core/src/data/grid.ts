@@ -16,6 +16,7 @@ import TileData from './tile.js';
 import MusicGridRule from './rules/musicGridRule.js';
 import CompletePatternRule from './rules/completePatternRule.js';
 import UndercluedRule from './rules/undercluedRule.js';
+import GridZones from './gridZones.js';
 
 export const NEIGHBOR_OFFSETS: Position[] = [
   { x: -1, y: 0 },
@@ -27,6 +28,7 @@ export const NEIGHBOR_OFFSETS: Position[] = [
 export default class GridData {
   public readonly tiles: readonly (readonly TileData[])[];
   public readonly connections: GridConnections;
+  public readonly zones: GridZones;
   public readonly symbols: ReadonlyMap<string, readonly Symbol[]>;
   public readonly rules: readonly Rule[];
 
@@ -66,6 +68,7 @@ export default class GridData {
    * @param height The height of the grid.
    * @param tiles The tiles of the grid.
    * @param connections The connections of the grid, which determines which tiles are merged.
+   * @param zones The zones of the grid.
    * @param symbols The symbols in the grid.
    * @param rules The rules of the grid.
    */
@@ -74,6 +77,7 @@ export default class GridData {
     public readonly height: number,
     tiles?: readonly (readonly TileData[])[],
     connections?: GridConnections,
+    zones?: GridZones,
     symbols?: ReadonlyMap<string, readonly Symbol[]>,
     rules?: readonly Rule[]
   ) {
@@ -81,6 +85,7 @@ export default class GridData {
     this.height = height;
     this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
+    this.zones = zones ?? new GridZones();
     const newSymbols = symbols
       ? GridData.deduplicateSymbols(symbols)
       : new Map<string, Symbol[]>();
@@ -112,6 +117,7 @@ export default class GridData {
     height,
     tiles,
     connections,
+    zones,
     symbols,
     rules,
   }: {
@@ -119,6 +125,7 @@ export default class GridData {
     height?: number;
     tiles?: readonly (readonly TileData[])[];
     connections?: GridConnections;
+    zones?: GridZones;
     symbols?: ReadonlyMap<string, readonly Symbol[]>;
     rules?: readonly Rule[];
   }): GridData {
@@ -127,6 +134,7 @@ export default class GridData {
       height ?? this.height,
       tiles ?? this.tiles,
       connections ?? this.connections,
+      zones ?? this.zones,
       symbols ?? this.symbols,
       rules ?? this.rules
     );
@@ -210,6 +218,19 @@ export default class GridData {
         typeof connections === 'function'
           ? connections(this.connections)
           : connections,
+    });
+  }
+
+  /**
+   * Add or modify the zones in the grid.
+   * @param zones The new zones to add or modify.
+   * @returns The new grid with the new zones.
+   */
+  public withZones(
+    zones: GridZones | ((value: GridZones) => GridZones)
+  ): GridData {
+    return this.copyWith({
+      zones: typeof zones === 'function' ? zones(this.zones) : zones,
     });
   }
 
@@ -404,6 +425,7 @@ export default class GridData {
       return this.getTile(x - 1, y);
     });
     const connections = this.connections.insertColumn(index);
+    const zones = this.zones.insertColumn(index);
     const rules = this.rules
       .map(rule => {
         if (handlesGridResize(rule))
@@ -422,6 +444,7 @@ export default class GridData {
       width: this.width + 1,
       tiles,
       connections,
+      zones,
       rules,
       symbols,
     });
@@ -440,6 +463,7 @@ export default class GridData {
       return this.getTile(x, y - 1);
     });
     const connections = this.connections.insertRow(index);
+    const zones = this.zones.insertRow(index);
     const rules = this.rules
       .map(rule => {
         if (handlesGridResize(rule))
@@ -458,6 +482,7 @@ export default class GridData {
       height: this.height + 1,
       tiles,
       connections,
+      zones,
       rules,
       symbols,
     });
@@ -474,6 +499,7 @@ export default class GridData {
       x < index ? this.getTile(x, y) : this.getTile(x + 1, y)
     );
     const connections = this.connections.removeColumn(index);
+    const zones = this.zones.removeColumn(index);
     const rules = this.rules
       .map(rule => {
         if (handlesGridResize(rule))
@@ -492,6 +518,7 @@ export default class GridData {
       width: this.width - 1,
       tiles,
       connections,
+      zones,
       rules,
       symbols,
     });
@@ -508,6 +535,7 @@ export default class GridData {
       y < index ? this.getTile(x, y) : this.getTile(x, y + 1)
     );
     const connections = this.connections.removeRow(index);
+    const zones = this.zones.removeRow(index);
     const rules = this.rules
       .map(rule => {
         if (handlesGridResize(rule))
@@ -526,6 +554,7 @@ export default class GridData {
       height: this.height - 1,
       tiles,
       connections,
+      zones,
       rules,
       symbols,
     });
@@ -854,6 +883,26 @@ export default class GridData {
           y2: edge.y2 - origin.y,
         }))
     );
+    const zones = new GridZones(
+      this.zones.edges
+        .filter(
+          edge =>
+            edge.x1 >= origin.x &&
+            edge.y1 >= origin.y &&
+            edge.x2 >= origin.x &&
+            edge.y2 >= origin.y &&
+            edge.x1 < origin.x + width &&
+            edge.y1 < origin.y + height &&
+            edge.x2 < origin.x + width &&
+            edge.y2 < origin.y + height
+        )
+        .map(edge => ({
+          x1: edge.x1 - origin.x,
+          y1: edge.y1 - origin.y,
+          x2: edge.x2 - origin.x,
+          y2: edge.y2 - origin.y,
+        }))
+    );
     const symbols = new Map<string, Symbol[]>();
     for (const [id, symbolList] of this.symbols) {
       const newSymbolList = symbolList.filter(
@@ -870,6 +919,7 @@ export default class GridData {
       height,
       newTiles,
       connections,
+      zones,
       symbols,
       this.rules
     );
@@ -919,6 +969,15 @@ export default class GridData {
         y2: edge.y2 + origin.y,
       })),
     ]);
+    const zones = new GridZones([
+      ...this.zones.edges,
+      ...grid.zones.edges.map(edge => ({
+        x1: edge.x1 + origin.x,
+        y1: edge.y1 + origin.y,
+        x2: edge.x2 + origin.x,
+        y2: edge.y2 + origin.y,
+      })),
+    ]);
     const symbols = new Map(this.symbols);
     for (const [id, sourceList] of grid.symbols) {
       const symbolList = sourceList.map(symbol =>
@@ -931,7 +990,13 @@ export default class GridData {
       }
     }
     const rules = [...this.rules, ...grid.rules];
-    return this.copyWith({ tiles: newTiles, connections, symbols, rules });
+    return this.copyWith({
+      tiles: newTiles,
+      connections,
+      zones,
+      symbols,
+      rules,
+    });
   }
 
   /**
@@ -992,6 +1057,7 @@ export default class GridData {
     )
       return false;
     if (!this.connections.equals(other.connections)) return false;
+    if (!this.zones.equals(other.zones)) return false;
     if (this.symbols.size !== other.symbols.size) return false;
     for (const [id, symbols] of this.symbols) {
       const otherSymbols = other.symbols.get(id);

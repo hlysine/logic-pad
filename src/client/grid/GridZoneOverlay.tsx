@@ -1,23 +1,16 @@
-import { PartPlacement, PartSpec } from './types';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import CellCountPerZoneRule, {
-  instance as cellCountPerZoneInstance,
-} from '@logic-pad/core/data/rules/cellCountPerZoneRule';
-import { useTheme } from '../../contexts/ThemeContext';
-import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
-import { useGrid } from '../../contexts/GridContext';
+import { useTheme } from '../contexts/ThemeContext';
+import GridCanvasOverlay, { RawCanvasRef } from './GridCanvasOverlay';
+import GridData from '@logic-pad/core/data/grid';
 
-export interface CellCountPerZoneOverlayPartProps {
-  instruction: CellCountPerZoneRule;
+export interface GridZoneOverlay {
+  grid: GridData;
 }
 
 const BLEED = 5;
 
-export default memo(function CellCountPerZoneOverlayPart({
-  instruction,
-}: CellCountPerZoneOverlayPartProps) {
+export default memo(function GridZoneOverlay({ grid }: GridZoneOverlay) {
   const { theme } = useTheme();
-  const { grid } = useGrid();
   const secondaryColor = useMemo(
     () =>
       window.getComputedStyle(document.getElementById('color-ref-secondary')!)
@@ -54,7 +47,7 @@ export default memo(function CellCountPerZoneOverlayPart({
     ctx.lineWidth = Math.max(4, tileSize * 0.05);
     ctx.lineCap = 'round';
 
-    instruction.edges.forEach(edge => {
+    grid.zones.edges.forEach(edge => {
       let { x1, y1, x2, y2 } = edge;
       x1 += 0.5;
       y1 += 0.5;
@@ -69,7 +62,7 @@ export default memo(function CellCountPerZoneOverlayPart({
       y2 = midY - dx2;
       line(x1 * tileSize, y1 * tileSize, x2 * tileSize, y2 * tileSize);
     });
-  }, [instruction.edges, secondaryColor, width, height, tileSize]);
+  }, [grid, secondaryColor, width, height, tileSize]);
 
   return (
     <GridCanvasOverlay
@@ -81,8 +74,3 @@ export default memo(function CellCountPerZoneOverlayPart({
     ></GridCanvasOverlay>
   );
 });
-
-export const spec: PartSpec = {
-  placement: PartPlacement.GridOverlay,
-  instructionId: cellCountPerZoneInstance.id,
-};

@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import ToolboxItem from '../ToolboxItem';
 import { Color } from '@logic-pad/core/data/primitives';
-import { RiMergeCellsHorizontal } from 'react-icons/ri';
-import { useGrid } from '../../contexts/GridContext.tsx';
+import { useGrid } from '../../contexts/GridContext';
 import PointerCaptureOverlay from '../../grid/PointerCaptureOverlay';
+import { TbFrame } from 'react-icons/tb';
 
-function MergeToolOverlay() {
+function ZoneToolOverlay() {
   const { grid, setGrid } = useGrid();
   return (
     <PointerCaptureOverlay
@@ -31,12 +31,12 @@ function MergeToolOverlay() {
         }
         const newEdge = { x1: tx, y1: ty, x2: cx, y2: cy };
         if (from === Color.Dark || to === Color.Dark) {
-          if (!grid.connections.hasEdge(newEdge)) {
-            setGrid(grid.withConnections(con => con.addEdge(newEdge)));
+          if (!grid.zones.hasEdge(newEdge)) {
+            setGrid(grid.withZones(z => z.addEdge(newEdge)));
           }
         } else if (from === Color.Light || to === Color.Light) {
-          if (grid.connections.hasEdge(newEdge)) {
-            setGrid(grid.withConnections(con => con.removeEdge(newEdge)));
+          if (grid.zones.hasEdge(newEdge)) {
+            setGrid(grid.withZones(z => z.removeEdge(newEdge)));
           }
         }
       }}
@@ -44,18 +44,18 @@ function MergeToolOverlay() {
   );
 }
 
-export default memo(function MergeTool() {
+export default memo(function ZoneTool() {
   return (
     <ToolboxItem
-      id="merge"
-      order={5}
-      name="Merge tiles"
-      description="Left click a gap to merge tiles. Right click to split tiles."
-      hotkey="g"
-      gridOverlay={<MergeToolOverlay />}
+      id="zone"
+      order={6}
+      name="Define zones"
+      description="Left click a gap to add an edge. Right click to remove."
+      hotkey="h"
+      gridOverlay={<ZoneToolOverlay />}
       onTileClick={null}
     >
-      <RiMergeCellsHorizontal />
+      <TbFrame />
     </ToolboxItem>
   );
 });

@@ -1,8 +1,8 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import { array } from '../dataHelper.js';
 import GridData, { NEIGHBOR_OFFSETS } from '../grid.js';
-import GridConnections from '../gridConnections.js';
-import { Color, Edge, RuleState, State, Position } from '../primitives.js';
+import GridZones from '../gridZones.js';
+import { Color, RuleState, State, Position } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
 interface Zone {
@@ -20,25 +20,20 @@ export default class CellCountPerZoneRule extends Rule {
       description: 'Color',
       configurable: true,
     },
-    {
-      type: ConfigType.Edges,
-      default: [],
-      field: 'edges',
-      description: 'Edges',
-      configurable: false,
-    },
   ]);
 
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
-    GridData.create(['bwbbb', 'wbbwb', 'bbbwb', 'bwbwb']).addRule(
-      new CellCountPerZoneRule(Color.Light, [
-        { x1: 0, y1: 1, x2: 0, y2: 2 },
-        { x1: 1, y1: 1, x2: 1, y2: 2 },
-        { x1: 2, y1: 1, x2: 2, y2: 2 },
-        { x1: 3, y1: 1, x2: 3, y2: 2 },
-        { x1: 4, y1: 1, x2: 4, y2: 2 },
-      ])
-    )
+    GridData.create(['bwbbb', 'wbbwb', 'bbbwb', 'bwbwb'])
+      .withZones(
+        new GridZones([
+          { x1: 0, y1: 1, x2: 0, y2: 2 },
+          { x1: 1, y1: 1, x2: 1, y2: 2 },
+          { x1: 2, y1: 1, x2: 2, y2: 2 },
+          { x1: 3, y1: 1, x2: 3, y2: 2 },
+          { x1: 4, y1: 1, x2: 4, y2: 2 },
+        ])
+      )
+      .addRule(new CellCountPerZoneRule(Color.Light))
   );
 
   private static readonly EXAMPLE_GRID_DARK = Object.freeze(
@@ -62,23 +57,18 @@ export default class CellCountPerZoneRule extends Rule {
   );
 
   private static readonly SEARCH_VARIANTS = [
-    new CellCountPerZoneRule(Color.Light, []).searchVariant(),
-    new CellCountPerZoneRule(Color.Dark, []).searchVariant(),
+    new CellCountPerZoneRule(Color.Light).searchVariant(),
+    new CellCountPerZoneRule(Color.Dark).searchVariant(),
   ];
 
   /**
    * **Every zone has the same number of &lt;color&gt; cells.**
    *
    * @param color - The color of the cells to count.
-   * @param edges - The edges of the zones to count.
    */
-  public constructor(
-    public readonly color: Color,
-    public readonly edges: readonly Edge[]
-  ) {
+  public constructor(public readonly color: Color) {
     super();
     this.color = color;
-    this.edges = GridConnections.deduplicateEdges(edges);
   }
 
   public get id(): string {
@@ -138,7 +128,7 @@ export default class CellCountPerZoneRule extends Rule {
         for (const offset of NEIGHBOR_OFFSETS) {
           const next = { x: x + offset.x, y: y + offset.y };
           if (
-            !this.edges.some(
+            !grid.zones.edges.some(
               e =>
                 (e.x1 === x &&
                   e.y1 === y &&
@@ -178,30 +168,13 @@ export default class CellCountPerZoneRule extends Rule {
     }
   }
 
-  public copyWith({
-    color,
-    edges,
-  }: {
-    color?: Color;
-    edges?: readonly Edge[];
-  }): this {
-    return new CellCountPerZoneRule(
-      color ?? this.color,
-      edges ?? this.edges
-    ) as this;
+  public copyWith({ color }: { color?: Color }): this {
+    return new CellCountPerZoneRule(color ?? this.color) as this;
   }
 
   public withColor(color: Color): this {
     return this.copyWith({ color });
   }
-
-  public withEdges(
-    edges: readonly Edge[] | ((edges: readonly Edge[]) => readonly Edge[])
-  ): this {
-    return this.copyWith({
-      edges: typeof edges === 'function' ? edges(this.edges) : edges,
-    });
-  }
 }
 
-export const instance = new CellCountPerZoneRule(Color.Light, []);
+export const instance = new CellCountPerZoneRule(Color.Light);

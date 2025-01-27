@@ -17,7 +17,6 @@ import {
   directionToggle,
   orientationToggle,
   Position,
-  Edge,
 } from '../primitives.js';
 import { array, escape, unescape } from '../dataHelper.js';
 import { allRules } from '../rules/index.js';
@@ -25,6 +24,7 @@ import { allSymbols } from '../symbols/index.js';
 import SerializerBase from './serializerBase.js';
 import { Puzzle, PuzzleMetadata } from '../puzzle.js';
 import { ControlLine, Row } from '../rules/musicControlLine.js';
+import GridZones from '../gridZones.js';
 
 const OFFSETS = [
   { x: 0, y: -1 },
@@ -252,14 +252,6 @@ export default class SerializerV0 extends SerializerBase {
               .join('/') ?? ''
           )
         );
-      case ConfigType.Edges:
-        return (
-          config.field +
-          '=' +
-          (instruction[config.field as keyof Instruction] as unknown as Edge[])
-            .map(edge => `${edge.x1}_${edge.y1}_${edge.x2}_${edge.y2}`)
-            .join('/')
-        );
     }
   }
 
@@ -329,21 +321,6 @@ export default class SerializerV0 extends SerializerBase {
             : value.split('/').map(pos => {
                 const [x, y] = pos.split('_');
                 return { x: Number(x), y: Number(y) };
-              }),
-        ];
-      case ConfigType.Edges:
-        return [
-          config.field,
-          value === ''
-            ? []
-            : value.split('/').map(edge => {
-                const [x1, y1, x2, y2] = edge.split('_');
-                return {
-                  x1: Number(x1),
-                  y1: Number(y1),
-                  x2: Number(x2),
-                  y2: Number(y2),
-                };
               }),
         ];
     }
@@ -450,6 +427,23 @@ export default class SerializerV0 extends SerializerBase {
     return GridConnections.create(tiles.map(row => row.join('')));
   }
 
+  public stringifyZones(zones: GridZones): string {
+    return `Z${zones.edges.map(edge => `${edge.x1}_${edge.y1}_${edge.x2 - edge.x1}_${edge.y2 - edge.y1}`).join(':')}`;
+  }
+
+  public parseZones(input: string): GridZones {
+    if (!input.startsWith('Z')) {
+      throw new Error('Invalid grid zones\n' + input);
+    }
+    const data = input.slice(1).split(':');
+    return new GridZones(
+      data.map(entry => {
+        const [x1, y1, w, h] = entry.split('_').map(Number);
+        return { x1, y1, x2: x1 + w, y2: y1 + h };
+      })
+    );
+  }
+
   public stringifyTiles(tiles: readonly (readonly TileData[])[]): string {
     return `T${tiles[0]?.length ?? 0}:${tiles.map(row => row.map(tile => this.stringifyTile(tile)).join('')).join('')}`;
   }
@@ -513,6 +507,7 @@ export default class SerializerV0 extends SerializerBase {
     const data = [
       this.stringifyTiles(grid.tiles),
       this.stringifyConnections(grid.connections),
+      this.stringifyZones(grid.zones),
       this.stringifySymbols(grid.symbols),
       this.stringifyRules(grid.rules),
     ];
@@ -525,6 +520,7 @@ export default class SerializerV0 extends SerializerBase {
     let height: number | undefined;
     let tiles: TileData[][] | undefined;
     let connections: GridConnections | undefined;
+    let zones: GridZones | undefined;
     let symbols: Map<string, Symbol[]> | undefined;
     let rules: Rule[] | undefined;
     for (const d of data) {
@@ -534,6 +530,8 @@ export default class SerializerV0 extends SerializerBase {
         tiles = this.parseTiles(d);
       } else if (d.startsWith('C')) {
         connections = this.parseConnections(d);
+      } else if (d.startsWith('Z')) {
+        zones = this.parseZones(d);
       } else if (d.startsWith('S')) {
         symbols = this.parseSymbols(d);
       } else if (d.startsWith('R')) {
@@ -547,6 +545,7 @@ export default class SerializerV0 extends SerializerBase {
       height ?? tiles?.length ?? 0,
       tiles,
       connections,
+      zones,
       symbols,
       rules
     );

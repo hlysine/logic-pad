@@ -14,7 +14,7 @@ import { handlesGridResize } from './data/events/onGridResize.js';
 import { handlesSetGrid } from './data/events/onSetGrid.js';
 import { handlesSymbolDisplay } from './data/events/onSymbolDisplay.js';
 import { handlesSymbolValidation } from './data/events/onSymbolValidation.js';
-import GridData from './data/grid.js';
+import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import Instruction from './data/instruction.js';
 import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, directionToggle, orientationToggle } from './data/primitives.js';
@@ -128,6 +128,7 @@ export {
   handlesSymbolDisplay,
   handlesSymbolValidation,
   GridData,
+  NEIGHBOR_OFFSETS,
   GridConnections,
   Instruction,
   COMPARISONS,

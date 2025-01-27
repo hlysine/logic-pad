@@ -15,6 +15,7 @@ import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import ErrorOverlay from './ErrorOverlay';
 import { usePinch } from '@use-gesture/react';
+import GridZoneOverlay from './GridZoneOverlay.tsx';
 
 export interface MainGridProps {
   useToolboxClick: boolean;
@@ -158,6 +159,7 @@ export default memo(function MainGrid({
                 width={grid.width}
                 height={grid.height}
               />
+              <GridZoneOverlay grid={grid} />
               <TileCountOverlay grid={grid} />
               {children}
             </>

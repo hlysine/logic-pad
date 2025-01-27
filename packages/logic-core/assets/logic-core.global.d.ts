@@ -584,6 +584,7 @@ declare global {
     get validateWithSolution(): boolean;
     get isSingleton(): boolean;
   }
+  export declare const NEIGHBOR_OFFSETS: Position$1[];
   export declare class GridData {
     readonly width: number;
     readonly height: number;
@@ -1350,6 +1351,7 @@ declare global {
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
+    private static readonly EXAMPLE_GRID_GRAY;
     private static readonly SEARCH_VARIANTS;
     /**
      * **Every zone has the same number of &lt;color&gt; cells.**
@@ -1363,7 +1365,7 @@ declare global {
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
+    validateGrid(grid: GridData): RuleState;
     copyWith({
       color,
       edges,

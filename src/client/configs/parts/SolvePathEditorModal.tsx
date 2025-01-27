@@ -10,10 +10,7 @@ import PerfectionRule, {
 } from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../../screens/PerfectionScreen';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
-import {
-  SolvePathConsumer,
-  useSolvePath,
-} from '../../contexts/SolvePathContext';
+import { useSolvePath } from '../../contexts/SolvePathContext';
 import EditContext from '../../contexts/EditContext';
 import { useDelta } from 'react-delta-hooks';
 
@@ -30,6 +27,20 @@ function EmbedLoader({ solvePath }: { solvePath: Position[] }) {
     setSolvePath(solvePath);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  return null;
+}
+
+function SolvePathUpdater({
+  oldSolvePath,
+  setSolvePath,
+}: {
+  oldSolvePath: Position[];
+  setSolvePath: (solvePath: Position[]) => void;
+}) {
+  const { solvePath: newSolvePath } = useSolvePath();
+  useEffect(() => {
+    if (newSolvePath !== oldSolvePath) setSolvePath(newSolvePath);
+  }, [newSolvePath, oldSolvePath, setSolvePath]);
   return null;
 }
 
@@ -93,13 +104,10 @@ export default memo(function SolvePathEditorModal({
                                 return null;
                               }}
                             </GridConsumer>
-                            <SolvePathConsumer>
-                              {({ solvePath: newSolvePath }) => {
-                                if (newSolvePath !== tempSolvePath)
-                                  setTempSolvePath(newSolvePath);
-                                return null;
-                              }}
-                            </SolvePathConsumer>
+                            <SolvePathUpdater
+                              oldSolvePath={tempSolvePath}
+                              setSolvePath={setTempSolvePath}
+                            />
                           </PerfectionScreen>
                         </GridContext>
                       </GridStateContext>

@@ -96,7 +96,23 @@ export default memo(function ForesightControlsPart({
                 }
               });
               if (errors.length === 0) {
-                setForesight(grid, null, 'Your progress is correct');
+                let nextPos: Position | null = null;
+                for (const pos of instruction.solvePath) {
+                  const tile = grid.getTile(pos.x, pos.y);
+                  if (tile.exists && tile.color === Color.Gray) {
+                    nextPos = pos;
+                    break;
+                  }
+                }
+                if (nextPos) {
+                  setForesight(
+                    grid,
+                    nextPos,
+                    'Your progress is correct. Now look at this tile'
+                  );
+                } else {
+                  setForesight(grid, null, 'Your progress is correct');
+                }
               } else if (errors.length === 1) {
                 setForesight(
                   grid,

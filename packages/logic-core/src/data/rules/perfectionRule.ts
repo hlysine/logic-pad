@@ -49,6 +49,10 @@ export default class PerfectionRule
     return false;
   }
 
+  public get isSingleton(): boolean {
+    return true;
+  }
+
   public validateGrid(grid: GridData): RuleState {
     if (grid.getTileCount(true, undefined, Color.Gray) > 0) {
       return { state: State.Incomplete };

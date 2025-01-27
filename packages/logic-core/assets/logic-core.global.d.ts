@@ -189,6 +189,13 @@ declare global {
     y: number;
   };
   /**
+   * Check if two edges are the same, regardless of direction.
+   * @param a The first edge.
+   * @param b The second edge.
+   * @returns Whether the edges are the same.
+   */
+  export declare function isSameEdge(a: Edge, b: Edge): boolean;
+  /**
    * Convert the given direction to a rotation in degrees.
    * @param direction The direction to convert.
    * @returns The rotation in degrees.
@@ -1031,6 +1038,7 @@ declare global {
     ControlLines = 'controlLines',
     NullableNote = 'nullableNote',
     SolvePath = 'solvePath',
+    Edges = 'edges',
   }
   export interface Config<T> {
     readonly type: ConfigType;
@@ -1104,6 +1112,9 @@ declare global {
   export interface SolvePathConfig extends Config<Position$1[]> {
     readonly type: ConfigType.SolvePath;
   }
+  export interface EdgesConfig extends Config<Edge[]> {
+    readonly type: ConfigType.Edges;
+  }
   export type AnyConfig =
     | BooleanConfig
     | NullableBooleanConfig
@@ -1122,7 +1133,8 @@ declare global {
     | IconConfig
     | ControlLinesConfig
     | NullableNoteConfig
-    | SolvePathConfig;
+    | SolvePathConfig
+    | EdgesConfig;
   /**
    * Compare two config values for equality, using an appropriate method for the config type.
    *
@@ -1331,6 +1343,38 @@ declare global {
     validateGrid(grid: GridData): RuleState;
     copyWith({ pattern }: { pattern?: GridData }): this;
     withPattern(pattern: GridData): this;
+  }
+  export declare class CellCountPerZoneRule extends Rule {
+    readonly color: Color;
+    readonly edges: readonly Edge[];
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Every zone has the same number of &lt;color&gt; cells.**
+     *
+     * @param color - The color of the cells to count.
+     * @param edges - The edges of the zones to count.
+     */
+    constructor(color: Color, edges: readonly Edge[]);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_grid: GridData): RuleState;
+    copyWith({
+      color,
+      edges,
+    }: {
+      color?: Color;
+      edges?: readonly Edge[];
+    }): this;
+    withColor(color: Color): this;
+    withEdges(
+      edges: readonly Edge[] | ((edges: readonly Edge[]) => readonly Edge[])
+    ): this;
   }
   export declare class CellCountRule extends Rule {
     readonly color: Color;

@@ -57,7 +57,14 @@ export default memo(function ToolboxEditor() {
         {allTools.map((Tool, i) => (
           <Tool key={i} />
         ))}
-        <InstructionPartOutlet placement={PartPlacement.Toolbox} />
+        <GridConsumer>
+          {({ grid }) => (
+            <InstructionPartOutlet
+              grid={grid}
+              placement={PartPlacement.Toolbox}
+            />
+          )}
+        </GridConsumer>
       </div>
       <span className="divider mt-0 mb-0"></span>
       <div className="flex gap-4 justify-between items-center pr-4">

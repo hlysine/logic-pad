@@ -1,6 +1,7 @@
 import DocumentTitle from '../components/DocumentTitle';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
+import { GridConsumer } from '../contexts/GridContext';
 import SolvePathContext from '../contexts/SolvePathContext';
 import MainGrid from '../grid/MainGrid';
 import InstructionList from '../instructions/InstructionList';
@@ -21,9 +22,23 @@ export default function PerfectionScreen({ children }: PerfectionScreenProps) {
             <DocumentTitle>Logic Pad</DocumentTitle>
             <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
               <Metadata />
-              <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
+              <GridConsumer>
+                {({ grid }) => (
+                  <InstructionPartOutlet
+                    grid={grid}
+                    placement={PartPlacement.LeftPanel}
+                  />
+                )}
+              </GridConsumer>
             </div>
-            <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
+            <GridConsumer>
+              {({ grid }) => (
+                <InstructionPartOutlet
+                  grid={grid}
+                  placement={PartPlacement.LeftBottom}
+                />
+              )}
+            </GridConsumer>
             <TouchControls />
           </>
         }

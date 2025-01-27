@@ -7,6 +7,8 @@ import SymbolOverlay from '../grid/SymbolOverlay';
 import AnnotatedText from '../components/AnnotatedText';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { PartPlacement } from './parts/types.ts';
+import InstructionPartOutlet from './InstructionPartOutlet.tsx';
 
 export interface InstructionProps {
   id: string | number;
@@ -92,6 +94,10 @@ export default memo(function Instruction({
               {exampleGrid.symbols.size > 0 ? (
                 <SymbolOverlay grid={exampleGrid} editable={false} />
               ) : null}
+              <InstructionPartOutlet
+                grid={exampleGrid}
+                placement={PartPlacement.GridOverlay}
+              />
             </Grid>
           )}
         </div>

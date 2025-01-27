@@ -1,3 +1,4 @@
+import { isSameEdge } from './dataHelper.js';
 import GridData from './grid.js';
 import {
   Color,
@@ -5,6 +6,7 @@ import {
   DIRECTIONS,
   Direction,
   DirectionToggle,
+  Edge,
   ORIENTATIONS,
   Orientation,
   OrientationToggle,
@@ -31,6 +33,7 @@ export enum ConfigType {
   ControlLines = 'controlLines',
   NullableNote = 'nullableNote',
   SolvePath = 'solvePath',
+  Edges = 'edges',
 }
 
 export interface Config<T> {
@@ -124,6 +127,10 @@ export interface SolvePathConfig extends Config<Position[]> {
   readonly type: ConfigType.SolvePath;
 }
 
+export interface EdgesConfig extends Config<Edge[]> {
+  readonly type: ConfigType.Edges;
+}
+
 export type AnyConfig =
   | BooleanConfig
   | NullableBooleanConfig
@@ -142,7 +149,8 @@ export type AnyConfig =
   | IconConfig
   | ControlLinesConfig
   | NullableNoteConfig
-  | SolvePathConfig;
+  | SolvePathConfig
+  | EdgesConfig;
 
 /**
  * Compare two config values for equality, using an appropriate method for the config type.
@@ -187,6 +195,14 @@ export function configEquals<C extends AnyConfig>(
     if (aPath.length !== bPath.length) return false;
     return aPath.every(
       (pos, i) => pos.x === bPath[i].x && pos.y === bPath[i].y
+    );
+  }
+  if (type === ConfigType.Edges) {
+    const aEdges = a as Edge[];
+    const bEdges = b as Edge[];
+    if (aEdges.length !== bEdges.length) return false;
+    return aEdges.every(aEdge =>
+      bEdges.some(bEdge => isSameEdge(aEdge, bEdge))
     );
   }
   return a === b;

@@ -17,6 +17,7 @@ import {
   directionToggle,
   orientationToggle,
   Position,
+  Edge,
 } from '../primitives.js';
 import { array, escape, unescape } from '../dataHelper.js';
 import { allRules } from '../rules/index.js';
@@ -251,6 +252,14 @@ export default class SerializerV0 extends SerializerBase {
               .join('/') ?? ''
           )
         );
+      case ConfigType.Edges:
+        return (
+          config.field +
+          '=' +
+          (instruction[config.field as keyof Instruction] as unknown as Edge[])
+            .map(edge => `${edge.x1}_${edge.y1}_${edge.x2}_${edge.y2}`)
+            .join('/')
+        );
     }
   }
 
@@ -320,6 +329,21 @@ export default class SerializerV0 extends SerializerBase {
             : value.split('/').map(pos => {
                 const [x, y] = pos.split('_');
                 return { x: Number(x), y: Number(y) };
+              }),
+        ];
+      case ConfigType.Edges:
+        return [
+          config.field,
+          value === ''
+            ? []
+            : value.split('/').map(edge => {
+                const [x1, y1, x2, y2] = edge.split('_');
+                return {
+                  x1: Number(x1),
+                  y1: Number(y1),
+                  x2: Number(x2),
+                  y2: Number(y2),
+                };
               }),
         ];
     }

@@ -1,13 +1,12 @@
-import { memo, useRef } from 'react';
+import { memo } from 'react';
 import ToolboxItem from '../ToolboxItem';
-import { Color, Position } from '@logic-pad/core/data/primitives';
+import { Color } from '@logic-pad/core/data/primitives';
 import { RiMergeCellsHorizontal } from 'react-icons/ri';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import PointerCaptureOverlay from '../../grid/PointerCaptureOverlay';
 
 function MergeToolOverlay() {
   const { grid, setGrid } = useGrid();
-  const location = useRef<Position | null>(null);
   return (
     <PointerCaptureOverlay
       width={grid.width}
@@ -16,18 +15,10 @@ function MergeToolOverlay() {
       colorMap={() => false}
       onTileClick={(x, y, from, to) => {
         if (x < 0 || y < 0 || x >= grid.width || y >= grid.height) {
-          location.current = null;
           return;
         }
         const tx = Math.floor(x);
         const ty = Math.floor(y);
-        if (
-          location.current != null &&
-          location.current.x === tx &&
-          location.current.y === ty
-        ) {
-          return;
-        }
         let cx, cy;
         if (Math.abs(tx + 0.5 - x) < 0.25 && Math.abs(ty + 0.5 - y) < 0.25)
           return;
@@ -38,30 +29,16 @@ function MergeToolOverlay() {
           cx = tx;
           cy = y > ty + 0.5 ? ty + 1 : ty - 1;
         }
+        const newEdge = { x1: tx, y1: ty, x2: cx, y2: cy };
         if (from === Color.Dark || to === Color.Dark) {
-          setGrid(
-            grid.withConnections(con =>
-              con.addEdge({
-                x1: tx,
-                y1: ty,
-                x2: cx,
-                y2: cy,
-              })
-            )
-          );
+          if (!grid.connections.isConnected(newEdge)) {
+            setGrid(grid.withConnections(con => con.addEdge(newEdge)));
+          }
         } else if (from === Color.Light || to === Color.Light) {
-          setGrid(
-            grid.withConnections(con =>
-              con.removeEdge({
-                x1: tx,
-                y1: ty,
-                x2: cx,
-                y2: cy,
-              })
-            )
-          );
+          if (grid.connections.isConnected(newEdge)) {
+            setGrid(grid.withConnections(con => con.removeEdge(newEdge)));
+          }
         }
-        location.current = { x: tx, y: ty };
       }}
     />
   );

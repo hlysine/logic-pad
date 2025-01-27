@@ -140,6 +140,6 @@ export default memo(function MusicOverlayPart() {
 });
 
 export const spec: PartSpec = {
-  placement: PartPlacement.GridOverlay,
+  placement: PartPlacement.MainGridOverlay,
   instructionId: musicGridInstance.id,
 };

@@ -72,6 +72,6 @@ export default memo(function PerfectionOverlayPart() {
 });
 
 export const spec: PartSpec = {
-  placement: PartPlacement.GridOverlay,
+  placement: PartPlacement.MainGridOverlay,
   instructionId: perfectionInstance.id,
 };

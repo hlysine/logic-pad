@@ -53,6 +53,9 @@ ReactDOM.createRoot(document.getElementById('app')!).render(
       <div id="color-ref-accent" className="text-accent hidden">
         {/* For canvas components to retrieve this color */}
       </div>
+      <div id="color-ref-secondary" className="text-secondary hidden">
+        {/* For canvas components to retrieve this color */}
+      </div>
       <div id="color-ref-info" className="text-info hidden">
         {/* For canvas components to retrieve this color */}
       </div>

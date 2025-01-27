@@ -32,6 +32,6 @@ export default memo(function ForesightOverlayPart() {
 });
 
 export const spec: PartSpec = {
-  placement: PartPlacement.GridOverlay,
+  placement: PartPlacement.MainGridOverlay,
   instructionId: foresightInstance.id,
 };

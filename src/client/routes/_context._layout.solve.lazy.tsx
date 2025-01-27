@@ -7,6 +7,17 @@ export const Route = createLazyFileRoute('/_context/_layout/solve')({
   component: memo(function SolveMode() {
     const params = Route.useSearch();
     useLinkLoader(params, { allowEmpty: false });
-    return <SolveScreen />;
+    return (
+      <SolveScreen>
+        <button
+          className="btn btn-outline btn-neutral"
+          onClick={() => {
+            window.location.pathname = '/perfection';
+          }}
+        >
+          Switch to Perfection Mode
+        </button>
+      </SolveScreen>
+    );
   }),
 });

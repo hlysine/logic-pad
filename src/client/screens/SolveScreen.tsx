@@ -9,7 +9,11 @@ import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 
-export default function SolveScreen() {
+export interface SolveScreenProps {
+  children?: React.ReactNode;
+}
+
+export default function SolveScreen({ children }: SolveScreenProps) {
   return (
     <ForesightContext>
       <ThreePaneLayout
@@ -21,6 +25,7 @@ export default function SolveScreen() {
               <InstructionPartOutlet placement={PartPlacement.LeftPanel} />
             </div>
             <InstructionPartOutlet placement={PartPlacement.LeftBottom} />
+            {children}
             <TouchControls />
             <EditControls />
           </>

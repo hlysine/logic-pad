@@ -110,7 +110,7 @@ export function encodePlayback(
         tile.color === Color.Dark &&
         !grid.connections.hasEdge({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        addEvent(x / 2 + (nudge(row.note) * 0.02 * bpm) / 120, {
+        addEvent(x / 2, {
           type: 'keydown',
           value: row.note,
           velocity: row.velocity,
@@ -126,7 +126,7 @@ export function encodePlayback(
         ) {
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
-        addEvent((endPos.x + 1) / 2 + (nudge(row.note) * 0.02 * bpm) / 120, {
+        addEvent((endPos.x + 1) / 2, {
           type: 'keyup',
           value: row.note,
         });

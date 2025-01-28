@@ -51,7 +51,7 @@ export default memo(function Difficulty({
           key={-1}
           type="radio"
           name="difficulty-rating"
-          className="rating-hidden"
+          className="rating-hidden pointer-events-none"
           checked={value === 0}
         />,
         ...Array.from({ length: readonly ? 5 : 10 }, (_, i) => (

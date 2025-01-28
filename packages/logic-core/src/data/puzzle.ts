@@ -19,9 +19,9 @@ export type PuzzleMetadata = {
    */
   link: string;
   /**
-   * The difficulty of the puzzle, from 1 to 10. (required)
+   * The difficulty of the puzzle, from 0 to 10. (required)
    *
-   * 6-10 represent star difficulties.
+   * 0 represents an unrated puzzle, 6-10 represent star difficulties.
    */
   difficulty: number;
 };
@@ -32,7 +32,7 @@ export const MetadataSchema = z
     author: z.string().min(1),
     description: z.string(),
     link: z.string(),
-    difficulty: z.number().int().min(1).max(10),
+    difficulty: z.number().int().min(0).max(10),
   })
   .strict();
 
@@ -42,7 +42,7 @@ export const PuzzleSchema = z
     author: z.string().min(1),
     description: z.string(),
     link: z.string(),
-    difficulty: z.number().int().min(1).max(10),
+    difficulty: z.number().int().min(0).max(10),
     grid: z.instanceof(GridData),
     solution: z.instanceof(GridData).nullable(),
   })

@@ -1241,9 +1241,9 @@ declare global {
      */
     link: string;
     /**
-     * The difficulty of the puzzle, from 1 to 10. (required)
+     * The difficulty of the puzzle, from 0 to 10. (required)
      *
-     * 6-10 represent star difficulties.
+     * 0 represents an unrated puzzle, 6-10 represent star difficulties.
      */
     difficulty: number;
   };

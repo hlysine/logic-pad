@@ -51,6 +51,7 @@ export const drum = {
   snare: new Tone.Player('/samples/snare.wav').toDestination(),
   kick: new Tone.Player('/samples/kick.wav').toDestination(),
   hihat: new Tone.Player('/samples/hihat.wav').toDestination(),
+  'hihat-open': new Tone.Player('/samples/hihat-open.wav').toDestination(),
   crash: new Tone.Player('/samples/crash.wav').toDestination(),
   tom: new Tone.Player('/samples/tom.wav').toDestination(),
   rim: new Tone.Player('/samples/rim.wav').toDestination(),

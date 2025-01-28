@@ -1,3 +1,7 @@
+# 28/1/2025
+
+- Puzzles without a difficulty rating now display a question mark
+
 # 27/1/2025
 
 - Added the perfection mode in which all cell colors are final (accessible in the `/perfection` page)

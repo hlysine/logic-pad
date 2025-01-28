@@ -1,3 +1,7 @@
+# 0.4.2
+
+- Puzzles can now have no difficulty rating (represented as difficulty == 0)
+
 # 0.4.1
 
 - Changed zones to be a grid attribute rather than a config of the cell count per zone rule

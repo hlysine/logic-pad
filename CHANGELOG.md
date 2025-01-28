@@ -1,6 +1,7 @@
 # 28/1/2025
 
 - Puzzles without a difficulty rating now display a question mark
+- Added `hihat-open` note for music grids
 
 # 27/1/2025
 

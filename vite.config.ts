@@ -53,9 +53,11 @@ export default defineConfig({
       includeAssets: [
         'favicon.ico',
         'apple-touch-icon-180x180.png',
-        'z3-built.js',
-        'z3-built.wasm',
-        'z3-built.worker.js',
+        'assets/z3-built.js',
+        'assets/z3-built.wasm',
+        'assets/z3-built.worker.js',
+        'assets/logic-core.global.d.ts',
+        'CHANGELOG.md',
       ],
       workbox: {
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,

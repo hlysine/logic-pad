@@ -3,7 +3,6 @@ import { PartPlacement, PartSpec } from './types';
 import PerfectionRule, {
   instance as perfectionInstance,
 } from '@logic-pad/core/data/rules/perfectionRule';
-import { MdError } from 'react-icons/md';
 import { useGridState } from '../../contexts/GridStateContext';
 import { Color, State, Position } from '@logic-pad/core/data/primitives';
 import { useEdit } from '../../contexts/EditContext';
@@ -11,6 +10,7 @@ import { useGrid } from '../../contexts/GridContext';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useSolvePath } from '../../contexts/SolvePathContext';
 import { useDelta } from 'react-delta-hooks';
+import { RiErrorWarningFill } from 'react-icons/ri';
 
 export interface PerfectionControlsPartProps {
   instruction: PerfectionRule;
@@ -97,7 +97,7 @@ export default memo(function PerfectionControlsPart() {
       {state.final === State.Error && (
         <div className="card grow-0 shrink-0 card-side rounded-none bg-primary/10">
           <figure className="shrink-0 pl-2 self-center">
-            <MdError size={48} />
+            <RiErrorWarningFill size={48} />
           </figure>
           <div className="card-body p-4">
             <p>Your progress is incorrect</p>

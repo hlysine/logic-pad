@@ -32,6 +32,9 @@ export default defineConfig({
         'z3-built.wasm',
         'z3-built.worker.js',
       ],
+      workbox: {
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
+      },
       manifest: {
         name: 'Logic Pad',
         short_name: 'Logic Pad',

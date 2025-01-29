@@ -1,8 +1,9 @@
 # 29/1/2025
 
-- Internal refactor: changed how the z3 solver is loaded
-- Fixed broken images when offline
+- Changed how cell count per zone works
 - Fixed site update leading to blank pages in some instances
+- Fixed broken images when offline
+- Internal refactor: changed how the z3 solver is loaded
 
 # 28/1/2025
 

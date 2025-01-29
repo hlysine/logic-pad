@@ -31,6 +31,10 @@ export default class CellCountPerZoneRule extends Rule {
           { x1: 2, y1: 1, x2: 2, y2: 2 },
           { x1: 3, y1: 1, x2: 3, y2: 2 },
           { x1: 4, y1: 1, x2: 4, y2: 2 },
+          { x1: 1, y1: 0, x2: 2, y2: 0 },
+          { x1: 1, y1: 1, x2: 2, y2: 1 },
+          { x1: 2, y1: 2, x2: 3, y2: 2 },
+          { x1: 2, y1: 3, x2: 3, y2: 3 },
         ])
       )
       .addRule(new CellCountPerZoneRule(Color.Light))
@@ -62,7 +66,7 @@ export default class CellCountPerZoneRule extends Rule {
   ];
 
   /**
-   * **Every zone has the same number of &lt;color&gt; cells.**
+   * **Zones of the same size have the same number of &lt;color&gt; cells.**
    *
    * @param color - The color of the cells to count.
    */
@@ -76,7 +80,7 @@ export default class CellCountPerZoneRule extends Rule {
   }
 
   public get explanation(): string {
-    return `Every zone has the same number of ${this.color} cells`;
+    return `Zones of the same size have the same number of ${this.color} cells`;
   }
 
   public get configs(): readonly AnyConfig[] | null {
@@ -153,6 +157,7 @@ export default class CellCountPerZoneRule extends Rule {
         zones.some(
           zz =>
             zz !== z &&
+            zz.positions.length === z.positions.length &&
             (zz.completed > z.completed + z.possible ||
               zz.completed + zz.possible < z.completed)
         )

@@ -1,3 +1,7 @@
+# 0.4.3
+
+- Changed how cell count per zone works
+
 # 0.4.2
 
 - Puzzles can now have no difficulty rating (represented as difficulty = 0)

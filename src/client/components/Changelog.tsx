@@ -8,16 +8,20 @@ export const changelogSections: { title: string; content: string }[] = [];
 
 async function loadChangelog() {
   if (changelogSections.length > 0) return Promise.resolve();
-  changelogText = (await import('../../../CHANGELOG.md?raw')).default.replace(
-    /\r\n|\r|\n/g,
-    '\n'
-  );
-  const sectionMatch = /(?:^|\n)# (.*?)\n(.*?)(?=\n#|$)/gs;
-  for (const match of changelogText.matchAll(sectionMatch)) {
-    changelogSections.push({
-      title: match[1].trim(),
-      content: match[2].trim(),
-    });
+  try {
+    changelogText = (await import('../../../CHANGELOG.md?raw')).default.replace(
+      /\r\n|\r|\n/g,
+      '\n'
+    );
+    const sectionMatch = /(?:^|\n)# (.*?)\n(.*?)(?=\n#|$)/gs;
+    for (const match of changelogText.matchAll(sectionMatch)) {
+      changelogSections.push({
+        title: match[1].trim(),
+        content: match[2].trim(),
+      });
+    }
+  } catch (e) {
+    console.error('Failed to load changelog:', e);
   }
 }
 
@@ -25,6 +29,7 @@ const ChangelogButton = lazy(async () => {
   await loadChangelog();
   return {
     default: function ChangelogButton() {
+      if (changelogSections.length === 0) return null;
       return (
         <>
           <button

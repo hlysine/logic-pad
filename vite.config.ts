@@ -5,10 +5,27 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import { replaceCodePlugin } from 'vite-plugin-replace';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/z3-solver/build/z3-built.js',
+          dest: 'assets',
+        },
+        {
+          src: 'node_modules/z3-solver/build/z3-built.wasm',
+          dest: 'assets',
+        },
+        {
+          src: 'node_modules/z3-solver/build/z3-built.worker.js',
+          dest: 'assets',
+        },
+      ],
+    }),
     replaceCodePlugin({
       replacements: [
         {
@@ -27,11 +44,15 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: [
         'favicon.ico',
-        'apple-touch-icon-180x180.png',
-        'z3-built.js',
-        'z3-built.wasm',
-        'z3-built.worker.js',
+        '*.svg',
+        '*.png',
+        'assets/z3-built.js',
+        'assets/z3-built.wasm',
+        'assets/z3-built.worker.js',
       ],
+      workbox: {
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
+      },
       manifest: {
         name: 'Logic Pad',
         short_name: 'Logic Pad',

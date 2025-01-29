@@ -16,7 +16,7 @@ export default memo(function PWAPrompt() {
       className="alert min-w-[min(100%-1rem,512px)] w-fit fixed top-2 right-2 max-w-[calc(100%-1rem)] shadow-xl z-50"
     >
       <FiAlertCircle />
-      <span>Update available. Reload site now?</span>
+      <span>Update available. Reload site now? 8</span>
       <div>
         <button
           type="button"
@@ -32,11 +32,8 @@ export default memo(function PWAPrompt() {
             const newLocation = `${window.location.origin}${window.location.pathname}?d=${await Compressor.compress(
               Serializer.stringifyPuzzle({ ...metadata, grid, solution })
             )}`;
-            try {
-              await updateServiceWorker(false);
-            } finally {
-              window.location.replace(newLocation);
-            }
+            window.history.pushState(null, '', newLocation);
+            await updateServiceWorker(true);
           }}
         >
           Reload

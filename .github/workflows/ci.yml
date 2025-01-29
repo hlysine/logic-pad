@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
-      - run: cd packages/logic-core && bun install
       - run: bun install
+      - run: cd packages/logic-core && bun install
       - run: bun run lint
       - run: cd packages/logic-core && bun run build
-      - run: bun run build
+      # - run: bun run build

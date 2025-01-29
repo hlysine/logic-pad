@@ -1,6 +1,6 @@
 # 0.4.2
 
-- Puzzles can now have no difficulty rating (represented as difficulty == 0)
+- Puzzles can now have no difficulty rating (represented as difficulty = 0)
 
 # 0.4.1
 

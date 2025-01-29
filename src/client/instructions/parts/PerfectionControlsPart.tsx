@@ -54,9 +54,9 @@ export default memo(function PerfectionControlsPart() {
       row.forEach((tile, x) => {
         const oldTile = gridDelta.prev!.tiles[y][x];
         if (tile === oldTile || tile.exists !== oldTile.exists) return;
-        if (tile.color === Color.Gray && oldTile.color !== Color.Gray)
+        if (oldTile.color !== Color.Gray && tile.color !== oldTile.color)
           positionsRemoved.push({ x, y });
-        if (tile.color !== Color.Gray && oldTile.color === Color.Gray)
+        if (tile.color !== Color.Gray && tile.color !== oldTile.color)
           positionsAdded.push({ x, y });
       });
     });

@@ -111,6 +111,7 @@ declare global {
   export declare enum Mode {
     Create = 'create',
     Solve = 'solve',
+    Perfection = 'perfection',
   }
   export declare class GridZones {
     readonly edges: readonly Edge[];
@@ -321,6 +322,10 @@ declare global {
     get necessaryForCompletion(): boolean;
     get visibleWhenSolving(): boolean;
     /**
+     * Return a variant of this instruction that is suitable for the given mode.
+     */
+    abstract modeVariant(mode: Mode): Instruction | null;
+    /**
      * Check if this instruction is equal to another instruction by comparing their IDs and configs.
      *
      * @param other The other instruction to compare to.
@@ -336,6 +341,7 @@ declare global {
     abstract validateGrid(grid: GridData): RuleState;
     abstract get searchVariants(): SearchVariant[];
     searchVariant(): SearchVariant;
+    modeVariant(_mode: Mode): Rule | null;
     /**
      * Whether only one instance of this rule is allowed in a grid.
      */
@@ -363,6 +369,7 @@ declare global {
     readonly y: number;
     constructor(x: number, y: number);
     abstract validateSymbol(grid: GridData): State;
+    modeVariant(_mode: Mode): Symbol$1 | null;
     onGridResize(
       _grid: GridData,
       mode: 'insert' | 'remove',
@@ -426,6 +433,11 @@ declare global {
   export declare function handlesSetGrid<T extends Instruction>(
     val: T
   ): val is T & SetGridHandler;
+  export declare function invokeSetGrid(
+    oldGrid: GridData,
+    newGrid: GridData,
+    solution: GridData | null
+  ): GridData;
   export declare class Row extends Configurable {
     /**
      * The note to play at this row, or null to keep the current note from the previous control line.
@@ -981,14 +993,6 @@ declare global {
      */
     colorEquals(grid: GridData): boolean;
     /**
-     * Check if this grid conforms to the given solution, or an incomplete version of the solution.
-     * Symbols and rules are not validated.
-     *
-     * @param solution The solution to compare with.
-     * @returns True if the grid conforms to the solution, false otherwise.
-     */
-    solutionMatches(solution: GridData): boolean;
-    /**
      * Check if this grid is equal to another grid in terms of size, tile colors, connections, symbols, and rules.
      *
      * @param other The grid to compare with.
@@ -1368,7 +1372,7 @@ declare global {
     private static readonly EXAMPLE_GRID_GRAY;
     private static readonly SEARCH_VARIANTS;
     /**
-     * **Every zone has the same number of &lt;color&gt; cells.**
+     * **Zones of the same size have the same number of &lt;color&gt; cells.**
      *
      * @param color - The color of the cells to count.
      */
@@ -1483,6 +1487,7 @@ declare global {
     validateGrid(_grid: GridData): RuleState;
     get necessaryForCompletion(): boolean;
     get isSingleton(): boolean;
+    modeVariant(mode: Mode): Rule | null;
     copyWith({
       count,
       regenInterval,
@@ -1573,12 +1578,15 @@ declare global {
     extends Rule
     implements SetGridHandler, FinalValidationHandler
   {
+    readonly editor: boolean;
     private static readonly EXAMPLE_GRID;
     private static readonly SEARCH_VARIANTS;
     /**
      * **Quest for Perfection: cell colors are final**
+     *
+     * @param editor - whether to enable editor mode. This field is automatically set by the editor.
      */
-    constructor();
+    constructor(editor?: boolean);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
@@ -1586,6 +1594,7 @@ declare global {
     get searchVariants(): SearchVariant[];
     get necessaryForCompletion(): boolean;
     get isSingleton(): boolean;
+    modeVariant(mode: Mode): Rule | null;
     validateGrid(grid: GridData): RuleState;
     /**
      * If the grid passes validation but is different from the solution, indicate the error in the final state.
@@ -1596,6 +1605,7 @@ declare global {
       state: GridState
     ): GridState;
     private fixTiles;
+    private isValid;
     /**
      * Force all tiles to be fixed.
      *
@@ -1606,7 +1616,7 @@ declare global {
       newGrid: GridData,
       solution: GridData | null
     ): GridData;
-    copyWith(_: object): this;
+    copyWith({ editor }: { editor?: boolean }): this;
   }
   export declare class RegionAreaRule extends Rule {
     readonly color: Color;

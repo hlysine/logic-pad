@@ -1,6 +1,13 @@
 import { AnyConfig } from '../config.js';
 import GridData from '../grid.js';
-import { Color, GridState, RuleState, State, Position } from '../primitives.js';
+import {
+  Color,
+  GridState,
+  RuleState,
+  State,
+  Position,
+  Mode,
+} from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import { SetGridHandler } from '../events/onSetGrid.js';
@@ -16,13 +23,18 @@ export default class PerfectionRule
     )
   );
 
-  private static readonly SEARCH_VARIANTS = []; // this rule is not searchable
+  private static readonly SEARCH_VARIANTS = [
+    new PerfectionRule().searchVariant(),
+  ];
 
   /**
    * **Quest for Perfection: cell colors are final**
+   *
+   * @param editor - whether to enable editor mode. This field is automatically set by the editor.
    */
-  public constructor() {
+  public constructor(public readonly editor = false) {
     super();
+    this.editor = editor;
   }
 
   public get id(): string {
@@ -51,6 +63,17 @@ export default class PerfectionRule
 
   public get isSingleton(): boolean {
     return true;
+  }
+
+  public modeVariant(mode: Mode): Rule | null {
+    // only allow this rule in perfection mode
+    if (this.editor === (mode === Mode.Create)) {
+      return this;
+    } else if (mode === Mode.Create) {
+      return this.copyWith({ editor: true });
+    } else {
+      return this.copyWith({ editor: false });
+    }
   }
 
   public validateGrid(grid: GridData): RuleState {
@@ -127,6 +150,8 @@ export default class PerfectionRule
     newGrid: GridData,
     solution: GridData | null
   ): GridData {
+    if (this.editor) return newGrid;
+
     if (!solution) {
       return this.fixTiles(newGrid);
     }
@@ -139,8 +164,8 @@ export default class PerfectionRule
     return this.fixTiles(newGrid);
   }
 
-  public copyWith(_: object): this {
-    return new PerfectionRule() as this;
+  public copyWith({ editor }: { editor?: boolean }): this {
+    return new PerfectionRule(editor ?? this.editor) as this;
   }
 }
 

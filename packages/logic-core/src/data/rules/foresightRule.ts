@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
-import { RuleState, State, Position } from '../primitives.js';
+import { RuleState, State, Position, Mode } from '../primitives.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
@@ -98,6 +98,14 @@ export default class ForesightRule extends Rule {
 
   public get isSingleton(): boolean {
     return true;
+  }
+
+  public modeVariant(mode: Mode): Rule | null {
+    // foresight is disabled in perfection mode
+    if (mode === Mode.Perfection) {
+      return null;
+    }
+    return this;
   }
 
   public copyWith({

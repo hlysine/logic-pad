@@ -1,6 +1,8 @@
 import { PartPlacement, PartSpec } from './types';
 import { memo, useEffect, useRef, useState } from 'react';
-import { instance as perfectionInstance } from '@logic-pad/core/data/rules/perfectionRule';
+import PerfectionRule, {
+  instance as perfectionInstance,
+} from '@logic-pad/core/data/rules/perfectionRule';
 import { useGrid } from '../../contexts/GridContext';
 import { useSolvePath } from '../../contexts/SolvePathContext';
 import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
@@ -64,10 +66,17 @@ const PerfectionOverlay = memo(function PerfectionOverlay() {
   );
 });
 
-export default memo(function PerfectionOverlayPart() {
+export interface PerfectionOverlayPartProps {
+  instruction: PerfectionRule;
+}
+
+export default memo(function PerfectionOverlayPart({
+  instruction,
+}: PerfectionOverlayPartProps) {
   const { solvePath, visualizeSolvePath } = useSolvePath();
 
-  if (!visualizeSolvePath || solvePath.length === 0) return null;
+  if (!visualizeSolvePath || solvePath.length === 0 || instruction.editor)
+    return null;
   return <PerfectionOverlay />;
 });
 

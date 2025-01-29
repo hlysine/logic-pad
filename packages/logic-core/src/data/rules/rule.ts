@@ -1,5 +1,5 @@
 import GridData from '../grid.js';
-import { RuleState } from '../primitives.js';
+import { Mode, RuleState } from '../primitives.js';
 import Instruction from '../instruction.js';
 
 export interface SearchVariant {
@@ -17,6 +17,10 @@ export default abstract class Rule extends Instruction {
       description: this.explanation,
       rule: this,
     };
+  }
+
+  public modeVariant(_mode: Mode): Rule | null {
+    return this as Rule;
   }
 
   /**

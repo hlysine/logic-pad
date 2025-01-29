@@ -9,7 +9,8 @@ import InstructionList from '../instructions/InstructionList';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
-import { Position } from '@logic-pad/core/data/primitives';
+import { Mode, Position } from '@logic-pad/core/data/primitives';
+import ModeVariantLoader from '../router/ModeVariantLoader';
 
 export interface PerfectionScreenProps {
   children?: React.ReactNode;
@@ -49,6 +50,7 @@ export default function PerfectionScreen({
             </GridConsumer>
             <TouchControls />
             <EditControls />
+            <ModeVariantLoader mode={Mode.Perfection} />
           </>
         }
         center={<MainGrid useToolboxClick={false} />}

@@ -11,13 +11,17 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useSolvePath } from '../../contexts/SolvePathContext';
 import { useDelta } from 'react-delta-hooks';
 import { RiErrorWarningFill } from 'react-icons/ri';
+import { useEmbed } from '../../contexts/EmbedContext';
 
 export interface PerfectionControlsPartProps {
   instruction: PerfectionRule;
 }
 
-export default memo(function PerfectionControlsPart() {
+export default memo(function PerfectionControlsPart({
+  instruction,
+}: PerfectionControlsPartProps) {
   const { grid, setGridRaw } = useGrid();
+  const { embedChildren } = useEmbed();
   const { state } = useGridState();
   const { undo } = useEdit();
   const { solvePath, setSolvePath, visualizeSolvePath, setVisualizeSolvePath } =
@@ -38,12 +42,16 @@ export default memo(function PerfectionControlsPart() {
   };
 
   useHotkeys('z', handleUndo, {
-    enabled: () => state.final === State.Error,
+    enabled: () =>
+      !instruction.editor &&
+      state.final === State.Error &&
+      embedChildren.length === 0,
     preventDefault: true,
   });
 
   const gridDelta = useDelta(grid);
   useEffect(() => {
+    if (instruction.editor) return;
     if (!gridDelta) return;
     if (!gridDelta.prev) return;
     if (gridDelta.prev === gridDelta.curr) return;
@@ -91,6 +99,8 @@ export default memo(function PerfectionControlsPart() {
     const filled = solvePath.length;
     return (filled / (empty + filled)) * 100;
   }, [grid, solvePath]);
+
+  if (instruction.editor) return null;
 
   return (
     <>

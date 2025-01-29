@@ -1021,27 +1021,6 @@ export default class GridData {
   }
 
   /**
-   * Check if this grid conforms to the given solution, or an incomplete version of the solution.
-   * Symbols and rules are not validated.
-   *
-   * @param solution The solution to compare with.
-   * @returns True if the grid conforms to the solution, false otherwise.
-   */
-  public solutionMatches(solution: GridData): boolean {
-    if (this.width !== solution.width) return false;
-    if (this.height !== solution.height) return false;
-    return this.tiles.every((row, y) =>
-      row.every((tile, x) => {
-        const solutionTile = solution.getTile(x, y);
-        if (!solutionTile.exists) return true;
-        if (tile.color === Color.Gray) return true;
-        if (solutionTile.color !== tile.color) return false;
-        return true;
-      })
-    );
-  }
-
-  /**
    * Check if this grid is equal to another grid in terms of size, tile colors, connections, symbols, and rules.
    *
    * @param other The grid to compare with.

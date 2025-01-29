@@ -6,11 +6,13 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { useEdit } from '../contexts/EditContext.tsx';
 import { useSearch } from '@tanstack/react-router';
 import { Compressor, GridData, Serializer } from '@logic-pad/core/index.ts';
+import { useEmbed } from '../contexts/EmbedContext.tsx';
 
 export default memo(function EditControls() {
   const { grid, setGrid, setGridRaw } = useGrid();
   const { undoStack, redoStack, undo: undoEdit, redo: redoEdit } = useEdit();
   const search = useSearch({ from: undefined, strict: false });
+  const { embedChildren } = useEmbed();
 
   const undo = () => {
     const result = undoEdit(grid);
@@ -35,9 +37,18 @@ export default memo(function EditControls() {
     setGrid(reset);
   };
 
-  useHotkeys('z', undo, { preventDefault: true });
-  useHotkeys('r', restart, { preventDefault: true });
-  useHotkeys('y', redo, { preventDefault: true });
+  useHotkeys('z', undo, {
+    preventDefault: true,
+    enabled: embedChildren.length === 0,
+  });
+  useHotkeys('r', restart, {
+    preventDefault: true,
+    enabled: embedChildren.length === 0,
+  });
+  useHotkeys('y', redo, {
+    preventDefault: true,
+    enabled: embedChildren.length === 0,
+  });
 
   return (
     <ul className="menu menu-horizontal shrink-0 justify-center bg-base-100 shadow-md text-base-content rounded-box fixed bottom-2 z-40 left-2 right-2 xl:static xl:shadow-md">

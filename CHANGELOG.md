@@ -1,9 +1,11 @@
 # 29/1/2025
 
 - Changed how cell count per zone works
+- The perfection rule now locks further input on error even if a solution is not available
+- The perfection rule is now searchable in the editor
+- Undo/redo hotkeys are now usable in editor modal boxes
 - Fixed site update leading to blank pages in some instances
 - Fixed broken images when offline
-- Internal refactor: changed how the z3 solver is loaded
 
 # 28/1/2025
 

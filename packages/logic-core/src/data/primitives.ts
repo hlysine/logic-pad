@@ -138,4 +138,5 @@ export function orientationToggle(...orientations: readonly Orientation[]) {
 export enum Mode {
   Create = 'create',
   Solve = 'solve',
+  Perfection = 'perfection',
 }

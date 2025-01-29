@@ -4,7 +4,7 @@ import { useEdit } from './EditContext.tsx';
 import { PuzzleMetadata } from '@logic-pad/core/data/puzzle';
 import validateGrid from '@logic-pad/core/data/validate';
 import { useGridState } from './GridStateContext.tsx';
-import { handlesSetGrid } from '@logic-pad/core/data/events/onSetGrid';
+import { invokeSetGrid } from '@logic-pad/core/data/events/onSetGrid';
 
 export interface GridContext {
   grid: GridData;
@@ -39,21 +39,27 @@ export const useGrid = () => {
 
 export const GridConsumer = context.Consumer;
 
+export interface GridContextProps {
+  children: React.ReactNode;
+  initialGrid?: GridData | (() => GridData);
+  initialSolution?: GridData | null | (() => GridData | null);
+  initialMetadata?: PuzzleMetadata | (() => PuzzleMetadata);
+  grid?: GridData;
+  setGrid?: (value: GridData) => void;
+}
+
 export default memo(function GridContext({
   children,
-  grid: initialGrid,
-  solution: initialSolution,
-  metadata: initialMetadata,
-}: {
-  children: React.ReactNode;
-  grid?: GridData | (() => GridData);
-  solution?: GridData | null | (() => GridData | null);
-  metadata?: PuzzleMetadata;
-}) {
+  initialGrid,
+  initialSolution,
+  initialMetadata,
+  grid: externalGrid,
+  setGrid: setExternalGrid,
+}: GridContextProps) {
   const { recordEdit, clearHistory } = useEdit();
   const { setState } = useGridState();
 
-  const [grid, setGrid] = useState(initialGrid ?? defaultGrid);
+  const [internalGrid, setInternalGrid] = useState(initialGrid ?? defaultGrid);
   const [solution, setSolution] = useState<GridData | null>(
     initialSolution === undefined ? null : initialSolution
   );
@@ -61,37 +67,16 @@ export default memo(function GridContext({
     initialMetadata ?? defaultMetadata
   );
 
+  const grid = externalGrid ?? internalGrid;
+  const setGrid = setExternalGrid ?? setInternalGrid;
+
   useEffect(() => {
     clearHistory(grid);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const invokeSetGrid = (newGrid: GridData, sol?: GridData | null) => {
-    newGrid.symbols.forEach(list => {
-      list.forEach(symbol => {
-        if (handlesSetGrid(symbol)) {
-          newGrid = symbol.onSetGrid(
-            grid,
-            newGrid,
-            sol === undefined ? solution : sol
-          );
-        }
-      });
-    });
-    newGrid.rules.forEach(rule => {
-      if (handlesSetGrid(rule)) {
-        newGrid = rule.onSetGrid(
-          grid,
-          newGrid,
-          sol === undefined ? solution : sol
-        );
-      }
-    });
-    return newGrid;
-  };
-
   const setGridRaw = (newGrid: GridData, sol?: GridData | null) => {
-    newGrid = invokeSetGrid(newGrid, sol);
+    newGrid = invokeSetGrid(grid, newGrid, sol === undefined ? solution : sol);
     setGrid(newGrid);
     if (sol !== undefined) setSolution(sol);
     setState(validateGrid(newGrid, sol === undefined ? solution : sol));

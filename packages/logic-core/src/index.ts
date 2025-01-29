@@ -11,7 +11,7 @@ import { isEventHandler } from './data/events/eventHelper.js';
 import { handlesFinalValidation } from './data/events/onFinalValidation.js';
 import { handlesGridChange } from './data/events/onGridChange.js';
 import { handlesGridResize } from './data/events/onGridResize.js';
-import { handlesSetGrid } from './data/events/onSetGrid.js';
+import { handlesSetGrid, invokeSetGrid } from './data/events/onSetGrid.js';
 import { handlesSymbolDisplay } from './data/events/onSymbolDisplay.js';
 import { handlesSymbolValidation } from './data/events/onSymbolValidation.js';
 import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
@@ -126,6 +126,7 @@ export {
   handlesGridChange,
   handlesGridResize,
   handlesSetGrid,
+  invokeSetGrid,
   handlesSymbolDisplay,
   handlesSymbolValidation,
   GridData,

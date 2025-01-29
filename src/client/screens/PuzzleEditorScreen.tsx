@@ -17,7 +17,8 @@ import { useEmbed } from '../contexts/EmbedContext';
 import PuzzleChecklist from '../editor/PuzzleChecklist';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
-import BanPerfectionRulePart from '../instructions/parts/BanPerfectionRulePart';
+import ModeVariantLoader from '../router/ModeVariantLoader';
+import { Mode } from '@logic-pad/core/data/primitives';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -55,7 +56,7 @@ export default memo(function PuzzleEditorScreen({
               </div>
               <TouchControls />
               <EditControls />
-              <BanPerfectionRulePart />
+              <ModeVariantLoader mode={Mode.Create} />
             </>
           }
           center={

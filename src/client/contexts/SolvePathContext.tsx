@@ -21,19 +21,25 @@ export const useSolvePath = () => {
 
 export const SolvePathConsumer = context.Consumer;
 
+export interface SolvePathContextProps {
+  children: React.ReactNode;
+  solvePath?: Position[];
+  setSolvePath?: (solvePath: Position[]) => void;
+}
+
 export default memo(function SolvePathContext({
   children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [solvePath, setSolvePath] = useState<Position[]>([]);
+  solvePath: externalSolvePath,
+  setSolvePath: setExternalSolvePath,
+}: SolvePathContextProps) {
+  const [internalSolvePath, setInternalSolvePath] = useState<Position[]>([]);
   const [visualizeSolvePath, setVisualizeSolvePath] = useState<boolean>(false);
 
   return (
     <context.Provider
       value={{
-        solvePath,
-        setSolvePath,
+        solvePath: externalSolvePath ?? internalSolvePath,
+        setSolvePath: setExternalSolvePath ?? setInternalSolvePath,
         visualizeSolvePath,
         setVisualizeSolvePath,
       }}

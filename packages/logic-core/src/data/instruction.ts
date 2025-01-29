@@ -1,5 +1,6 @@
 import Configurable from './configurable.js';
 import GridData from './grid.js';
+import { Mode } from './primitives.js';
 
 export default abstract class Instruction extends Configurable {
   public abstract get id(): string;
@@ -22,6 +23,11 @@ export default abstract class Instruction extends Configurable {
   public get visibleWhenSolving(): boolean {
     return true;
   }
+
+  /**
+   * Return a variant of this instruction that is suitable for the given mode.
+   */
+  public abstract modeVariant(mode: Mode): Instruction | null;
 
   /**
    * Check if this instruction is equal to another instruction by comparing their IDs and configs.

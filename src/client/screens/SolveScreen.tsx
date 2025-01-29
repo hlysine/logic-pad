@@ -1,3 +1,4 @@
+import { Mode } from '@logic-pad/core/data/primitives';
 import DocumentTitle from '../components/DocumentTitle';
 import EditControls from '../components/EditControls';
 import ThreePaneLayout from '../components/ThreePaneLayout';
@@ -7,9 +8,9 @@ import { GridConsumer } from '../contexts/GridContext';
 import MainGrid from '../grid/MainGrid';
 import InstructionList from '../instructions/InstructionList';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
-import BanPerfectionRulePart from '../instructions/parts/BanPerfectionRulePart';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
+import ModeVariantLoader from '../router/ModeVariantLoader';
 
 export interface SolveScreenProps {
   children?: React.ReactNode;
@@ -44,7 +45,7 @@ export default function SolveScreen({ children }: SolveScreenProps) {
             {children}
             <TouchControls />
             <EditControls />
-            <BanPerfectionRulePart />
+            <ModeVariantLoader mode={Mode.Solve} />
           </>
         }
         center={<MainGrid useToolboxClick={false} />}

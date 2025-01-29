@@ -1,3 +1,8 @@
+# 0.4.4
+
+- Added mode variants for rules and symbols
+- The perfection rule now locks further input on error even if a solution is not available
+
 # 0.4.3
 
 - Changed how cell count per zone works

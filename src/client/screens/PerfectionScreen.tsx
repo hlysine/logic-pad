@@ -9,14 +9,22 @@ import InstructionList from '../instructions/InstructionList';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
+import { Mode, Position } from '@logic-pad/core/data/primitives';
+import ModeVariantLoader from '../router/ModeVariantLoader';
 
 export interface PerfectionScreenProps {
   children?: React.ReactNode;
+  solvePath?: Position[];
+  setSolvePath?: (solvePath: Position[]) => void;
 }
 
-export default function PerfectionScreen({ children }: PerfectionScreenProps) {
+export default function PerfectionScreen({
+  children,
+  solvePath,
+  setSolvePath,
+}: PerfectionScreenProps) {
   return (
-    <SolvePathContext>
+    <SolvePathContext solvePath={solvePath} setSolvePath={setSolvePath}>
       <ThreePaneLayout
         left={
           <>
@@ -42,6 +50,7 @@ export default function PerfectionScreen({ children }: PerfectionScreenProps) {
             </GridConsumer>
             <TouchControls />
             <EditControls />
+            <ModeVariantLoader mode={Mode.Perfection} />
           </>
         }
         center={<MainGrid useToolboxClick={false} />}

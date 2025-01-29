@@ -1,7 +1,7 @@
 import { GridResizeHandler } from '../events/onGridResize.js';
 import GridData from '../grid.js';
 import Instruction from '../instruction.js';
-import { State } from '../primitives.js';
+import { Mode, State } from '../primitives.js';
 
 export default abstract class Symbol
   extends Instruction
@@ -17,6 +17,10 @@ export default abstract class Symbol
   }
 
   public abstract validateSymbol(grid: GridData): State;
+
+  public modeVariant(_mode: Mode): Symbol | null {
+    return this as Symbol;
+  }
 
   public onGridResize(
     _grid: GridData,

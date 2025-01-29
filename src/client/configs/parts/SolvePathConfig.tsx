@@ -1,9 +1,12 @@
-import { memo, useState } from 'react';
+import { memo, useRef } from 'react';
 import { ConfigType, SolvePathConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
 import { FiExternalLink } from 'react-icons/fi';
 import { Position } from '@logic-pad/core/data/primitives';
-import SolvePathEditorModal from './SolvePathEditorModal';
+import SolvePathEditorModal, {
+  SolvePathEditorRef,
+} from './SolvePathEditorModal';
+import { useGrid } from '../../contexts/GridContext';
 
 export interface SolvePathConfigProps {
   configurable: Configurable;
@@ -16,10 +19,12 @@ export default memo(function SolvePathConfig({
   config,
   setConfig,
 }: SolvePathConfigProps) {
+  const { grid, metadata } = useGrid();
   const solvePath = configurable[
     config.field as keyof typeof configurable
   ] as unknown as Position[];
-  const [open, setOpen] = useState(false);
+
+  const editorRef = useRef<SolvePathEditorRef>(null);
 
   return (
     <div className="flex p-2 justify-between items-center">
@@ -28,17 +33,15 @@ export default memo(function SolvePathConfig({
         <button
           type="button"
           className="btn justify-start flex-nowrap flex"
-          onClick={() => setOpen(true)}
+          onClick={() => editorRef.current?.open(solvePath, grid, metadata)}
         >
           Open editor
           <FiExternalLink size={24} />
         </button>
 
         <SolvePathEditorModal
-          solvePath={solvePath}
-          setSolvePath={solvePath => setConfig?.(config.field, solvePath)}
-          open={open}
-          setOpen={setOpen}
+          ref={editorRef}
+          onChange={solvePath => setConfig?.(config.field, solvePath)}
         />
       </div>
     </div>

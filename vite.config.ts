@@ -5,10 +5,35 @@ import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import { replaceCodePlugin } from 'vite-plugin-replace';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'CHANGELOG.md',
+          dest: '.',
+        },
+        {
+          src: 'packages/logic-core/assets/logic-core.global.d.ts',
+          dest: 'assets',
+        },
+        {
+          src: 'node_modules/z3-solver/build/z3-built.js',
+          dest: 'assets',
+        },
+        {
+          src: 'node_modules/z3-solver/build/z3-built.wasm',
+          dest: 'assets',
+        },
+        {
+          src: 'node_modules/z3-solver/build/z3-built.worker.js',
+          dest: 'assets',
+        },
+      ],
+    }),
     replaceCodePlugin({
       replacements: [
         {

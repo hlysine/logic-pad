@@ -1,3 +1,7 @@
+# 29/1/2025
+
+- Internal change: skip bundling of static text assets
+
 # 28/1/2025
 
 - Puzzles without a difficulty rating now display a question mark

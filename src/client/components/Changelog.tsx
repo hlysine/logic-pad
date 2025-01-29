@@ -8,10 +8,9 @@ export const changelogSections: { title: string; content: string }[] = [];
 
 async function loadChangelog() {
   if (changelogSections.length > 0) return Promise.resolve();
-  changelogText = (await import('../../../CHANGELOG.md?raw')).default.replace(
-    /\r\n|\r|\n/g,
-    '\n'
-  );
+  changelogText = (
+    await fetch('/CHANGELOG.md').then(res => res.text())
+  ).replace(/\r\n|\r|\n/g, '\n');
   const sectionMatch = /(?:^|\n)# (.*?)\n(.*?)(?=\n#|$)/gs;
   for (const match of changelogText.matchAll(sectionMatch)) {
     changelogSections.push({

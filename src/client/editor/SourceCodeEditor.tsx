@@ -90,8 +90,9 @@ export default memo(function SourceCodeEditor({
       strict: true,
     });
 
-    import('@logic-pad/core/assets/logic-core.global.d.ts?raw')
-      .then(({ default: def }) => {
+    fetch('/assets/logic-core.global.d.ts')
+      .then(res => res.text())
+      .then(def => {
         monaco.languages.typescript.javascriptDefaults.addExtraLib(
           def,
           'file:///logic-pad.d.ts'

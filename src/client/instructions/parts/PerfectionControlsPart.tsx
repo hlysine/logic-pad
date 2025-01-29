@@ -69,7 +69,7 @@ export default memo(function PerfectionControlsPart({
       });
     });
     if (positionsRemoved.length > 0) {
-      const endOfPath = solvePath.slice(-positionsRemoved.length);
+      const endOfPath = newSolvePath.slice(-positionsRemoved.length);
       if (
         endOfPath.every(pos =>
           positionsRemoved.some(p => p.x === pos.x && p.y === pos.y)
@@ -82,7 +82,7 @@ export default memo(function PerfectionControlsPart({
     }
     if (positionsAdded.length > 0) {
       if (
-        solvePath.some(pos =>
+        newSolvePath.some(pos =>
           positionsAdded.some(p => p.x === pos.x && p.y === pos.y)
         )
       ) {

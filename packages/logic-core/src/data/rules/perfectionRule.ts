@@ -125,15 +125,19 @@ export default class PerfectionRule
     return state;
   }
 
-  private fixTiles(grid: GridData): GridData {
+  private fixTiles(grid: GridData, exclusions?: Position[]): GridData {
     if (
       grid.getTileCount(true, false, Color.Light) > 0 ||
       grid.getTileCount(true, false, Color.Dark) > 0
     ) {
       return grid.withTiles(tiles =>
-        tiles.map(row =>
-          row.map(t =>
-            t.exists && t.color !== Color.Gray ? t.withFixed(true) : t
+        tiles.map((row, y) =>
+          row.map((t, x) =>
+            t.exists &&
+            t.color !== Color.Gray &&
+            !exclusions?.some(e => e.x === x && e.y === y)
+              ? t.withFixed(true)
+              : t
           )
         )
       );
@@ -143,6 +147,35 @@ export default class PerfectionRule
 
   private isValid(grid: GridData, solution: GridData | null): boolean {
     return validateGrid(grid, solution).final !== State.Error;
+  }
+
+  private findSingleError(
+    grid: GridData,
+    solution: GridData | null
+  ): Position[] {
+    if (solution === null) return [];
+    const positions: Position[] = [];
+    // If a solution is available, we can compare against the solution and allow the user to modify the one single error.
+    grid.tiles.forEach((row, y) =>
+      row.forEach((t, x) => {
+        if (
+          t.exists &&
+          t.color !== Color.Gray &&
+          t.color !== solution.getTile(x, y).color
+        ) {
+          positions.push({ x, y });
+        }
+      })
+    );
+    if (positions.length > 1) {
+      const connected = grid.connections.getConnectedTiles(positions[0]);
+      if (
+        !positions.every(p => connected.some(c => c.x === p.x && c.y === p.y))
+      ) {
+        return [];
+      }
+    }
+    return positions;
   }
 
   /**
@@ -157,8 +190,14 @@ export default class PerfectionRule
   ): GridData {
     if (this.editor) return newGrid;
 
-    if (!this.isValid(oldGrid, solution) && !this.isValid(newGrid, solution)) {
-      return this.fixTiles(oldGrid);
+    const oldGridIsValid = this.isValid(oldGrid, solution);
+    const newGridIsValid = this.isValid(newGrid, solution);
+    if (!oldGridIsValid && !newGridIsValid) {
+      const oldPositions = this.findSingleError(oldGrid, solution);
+      return this.fixTiles(oldGrid, oldPositions);
+    } else if (!newGridIsValid) {
+      const positions = this.findSingleError(newGrid, solution);
+      return this.fixTiles(newGrid, positions);
     }
     return this.fixTiles(newGrid);
   }

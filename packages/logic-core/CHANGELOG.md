@@ -2,6 +2,7 @@
 
 - Added mode variants for rules and symbols
 - The perfection rule now locks further input on error even if a solution is not available
+- If a solution is available, you can now amend an error in perfection mode without having to undo
 
 # 0.4.3
 

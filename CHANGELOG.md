@@ -6,6 +6,7 @@
 - Undo/redo hotkeys are now usable in editor modal boxes
 - Fixed site update leading to blank pages in some instances
 - Fixed broken images when offline
+- If a solution is available, you can now amend an error in perfection mode without having to undo
 
 # 28/1/2025
 

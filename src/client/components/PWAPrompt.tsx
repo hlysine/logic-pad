@@ -35,7 +35,7 @@ export default memo(function PWAPrompt() {
             try {
               await updateServiceWorker(false);
             } finally {
-              window.location.replace(newLocation);
+              window.location.href = newLocation;
             }
           }}
         >

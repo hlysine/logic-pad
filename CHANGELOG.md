@@ -1,6 +1,7 @@
 # 29/1/2025
 
-- Internal change: skip bundling of static text assets
+- Internal refactor: changed how the z3 solver is loaded
+- Fixed broken images when offline
 
 # 28/1/2025
 

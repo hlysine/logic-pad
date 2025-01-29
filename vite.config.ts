@@ -13,14 +13,6 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'CHANGELOG.md',
-          dest: '.',
-        },
-        {
-          src: 'packages/logic-core/assets/logic-core.global.d.ts',
-          dest: 'assets',
-        },
-        {
           src: 'node_modules/z3-solver/build/z3-built.js',
           dest: 'assets',
         },
@@ -57,8 +49,6 @@ export default defineConfig({
         'assets/z3-built.js',
         'assets/z3-built.wasm',
         'assets/z3-built.worker.js',
-        'assets/logic-core.global.d.ts',
-        'CHANGELOG.md',
       ],
       workbox: {
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,

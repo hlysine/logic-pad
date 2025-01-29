@@ -2,6 +2,7 @@
 
 - Internal refactor: changed how the z3 solver is loaded
 - Fixed broken images when offline
+- Fixed site update leading to blank pages in some instances
 
 # 28/1/2025
 

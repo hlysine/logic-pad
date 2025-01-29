@@ -12,6 +12,7 @@ import Rule, { SearchVariant } from './rule.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import { SetGridHandler } from '../events/onSetGrid.js';
 import { FinalValidationHandler } from '../events/onFinalValidation.js';
+import validateGrid from '../validate.js';
 
 export default class PerfectionRule
   extends Rule
@@ -140,6 +141,10 @@ export default class PerfectionRule
     return grid;
   }
 
+  private isValid(grid: GridData, solution: GridData | null): boolean {
+    return validateGrid(grid, solution).final !== State.Error;
+  }
+
   /**
    * Force all tiles to be fixed.
    *
@@ -152,13 +157,7 @@ export default class PerfectionRule
   ): GridData {
     if (this.editor) return newGrid;
 
-    if (!solution) {
-      return this.fixTiles(newGrid);
-    }
-    if (
-      !oldGrid.solutionMatches(solution) &&
-      !newGrid.solutionMatches(solution)
-    ) {
+    if (!this.isValid(oldGrid, solution) && !this.isValid(newGrid, solution)) {
       return this.fixTiles(oldGrid);
     }
     return this.fixTiles(newGrid);

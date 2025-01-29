@@ -52,7 +52,8 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: [
         'favicon.ico',
-        'apple-touch-icon-180x180.png',
+        '*.svg',
+        '*.png',
         'assets/z3-built.js',
         'assets/z3-built.wasm',
         'assets/z3-built.worker.js',

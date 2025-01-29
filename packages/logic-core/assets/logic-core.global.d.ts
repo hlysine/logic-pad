@@ -1606,6 +1606,7 @@ declare global {
     ): GridState;
     private fixTiles;
     private isValid;
+    private findSingleError;
     /**
      * Force all tiles to be fixed.
      *

@@ -4,6 +4,7 @@
 - Added hotkey indications for various buttons
 - Fixed "copy solve path" button not working for underclued grids
 - Added a button to reset solver
+- Disabled fancy animations in the editor
 
 # 29/1/2025
 

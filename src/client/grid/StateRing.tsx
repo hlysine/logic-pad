@@ -3,6 +3,7 @@ import { cn, prefersReducedMotion } from '../uiHelper.ts';
 import { State } from '@logic-pad/core/data/primitives';
 import anime from 'animejs';
 import { useGridState } from '../contexts/GridStateContext.tsx';
+import { useRouterState } from '@tanstack/react-router';
 
 export interface GridRingProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ export default memo(
     ref
   ) {
     const { state } = useGridState();
+    const router = useRouterState();
 
     useEffect(() => {
       if (state.final === State.Satisfied && !prefersReducedMotion()) {
@@ -42,7 +44,7 @@ export default memo(
     }, [state.final, width, height]);
 
     useEffect(() => {
-      if (prefersReducedMotion()) {
+      if (prefersReducedMotion() || router.location.pathname === '/create') {
         anime({
           targets: '.logic-animated .logic-tile',
           scale: 1,
@@ -60,7 +62,7 @@ export default memo(
           }),
         });
       }
-    }, [width, height]);
+    }, [width, height, router.location.pathname]);
 
     return (
       <div

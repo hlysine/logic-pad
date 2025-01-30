@@ -155,6 +155,10 @@ export function encodePlayback(
             break;
           case 'keydown':
             if (event.value in drum) {
+              drum[event.value as keyof typeof drum].volume.setValueAtTime(
+                (event.velocity - 0.6) * 20,
+                time
+              );
               drum[event.value as keyof typeof drum].start(time, 0);
             } else {
               piano.keyDown({

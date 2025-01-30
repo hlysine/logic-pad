@@ -5,6 +5,7 @@
 - Fixed "copy solve path" button not working for underclued grids
 - Added a button to reset solver
 - Disabled fancy animations in the editor
+- Drum sample volume can now be controlled with the velocity field
 
 # 29/1/2025
 

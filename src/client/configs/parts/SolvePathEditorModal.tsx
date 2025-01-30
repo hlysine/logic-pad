@@ -14,7 +14,7 @@ import { Color, Position } from '@logic-pad/core/data/primitives';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../../screens/PerfectionScreen';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
-import EditContext from '../../contexts/EditContext';
+import EditContext, { EditConsumer } from '../../contexts/EditContext';
 import { useDelta } from 'react-delta-hooks';
 import { GridData } from '@logic-pad/core/index';
 import { Puzzle, PuzzleMetadata } from '@logic-pad/core/data/puzzle';
@@ -133,42 +133,49 @@ export default memo(
                           return metadata;
                         }}
                       >
-                        <PerfectionScreen
-                          solvePath={tempSolvePath}
-                          setSolvePath={setTempSolvePath}
-                        >
-                          <GridConsumer>
-                            {({ setGrid: setInnerGrid }) => {
-                              return (
-                                <>
-                                  <button
-                                    type="button"
-                                    className="btn"
-                                    onClick={() => {
-                                      const { grid, solution } = prepareGrid(
-                                        initialState.grid,
-                                        []
-                                      );
-                                      setInnerGrid(grid, solution);
-                                      setTempSolvePath([]);
-                                    }}
-                                  >
-                                    Reset progress
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary"
-                                    onClick={() => {
-                                      setInitialState(null);
-                                    }}
-                                  >
-                                    Save and exit
-                                  </button>
-                                </>
-                              );
-                            }}
-                          </GridConsumer>
-                        </PerfectionScreen>
+                        <EditConsumer>
+                          {({ clearHistory }) => {
+                            return (
+                              <GridConsumer>
+                                {({ setGridRaw: setInnerGrid }) => {
+                                  const onReset = () => {
+                                    const { grid, solution } = prepareGrid(
+                                      initialState.grid,
+                                      []
+                                    );
+                                    setInnerGrid(grid, solution);
+                                    setTempSolvePath([]);
+                                    clearHistory(grid);
+                                  };
+                                  return (
+                                    <PerfectionScreen
+                                      solvePath={tempSolvePath}
+                                      setSolvePath={setTempSolvePath}
+                                      onReset={onReset}
+                                    >
+                                      <button
+                                        type="button"
+                                        className="btn"
+                                        onClick={onReset}
+                                      >
+                                        Reset progress (R)
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                          setInitialState(null);
+                                        }}
+                                      >
+                                        Save and exit
+                                      </button>
+                                    </PerfectionScreen>
+                                  );
+                                }}
+                              </GridConsumer>
+                            );
+                          }}
+                        </EditConsumer>
                       </GridContext>
                     </GridStateContext>
                   </EditContext>

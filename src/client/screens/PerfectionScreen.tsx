@@ -1,5 +1,5 @@
 import DocumentTitle from '../components/DocumentTitle';
-import EditControls from '../components/EditControls';
+import { PerfectionEditControls } from '../components/EditControls';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
 import { GridConsumer } from '../contexts/GridContext';
@@ -16,12 +16,14 @@ export interface PerfectionScreenProps {
   children?: React.ReactNode;
   solvePath?: Position[];
   setSolvePath?: (solvePath: Position[]) => void;
+  onReset?: () => void;
 }
 
 export default function PerfectionScreen({
   children,
   solvePath,
   setSolvePath,
+  onReset,
 }: PerfectionScreenProps) {
   return (
     <SolvePathContext solvePath={solvePath} setSolvePath={setSolvePath}>
@@ -49,7 +51,7 @@ export default function PerfectionScreen({
               )}
             </GridConsumer>
             <TouchControls />
-            <EditControls />
+            <PerfectionEditControls onReset={onReset} />
             <ModeVariantLoader mode={Mode.Perfection} />
           </>
         }

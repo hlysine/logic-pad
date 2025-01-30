@@ -1,5 +1,5 @@
 import InstructionList from '../instructions/InstructionList';
-import EditControls from '../components/EditControls';
+import { EditorEditControls } from '../components/EditControls';
 import MainGrid from '../grid/MainGrid';
 import RulerOverlay from '../grid/RulerOverlay';
 import { GridConsumer } from '../contexts/GridContext';
@@ -55,7 +55,7 @@ export default memo(function PuzzleEditorScreen({
                 </GridConsumer>
               </div>
               <TouchControls />
-              <EditControls />
+              <EditorEditControls />
               <ModeVariantLoader mode={Mode.Create} />
             </>
           }

@@ -1,6 +1,6 @@
 import { Mode } from '@logic-pad/core/data/primitives';
 import DocumentTitle from '../components/DocumentTitle';
-import EditControls from '../components/EditControls';
+import { SolveEditControls } from '../components/EditControls';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
 import ForesightContext from '../contexts/ForesightContext';
@@ -44,7 +44,7 @@ export default function SolveScreen({ children }: SolveScreenProps) {
             </GridConsumer>
             {children}
             <TouchControls />
-            <EditControls />
+            <SolveEditControls />
             <ModeVariantLoader mode={Mode.Solve} />
           </>
         }

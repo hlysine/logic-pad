@@ -112,7 +112,7 @@ export default memo(function PerfectionControlsPart({
           <div className="card-body p-4">
             <p>Your progress is incorrect</p>
             <button className="btn btn-primary" onClick={handleUndo}>
-              Undo
+              Undo (Z)
             </button>
           </div>
         </div>
@@ -131,16 +131,10 @@ export default memo(function PerfectionControlsPart({
             </label>
             <div
               className="tooltip"
-              data-tip={
-                tooltip ??
-                (progress < 100
-                  ? 'Finish the puzzle first'
-                  : 'Copy solve path as text')
-              }
+              data-tip={tooltip ?? 'Copy solve path as text'}
             >
               <button
                 className="btn btn-sm btn-neutral"
-                disabled={progress < 100}
                 onClick={async () => {
                   const output = solvePath
                     .map(({ x, y }) => `${x}:${y}`)

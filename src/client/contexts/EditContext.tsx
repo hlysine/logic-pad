@@ -23,6 +23,8 @@ export const useEdit = () => {
   return useContext(context);
 };
 
+export const EditConsumer = context.Consumer;
+
 export default memo(function EditContext({
   children,
 }: {

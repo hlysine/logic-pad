@@ -1,3 +1,9 @@
+# 30/1/2025
+
+- You can no longer undo a grid reset in perfection mode
+- Added hotkey indications for various buttons
+- Fixed "copy solve path" button not working for underclued grids
+
 # 29/1/2025
 
 - Changed how cell count per zone works

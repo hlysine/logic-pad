@@ -285,6 +285,18 @@ export default memo(function PuzzleChecklist() {
                 )}
               </ChecklistItem>
             )}
+            {!isPending && (
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => {
+                  setSolution(null);
+                  setAlternate(null);
+                }}
+              >
+                Reset solver
+              </button>
+            )}
           </>
         ) : (
           <>

@@ -3,6 +3,7 @@
 - You can no longer undo a grid reset in perfection mode
 - Added hotkey indications for various buttons
 - Fixed "copy solve path" button not working for underclued grids
+- Added a button to reset solver
 
 # 29/1/2025
 

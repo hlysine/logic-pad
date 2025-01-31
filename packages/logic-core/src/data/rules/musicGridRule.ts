@@ -10,14 +10,14 @@ import { ControlLine, Row } from './musicControlLine.js';
 import Rule, { SearchVariant } from './rule.js';
 
 const DEFAULT_SCALLE = [
-  new Row('C5', 0.5),
-  new Row('B4', 0.5),
-  new Row('A4', 0.5),
-  new Row('G4', 0.5),
-  new Row('F4', 0.5),
-  new Row('E4', 0.5),
-  new Row('D4', 0.5),
-  new Row('C4', 0.5),
+  new Row('C5', null),
+  new Row('B4', null),
+  new Row('A4', null),
+  new Row('G4', null),
+  new Row('F4', null),
+  new Row('E4', null),
+  new Row('D4', null),
+  new Row('C4', null),
 ];
 
 export default class MusicGridRule

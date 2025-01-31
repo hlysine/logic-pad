@@ -1,3 +1,8 @@
+# 0.4.5
+
+- Changed default velocity of music grid notes to 0.5
+- Added an option to normalize note velocity by pitch
+
 # 0.4.4
 
 - Added mode variants for rules and symbols

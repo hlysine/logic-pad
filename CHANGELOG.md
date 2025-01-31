@@ -1,3 +1,8 @@
+# 31/1/2025
+
+- Changed default velocity of music grid notes to 0.5
+- Note velocity is now normalized by pitch by default
+
 # 30/1/2025
 
 - You can no longer undo a grid reset in perfection mode

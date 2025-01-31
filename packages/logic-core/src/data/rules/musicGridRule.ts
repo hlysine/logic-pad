@@ -10,14 +10,14 @@ import { ControlLine, Row } from './musicControlLine.js';
 import Rule, { SearchVariant } from './rule.js';
 
 const DEFAULT_SCALLE = [
-  new Row('C5', 0.6),
-  new Row('B4', 0.6),
-  new Row('A4', 0.6),
-  new Row('G4', 0.6),
-  new Row('F4', 0.6),
-  new Row('E4', 0.6),
-  new Row('D4', 0.6),
-  new Row('C4', 0.6),
+  new Row('C5', 0.5),
+  new Row('B4', 0.5),
+  new Row('A4', 0.5),
+  new Row('G4', 0.5),
+  new Row('F4', 0.5),
+  new Row('E4', 0.5),
+  new Row('D4', 0.5),
+  new Row('C4', 0.5),
 ];
 
 export default class MusicGridRule
@@ -51,6 +51,13 @@ export default class MusicGridRule
       description: 'Track',
       configurable: true,
     },
+    {
+      type: ConfigType.Boolean,
+      default: true,
+      field: 'normalizeVelocity',
+      description: 'Normalize Velocity',
+      configurable: true,
+    },
   ]);
 
   private static readonly SEARCH_VARIANTS = [
@@ -64,14 +71,17 @@ export default class MusicGridRule
    * **Music Grid: Listen to the solution**
    * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
    * @param track The grid to be played when "listen" is clicked. Set as null to play the solution.
+   * @param normalizeVelocity Whether to normalize the velocity of the notes by their pitch such that lower notes are played softer.
    */
   public constructor(
     public readonly controlLines: readonly ControlLine[],
-    public readonly track: GridData | null
+    public readonly track: GridData | null,
+    public readonly normalizeVelocity = true
   ) {
     super();
     this.controlLines = MusicGridRule.deduplicateControlLines(controlLines);
     this.track = track;
+    this.normalizeVelocity = normalizeVelocity;
   }
 
   public get id(): string {
@@ -205,13 +215,16 @@ export default class MusicGridRule
   public copyWith({
     controlLines,
     track,
+    normalizeVelocity,
   }: {
     controlLines?: readonly ControlLine[];
     track?: GridData | null;
+    normalizeVelocity?: boolean;
   }): this {
     return new MusicGridRule(
       controlLines ?? this.controlLines,
-      track !== undefined ? track : this.track
+      track !== undefined ? track : this.track,
+      normalizeVelocity ?? this.normalizeVelocity
     ) as this;
   }
 

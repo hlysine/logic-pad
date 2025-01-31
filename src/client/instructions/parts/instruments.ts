@@ -41,12 +41,6 @@ export const pianoImmediate = new Piano({
   maxPolyphony: 32,
 }).toDestination();
 
-function nudge(note: string): number {
-  const n = Number(note.at(-1));
-  if (Number.isNaN(n)) return 0;
-  return (8 - n) / 6;
-}
-
 export const drum = {
   snare: new Tone.Player('/samples/snare.wav').toDestination(),
   kick: new Tone.Player('/samples/kick.wav').toDestination(),
@@ -56,6 +50,31 @@ export const drum = {
   tom: new Tone.Player('/samples/tom.wav').toDestination(),
   rim: new Tone.Player('/samples/rim.wav').toDestination(),
 };
+
+const c5Midi = Tone.Midi('C5').toMidi();
+const e4Midi = Tone.Midi('E4').toMidi();
+const e3Midi = Tone.Midi('E3').toMidi();
+const e2Midi = Tone.Midi('E2').toMidi();
+
+function normalizeVelocity(
+  velocity: number,
+  note: string,
+  applyNormalization: boolean
+): number {
+  if (!applyNormalization) return velocity;
+  // the default velocity is 0.5 but drum samples are louder so their base velocity is 0.7
+  if (note in drum) return (velocity - 0.7) * 20;
+  const midi = Tone.Midi(note).toMidi();
+  if (midi > c5Midi) return velocity;
+  velocity -= 0.2;
+  if (midi > e4Midi) return velocity;
+  velocity -= 0.05;
+  if (midi > e3Midi) return velocity;
+  velocity -= 0.03;
+  if (midi > e2Midi) return velocity;
+  velocity -= 0.01;
+  return velocity;
+}
 
 export function encodePlayback(
   grid: GridData,
@@ -70,7 +89,7 @@ export function encodePlayback(
     velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
     note: null,
-    velocity: 0.6,
+    velocity: 0.5,
   }));
   const events = new Map<Tone.Unit.Time, EventData[]>();
   const addEvent = (time: Tone.Unit.Time, event: EventData) => {
@@ -156,15 +175,22 @@ export function encodePlayback(
           case 'keydown':
             if (event.value in drum) {
               drum[event.value as keyof typeof drum].volume.setValueAtTime(
-                (event.velocity - 0.6) * 20,
+                normalizeVelocity(
+                  event.velocity,
+                  event.value,
+                  musicGrid.normalizeVelocity
+                ),
                 time
               );
               drum[event.value as keyof typeof drum].start(time, 0);
             } else {
               piano.keyDown({
-                midi:
-                  Tone.Midi(event.value).toMidi() + nudge(event.value) * 0.01,
-                velocity: event.velocity,
+                note: event.value,
+                velocity: normalizeVelocity(
+                  event.velocity,
+                  event.value,
+                  musicGrid.normalizeVelocity
+                ),
                 time,
               });
             }
@@ -174,8 +200,7 @@ export function encodePlayback(
               drum[event.value as keyof typeof drum].stop(time);
             } else {
               piano.keyUp({
-                midi:
-                  Tone.Midi(event.value).toMidi() + nudge(event.value) * 0.01,
+                note: event.value,
                 time,
               });
             }
@@ -218,7 +243,7 @@ export function encodeImmediate(
     velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
     note: null,
-    velocity: 0.6,
+    velocity: 0.5,
   }));
 
   for (let x = 0; x < grid.width; x++) {
@@ -253,9 +278,24 @@ export function encodeImmediate(
       ) {
         const targetPiano = pedal ? pianoImmediatePedal : pianoImmediate;
         if (row.note in drum) {
+          drum[row.note as keyof typeof drum].volume.setValueAtTime(
+            normalizeVelocity(
+              row.velocity,
+              row.note,
+              musicGrid.normalizeVelocity
+            ),
+            0
+          );
           drum[row.note as keyof typeof drum].start(0, 0);
         } else {
-          targetPiano.keyDown({ note: row.note, velocity: row.velocity });
+          targetPiano.keyDown({
+            note: row.note,
+            velocity: normalizeVelocity(
+              row.velocity,
+              row.note,
+              musicGrid.normalizeVelocity
+            ),
+          });
         }
         remainingPolyphony--;
         let endPos = { x, y };

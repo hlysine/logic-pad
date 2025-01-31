@@ -12,7 +12,7 @@ export class Row extends Configurable {
     },
     {
       type: ConfigType.NullableNumber,
-      default: 0.6,
+      default: 0.5,
       min: 0,
       max: 1,
       step: 0.2,

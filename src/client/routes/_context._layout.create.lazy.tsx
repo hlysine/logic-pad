@@ -5,11 +5,11 @@ import {
 } from '@tanstack/react-router';
 import { memo } from 'react';
 import useLinkLoader, { SolutionHandling } from '../router/linkLoader';
-import PuzzleEditorScreen from '../screens/PuzzleEditorScreen.tsx';
+import PuzzleEditorScreen from '../screens/PuzzleEditorScreen';
 import { IoWarningOutline } from 'react-icons/io5';
-import ShareButton from '../components/ShareButton';
-import { defaultGrid, useGrid } from '../contexts/GridContext.tsx';
-import { siteOptions } from '../uiHelper.ts';
+import CopyLink from '../components/CopyLink';
+import { defaultGrid, useGrid } from '../contexts/GridContext';
+import { siteOptions } from '../uiHelper';
 
 export const Route = createLazyFileRoute('/_context/_layout/create')({
   component: memo(function CreateMode() {
@@ -57,7 +57,7 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
             </div>
           </div>
         )}
-        <ShareButton />
+        <CopyLink />
       </PuzzleEditorScreen>
     );
   }),

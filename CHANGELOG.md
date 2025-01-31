@@ -2,6 +2,7 @@
 
 - Changed default velocity of music grid notes to 0.5
 - Note velocity is now normalized by pitch by default
+- You can now copy a link that displays the solution for further editing
 
 # 30/1/2025
 

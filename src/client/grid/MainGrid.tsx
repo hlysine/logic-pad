@@ -43,7 +43,7 @@ export default memo(function MainGrid({
   children,
 }: MainGridProps) {
   const gridContext = useGrid();
-  const { grid } = gridContext;
+  const { grid, solution } = gridContext;
   const { scale, setScale } = useDisplay();
   const { onTileClick } = useToolbox();
   const [tileConfig, setTileConfig] = useState<{
@@ -139,6 +139,7 @@ export default memo(function MainGrid({
             <>
               <SymbolOverlay
                 grid={grid}
+                solution={solution}
                 state={state.symbols}
                 editable={useToolboxClick}
               />

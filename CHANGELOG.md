@@ -1,3 +1,7 @@
+# 1/2/2025
+
+- Hidden tiles now match tile colors against grid solution directly
+
 # 31/1/2025
 
 - Changed default velocity of music grid notes to 0.5

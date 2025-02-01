@@ -261,7 +261,10 @@ export default class SerializerV0 extends SerializerBase {
   ): [string, unknown] {
     const [key, value] = entry.split('=');
     const config = configs.find(x => x.field === key);
-    if (!config) throw new Error(`Unknown config: ${key}`);
+    if (!config) {
+      console.warn(`Unknown config: ${key} when parsing ${entry}`);
+      return [key, value];
+    }
     switch (config.type) {
       case ConfigType.Boolean:
         return [config.field, value === '1'];

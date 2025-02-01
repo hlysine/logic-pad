@@ -93,7 +93,11 @@ export default memo(function Instruction({
               editable={false}
             >
               {exampleGrid.symbols.size > 0 ? (
-                <SymbolOverlay grid={exampleGrid} editable={false} />
+                <SymbolOverlay
+                  grid={exampleGrid}
+                  solution={null}
+                  editable={false}
+                />
               ) : null}
               <InstructionPartOutlet
                 grid={exampleGrid}

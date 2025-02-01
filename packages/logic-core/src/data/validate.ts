@@ -102,7 +102,7 @@ export default function validateGrid(
       symbolList.map(s => {
         if (s.validateWithSolution) requireSolution = true;
         return applySymbolOverrides(grid, grid.rules, s, g =>
-          s.validateSymbol(g)
+          s.validateSymbol(g, solution)
         );
       })
     )

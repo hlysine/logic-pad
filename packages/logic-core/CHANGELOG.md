@@ -2,6 +2,7 @@
 
 - Changed default velocity of music grid notes to 0.5
 - Added an option to normalize note velocity by pitch
+- Removed the color config from hidden symbols. Color matching is now based on the grid solution
 
 # 0.4.4
 

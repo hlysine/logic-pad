@@ -15,10 +15,8 @@ export default memo(function HiddenTool() {
       hotkey="="
       sample={sample}
       component={HiddenSymbol}
-      onNewSymbol={(symbol, grid) => {
-        return (symbol as HiddenSymbolData).withColor(
-          grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y)).color
-        );
+      onNewSymbol={symbol => {
+        return symbol as HiddenSymbolData;
       }}
     />
   );

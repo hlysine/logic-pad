@@ -14,6 +14,7 @@ import SymbolData from '@logic-pad/core/data/symbols/symbol';
 
 export interface SymbolOverlayProps {
   grid: GridData;
+  solution: GridData | null;
   state?: GridState['symbols'];
   editable: boolean;
 }
@@ -58,6 +59,7 @@ function fg(color: Color) {
 
 export default memo(function SymbolOverlay({
   grid,
+  solution,
   state,
   editable,
 }: SymbolOverlayProps) {
@@ -70,7 +72,7 @@ export default memo(function SymbolOverlay({
             for (const s of value) {
               if (
                 handlesSymbolDisplay(s) &&
-                !s.onSymbolDisplay(grid, symbol, editable)
+                !s.onSymbolDisplay(grid, solution, symbol, editable)
               ) {
                 return null;
               }
@@ -79,7 +81,7 @@ export default memo(function SymbolOverlay({
           for (const rule of grid.rules) {
             if (
               handlesSymbolDisplay(rule) &&
-              !rule.onSymbolDisplay(grid, symbol, editable)
+              !rule.onSymbolDisplay(grid, solution, symbol, editable)
             ) {
               return null;
             }

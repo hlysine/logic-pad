@@ -16,7 +16,10 @@ export default abstract class Symbol
     this.y = y;
   }
 
-  public abstract validateSymbol(grid: GridData): State;
+  public abstract validateSymbol(
+    grid: GridData,
+    solution: GridData | null
+  ): State;
 
   public modeVariant(_mode: Mode): Symbol | null {
     return this as Symbol;

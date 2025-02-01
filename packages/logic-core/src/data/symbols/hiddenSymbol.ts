@@ -25,14 +25,6 @@ export default class HiddenSymbol
       configurable: false,
     },
     {
-      type: ConfigType.Color,
-      default: Color.Light,
-      field: 'color',
-      allowGray: true,
-      description: 'Show on color',
-      configurable: true,
-    },
-    {
       type: ConfigType.Boolean,
       default: false,
       field: 'revealLocation',
@@ -52,17 +44,14 @@ export default class HiddenSymbol
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
-   * @param color - The target color of the cell.
    * @param revealLocation - Whether to reveal the location of the symbol.
    */
   public constructor(
     public readonly x: number,
     public readonly y: number,
-    public readonly color: Color,
     public readonly revealLocation = false
   ) {
     super(x, y);
-    this.color = color;
     this.revealLocation = revealLocation;
   }
 
@@ -94,16 +83,22 @@ export default class HiddenSymbol
     return 0;
   }
 
-  public validateSymbol(grid: GridData): State {
+  public validateSymbol(grid: GridData, solution: GridData | null): State {
     const thisX = Math.floor(this.x);
     const thisY = Math.floor(this.y);
-    return grid.getTile(thisX, thisY).color === this.color
-      ? State.Satisfied
-      : State.Incomplete;
+    const thisColor = grid.getTile(thisX, thisY).color;
+    if (solution) {
+      return thisColor === solution.getTile(thisX, thisY).color
+        ? State.Satisfied
+        : State.Incomplete;
+    } else {
+      return thisColor !== Color.Gray ? State.Satisfied : State.Incomplete;
+    }
   }
 
   public onSymbolDisplay(
     grid: GridData,
+    solution: GridData | null,
     symbol: Symbol,
     editing: boolean
   ): boolean {
@@ -113,7 +108,10 @@ export default class HiddenSymbol
     const symX = Math.floor(symbol.x);
     const symY = Math.floor(symbol.y);
     if (thisX !== symX || thisY !== symY) return true;
-    const colorMatch = grid.getTile(thisX, thisY).color === this.color;
+    const thisColor = grid.getTile(thisX, thisY).color;
+    const colorMatch = solution
+      ? thisColor === solution.getTile(thisX, thisY).color
+      : thisColor !== Color.Gray;
     if (symbol.id === this.id) {
       return !colorMatch;
     }
@@ -123,24 +121,17 @@ export default class HiddenSymbol
   public copyWith({
     x,
     y,
-    color,
     revealLocation,
   }: {
     x?: number;
     y?: number;
-    color?: Color;
     revealLocation?: boolean;
   }): this {
     return new HiddenSymbol(
       x ?? this.x,
       y ?? this.y,
-      color ?? this.color,
       revealLocation ?? this.revealLocation
     ) as this;
-  }
-
-  public withColor(color: Color): this {
-    return this.copyWith({ color });
   }
 
   public withRevealLocation(revealLocation: boolean): this {
@@ -148,4 +139,4 @@ export default class HiddenSymbol
   }
 }
 
-export const instance = new HiddenSymbol(0, 0, Color.Light);
+export const instance = new HiddenSymbol(0, 0);

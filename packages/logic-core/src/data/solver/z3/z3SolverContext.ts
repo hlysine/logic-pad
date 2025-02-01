@@ -1,5 +1,5 @@
 import { RegionConstrainer, SymbolGrid } from 'grilops';
-import { Optimize, Solver } from 'z3-solver';
+import { Optimize, Solver, Z3LowLevel } from 'z3-solver';
 
 export default class Z3SolverContext<
   Name extends string,
@@ -29,7 +29,7 @@ export default class Z3SolverContext<
     return this.grid.ctx.context;
   }
 
-  public get z3() {
+  public get z3(): Z3LowLevel['Z3'] {
     return this.grid.ctx.z3;
   }
 

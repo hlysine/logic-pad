@@ -368,7 +368,7 @@ declare global {
     readonly x: number;
     readonly y: number;
     constructor(x: number, y: number);
-    abstract validateSymbol(grid: GridData): State;
+    abstract validateSymbol(grid: GridData, solution: GridData | null): State;
     modeVariant(_mode: Mode): Symbol$1 | null;
     onGridResize(
       _grid: GridData,
@@ -521,6 +521,7 @@ declare global {
   {
     readonly controlLines: readonly ControlLine[];
     readonly track: GridData | null;
+    readonly normalizeVelocity: boolean;
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
@@ -528,8 +529,13 @@ declare global {
      * **Music Grid: Listen to the solution**
      * @param controlLines Denote changes in the playback settings. At least one control line at column 0 should be present to enable playback.
      * @param track The grid to be played when "listen" is clicked. Set as null to play the solution.
+     * @param normalizeVelocity Whether to normalize the velocity of the notes by their pitch such that lower notes are played softer.
      */
-    constructor(controlLines: readonly ControlLine[], track: GridData | null);
+    constructor(
+      controlLines: readonly ControlLine[],
+      track: GridData | null,
+      normalizeVelocity?: boolean
+    );
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
@@ -558,9 +564,11 @@ declare global {
     copyWith({
       controlLines,
       track,
+      normalizeVelocity,
     }: {
       controlLines?: readonly ControlLine[];
       track?: GridData | null;
+      normalizeVelocity?: boolean;
     }): this;
     get validateWithSolution(): boolean;
     get isSingleton(): boolean;
@@ -1194,12 +1202,14 @@ declare global {
      * Controls whether a symbol should be visible in the grid.
      *
      * @param grid The grid that is being displayed.
+     * @param solution The solution grid, if it is available.
      * @param symbol The symbol that is being displayed.
      * @param editing Whether the grid is being edited.
      * @returns True if the symbol should be displayed, false otherwise. The symbol will not be displayed if any handler returns false.
      */
     onSymbolDisplay(
       grid: GridData,
+      solution: GridData | null,
       symbol: Symbol$1,
       editing: boolean
     ): boolean;
@@ -6028,7 +6038,6 @@ declare global {
   {
     readonly x: number;
     readonly y: number;
-    readonly color: Color;
     readonly revealLocation: boolean;
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
@@ -6037,10 +6046,9 @@ declare global {
      *
      * @param x - The x-coordinate of the symbol.
      * @param y - The y-coordinate of the symbol.
-     * @param color - The target color of the cell.
      * @param revealLocation - Whether to reveal the location of the symbol.
      */
-    constructor(x: number, y: number, color: Color, revealLocation?: boolean);
+    constructor(x: number, y: number, revealLocation?: boolean);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
@@ -6048,24 +6056,22 @@ declare global {
     get necessaryForCompletion(): boolean;
     get visibleWhenSolving(): boolean;
     get sortOrder(): number;
-    validateSymbol(grid: GridData): State;
+    validateSymbol(grid: GridData, solution: GridData | null): State;
     onSymbolDisplay(
       grid: GridData,
+      solution: GridData | null,
       symbol: Symbol$1,
       editing: boolean
     ): boolean;
     copyWith({
       x,
       y,
-      color,
       revealLocation,
     }: {
       x?: number;
       y?: number;
-      color?: Color;
       revealLocation?: boolean;
     }): this;
-    withColor(color: Color): this;
     withRevealLocation(revealLocation: boolean): this;
   }
   export declare const allSymbols: Map<string, Symbol$1>;

@@ -16,4 +16,4 @@ jobs:
       - run: cd packages/logic-core && bun install
       - run: bun run lint
       - run: cd packages/logic-core && bun run build
-      # - run: bun run build
+      - run: bun run build

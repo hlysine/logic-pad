@@ -23,7 +23,7 @@
     "pwa-gen": "npx @vite-pwa/assets-generator --preset minimal-2023 public/logo.svg"
   },
   "engines": {
-    "bun": ">=1.1.0"
+    "bun": ">=1.2.2"
   },
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",

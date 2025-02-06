@@ -37,7 +37,15 @@ export default class BanPatternRule extends Rule {
     super();
     this.pattern = pattern
       // unlock all tiles
-      .withTiles(tiles => tiles.map(row => row.map(t => t.withFixed(false))))
+      .withTiles(tiles =>
+        tiles.map(row =>
+          row.map(t =>
+            t.exists
+              ? t.withFixed(false)
+              : t.copyWith({ exists: true, color: Color.Gray, fixed: false })
+          )
+        )
+      )
       // strip all symbols and rules
       .withRules([])
       .withSymbols(new Map());

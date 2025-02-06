@@ -1,3 +1,7 @@
+# 6/2/2025
+
+- Sanitize patterns in "Don't make this pattern" rules to avoid removed cells
+
 # 1/2/2025
 
 - Hidden tiles now match tile colors against grid solution directly

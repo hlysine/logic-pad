@@ -1,3 +1,7 @@
+# 8/2/2025
+
+- Fixed underclued tile count in perfection mode
+
 # 6/2/2025
 
 - Sanitize patterns in "Don't make this pattern" rules to avoid removed cells

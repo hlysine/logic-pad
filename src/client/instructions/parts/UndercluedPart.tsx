@@ -12,10 +12,10 @@ export default memo(function UndercluedPart() {
     let solutionCount = 0;
     let gridCount = 0;
     grid.forEach(tile => {
-      if (!tile.fixed && tile.color !== Color.Gray) gridCount++;
+      if (tile.exists && tile.color !== Color.Gray) gridCount++;
     });
     solution.forEach(tile => {
-      if (!tile.fixed && tile.color !== Color.Gray) solutionCount++;
+      if (tile.exists && tile.color !== Color.Gray) solutionCount++;
     });
     return `Tiles Remaining: ${solutionCount - gridCount}`;
   }, [grid, solution]);

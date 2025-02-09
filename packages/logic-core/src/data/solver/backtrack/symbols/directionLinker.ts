@@ -47,7 +47,6 @@ export default abstract class DirectionLinkerBTModule extends BTModule {
     const tilesNeedCheck = IntArray2D.create(grid.width, grid.height);
     const ratings: Rating[] = [];
 
-    let checkable = false;
     for (const pos of this.initialPositions) {
       const tile = grid.isInBound(pos.x, pos.y)
         ? grid.getTile(pos.x, pos.y)
@@ -60,6 +59,10 @@ export default abstract class DirectionLinkerBTModule extends BTModule {
         )
           return false;
         else {
+          if (grid.getTile(oppoPos.x, oppoPos.y) === BTTile.Empty) {
+            tilesNeedCheck.set(oppoPos.x, oppoPos.y, 1);
+            ratings.push({ pos: oppoPos, score: 1 });
+          }
           tilesNeedCheck.set(pos.x, pos.y, 1);
           ratings.push({ pos, score: 1 });
         }
@@ -76,17 +79,16 @@ export default abstract class DirectionLinkerBTModule extends BTModule {
         if (oppoPos !== null) {
           const oppoTile = grid.getTile(oppoPos.x, oppoPos.y);
           if (oppoTile === BTTile.Empty) {
-            tilesNeedCheck.set(pos.x, pos.y, 1);
-            ratings.push({ pos, score: 1 });
+            tilesNeedCheck.set(oppoPos.x, oppoPos.y, 1);
+            ratings.push({ pos: oppoPos, score: 1 });
           } else if (oppoTile === BTTile.NonExist) return false;
-          else checkable = true;
         } else {
           return false;
         }
       }
     }
 
-    if (!checkable) {
+    if (ratings.length > 0) {
       return { tilesNeedCheck, ratings };
     }
 

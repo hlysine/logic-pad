@@ -1,3 +1,7 @@
+# 0.4.6
+
+- Fixed the backtrack solver incorrectly reporting no solution in some grids with galaxy symbols
+
 # 0.4.5
 
 - Changed default velocity of music grid notes to 0.5

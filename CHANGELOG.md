@@ -1,3 +1,7 @@
+# 9/2/2025
+
+- Fixed the backtrack solver incorrectly reporting no solution in some grids with galaxy symbols
+
 # 8/2/2025
 
 - Fixed underclued tile count in perfection mode

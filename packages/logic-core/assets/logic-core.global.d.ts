@@ -31,9 +31,25 @@ declare global {
     Underclued = 'underclued',
   }
   export declare enum State {
+    /**
+     * Describes the violation of a rule.
+     */
     Error = 'error',
+    /**
+     * Describes that a rule is satisfied and complete in the current grid.
+     */
     Satisfied = 'satisfied',
+    /**
+     * Describes that a rule is not violated, but is not yet complete in the current grid.
+     */
     Incomplete = 'incomplete',
+    /**
+     * Describes that a rule is violated but ignored due to the effect of another rule.
+     */
+    Ignored = 'ignored',
+  }
+  export declare namespace State {
+    function isSatisfied(state: State): boolean;
   }
   export type RuleState =
     | {
@@ -1511,6 +1527,35 @@ declare global {
     }): this;
   }
   export declare const allRules: Map<string, Rule>;
+  export declare class LyingSymbolRule
+    extends Rule
+    implements FinalValidationHandler
+  {
+    readonly count: number;
+    private static readonly EXAMPLE_GRID;
+    private static readonly CONFIGS;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **&lt;count&gt; symbols are lying and can be ignored**
+     *
+     * @param count Number of lying symbols
+     */
+    constructor(count: number);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(_: GridData): RuleState;
+    get isSingleton(): boolean;
+    onFinalValidation(
+      grid: GridData,
+      solution: GridData | null,
+      state: GridState
+    ): GridState;
+    copyWith({ count }: { count?: number }): this;
+    withCount(count: number): this;
+  }
   export declare class MysteryRule
     extends Rule
     implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
@@ -2648,10 +2693,10 @@ declare global {
   }
   export declare const allSymbols: Map<string, Symbol$1>;
   export declare function aggregateState(
-    rules: RuleState[],
+    rules: readonly RuleState[],
     grid: GridData,
-    symbols: Map<string, State[]>
-  ): State;
+    symbols: ReadonlyMap<string, State[]>
+  ): State.Error | State.Satisfied | State.Incomplete;
   export declare function applyFinalOverrides(
     grid: GridData,
     solution: GridData | null,

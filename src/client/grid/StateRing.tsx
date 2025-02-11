@@ -31,7 +31,7 @@ export default memo(
     const router = useRouterState();
 
     useEffect(() => {
-      if (state.final === State.Satisfied && !prefersReducedMotion()) {
+      if (State.isSatisfied(state.final) && !prefersReducedMotion()) {
         anime({
           targets: '.logic-animated .logic-tile',
           scale: [
@@ -70,7 +70,7 @@ export default memo(
         className={cn(
           'w-fit h-fit border-4 p-4 rounded-xl transition-all delay-150 duration-150 ease-out logic-animated',
           ringBorder(state.final),
-          state.final === State.Satisfied
+          State.isSatisfied(state.final)
             ? 'first:*:opacity-100 first:*:duration-[1.5s]'
             : 'first:*:opacity-0 first:*:duration-[0.5s]'
         )}

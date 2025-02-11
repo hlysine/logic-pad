@@ -20,9 +20,29 @@ export enum MajorRule {
 }
 
 export enum State {
+  /**
+   * Describes the violation of a rule.
+   */
   Error = 'error',
+  /**
+   * Describes that a rule is satisfied and complete in the current grid.
+   */
   Satisfied = 'satisfied',
+  /**
+   * Describes that a rule is not violated, but is not yet complete in the current grid.
+   */
   Incomplete = 'incomplete',
+  /**
+   * Describes that a rule is violated but ignored due to the effect of another rule.
+   */
+  Ignored = 'ignored',
+}
+
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace State {
+  export function isSatisfied(state: State): boolean {
+    return state === State.Satisfied || state === State.Ignored;
+  }
 }
 
 export type RuleState =

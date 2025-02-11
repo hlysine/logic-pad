@@ -28,6 +28,7 @@ import ConnectAllRule from './data/rules/connectAllRule.js';
 import CustomRule from './data/rules/customRule.js';
 import ForesightRule from './data/rules/foresightRule.js';
 import { allRules } from './data/rules/index.js';
+import LyingSymbolRule from './data/rules/lyingSymbolRule.js';
 import { ControlLine, Row } from './data/rules/musicControlLine.js';
 import MusicGridRule from './data/rules/musicGridRule.js';
 import MysteryRule from './data/rules/mysteryRule.js';
@@ -156,6 +157,7 @@ export {
   CustomRule,
   ForesightRule,
   allRules,
+  LyingSymbolRule,
   ControlLine,
   Row,
   MusicGridRule,

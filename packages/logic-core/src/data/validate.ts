@@ -6,9 +6,9 @@ import Rule from './rules/rule.js';
 import Symbol from './symbols/symbol.js';
 
 export function aggregateState(
-  rules: RuleState[],
+  rules: readonly RuleState[],
   grid: GridData,
-  symbols: Map<string, State[]>
+  symbols: ReadonlyMap<string, State[]>
 ) {
   if (rules.some(s => s.state === State.Error)) return State.Error;
   for (const [_, symbolList] of symbols) {
@@ -113,14 +113,14 @@ export default function validateGrid(
     if (ruleStates[i].state !== State.Incomplete) return;
     if (states.some(s => s === State.Error))
       ruleStates[i] = { state: State.Error, positions: [] };
-    else if (states.length > 0 && states.every(s => s === State.Satisfied))
+    else if (states.length > 0 && states.every(s => State.isSatisfied(s)))
       ruleStates[i] = { state: State.Satisfied };
   });
 
   let final = aggregateState(ruleStates, grid, symbolStates);
 
   // in addition to satisfying all rules and symbols, a solution must also fill the grid completely
-  if (!requireSolution && final === State.Satisfied) {
+  if (!requireSolution && State.isSatisfied(final)) {
     final = grid.forEach(tile =>
       tile.exists && tile.color === Color.Gray ? true : undefined
     )
@@ -130,7 +130,7 @@ export default function validateGrid(
 
   // return early if there is no need to validate against a solution
   if (
-    final === State.Satisfied ||
+    State.isSatisfied(final) ||
     !requireSolution ||
     !solution ||
     solution.width !== grid.width ||

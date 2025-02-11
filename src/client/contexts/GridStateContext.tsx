@@ -37,7 +37,7 @@ export default memo(function GridStateContext({
 
   const setStateAndReveal = (value: GridState) => {
     setState(value);
-    if (value.final === State.Satisfied) {
+    if (State.isSatisfied(value.final)) {
       setRevealSpoiler(true);
     }
   };

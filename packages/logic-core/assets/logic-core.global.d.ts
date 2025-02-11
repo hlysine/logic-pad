@@ -61,6 +61,9 @@ declare global {
       }
     | {
         readonly state: State.Incomplete;
+      }
+    | {
+        readonly state: State.Ignored;
       };
   export interface GridState {
     final: State;
@@ -1619,7 +1622,7 @@ declare global {
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
+    validateGrid(grid: GridData): RuleState;
     onSymbolValidation(
       grid: GridData,
       symbol: Symbol$1,

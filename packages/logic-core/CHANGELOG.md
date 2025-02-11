@@ -1,3 +1,8 @@
+# 0.5.0
+
+- Added the lying symbols rule
+- Added a new state - Ignored, to be used by the lying symbols rule and any future instructions that can negate another instructions
+
 # 0.4.6
 
 - Fixed the backtrack solver incorrectly reporting no solution in some grids with galaxy symbols

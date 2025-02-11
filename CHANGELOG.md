@@ -1,3 +1,7 @@
+# 11/2/2025
+
+- Added the lying symbols rule
+
 # 9/2/2025
 
 - Fixed the backtrack solver incorrectly reporting no solution in some grids with galaxy symbols

@@ -76,7 +76,9 @@ export default memo(function Instruction({
               ? 'bg-opacity-0'
               : state === State.Satisfied
                 ? 'bg-success'
-                : 'bg-error'
+                : state === State.Ignored
+                  ? 'bg-neutral opacity-60'
+                  : 'bg-error'
           )}
         ></div>
         <div className="text-center py-1 px-4 flex grow justify-center items-center text-neutral-content">

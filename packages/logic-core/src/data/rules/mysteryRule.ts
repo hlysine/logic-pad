@@ -90,7 +90,7 @@ export default class MysteryRule
     _solution: GridData | null,
     state: GridState
   ): GridState {
-    if (state.final === State.Satisfied) return state;
+    if (State.isSatisfied(state.final)) return state;
     if (grid.colorEquals(this.solution))
       return {
         final: State.Satisfied,

@@ -98,7 +98,9 @@ export default memo(function SymbolOverlay({
                   ? 'text-error'
                   : symbolState === State.Satisfied
                     ? 'text-success'
-                    : fg(forceGrayFg(symbol, grid) ? Color.Gray : tile.color),
+                    : symbolState === State.Ignored
+                      ? 'text-neutral-content opacity-60'
+                      : fg(forceGrayFg(symbol, grid) ? Color.Gray : tile.color),
                 editable && !symbol.visibleWhenSolving ? 'opacity-60' : ''
               )}
               symbol={symbol}

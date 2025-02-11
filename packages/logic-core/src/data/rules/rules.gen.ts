@@ -13,6 +13,7 @@ export { instance as CompletePatternRule } from './completePatternRule.js';
 export { instance as ConnectAllRule } from './connectAllRule.js';
 export { instance as CustomRule } from './customRule.js';
 export { instance as ForesightRule } from './foresightRule.js';
+export { instance as LyingSymbolRule } from './lyingSymbolRule.js';
 export { instance as MusicGridRule } from './musicGridRule.js';
 export { instance as MysteryRule } from './mysteryRule.js';
 export { instance as OffByXRule } from './offByXRule.js';

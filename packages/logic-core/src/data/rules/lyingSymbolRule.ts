@@ -49,7 +49,7 @@ export default class LyingSymbolRule
   }
 
   public get explanation(): string {
-    return `${this.count} symbols ${this.count <= 1 ? 'is' : 'are'} *lying* and can be ignored`;
+    return `${this.count} symbol${this.count <= 1 ? ' is' : 's are'} *lying* and can be ignored`;
   }
 
   public get configs(): readonly AnyConfig[] | null {

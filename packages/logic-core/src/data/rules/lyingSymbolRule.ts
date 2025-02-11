@@ -4,8 +4,104 @@ import GridData from '../grid.js';
 import { Color, GridState, RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
-import validateGrid, { aggregateState } from '../validate.js';
+import validateGrid from '../validate.js';
 import Symbol from '../symbols/symbol.js';
+
+class IgnoredSymbol extends Symbol {
+  public constructor(public readonly symbol: Symbol) {
+    super(symbol.x, symbol.y);
+    this.symbol = symbol;
+  }
+
+  public get id(): string {
+    return this.symbol.id;
+  }
+
+  public get explanation(): string {
+    return this.symbol.explanation;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return this.symbol.configs;
+  }
+
+  public createExampleGrid(): GridData {
+    return this.symbol.createExampleGrid();
+  }
+
+  public get necessaryForCompletion(): boolean {
+    return this.symbol.necessaryForCompletion;
+  }
+
+  public get visibleWhenSolving(): boolean {
+    return this.symbol.visibleWhenSolving;
+  }
+
+  public get sortOrder(): number {
+    return this.symbol.sortOrder;
+  }
+
+  public validateSymbol(_grid: GridData, _solution: GridData | null): State {
+    return State.Ignored;
+  }
+
+  public copyWith({ symbol }: { symbol?: Symbol }): this {
+    return new IgnoredSymbol(symbol ?? this.symbol) as this;
+  }
+
+  public withSymbol(symbol: Symbol): this {
+    return this.copyWith({ symbol });
+  }
+}
+
+class IgnoredRule extends Rule {
+  public constructor(
+    public readonly rule: Rule,
+    public readonly state: State
+  ) {
+    super();
+    this.rule = rule;
+    this.state = state;
+  }
+
+  public get searchVariants(): SearchVariant[] {
+    return [];
+  }
+
+  public get id(): string {
+    return this.rule.id;
+  }
+
+  public get explanation(): string {
+    return this.rule.explanation;
+  }
+
+  public createExampleGrid(): GridData {
+    return this.rule.createExampleGrid();
+  }
+
+  public get necessaryForCompletion(): boolean {
+    return this.rule.necessaryForCompletion;
+  }
+
+  public get visibleWhenSolving(): boolean {
+    return this.rule.visibleWhenSolving;
+  }
+
+  public get isSingleton(): boolean {
+    return this.rule.isSingleton;
+  }
+
+  public validateGrid(_grid: GridData): RuleState {
+    if (this.state === State.Error)
+      return { state: State.Error, positions: [] };
+    else return { state: this.state };
+  }
+
+  public copyWith({ rule, state }: { rule?: Rule; state?: State }): this {
+    return new IgnoredRule(rule ?? this.rule, state ?? this.state) as this;
+  }
+}
 
 export default class LyingSymbolRule
   extends Rule
@@ -93,65 +189,36 @@ export default class LyingSymbolRule
         symbols: state.symbols,
       };
     }
-    if (ignoredSymbols.length < this.count) {
-      const newSymbols = new Map<string, State[]>(state.symbols);
-      newSymbols.forEach(values => {
-        values.forEach((state, idx) => {
-          if (state === State.Error) {
-            values[idx] = State.Ignored;
-          }
-        });
-      });
-      const newState = aggregateState(state.rules, grid, newSymbols);
-      if (grid.getTileCount(true, false, Color.Gray) === 0) {
-        const thisIdx = grid.rules.findIndex(rule => rule.id === this.id);
-        return {
-          final: State.Error,
-          rules: state.rules.map((rule, idx) =>
-            idx === thisIdx ? { state: State.Error, positions: [] } : rule
-          ),
-          symbols: newSymbols,
-        };
-      }
-      return {
-        final: newState,
-        rules: state.rules,
-        symbols: newSymbols,
-      };
-    }
 
-    const thisIdx = grid.rules.findIndex(rule => rule.id === this.id);
     const newSymbols = new Map<string, Symbol[]>();
     grid.symbols.forEach((values, key) => {
       values.forEach((symbol, idx) => {
-        if (ignoredSymbols.some(([k, i]) => k === key && i === idx)) {
-          return;
-        }
         if (!newSymbols.has(key)) {
           newSymbols.set(key, []);
         }
-        newSymbols.get(key)!.push(symbol);
+        if (ignoredSymbols.some(([k, i]) => k === key && i === idx)) {
+          newSymbols.get(key)!.push(new IgnoredSymbol(symbol));
+        } else {
+          newSymbols.get(key)!.push(symbol);
+        }
       });
     });
-    const newRules = grid.rules.filter(rule => rule.id !== this.id);
-    const filteredState = validateGrid(
+    const newRules = grid.rules.map(rule =>
+      rule.id === this.id
+        ? new IgnoredRule(
+            this,
+            ignoredSymbols.length === this.count
+              ? State.Satisfied
+              : grid.getTileCount(true, false, Color.Gray) === 0
+                ? State.Error
+                : State.Incomplete
+          )
+        : rule
+    );
+    return validateGrid(
       grid.copyWith({ rules: newRules, symbols: newSymbols }),
       solution
     );
-    const filteredRules = filteredState.rules.slice();
-    filteredRules.splice(thisIdx, 0, { state: State.Satisfied });
-    const filteredSymbols = new Map<string, State[]>(filteredState.symbols);
-    ignoredSymbols.forEach(([key, idx]) => {
-      if (!filteredSymbols.has(key)) {
-        filteredSymbols.set(key, []);
-      }
-      filteredSymbols.get(key)!.splice(idx, 0, State.Ignored);
-    });
-    return {
-      final: filteredState.final,
-      rules: filteredRules,
-      symbols: filteredSymbols,
-    };
   }
 
   public copyWith({ count }: { count?: number }): this {

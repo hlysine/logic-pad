@@ -55,6 +55,9 @@ export type RuleState =
     }
   | {
       readonly state: State.Incomplete;
+    }
+  | {
+      readonly state: State.Ignored;
     };
 
 export interface GridState {

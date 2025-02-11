@@ -1,7 +1,7 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import { SymbolValidationHandler } from '../events/onSymbolValidation.js';
 import GridData from '../grid.js';
-import { RuleState, State } from '../primitives.js';
+import { Color, RuleState, State } from '../primitives.js';
 import AreaNumberSymbol from '../symbols/areaNumberSymbol.js';
 import NumberSymbol from '../symbols/numberSymbol.js';
 import Symbol from '../symbols/symbol.js';
@@ -94,8 +94,13 @@ export default class OffByXRule
     return OffByXRule.SEARCH_VARIANTS;
   }
 
-  public validateGrid(_grid: GridData): RuleState {
-    return { state: State.Incomplete };
+  public validateGrid(grid: GridData): RuleState {
+    return {
+      state:
+        grid.getTileCount(true, false, Color.Gray) === 0
+          ? State.Satisfied
+          : State.Incomplete,
+    };
   }
 
   public onSymbolValidation(

@@ -1539,7 +1539,7 @@ declare global {
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
     /**
-     * **&lt;count&gt; symbols are lying and can be ignored**
+     * **&lt;count&gt; symbols are lying and are incorrect**
      *
      * @param count Number of lying symbols
      */

@@ -131,7 +131,7 @@ export default class LyingSymbolRule
   ];
 
   /**
-   * **&lt;count&gt; symbols are lying and can be ignored**
+   * **&lt;count&gt; symbols are lying and are incorrect**
    *
    * @param count Number of lying symbols
    */
@@ -145,7 +145,7 @@ export default class LyingSymbolRule
   }
 
   public get explanation(): string {
-    return `${this.count} symbol${this.count <= 1 ? ' is' : 's are'} *lying* and can be ignored`;
+    return `${this.count} symbol${this.count <= 1 ? ' is' : 's are'} *lying* and ${this.count <= 1 ? 'is' : 'are'} incorrect`;
   }
 
   public get configs(): readonly AnyConfig[] | null {

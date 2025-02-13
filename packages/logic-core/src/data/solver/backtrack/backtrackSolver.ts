@@ -16,7 +16,7 @@ import { instance as lotusInstance } from '../../symbols/lotusSymbol.js';
 import { instance as minesweeperInstance } from '../../symbols/minesweeperSymbol.js';
 import { instance as myopiaInstance } from '../../symbols/myopiaSymbol.js';
 import { instance as viewpointInstance } from '../../symbols/viewpointSymbol.js';
-import Solver from '../solver.js';
+import Solver, { CancelRef } from '../solver.js';
 import { instance as connectAllInstance } from '../z3/modules/connectAllModule.js';
 
 export default class BacktrackSolver extends Solver {
@@ -44,13 +44,18 @@ export default class BacktrackSolver extends Solver {
   public readonly description =
     'Solves puzzles using backtracking with optimizations (blazingly fast). Support most rules and symbols (including underclued).';
 
-  public async *solve(grid: GridData): AsyncGenerator<GridData | null> {
+  public async *solve(
+    grid: GridData,
+    cancelRef: CancelRef
+  ): AsyncGenerator<GridData | null> {
     const worker = new Worker(
       new URL(`./backtrackWorker.js`, import.meta.url),
       {
         type: 'module',
       }
     );
+
+    cancelRef.cancel = () => worker.terminate();
 
     try {
       const iterator = new EventIterator<GridData>(({ push, stop, fail }) => {

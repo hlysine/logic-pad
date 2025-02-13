@@ -1,5 +1,5 @@
 import Solver from './solver.js';
-import UndercluedSolver from './underclued/undercluedSolver.js';
+import UniversalSolver from './universal/universalSolver.js';
 import BacktrackSolver from './backtrack/backtrackSolver.js';
 import Z3Solver from './z3/z3Solver.js';
 
@@ -10,7 +10,7 @@ function register(prototype: Solver) {
 }
 
 register(new BacktrackSolver());
-register(new UndercluedSolver());
+register(new UniversalSolver());
 register(new Z3Solver());
 
 export { allSolvers };

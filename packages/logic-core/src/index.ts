@@ -6,7 +6,20 @@
 
 import { ConfigType, configEquals } from './data/config.js';
 import Configurable from './data/configurable.js';
-import { CachedAccess, allEqual, array, directionToRotation, escape, isSameEdge, maxBy, minBy, move, orientationToRotation, resize, unescape } from './data/dataHelper.js';
+import {
+  CachedAccess,
+  allEqual,
+  array,
+  directionToRotation,
+  escape,
+  isSameEdge,
+  maxBy,
+  minBy,
+  move,
+  orientationToRotation,
+  resize,
+  unescape,
+} from './data/dataHelper.js';
 import { isEventHandler } from './data/events/eventHelper.js';
 import { handlesFinalValidation } from './data/events/onFinalValidation.js';
 import { handlesGridChange } from './data/events/onGridChange.js';
@@ -18,7 +31,20 @@ import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import GridZones from './data/gridZones.js';
 import Instruction from './data/instruction.js';
-import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, directionToggle, orientationToggle } from './data/primitives.js';
+import {
+  COMPARISONS,
+  Color,
+  Comparison,
+  DIRECTIONS,
+  Direction,
+  MajorRule,
+  Mode,
+  ORIENTATIONS,
+  Orientation,
+  State,
+  directionToggle,
+  orientationToggle,
+} from './data/primitives.js';
 import { MetadataSchema, PuzzleSchema } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
@@ -49,10 +75,23 @@ import GzipCompressor from './data/serializer/compressor/gzipCompressor.js';
 import StreamCompressor from './data/serializer/compressor/streamCompressor.js';
 import SerializerBase from './data/serializer/serializerBase.js';
 import SerializerV0 from './data/serializer/serializer_v0.js';
-import { getShapeVariants, normalizeShape, positionsToShape, shapeEquals, tilesToShape } from './data/shapes.js';
+import {
+  getShapeVariants,
+  normalizeShape,
+  positionsToShape,
+  shapeEquals,
+  tilesToShape,
+} from './data/shapes.js';
 import { allSolvers } from './data/solver/allSolvers.js';
 import BacktrackSolver from './data/solver/backtrack/backtrackSolver.js';
-import BTModule, { BTGridData, BTTile, IntArray2D, colorToBTTile, createOneTileResult, getOppositeColor } from './data/solver/backtrack/data.js';
+import BTModule, {
+  BTGridData,
+  BTTile,
+  IntArray2D,
+  colorToBTTile,
+  createOneTileResult,
+  getOppositeColor,
+} from './data/solver/backtrack/data.js';
 import BanPatternBTModule from './data/solver/backtrack/rules/banPattern.js';
 import CellCountBTModule from './data/solver/backtrack/rules/cellCount.js';
 import ConnectAllBTModule from './data/solver/backtrack/rules/connectAll.js';
@@ -71,7 +110,7 @@ import MinesweeperBTModule from './data/solver/backtrack/symbols/minesweeper.js'
 import MyopiaBTModule from './data/solver/backtrack/symbols/myopia.js';
 import ViewpointBTModule from './data/solver/backtrack/symbols/viewpoint.js';
 import Solver from './data/solver/solver.js';
-import UndercluedSolver from './data/solver/underclued/undercluedSolver.js';
+import UniversalSolver from './data/solver/universal/universalSolver.js';
 import AreaNumberModule from './data/solver/z3/modules/areaNumberModule.js';
 import CellCountModule from './data/solver/z3/modules/cellCountModule.js';
 import ConnectAllModule from './data/solver/z3/modules/connectAllModule.js';
@@ -104,7 +143,10 @@ import Symbol from './data/symbols/symbol.js';
 import ViewpointSymbol from './data/symbols/viewpointSymbol.js';
 import TileData from './data/tile.js';
 import TileConnections from './data/tileConnections.js';
-import validateGrid, { aggregateState, applyFinalOverrides } from './data/validate.js';
+import validateGrid, {
+  aggregateState,
+  applyFinalOverrides,
+} from './data/validate.js';
 
 export {
   ConfigType,
@@ -211,7 +253,7 @@ export {
   MyopiaBTModule,
   ViewpointBTModule,
   Solver,
-  UndercluedSolver,
+  UniversalSolver as UndercluedSolver,
   AreaNumberModule,
   CellCountModule,
   ConnectAllModule,

@@ -1,14 +1,14 @@
 import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
 import EventIteratingSolver from '../eventIteratingSolver.js';
 
-export default class UndercluedSolver extends EventIteratingSolver {
-  public readonly id = 'underclued';
+export default class UniversalSolver extends EventIteratingSolver {
+  public readonly id = 'universal';
 
   public readonly description =
-    'Solves every puzzle as if it were underclued. Supports all rules and symbols and is decently fast for small puzzles. Very slow for large puzzles.';
+    'A backtracking solver that supports all rules and symbols (including underclued) but is less optimized.';
 
   protected createWorker(): Worker {
-    return new Worker(new URL('./undercluedWorker.js', import.meta.url), {
+    return new Worker(new URL('./universalWorker.js', import.meta.url), {
       type: 'module',
     });
   }

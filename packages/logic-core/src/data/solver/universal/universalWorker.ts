@@ -22,60 +22,14 @@ function getNextTile(
   grid: GridData,
   rawTiles: Color[][]
 ): [Position, Color] | undefined {
-  let bestPos: Position | undefined;
-  let bestScore = 0;
-  let bestColor = Color.Dark;
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
       const tile = grid.getTile(x, y);
       if (!tile.exists || tile.fixed) continue;
-      if (rawTiles[y][x] !== Color.Gray) continue;
-      let score = 0;
-      let color = Color.Dark;
-      if (x > 0) {
-        const c = rawTiles[y][x - 1];
-        if (c !== Color.Gray) {
-          color = c;
-          score += 1;
-        }
-      } else {
-        score += 0.5;
-      }
-      if (x < grid.width - 1) {
-        const c = rawTiles[y][x + 1];
-        if (c !== Color.Gray) {
-          color = c;
-          score += 1;
-        }
-      } else {
-        score += 0.5;
-      }
-      if (y > 0) {
-        const c = rawTiles[y - 1][x];
-        if (c !== Color.Gray) {
-          color = c;
-          score += 1;
-        }
-      } else {
-        score += 0.5;
-      }
-      if (y < grid.height - 1) {
-        const c = rawTiles[y + 1][x];
-        if (c !== Color.Gray) {
-          color = c;
-          score += 1;
-        }
-      } else {
-        score += 0.5;
-      }
-      if (score > bestScore) {
-        bestScore = score;
-        bestPos = { x, y };
-        bestColor = color;
-      }
+      if (rawTiles[y][x] === Color.Gray) return [{ x, y }, Color.Dark];
     }
   }
-  return bestPos ? [bestPos, bestColor] : undefined;
+  return undefined;
 }
 
 function backtrack(

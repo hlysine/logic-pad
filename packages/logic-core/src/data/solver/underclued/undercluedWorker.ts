@@ -1,148 +1,219 @@
 import GridData from '../../grid.js';
-import { Color, State } from '../../primitives.js';
+import { Color, Position, State } from '../../primitives.js';
 import { Serializer } from '../../serializer/allSerializers.js';
+import TileData from '../../tile.js';
+import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
+import { array } from '../../dataHelper.js';
 import validateGrid from '../../validate.js';
 
-function posToCoords(pos: number | undefined, width: number): [number, number] {
-  if (pos === undefined) {
-    throw new Error('pos is undefined');
-  }
-  return [pos % width, Math.floor(pos / width)];
+function gridToRawTiles(grid: GridData): Color[][] {
+  return array(grid.width, grid.height, (x, y) => grid.getTile(x, y).color);
 }
 
-function coordsToPos(a: [number, number], width: number) {
-  return a[0] + a[1] * width;
-}
-
-function getValidGrid(
-  grid: GridData,
-  assumptions: number[],
-  canAssump: boolean[]
-): [GridData, number[], boolean] {
-  while (true) {
-    // Get assumption
-    const newAssump = canAssump.findIndex(
-      (a, i) => a && !assumptions.includes(i)
-    );
-    if (newAssump === -1) {
-      return [grid, assumptions, true];
-    }
-    // Set assumption's color to dark
-    const coords = posToCoords(newAssump, grid.width);
-    grid = grid.fastCopyWith({
-      tiles: grid.setTile(coords[0], coords[1], tile =>
-        tile.withColor(Color.Dark)
-      ),
-    });
-    assumptions.push(newAssump);
-    for (const a of grid.connections.getConnectedTiles({
-      x: coords[0],
-      y: coords[1],
-    })) {
-      canAssump[coordsToPos([a.x, a.y], grid.width)] =
-        a.x === coords[0] && a.y === coords[1];
-    }
-    const state = validateGrid(grid, null);
-    // If the grid is invalid, try to backtrack to a right assumption
-    if (state.final === State.Error) {
-      // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      [grid, assumptions] = tryToBacktrack(grid, assumptions);
-      if (assumptions.length === 0) {
-        return [grid, assumptions, false];
-      }
-    }
-  }
-}
-
-function tryToBacktrack(
-  grid: GridData,
-  assumptions: number[]
-): [GridData, number[]] {
-  while (assumptions.length > 0) {
-    const coords = posToCoords(assumptions[assumptions.length - 1], grid.width);
-    if (grid.getTile(coords[0], coords[1]).color === Color.Light) {
-      grid = grid.fastCopyWith({
-        tiles: grid.setTile(coords[0], coords[1], tile =>
-          tile.withColor(Color.Gray)
-        ),
-      });
-      assumptions.pop();
-    } else {
-      grid = grid.fastCopyWith({
-        tiles: grid.setTile(coords[0], coords[1], tile =>
-          tile.withColor(Color.Light)
-        ),
-      });
-      const state = validateGrid(grid, null);
-      if (state.final === State.Error) {
-        grid = grid.fastCopyWith({
-          tiles: grid.setTile(coords[0], coords[1], tile =>
-            tile.withColor(Color.Gray)
-          ),
-        });
-        assumptions.pop();
-      } else {
-        return [grid, assumptions];
-      }
-    }
-  }
-  return [grid, assumptions];
-}
-
-function computeSolution(initialGrid: GridData): GridData {
-  const canAssump: boolean[] = initialGrid.tiles
-    .map(row => row.map(t => t.exists && !t.fixed))
-    .flat();
-  let lastValidGrid: Color[] = [];
-  let assumptions: number[] = [];
-  let currentGrid: GridData = initialGrid.fastCopyWith({});
-  let anyNewGrid;
-  while (assumptions.length > 0 || lastValidGrid.length === 0) {
-    [currentGrid, assumptions, anyNewGrid] = getValidGrid(
-      currentGrid,
-      assumptions,
-      canAssump
-    );
-    if (!anyNewGrid) {
-      break;
-    }
-    const newLastValidGrid = currentGrid.tiles
-      .map(row => row.map(t => t.color))
-      .flat();
-    if (lastValidGrid.length !== 0) {
-      const diff = newLastValidGrid.map(
-        (color, i) => color === lastValidGrid[i]
-      );
-      diff.forEach((same, i) => {
-        if (!same) {
-          newLastValidGrid[i] = Color.Gray;
-        }
-      });
-    }
-    [currentGrid, assumptions] = tryToBacktrack(currentGrid, assumptions);
-    lastValidGrid = newLastValidGrid;
-  }
-  // Create a new grid with lastValidGrid
-  let solutionGrid = initialGrid.fastCopyWith({});
-  lastValidGrid.forEach((color, i) => {
-    const coords = posToCoords(i, solutionGrid.width);
-    solutionGrid = solutionGrid.fastCopyWith({
-      tiles: solutionGrid.setTile(coords[0], coords[1], tile =>
-        tile.withColor(color)
-      ),
-    });
+function rawTilesToGrid(rawTiles: Color[][], grid: GridData): GridData {
+  return grid.fastCopyWith({
+    tiles: array(grid.width, grid.height, (x, y) =>
+      grid.getTile(x, y).withColor(rawTiles[y][x])
+    ),
   });
-  return solutionGrid;
+}
+
+function getNextTile(
+  grid: GridData,
+  rawTiles: Color[][]
+): [Position, Color] | undefined {
+  let bestPos: Position | undefined;
+  let bestScore = 0;
+  let bestColor = Color.Dark;
+  for (let y = 0; y < grid.height; y++) {
+    for (let x = 0; x < grid.width; x++) {
+      const tile = grid.getTile(x, y);
+      if (!tile.exists || tile.fixed) continue;
+      if (rawTiles[y][x] !== Color.Gray) continue;
+      let score = 0;
+      let color = Color.Dark;
+      if (x > 0) {
+        const c = rawTiles[y][x - 1];
+        if (c !== Color.Gray) {
+          color = c;
+          score += 1;
+        }
+      } else {
+        score += 0.5;
+      }
+      if (x < grid.width - 1) {
+        const c = rawTiles[y][x + 1];
+        if (c !== Color.Gray) {
+          color = c;
+          score += 1;
+        }
+      } else {
+        score += 0.5;
+      }
+      if (y > 0) {
+        const c = rawTiles[y - 1][x];
+        if (c !== Color.Gray) {
+          color = c;
+          score += 1;
+        }
+      } else {
+        score += 0.5;
+      }
+      if (y < grid.height - 1) {
+        const c = rawTiles[y + 1][x];
+        if (c !== Color.Gray) {
+          color = c;
+          score += 1;
+        }
+      } else {
+        score += 0.5;
+      }
+      if (score > bestScore) {
+        bestScore = score;
+        bestPos = { x, y };
+        bestColor = color;
+      }
+    }
+  }
+  return bestPos ? [bestPos, bestColor] : undefined;
+}
+
+function backtrack(
+  grid: GridData,
+  rawTiles: Color[][],
+  submitSolution: (rawTiles: Color[][] | null) => boolean
+): boolean {
+  // Find the best empty cell to guess
+  const target = getNextTile(grid, rawTiles);
+
+  // Found a solution
+  if (!target) return !submitSolution(rawTiles);
+
+  const [pos, color] = target;
+  const positions = grid.connections.getConnectedTiles(pos);
+
+  for (let i = 0; i <= 1; i++) {
+    const tile =
+      i === 0 ? color : color === Color.Dark ? Color.Light : Color.Dark;
+
+    positions.forEach(({ x, y }) => (rawTiles[y][x] = tile));
+
+    const newGrid = rawTilesToGrid(rawTiles, grid);
+
+    const isValid = validateGrid(newGrid, null);
+
+    if (
+      isValid.final !== State.Error &&
+      backtrack(newGrid, rawTiles, submitSolution)
+    )
+      return true;
+  }
+  positions.forEach(({ x, y }) => (rawTiles[y][x] = Color.Gray));
+  return false;
+}
+
+function solveNormal(
+  input: GridData,
+  submitSolution: (grid: GridData | null) => boolean
+) {
+  // Call backtrack
+  backtrack(input, gridToRawTiles(input), rawTiles =>
+    submitSolution(rawTiles ? rawTilesToGrid(rawTiles, input) : null)
+  );
+}
+
+function solveUnderclued(input: GridData): GridData | null {
+  interface PossibleState {
+    dark: boolean;
+    light: boolean;
+  }
+
+  let grid = input;
+
+  const possibles: PossibleState[][] = array(grid.width, grid.height, () => ({
+    dark: false,
+    light: false,
+  }));
+
+  function search(x: number, y: number, tile: TileData, color: Color): boolean {
+    const newGrid = grid.fastCopyWith({
+      tiles: grid.setTile(x, y, tile.withColor(color)),
+    });
+
+    // Solve
+    let solution: GridData | null | undefined;
+    solveNormal(newGrid, sol => {
+      solution = sol;
+      return false;
+    });
+
+    if (!solution) return false;
+
+    // Update the new possible states
+    solution.forEach((solTile, solX, solY) => {
+      if (solTile.color === Color.Dark) {
+        possibles[solY][solX].dark = true;
+      } else {
+        possibles[solY][solX].light = true;
+      }
+    });
+
+    return true;
+  }
+
+  for (let y = 0; y < grid.height; y++) {
+    for (let x = 0; x < grid.width; x++) {
+      const tile = grid.getTile(x, y);
+
+      if (!tile.exists || tile.color !== Color.Gray) continue;
+
+      // We can skip this solve if it is proved to be solvable
+      const darkPossible =
+        possibles[y][x].dark || search(x, y, tile, Color.Dark);
+      const lightPossible =
+        possibles[y][x].light || search(x, y, tile, Color.Light);
+
+      // No solution
+      if (!darkPossible && !lightPossible) return null;
+
+      if (darkPossible && !lightPossible)
+        grid = grid.fastCopyWith({
+          tiles: grid.setTile(x, y, tile.withColor(Color.Dark)),
+        });
+      if (!darkPossible && lightPossible)
+        grid = grid.fastCopyWith({
+          tiles: grid.setTile(x, y, tile.withColor(Color.Light)),
+        });
+    }
+  }
+
+  return grid;
+}
+
+function solve(
+  grid: GridData,
+  submitSolution: (grid: GridData | null) => boolean
+) {
+  if (grid.findRule(rule => rule.id === undercluedInstance.id)) {
+    submitSolution(solveUnderclued(grid));
+  } else {
+    solveNormal(grid, submitSolution);
+  }
 }
 
 onmessage = e => {
-  if (!e.data || typeof e.data !== 'string') return;
-  const grid = Serializer.parseGrid(e.data);
-  const solved = computeSolution(grid);
-  postMessage(Serializer.stringifyGrid(solved));
+  const grid = Serializer.parseGrid(e.data as string);
+
+  let count = 0;
+
+  solve(grid, solution => {
+    postMessage(solution ? Serializer.stringifyGrid(solution) : null);
+
+    count += 1;
+    return count < 2;
+  });
+
   postMessage(null);
 };
 
-// make typescript happy
-// eslint-disable-next-line import/no-anonymous-default-export
-export default null;
+export {};

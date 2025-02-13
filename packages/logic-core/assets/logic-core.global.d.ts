@@ -646,6 +646,7 @@ declare global {
     readonly underclued: CachedAccess<UndercluedRule | undefined>;
     /**
      * Create a new grid with tiles, connections, symbols and rules.
+     *
      * @param width The width of the grid.
      * @param height The height of the grid.
      * @param tiles The tiles of the grid.
@@ -664,11 +665,67 @@ declare global {
       rules?: readonly Rule[]
     );
     /**
+     * Create a new GridData object from a string array.
+     *
+     * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+     * - Capitalize the letter to make the tile fixed.
+     * - Use `.` to represent empty space.
+     *
+     * @param array - The string array to create the grid from.
+     * @returns The created grid.
+     */
+    static create(array: string[]): GridData;
+    /**
+     * Create a new grid with tiles, connections, symbols and rules. Sanitize the provided list of symbols and rules,
+     * and trigger grid change events.
+     *
+     * @param width The width of the grid.
+     * @param height The height of the grid.
+     * @param tiles The tiles of the grid.
+     * @param connections The connections of the grid, which determines which tiles are merged.
+     * @param zones The zones of the grid.
+     * @param symbols The symbols in the grid.
+     * @param rules The rules of the grid.
+     */
+    static create(
+      width: number,
+      height: number,
+      tiles?: readonly (readonly TileData[])[],
+      connections?: GridConnections,
+      zones?: GridZones,
+      symbols?: ReadonlyMap<string, readonly Symbol$1[]>,
+      rules?: readonly Rule[]
+    ): GridData;
+    /**
      * Copy the current grid while modifying the provided properties.
      * @param param0 The properties to modify.
      * @returns The new grid with the modified properties.
      */
     copyWith({
+      width,
+      height,
+      tiles,
+      connections,
+      zones,
+      symbols,
+      rules,
+    }: {
+      width?: number;
+      height?: number;
+      tiles?: readonly (readonly TileData[])[];
+      connections?: GridConnections;
+      zones?: GridZones;
+      symbols?: ReadonlyMap<string, readonly Symbol$1[]>;
+      rules?: readonly Rule[];
+    }): GridData;
+    /**
+     * Copy the current grid while modifying the provided properties.
+     * Skip sanitization and event triggering for performance.
+     *
+     * @param param0 The properties to modify.
+     * @returns The new grid with the modified properties.
+     */
+    fastCopyWith({
       width,
       height,
       tiles,
@@ -695,19 +752,19 @@ declare global {
     getTile(x: number, y: number): TileData;
     /**
      * Safely set the tile at the given position.
-     * If the position is invalid, the grid is returned unchanged.
+     * If the position is invalid, the tile array is returned unchanged.
      * If the tile is merged with other tiles, the colors of all connected tiles are changed.
      *
      * @param x The x-coordinate of the tile.
      * @param y The y-coordinate of the tile.
      * @param tile The new tile to set.
-     * @returns The new grid with the tile set at the given position.
+     * @returns The new tile array with updated tiles.
      */
     setTile(
       x: number,
       y: number,
       tile: TileData | ((tile: TileData) => TileData)
-    ): GridData;
+    ): readonly (readonly TileData[])[];
     /**
      * Replace or modify all tiles in the grid.
      *
@@ -860,17 +917,6 @@ declare global {
      * @returns The created tile array.
      */
     static createTiles(array: string[]): TileData[][];
-    /**
-     * Create a new GridData object from a string array.
-     *
-     * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
-     * - Capitalize the letter to make the tile fixed.
-     * - Use `.` to represent empty space.
-     *
-     * @param array - The string array to create the grid from.
-     * @returns The created grid.
-     */
-    static create(array: string[]): GridData;
     /**
      * Find a tile in the grid that satisfies the predicate.
      *
@@ -1911,6 +1957,9 @@ declare global {
     stringifyPuzzle(puzzle: Puzzle): string;
     parsePuzzle(input: string): Puzzle;
   }
+  export interface CancelRef {
+    cancel?: () => void;
+  }
   /**
    * Base class that all solvers must extend.
    */
@@ -1940,8 +1989,13 @@ declare global {
      *
      * @param grid The grid to solve. The provided grid is guaranteed to be supported by the solver. Some tiles in the
      * grid may already be filled by the user. It is up to the solver to decide whether to respect these tiles or not.
+     * @param cancelRef A reference to a function that can be called to cancel the solver. If cancellation is supported,
+     * the solver can assign a function to `cancelRef.cancel` that will stop the solver when called.
      */
-    abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
+    abstract solve(
+      grid: GridData,
+      cancelRef: CancelRef
+    ): AsyncGenerator<GridData | null>;
     /**
      * Check if the solver supports the current browser environment. This method is called once when the user first clicks
      * the "Solve" button, and the result is cached for the duration of the editor session.
@@ -1972,12 +2026,19 @@ declare global {
     isGridSupported(grid: GridData): boolean;
   }
   export declare const allSolvers: Map<string, Solver>;
-  export declare class BacktrackSolver extends Solver {
+  export declare abstract class EventIteratingSolver extends Solver {
+    protected abstract createWorker(): Worker;
+    solve(
+      grid: GridData,
+      cancelRef: CancelRef
+    ): AsyncGenerator<GridData | null>;
+  }
+  export declare class BacktrackSolver extends EventIteratingSolver {
     private static readonly supportedInstrs;
     readonly id = 'backtrack';
     readonly description =
       'Solves puzzles using backtracking with optimizations (blazingly fast). Support most rules and symbols (including underclued).';
-    solve(grid: GridData): AsyncGenerator<GridData | null>;
+    protected createWorker(): Worker;
     isInstructionSupported(instructionId: string): boolean;
   }
   export declare enum BTTile {
@@ -2448,11 +2509,11 @@ declare global {
     constructor(instr: ViewpointSymbol);
     checkGlobal(grid: BTGridData): CheckResult | false;
   }
-  export declare class UndercluedSolver extends Solver {
-    readonly id = 'underclued';
+  export declare class UniversalSolver extends EventIteratingSolver {
+    readonly id = 'universal';
     readonly description =
-      'Solves every puzzle as if it were underclued. Supports all rules and symbols and is decently fast for small puzzles. Very slow for large puzzles.';
-    solve(grid: GridData): AsyncGenerator<GridData | null>;
+      'A backtracking solver that supports all rules and symbols (including underclued) but is less optimized.';
+    protected createWorker(): Worker;
     isInstructionSupported(instructionId: string): boolean;
   }
   export declare class Z3SolverContext<

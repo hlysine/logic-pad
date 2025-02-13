@@ -223,8 +223,6 @@ export default memo(function PuzzleChecklist() {
                   type="button"
                   className="btn btn-sm"
                   onClick={() => {
-                    setSolution(null);
-                    setAlternate(null);
                     solveRef.cancel?.();
                     setSolveRef(null);
                   }}

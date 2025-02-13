@@ -95,7 +95,13 @@ export default abstract class Solver {
     ) {
       return false;
     }
-    if ([...grid.symbols.keys()].some(id => !this.isInstructionSupported(id))) {
+    if (
+      [...grid.symbols.keys()].some(
+        id =>
+          grid.symbols.get(id)?.some(s => s.necessaryForCompletion) &&
+          !this.isInstructionSupported(id)
+      )
+    ) {
       return false;
     }
     return true;

@@ -105,9 +105,10 @@ function translateToBTGridData(grid: GridData): BTGridData {
         continue;
       }
 
-      if (!module) throw new Error('Symbol not supported.');
+      if (!module && symbol.necessaryForCompletion)
+        throw new Error('Symbol not supported.');
 
-      modules.push(module);
+      if (module) modules.push(module);
     }
   }
 

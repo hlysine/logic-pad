@@ -103,20 +103,6 @@ function computeSolution(initialGrid: GridData): GridData {
       assumptions,
       canAssump
     );
-    // console.log(
-    //   currentGrid.tiles
-    //     .map(row =>
-    //       row
-    //         .map(t => {
-    //           const color = t.color === Color.Light ? 'w' : 'b';
-    //           if (t.color === Color.Gray) return 'n';
-    //           if (!t.exists) return '.';
-    //           return t.fixed ? color.toUpperCase() : color;
-    //         })
-    //         .join('')
-    //     )
-    //     .join('\n')
-    // );
     if (!anyNewGrid) {
       break;
     }
@@ -146,20 +132,6 @@ function computeSolution(initialGrid: GridData): GridData {
       ),
     });
   });
-  // console.log(
-  //   solutionGrid.tiles
-  //     .map(row =>
-  //       row
-  //         .map(t => {
-  //           const color = t.color === Color.Light ? 'w' : 'b';
-  //           if (t.color === Color.Gray) return 'n';
-  //           if (!t.exists) return '.';
-  //           return t.fixed ? color.toUpperCase() : color;
-  //         })
-  //         .join('')
-  //     )
-  //     .join('\n')
-  // );
   return solutionGrid;
 }
 
@@ -168,6 +140,7 @@ onmessage = e => {
   const grid = Serializer.parseGrid(e.data);
   const solved = computeSolution(grid);
   postMessage(Serializer.stringifyGrid(solved));
+  postMessage(null);
 };
 
 // make typescript happy

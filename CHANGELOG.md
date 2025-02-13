@@ -1,3 +1,8 @@
+# 13/2/2025
+
+- Changed the thumbnail grid of the lying symbols rule
+- Fixed an error related to myopia being a lying symbol
+
 # 11/2/2025
 
 - Added the lying symbols rule

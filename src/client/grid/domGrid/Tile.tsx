@@ -71,17 +71,31 @@ function bg(color: Color) {
   }
 }
 
+function getFixedClass(key: string) {
+  // eslint-disable @typescript-eslint/prefer-string-starts-ends-with
+  const ul = key.startsWith('0') && key[1] === '0' && key[3] === '0';
+  const ur = key[1] === '0' && key[2] === '0' && key[5] === '0';
+  const bl = key[3] === '0' && key[6] === '0' && key[7] === '0';
+  const br = key[5] === '0' && key[7] === '0' && key[8] === '0';
+  const elements = [];
+  if (ul) elements.push('ul');
+  if (ur) elements.push('ur');
+  if (bl) elements.push('bl');
+  if (br) elements.push('br');
+  return `tile-${elements.join('-')}`;
+}
+
 export default memo(function Tile({
   data,
   editable,
   connections,
   onTileClick,
 }: TileProps) {
-  const partStyles = useMemo(() => {
+  const [partStyles, fixedClass] = useMemo(() => {
     const key = connectionsToId(connections);
     const styles = tileStyles.get(key);
     if (!styles) throw new Error(`No style for key ${key}`);
-    return styles;
+    return [styles, getFixedClass(key)];
   }, [connections]);
   let fixed = false;
 
@@ -99,7 +113,7 @@ export default memo(function Tile({
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default',
                 fixable && data.fixed
-                  ? ((fixed = true), 'tile-fixed')
+                  ? ((fixed = true), `tile-fixed ${fixedClass}`)
                   : 'border-0'
               )}
               tabIndex={
@@ -161,7 +175,10 @@ export default memo(function Tile({
           {!fixed && data.fixed && (
             <div
               key="fixed"
-              className="absolute inset-[0.05em] text-[1em] pointer-events-none tile-fixed"
+              className={cn(
+                'absolute inset-[0.05em] text-[1em] pointer-events-none tile-fixed',
+                fixedClass
+              )}
             ></div>
           )}
         </>

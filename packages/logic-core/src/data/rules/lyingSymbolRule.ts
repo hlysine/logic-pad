@@ -1,12 +1,21 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import { FinalValidationHandler } from '../events/onFinalValidation.js';
 import GridData from '../grid.js';
-import { Color, GridState, RuleState, State } from '../primitives.js';
+import {
+  Color,
+  GridState,
+  Orientation,
+  RuleState,
+  State,
+} from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
-import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import validateGrid from '../validate.js';
 import Symbol from '../symbols/symbol.js';
 import Instruction from '../instruction.js';
+import LetterSymbol from '../symbols/letterSymbol.js';
+import GalaxySymbol from '../symbols/galaxySymbol.js';
+import LotusSymbol from '../symbols/lotusSymbol.js';
+import AreaNumberSymbol from '../symbols/areaNumberSymbol.js';
 
 class IgnoredSymbol extends Symbol {
   public constructor(
@@ -128,9 +137,13 @@ export default class LyingSymbolRule
   implements FinalValidationHandler
 {
   private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['.']).addSymbol(
-      new CustomIconSymbol('', GridData.create([]), 0, 0, 'MdOutlineDeblur')
-    )
+    GridData.create(['bbbbw', 'wwbbb', 'bbbbw', 'wbbww']).withSymbols([
+      new LetterSymbol(4, 0, 'A'),
+      new GalaxySymbol(1, 1),
+      new LotusSymbol(2, 2, Orientation.Up),
+      new LetterSymbol(0, 3, 'A'),
+      new AreaNumberSymbol(4, 3, 1),
+    ])
   );
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([

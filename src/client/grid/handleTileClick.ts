@@ -17,7 +17,9 @@ export default function handleTileClick(
     } else if (flood) {
       setGrid(grid.floodFill({ x, y }, tile.color, target, true));
     } else {
-      setGrid(grid.setTile(x, y, t => t.withColor(target)));
+      setGrid(
+        grid.copyWith({ tiles: grid.setTile(x, y, t => t.withColor(target)) })
+      );
     }
   } else {
     const tile = grid.getTile(x, y);
@@ -27,7 +29,9 @@ export default function handleTileClick(
     } else if (flood && !tile.fixed) {
       setGrid(grid.floodFill({ x, y }, Color.Gray, target, false));
     } else if (!tile.fixed) {
-      setGrid(grid.setTile(x, y, t => t.withColor(target)));
+      setGrid(
+        grid.copyWith({ tiles: grid.setTile(x, y, t => t.withColor(target)) })
+      );
     }
   }
 }

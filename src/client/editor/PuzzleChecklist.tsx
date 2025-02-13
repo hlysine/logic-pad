@@ -14,7 +14,7 @@ import { useGridState } from '../contexts/GridStateContext.tsx';
 import { Color, State } from '@logic-pad/core/data/primitives';
 import { BiSolidFlagCheckered } from 'react-icons/bi';
 import { BsCreditCard2Front, BsPatchCheckFill } from 'react-icons/bs';
-import { FaCircleHalfStroke } from 'react-icons/fa6';
+import { FaCircleHalfStroke, FaHourglassHalf } from 'react-icons/fa6';
 import { MetadataSchema } from '@logic-pad/core/data/puzzle';
 import { RiRobot2Fill } from 'react-icons/ri';
 import GridData from '@logic-pad/core/data/grid';
@@ -22,6 +22,7 @@ import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
+import { CancelRef } from '@logic-pad/core/data/solver/solver.ts';
 
 const SolverSelector = lazy(() => import('./SolverSelector'));
 
@@ -59,7 +60,7 @@ export default memo(function PuzzleChecklist() {
   const { solver } = useSolver();
 
   const solverRequest = useRef(0);
-  const [isPending, setPending] = useState(false);
+  const [solveRef, setSolveRef] = useState<CancelRef | null>(null);
   const [solution, setSolution] = useState<TiedToGrid<GridData | null> | null>(
     null
   );
@@ -69,13 +70,19 @@ export default memo(function PuzzleChecklist() {
   useEffect(() => {
     if (solution && !solution.grid.resetTiles().equals(grid.resetTiles())) {
       setSolution(null);
-      setPending(false);
+      if (solveRef !== null) {
+        solveRef.cancel?.();
+        setSolveRef(null);
+      }
     }
     if (alternate && !alternate.grid.resetTiles().equals(grid.resetTiles())) {
       setAlternate(null);
-      setPending(false);
+      if (solveRef !== null) {
+        solveRef.cancel?.();
+        setSolveRef(null);
+      }
     }
-  }, [grid, solution, alternate]);
+  }, [grid, solution, alternate, solveRef]);
 
   const metadataValid = useMemo(
     () => MetadataSchema.safeParse(metadata).success,
@@ -180,24 +187,24 @@ export default memo(function PuzzleChecklist() {
             {solutionIsNotEmpty ? 'Solution not empty' : 'Solution empty'}
           </ChecklistItem>
         )}
-        {solution !== null || isPending ? (
+        {solution !== null || solveRef ? (
           <>
             <ChecklistItem
               key="solution"
-              icon={HiViewGrid}
+              icon={solveRef ? FaHourglassHalf : HiViewGrid}
               iconClass={
                 solution !== null
                   ? solution.value !== null
                     ? 'text-success'
                     : 'text-error'
-                  : 'opacity-0'
+                  : 'text-info'
               }
               tooltip={
                 solution !== null
                   ? solution.value !== null
                     ? 'Solution found. Click to view'
                     : 'This puzzle has no solution'
-                  : isPending
+                  : solveRef
                     ? 'Solving...'
                     : 'Solver stopped before a solution was found'
               }
@@ -207,10 +214,22 @@ export default memo(function PuzzleChecklist() {
                   ? solution.value !== null
                     ? 'Solution found'
                     : 'No solution'
-                  : isPending
+                  : solveRef
                     ? 'Solving...'
                     : 'Solution unavailable'}
               </span>
+              {solveRef?.cancel && (
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  onClick={() => {
+                    solveRef.cancel?.();
+                    setSolveRef(null);
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
               {!!solution?.value && (
                 <button
                   type="button"
@@ -249,7 +268,7 @@ export default memo(function PuzzleChecklist() {
                     ? alternate.value !== null
                       ? 'Click to view alternate solution'
                       : 'The solution is unique'
-                    : isPending
+                    : solveRef
                       ? 'Looking for alternate solutions...'
                       : 'Alternate solution not supported by solver'
                 }
@@ -259,7 +278,7 @@ export default memo(function PuzzleChecklist() {
                     ? alternate.value !== null
                       ? 'Solution not unique'
                       : 'Unique solution'
-                    : isPending
+                    : solveRef
                       ? 'Verifying...'
                       : 'Alternate unavailable'}
                 </span>
@@ -285,7 +304,7 @@ export default memo(function PuzzleChecklist() {
                 )}
               </ChecklistItem>
             )}
-            {!isPending && (
+            {!solveRef && (
               <button
                 type="button"
                 className="btn btn-sm"
@@ -316,12 +335,16 @@ export default memo(function PuzzleChecklist() {
               <SolverSelector
                 onSolve={async solver => {
                   const requestId = ++solverRequest.current;
-                  setPending(true);
+                  const cancelRef: CancelRef = {};
+                  setSolveRef(cancelRef);
                   setSolution(null);
                   setAlternate(null);
                   try {
                     let isAlternate = false;
-                    for await (const solution of solver.solve(grid)) {
+                    for await (const solution of solver.solve(
+                      grid,
+                      cancelRef
+                    )) {
                       if (!isAlternate) {
                         if (requestId !== solverRequest.current) break;
                         setSolution({ grid, value: solution });
@@ -335,7 +358,8 @@ export default memo(function PuzzleChecklist() {
                   } catch (ex) {
                     console.error(ex);
                   } finally {
-                    setPending(false);
+                    cancelRef.cancel?.();
+                    setSolveRef(null);
                   }
                 }}
               />

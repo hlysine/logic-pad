@@ -1,3 +1,12 @@
+# 0.6.0
+
+- Rule and symbol list sanitization is now performed in `GridData.create` rather than `GridData` constructor
+- Added `fastCopyWith` to skip sanitization
+- Breaking change to the `GridData.setTile` method - now returns the tile array instead of a new `GridData`
+- Added cancellation API to solvers
+- Refactored JS solvers to use a common adapter class `EventInteratingSolver`
+- Reworked and renamed the underclued solver to universal solver
+
 # 0.5.0
 
 - Added the lying symbols rule

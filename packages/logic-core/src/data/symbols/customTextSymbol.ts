@@ -3,7 +3,7 @@ import GridData from '../grid.js';
 import CustomSymbol from './customSymbol.js';
 
 export default class CustomTextSymbol extends CustomSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
+  private static readonly EXAMPLE_GRID = Object.freeze(GridData.create(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
@@ -119,7 +119,7 @@ export default class CustomTextSymbol extends CustomSymbol {
 
 export const instance = new CustomTextSymbol(
   'A *custom* text symbol',
-  new GridData(5, 4),
+  GridData.create(5, 4),
   0,
   0,
   'X'

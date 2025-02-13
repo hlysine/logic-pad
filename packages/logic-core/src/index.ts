@@ -70,8 +70,9 @@ import LotusBTModule from './data/solver/backtrack/symbols/lotus.js';
 import MinesweeperBTModule from './data/solver/backtrack/symbols/minesweeper.js';
 import MyopiaBTModule from './data/solver/backtrack/symbols/myopia.js';
 import ViewpointBTModule from './data/solver/backtrack/symbols/viewpoint.js';
+import EventIteratingSolver from './data/solver/eventIteratingSolver.js';
 import Solver from './data/solver/solver.js';
-import UndercluedSolver from './data/solver/underclued/undercluedSolver.js';
+import UniversalSolver from './data/solver/universal/universalSolver.js';
 import AreaNumberModule from './data/solver/z3/modules/areaNumberModule.js';
 import CellCountModule from './data/solver/z3/modules/cellCountModule.js';
 import ConnectAllModule from './data/solver/z3/modules/connectAllModule.js';
@@ -210,8 +211,9 @@ export {
   MinesweeperBTModule,
   MyopiaBTModule,
   ViewpointBTModule,
+  EventIteratingSolver,
   Solver,
-  UndercluedSolver,
+  UniversalSolver,
   AreaNumberModule,
   CellCountModule,
   ConnectAllModule,

@@ -2,6 +2,10 @@ import GridData from '../grid.js';
 import { allRules } from '../rules/index.js';
 import { allSymbols } from '../symbols/index.js';
 
+export interface CancelRef {
+  cancel?: () => void;
+}
+
 /**
  * Base class that all solvers must extend.
  */
@@ -33,8 +37,13 @@ export default abstract class Solver {
    *
    * @param grid The grid to solve. The provided grid is guaranteed to be supported by the solver. Some tiles in the
    * grid may already be filled by the user. It is up to the solver to decide whether to respect these tiles or not.
+   * @param cancelRef A reference to a function that can be called to cancel the solver. If cancellation is supported,
+   * the solver can assign a function to `cancelRef.cancel` that will stop the solver when called.
    */
-  public abstract solve(grid: GridData): AsyncGenerator<GridData | null>;
+  public abstract solve(
+    grid: GridData,
+    cancelRef: CancelRef
+  ): AsyncGenerator<GridData | null>;
 
   /**
    * Check if the solver supports the current browser environment. This method is called once when the user first clicks
@@ -86,7 +95,13 @@ export default abstract class Solver {
     ) {
       return false;
     }
-    if ([...grid.symbols.keys()].some(id => !this.isInstructionSupported(id))) {
+    if (
+      [...grid.symbols.keys()].some(
+        id =>
+          grid.symbols.get(id)?.some(s => s.necessaryForCompletion) &&
+          !this.isInstructionSupported(id)
+      )
+    ) {
       return false;
     }
     return true;

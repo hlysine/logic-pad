@@ -543,7 +543,7 @@ export default class SerializerV0 extends SerializerBase {
         throw new Error(`Invalid data: ${d}`);
       }
     }
-    return new GridData(
+    return GridData.create(
       width ?? tiles?.[0].length ?? 0,
       height ?? tiles?.length ?? 0,
       tiles,

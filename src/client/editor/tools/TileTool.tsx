@@ -30,11 +30,19 @@ export default memo(function TileTool() {
                 onTileClick={(x, y, from, to) => {
                   if (from === Color.Dark || to === Color.Dark) {
                     setGrid(
-                      grid.setTile(x, y, t => t.withFixed(to === Color.Dark))
+                      grid.copyWith({
+                        tiles: grid.setTile(x, y, t =>
+                          t.withFixed(to === Color.Dark)
+                        ),
+                      })
                     );
                   } else if (from === Color.Light || to === Color.Light) {
                     setGrid(
-                      grid.setTile(x, y, t => t.withExists(to === Color.Light))
+                      grid.copyWith({
+                        tiles: grid.setTile(x, y, t =>
+                          t.withExists(to === Color.Light)
+                        ),
+                      })
                     );
                   }
                 }}

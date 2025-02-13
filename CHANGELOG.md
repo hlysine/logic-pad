@@ -1,5 +1,9 @@
 # 13/2/2025
 
+- Reworked the underclued solver to behave like backtrack solver but with universal rules and symbols support
+- Renamed underclued solver to universal solver
+- Added a button to cancel the current solve attempt
+- Optimized grid data copying for the universal solver
 - Changed the thumbnail grid of the lying symbols rule
 - Fixed an error related to myopia being a lying symbol
 

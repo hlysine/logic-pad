@@ -84,7 +84,7 @@ export default class BanPatternRule extends Rule {
       if (!tile.exists || tile.color !== Color.Gray) return tile;
       return tile.withExists(false);
     });
-    return new GridData(width, height, tiles);
+    return GridData.create(width, height, tiles);
   }
 
   public get searchVariants(): SearchVariant[] {

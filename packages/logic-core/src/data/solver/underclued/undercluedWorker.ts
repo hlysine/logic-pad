@@ -29,9 +29,11 @@ function getValidGrid(
     }
     // Set assumption's color to dark
     const coords = posToCoords(newAssump, grid.width);
-    grid = grid.setTile(coords[0], coords[1], tile =>
-      tile.withColor(Color.Dark)
-    );
+    grid = grid.fastCopyWith({
+      tiles: grid.setTile(coords[0], coords[1], tile =>
+        tile.withColor(Color.Dark)
+      ),
+    });
     assumptions.push(newAssump);
     for (const a of grid.connections.getConnectedTiles({
       x: coords[0],
@@ -59,19 +61,25 @@ function tryToBacktrack(
   while (assumptions.length > 0) {
     const coords = posToCoords(assumptions[assumptions.length - 1], grid.width);
     if (grid.getTile(coords[0], coords[1]).color === Color.Light) {
-      grid = grid.setTile(coords[0], coords[1], tile =>
-        tile.withColor(Color.Gray)
-      );
+      grid = grid.fastCopyWith({
+        tiles: grid.setTile(coords[0], coords[1], tile =>
+          tile.withColor(Color.Gray)
+        ),
+      });
       assumptions.pop();
     } else {
-      grid = grid.setTile(coords[0], coords[1], tile =>
-        tile.withColor(Color.Light)
-      );
+      grid = grid.fastCopyWith({
+        tiles: grid.setTile(coords[0], coords[1], tile =>
+          tile.withColor(Color.Light)
+        ),
+      });
       const state = validateGrid(grid, null);
       if (state.final === State.Error) {
-        grid = grid.setTile(coords[0], coords[1], tile =>
-          tile.withColor(Color.Gray)
-        );
+        grid = grid.fastCopyWith({
+          tiles: grid.setTile(coords[0], coords[1], tile =>
+            tile.withColor(Color.Gray)
+          ),
+        });
         assumptions.pop();
       } else {
         return [grid, assumptions];
@@ -87,7 +95,7 @@ function computeSolution(initialGrid: GridData): GridData {
     .flat();
   let lastValidGrid: Color[] = [];
   let assumptions: number[] = [];
-  let currentGrid: GridData = initialGrid.copyWith({});
+  let currentGrid: GridData = initialGrid.fastCopyWith({});
   let anyNewGrid;
   while (assumptions.length > 0 || lastValidGrid.length === 0) {
     [currentGrid, assumptions, anyNewGrid] = getValidGrid(
@@ -129,12 +137,14 @@ function computeSolution(initialGrid: GridData): GridData {
     lastValidGrid = newLastValidGrid;
   }
   // Create a new grid with lastValidGrid
-  let solutionGrid = initialGrid.copyWith({});
+  let solutionGrid = initialGrid.fastCopyWith({});
   lastValidGrid.forEach((color, i) => {
     const coords = posToCoords(i, solutionGrid.width);
-    solutionGrid = solutionGrid.setTile(coords[0], coords[1], tile =>
-      tile.withColor(color)
-    );
+    solutionGrid = solutionGrid.fastCopyWith({
+      tiles: solutionGrid.setTile(coords[0], coords[1], tile =>
+        tile.withColor(color)
+      ),
+    });
   });
   // console.log(
   //   solutionGrid.tiles

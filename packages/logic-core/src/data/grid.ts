@@ -64,6 +64,7 @@ export default class GridData {
 
   /**
    * Create a new grid with tiles, connections, symbols and rules.
+   *
    * @param width The width of the grid.
    * @param height The height of the grid.
    * @param tiles The tiles of the grid.
@@ -86,25 +87,85 @@ export default class GridData {
     this.tiles = tiles ?? array(width, height, () => TileData.empty());
     this.connections = connections ?? new GridConnections();
     this.zones = zones ?? new GridZones();
-    const newSymbols = symbols
-      ? GridData.deduplicateSymbols(symbols)
-      : new Map<string, Symbol[]>();
-    // do not deduplicate all rules because it makes for bad editor experience
-    const newRules = rules ? GridData.deduplicateSingletonRules(rules) : [];
-    this.symbols = newSymbols;
-    this.rules = newRules;
-    newSymbols.forEach(list => {
-      list.forEach((sym, i) => {
-        if (handlesGridChange(sym)) {
-          list[i] = sym.onGridChange(this);
+    this.symbols = symbols ?? new Map<string, Symbol[]>();
+    this.rules = rules ?? [];
+  }
+
+  /**
+   * Create a new GridData object from a string array.
+   *
+   * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
+   * - Capitalize the letter to make the tile fixed.
+   * - Use `.` to represent empty space.
+   *
+   * @param array - The string array to create the grid from.
+   * @returns The created grid.
+   */
+  public static create(array: string[]): GridData;
+
+  /**
+   * Create a new grid with tiles, connections, symbols and rules. Sanitize the provided list of symbols and rules,
+   * and trigger grid change events.
+   *
+   * @param width The width of the grid.
+   * @param height The height of the grid.
+   * @param tiles The tiles of the grid.
+   * @param connections The connections of the grid, which determines which tiles are merged.
+   * @param zones The zones of the grid.
+   * @param symbols The symbols in the grid.
+   * @param rules The rules of the grid.
+   */
+  public static create(
+    width: number,
+    height: number,
+    tiles?: readonly (readonly TileData[])[],
+    connections?: GridConnections,
+    zones?: GridZones,
+    symbols?: ReadonlyMap<string, readonly Symbol[]>,
+    rules?: readonly Rule[]
+  ): GridData;
+
+  public static create(
+    arrayOrWidth: string[] | number,
+    height?: number,
+    tiles?: readonly (readonly TileData[])[],
+    connections?: GridConnections,
+    zones?: GridZones,
+    symbols?: ReadonlyMap<string, readonly Symbol[]>,
+    rules?: readonly Rule[]
+  ): GridData {
+    if (typeof arrayOrWidth === 'number') {
+      const newSymbols = symbols
+        ? GridData.deduplicateSymbols(symbols)
+        : new Map<string, Symbol[]>();
+      // do not deduplicate all rules because it makes for bad editor experience
+      const newRules = rules ? GridData.deduplicateSingletonRules(rules) : [];
+      const newGrid = new GridData(
+        arrayOrWidth,
+        height!,
+        tiles,
+        connections,
+        zones,
+        newSymbols,
+        newRules
+      );
+      newSymbols.forEach(list => {
+        list.forEach((sym, i) => {
+          if (handlesGridChange(sym)) {
+            list[i] = sym.onGridChange(newGrid);
+          }
+        });
+      });
+      newRules.forEach((rule, i) => {
+        if (handlesGridChange(rule)) {
+          newRules[i] = rule.onGridChange(newGrid);
         }
       });
-    });
-    newRules.forEach((rule, i) => {
-      if (handlesGridChange(rule)) {
-        newRules[i] = rule.onGridChange(this);
-      }
-    });
+      return newGrid;
+    } else {
+      const tiles = GridData.createTiles(arrayOrWidth);
+      return GridData.create(tiles[0]?.length ?? 0, tiles.length, tiles);
+    }
   }
 
   /**
@@ -113,6 +174,41 @@ export default class GridData {
    * @returns The new grid with the modified properties.
    */
   public copyWith({
+    width,
+    height,
+    tiles,
+    connections,
+    zones,
+    symbols,
+    rules,
+  }: {
+    width?: number;
+    height?: number;
+    tiles?: readonly (readonly TileData[])[];
+    connections?: GridConnections;
+    zones?: GridZones;
+    symbols?: ReadonlyMap<string, readonly Symbol[]>;
+    rules?: readonly Rule[];
+  }): GridData {
+    return GridData.create(
+      width ?? this.width,
+      height ?? this.height,
+      tiles ?? this.tiles,
+      connections ?? this.connections,
+      zones ?? this.zones,
+      symbols ?? this.symbols,
+      rules ?? this.rules
+    );
+  }
+
+  /**
+   * Copy the current grid while modifying the provided properties.
+   * Skip sanitization and event triggering for performance.
+   *
+   * @param param0 The properties to modify.
+   * @returns The new grid with the modified properties.
+   */
+  public fastCopyWith({
     width,
     height,
     tiles,
@@ -157,21 +253,21 @@ export default class GridData {
 
   /**
    * Safely set the tile at the given position.
-   * If the position is invalid, the grid is returned unchanged.
+   * If the position is invalid, the tile array is returned unchanged.
    * If the tile is merged with other tiles, the colors of all connected tiles are changed.
    *
    * @param x The x-coordinate of the tile.
    * @param y The y-coordinate of the tile.
    * @param tile The new tile to set.
-   * @returns The new grid with the tile set at the given position.
+   * @returns The new tile array with updated tiles.
    */
   public setTile(
     x: number,
     y: number,
     tile: TileData | ((tile: TileData) => TileData)
-  ): GridData {
+  ): readonly (readonly TileData[])[] {
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
-      return this;
+      return this.tiles;
     }
 
     const changing = this.connections.getConnectedTiles({ x, y });
@@ -183,7 +279,7 @@ export default class GridData {
     });
     tiles[y][x] = newTile;
 
-    return this.copyWith({ tiles });
+    return tiles;
   }
 
   /**
@@ -601,21 +697,6 @@ export default class GridData {
   }
 
   /**
-   * Create a new GridData object from a string array.
-   *
-   * - Use `b` for dark cells, `w` for light cells, and `n` for gray cells.
-   * - Capitalize the letter to make the tile fixed.
-   * - Use `.` to represent empty space.
-   *
-   * @param array - The string array to create the grid from.
-   * @returns The created grid.
-   */
-  public static create(array: string[]): GridData {
-    const tiles = GridData.createTiles(array);
-    return new GridData(tiles[0]?.length ?? 0, tiles.length, tiles);
-  }
-
-  /**
    * Find a tile in the grid that satisfies the predicate.
    *
    * @param predicate The predicate to test each tile with.
@@ -914,7 +995,7 @@ export default class GridData {
       );
       if (newSymbolList.length > 0) symbols.set(id, newSymbolList);
     }
-    return new GridData(
+    return GridData.create(
       width,
       height,
       newTiles,

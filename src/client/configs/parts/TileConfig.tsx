@@ -53,7 +53,9 @@ export default memo(function TileConfig({
             } else if (!tile.fixed) {
               setConfig?.(
                 config.field,
-                grid.setTile(x, y, t => t.withColor(target))
+                grid.copyWith({
+                  tiles: grid.setTile(x, y, t => t.withColor(target)),
+                })
               );
             }
           }}

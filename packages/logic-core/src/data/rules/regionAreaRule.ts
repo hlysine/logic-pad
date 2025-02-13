@@ -40,40 +40,36 @@ export default class RegionAreaRule extends Rule {
   ]);
 
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
-    RegionAreaRule.EXAMPLE_GRID_DARK.map(
-      grid =>
-        new GridData(
-          grid.width,
-          grid.height,
-          grid.tiles.map(row =>
-            row.map(tile =>
-              tile.withColor(
-                tile.color === Color.Dark ? Color.Light : Color.Dark
-              )
-            )
+    RegionAreaRule.EXAMPLE_GRID_DARK.map(grid =>
+      GridData.create(
+        grid.width,
+        grid.height,
+        grid.tiles.map(row =>
+          row.map(tile =>
+            tile.withColor(tile.color === Color.Dark ? Color.Light : Color.Dark)
           )
         )
+      )
     )
   );
 
   private static readonly EXAMPLE_GRID_GRAY = Object.freeze(
-    RegionAreaRule.EXAMPLE_GRID_DARK.map(
-      grid =>
-        new GridData(
-          grid.width,
-          grid.height,
-          grid.tiles.map((row, y) =>
-            row.map((tile, x) =>
-              tile.withColor(
-                tile.color === Color.Dark
-                  ? Color.Gray
-                  : x % 2 !== y % 2
-                    ? Color.Dark
-                    : Color.Light
-              )
+    RegionAreaRule.EXAMPLE_GRID_DARK.map(grid =>
+      GridData.create(
+        grid.width,
+        grid.height,
+        grid.tiles.map((row, y) =>
+          row.map((tile, x) =>
+            tile.withColor(
+              tile.color === Color.Dark
+                ? Color.Gray
+                : x % 2 !== y % 2
+                  ? Color.Dark
+                  : Color.Light
             )
           )
         )
+      )
     )
   );
 
@@ -137,7 +133,7 @@ export default class RegionAreaRule extends Rule {
                 : Color.Light
         );
       });
-      return new GridData(5, 4, tiles);
+      return GridData.create(5, 4, tiles);
     }
   }
 

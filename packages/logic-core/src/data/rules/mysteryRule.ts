@@ -183,7 +183,7 @@ export default class MysteryRule
           return tile.withColor(solutionTile.color);
         })
       : solution.tiles;
-    return new GridData(
+    return GridData.create(
       baseGrid?.width ?? solution.width,
       baseGrid?.height ?? solution.height,
       tiles

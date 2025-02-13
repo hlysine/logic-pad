@@ -41,7 +41,7 @@ export default class MusicGridRule
     {
       type: ConfigType.NullableGrid,
       default: null,
-      nonNullDefault: new GridData(5, 4).addRule(
+      nonNullDefault: GridData.create(5, 4).addRule(
         new MusicGridRule(
           [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
           null

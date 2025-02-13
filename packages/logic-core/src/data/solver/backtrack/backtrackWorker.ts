@@ -316,7 +316,9 @@ function solveUnderclued(input: GridData): GridData | null {
 
     // console.log(`Trying (${x}, ${y}) with ${color}`);
 
-    const newGrid = grid.setTile(x, y, tile.withColor(color));
+    const newGrid = grid.fastCopyWith({
+      tiles: grid.setTile(x, y, tile.withColor(color)),
+    });
 
     // Solve
     let solution: GridData | undefined;
@@ -355,9 +357,13 @@ function solveUnderclued(input: GridData): GridData | null {
       if (!darkPossible && !lightPossible) return null;
 
       if (darkPossible && !lightPossible)
-        grid = grid.setTile(x, y, tile.withColor(Color.Dark));
+        grid = grid.fastCopyWith({
+          tiles: grid.setTile(x, y, tile.withColor(Color.Dark)),
+        });
       if (!darkPossible && lightPossible)
-        grid = grid.setTile(x, y, tile.withColor(Color.Light));
+        grid = grid.fastCopyWith({
+          tiles: grid.setTile(x, y, tile.withColor(Color.Light)),
+        });
     }
   }
 

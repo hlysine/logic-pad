@@ -3,7 +3,7 @@ import GridData from '../grid.js';
 import CustomSymbol from './customSymbol.js';
 
 export default class CustomIconSymbol extends CustomSymbol {
-  private static readonly EXAMPLE_GRID = Object.freeze(new GridData(5, 4));
+  private static readonly EXAMPLE_GRID = Object.freeze(GridData.create(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
@@ -118,7 +118,7 @@ export default class CustomIconSymbol extends CustomSymbol {
 
 export const instance = new CustomIconSymbol(
   'A *custom* icon symbol',
-  new GridData(5, 4),
+  GridData.create(5, 4),
   0,
   0,
   'MdQuestionMark'

@@ -6,15 +6,20 @@ import Rule, { SearchVariant } from './rule.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import validateGrid from '../validate.js';
 import Symbol from '../symbols/symbol.js';
+import Instruction from '../instruction.js';
 
 class IgnoredSymbol extends Symbol {
-  public constructor(public readonly symbol: Symbol) {
+  public constructor(
+    public readonly symbol: Symbol,
+    public readonly state: State
+  ) {
     super(symbol.x, symbol.y);
     this.symbol = symbol;
+    this.state = state;
   }
 
   public get id(): string {
-    return this.symbol.id;
+    return `ignored_${this.symbol.id}`;
   }
 
   public get explanation(): string {
@@ -22,7 +27,7 @@ class IgnoredSymbol extends Symbol {
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return this.symbol.configs;
+    return [];
   }
 
   public createExampleGrid(): GridData {
@@ -42,15 +47,22 @@ class IgnoredSymbol extends Symbol {
   }
 
   public validateSymbol(_grid: GridData, _solution: GridData | null): State {
-    return State.Ignored;
+    return this.state;
   }
 
-  public copyWith({ symbol }: { symbol?: Symbol }): this {
-    return new IgnoredSymbol(symbol ?? this.symbol) as this;
+  public copyWith({ symbol, state }: { symbol?: Symbol; state?: State }): this {
+    return new IgnoredSymbol(
+      symbol ?? this.symbol,
+      state ?? this.state
+    ) as this;
   }
 
   public withSymbol(symbol: Symbol): this {
     return this.copyWith({ symbol });
+  }
+
+  public equals(other: Instruction): boolean {
+    return other === this;
   }
 }
 
@@ -69,11 +81,15 @@ class IgnoredRule extends Rule {
   }
 
   public get id(): string {
-    return this.rule.id;
+    return `ignored_${this.rule.id}`;
   }
 
   public get explanation(): string {
     return this.rule.explanation;
+  }
+
+  public get configs(): readonly AnyConfig[] | null {
+    return [];
   }
 
   public createExampleGrid(): GridData {
@@ -100,6 +116,10 @@ class IgnoredRule extends Rule {
 
   public copyWith({ rule, state }: { rule?: Rule; state?: State }): this {
     return new IgnoredRule(rule ?? this.rule, state ?? this.state) as this;
+  }
+
+  public equals(other: Instruction): boolean {
+    return other === this;
   }
 }
 
@@ -197,7 +217,7 @@ export default class LyingSymbolRule
           newSymbols.set(key, []);
         }
         if (ignoredSymbols.some(([k, i]) => k === key && i === idx)) {
-          newSymbols.get(key)!.push(new IgnoredSymbol(symbol));
+          newSymbols.get(key)!.push(new IgnoredSymbol(symbol, State.Ignored));
         } else {
           newSymbols.get(key)!.push(symbol);
         }

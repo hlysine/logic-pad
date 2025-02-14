@@ -164,7 +164,7 @@ export default memo(function InstructionList({
     <div className="flex flex-col items-end w-[320px] sm:w-[640px] lg:w-[320px] justify-start self-stretch overflow-y-auto py-[1px] relative lg:left-2">
       {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
       {filteredRules.length > 0 && <Title>Rules</Title>}
-      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-center items-center">
+      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
         {(editable ? wrapWithDraggable : (t: React.ReactNode) => t)(
           filteredRules.map(({ rule, id }, i) => (
             <Instruction
@@ -181,7 +181,7 @@ export default memo(function InstructionList({
         )}
       </div>
       {hasSymbols && <Title>Symbols</Title>}
-      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-center items-center">
+      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
         {symbolSortOrder.flatMap(key => {
           const value = symbolMergeMap.get(key)!;
           return value.map(

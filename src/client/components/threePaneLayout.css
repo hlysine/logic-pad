@@ -1,0 +1,6 @@
+@media (max-width: 1279px) {
+  .drawer-side > *:not(.drawer-overlay) .fixed {
+    transform: translateX(100dvw);
+    pointer-events: all;
+  }
+}

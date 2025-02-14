@@ -32,6 +32,7 @@ export default memo(function PuzzleEditorScreen({
     <ToolboxContext>
       <ConfigContext>
         <ThreePaneLayout
+          collapsible={true}
           left={
             <>
               <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
@@ -76,7 +77,7 @@ export default memo(function PuzzleEditorScreen({
                 <InstructionList editable={features.instructions} />
                 <ConfigPopup key="config-popup" />
               </div>
-              <div className="p-2 w-full flex flex-col items-stretch justify-end gap-2 shrink-0">
+              <div className="pb-2 w-full flex flex-col items-stretch justify-end gap-2 shrink-0">
                 <PuzzleChecklist />
                 {children}
               </div>

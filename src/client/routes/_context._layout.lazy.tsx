@@ -7,7 +7,7 @@ export const Route = createLazyFileRoute('/_context/_layout')({
   component: memo(function Layout() {
     return (
       <>
-        <header className="flex flex-wrap justify-between items-center gap-4 px-8 py-2 shadow-md">
+        <header className="flex shrink-0 flex-wrap justify-between items-center gap-4 px-8 py-2 shadow-md">
           <div className="flex xl:basis-[320px] flex-wrap grow shrink items-center gap-4">
             <Link
               to="/"

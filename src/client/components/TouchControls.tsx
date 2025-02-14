@@ -14,7 +14,7 @@ export default memo(function TouchControls() {
     });
   };
   return (
-    <div className="flex shrink-0 items-center shadow-xl rounded-box bg-base-100 text-base-content fixed bottom-16 z-50 left-2 right-2 xl:static xl:shadow-md">
+    <div className="flex shrink-0 items-center shadow-xl rounded-box bg-base-100 text-base-content fixed bottom-16 z-40 left-2 right-2 xl:static xl:shadow-md">
       <div
         className="tooltip tooltip-top flex tooltip-info flex-1"
         data-tip="Resize grid"

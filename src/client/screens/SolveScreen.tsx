@@ -20,6 +20,7 @@ export default function SolveScreen({ children }: SolveScreenProps) {
   return (
     <ForesightContext>
       <ThreePaneLayout
+        collapsible={false}
         left={
           <>
             <DocumentTitle>Logic Pad</DocumentTitle>

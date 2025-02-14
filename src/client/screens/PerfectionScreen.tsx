@@ -28,6 +28,7 @@ export default function PerfectionScreen({
   return (
     <SolvePathContext solvePath={solvePath} setSolvePath={setSolvePath}>
       <ThreePaneLayout
+        collapsible={false}
         left={
           <>
             <DocumentTitle>Logic Pad</DocumentTitle>

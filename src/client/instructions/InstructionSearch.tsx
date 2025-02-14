@@ -19,7 +19,7 @@ export default memo(function InstructionSearch() {
 
   return (
     <Autocomplete
-      className="pr-2 shrink-0 mt-4"
+      className="shrink-0 mt-4"
       placeholder="Add a new rule..."
       items={descriptionList}
       value={search}

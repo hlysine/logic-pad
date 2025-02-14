@@ -1,6 +1,7 @@
 # 14/2/2025
 
 - Tweaked the rendering of merged given tiles
+- Scaled up the color toggle on smaller screens
 
 # 13/2/2025
 

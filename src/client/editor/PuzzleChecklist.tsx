@@ -187,49 +187,23 @@ export default memo(function PuzzleChecklist() {
             {solutionIsNotEmpty ? 'Solution not empty' : 'Solution empty'}
           </ChecklistItem>
         )}
-        {solution !== null || solveRef ? (
+        {solution !== null && (
           <>
             <ChecklistItem
               key="solution"
-              icon={solveRef ? FaHourglassHalf : HiViewGrid}
+              icon={HiViewGrid}
               iconClass={
-                solution !== null
-                  ? solution.value !== null
-                    ? 'text-success'
-                    : 'text-error'
-                  : 'text-info'
+                solution.value !== null ? 'text-success' : 'text-error'
               }
               tooltip={
-                solution !== null
-                  ? solution.value !== null
-                    ? 'Solution found. Click to view'
-                    : 'This puzzle has no solution'
-                  : solveRef
-                    ? 'Solving...'
-                    : 'Solver stopped before a solution was found'
+                solution.value !== null
+                  ? 'Solution found. Click to view'
+                  : 'This puzzle has no solution'
               }
             >
               <span className="flex-1 text-start">
-                {solution !== null
-                  ? solution.value !== null
-                    ? 'Solution found'
-                    : 'No solution'
-                  : solveRef
-                    ? 'Solving...'
-                    : 'Solution unavailable'}
+                {solution.value !== null ? 'Solution found' : 'No solution'}
               </span>
-              {solveRef?.cancel && (
-                <button
-                  type="button"
-                  className="btn btn-sm"
-                  onClick={() => {
-                    solveRef.cancel?.();
-                    setSolveRef(null);
-                  }}
-                >
-                  Cancel
-                </button>
-              )}
               {!!solution?.value && (
                 <button
                   type="button"
@@ -252,7 +226,7 @@ export default memo(function PuzzleChecklist() {
                 </button>
               )}
             </ChecklistItem>
-            {!!solution?.value && (
+            {(alternate !== null || !solveRef) && (
               <ChecklistItem
                 key="alternate"
                 icon={HiViewGridAdd}
@@ -268,9 +242,7 @@ export default memo(function PuzzleChecklist() {
                     ? alternate.value !== null
                       ? 'Click to view alternate solution'
                       : 'The solution is unique'
-                    : solveRef
-                      ? 'Looking for alternate solutions...'
-                      : 'Alternate solution not supported by solver'
+                    : 'Alternate solution not reported by solver'
                 }
               >
                 <span className="flex-1 text-start">
@@ -278,9 +250,7 @@ export default memo(function PuzzleChecklist() {
                     ? alternate.value !== null
                       ? 'Solution not unique'
                       : 'Unique solution'
-                    : solveRef
-                      ? 'Verifying...'
-                      : 'Alternate unavailable'}
+                    : 'Alternate unavailable'}
                 </span>
                 {!!alternate?.value && (
                   <button
@@ -317,7 +287,36 @@ export default memo(function PuzzleChecklist() {
               </button>
             )}
           </>
-        ) : (
+        )}
+        {solveRef && (
+          <ChecklistItem
+            key="solving"
+            icon={FaHourglassHalf}
+            iconClass={'text-info'}
+            tooltip={
+              solution === null
+                ? 'Solving...'
+                : 'Looking for alternate solutions...'
+            }
+          >
+            <span className="flex-1 text-start">
+              {solution === null ? 'Solving...' : 'Verifying...'}
+            </span>
+            {solveRef?.cancel && (
+              <button
+                type="button"
+                className="btn btn-sm"
+                onClick={() => {
+                  solveRef.cancel?.();
+                  setSolveRef(null);
+                }}
+              >
+                Cancel
+              </button>
+            )}
+          </ChecklistItem>
+        )}
+        {!solveRef && solution === null && (
           <>
             <ChecklistItem
               key="autoSolvable"

@@ -19,7 +19,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
 }: ThreePaneLayoutComponentProps) {
   const id = useId();
   return (
-    <div className="drawer xl:drawer-open h-dvh">
+    <div className="drawer xl:drawer-open lg:h-dvh xl:h-full">
       <input
         id={`three-pane-${id}`}
         type="checkbox"
@@ -71,8 +71,8 @@ const FixedThreePaneLayout = memo(function FixedThreePaneLayout({
       <div className="w-full max-w-[640px] xl:w-[320px] shrink-0 grow-0 xl:self-stretch flex flex-col p-4 gap-4 text-neutral-content justify-between order-0">
         {left}
       </div>
-      <div className="flex flex-1 h-[calc(100dvh-8rem)] xl:h-full justify-center items-center self-stretch flex-col lg:flex-row gap-2">
-        <div className="grow shrink h-[calc(100dvh-8rem)] xl:h-full overflow-auto self-stretch p-8 py-16 xl:py-8 order-2">
+      <div className="flex flex-1 lg:h-[calc(100dvh-8rem)] xl:h-full justify-center items-center self-stretch flex-col lg:flex-row gap-2">
+        <div className="grow shrink lg:h-[calc(100dvh-8rem)] xl:h-full overflow-auto self-stretch p-8 py-16 xl:py-8 order-2">
           <div className="flex items-center justify-center m-0 p-0 min-h-full min-w-full h-fit w-fit">
             {center}
           </div>

@@ -41,7 +41,7 @@ const ModeButton = memo(function ModeButton({
         }
       }}
       className={cn(
-        'tab w-24 lg:w-36 text-[1rem] lg:text-lg capitalize',
+        'tab w-24 lg:w-36 text-base lg:text-lg capitalize',
         active && 'tab-active'
       )}
     >

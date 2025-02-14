@@ -10,6 +10,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { PartPlacement } from './parts/types.ts';
 import InstructionPartOutlet from './InstructionPartOutlet.tsx';
 import GridZoneOverlay from '../grid/GridZoneOverlay.tsx';
+import { useMediaQuery } from 'react-responsive';
 
 export interface InstructionProps {
   id: string | number;
@@ -48,6 +49,8 @@ export default memo(function Instruction({
   );
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
+  const isLargeScreen = useMediaQuery({ minWidth: 1024 });
+
   return (
     <div
       ref={editable ? setNodeRef : null}
@@ -81,15 +84,17 @@ export default memo(function Instruction({
                   : 'bg-error'
           )}
         ></div>
-        <div className="text-center py-1 px-4 flex grow justify-center items-center text-neutral-content">
+        <div className="text-center py-1 px-4 flex grow justify-center items-center text-neutral-content text-sm lg:text-base">
           <AnnotatedText text={instruction.explanation} />
         </div>
-        <div className="shrink-0 relative min-h-[calc(28px*4)] min-w-[calc(28px*5)] flex items-center justify-center py-1">
+        <div className="shrink-0 relative min-h-[calc(16px*4)] lg:min-h-[calc(30px*4)] min-w-[calc(16px*5)] lg:min-w-[calc(30px*5)] flex items-center justify-center py-1">
           {exampleGrid && (
             <Grid
               type="canvas"
               size={
-                exampleGrid.width === 1 && exampleGrid.height === 1 ? 56 : 28 // special case for rules with a single symbol as thumbnail
+                (exampleGrid.width === 1 && exampleGrid.height === 1
+                  ? 56
+                  : 28) / (isLargeScreen ? 1 : 2) // special case for rules with a single symbol as thumbnail
               }
               grid={exampleGrid}
               editable={false}

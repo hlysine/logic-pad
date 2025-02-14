@@ -37,7 +37,7 @@ export default memo(function Autocomplete({
 
   return (
     <div className={cn('shrink-0', className)}>
-      <div className="dropdown dropdown-end w-full">
+      <div className="dropdown dropdown-end w-full z-10">
         <input
           type="text"
           tabIndex={0}

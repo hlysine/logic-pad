@@ -34,7 +34,8 @@ export function renderFixed(
   ctx: CanvasRenderingContext2D,
   x: number,
   y: number,
-  size: number
+  size: number,
+  connections: TileConnections
 ) {
   const px = -size / 2;
   const py = -size / 2;
@@ -43,28 +44,35 @@ export function renderFixed(
   ctx.fillStyle = '#16a34a';
   ctx.save();
   ctx.translate(x * size + size / 2, y * size + size / 2);
+  const corners = [
+    connections.top || connections.topLeft || connections.left,
+    connections.top || connections.topRight || connections.right,
+    connections.bottom || connections.bottomRight || connections.right,
+    connections.bottom || connections.bottomLeft || connections.left,
+  ];
   for (let i = 0; i < 4; i++) {
-    ctx.rotate(Math.PI / 2);
+    const trueLength = corners[i] ? (length - gap * 2) / 3 + gap * 2 : length;
     ctx.beginPath();
     ctx.moveTo(px + gap, py + gap);
-    ctx.lineTo(px + gap + length, py + gap);
+    ctx.lineTo(px + gap + trueLength, py + gap);
     ctx.bezierCurveTo(
-      px + gap + length,
+      px + gap + trueLength,
       py + gap * 2,
-      px + gap * 3 + (length - gap * 2) / 2,
+      px + gap * 3 + (trueLength - gap * 2) / 2,
       py + gap * 3,
       px + gap * 3,
       py + gap * 3
     );
     ctx.bezierCurveTo(
       px + gap * 3,
-      py + gap * 3 + (length - gap * 2) / 2,
+      py + gap * 3 + (trueLength - gap * 2) / 2,
       px + gap * 2,
-      py + gap + length,
+      py + gap + trueLength,
       px + gap,
-      py + gap + length
+      py + gap + trueLength
     );
     ctx.fill();
+    ctx.rotate(Math.PI / 2);
   }
   ctx.restore();
 }
@@ -120,6 +128,6 @@ export function renderTile(
   });
   ctx.fill();
   if (tile.fixed) {
-    renderFixed(ctx, x, y, size);
+    renderFixed(ctx, x, y, size, connections);
   }
 }

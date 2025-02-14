@@ -1,7 +1,13 @@
 # 14/2/2025
 
-- Tweaked the rendering of merged given tiles
-- Scaled up the color toggle on smaller screens
+- Enhanced support for smaller screens
+  - Tweaked the rendering of merged given tiles to increase visibility
+  - Scaled up the color toggle
+  - Collapsed the left editor pane
+  - Scaled down the instruction cards and added a dense layout
+  - Scaled down elements of the header bar
+  - Added an intermediate layout designed for tablets
+- Refactored solve controls so that the cancel button is in a more sensible place when looking for alternate solutions
 
 # 13/2/2025
 

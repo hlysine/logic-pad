@@ -6,6 +6,7 @@
   - Collapsed the left editor pane
   - Scaled down the instruction cards and added a dense layout
   - Scaled down elements of the header bar
+  - Scaled down puzzle metadata
   - Added an intermediate layout designed for tablets
 - Refactored solve controls so that the cancel button is in a more sensible place when looking for alternate solutions
 

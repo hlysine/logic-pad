@@ -21,7 +21,7 @@ export const Route = createLazyFileRoute('/_context/_layout/solve')({
           {({ grid }) =>
             grid.findRule(r => r.id === musicGridInstance.id) ? null : (
               <button
-                className="btn btn-outline btn-neutral"
+                className="btn btn-outline btn-neutral btn-sm lg:btn-md w-full max-w-[320px] self-center"
                 onClick={async () => {
                   await navigate({
                     to: '/perfection',

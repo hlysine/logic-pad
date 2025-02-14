@@ -24,7 +24,7 @@ import RuleData from '@logic-pad/core/data/rules/rule';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
-    <div className="uppercase w-36 text-center bg-secondary bg-opacity-10 text-neutral-content mt-4">
+    <div className="uppercase w-36 text-center bg-secondary bg-opacity-10 text-neutral-content mt-4 shrink-0">
       {children}
     </div>
   );
@@ -161,10 +161,10 @@ export default memo(function InstructionList({
   );
 
   return (
-    <div className="flex flex-col items-end w-[320px] justify-start self-stretch overflow-y-auto py-[1px] relative xl:left-2">
+    <div className="flex flex-col items-end w-[320px] sm:w-[640px] lg:w-[320px] justify-start self-stretch overflow-y-auto py-[1px] relative lg:left-2">
       {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
-      <div className="flex flex-col shrink-0 items-end justify-start">
-        {filteredRules.length > 0 && <Title>Rules</Title>}
+      {filteredRules.length > 0 && <Title>Rules</Title>}
+      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-center items-center">
         {(editable ? wrapWithDraggable : (t: React.ReactNode) => t)(
           filteredRules.map(({ rule, id }, i) => (
             <Instruction
@@ -179,7 +179,9 @@ export default memo(function InstructionList({
             </Instruction>
           ))
         )}
-        {hasSymbols && <Title>Symbols</Title>}
+      </div>
+      {hasSymbols && <Title>Symbols</Title>}
+      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-center items-center">
         {symbolSortOrder.flatMap(key => {
           const value = symbolMergeMap.get(key)!;
           return value.map(

@@ -72,12 +72,12 @@ export default memo(function PuzzleEditorScreen({
           }
           right={
             <>
-              <div className="h-full flex flex-col items-stretch justify-center gap-4">
+              <div className="h-full flex flex-col items-center justify-center gap-4">
                 {features.instructions && <InstructionSearch />}
                 <InstructionList editable={features.instructions} />
                 <ConfigPopup key="config-popup" />
               </div>
-              <div className="pb-2 w-full flex flex-col items-stretch justify-end gap-2 shrink-0">
+              <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
                 <PuzzleChecklist />
                 {children}
               </div>

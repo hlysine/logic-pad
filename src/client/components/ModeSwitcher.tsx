@@ -40,7 +40,10 @@ const ModeButton = memo(function ModeButton({
           });
         }
       }}
-      className={cn('tab w-36 capitalize', active && 'tab-active')}
+      className={cn(
+        'tab w-24 lg:w-36 text-[1rem] lg:text-lg capitalize',
+        active && 'tab-active'
+      )}
     >
       {state.isTransitioning ? (
         <span className="loading loading-bars loading-md"></span>

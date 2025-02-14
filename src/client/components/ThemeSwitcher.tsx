@@ -23,7 +23,7 @@ export default memo(function ThemeSwitcher() {
       </div>
       <ul
         tabIndex={0}
-        className="dropdown-content z-50 p-2 shadow-2xl bg-base-300 text-base-content rounded-box w-52 max-h-[calc(100dvh-100px)] overflow-y-auto"
+        className="dropdown-content z-50 p-2 shadow-2xl bg-base-300 text-base-content rounded-box w-52 max-h-[calc(100dvh-200px)] overflow-y-auto"
       >
         {SUPPORTED_THEMES.map(([themeChoice]) => (
           <li key={themeChoice}>

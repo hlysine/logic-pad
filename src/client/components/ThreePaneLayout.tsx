@@ -38,8 +38,8 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
             {center}
           </div>
         </div>
-        <div className="w-[320px] shrink-0 grow-0 flex flex-col items-end lg:self-stretch justify-stretch lg:mr-2 order-1 lg:order-3">
-          <div className="w-[320px] h-full flex flex-col items-stretch justify-center gap-4">
+        <div className="lg:w-[320px] shrink-0 grow-0 flex flex-col items-end lg:self-stretch justify-stretch lg:mr-2 order-1 lg:order-3">
+          <div className="lg:w-[320px] h-full flex flex-col items-stretch justify-center gap-4">
             {right}
           </div>
         </div>
@@ -77,8 +77,8 @@ const FixedThreePaneLayout = memo(function FixedThreePaneLayout({
             {center}
           </div>
         </div>
-        <div className="w-[320px] shrink-0 grow-0 flex flex-col items-end xl:self-stretch justify-stretch xl:mr-2 order-1 lg:order-3">
-          <div className="w-[320px] h-full flex flex-col items-stretch justify-center gap-4">
+        <div className="lg:w-[320px] lg:h-[calc(100dvh-8rem)] xl:h-full shrink-0 grow-0 flex flex-col items-end xl:self-stretch justify-stretch lg:mr-2 order-1 lg:order-3">
+          <div className="lg:w-[320px] h-full flex flex-col items-stretch justify-center gap-4">
             {right}
           </div>
         </div>

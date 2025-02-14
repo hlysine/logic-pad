@@ -1,3 +1,7 @@
+# 14/2/2025
+
+- Tweaked the rendering of merged given tiles
+
 # 13/2/2025
 
 - Reworked the underclued solver to behave like backtrack solver but with universal rules and symbols support

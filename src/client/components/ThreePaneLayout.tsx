@@ -28,7 +28,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
       <div className="drawer-content flex justify-center items-center h-fit min-h-full lg:h-full flex-col lg:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
         <label
           htmlFor={`three-pane-${id}`}
-          className="btn drawer-button xl:hidden fixed z-20 top-24 left-0 pl-8 -ml-4 rounded-l-none"
+          className="btn drawer-button xl:hidden fixed z-20 bottom-32 left-0 pl-8 -ml-4 rounded-l-none shadow-lg"
         >
           <IoMenu size={24} /> Open drawer
         </label>

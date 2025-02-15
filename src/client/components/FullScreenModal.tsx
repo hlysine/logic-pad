@@ -21,7 +21,7 @@ export default function FullScreenModal({
         <div className="overflow-y-auto overscroll-contain w-dvw h-dvh">
           <div className="flex flex-col items-stretch w-full min-h-full xl:h-full">
             <header className="flex shrink-0 flex-wrap justify-between items-center gap-4 px-8 py-2 shadow-md bg-base-100">
-              <span>{title}</span>
+              <span className="text-xl my-2">{title}</span>
               <form method="dialog">
                 <button
                   aria-label="Close dialog"

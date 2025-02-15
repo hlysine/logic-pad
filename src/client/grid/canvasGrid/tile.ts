@@ -77,6 +77,11 @@ export function renderFixed(
   ctx.restore();
 }
 
+function ensureGap(length: number) {
+  if (length === 0) return length;
+  return Math.max(0.5, length);
+}
+
 export function renderTile(
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -109,15 +114,15 @@ export function renderTile(
     throw new Error(`No shape for connections ${key}`);
   }
   shape.forEach(part => {
+    const left = ensureGap(getEm(part.l) * size);
+    const top = ensureGap(getEm(part.t) * size);
+    const right = ensureGap(getEm(part.r) * size);
+    const bottom = ensureGap(getEm(part.b) * size);
     ctx.roundRect(
-      tx + Math.floor(getEm(part.l) * size),
-      ty + Math.floor(getEm(part.t) * size),
-      tx1 -
-        Math.floor(getEm(part.r) * size) -
-        (tx + Math.floor(getEm(part.l) * size)),
-      ty1 -
-        Math.floor(getEm(part.b) * size) -
-        (ty + Math.floor(getEm(part.t) * size)),
+      tx + left,
+      ty + top,
+      tx1 - right - (tx + left),
+      ty1 - bottom - (ty + top),
       [
         part.corners & TL ? radius : 0,
         part.corners & TR ? radius : 0,

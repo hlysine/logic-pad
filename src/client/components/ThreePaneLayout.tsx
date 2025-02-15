@@ -25,10 +25,10 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
         type="checkbox"
         className="drawer-toggle"
       />
-      <div className="drawer-content flex justify-center items-center flex-col lg:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
+      <div className="drawer-content flex justify-center items-center h-fit min-h-full lg:h-full flex-col lg:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
         <label
           htmlFor={`three-pane-${id}`}
-          className="btn drawer-button xl:hidden fixed z-10 top-24 left-0 pl-8 -ml-4 rounded-l-none"
+          className="btn drawer-button xl:hidden fixed z-20 top-24 left-0 pl-8 -ml-4 rounded-l-none"
         >
           <IoMenu size={24} /> Open drawer
         </label>
@@ -44,7 +44,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
           </div>
         </div>
       </div>
-      <div className="drawer-side z-10 h-full w-full">
+      <div className="drawer-side z-20 h-full w-full">
         <label
           htmlFor={`three-pane-${id}`}
           aria-label="close sidebar"

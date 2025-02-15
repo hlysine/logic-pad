@@ -1,3 +1,9 @@
+# 15/2/2025
+
+- Changed grid editor modals to be fullscreen for mobile-friendliness
+- Fixed various z-order issues
+- Fixed cell boundaries not being visible on grids with very small tile size
+
 # 14/2/2025
 
 - Enhanced support for smaller screens

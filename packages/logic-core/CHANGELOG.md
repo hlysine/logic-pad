@@ -1,3 +1,7 @@
+# 0.6.1
+
+- Fixed a bug in the universal solver causing it to miss the last tile of an underclued grid
+
 # 0.6.0
 
 - Rule and symbol list sanitization is now performed in `GridData.create` rather than `GridData` constructor

@@ -1,3 +1,7 @@
+# 16/2/2025
+
+- Fixed a bug in the universal solver causing it to miss the last tile of an underclued grid
+
 # 15/2/2025
 
 - Changed grid editor modals to be fullscreen for mobile-friendliness

@@ -70,6 +70,12 @@ function solveNormal(
   input: GridData,
   submitSolution: (grid: GridData | null) => boolean
 ) {
+  const isValid = validateGrid(input, null);
+
+  if (isValid.final === State.Error) {
+    return;
+  }
+
   // Call backtrack
   backtrack(input, gridToRawTiles(input), rawTiles =>
     submitSolution(rawTiles ? rawTilesToGrid(rawTiles, input) : null)

@@ -1,8 +1,10 @@
+import { memo } from 'react';
+
 export interface AnnotatedTextProps {
   text: string;
 }
 
-export default function AnnotatedText({ text }: AnnotatedTextProps) {
+export default memo(function AnnotatedText({ text }: AnnotatedTextProps) {
   const parts = text.split('*');
   return (
     <span>
@@ -18,4 +20,4 @@ export default function AnnotatedText({ text }: AnnotatedTextProps) {
       })}
     </span>
   );
-}
+});

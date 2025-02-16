@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, memo } from 'react';
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -9,10 +9,10 @@ const TanStackRouterDevtools = import.meta.env.PROD
       }))
     );
 
-export default function TanStackDevTools() {
+export default memo(function TanStackDevTools() {
   return (
     <Suspense>
       <TanStackRouterDevtools />
     </Suspense>
   );
-}
+});

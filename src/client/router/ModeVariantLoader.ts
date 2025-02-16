@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useGrid } from '../contexts/GridContext';
 import { Mode } from '@logic-pad/core/data/primitives';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
@@ -16,7 +16,9 @@ function isSymbol(symbol: Symbol | null): symbol is Symbol {
   return symbol !== null;
 }
 
-export default function ModeVariantLoader({ mode }: ModeVariantLoaderProps) {
+export default memo(function ModeVariantLoader({
+  mode,
+}: ModeVariantLoaderProps) {
   const { grid, setGridRaw } = useGrid();
   useEffect(() => {
     let changed = false;
@@ -47,4 +49,4 @@ export default function ModeVariantLoader({ mode }: ModeVariantLoaderProps) {
     if (changed) setGridRaw(newGrid);
   }, [grid, mode, setGridRaw]);
   return null;
-}
+});

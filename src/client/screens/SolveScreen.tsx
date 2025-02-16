@@ -11,12 +11,13 @@ import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import ModeVariantLoader from '../router/ModeVariantLoader';
+import { memo } from 'react';
 
 export interface SolveScreenProps {
   children?: React.ReactNode;
 }
 
-export default function SolveScreen({ children }: SolveScreenProps) {
+export default memo(function SolveScreen({ children }: SolveScreenProps) {
   return (
     <ForesightContext>
       <ThreePaneLayout
@@ -54,4 +55,4 @@ export default function SolveScreen({ children }: SolveScreenProps) {
       />
     </ForesightContext>
   );
-}
+});

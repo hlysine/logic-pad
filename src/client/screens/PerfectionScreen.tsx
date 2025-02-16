@@ -11,6 +11,7 @@ import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import { Mode, Position } from '@logic-pad/core/data/primitives';
 import ModeVariantLoader from '../router/ModeVariantLoader';
+import { memo } from 'react';
 
 export interface PerfectionScreenProps {
   children?: React.ReactNode;
@@ -19,7 +20,7 @@ export interface PerfectionScreenProps {
   onReset?: () => void;
 }
 
-export default function PerfectionScreen({
+export default memo(function PerfectionScreen({
   children,
   solvePath,
   setSolvePath,
@@ -70,4 +71,4 @@ export default function PerfectionScreen({
       />
     </SolvePathContext>
   );
-}
+});

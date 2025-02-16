@@ -1,4 +1,4 @@
-import { ReactNode, useId } from 'react';
+import { ReactNode, memo, useId } from 'react';
 
 export interface FullScreenModalProps {
   title: string;
@@ -7,7 +7,7 @@ export interface FullScreenModalProps {
   children: ReactNode;
 }
 
-export default function FullScreenModal({
+export default memo(function FullScreenModal({
   title,
   className,
   onClose,
@@ -40,4 +40,4 @@ export default function FullScreenModal({
       </div>
     </dialog>
   );
-}
+});

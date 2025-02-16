@@ -1,5 +1,6 @@
 # 16/2/2025
 
+- Added a button to share puzzle screenshot in solve mode
 - Fixed a bug in the universal solver causing it to miss the last tile of an underclued grid
 
 # 15/2/2025

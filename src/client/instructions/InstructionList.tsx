@@ -32,6 +32,7 @@ function Title({ children }: { children: React.ReactNode }) {
 
 export interface InstructionListProps {
   editable?: boolean;
+  responsive?: boolean;
 }
 
 interface SortableItem {
@@ -41,8 +42,10 @@ interface SortableItem {
 
 export default memo(function InstructionList({
   editable,
+  responsive,
 }: InstructionListProps) {
   editable = editable ?? false;
+  responsive = responsive ?? true;
   const { grid, setGrid } = useGrid();
   const { state } = useGridState();
   const filteredRules = useMemo<SortableItem[]>(() => {
@@ -161,7 +164,14 @@ export default memo(function InstructionList({
   );
 
   return (
-    <div className="flex flex-col items-end w-[320px] sm:w-[640px] lg:w-[320px] justify-start self-stretch overflow-y-auto py-[1px] relative lg:left-2">
+    <div
+      className={cn(
+        'flex flex-col items-end justify-start self-stretch overflow-y-auto py-[1px] relative',
+        responsive
+          ? 'w-[320px] sm:w-[640px] lg:w-[320px] lg:left-2'
+          : 'w-[320px] left-2'
+      )}
+    >
       {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
       {filteredRules.length > 0 && <Title>Rules</Title>}
       <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
@@ -177,6 +187,7 @@ export default memo(function InstructionList({
                 'self-stretch',
                 rule.visibleWhenSolving || 'opacity-60'
               )}
+              responsive={responsive}
             >
               {editable && <EditTarget configurable={rule} />}
             </Instruction>
@@ -197,6 +208,7 @@ export default memo(function InstructionList({
                   instruction={grid.symbols.get(key)![group[0]]}
                   state={symbolStateMap.get(key)?.[i]}
                   className={cn('self-stretch')}
+                  responsive={responsive}
                 />
               )
           );

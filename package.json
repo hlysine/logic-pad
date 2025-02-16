@@ -44,6 +44,7 @@
     "events": "^3.3.0",
     "fuzzysort-esm": "^3.0.1",
     "grilops": "^0.1.1",
+    "html2canvas-pro": "^1.5.8",
     "lodash": "^4.17.21",
     "million": "^3.0.6",
     "monaco-editor": "^0.47.0",

@@ -5,8 +5,19 @@ import Difficulty from './Difficulty';
 import DocumentTitle from '../components/DocumentTitle';
 import Markdown from '../components/Markdown';
 import { useGridState } from '../contexts/GridStateContext.tsx';
+import { cn } from '../uiHelper.ts';
 
-export default memo(function Metadata() {
+export interface MetadataProps {
+  simplified?: boolean;
+  responsive?: boolean;
+}
+
+export default memo(function Metadata({
+  simplified,
+  responsive,
+}: MetadataProps) {
+  simplified = simplified ?? false;
+  responsive = responsive ?? true;
   const { metadata } = useGrid();
   const { revealSpoiler } = useGridState();
 
@@ -14,13 +25,28 @@ export default memo(function Metadata() {
     <div className="flex flex-col gap-4 text-neutral-content">
       <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
       <Difficulty value={metadata.difficulty} />
-      <h1 className="text-3xl lg:text-4xl flex-shrink-0">{metadata.title}</h1>
-      <div className="badge badge-secondary lg:badge-lg rounded-lg flex-shrink-0">
+      <h1
+        className={cn(
+          'flex-shrink-0',
+          responsive ? 'text-3xl lg:text-4xl' : 'text-4xl'
+        )}
+      >
+        {metadata.title}
+      </h1>
+      <div
+        className={cn(
+          'badge badge-secondary  rounded-lg flex-shrink-0',
+          responsive ? 'lg:badge-lg' : 'badge-lg'
+        )}
+      >
         {metadata.author}
       </div>
-      {metadata.link.trim().length > 0 && (
+      {!simplified && metadata.link.trim().length > 0 && (
         <a
-          className="btn btn-ghost justify-start flex-nowrap flex flex-shrink-0 btn-sm lg:btn-md"
+          className={cn(
+            'btn btn-ghost justify-start flex-nowrap flex flex-shrink-0',
+            responsive ? 'btn-sm lg:btn-md' : 'btn-md'
+          )}
           href={metadata.link}
           target="_blank"
           rel="noreferrer"
@@ -31,11 +57,16 @@ export default memo(function Metadata() {
           <FiExternalLink size={24} />
         </a>
       )}
-      <div className="overflow-y-auto">
-        <Markdown revealSpoiler={revealSpoiler} className="lg:text-lg">
-          {metadata.description}
-        </Markdown>
-      </div>
+      {!simplified && (
+        <div className="overflow-y-auto">
+          <Markdown
+            revealSpoiler={revealSpoiler}
+            className={responsive ? 'lg:text-lg' : 'text-lg'}
+          >
+            {metadata.description}
+          </Markdown>
+        </div>
+      )}
     </div>
   );
 });

@@ -19,6 +19,7 @@ export interface InstructionProps {
   state?: State;
   children?: React.ReactNode;
   className?: string;
+  responsive?: boolean;
 }
 
 function instructionBg(state: State) {
@@ -41,15 +42,17 @@ export default memo(function Instruction({
   state,
   children,
   className,
+  responsive,
 }: InstructionProps) {
   state = state ?? State.Incomplete;
+  responsive = responsive ?? true;
   const exampleGrid = useMemo(
     () => instruction.createExampleGrid(),
     [instruction]
   );
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
-  const isLargeScreen = useMediaQuery({ minWidth: 1024 });
+  const isLargeScreen = useMediaQuery({ minWidth: 1024 }) && responsive;
 
   return (
     <div
@@ -87,10 +90,22 @@ export default memo(function Instruction({
                   : 'bg-error'
           )}
         ></div>
-        <div className="text-center py-1 px-4 flex grow justify-center items-center text-neutral-content text-sm lg:text-base">
+        <div
+          className={cn(
+            'text-center py-1 px-4 flex grow justify-center items-center text-neutral-content',
+            responsive ? 'text-sm lg:text-base' : 'text-sm'
+          )}
+        >
           <AnnotatedText text={instruction.explanation} />
         </div>
-        <div className="shrink-0 relative min-h-[calc(16px*4)] lg:min-h-[calc(30px*4)] min-w-[calc(16px*5)] lg:min-w-[calc(30px*5)] flex items-center justify-center py-1">
+        <div
+          className={cn(
+            'shrink-0 relative flex items-center justify-center py-1',
+            responsive
+              ? 'min-h-[calc(16px*4)] lg:min-h-[calc(30px*4)] min-w-[calc(16px*5)] lg:min-w-[calc(30px*5)]'
+              : 'min-h-[calc(16px*4)] min-w-[calc(16px*5)]'
+          )}
+        >
           {exampleGrid && (
             <Grid
               type="canvas"

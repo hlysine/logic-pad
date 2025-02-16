@@ -173,7 +173,10 @@ export default memo(function InstructionList({
               id={id}
               instruction={rule}
               state={state?.rules[i]?.state}
-              className={cn(rule.visibleWhenSolving || 'opacity-60')}
+              className={cn(
+                'self-stretch',
+                rule.visibleWhenSolving || 'opacity-60'
+              )}
             >
               {editable && <EditTarget configurable={rule} />}
             </Instruction>
@@ -193,6 +196,7 @@ export default memo(function InstructionList({
                   key={key + group[0].toString()}
                   instruction={grid.symbols.get(key)![group[0]]}
                   state={symbolStateMap.get(key)?.[i]}
+                  className={cn('self-stretch')}
                 />
               )
           );

@@ -70,7 +70,10 @@ export default memo(function Instruction({
       )}
     >
       <div
-        className={cn('relative flex m-0 border-0 pr-2', instructionBg(state))}
+        className={cn(
+          'relative flex flex-1 m-0 border-0 pr-2',
+          instructionBg(state)
+        )}
       >
         <div
           className={cn(

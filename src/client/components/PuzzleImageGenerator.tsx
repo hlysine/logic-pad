@@ -113,7 +113,7 @@ const PuzzleImage = memo(function PuzzleImage() {
       >
         <div className="flex flex-col gap-4">
           <Metadata simplified={true} responsive={false} />
-          <MainGrid useToolboxClick={false} />
+          <MainGrid useToolboxClick={false} animated={false} />
         </div>
         <div className="pr-2">
           <InstructionList responsive={false} />

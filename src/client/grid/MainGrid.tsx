@@ -20,6 +20,7 @@ import GridZoneOverlay from './GridZoneOverlay.tsx';
 export interface MainGridProps {
   useToolboxClick: boolean;
   children?: React.ReactNode;
+  animated?: boolean;
 }
 
 function computeTileSize(grid: GridData) {
@@ -41,7 +42,9 @@ function computeTileSize(grid: GridData) {
 export default memo(function MainGrid({
   useToolboxClick,
   children,
+  animated,
 }: MainGridProps) {
+  animated = animated ?? true;
   const gridContext = useGrid();
   const { grid, solution } = gridContext;
   const { scale, setScale } = useDisplay();
@@ -120,6 +123,7 @@ export default memo(function MainGrid({
       ref={stateRingRef}
       width={grid.width}
       height={grid.height}
+      animated={animated}
       {...bind()}
     >
       <Grid

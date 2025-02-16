@@ -9,6 +9,7 @@ export interface GridRingProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   width: number;
   height: number;
+  animated?: boolean;
 }
 
 function ringBorder(state: State) {
@@ -24,9 +25,10 @@ function ringBorder(state: State) {
 
 export default memo(
   forwardRef<HTMLDivElement, GridRingProps>(function StateRing(
-    { children, width, height, ...rest }: GridRingProps,
+    { children, width, height, animated, ...rest }: GridRingProps,
     ref
   ) {
+    animated = animated ?? true;
     const { state } = useGridState();
     const router = useRouterState();
 
@@ -44,7 +46,11 @@ export default memo(
     }, [state.final, width, height]);
 
     useEffect(() => {
-      if (prefersReducedMotion() || router.location.pathname === '/create') {
+      if (
+        prefersReducedMotion() ||
+        router.location.pathname === '/create' ||
+        !animated
+      ) {
         anime({
           targets: '.logic-animated .logic-tile',
           scale: 1,
@@ -62,6 +68,7 @@ export default memo(
           }),
         });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [width, height, router.location.pathname]);
 
     return (

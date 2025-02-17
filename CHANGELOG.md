@@ -1,6 +1,7 @@
 # 17/2/2025
 
 - Fixed transforms not working in puzzle image renderer
+- You can now choose whether to share your current progress or a fresh render of the puzzle
 
 # 16/2/2025
 

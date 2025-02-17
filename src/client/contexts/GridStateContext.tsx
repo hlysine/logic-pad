@@ -8,7 +8,7 @@ interface GridStateContext {
   setRevealSpoiler: (value: boolean) => void;
 }
 
-const defaultState: GridState = {
+export const defaultState: GridState = {
   final: State.Incomplete,
   rules: [],
   symbols: new Map(),
@@ -29,11 +29,18 @@ export const GridStateConsumer = context.Consumer;
 
 export default memo(function GridStateContext({
   children,
+  state: externalState,
+  setState: setExternalState,
 }: {
   children: React.ReactNode;
+  state?: GridState;
+  setState?: (value: GridState) => void;
 }) {
-  const [state, setState] = useState(defaultState);
+  const [internalState, setInternalState] = useState(defaultState);
   const [revealSpoiler, setRevealSpoiler] = useState(false);
+
+  const state = externalState ?? internalState;
+  const setState = setExternalState ?? setInternalState;
 
   const setStateAndReveal = (value: GridState) => {
     setState(value);

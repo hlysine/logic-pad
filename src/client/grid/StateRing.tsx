@@ -83,7 +83,13 @@ export default memo(
         )}
         {...rest}
       >
-        <div className="block fixed inset-0 transition-all ease-out bg-radient-circle-c from-transparent to-success/10 z-[1000] pointer-events-none"></div>
+        <div
+          className={
+            animated
+              ? 'block fixed inset-0 transition-all ease-out bg-radient-circle-c from-transparent to-success/10 z-[1000] pointer-events-none'
+              : 'hidden'
+          }
+        ></div>
         {children}
       </div>
     );

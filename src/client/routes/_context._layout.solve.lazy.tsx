@@ -8,7 +8,7 @@ import useLinkLoader from '../router/linkLoader';
 import SolveScreen from '../screens/SolveScreen';
 import { GridConsumer } from '../contexts/GridContext';
 import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
-import PuzzleImageGenerator from '../components/PuzzleImageGenerator';
+import SharePuzzleImage from '../components/SharePuzzleImage';
 
 export const Route = createLazyFileRoute('/_context/_layout/solve')({
   component: memo(function SolveMode() {
@@ -35,7 +35,7 @@ export const Route = createLazyFileRoute('/_context/_layout/solve')({
             )
           }
         </GridConsumer>
-        <PuzzleImageGenerator />
+        <SharePuzzleImage />
       </SolveScreen>
     );
   }),

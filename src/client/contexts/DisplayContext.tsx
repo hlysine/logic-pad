@@ -18,10 +18,16 @@ export const DisplayConsumer = context.Consumer;
 
 export default memo(function DisplayContext({
   children,
+  scale: externalScale,
+  setScale: setExternalScale,
 }: {
   children: React.ReactNode;
+  scale?: number;
+  setScale?: (value: number) => void;
 }) {
-  const [scale, setScale] = useState(1);
+  const [internalScale, setInternalScale] = useState(1);
+  const scale = externalScale ?? internalScale;
+  const setScale = setExternalScale ?? setInternalScale;
 
   return (
     <context.Provider

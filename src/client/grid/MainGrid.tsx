@@ -137,6 +137,7 @@ export default memo(function MainGrid({
           }
           handleTileClick(x, y, target, flood, gridContext, false);
         }}
+        type={animated ? 'auto' : 'canvas'}
       >
         <GridStateConsumer>
           {({ state }) => (

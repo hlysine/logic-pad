@@ -76,7 +76,7 @@ const PuzzleImage = memo(function PuzzleImage() {
         onclone(document, element) {
           element.parentElement?.removeChild(element);
           document.body.appendChild(element);
-          element.style.display = 'flex';
+          element.style.opacity = '1';
           document.body.style.backgroundColor = element.style.backgroundColor;
         },
       })
@@ -105,11 +105,11 @@ const PuzzleImage = memo(function PuzzleImage() {
   return (
     <div
       tabIndex={0}
-      className="dropdown-content flex flex-col gap-4 bg-base-100 rounded-box z-[1] w-full max-w-[320px] p-4 shadow mb-4"
+      className="dropdown-content flex flex-col gap-4 bg-base-100 rounded-box z-[1] w-full max-w-[320px] p-4 shadow mb-4 overflow-hidden"
     >
       <div
         ref={containerRef}
-        className="fixed top-0 left-0 shrink-0 w-fit h-fit gap-1 py-4 pl-4 items-center bg-neutral border-0 pointer-events-none hidden"
+        className="fixed top-0 left-0 shrink-0 w-fit h-fit flex gap-1 py-4 pl-4 items-center bg-neutral border-0 pointer-events-none opacity-0"
       >
         <div className="flex flex-col gap-4">
           <Metadata simplified={true} responsive={false} />

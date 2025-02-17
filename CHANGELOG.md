@@ -1,3 +1,7 @@
+# 17/2/2025
+
+- Fixed transforms not working in puzzle image renderer
+
 # 16/2/2025
 
 - Added a button to share puzzle screenshot in solve mode

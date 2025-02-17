@@ -102,7 +102,12 @@ const ImageGenerator = memo(function ImageGenerator() {
   const [resetScale, setResetScale] = useState(true);
   const image = useMemo(() => {
     if (canvas) {
-      return <img src={canvas.toDataURL()} />;
+      return (
+        <img
+          src={canvas.toDataURL()}
+          onContextMenu={e => e.stopPropagation()}
+        />
+      );
     } else {
       return <Loading />;
     }

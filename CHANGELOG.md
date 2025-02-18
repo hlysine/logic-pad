@@ -1,6 +1,7 @@
 # 18/2/2025
 
 - Puzzle images now use full-sized cards if there are not a lot of instructions
+- Fixed a scrolling bug in puzzle image box
 
 # 17/2/2025
 

@@ -126,6 +126,17 @@ export default memo(function InstructionList({
     }
     return map;
   }, [symbolMergeMap, state]);
+  const large = useMemo(() => {
+    if (responsive) return false;
+    let count = filteredRules.length;
+    symbolSortOrder.forEach(key => {
+      const value = symbolMergeMap.get(key)!;
+      value.forEach(group => {
+        if (grid.symbols.get(key)![group[0]].explanation.length > 0) count++;
+      });
+    });
+    return count < 5;
+  }, [filteredRules, grid, responsive, symbolMergeMap, symbolSortOrder]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -187,7 +198,7 @@ export default memo(function InstructionList({
                 'self-stretch',
                 rule.visibleWhenSolving || 'opacity-60'
               )}
-              responsive={responsive}
+              size={responsive ? 'responsive' : large ? 'lg' : 'sm'}
             >
               {editable && <EditTarget configurable={rule} />}
             </Instruction>
@@ -208,7 +219,7 @@ export default memo(function InstructionList({
                   instruction={grid.symbols.get(key)![group[0]]}
                   state={symbolStateMap.get(key)?.[i]}
                   className={cn('self-stretch')}
-                  responsive={responsive}
+                  size={responsive ? 'responsive' : large ? 'lg' : 'sm'}
                 />
               )
           );

@@ -1,3 +1,7 @@
+# 18/2/2025
+
+- Puzzle images now use full-sized cards if there are not a lot of instructions
+
 # 17/2/2025
 
 - Fixed transforms not working in puzzle image renderer

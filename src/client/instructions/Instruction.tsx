@@ -19,7 +19,7 @@ export interface InstructionProps {
   state?: State;
   children?: React.ReactNode;
   className?: string;
-  responsive?: boolean;
+  size?: 'responsive' | 'lg' | 'sm';
 }
 
 function instructionBg(state: State) {
@@ -42,17 +42,21 @@ export default memo(function Instruction({
   state,
   children,
   className,
-  responsive,
+  size,
 }: InstructionProps) {
   state = state ?? State.Incomplete;
-  responsive = responsive ?? true;
+  size = size ?? 'responsive';
   const exampleGrid = useMemo(
     () => instruction.createExampleGrid(),
     [instruction]
   );
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
-  const isLargeScreen = useMediaQuery({ minWidth: 1024 }) && responsive;
+  const isLargeMedia = useMediaQuery({ minWidth: 1024 });
+  const isLargeScreen =
+    size === 'lg' || (size === 'responsive' && isLargeMedia);
+  const responsive = size === 'responsive';
+  const large = size === 'lg';
 
   return (
     <div
@@ -93,7 +97,11 @@ export default memo(function Instruction({
         <div
           className={cn(
             'text-center py-1 px-4 flex grow justify-center items-center text-neutral-content',
-            responsive ? 'text-sm lg:text-base' : 'text-sm'
+            responsive
+              ? 'text-sm lg:text-base'
+              : large
+                ? 'text-base'
+                : 'text-sm'
           )}
         >
           <AnnotatedText text={instruction.explanation} />
@@ -103,7 +111,9 @@ export default memo(function Instruction({
             'shrink-0 relative flex items-center justify-center py-1',
             responsive
               ? 'min-h-[calc(16px*4)] lg:min-h-[calc(30px*4)] min-w-[calc(16px*5)] lg:min-w-[calc(30px*5)]'
-              : 'min-h-[calc(16px*4)] min-w-[calc(16px*5)]'
+              : large
+                ? 'min-h-[calc(30px*4)] min-w-[calc(30px*5)]'
+                : 'min-h-[calc(16px*4)] min-w-[calc(16px*5)]'
           )}
         >
           {exampleGrid && (

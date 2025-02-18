@@ -163,37 +163,41 @@ const ImageGenerator = memo(function ImageGenerator() {
   return (
     <div
       tabIndex={0}
-      className="dropdown-content flex flex-col gap-4 bg-base-100 rounded-box z-[1] w-full max-w-[320px] p-4 shadow mt-4 mb-4 overflow-hidden"
+      className="dropdown-content flex flex-col bg-base-100 rounded-box z-[1] w-full max-w-[320px] p-4 shadow mt-4 mb-4"
     >
-      <PuzzleImage
-        resetGrid={resetGrid}
-        resetScale={resetScale}
-        ref={containerRef}
-      />
-      {image}
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Reset grid</span>
-          <input
-            type="checkbox"
-            className="toggle"
-            checked={resetGrid}
-            onChange={e => setResetGrid(e.target.checked)}
-          />
-        </label>
+      <div className="overflow-hidden h-0 w-0 scale-50">
+        <PuzzleImage
+          resetGrid={resetGrid}
+          resetScale={resetScale}
+          ref={containerRef}
+        />
       </div>
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Reset scale</span>
-          <input
-            type="checkbox"
-            className="toggle"
-            checked={resetScale}
-            onChange={e => setResetScale(e.target.checked)}
-          />
-        </label>
+      <div className="flex flex-col gap-4">
+        {image}
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Reset grid</span>
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={resetGrid}
+              onChange={e => setResetGrid(e.target.checked)}
+            />
+          </label>
+        </div>
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Reset scale</span>
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={resetScale}
+              onChange={e => setResetScale(e.target.checked)}
+            />
+          </label>
+        </div>
+        <CopyImageButton canvas={canvas} />
       </div>
-      <CopyImageButton canvas={canvas} />
     </div>
   );
 });

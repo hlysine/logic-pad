@@ -91,14 +91,14 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
 
   onGetTile(x: number, y: number, grid: GridData): Position {
     if (this.horizontal !== Wrapping.None) {
-      const idx = Math.floor(x / grid.width);
+      const idx = Math.abs(Math.floor(x / grid.width));
       x = ((x % grid.width) + grid.width) % grid.width;
       if (this.horizontal === Wrapping.WrapReverse && idx % 2 === 1) {
         y = grid.height - 1 - y;
       }
     }
     if (this.vertical !== Wrapping.None) {
-      const idx = Math.floor(y / grid.height);
+      const idx = Math.abs(Math.floor(y / grid.height));
       y = ((y % grid.height) + grid.height) % grid.height;
       if (this.vertical === Wrapping.WrapReverse && idx % 2 === 1) {
         x = grid.width - 1 - x;

@@ -196,14 +196,18 @@ export default class DirectionLinkerSymbol extends Symbol {
             color1: baseColor1,
             color2: baseColor2,
           };
-          if (
-            visited[newTurtle.pos1.y][newTurtle.pos1.x] &&
-            visited[newTurtle.pos2.y][newTurtle.pos2.x]
-          ) {
-            continue;
+          if (grid.isPositionValid(newTurtle.pos1.x, newTurtle.pos1.y)) {
+            if (visited[newTurtle.pos1.y][newTurtle.pos1.x]) {
+              continue;
+            }
+            visited[newTurtle.pos1.y][newTurtle.pos1.x] = true;
           }
-          visited[newTurtle.pos1.y][newTurtle.pos1.x] = true;
-          visited[newTurtle.pos2.y][newTurtle.pos2.x] = true;
+          if (grid.isPositionValid(newTurtle.pos2.x, newTurtle.pos2.y)) {
+            if (visited[newTurtle.pos2.y][newTurtle.pos2.x]) {
+              continue;
+            }
+            visited[newTurtle.pos2.y][newTurtle.pos2.x] = true;
+          }
           queue.push(newTurtle);
         }
       }

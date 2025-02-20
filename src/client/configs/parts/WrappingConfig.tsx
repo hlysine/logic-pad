@@ -17,10 +17,6 @@ function getDisplayName(wrapping: Wrapping) {
       return 'Wrap';
     case Wrapping.WrapReverse:
       return 'Reversed wrap';
-    case Wrapping.Reflect:
-      return 'Reflect';
-    case Wrapping.ReflectReverse:
-      return 'Reversed reflect';
   }
 }
 

@@ -10,86 +10,10 @@ import { computeTileSize } from '../../grid/MainGrid.tsx';
 import { useDisplay } from '../../contexts/DisplayContext.tsx';
 import { array } from '@logic-pad/core/data/dataHelper';
 import GridZones from '@logic-pad/core/data/gridZones';
-import GridData from '@logic-pad/core/data/grid';
-import { Wrapping } from '@logic-pad/core/data/primitives';
-import GridConnections from '@logic-pad/core/data/gridConnections';
+import { GridConnections, Wrapping } from '@logic-pad/core/index.ts';
 
 export interface WrapAroundOverlayPartProps {
   instruction: WrapAroundRule;
-}
-
-function getLeftEdge(grid: GridData, reverse: boolean) {
-  return grid.copyWith({
-    width: 1,
-    tiles: array(1, grid.height, (_, y) =>
-      grid.getTile(grid.width - 1, reverse ? grid.height - 1 - y : y)
-    ),
-    connections: new GridConnections(
-      grid.connections.edges
-        .filter(e => e.x1 === grid.width - 1 || e.x2 === grid.width - 1)
-        .map(e => ({
-          x1: e.x1 - grid.width + 1,
-          y1: reverse ? grid.height - 1 - e.y1 : e.y1,
-          x2: e.x2 - grid.width + 1,
-          y2: reverse ? grid.height - 1 - e.y2 : e.y2,
-        }))
-    ),
-    symbols: new Map(),
-    rules: [],
-    zones: new GridZones(),
-  });
-}
-
-function getRightEdge(grid: GridData, reverse: boolean) {
-  return grid.copyWith({
-    width: 1,
-    tiles: array(1, grid.height, (_, y) =>
-      grid.getTile(0, reverse ? grid.height - 1 - y : y)
-    ),
-    connections: new GridConnections(
-      grid.connections.edges.filter(e => e.x1 === 0 || e.x2 === 0)
-    ),
-    symbols: new Map(),
-    rules: [],
-    zones: new GridZones(),
-  });
-}
-
-function getTopEdge(grid: GridData, reverse: boolean) {
-  return grid.copyWith({
-    height: 1,
-    tiles: array(grid.width, 1, (x, _) =>
-      grid.getTile(reverse ? grid.width - 1 - x : x, grid.height - 1)
-    ),
-    connections: new GridConnections(
-      grid.connections.edges
-        .filter(e => e.y1 === grid.height - 1 || e.y1 === grid.height - 1)
-        .map(e => ({
-          x1: reverse ? grid.width - 1 - e.x1 : e.x1,
-          y1: e.y1 - grid.height + 1,
-          x2: reverse ? grid.width - 1 - e.x2 : e.x2,
-          y2: e.y2 - grid.height + 1,
-        }))
-    ),
-    symbols: new Map(),
-    rules: [],
-    zones: new GridZones(),
-  });
-}
-
-function getBottomEdge(grid: GridData, reverse: boolean) {
-  return grid.copyWith({
-    height: 1,
-    tiles: array(grid.width, 1, (x, _) =>
-      grid.getTile(reverse ? grid.width - 1 - x : x, 0)
-    ),
-    connections: new GridConnections(
-      grid.connections.edges.filter(e => e.y1 === 0 || e.y1 === 0)
-    ),
-    symbols: new Map(),
-    rules: [],
-    zones: new GridZones(),
-  });
 }
 
 export default memo(function WrapAroundOverlayPart({
@@ -99,43 +23,81 @@ export default memo(function WrapAroundOverlayPart({
   const { scale } = useDisplay();
   const leftGrid = useMemo(() => {
     if (instruction.horizontal === Wrapping.None) return grid;
-    const reverse =
-      instruction.horizontal === Wrapping.WrapReverse ||
-      instruction.horizontal === Wrapping.ReflectReverse;
-    return instruction.horizontal === Wrapping.Wrap ||
-      instruction.horizontal === Wrapping.WrapReverse
-      ? getLeftEdge(grid, reverse)
-      : getRightEdge(grid, reverse);
+    const reverse = instruction.horizontal === Wrapping.WrapReverse;
+    return grid.copyWith({
+      width: 1,
+      tiles: array(1, grid.height, (_, y) =>
+        grid.getTile(grid.width - 1, reverse ? grid.height - 1 - y : y)
+      ),
+      connections: new GridConnections(
+        grid.connections.edges
+          .filter(e => e.x1 === grid.width - 1 || e.x2 === grid.width - 1)
+          .map(e => ({
+            x1: e.x1 - grid.width + 1,
+            y1: reverse ? grid.height - 1 - e.y1 : e.y1,
+            x2: e.x2 - grid.width + 1,
+            y2: reverse ? grid.height - 1 - e.y2 : e.y2,
+          }))
+      ),
+      symbols: new Map(),
+      rules: [],
+      zones: new GridZones(),
+    });
   }, [grid, instruction]);
   const rightGrid = useMemo(() => {
     if (instruction.horizontal === Wrapping.None) return grid;
-    const reverse =
-      instruction.horizontal === Wrapping.WrapReverse ||
-      instruction.horizontal === Wrapping.ReflectReverse;
-    return instruction.horizontal === Wrapping.Wrap ||
-      instruction.horizontal === Wrapping.WrapReverse
-      ? getRightEdge(grid, reverse)
-      : getLeftEdge(grid, reverse);
+    const reverse = instruction.horizontal === Wrapping.WrapReverse;
+    return grid.copyWith({
+      width: 1,
+      tiles: array(1, grid.height, (_, y) =>
+        grid.getTile(0, reverse ? grid.height - 1 - y : y)
+      ),
+      connections: new GridConnections(
+        grid.connections.edges.filter(e => e.x1 === 0 || e.x2 === 0)
+      ),
+      symbols: new Map(),
+      rules: [],
+      zones: new GridZones(),
+    });
   }, [grid, instruction]);
   const topGrid = useMemo(() => {
     if (instruction.vertical === Wrapping.None) return grid;
-    const reverse =
-      instruction.vertical === Wrapping.WrapReverse ||
-      instruction.vertical === Wrapping.ReflectReverse;
-    return instruction.vertical === Wrapping.Wrap ||
-      instruction.vertical === Wrapping.WrapReverse
-      ? getTopEdge(grid, reverse)
-      : getBottomEdge(grid, reverse);
+    const reverse = instruction.vertical === Wrapping.WrapReverse;
+    return grid.copyWith({
+      height: 1,
+      tiles: array(grid.width, 1, (x, _) =>
+        grid.getTile(reverse ? grid.width - 1 - x : x, grid.height - 1)
+      ),
+      connections: new GridConnections(
+        grid.connections.edges
+          .filter(e => e.y1 === grid.height - 1 || e.y1 === grid.height - 1)
+          .map(e => ({
+            x1: reverse ? grid.width - 1 - e.x1 : e.x1,
+            y1: e.y1 - grid.height + 1,
+            x2: reverse ? grid.width - 1 - e.x2 : e.x2,
+            y2: e.y2 - grid.height + 1,
+          }))
+      ),
+      symbols: new Map(),
+      rules: [],
+      zones: new GridZones(),
+    });
   }, [grid, instruction]);
   const bottomGrid = useMemo(() => {
     if (instruction.vertical === Wrapping.None) return grid;
-    const reverse =
-      instruction.vertical === Wrapping.WrapReverse ||
-      instruction.vertical === Wrapping.ReflectReverse;
-    return instruction.vertical === Wrapping.Wrap ||
-      instruction.vertical === Wrapping.WrapReverse
-      ? getBottomEdge(grid, reverse)
-      : getTopEdge(grid, reverse);
+    const reverse = instruction.vertical === Wrapping.WrapReverse;
+    return grid.copyWith({
+      height: 1,
+      tiles: array(grid.width, 1, (x, _) =>
+        grid.getTile(reverse ? grid.width - 1 - x : x, 0)
+      ),
+      connections: new GridConnections(
+        grid.connections.edges.filter(e => e.y1 === 0 || e.y1 === 0)
+      ),
+      symbols: new Map(),
+      rules: [],
+      zones: new GridZones(),
+    });
   }, [grid, instruction]);
 
   const [tileConfig, setTileConfig] = useState<{

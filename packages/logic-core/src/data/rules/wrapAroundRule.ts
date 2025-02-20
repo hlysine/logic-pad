@@ -5,15 +5,12 @@ import GridData from '../grid.js';
 import {
   Color,
   MajorRule,
-  Orientation,
   Position,
   RuleState,
   State,
   Wrapping,
-  orientationToggle,
 } from '../primitives.js';
 import LetterSymbol from '../symbols/letterSymbol.js';
-import MyopiaSymbol from '../symbols/myopiaSymbol.js';
 import Symbol from '../symbols/symbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
@@ -22,121 +19,37 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
     GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww', 'wwwww'])
   );
 
-  private static readonly EXAMPLE_GRID_HORIZONTAL = Object.freeze({
-    [Wrapping.None]: WrapAroundRule.EXAMPLE_GRID_NONE,
-    [Wrapping.Wrap]: GridData.create([
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-    ])
+  private static readonly EXAMPLE_GRID_HORIZONTAL = Object.freeze(
+    GridData.create(['wwwww', 'bwwwb', 'wwwww', 'bwwwb', 'wwwww'])
       .addSymbol(new LetterSymbol(0, 1, 'A'))
       .addSymbol(new LetterSymbol(4, 1, 'A'))
       .addSymbol(new LetterSymbol(0, 3, 'B'))
-      .addSymbol(new LetterSymbol(4, 3, 'B')),
-    [Wrapping.WrapReverse]: GridData.create([
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-    ])
+      .addSymbol(new LetterSymbol(4, 3, 'B'))
+  );
+
+  private static readonly EXAMPLE_GRID_HORIZONTAL_REVERSE = Object.freeze(
+    GridData.create(['wwwww', 'bwwwb', 'wwwww', 'bwwwb', 'wwwww'])
       .addSymbol(new LetterSymbol(0, 1, 'A'))
       .addSymbol(new LetterSymbol(4, 1, 'B'))
       .addSymbol(new LetterSymbol(0, 3, 'B'))
-      .addSymbol(new LetterSymbol(4, 3, 'A')),
-    [Wrapping.Reflect]: GridData.create([
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-    ])
-      .addSymbol(
-        new MyopiaSymbol(0, 1, false, orientationToggle(Orientation.Left))
-      )
-      .addSymbol(
-        new MyopiaSymbol(0, 3, false, orientationToggle(Orientation.Left))
-      )
-      .addSymbol(
-        new MyopiaSymbol(4, 1, false, orientationToggle(Orientation.Right))
-      )
-      .addSymbol(
-        new MyopiaSymbol(4, 3, false, orientationToggle(Orientation.Right))
-      ),
-    [Wrapping.ReflectReverse]: GridData.create([
-      'wwwww',
-      'bwwww',
-      'wwwww',
-      'wwwwb',
-      'wwwww',
-    ])
-      .addSymbol(
-        new MyopiaSymbol(0, 3, false, orientationToggle(Orientation.Left))
-      )
-      .addSymbol(
-        new MyopiaSymbol(4, 1, false, orientationToggle(Orientation.Right))
-      ),
-  });
+      .addSymbol(new LetterSymbol(4, 3, 'A'))
+  );
 
-  private static readonly EXAMPLE_GRID_VERTICAL = Object.freeze({
-    [Wrapping.None]: WrapAroundRule.EXAMPLE_GRID_NONE,
-    [Wrapping.Wrap]: GridData.create([
-      'wbwbw',
-      'wwwww',
-      'wwwww',
-      'wwwww',
-      'wbwbw',
-    ])
+  private static readonly EXAMPLE_GRID_VERTICAL = Object.freeze(
+    GridData.create(['wbwbw', 'wwwww', 'wwwww', 'wwwww', 'wbwbw'])
       .addSymbol(new LetterSymbol(1, 0, 'C'))
       .addSymbol(new LetterSymbol(3, 0, 'D'))
       .addSymbol(new LetterSymbol(1, 4, 'C'))
-      .addSymbol(new LetterSymbol(3, 4, 'D')),
-    [Wrapping.WrapReverse]: GridData.create([
-      'wbwbw',
-      'wwwww',
-      'wwwww',
-      'wwwww',
-      'wbwbw',
-    ])
+      .addSymbol(new LetterSymbol(3, 4, 'D'))
+  );
+
+  private static readonly EXAMPLE_GRID_VERTICAL_REVERSE = Object.freeze(
+    GridData.create(['wbwbw', 'wwwww', 'wwwww', 'wwwww', 'wbwbw'])
       .addSymbol(new LetterSymbol(1, 0, 'C'))
       .addSymbol(new LetterSymbol(3, 0, 'D'))
       .addSymbol(new LetterSymbol(1, 4, 'D'))
-      .addSymbol(new LetterSymbol(3, 4, 'C')),
-    [Wrapping.Reflect]: GridData.create([
-      'wbwbw',
-      'wwwww',
-      'wwwww',
-      'wwwww',
-      'wbwbw',
-    ])
-      .addSymbol(
-        new MyopiaSymbol(1, 0, false, orientationToggle(Orientation.Up))
-      )
-      .addSymbol(
-        new MyopiaSymbol(3, 0, false, orientationToggle(Orientation.Up))
-      )
-      .addSymbol(
-        new MyopiaSymbol(1, 4, false, orientationToggle(Orientation.Down))
-      )
-      .addSymbol(
-        new MyopiaSymbol(3, 4, false, orientationToggle(Orientation.Down))
-      ),
-    [Wrapping.ReflectReverse]: GridData.create([
-      'wbwww',
-      'wwwww',
-      'wwwww',
-      'wwwww',
-      'wwwbw',
-    ])
-      .addSymbol(
-        new MyopiaSymbol(3, 0, false, orientationToggle(Orientation.Up))
-      )
-      .addSymbol(
-        new MyopiaSymbol(1, 4, false, orientationToggle(Orientation.Down))
-      ),
-  });
+      .addSymbol(new LetterSymbol(3, 4, 'C'))
+  );
 
   private static readonly SEARCH_VARIANTS = [
     new WrapAroundRule(Wrapping.Wrap, Wrapping.None).searchVariant(),
@@ -180,37 +93,15 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
     if (this.horizontal !== Wrapping.None) {
       const idx = Math.abs(Math.floor(x / grid.width));
       x = ((x % grid.width) + grid.width) % grid.width;
-      if (
-        (this.horizontal === Wrapping.WrapReverse ||
-          this.horizontal === Wrapping.ReflectReverse) &&
-        idx % 2 === 1
-      ) {
+      if (this.horizontal === Wrapping.WrapReverse && idx % 2 === 1) {
         y = grid.height - 1 - y;
-      }
-      if (
-        (this.horizontal === Wrapping.Reflect ||
-          this.horizontal === Wrapping.ReflectReverse) &&
-        idx % 2 === 1
-      ) {
-        x = grid.width - 1 - x;
       }
     }
     if (this.vertical !== Wrapping.None) {
       const idx = Math.abs(Math.floor(y / grid.height));
       y = ((y % grid.height) + grid.height) % grid.height;
-      if (
-        (this.vertical === Wrapping.WrapReverse ||
-          this.vertical === Wrapping.ReflectReverse) &&
-        idx % 2 === 1
-      ) {
+      if (this.vertical === Wrapping.WrapReverse && idx % 2 === 1) {
         x = grid.width - 1 - x;
-      }
-      if (
-        (this.vertical === Wrapping.Reflect ||
-          this.vertical === Wrapping.ReflectReverse) &&
-        idx % 2 === 1
-      ) {
-        y = grid.height - 1 - y;
       }
     }
     return { x, y };
@@ -223,54 +114,37 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
   public get explanation(): string {
     if (this.horizontal === Wrapping.None && this.vertical === Wrapping.None) {
       return `No edges are connected.`;
+    } else if (this.horizontal === Wrapping.None) {
+      return `The top and bottom edges are connected${this.vertical === Wrapping.WrapReverse ? ' in reverse' : ''}.`;
+    } else if (this.vertical === Wrapping.None) {
+      return `The left and right edges are connected${this.horizontal === Wrapping.WrapReverse ? ' in reverse' : ''}.`;
+    } else if (
+      this.horizontal === Wrapping.Wrap &&
+      this.vertical === Wrapping.Wrap
+    ) {
+      return `All four edges are connected.`;
+    } else if (this.horizontal === Wrapping.Wrap) {
+      return `All four edges are connected, with the top and bottom edges in reverse.`;
+    } else if (this.vertical === Wrapping.Wrap) {
+      return `All four edges are connected, with the left and right edges in reverse.`;
+    } else {
+      return `All four edges are connected in reverse.`;
     }
-    const horizontal =
-      this.horizontal === Wrapping.None
-        ? null
-        : this.horizontal === Wrapping.Wrap ||
-            this.horizontal === Wrapping.WrapReverse
-          ? 'connected'
-          : 'reflective';
-    const vertical =
-      this.vertical === Wrapping.None
-        ? null
-        : this.vertical === Wrapping.Wrap ||
-            this.vertical === Wrapping.WrapReverse
-          ? 'connected'
-          : 'reflective';
-    const horizontalReverse =
-      this.horizontal === Wrapping.WrapReverse ||
-      this.horizontal === Wrapping.ReflectReverse
-        ? ' in reverse'
-        : '';
-    const verticalReverse =
-      this.vertical === Wrapping.WrapReverse ||
-      this.vertical === Wrapping.ReflectReverse
-        ? ' in reverse'
-        : '';
-    if (this.horizontal === this.vertical) {
-      return `All four edges are ${horizontal}${horizontalReverse}.`;
-    }
-    if (this.horizontal === Wrapping.None) {
-      return `The top and bottom edges are ${vertical}${verticalReverse}.`;
-    }
-    if (this.vertical === Wrapping.None) {
-      return `The left and right edges are ${horizontal}${verticalReverse}.`;
-    }
-    if (horizontal === vertical) {
-      if (horizontalReverse !== '') {
-        return `All four edges are ${horizontal}, with the left and right edges${horizontalReverse}.`;
-      } else {
-        return `All four edges are ${horizontal}, with the top and bottom edges${verticalReverse}.`;
-      }
-    }
-    return `The left and right edges are ${horizontal}${horizontalReverse}. The top and bottom edges are ${vertical}${verticalReverse}.`;
   }
 
   public createExampleGrid(): GridData {
-    const horizontal = WrapAroundRule.EXAMPLE_GRID_HORIZONTAL[this.horizontal];
-    const vertical = WrapAroundRule.EXAMPLE_GRID_VERTICAL[this.vertical];
-
+    const horizontal =
+      this.horizontal === Wrapping.Wrap
+        ? WrapAroundRule.EXAMPLE_GRID_HORIZONTAL
+        : this.horizontal === Wrapping.WrapReverse
+          ? WrapAroundRule.EXAMPLE_GRID_HORIZONTAL_REVERSE
+          : WrapAroundRule.EXAMPLE_GRID_NONE;
+    const vertical =
+      this.vertical === Wrapping.Wrap
+        ? WrapAroundRule.EXAMPLE_GRID_VERTICAL
+        : this.vertical === Wrapping.WrapReverse
+          ? WrapAroundRule.EXAMPLE_GRID_VERTICAL_REVERSE
+          : WrapAroundRule.EXAMPLE_GRID_NONE;
     if (horizontal === WrapAroundRule.EXAMPLE_GRID_NONE) {
       return vertical;
     } else if (vertical === WrapAroundRule.EXAMPLE_GRID_NONE) {

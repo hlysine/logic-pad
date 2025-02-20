@@ -78,10 +78,10 @@ export default class ConnectAllRule extends Rule {
         seed,
         tile => tile.color === this.color || tile.color === Color.Gray,
         (tile, x, y) => {
+          visited[y][x] = true;
           if (tile.color === Color.Gray) complete = false;
           positions.push({ x, y });
-        },
-        visited
+        }
       );
       islands.push(positions);
     }

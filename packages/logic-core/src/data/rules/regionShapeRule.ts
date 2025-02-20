@@ -42,10 +42,10 @@ export default abstract class RegionShapeRule extends Rule {
       grid.iterateArea(
         seed,
         tile => tile.color === this.color,
-        (_, _x, _y, logX, logY) => {
+        (_, x, y, logX, logY) => {
+          visited[y][x] = true;
           positions.push({ x: logX, y: logY });
-        },
-        visited
+        }
       );
       const incomplete = grid.iterateArea(
         seed,

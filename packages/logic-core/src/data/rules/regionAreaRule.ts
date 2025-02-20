@@ -159,8 +159,8 @@ export default class RegionAreaRule extends Rule {
         tile => tile.color === this.color,
         (_, x, y) => {
           completed.push({ x, y });
-        },
-        visited
+          visited[y][x] = true;
+        }
       );
       if (this.color === Color.Gray) {
         gray.push(...completed);

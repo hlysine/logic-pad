@@ -158,13 +158,13 @@ export default class SymbolsPerRegionRule extends Rule {
         tile => tile.color === this.color,
         (_, x, y) => {
           completed.push({ x, y });
+          visited[y][x] = true;
           nbSymbolsIn += SymbolsPerRegionRule.countAllSymbolsOfPosition(
             grid,
             x,
             y
           );
-        },
-        visited
+        }
       );
       if (this.comparison !== Comparison.AtLeast && nbSymbolsIn > this.count) {
         return { state: State.Error, positions: completed };

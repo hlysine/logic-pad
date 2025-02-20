@@ -1,4 +1,5 @@
 import { AnyConfig, ConfigType } from '../config.js';
+import { array } from '../dataHelper.js';
 import GridData from '../grid.js';
 import { Color, Direction, Position, State } from '../primitives.js';
 import Symbol from './symbol.js';
@@ -105,11 +106,15 @@ export default class DirectionLinkerSymbol extends Symbol {
     return DirectionLinkerSymbol.EXAMPLE_GRID;
   }
 
-  private deltaCoordinate(c: Position, direction: Direction): Position {
-    return {
-      x: c.x + DirectionLinkerSymbol.directionDeltas[direction].dx,
-      y: c.y + DirectionLinkerSymbol.directionDeltas[direction].dy,
-    };
+  private deltaCoordinate(
+    c: Position,
+    direction: Direction,
+    grid: GridData
+  ): Position {
+    return grid.toArrayCoordinates(
+      c.x + DirectionLinkerSymbol.directionDeltas[direction].dx,
+      c.y + DirectionLinkerSymbol.directionDeltas[direction].dy
+    );
   }
 
   public validateSymbol(grid: GridData): State {
@@ -151,6 +156,13 @@ export default class DirectionLinkerSymbol extends Symbol {
 
     let grayFound = false;
 
+    const visited = array(grid.width, grid.height, (x, y) =>
+      checkedCouples.some(
+        ({ pos1, pos2 }) =>
+          (pos1.x === x && pos1.y === y) || (pos2.x === x && pos2.y === y)
+      )
+    );
+
     while (queue.length > 0) {
       const turtle = queue.shift()!;
       const { pos1, pos2, color1: baseColor1, color2: baseColor2 } = turtle;
@@ -175,27 +187,23 @@ export default class DirectionLinkerSymbol extends Symbol {
         const directions = Object.keys(this.linkedDirections) as Direction[];
         for (const direction of directions) {
           const newTurtle: Turtle = {
-            pos1: this.deltaCoordinate(pos1, direction),
-            pos2: this.deltaCoordinate(pos2, this.linkedDirections[direction]),
+            pos1: this.deltaCoordinate(pos1, direction, grid),
+            pos2: this.deltaCoordinate(
+              pos2,
+              this.linkedDirections[direction],
+              grid
+            ),
             color1: baseColor1,
             color2: baseColor2,
           };
           if (
-            checkedCouples.some(
-              ({ pos1, pos2 }) =>
-                pos1.x === newTurtle.pos1.x &&
-                pos1.y === newTurtle.pos1.y &&
-                pos2.x === newTurtle.pos2.x &&
-                pos2.y === newTurtle.pos2.y
-            ) ||
-            (pos1.x === newTurtle.pos2.x &&
-              pos1.y === newTurtle.pos2.y &&
-              pos2.x === newTurtle.pos1.x &&
-              pos2.y === newTurtle.pos1.y)
+            visited[newTurtle.pos1.y][newTurtle.pos1.x] &&
+            visited[newTurtle.pos2.y][newTurtle.pos2.x]
           ) {
             continue;
           }
-          checkedCouples.push(newTurtle);
+          visited[newTurtle.pos1.y][newTurtle.pos1.x] = true;
+          visited[newTurtle.pos2.y][newTurtle.pos2.x] = true;
           queue.push(newTurtle);
         }
       }

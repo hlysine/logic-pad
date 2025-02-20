@@ -1,12 +1,20 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import { array } from '../dataHelper.js';
+import { GetTileHandler } from '../events/onGetTile.js';
 import GridData from '../grid.js';
-import { Color, MajorRule, RuleState, State, Wrapping } from '../primitives.js';
+import {
+  Color,
+  MajorRule,
+  Position,
+  RuleState,
+  State,
+  Wrapping,
+} from '../primitives.js';
 import LetterSymbol from '../symbols/letterSymbol.js';
 import Symbol from '../symbols/symbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
-export default class WrapAroundRule extends Rule {
+export default class WrapAroundRule extends Rule implements GetTileHandler {
   private static readonly EXAMPLE_GRID_NONE = Object.freeze(
     GridData.create(['wwwww', 'wwwww', 'wwwww', 'wwwww', 'wwwww'])
   );
@@ -79,6 +87,24 @@ export default class WrapAroundRule extends Rule {
     super();
     this.horizontal = horizontal;
     this.vertical = vertical;
+  }
+
+  onGetTile(x: number, y: number, grid: GridData): Position {
+    if (this.horizontal !== Wrapping.None) {
+      const idx = Math.floor(x / grid.width);
+      x = ((x % grid.width) + grid.width) % grid.width;
+      if (this.horizontal === Wrapping.WrapReverse && idx % 2 === 1) {
+        y = grid.height - 1 - y;
+      }
+    }
+    if (this.vertical !== Wrapping.None) {
+      const idx = Math.floor(y / grid.height);
+      y = ((y % grid.height) + grid.height) % grid.height;
+      if (this.vertical === Wrapping.WrapReverse && idx % 2 === 1) {
+        x = grid.width - 1 - x;
+      }
+    }
+    return { x, y };
   }
 
   public get id(): string {

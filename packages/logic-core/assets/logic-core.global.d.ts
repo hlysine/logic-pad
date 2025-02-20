@@ -81,12 +81,13 @@ declare global {
     AtLeast = 'ge',
     AtMost = 'le',
   }
+  export declare const COMPARISONS: readonly Comparison[];
   export declare enum Wrapping {
     None = 'none',
     Wrap = 'wrap',
     WrapReverse = 'wrap-reverse',
   }
-  export declare const COMPARISONS: readonly Comparison[];
+  export declare const WRAPPINGS: readonly Wrapping[];
   export declare enum Direction {
     Up = 'up',
     Down = 'down',
@@ -638,6 +639,45 @@ declare global {
     get validateWithSolution(): boolean;
     get isSingleton(): boolean;
   }
+  export interface GetTileHandler {
+    onGetTile(x: number, y: number, grid: GridData): Position$1;
+  }
+  export declare function handlesGetTile<T extends Instruction>(
+    val: T
+  ): val is T & GetTileHandler;
+  export declare class WrapAroundRule extends Rule implements GetTileHandler {
+    readonly horizontal: Wrapping;
+    readonly vertical: Wrapping;
+    private static readonly EXAMPLE_GRID_NONE;
+    private static readonly EXAMPLE_GRID_HORIZONTAL;
+    private static readonly EXAMPLE_GRID_HORIZONTAL_REVERSE;
+    private static readonly EXAMPLE_GRID_VERTICAL;
+    private static readonly EXAMPLE_GRID_VERTICAL_REVERSE;
+    private static readonly SEARCH_VARIANTS;
+    private static readonly CONFIGS;
+    /**
+     * **The left and right edges are connected (in reverse)**
+     *
+     * @param horizontal - The horizontal wrapping.
+     * @param vertical - The vertical wrapping.
+     */
+    constructor(horizontal: Wrapping, vertical: Wrapping);
+    onGetTile(x: number, y: number, grid: GridData): Position$1;
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get configs(): readonly AnyConfig[] | null;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({
+      horizontal,
+      vertical,
+    }: {
+      horizontal?: Wrapping;
+      vertical?: Wrapping;
+    }): this;
+    get isSingleton(): boolean;
+  }
   export declare const NEIGHBOR_OFFSETS: Position$1[];
   export declare class GridData {
     readonly width: number;
@@ -650,6 +690,7 @@ declare global {
     readonly musicGrid: CachedAccess<MusicGridRule | undefined>;
     readonly completePattern: CachedAccess<CompletePatternRule | undefined>;
     readonly underclued: CachedAccess<UndercluedRule | undefined>;
+    readonly wrapAround: CachedAccess<WrapAroundRule | undefined>;
     /**
      * Create a new grid with tiles, connections, symbols and rules.
      *
@@ -748,6 +789,7 @@ declare global {
       symbols?: ReadonlyMap<string, readonly Symbol$1[]>;
       rules?: readonly Rule[];
     }): GridData;
+    toArrayCoordinates(x: number, y: number): Position$1;
     isPositionValid(x: number, y: number): boolean;
     /**
      * Safely get the tile at the given position.
@@ -940,12 +982,20 @@ declare global {
      * @param position The position to start the iteration from. This position is included in the iteration.
      * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
      * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+     * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
      * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
      */
     iterateArea<T>(
       position: Position$1,
       predicate: (tile: TileData) => boolean,
-      callback: (tile: TileData, x: number, y: number) => undefined | T
+      callback: (
+        tile: TileData,
+        x: number,
+        y: number,
+        logicalX: number,
+        logicalY: number
+      ) => undefined | T,
+      visited?: boolean[][]
     ): T | undefined;
     /**
      * Iterate over all tiles in a straight line from the given position in the given direction that satisfy the predicate.
@@ -956,13 +1006,21 @@ declare global {
      * @param direction The direction to iterate in.
      * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
      * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+     * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
      * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
      */
     iterateDirection<T>(
       position: Position$1,
       direction: Direction | Orientation,
       predicate: (tile: TileData) => boolean,
-      callback: (tile: TileData, x: number, y: number) => T | undefined
+      callback: (
+        tile: TileData,
+        x: number,
+        y: number,
+        logicalX: number,
+        logicalY: number
+      ) => T | undefined,
+      visited?: boolean[][]
     ): T | undefined;
     /**
      * Iterate over all tiles in a straight line from the given position in the given direction that satisfy the predicate.
@@ -973,13 +1031,21 @@ declare global {
      * @param direction The direction to iterate in.
      * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
      * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+     * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
      * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
      */
     iterateDirectionAll<T>(
       position: Position$1,
       direction: Direction | Orientation,
       predicate: (tile: TileData) => boolean,
-      callback: (tile: TileData, x: number, y: number) => T | undefined
+      callback: (
+        tile: TileData,
+        x: number,
+        y: number,
+        logicalX: number,
+        logicalY: number
+      ) => T | undefined,
+      visited?: boolean[][]
     ): T | undefined;
     /**
      * Check if every tile in the grid is filled with a color other than gray.
@@ -1131,6 +1197,7 @@ declare global {
     String = 'string',
     Color = 'color',
     Comparison = 'comparison',
+    Wrapping = 'wrapping',
     Direction = 'direction',
     DirectionToggle = 'directionToggle',
     Orientation = 'orientation',
@@ -1180,6 +1247,9 @@ declare global {
   export interface ComparisonConfig extends Config<Comparison> {
     readonly type: ConfigType.Comparison;
   }
+  export interface WrappingConfig extends Config<Wrapping> {
+    readonly type: ConfigType.Wrapping;
+  }
   export interface DirectionConfig extends Config<Direction> {
     readonly type: ConfigType.Direction;
   }
@@ -1223,6 +1293,7 @@ declare global {
     | StringConfig
     | ColorConfig
     | ComparisonConfig
+    | WrappingConfig
     | DirectionConfig
     | DirectionToggleConfig
     | OrientationConfig
@@ -1844,36 +1915,6 @@ declare global {
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ color }: { color?: Color }): this;
-  }
-  export declare class WrapAroundRule extends Rule {
-    readonly horizontal: Wrapping;
-    readonly vertical: Wrapping;
-    private static readonly EXAMPLE_GRID_NONE;
-    private static readonly EXAMPLE_GRID_HORIZONTAL;
-    private static readonly EXAMPLE_GRID_HORIZONTAL_REVERSE;
-    private static readonly EXAMPLE_GRID_VERTICAL;
-    private static readonly EXAMPLE_GRID_VERTICAL_REVERSE;
-    private static readonly SEARCH_VARIANTS;
-    /**
-     * **The left and right edges are connected (in reverse)**
-     *
-     * @param horizontal - The horizontal wrapping.
-     * @param vertical - The vertical wrapping.
-     */
-    constructor(horizontal: Wrapping, vertical: Wrapping);
-    get id(): string;
-    get explanation(): string;
-    createExampleGrid(): GridData;
-    get searchVariants(): SearchVariant[];
-    validateGrid(grid: GridData): RuleState;
-    copyWith({
-      horizontal,
-      vertical,
-    }: {
-      horizontal?: Wrapping;
-      vertical?: Wrapping;
-    }): this;
-    get isSingleton(): boolean;
   }
   /**
    * The master serializer for puzzles.

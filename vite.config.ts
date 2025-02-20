@@ -34,7 +34,7 @@ export default defineConfig({
         },
       ],
     }),
-    million.vite({ auto: true }),
+    million.vite({ auto: true, telemetry: false }),
     react(),
     TanStackRouterVite({
       routesDirectory: './src/client/routes',

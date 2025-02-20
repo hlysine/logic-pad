@@ -24,7 +24,7 @@
         "grilops": "^0.1.1",
         "html2canvas-pro": "^1.5.8",
         "lodash": "^4.17.21",
-        "million": "^3.0.6",
+        "million": "^3.1.11",
         "monaco-editor": "^0.47.0",
         "monaco-themes": "^0.4.4",
         "react": "^18.2.0",
@@ -1206,7 +1206,7 @@
 
     "micromatch": ["micromatch@4.0.5", "", { "dependencies": { "braces": "^3.0.2", "picomatch": "^2.3.1" } }, "sha512-DMy+ERcEW2q8Z2Po+WNXuw3c5YaUSFjAO5GsJqfEl7UjvtIuFKO6ZrKvcItdy98dwFI2N1tg3zNIdKaQT+aNdA=="],
 
-    "million": ["million@3.0.6", "", { "dependencies": { "@babel/core": "^7.23.7", "@babel/types": "^7.23.6", "@rollup/pluginutils": "^5.1.0", "kleur": "^4.1.5", "undici": "^6.3.0", "unplugin": "^1.6.0" }, "bin": { "million": "packages/cli/dist/index.js" } }, "sha512-OLjRVASGOZdyZw2ctBSSOu5kb9PaxafqkueqVvw0iQtUUnTLVRk1EmtqcNAtJWCIm8wn+WGRpDbnp+5Hi8//Kg=="],
+    "million": ["million@3.1.11", "", { "dependencies": { "@babel/core": "^7.23.7", "@babel/types": "^7.23.6", "@rollup/pluginutils": "^5.1.0", "kleur": "^4.1.5", "undici": "^6.3.0", "unplugin": "^1.6.0" }, "bin": { "million": "cli.js" } }, "sha512-6Vh1s0da0PzSqbbp9Zd8yMTIkOWnvBU4vNJCMHTZPXaY3fZ5h+N7s5croS/RBgjJIHz3WQZnvyNBQz7gQ6cqJg=="],
 
     "minimatch": ["minimatch@3.1.2", "", { "dependencies": { "brace-expansion": "^1.1.7" } }, "sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw=="],
 

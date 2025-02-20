@@ -75,7 +75,7 @@ export default function useLinkLoader(
   const { setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
   const { setRevealSpoiler } = useGridState();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: '/solve' });
   const [result, setResult] = useState<LinkLoaderResult | undefined>(undefined);
   useEffect(() => {
     void (async () => {

@@ -4,11 +4,11 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useEdit } from '../contexts/EditContext.tsx';
-import { GridData } from '@logic-pad/core/index.ts';
 import { useEmbed } from '../contexts/EmbedContext.tsx';
 import { useSearch } from '@tanstack/react-router';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
+import GridData from '@logic-pad/core/data/grid';
 
 export interface EditControlsProps {
   onReset?: () => void;

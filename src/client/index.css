@@ -76,3 +76,36 @@ summary::marker {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
     var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
+
+.mask-fade-l {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    transparent 50%,
+    rgba(0, 0, 0, 0.5)
+  );
+}
+.mask-fade-r {
+  mask-image: linear-gradient(
+    to left,
+    transparent,
+    transparent 50%,
+    rgba(0, 0, 0, 0.5)
+  );
+}
+.mask-fade-t {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    transparent 50%,
+    rgba(0, 0, 0, 0.5)
+  );
+}
+.mask-fade-b {
+  mask-image: linear-gradient(
+    to top,
+    transparent,
+    transparent 50%,
+    rgba(0, 0, 0, 0.5)
+  );
+}

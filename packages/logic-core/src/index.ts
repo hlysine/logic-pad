@@ -18,7 +18,7 @@ import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import GridZones from './data/gridZones.js';
 import Instruction from './data/instruction.js';
-import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, directionToggle, orientationToggle } from './data/primitives.js';
+import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
 import { MetadataSchema, PuzzleSchema } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
@@ -41,6 +41,7 @@ import SameShapeRule from './data/rules/sameShapeRule.js';
 import SymbolsPerRegionRule from './data/rules/symbolsPerRegionRule.js';
 import UndercluedRule from './data/rules/undercluedRule.js';
 import UniqueShapeRule from './data/rules/uniqueShapeRule.js';
+import WrapAroundRule from './data/rules/wrapAroundRule.js';
 import { Serializer } from './data/serializer/allSerializers.js';
 import { Compressor } from './data/serializer/compressor/allCompressors.js';
 import CompressorBase from './data/serializer/compressor/compressorBase.js';
@@ -146,6 +147,7 @@ export {
   ORIENTATIONS,
   Orientation,
   State,
+  Wrapping,
   directionToggle,
   orientationToggle,
   MetadataSchema,
@@ -172,6 +174,7 @@ export {
   SymbolsPerRegionRule,
   UndercluedRule,
   UniqueShapeRule,
+  WrapAroundRule,
   Serializer,
   Compressor,
   CompressorBase,

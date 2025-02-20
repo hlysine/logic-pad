@@ -23,3 +23,4 @@ export { instance as SameShapeRule } from './sameShapeRule.js';
 export { instance as SymbolsPerRegionRule } from './symbolsPerRegionRule.js';
 export { instance as UndercluedRule } from './undercluedRule.js';
 export { instance as UniqueShapeRule } from './uniqueShapeRule.js';
+export { instance as WrapAroundRule } from './wrapAroundRule.js';

@@ -29,6 +29,7 @@ declare global {
     MusicGrid = 'music',
     CompletePattern = 'complete_pattern',
     Underclued = 'underclued',
+    WrapAround = 'wrap_around',
   }
   export declare enum State {
     /**
@@ -79,6 +80,11 @@ declare global {
     Equal = 'eq',
     AtLeast = 'ge',
     AtMost = 'le',
+  }
+  export declare enum Wrapping {
+    None = 'none',
+    Wrap = 'wrap',
+    WrapReverse = 'wrap-reverse',
   }
   export declare const COMPARISONS: readonly Comparison[];
   export declare enum Direction {
@@ -560,7 +566,7 @@ declare global {
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
-    validateGrid(_grid: GridData): RuleState;
+    validateGrid(grid: GridData): RuleState;
     onSetGrid(
       _oldGrid: GridData,
       newGrid: GridData,
@@ -1838,6 +1844,36 @@ declare global {
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ color }: { color?: Color }): this;
+  }
+  export declare class WrapAroundRule extends Rule {
+    readonly horizontal: Wrapping;
+    readonly vertical: Wrapping;
+    private static readonly EXAMPLE_GRID_NONE;
+    private static readonly EXAMPLE_GRID_HORIZONTAL;
+    private static readonly EXAMPLE_GRID_HORIZONTAL_REVERSE;
+    private static readonly EXAMPLE_GRID_VERTICAL;
+    private static readonly EXAMPLE_GRID_VERTICAL_REVERSE;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **The left and right edges are connected (in reverse)**
+     *
+     * @param horizontal - The horizontal wrapping.
+     * @param vertical - The vertical wrapping.
+     */
+    constructor(horizontal: Wrapping, vertical: Wrapping);
+    get id(): string;
+    get explanation(): string;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({
+      horizontal,
+      vertical,
+    }: {
+      horizontal?: Wrapping;
+      vertical?: Wrapping;
+    }): this;
+    get isSingleton(): boolean;
   }
   /**
    * The master serializer for puzzles.

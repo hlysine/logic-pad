@@ -9,6 +9,7 @@ import {
   Orientation,
   OrientationToggle,
   Position,
+  Wrapping,
 } from './primitives.js';
 import { ControlLine } from './rules/musicControlLine.js';
 
@@ -20,6 +21,7 @@ export enum ConfigType {
   String = 'string',
   Color = 'color',
   Comparison = 'comparison',
+  Wrapping = 'wrapping',
   Direction = 'direction',
   DirectionToggle = 'directionToggle',
   Orientation = 'orientation',
@@ -78,6 +80,10 @@ export interface ComparisonConfig extends Config<Comparison> {
   readonly type: ConfigType.Comparison;
 }
 
+export interface WrappingConfig extends Config<Wrapping> {
+  readonly type: ConfigType.Wrapping;
+}
+
 export interface DirectionConfig extends Config<Direction> {
   readonly type: ConfigType.Direction;
 }
@@ -132,6 +138,7 @@ export type AnyConfig =
   | StringConfig
   | ColorConfig
   | ComparisonConfig
+  | WrappingConfig
   | DirectionConfig
   | DirectionToggleConfig
   | OrientationConfig

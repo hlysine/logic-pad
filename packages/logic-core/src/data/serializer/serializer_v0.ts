@@ -17,6 +17,7 @@ import {
   directionToggle,
   orientationToggle,
   Position,
+  Wrapping,
 } from '../primitives.js';
 import { array, escape, unescape } from '../dataHelper.js';
 import { allRules } from '../rules/index.js';
@@ -125,6 +126,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Number:
       case ConfigType.Color:
       case ConfigType.Comparison:
+      case ConfigType.Wrapping:
       case ConfigType.Direction:
       case ConfigType.Orientation:
         return (
@@ -278,6 +280,8 @@ export default class SerializerV0 extends SerializerBase {
         return [config.field, value as Color];
       case ConfigType.Comparison:
         return [config.field, value as Comparison];
+      case ConfigType.Wrapping:
+        return [config.field, value as Wrapping];
       case ConfigType.Direction:
         return [config.field, value as Direction];
       case ConfigType.DirectionToggle: {

@@ -90,6 +90,9 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
   }
 
   onGetTile(x: number, y: number, grid: GridData): Position {
+    if (grid.width === 0 || grid.height === 0) {
+      return { x, y };
+    }
     if (this.horizontal !== Wrapping.None) {
       const idx = Math.abs(Math.floor(x / grid.width));
       x = ((x % grid.width) + grid.width) % grid.width;

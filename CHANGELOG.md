@@ -1,3 +1,8 @@
+# 21/2/2025
+
+- Fixed validation of lotuses and galaxies in wrap-around grids
+- Added a new option in image sharing - grid only
+
 # 20/2/2025
 
 - Added the wrap-around rule

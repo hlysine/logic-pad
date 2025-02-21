@@ -56,11 +56,12 @@ const CopyImageButton = memo(function CopyImageButton({
 interface PuzzleImageProps {
   resetGrid: boolean;
   resetScale: boolean;
+  gridOnly: boolean;
 }
 
 const PuzzleImage = memo(
   forwardRef<HTMLDivElement, PuzzleImageProps>(function PuzzleImage(
-    { resetGrid, resetScale }: PuzzleImageProps,
+    { resetGrid, resetScale, gridOnly }: PuzzleImageProps,
     ref
   ) {
     const { grid, metadata } = useGrid();
@@ -81,12 +82,14 @@ const PuzzleImage = memo(
           <GridStateContext state={resetGrid ? defaultState : state}>
             <GridContext grid={newGrid} initialMetadata={metadata}>
               <div className="flex flex-col gap-4">
-                <Metadata simplified={true} responsive={false} />
+                {gridOnly || <Metadata simplified={true} responsive={false} />}
                 <MainGrid useToolboxClick={false} animated={false} />
               </div>
-              <div className="pr-2">
-                <InstructionList responsive={false} />
-              </div>
+              {gridOnly || (
+                <div className="pr-2">
+                  <InstructionList responsive={false} />
+                </div>
+              )}
             </GridContext>
           </GridStateContext>
         </DisplayContext>
@@ -100,6 +103,7 @@ const ImageGenerator = memo(function ImageGenerator() {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const [resetGrid, setResetGrid] = useState(true);
   const [resetScale, setResetScale] = useState(true);
+  const [gridOnly, setGridOnly] = useState(false);
   const image = useMemo(() => {
     if (canvas) {
       return (
@@ -159,7 +163,7 @@ const ImageGenerator = memo(function ImageGenerator() {
     }, 1000);
     handle.current = currentHandle;
     return () => clearTimeout(currentHandle);
-  }, [resetScale, resetGrid]);
+  }, [resetScale, resetGrid, gridOnly]);
   return (
     <div
       tabIndex={0}
@@ -169,6 +173,7 @@ const ImageGenerator = memo(function ImageGenerator() {
         <PuzzleImage
           resetGrid={resetGrid}
           resetScale={resetScale}
+          gridOnly={gridOnly}
           ref={containerRef}
         />
       </div>
@@ -193,6 +198,17 @@ const ImageGenerator = memo(function ImageGenerator() {
               className="toggle"
               checked={resetScale}
               onChange={e => setResetScale(e.target.checked)}
+            />
+          </label>
+        </div>
+        <div className="form-control">
+          <label className="label cursor-pointer">
+            <span className="label-text">Grid only</span>
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={gridOnly}
+              onChange={e => setGridOnly(e.target.checked)}
             />
           </label>
         </div>

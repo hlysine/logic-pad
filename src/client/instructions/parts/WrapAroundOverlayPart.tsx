@@ -242,11 +242,11 @@ export default memo(function WrapAroundOverlayPart({
             editable={false}
             className={cn(
               'absolute bottom-full',
-              (instruction.horizontal === Wrapping.WrapReverse ||
-                instruction.horizontal === Wrapping.ReflectReverse) &&
+              (instruction.vertical === Wrapping.WrapReverse ||
+                instruction.vertical === Wrapping.ReflectReverse) &&
                 '-scale-x-100',
-              instruction.horizontal === Wrapping.Reflect ||
-                instruction.horizontal === Wrapping.ReflectReverse
+              instruction.vertical === Wrapping.Reflect ||
+                instruction.vertical === Wrapping.ReflectReverse
                 ? '-scale-y-100 mask-fade-b'
                 : 'mask-fade-t'
             )}
@@ -260,11 +260,11 @@ export default memo(function WrapAroundOverlayPart({
             editable={false}
             className={cn(
               'absolute top-full',
-              (instruction.horizontal === Wrapping.WrapReverse ||
-                instruction.horizontal === Wrapping.ReflectReverse) &&
+              (instruction.vertical === Wrapping.WrapReverse ||
+                instruction.vertical === Wrapping.ReflectReverse) &&
                 '-scale-x-100',
-              instruction.horizontal === Wrapping.Reflect ||
-                instruction.horizontal === Wrapping.ReflectReverse
+              instruction.vertical === Wrapping.Reflect ||
+                instruction.vertical === Wrapping.ReflectReverse
                 ? '-scale-y-100 mask-fade-t'
                 : 'mask-fade-b'
             )}

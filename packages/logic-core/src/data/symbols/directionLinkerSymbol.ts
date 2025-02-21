@@ -1,5 +1,4 @@
 import { AnyConfig, ConfigType } from '../config.js';
-import { array } from '../dataHelper.js';
 import GridData from '../grid.js';
 import { Color, Direction, Position, State } from '../primitives.js';
 import Symbol from './symbol.js';
@@ -156,13 +155,6 @@ export default class DirectionLinkerSymbol extends Symbol {
 
     let grayFound = false;
 
-    const visited = array(grid.width, grid.height, (x, y) =>
-      checkedCouples.some(
-        ({ pos1, pos2 }) =>
-          (pos1.x === x && pos1.y === y) || (pos2.x === x && pos2.y === y)
-      )
-    );
-
     while (queue.length > 0) {
       const turtle = queue.shift()!;
       const { pos1, pos2, color1: baseColor1, color2: baseColor2 } = turtle;
@@ -196,18 +188,22 @@ export default class DirectionLinkerSymbol extends Symbol {
             color1: baseColor1,
             color2: baseColor2,
           };
-          if (grid.isPositionValid(newTurtle.pos1.x, newTurtle.pos1.y)) {
-            if (visited[newTurtle.pos1.y][newTurtle.pos1.x]) {
-              continue;
-            }
-            visited[newTurtle.pos1.y][newTurtle.pos1.x] = true;
+          if (
+            checkedCouples.some(
+              ({ pos1, pos2 }) =>
+                pos1.x === newTurtle.pos1.x &&
+                pos1.y === newTurtle.pos1.y &&
+                pos2.x === newTurtle.pos2.x &&
+                pos2.y === newTurtle.pos2.y
+            ) ||
+            (pos1.x === newTurtle.pos2.x &&
+              pos1.y === newTurtle.pos2.y &&
+              pos2.x === newTurtle.pos1.x &&
+              pos2.y === newTurtle.pos1.y)
+          ) {
+            continue;
           }
-          if (grid.isPositionValid(newTurtle.pos2.x, newTurtle.pos2.y)) {
-            if (visited[newTurtle.pos2.y][newTurtle.pos2.x]) {
-              continue;
-            }
-            visited[newTurtle.pos2.y][newTurtle.pos2.x] = true;
-          }
+          checkedCouples.push(newTurtle);
           queue.push(newTurtle);
         }
       }

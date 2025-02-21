@@ -76,7 +76,7 @@ const PuzzleImage = memo(
     return (
       <div
         ref={ref}
-        className="fixed top-0 left-0 shrink-0 w-fit h-fit flex gap-4 py-4 pl-4 items-center bg-neutral border-0 pointer-events-none opacity-0"
+        className="fixed top-0 left-0 shrink-0 w-fit h-fit flex gap-4 py-[calc(1rem+8px)] pl-[calc(1rem+8px)] pr-[8px] items-center bg-neutral border-0 pointer-events-none opacity-0"
       >
         <DisplayContext scale={resetScale ? 1 : scale}>
           <GridStateContext state={resetGrid ? defaultState : state}>
@@ -128,8 +128,8 @@ const ImageGenerator = memo(function ImageGenerator() {
 
       html2canvas(containerRef.current, {
         foreignObjectRendering: true,
-        x: 1,
-        y: 1,
+        x: 0,
+        y: 0,
         windowHeight: 1080,
         windowWidth: 1920,
         onclone(document, element) {
@@ -141,14 +141,14 @@ const ImageGenerator = memo(function ImageGenerator() {
       })
         .then(result => {
           const croppedCanvas = document.createElement('canvas');
-          croppedCanvas.width = result.width - 2;
-          croppedCanvas.height = result.height - 2;
+          croppedCanvas.width = result.width - 16;
+          croppedCanvas.height = result.height - 16;
           const ctx = croppedCanvas.getContext('2d');
           if (!ctx) return;
           ctx.drawImage(
             result,
-            0,
-            0,
+            8,
+            8,
             croppedCanvas.width,
             croppedCanvas.height,
             0,

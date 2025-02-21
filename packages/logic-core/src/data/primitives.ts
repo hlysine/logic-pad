@@ -17,6 +17,7 @@ export enum MajorRule {
   MusicGrid = 'music',
   CompletePattern = 'complete_pattern',
   Underclued = 'underclued',
+  WrapAround = 'wrap_around',
 }
 
 export enum State {
@@ -82,6 +83,18 @@ export const COMPARISONS: readonly Comparison[] = [
   Comparison.Equal,
   Comparison.AtLeast,
   Comparison.AtMost,
+];
+
+export enum Wrapping {
+  None = 'none',
+  Wrap = 'wrap',
+  WrapReverse = 'wrap-reverse',
+}
+
+export const WRAPPINGS: readonly Wrapping[] = [
+  Wrapping.None,
+  Wrapping.Wrap,
+  Wrapping.WrapReverse,
 ];
 
 export enum Direction {

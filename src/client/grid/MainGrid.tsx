@@ -23,7 +23,7 @@ export interface MainGridProps {
   animated?: boolean;
 }
 
-function computeTileSize(grid: GridData) {
+export function computeTileSize(grid: GridData) {
   const newSize =
     window.innerWidth < 1280
       ? Math.min(

@@ -119,7 +119,8 @@ export default class CellCountPerZoneRule extends Rule {
       };
       const stack = [seed];
       while (stack.length > 0) {
-        const { x, y } = stack.pop()!;
+        let { x, y } = stack.pop()!;
+        ({ x, y } = grid.toArrayCoordinates(x, y));
         if (visited[y][x]) continue;
         visited[y][x] = true;
         zone.positions.push({ x, y });
@@ -130,16 +131,16 @@ export default class CellCountPerZoneRule extends Rule {
           complete = false;
         }
         for (const offset of NEIGHBOR_OFFSETS) {
-          const next = { x: x + offset.x, y: y + offset.y };
+          const next = grid.toArrayCoordinates(x + offset.x, y + offset.y);
           if (
-            !grid.zones.edges.some(
-              e =>
-                (e.x1 === x &&
-                  e.y1 === y &&
-                  e.x2 === next.x &&
-                  e.y2 === next.y) ||
-                (e.x1 === next.x && e.y1 === next.y && e.x2 === x && e.y2 === y)
-            )
+            !grid.zones.edges.some(e => {
+              const { x: x1, y: y1 } = grid.toArrayCoordinates(e.x1, e.y1);
+              const { x: x2, y: y2 } = grid.toArrayCoordinates(e.x2, e.y2);
+              return (
+                (x1 === x && y1 === y && x2 === next.x && y2 === next.y) ||
+                (x2 === x && y2 === y && x1 === next.x && y1 === next.y)
+              );
+            })
           ) {
             const nextTile = grid.getTile(next.x, next.y);
             if (nextTile.exists) {

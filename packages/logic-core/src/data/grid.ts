@@ -17,6 +17,7 @@ import MusicGridRule from './rules/musicGridRule.js';
 import CompletePatternRule from './rules/completePatternRule.js';
 import UndercluedRule from './rules/undercluedRule.js';
 import GridZones from './gridZones.js';
+import WrapAroundRule from './rules/wrapAroundRule.js';
 
 export const NEIGHBOR_OFFSETS: Position[] = [
   { x: -1, y: 0 },
@@ -57,6 +58,14 @@ export default class GridData {
       () =>
         this.findRule(rule => rule.id === MajorRule.Underclued) as
           | UndercluedRule
+          | undefined
+    );
+
+  public readonly wrapAround: CachedAccess<WrapAroundRule | undefined> =
+    CachedAccess.of(
+      () =>
+        this.findRule(rule => rule.id === MajorRule.WrapAround) as
+          | WrapAroundRule
           | undefined
     );
 
@@ -236,7 +245,31 @@ export default class GridData {
     );
   }
 
+  public toArrayCoordinates(x: number, y: number): Position {
+    // // This is the preferred way to compute tile coordinates, but for performance reasons we will just access the
+    // // wrap-around rule directly.
+    // this.rules.forEach(rule => {
+    //   if (handlesGetTile(rule)) {
+    //     ({ x, y } = rule.onGetTile(x, y));
+    //   }
+    // });
+    // this.symbols.forEach(list =>
+    //   list.forEach(symbol => {
+    //     if (handlesGetTile(symbol)) {
+    //       ({ x, y } = symbol.onGetTile(x, y));
+    //     }
+    //   })
+    // );
+
+    if (this.wrapAround.value) {
+      return this.wrapAround.value.onGetTile(x, y, this);
+    } else {
+      return { x, y };
+    }
+  }
+
   public isPositionValid(x: number, y: number) {
+    ({ x, y } = this.toArrayCoordinates(x, y));
     return x >= 0 && x < this.width && y >= 0 && y < this.height;
   }
 
@@ -247,7 +280,9 @@ export default class GridData {
    * @returns The tile at the given position, or a non-existent tile if the position is invalid.
    */
   public getTile(x: number, y: number): TileData {
-    if (!this.isPositionValid(x, y)) return TileData.doesNotExist();
+    ({ x, y } = this.toArrayCoordinates(x, y));
+    if (x < 0 || x >= this.width || y < 0 || y >= this.height)
+      return TileData.doesNotExist();
     return this.tiles[y][x];
   }
 
@@ -266,6 +301,8 @@ export default class GridData {
     y: number,
     tile: TileData | ((tile: TileData) => TileData)
   ): readonly (readonly TileData[])[] {
+    ({ x, y } = this.toArrayCoordinates(x, y));
+
     if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
       return this.tiles;
     }
@@ -723,26 +760,34 @@ export default class GridData {
    * @param position The position to start the iteration from. This position is included in the iteration.
    * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
    * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+   * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
    * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
    */
   public iterateArea<T>(
     position: Position,
     predicate: (tile: TileData) => boolean,
-    callback: (tile: TileData, x: number, y: number) => undefined | T
+    callback: (
+      tile: TileData,
+      x: number,
+      y: number,
+      logicalX: number,
+      logicalY: number
+    ) => undefined | T,
+    visited: boolean[][] = array(this.width, this.height, () => false)
   ): T | undefined {
     const tile = this.getTile(position.x, position.y);
     if (!tile.exists || !predicate(tile)) {
       return;
     }
-    const visited = array(this.width, this.height, () => false);
     const stack = [position];
     while (stack.length > 0) {
       const { x, y } = stack.pop()!;
-      if (visited[y][x]) {
+      const { x: arrX, y: arrY } = this.toArrayCoordinates(x, y);
+      if (visited[arrY][arrX]) {
         continue;
       }
-      visited[y][x] = true;
-      const ret = callback(this.getTile(x, y), x, y);
+      visited[arrY][arrX] = true;
+      const ret = callback(this.getTile(x, y), arrX, arrY, x, y);
       if (ret !== undefined) return ret;
       for (const offset of NEIGHBOR_OFFSETS) {
         const next = { x: x + offset.x, y: y + offset.y };
@@ -763,19 +808,28 @@ export default class GridData {
    * @param direction The direction to iterate in.
    * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
    * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+   * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
    * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
    */
   public iterateDirection<T>(
     position: Position,
     direction: Direction | Orientation,
     predicate: (tile: TileData) => boolean,
-    callback: (tile: TileData, x: number, y: number) => T | undefined
+    callback: (
+      tile: TileData,
+      x: number,
+      y: number,
+      logicalX: number,
+      logicalY: number
+    ) => T | undefined,
+    visited: boolean[][] = array(this.width, this.height, () => false)
   ): T | undefined {
     return this.iterateDirectionAll(
       position,
       direction,
       tile => tile.exists && predicate(tile),
-      callback
+      callback,
+      visited
     );
   }
 
@@ -788,21 +842,34 @@ export default class GridData {
    * @param direction The direction to iterate in.
    * @param predicate The predicate to test each tile with. The callback is only called for tiles that satisfy this predicate.
    * @param callback The callback to call for each tile that satisfies the predicate. The iteration stops when this callback returns a value that is not undefined.
+   * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
    * @returns The value returned by the callback that stopped the iteration, or undefined if the iteration completed.
    */
   public iterateDirectionAll<T>(
     position: Position,
     direction: Direction | Orientation,
     predicate: (tile: TileData) => boolean,
-    callback: (tile: TileData, x: number, y: number) => T | undefined
+    callback: (
+      tile: TileData,
+      x: number,
+      y: number,
+      logicalX: number,
+      logicalY: number
+    ) => T | undefined,
+    visited: boolean[][] = array(this.width, this.height, () => false)
   ): T | undefined {
     let current = position;
     while (this.isPositionValid(current.x, current.y)) {
+      const arrPos = this.toArrayCoordinates(current.x, current.y);
+      if (visited[arrPos.y][arrPos.x]) {
+        break;
+      }
+      visited[arrPos.y][arrPos.x] = true;
       const tile = this.getTile(current.x, current.y);
       if (!predicate(tile)) {
         break;
       }
-      const ret = callback(tile, current.x, current.y);
+      const ret = callback(tile, arrPos.x, arrPos.y, current.x, current.y);
       if (ret !== undefined) return ret;
       current = move(current, direction);
     }

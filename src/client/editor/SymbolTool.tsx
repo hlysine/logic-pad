@@ -11,7 +11,7 @@ import { eq, mousePosition } from '../../client/uiHelper.ts';
 import PointerCaptureOverlay from '../grid/PointerCaptureOverlay';
 import handleTileClick from '../grid/handleTileClick';
 import { SymbolProps } from '../symbols';
-import { GridData } from '@logic-pad/core/index.ts';
+import GridData from '@logic-pad/core/data/grid';
 
 export interface SymbolToolProps {
   name: string;

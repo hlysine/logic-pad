@@ -22,7 +22,7 @@ import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
-import { CancelRef } from '@logic-pad/core/data/solver/solver.ts';
+import { CancelRef } from '@logic-pad/core/data/solver/solver';
 
 const SolverSelector = lazy(() => import('./SolverSelector'));
 

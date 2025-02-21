@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
-import { move } from '../dataHelper.js';
+import { array, move } from '../dataHelper.js';
 import { Color, DIRECTIONS, Position } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
@@ -72,6 +72,11 @@ export default class ViewpointSymbol extends NumberSymbol {
   ): { completed: number; possible: number } {
     let minSize = 1;
     let maxSize = 1;
+    const visited = array(
+      grid.width,
+      grid.height,
+      (x, y) => x === pos.x && y === pos.y
+    );
     for (const direction of DIRECTIONS) {
       let continuous = true;
       grid.iterateDirection(
@@ -85,7 +90,8 @@ export default class ViewpointSymbol extends NumberSymbol {
           } else {
             if (continuous) minSize++;
           }
-        }
+        },
+        visited
       );
     }
     return { completed: minSize, possible: maxSize };

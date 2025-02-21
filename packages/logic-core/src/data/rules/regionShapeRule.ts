@@ -42,9 +42,9 @@ export default abstract class RegionShapeRule extends Rule {
       grid.iterateArea(
         seed,
         tile => tile.color === this.color,
-        (_, x, y) => {
+        (_, x, y, logX, logY) => {
           visited[y][x] = true;
-          positions.push({ x, y });
+          positions.push({ x: logX, y: logY });
         }
       );
       const incomplete = grid.iterateArea(
@@ -60,7 +60,13 @@ export default abstract class RegionShapeRule extends Rule {
       if (existing) {
         existing.count++;
       } else {
-        regions.push({ positions, shape, count: 1 });
+        regions.push({
+          positions: positions.map(pos =>
+            grid.toArrayCoordinates(pos.x, pos.y)
+          ),
+          shape,
+          count: 1,
+        });
       }
     }
     return { regions, complete };

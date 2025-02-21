@@ -1,3 +1,7 @@
+# 20/2/2025
+
+- Added the wrap-around rule
+
 # 18/2/2025
 
 - Puzzle images now use full-sized cards if there are not a lot of instructions

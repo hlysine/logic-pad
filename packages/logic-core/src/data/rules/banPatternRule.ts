@@ -93,8 +93,8 @@ export default class BanPatternRule extends Rule {
 
   public validateGrid(grid: GridData): RuleState {
     for (const pattern of this.cache) {
-      for (let y = 0; y <= grid.height - pattern.height; y++) {
-        for (let x = 0; x <= grid.width - pattern.width; x++) {
+      for (let y = 0; y <= grid.height - 1; y++) {
+        for (let x = 0; x <= grid.width - 1; x++) {
           let match = true;
           for (const tile of pattern.elements) {
             const t = grid.getTile(x + tile.x, y + tile.y);
@@ -106,10 +106,9 @@ export default class BanPatternRule extends Rule {
           if (match) {
             return {
               state: State.Error,
-              positions: pattern.elements.map(tile => ({
-                x: x + tile.x,
-                y: y + tile.y,
-              })),
+              positions: pattern.elements.map(tile =>
+                grid.toArrayCoordinates(x + tile.x, y + tile.y)
+              ),
             };
           }
         }

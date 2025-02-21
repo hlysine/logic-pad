@@ -1,3 +1,12 @@
+# 0.7.0
+
+- Added the wrap-around rule
+- Non-breaking API changes to support wrap-around rule
+  - Added `GetTileHandler` (currently a stub)
+  - `GridData.getTile` now converts "logical" coordinates (can be infinite) to "array" coordinates (bounded by the array size)
+  - Added `GridData.toArrayCoordinates` to convert logical coordinates to array coordinates
+  - Changes to iteration methods in `GridData` to support logical and array coordinates
+
 # 0.6.1
 
 - Fixed a bug in the universal solver causing it to miss the last tile of an underclued grid

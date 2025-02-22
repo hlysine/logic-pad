@@ -1,3 +1,8 @@
+# 0.7.1
+
+- Fixed pattern detection, galaxies and lotuses when all edges are reverse-wrapped
+  - Reverse-wrapping all edges simulates a real projective plane which is one-sided and cannot count the same tile twice in patterns
+
 # 0.7.0
 
 - Added the wrap-around rule

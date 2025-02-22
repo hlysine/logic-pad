@@ -20,6 +20,7 @@ export default memo(function Grid({
   grid,
   editable,
   onTileClick,
+  bleed,
   children,
   className,
 }: GridProps) {
@@ -112,6 +113,7 @@ export default memo(function Grid({
         allowDrag={true}
         allowReplace={true}
         step={1}
+        bleed={bleed}
       />
       {children}
     </div>

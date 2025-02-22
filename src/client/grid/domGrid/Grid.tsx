@@ -1,15 +1,16 @@
 import { memo, useMemo } from 'react';
 import Tile from './Tile';
-import { Color } from '@logic-pad/core/data/primitives';
 import { array } from '@logic-pad/core/data/dataHelper';
 import { cn } from '../../../client/uiHelper.ts';
 import { type GridProps } from '../Grid';
+import PointerCaptureOverlay from '../PointerCaptureOverlay.tsx';
 
 export default memo(function Grid({
   size,
   grid,
   editable,
   onTileClick,
+  bleed,
   children,
   className,
 }: GridProps) {
@@ -37,16 +38,6 @@ export default memo(function Grid({
       ),
     [grid.connections, grid.width, grid.height]
   );
-  const clickHandlers = useMemo(
-    () =>
-      array(
-        grid.width,
-        grid.height,
-        (x, y) => (target: Color, flood: boolean) =>
-          onTileClick?.(x, y, target, flood)
-      ),
-    [grid.width, grid.height, onTileClick]
-  );
   return (
     <div className={cn('relative', className)} style={containerStyle}>
       <div
@@ -58,13 +49,25 @@ export default memo(function Grid({
             <Tile
               key={`${x},${y}`}
               data={tile}
-              editable={editable}
+              editable={false}
               connections={tileConnections[y][x]}
-              onTileClick={clickHandlers[y][x]}
             />
           ))
         )}
       </div>
+      <PointerCaptureOverlay
+        width={grid.width}
+        height={grid.height}
+        colorMap={(x, y, color) => grid.getTile(x, y).color === color}
+        onTileClick={(x, y, _from, to, flood) => {
+          if (editable && grid.getTile(x, y).exists)
+            onTileClick?.(x, y, to, flood);
+        }}
+        allowDrag={true}
+        allowReplace={true}
+        step={1}
+        bleed={bleed}
+      />
       {children}
     </div>
   );

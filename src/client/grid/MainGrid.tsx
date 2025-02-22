@@ -138,6 +138,7 @@ export default memo(function MainGrid({
           handleTileClick(x, y, target, flood, gridContext, false);
         }}
         type={animated ? 'auto' : 'canvas'}
+        bleed={grid.wrapAround.value ? 0.5 : 0}
       >
         <GridStateConsumer>
           {({ state }) => (

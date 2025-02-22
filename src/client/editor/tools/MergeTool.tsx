@@ -34,6 +34,14 @@ function MergeToolOverlay() {
           cx = tx;
           cy = y > ty + 0.5 ? ty + 1 : ty - 1;
         }
+        if (tx < 0 || ty < 0 || cx < 0 || cy < 0) return;
+        if (
+          tx >= grid.width ||
+          ty >= grid.height ||
+          cx >= grid.width ||
+          cy >= grid.height
+        )
+          return;
         const newEdge = { x1: tx, y1: ty, x2: cx, y2: cy };
         if (from === Color.Dark || to === Color.Dark) {
           if (!grid.connections.hasEdge(newEdge)) {

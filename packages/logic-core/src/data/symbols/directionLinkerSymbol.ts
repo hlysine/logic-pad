@@ -105,15 +105,11 @@ export default class DirectionLinkerSymbol extends Symbol {
     return DirectionLinkerSymbol.EXAMPLE_GRID;
   }
 
-  private deltaCoordinate(
-    c: Position,
-    direction: Direction,
-    grid: GridData
-  ): Position {
-    return grid.toArrayCoordinates(
-      c.x + DirectionLinkerSymbol.directionDeltas[direction].dx,
-      c.y + DirectionLinkerSymbol.directionDeltas[direction].dy
-    );
+  private deltaCoordinate(c: Position, direction: Direction): Position {
+    return {
+      x: c.x + DirectionLinkerSymbol.directionDeltas[direction].dx,
+      y: c.y + DirectionLinkerSymbol.directionDeltas[direction].dy,
+    };
   }
 
   public validateSymbol(grid: GridData): State {
@@ -179,31 +175,33 @@ export default class DirectionLinkerSymbol extends Symbol {
         const directions = Object.keys(this.linkedDirections) as Direction[];
         for (const direction of directions) {
           const newTurtle: Turtle = {
-            pos1: this.deltaCoordinate(pos1, direction, grid),
-            pos2: this.deltaCoordinate(
-              pos2,
-              this.linkedDirections[direction],
-              grid
-            ),
+            pos1: this.deltaCoordinate(pos1, direction),
+            pos2: this.deltaCoordinate(pos2, this.linkedDirections[direction]),
+            color1: baseColor1,
+            color2: baseColor2,
+          };
+          const newArrTurtle: Turtle = {
+            pos1: grid.toArrayCoordinates(newTurtle.pos1.x, newTurtle.pos1.y),
+            pos2: grid.toArrayCoordinates(newTurtle.pos2.x, newTurtle.pos2.y),
             color1: baseColor1,
             color2: baseColor2,
           };
           if (
             checkedCouples.some(
               ({ pos1, pos2 }) =>
-                pos1.x === newTurtle.pos1.x &&
-                pos1.y === newTurtle.pos1.y &&
-                pos2.x === newTurtle.pos2.x &&
-                pos2.y === newTurtle.pos2.y
+                pos1.x === newArrTurtle.pos1.x &&
+                pos1.y === newArrTurtle.pos1.y &&
+                pos2.x === newArrTurtle.pos2.x &&
+                pos2.y === newArrTurtle.pos2.y
             ) ||
-            (pos1.x === newTurtle.pos2.x &&
-              pos1.y === newTurtle.pos2.y &&
-              pos2.x === newTurtle.pos1.x &&
-              pos2.y === newTurtle.pos1.y)
+            (pos1.x === newArrTurtle.pos2.x &&
+              pos1.y === newArrTurtle.pos2.y &&
+              pos2.x === newArrTurtle.pos1.x &&
+              pos2.y === newArrTurtle.pos1.y)
           ) {
             continue;
           }
-          checkedCouples.push(newTurtle);
+          checkedCouples.push(newArrTurtle);
           queue.push(newTurtle);
         }
       }

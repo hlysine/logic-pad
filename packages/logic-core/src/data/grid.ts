@@ -312,6 +312,7 @@ export default class GridData {
     const newTile = typeof tile === 'function' ? tile(tiles[y][x]) : tile;
 
     changing.forEach(({ x, y }) => {
+      ({ x, y } = this.toArrayCoordinates(x, y));
       tiles[y][x] = tiles[y][x].withColor(newTile.color);
     });
     tiles[y][x] = newTile;

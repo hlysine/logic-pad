@@ -2,6 +2,7 @@
 
 - You can now color the semi-transparent tiles directly in wrap-around rule
 - Improved the hitbox of merge and zone tools in the editor
+- Fixed pattern detection, galaxies and lotuses when all edges are reverse-wrapped
 
 # 21/2/2025
 

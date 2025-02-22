@@ -1,7 +1,7 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
 import { array } from '../dataHelper.js';
-import { Color, RuleState, State } from '../primitives.js';
+import { Color, RuleState, State, Position } from '../primitives.js';
 import { Shape, getShapeVariants, tilesToShape } from '../shapes.js';
 import Rule, { SearchVariant } from './rule.js';
 
@@ -96,7 +96,17 @@ export default class BanPatternRule extends Rule {
       for (let y = 0; y <= grid.height - 1; y++) {
         for (let x = 0; x <= grid.width - 1; x++) {
           let match = true;
+          const visited: Position[] = [];
           for (const tile of pattern.elements) {
+            const pos = grid.toArrayCoordinates(x + tile.x, y + tile.y);
+            if (
+              grid.wrapAround.value && // optimization: not need to check visited if wrapAround is disabled
+              visited.some(p => p.x === pos.x && p.y === pos.y)
+            ) {
+              match = false;
+              break;
+            }
+            visited.push(pos);
             const t = grid.getTile(x + tile.x, y + tile.y);
             if (!t.exists || t.color !== tile.color) {
               match = false;

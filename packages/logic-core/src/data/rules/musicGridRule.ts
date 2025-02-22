@@ -104,12 +104,8 @@ export default class MusicGridRule
     return MusicGridRule.SEARCH_VARIANTS;
   }
 
-  public validateGrid(grid: GridData): RuleState {
-    if (grid.getTileCount(true, false, Color.Gray) > 0) {
-      return { state: State.Incomplete };
-    } else {
-      return { state: State.Satisfied };
-    }
+  public validateGrid(_grid: GridData): RuleState {
+    return { state: State.Incomplete };
   }
 
   public onSetGrid(

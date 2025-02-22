@@ -1,8 +1,13 @@
+# 22/2/2025
+
+- You can now color the semi-transparent tiles directly in wrap-around rule
+- Improved the hitbox of merge and zone tools in the editor
+
 # 21/2/2025
 
 - Fixed validation of lotuses and galaxies in wrap-around grids
 - Added a new option in image sharing - grid only
-- Fix wrap-around rule in 0-size grids
+- Fixed wrap-around rule in 0-size grids
 
 # 20/2/2025
 

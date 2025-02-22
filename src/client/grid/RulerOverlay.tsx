@@ -12,7 +12,7 @@ export default memo(function RulerOverlay({
 }: RulerOverlayProps) {
   const verticalRuler = useMemo(
     () => (
-      <div className="absolute top-0 bottom-0 -left-8 flex flex-col justify-around w-fit opacity-20 hover:opacity-100 transition-opacity pointer-events-auto">
+      <div className="absolute top-0 bottom-0 -left-8 flex flex-col justify-around w-fit opacity-40 transition-opacity">
         {Array.from({ length: height }, (_, i) => (
           <span
             key={i}
@@ -25,7 +25,7 @@ export default memo(function RulerOverlay({
   );
   const horizontalRuler = useMemo(
     () => (
-      <div className="absolute left-0 right-0 -top-8 flex justify-around h-fit opacity-20 hover:opacity-100 transition-opacity pointer-events-auto">
+      <div className="absolute left-0 right-0 -top-8 flex justify-around h-fit opacity-40 transition-opacity">
         {Array.from({ length: width }, (_, i) => (
           <span
             key={i}

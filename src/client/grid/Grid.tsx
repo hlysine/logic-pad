@@ -10,6 +10,7 @@ export interface GridProps {
   grid: GridData;
   editable: boolean;
   onTileClick?: (x: number, y: number, target: Color, flood: boolean) => void;
+  bleed?: number | { top: number; right: number; bottom: number; left: number };
   children?: React.ReactNode;
   className?: string;
 }

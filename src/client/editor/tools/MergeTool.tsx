@@ -20,7 +20,12 @@ function MergeToolOverlay() {
         const tx = Math.floor(x);
         const ty = Math.floor(y);
         let cx, cy;
-        if (Math.abs(tx + 0.5 - x) < 0.25 && Math.abs(ty + 0.5 - y) < 0.25)
+        if (Math.abs(tx + 0.5 - x) < 0.2 && Math.abs(ty + 0.5 - y) < 0.2)
+          return;
+        if (
+          Math.abs(Math.round(x) - x) < 0.2 &&
+          Math.abs(Math.round(y) - y) < 0.2
+        )
           return;
         if (Math.abs(tx + 0.5 - x) > Math.abs(ty + 0.5 - y)) {
           cx = x > tx + 0.5 ? tx + 1 : tx - 1;

@@ -1,6 +1,7 @@
-import { memo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 import { Color } from '@logic-pad/core/data/primitives';
 import mouseContext from './MouseContext';
+import { cn } from '../uiHelper';
 
 export interface PointerCaptureOverlayProps {
   width: number;
@@ -18,7 +19,9 @@ export interface PointerCaptureOverlayProps {
   step?: number;
   onPointerUp?: (color: Color) => void;
   onPointerMove?: (x: number, y: number) => void;
+  bleed?: number | { top: number; right: number; bottom: number; left: number };
   children?: React.ReactNode;
+  className?: string;
 }
 
 function opposite(color: Color) {
@@ -42,16 +45,27 @@ export default memo(function PointerCaptureOverlay({
   step,
   onPointerUp,
   onPointerMove,
+  bleed,
   children,
+  className,
 }: PointerCaptureOverlayProps) {
   allowDrag = allowDrag ?? true;
   allowReplace = allowReplace ?? false;
   step = step ?? 1;
+  bleed = bleed ?? 0;
+  if (typeof bleed === 'number')
+    bleed = { top: bleed, right: bleed, bottom: bleed, left: bleed };
 
   const prevCoord = useRef({ x: -1, y: -1 });
 
   const getPointerLocation = (e: React.PointerEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
+    const widthUnit = rect.width / (width + bleed.left + bleed.right);
+    const heightUnit = rect.height / (height + bleed.top + bleed.bottom);
+    rect.x += bleed.left * widthUnit;
+    rect.y += bleed.top * heightUnit;
+    rect.width -= (bleed.left + bleed.right) * widthUnit;
+    rect.height -= (bleed.top + bleed.bottom) * heightUnit;
     const x =
       Math.floor(
         (((e.clientX - rect.left) / rect.width) * width -
@@ -74,7 +88,16 @@ export default memo(function PointerCaptureOverlay({
 
   return (
     <div
-      className="absolute inset-0"
+      className={cn('absolute', className)}
+      style={useMemo(
+        () => ({
+          left: `${-bleed.left}em`,
+          right: `${-bleed.right}em`,
+          top: `${-bleed.top}em`,
+          bottom: `${-bleed.bottom}em`,
+        }),
+        [bleed]
+      )}
       onPointerDown={e => {
         if (e.pointerType === 'mouse') {
           let targetColor = mouseContext.getColorForButtons(e.buttons);

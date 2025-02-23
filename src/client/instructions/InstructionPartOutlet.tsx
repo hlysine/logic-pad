@@ -3,6 +3,20 @@ import { PartPlacement } from './parts/types';
 import { PartComponent, allParts } from './parts';
 import Instruction from '@logic-pad/core/data/instruction';
 import GridData from '@logic-pad/core/data/grid';
+import { useInstructionParts } from '../contexts/InstructionPartsContext';
+
+interface InstructionPartsContextOutlet {
+  placement: PartPlacement;
+}
+
+const InstructionPartsContextOutlet = memo(
+  function InstructionPartsContextOutlet({
+    placement,
+  }: InstructionPartsContextOutlet) {
+    const { parts } = useInstructionParts();
+    return parts.get(placement) ?? null;
+  }
+);
 
 export interface InstructionPartOutletProps {
   placement: PartPlacement;
@@ -44,6 +58,7 @@ export default memo(function InstructionPartOutlet({
       {components.map(([Component, data], i) => (
         <Component key={i} instruction={data} />
       ))}
+      <InstructionPartsContextOutlet placement={placement} />
     </>
   );
 });

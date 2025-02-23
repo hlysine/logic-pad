@@ -1,5 +1,6 @@
 # 23/2/2025
 
+- Added a toggle to turn off wrap-around visualizations
 - Fixed viewpoints in wrap-around grids
 - Fixed padding in a grid-only puzzle image
 - Fixed the code editor being cut off on large screens

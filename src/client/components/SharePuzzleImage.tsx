@@ -76,7 +76,12 @@ const PuzzleImage = memo(
     return (
       <div
         ref={ref}
-        className="fixed top-0 left-0 shrink-0 w-fit h-fit flex gap-4 py-[calc(1rem+8px)] pl-[calc(1rem+8px)] pr-[8px] items-center bg-neutral border-0 pointer-events-none opacity-0"
+        className={cn(
+          'fixed top-0 left-0 shrink-0 w-fit h-fit flex gap-4 items-center bg-neutral border-0 pointer-events-none opacity-0',
+          gridOnly
+            ? 'p-[calc(1rem+8px)]'
+            : 'py-[calc(1rem+8px)] pl-[calc(1rem+8px)] pr-[8px]'
+        )}
       >
         <DisplayContext scale={resetScale ? 1 : scale}>
           <GridStateContext state={resetGrid ? defaultState : state}>

@@ -1,3 +1,7 @@
+# 23/2/2025
+
+- Fixed padding in a grid-only puzzle image
+
 # 22/2/2025
 
 - You can now color the semi-transparent tiles directly in wrap-around rule

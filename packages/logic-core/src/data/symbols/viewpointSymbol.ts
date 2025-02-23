@@ -72,26 +72,36 @@ export default class ViewpointSymbol extends NumberSymbol {
   ): { completed: number; possible: number } {
     let minSize = 1;
     let maxSize = 1;
-    const visited = array(
+    const visitedColored = array(
       grid.width,
       grid.height,
       (x, y) => x === pos.x && y === pos.y
     );
     for (const direction of DIRECTIONS) {
-      let continuous = true;
+      grid.iterateDirection(
+        move(pos, direction),
+        direction,
+        tile => tile.color === color,
+        () => {
+          minSize++;
+        },
+        visitedColored
+      );
+    }
+    const visitedAll = array(
+      grid.width,
+      grid.height,
+      (x, y) => x === pos.x && y === pos.y
+    );
+    for (const direction of DIRECTIONS) {
       grid.iterateDirection(
         move(pos, direction),
         direction,
         tile => tile.color === color || tile.color === Color.Gray,
-        tile => {
+        () => {
           maxSize++;
-          if (tile.color === Color.Gray) {
-            continuous = false;
-          } else {
-            if (continuous) minSize++;
-          }
         },
-        visited
+        visitedAll
       );
     }
     return { completed: minSize, possible: maxSize };

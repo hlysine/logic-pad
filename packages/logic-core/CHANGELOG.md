@@ -1,5 +1,6 @@
 # 0.7.1
 
+- Fixed viewpoints in wrap-around grids
 - Fixed pattern detection, galaxies and lotuses when all edges are reverse-wrapped
   - Reverse-wrapping all edges simulates a real projective plane which is one-sided and cannot count the same tile twice in patterns
 

@@ -1,6 +1,7 @@
 # 23/2/2025
 
 - Fixed padding in a grid-only puzzle image
+- Fixed the code editor being cut off on large screens
 
 # 22/2/2025
 

@@ -1,3 +1,9 @@
+# 24/2/2025
+
+- Rework site settings to mostly be applied instantly
+  - **Note: all site settings are reset**
+- Moved wrap-around visualization toggle to site settings
+
 # 23/2/2025
 
 - Added a toggle to turn off wrap-around visualizations

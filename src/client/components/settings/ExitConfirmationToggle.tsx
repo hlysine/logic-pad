@@ -2,8 +2,8 @@ import { memo } from 'react';
 import { useSettings } from '../../contexts/SettingsContext';
 
 export default memo(function ExitConfirmationToggle() {
-  const [bypassExitConfirmation, setBypassExitConfirmation] = useSettings(
-    'bypassExitConfirmation'
+  const [enableExitConfirmation, setEnableExitConfirmation] = useSettings(
+    'enableExitConfirmation'
   );
   return (
     <div
@@ -16,8 +16,8 @@ export default memo(function ExitConfirmationToggle() {
           <input
             type="checkbox"
             className="toggle"
-            checked={!bypassExitConfirmation}
-            onChange={() => setBypassExitConfirmation(!bypassExitConfirmation)}
+            checked={enableExitConfirmation}
+            onChange={e => setEnableExitConfirmation(e.currentTarget.checked)}
           />
         </label>
       </div>

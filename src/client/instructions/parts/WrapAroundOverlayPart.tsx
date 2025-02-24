@@ -14,17 +14,18 @@ import { GridConnections, Wrapping } from '@logic-pad/core/index.ts';
 import GridZoneOverlay from '../../grid/GridZoneOverlay.tsx';
 import SymbolOverlay from '../../grid/SymbolOverlay.tsx';
 import { cn } from '../../uiHelper.ts';
-import InstructionPartPortal from '../InstructionPartPortal.tsx';
+import { useSettings } from '../../contexts/SettingsContext.tsx';
 
 interface WrapAroundOverlayPartProps {
   instruction: WrapAroundRule;
 }
 
-const WrapAroundOverlayPart = memo(function WrapAroundOverlayPart({
+export default memo(function WrapAroundOverlayPart({
   instruction,
 }: WrapAroundOverlayPartProps) {
   const { grid } = useGrid();
   const { scale } = useDisplay();
+  const [visualizeWrapArounds] = useSettings('visualizeWrapArounds');
   const leftGrid = useMemo(() => {
     if (instruction.horizontal === Wrapping.None) return grid;
     return grid.copyWith({
@@ -156,6 +157,7 @@ const WrapAroundOverlayPart = memo(function WrapAroundOverlayPart({
       window.removeEventListener('resize', resizeHandler);
     };
   }, [grid]);
+  if (!visualizeWrapArounds) return null;
   if (
     tileConfig.tileSize === 0 ||
     tileConfig.width !== grid.width ||
@@ -225,42 +227,7 @@ const WrapAroundOverlayPart = memo(function WrapAroundOverlayPart({
   );
 });
 
-export interface WrapAroundControlsPartProps {
-  instruction: WrapAroundRule;
-}
-
-export default memo(function WrapAroundControlsPart({
-  instruction,
-}: WrapAroundControlsPartProps) {
-  const [showVisualAid, setShowVisualAid] = useState(true);
-
-  return (
-    <>
-      <div className="grow-0 shrink-0 bg-primary/10 flex flex-col items-stretch gap-1">
-        <div className="flex flex-col gap-4 justify-around mx-4 my-2 items-stretch">
-          <div className="form-control">
-            <label className="label cursor-pointer">
-              <span className="label-text">Visualize wrapping</span>
-              <input
-                type="checkbox"
-                className="toggle"
-                checked={showVisualAid}
-                onChange={e => setShowVisualAid(e.currentTarget.checked)}
-              />
-            </label>
-          </div>
-        </div>
-      </div>
-      {showVisualAid && (
-        <InstructionPartPortal placement={PartPlacement.MainGridOverlay}>
-          <WrapAroundOverlayPart instruction={instruction} />
-        </InstructionPartPortal>
-      )}
-    </>
-  );
-});
-
 export const spec: PartSpec = {
-  placement: PartPlacement.LeftBottom,
+  placement: PartPlacement.MainGridOverlay,
   instructionId: wrapAroundInstance.id,
 };

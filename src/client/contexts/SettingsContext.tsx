@@ -1,16 +1,21 @@
 import { useCallback, useMemo, useSyncExternalStore } from 'react';
 import { externalReducedMotion } from '../uiHelper';
+import { z } from 'zod';
 
-export interface SiteSettings {
-  reducedMotionOverride: boolean;
-  bypassExitConfirmation: boolean;
-  flipPrimaryMouseButton: boolean;
-}
+export const SiteSettingsSchema = z.object({
+  enableFancyAnimations: z.boolean(),
+  enableExitConfirmation: z.boolean(),
+  flipPrimaryMouseButton: z.boolean(),
+  visualizeWrapArounds: z.boolean(),
+});
+
+export type SiteSettings = z.infer<typeof SiteSettingsSchema>;
 
 const initialSettings: SiteSettings = {
-  reducedMotionOverride: false,
-  bypassExitConfirmation: false,
+  enableFancyAnimations: true,
+  enableExitConfirmation: true,
   flipPrimaryMouseButton: false,
+  visualizeWrapArounds: true,
 };
 
 class SyncSubscription {
@@ -43,8 +48,14 @@ class SettingsStore {
   public load() {
     const settings = window.localStorage.getItem('siteSettings');
     if (settings) {
-      this.settings = JSON.parse(settings) as SiteSettings;
-      Object.values(this.subscriptions).forEach(sub => sub.emitChange());
+      try {
+        const json: unknown = JSON.parse(settings);
+        this.settings = SiteSettingsSchema.parse(json);
+        Object.values(this.subscriptions).forEach(sub => sub.emitChange());
+      } catch (e) {
+        console.error('Failed to load settings', e);
+        this.save();
+      }
     }
   }
 
@@ -91,9 +102,9 @@ export function useSettings<const T extends keyof SiteSettings>(key: T) {
 }
 
 export function useReducedMotion() {
-  const [reducedMotionOverride] = useSettings('reducedMotionOverride');
+  const [enableFancyAnimations] = useSettings('enableFancyAnimations');
   return useMemo(
-    () => reducedMotionOverride || externalReducedMotion(),
-    [reducedMotionOverride]
+    () => !enableFancyAnimations || externalReducedMotion(),
+    [enableFancyAnimations]
   );
 }

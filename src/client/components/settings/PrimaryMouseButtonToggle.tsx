@@ -8,7 +8,7 @@ export default memo(function PrimaryMouseButtonToggle() {
   return (
     <div
       className="tooltip tooltip-info tooltip-bottom"
-      data-tip="Whether to use white for left click (Reload to take effect)"
+      data-tip="Whether to use left click for light tiles (Reload to take effect)"
     >
       <div className="form-control">
         <label className="label cursor-pointer">
@@ -17,7 +17,7 @@ export default memo(function PrimaryMouseButtonToggle() {
             type="checkbox"
             className="toggle"
             checked={flippedPrimaryButton}
-            onChange={() => setFlippedPrimaryButton(!flippedPrimaryButton)}
+            onChange={e => setFlippedPrimaryButton(e.currentTarget.checked)}
           />
         </label>
       </div>

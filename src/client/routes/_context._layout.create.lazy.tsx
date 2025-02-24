@@ -20,13 +20,13 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
       solutionHandling: SolutionHandling.Remove,
     });
     const { grid } = useGrid();
-    const [bypassExitConfirmation] = useSettings('bypassExitConfirmation');
+    const [enableExitConfirmation] = useSettings('enableExitConfirmation');
     useBlocker({
       shouldBlockFn: () =>
-        !bypassExitConfirmation &&
+        enableExitConfirmation &&
         !window.confirm('Are you sure you want to leave?'),
       disabled:
-        !!params.d || grid.equals(defaultGrid) || bypassExitConfirmation,
+        !!params.d || grid.equals(defaultGrid) || !enableExitConfirmation,
     });
 
     return (

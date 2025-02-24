@@ -1,18 +1,10 @@
-import { memo, useState } from 'react';
-import { siteOptions } from '../../uiHelper';
+import { memo } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export default memo(function PrimaryMouseButtonToggle() {
-  const [flippedPrimaryButton, setFlippedPrimaryButton] = useState(
-    siteOptions.flipPrimaryMouseButton
+  const [flippedPrimaryButton, setFlippedPrimaryButton] = useSettings(
+    'flipPrimaryMouseButton'
   );
-  const togglePrimaryButton = () => {
-    setFlippedPrimaryButton(sa => {
-      const val = !sa;
-      siteOptions.flipPrimaryMouseButton = val;
-      window.localStorage.setItem('flipPrimaryMouseButton', String(val));
-      return val;
-    });
-  };
   return (
     <div
       className="tooltip tooltip-info tooltip-bottom"
@@ -25,7 +17,7 @@ export default memo(function PrimaryMouseButtonToggle() {
             type="checkbox"
             className="toggle"
             checked={flippedPrimaryButton}
-            onChange={togglePrimaryButton}
+            onChange={() => setFlippedPrimaryButton(!flippedPrimaryButton)}
           />
         </label>
       </div>

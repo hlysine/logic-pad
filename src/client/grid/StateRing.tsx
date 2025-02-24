@@ -1,9 +1,10 @@
 import { forwardRef, memo, useEffect } from 'react';
-import { cn, prefersReducedMotion } from '../uiHelper.ts';
+import { cn } from '../uiHelper.ts';
 import { State } from '@logic-pad/core/data/primitives';
 import anime from 'animejs';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { useRouterState } from '@tanstack/react-router';
+import { useReducedMotion } from '../contexts/SettingsContext.tsx';
 
 export interface GridRingProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
@@ -31,9 +32,10 @@ export default memo(
     animated = animated ?? true;
     const { state } = useGridState();
     const router = useRouterState();
+    const prefersReducedMotion = useReducedMotion();
 
     useEffect(() => {
-      if (State.isSatisfied(state.final) && !prefersReducedMotion()) {
+      if (State.isSatisfied(state.final) && !prefersReducedMotion) {
         anime({
           targets: '.logic-animated .logic-tile',
           scale: [
@@ -43,11 +45,11 @@ export default memo(
           delay: anime.stagger(20, { grid: [width, height], from: 'center' }),
         });
       }
-    }, [state.final, width, height]);
+    }, [state.final, width, height, prefersReducedMotion]);
 
     useEffect(() => {
       if (
-        prefersReducedMotion() ||
+        prefersReducedMotion ||
         router.location.pathname === '/create' ||
         !animated
       ) {
@@ -69,7 +71,7 @@ export default memo(
         });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [width, height, router.location.pathname]);
+    }, [width, height, router.location.pathname, prefersReducedMotion]);
 
     return (
       <div

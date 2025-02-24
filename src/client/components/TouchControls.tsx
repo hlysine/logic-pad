@@ -1,10 +1,12 @@
 import { memo, useState } from 'react';
 import mouseContext from '../grid/MouseContext';
 import { useDisplay } from '../contexts/DisplayContext.tsx';
-import { siteOptions } from '../uiHelper.ts';
+import { settingsStore } from '../contexts/SettingsContext.tsx';
 
 export default memo(function TouchControls() {
-  const [inverted, setInverted] = useState(siteOptions.flipPrimaryMouseButton);
+  const [inverted, setInverted] = useState(
+    settingsStore.get('flipPrimaryMouseButton')
+  );
   const { scale, setScale } = useDisplay();
   const onSwitch = () => {
     setInverted(i => {

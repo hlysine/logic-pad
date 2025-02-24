@@ -1,18 +1,9 @@
-import { memo, useState } from 'react';
-import { externalReducedMotion, siteOptions } from '../../uiHelper';
+import { memo } from 'react';
+import { externalReducedMotion } from '../../uiHelper';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export default memo(function AnimationToggle() {
-  const [reduceMotion, setReduceMotion] = useState(
-    siteOptions.reducedMotionOverride
-  );
-  const toggleReduceMotion = () => {
-    setReduceMotion(sa => {
-      const val = !sa;
-      siteOptions.reducedMotionOverride = val;
-      window.localStorage.setItem('reducedMotion', String(val));
-      return val;
-    });
-  };
+  const [reduceMotion, setReduceMotion] = useSettings('reducedMotionOverride');
   const external = externalReducedMotion();
   return (
     <div
@@ -31,7 +22,7 @@ export default memo(function AnimationToggle() {
             className="toggle"
             checked={external ? false : !reduceMotion}
             disabled={external}
-            onChange={toggleReduceMotion}
+            onChange={() => setReduceMotion(!reduceMotion)}
           />
         </label>
       </div>

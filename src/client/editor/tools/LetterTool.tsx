@@ -9,7 +9,7 @@ export default memo(function LetterTool() {
   return (
     <SymbolTool
       name="Letter"
-      order={8}
+      order={102}
       hotkey="2"
       sample={sample}
       component={LetterSymbol}

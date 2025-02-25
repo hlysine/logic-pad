@@ -9,7 +9,7 @@ export default memo(function LotusTool() {
   return (
     <SymbolTool
       name="Lotus"
-      order={11}
+      order={105}
       hotkey="5"
       sample={sample}
       component={LotusSymbol}

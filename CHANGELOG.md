@@ -3,6 +3,7 @@
 - Added **Focus Numbers**, supported by backtrack and universal solvers
 - Non-standard tools are now hidden behind a toggle by default
 - Redesigned the minesweeper symbol
+- Moved the zone tool to last and reworked keybinds
 
 # 24/2/2025
 

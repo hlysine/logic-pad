@@ -9,7 +9,7 @@ export default memo(function CustomIconTool() {
   return (
     <SymbolTool
       name="Custom Icon"
-      order={18}
+      order={302}
       hotkey="shift+2"
       defaultHidden={true}
       sample={sample}

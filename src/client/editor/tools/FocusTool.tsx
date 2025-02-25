@@ -9,7 +9,7 @@ export default memo(function FocusTool() {
   return (
     <SymbolTool
       name="Focus"
-      order={15}
+      order={202}
       hotkey="alt+2"
       defaultHidden={true}
       sample={sample}

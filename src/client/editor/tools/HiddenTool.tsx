@@ -11,7 +11,7 @@ export default memo(function HiddenTool() {
   return (
     <SymbolTool
       name="Hidden"
-      order={19}
+      order={303}
       hotkey="shift+3"
       defaultHidden={true}
       sample={sample}

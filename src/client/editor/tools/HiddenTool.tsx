@@ -13,6 +13,7 @@ export default memo(function HiddenTool() {
       name="Hidden"
       order={17}
       hotkey="="
+      defaultHidden={true}
       sample={sample}
       component={HiddenSymbol}
       onNewSymbol={symbol => {

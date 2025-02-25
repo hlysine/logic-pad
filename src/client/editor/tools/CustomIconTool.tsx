@@ -11,6 +11,7 @@ export default memo(function CustomIconTool() {
       name="Custom Icon"
       order={16}
       hotkey="0"
+      defaultHidden={true}
       sample={sample}
       component={CustomIconSymbol}
     />

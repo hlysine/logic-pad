@@ -11,6 +11,7 @@ export default memo(function CustomTextTool() {
       name="Custom Text"
       order={15}
       hotkey="9"
+      defaultHidden={true}
       sample={sample}
       component={CustomTextSymbol}
     />

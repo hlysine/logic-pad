@@ -4,6 +4,7 @@ import { cn } from '../../client/uiHelper.ts';
 import { Color } from '@logic-pad/core/data/primitives';
 import { GridContext } from '../contexts/GridContext.tsx';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { useSettings } from '../contexts/SettingsContext.tsx';
 
 export interface ToolboxItemProps {
   id: string;
@@ -23,6 +24,7 @@ export interface ToolboxItemProps {
   className?: string;
   hotkey?: string;
   order?: number;
+  defaultHidden?: boolean;
 }
 
 export default memo(function ToolboxItem({
@@ -35,8 +37,10 @@ export default memo(function ToolboxItem({
   className,
   hotkey,
   order,
+  defaultHidden,
 }: ToolboxItemProps) {
   const { toolId, setTool } = useToolbox();
+  const [showMoreTools] = useSettings('showMoreTools');
 
   useEffect(() => {
     if (toolId === id) {
@@ -53,6 +57,8 @@ export default memo(function ToolboxItem({
       keyup: false,
     }
   );
+
+  if (defaultHidden && !showMoreTools) return null;
 
   return (
     <div

@@ -3,20 +3,16 @@ import { externalReducedMotion } from '../uiHelper';
 import { z } from 'zod';
 
 export const SiteSettingsSchema = z.object({
-  enableFancyAnimations: z.boolean(),
-  enableExitConfirmation: z.boolean(),
-  flipPrimaryMouseButton: z.boolean(),
-  visualizeWrapArounds: z.boolean(),
+  enableFancyAnimations: z.boolean().default(true),
+  enableExitConfirmation: z.boolean().default(true),
+  flipPrimaryMouseButton: z.boolean().default(false),
+  visualizeWrapArounds: z.boolean().default(true),
+  showMoreTools: z.boolean().default(false),
 });
 
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;
 
-const initialSettings: SiteSettings = {
-  enableFancyAnimations: true,
-  enableExitConfirmation: true,
-  flipPrimaryMouseButton: false,
-  visualizeWrapArounds: true,
-};
+const initialSettings = SiteSettingsSchema.parse({});
 
 class SyncSubscription {
   private listeners: (() => void)[] = [];

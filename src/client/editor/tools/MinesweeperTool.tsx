@@ -11,6 +11,7 @@ export default memo(function MinesweeperTool() {
       name="Minesweeper"
       order={14}
       hotkey="8"
+      defaultHidden={true}
       sample={sample}
       component={MinesweeperSymbol}
     />

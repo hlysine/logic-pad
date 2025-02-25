@@ -9,10 +9,12 @@ import SymbolTool from './SymbolTool';
 import { allSymbols } from '../symbols';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
+import { useSettings } from '../contexts/SettingsContext.tsx';
 
 export default memo(function ToolboxEditor() {
   const { toolId, name, description, setTool, presets, setPresets } =
     useToolbox();
+  const [showMoreTools, setShowMoreTools] = useSettings('showMoreTools');
 
   useEffect(() => {
     setTool(null, null, null, null, null);
@@ -66,6 +68,13 @@ export default memo(function ToolboxEditor() {
           )}
         </GridConsumer>
       </div>
+      <button
+        type="button"
+        className="btn btn-sm w-fit self-center"
+        onClick={() => setShowMoreTools(!showMoreTools)}
+      >
+        {showMoreTools ? 'Show less' : 'Show more'}
+      </button>
       <span className="divider mt-0 mb-0"></span>
       <div className="flex gap-4 justify-between items-center pr-4">
         <div className="flex flex-col gap-2">

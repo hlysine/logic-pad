@@ -11,6 +11,7 @@ export default memo(function FocusTool() {
       name="Focus"
       order={15}
       hotkey="alt+2"
+      defaultHidden={true}
       sample={sample}
       component={FocusSymbol}
     />

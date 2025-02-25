@@ -1,3 +1,9 @@
+# 25/2/2025
+
+- Added **Focus Numbers**, supported by backtrack and universal solvers
+- Non-standard tools are now hidden behind a toggle by default
+- Redesigned the minesweeper symbol
+
 # 24/2/2025
 
 - Rework site settings to mostly be applied instantly

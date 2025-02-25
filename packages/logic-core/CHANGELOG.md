@@ -1,3 +1,7 @@
+# 0.8.0
+
+- Added focus numbers, supported by backtrack and universal solvers
+
 # 0.7.1
 
 - Fixed viewpoints in wrap-around grids

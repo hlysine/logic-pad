@@ -9,8 +9,8 @@ export default memo(function CustomIconTool() {
   return (
     <SymbolTool
       name="Custom Icon"
-      order={16}
-      hotkey="0"
+      order={18}
+      hotkey="shift+2"
       defaultHidden={true}
       sample={sample}
       component={CustomIconSymbol}

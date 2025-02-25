@@ -9,8 +9,8 @@ export default memo(function CustomTextTool() {
   return (
     <SymbolTool
       name="Custom Text"
-      order={15}
-      hotkey="9"
+      order={17}
+      hotkey="shift+1"
       defaultHidden={true}
       sample={sample}
       component={CustomTextSymbol}

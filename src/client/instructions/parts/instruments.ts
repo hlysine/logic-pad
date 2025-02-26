@@ -65,6 +65,7 @@ function normalizeVelocity(
   // the default velocity is 0.5 but drum samples are louder so their base velocity is 0.7
   if (note in drum) return (velocity - 0.7) * 20;
   const midi = Tone.Midi(note).toMidi();
+  velocity += 0.2;
   if (midi > c5Midi) return velocity;
   velocity -= 0.2;
   if (midi > e4Midi) return velocity;

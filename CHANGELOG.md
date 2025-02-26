@@ -1,3 +1,7 @@
+# 26/2/2025
+
+- Cut the number of samples loaded by music grids to reduce memory usage
+
 # 25/2/2025
 
 - Added **Focus Numbers**, supported by backtrack and universal solvers

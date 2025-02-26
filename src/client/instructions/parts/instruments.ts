@@ -23,21 +23,21 @@ export const playbackState = {
 export const piano = new Piano({
   release: false,
   pedal: false,
-  velocities: 5,
+  velocities: 1,
   maxPolyphony: 32,
 }).toDestination();
 
 export const pianoImmediatePedal = new Piano({
   release: false,
   pedal: false,
-  velocities: 5,
+  velocities: 1,
   maxPolyphony: 32,
 }).toDestination();
 
 export const pianoImmediate = new Piano({
   release: false,
   pedal: false,
-  velocities: 5,
+  velocities: 1,
   maxPolyphony: 32,
 }).toDestination();
 

@@ -151,9 +151,10 @@ export default memo(function PointerCaptureOverlay({
           prevCoord.current = { x, y };
 
           if (mouseContext.color === currentColor) return;
+          const oppositeColor = getPointerColor(x, y, opposite(targetColor));
           if (
             mouseContext.color === Color.Gray ||
-            currentColor === Color.Gray ||
+            oppositeColor === Color.Gray ||
             mouseContext.replacing
           )
             onTileClick(x, y, currentColor, mouseContext.color, e.ctrlKey);

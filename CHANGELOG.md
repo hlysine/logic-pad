@@ -1,6 +1,7 @@
 # 26/2/2025
 
 - Cut the number of samples loaded by music grids to reduce memory usage
+- Improved dragging behavior: tiles of opposite color will only be replaced if you stared dragging from a tile of opposite color
 
 # 25/2/2025
 

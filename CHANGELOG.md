@@ -2,6 +2,7 @@
 
 - Fixed minesweeper and focus numbers counting tiles twice in reversed wrap-around grids
 - Capitalized Minesweeper Numbers for consistency
+- Fixed a crash due to the tile count overlay activating while the grid is rendering
 
 # 26/2/2025
 

@@ -37,7 +37,7 @@ export default class MinesweeperSymbol extends NumberSymbol {
   );
 
   /**
-   * **Minesweeper numbers count opposite cells in 8 adjacent spaces**
+   * **Minesweeper Numbers count opposite cells in 8 adjacent spaces**
    *
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
@@ -56,7 +56,7 @@ export default class MinesweeperSymbol extends NumberSymbol {
   }
 
   public get explanation(): string {
-    return `*Minesweeper numbers* count opposite cells in 8 adjacent spaces`;
+    return `*Minesweeper Numbers* count opposite cells in 8 adjacent spaces`;
   }
 
   public get configs(): readonly AnyConfig[] | null {

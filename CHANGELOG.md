@@ -1,3 +1,7 @@
+# 27/2/2025
+
+- Capitalized Minesweeper Numbers for consistency
+
 # 26/2/2025
 
 - Cut the number of samples loaded by music grids to reduce memory usage

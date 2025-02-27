@@ -1,6 +1,7 @@
 # 0.8.0
 
 - Added focus numbers, supported by backtrack and universal solvers
+- Capitalized Minesweeper Numbers for consistency
 
 # 0.7.1
 

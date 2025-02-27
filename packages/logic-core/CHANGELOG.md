@@ -2,6 +2,7 @@
 
 - Added focus numbers, supported by backtrack and universal solvers
 - Capitalized Minesweeper Numbers for consistency
+- Fixed minesweeper and focus numbers counting tiles twice in reversed wrap-around grids
 
 # 0.7.1
 

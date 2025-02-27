@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
-import { Color } from '../primitives.js';
+import { Color, Position } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
 export default class MinesweeperSymbol extends NumberSymbol {
@@ -75,9 +75,15 @@ export default class MinesweeperSymbol extends NumberSymbol {
       return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
     let gray = 0;
     let opposite = 0;
+    const visited: Position[] = [];
     for (let y = this.y - 1; y <= this.y + 1; y++) {
       for (let x = this.x - 1; x <= this.x + 1; x++) {
         if (x === this.x && y === this.y) continue;
+        if (grid.wrapAround.value) {
+          const pos = grid.toArrayCoordinates(x, y);
+          if (visited.some(v => v.x === pos.x && v.y === pos.y)) continue;
+          visited.push(pos);
+        }
         const tile = grid.getTile(x, y);
         if (!tile.exists) continue;
         if (tile.color === Color.Gray) gray++;

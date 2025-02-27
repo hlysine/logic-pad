@@ -1,5 +1,6 @@
 # 27/2/2025
 
+- Fixed minesweeper and focus numbers counting tiles twice in reversed wrap-around grids
 - Capitalized Minesweeper Numbers for consistency
 
 # 26/2/2025

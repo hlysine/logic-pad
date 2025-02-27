@@ -1,6 +1,6 @@
 import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
-import { Color } from '../primitives.js';
+import { Color, Position } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
 const OFFSETS = [
@@ -81,9 +81,15 @@ export default class FocusSymbol extends NumberSymbol {
       return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
     let gray = 0;
     let same = 0;
+    const visited: Position[] = [];
     for (const [dx, dy] of OFFSETS) {
       const x = this.x + dx;
       const y = this.y + dy;
+      if (grid.wrapAround.value) {
+        const pos = grid.toArrayCoordinates(x, y);
+        if (visited.some(v => v.x === pos.x && v.y === pos.y)) continue;
+        visited.push(pos);
+      }
       const tile = grid.getTile(x, y);
       if (!tile.exists) continue;
       if (tile.color === Color.Gray) gray++;

@@ -66,6 +66,7 @@ import UniqueShapeBTModule from './data/solver/backtrack/rules/uniqueShape.js';
 import AreaNumberBTModule from './data/solver/backtrack/symbols/areaNumber.js';
 import DartBTModule from './data/solver/backtrack/symbols/dart.js';
 import DirectionLinkerBTModule from './data/solver/backtrack/symbols/directionLinker.js';
+import FocusBTModule from './data/solver/backtrack/symbols/focus.js';
 import GalaxyBTModule from './data/solver/backtrack/symbols/galaxy.js';
 import LetterBTModule from './data/solver/backtrack/symbols/letter.js';
 import LotusBTModule from './data/solver/backtrack/symbols/lotus.js';
@@ -212,6 +213,7 @@ export {
   AreaNumberBTModule,
   DartBTModule,
   DirectionLinkerBTModule,
+  FocusBTModule,
   GalaxyBTModule,
   LetterBTModule,
   LotusBTModule,

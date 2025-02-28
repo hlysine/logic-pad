@@ -153,7 +153,13 @@ const ImageGenerator = memo(function ImageGenerator() {
         },
       })
         .then(result => {
-          console.log(window.devicePixelRatio, result.width, result.height);
+          console.log(
+            'Rendered image with size',
+            result.width,
+            result.height,
+            'device pixel ratio',
+            window.devicePixelRatio
+          );
           const croppedCanvas = document.createElement('canvas');
           croppedCanvas.width = result.width - 16;
           croppedCanvas.height = result.height - 16;

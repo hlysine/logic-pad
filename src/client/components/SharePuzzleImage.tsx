@@ -76,28 +76,35 @@ const PuzzleImage = memo(
     return (
       <div
         ref={ref}
-        className={cn(
-          'fixed top-0 left-0 shrink-0 w-fit h-fit flex gap-4 items-center bg-neutral border-0 pointer-events-none opacity-0',
-          gridOnly
-            ? 'p-[calc(1rem+8px)]'
-            : 'py-[calc(1rem+8px)] pl-[calc(1rem+8px)] pr-[8px]'
-        )}
+        className="fixed top-0 left-0 shrink-0 w-fit h-fit bg-neutral border-0 m-0 pointer-events-none opacity-0 p-[8px]"
       >
-        <DisplayContext scale={resetScale ? 1 : scale}>
-          <GridStateContext state={resetGrid ? defaultState : state}>
-            <GridContext grid={newGrid} initialMetadata={metadata}>
-              <div className="flex flex-col gap-4">
-                {gridOnly || <Metadata simplified={true} responsive={false} />}
-                <MainGrid useToolboxClick={false} animated={false} />
-              </div>
-              {gridOnly || (
-                <div className="pr-2">
-                  <InstructionList responsive={false} />
+        <div
+          className={cn(
+            'w-fit h-fit flex gap-4 items-center',
+            gridOnly ? 'p-4' : 'py-4 pl-4 pr-0'
+          )}
+        >
+          <DisplayContext
+            scale={resetScale ? 1 : scale}
+            responsiveScale={false}
+          >
+            <GridStateContext state={resetGrid ? defaultState : state}>
+              <GridContext grid={newGrid} initialMetadata={metadata}>
+                <div className="flex flex-col gap-4">
+                  {gridOnly || (
+                    <Metadata simplified={true} responsive={false} />
+                  )}
+                  <MainGrid useToolboxClick={false} animated={false} />
                 </div>
-              )}
-            </GridContext>
-          </GridStateContext>
-        </DisplayContext>
+                {gridOnly || (
+                  <div className="pr-2">
+                    <InstructionList responsive={false} />
+                  </div>
+                )}
+              </GridContext>
+            </GridStateContext>
+          </DisplayContext>
+        </div>
       </div>
     );
   })
@@ -137,6 +144,7 @@ const ImageGenerator = memo(function ImageGenerator() {
         y: 0,
         windowHeight: 1080,
         windowWidth: 1920,
+        scale: 1,
         onclone(document, element) {
           element.parentElement?.removeChild(element);
           document.body.appendChild(element);
@@ -145,6 +153,7 @@ const ImageGenerator = memo(function ImageGenerator() {
         },
       })
         .then(result => {
+          console.log(window.devicePixelRatio, result.width, result.height);
           const croppedCanvas = document.createElement('canvas');
           croppedCanvas.width = result.width - 16;
           croppedCanvas.height = result.height - 16;

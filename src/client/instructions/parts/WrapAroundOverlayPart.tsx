@@ -24,7 +24,7 @@ export default memo(function WrapAroundOverlayPart({
   instruction,
 }: WrapAroundOverlayPartProps) {
   const { grid } = useGrid();
-  const { scale } = useDisplay();
+  const { scale, responsiveScale } = useDisplay();
   const [visualizeWrapArounds] = useSettings('visualizeWrapArounds');
   const leftGrid = useMemo(() => {
     if (instruction.horizontal === Wrapping.None) return grid;
@@ -149,14 +149,14 @@ export default memo(function WrapAroundOverlayPart({
       setTileConfig({
         width: grid.width,
         height: grid.height,
-        tileSize: computeTileSize(grid),
+        tileSize: computeTileSize(grid, responsiveScale),
       });
     window.addEventListener('resize', resizeHandler);
     resizeHandler();
     return () => {
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [grid]);
+  }, [grid, responsiveScale]);
   if (!visualizeWrapArounds) return null;
   if (
     tileConfig.tileSize === 0 ||

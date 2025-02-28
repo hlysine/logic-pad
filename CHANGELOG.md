@@ -1,3 +1,7 @@
+# 28/2/2025
+
+- Fixed browser zoom and device pixel ratio affecting the generated puzzle image
+
 # 27/2/2025
 
 - Fixed minesweeper and focus numbers counting tiles twice in reversed wrap-around grids

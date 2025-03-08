@@ -2033,9 +2033,6 @@ declare global {
     stringifyPuzzle(puzzle: Puzzle): string;
     parsePuzzle(input: string): Puzzle;
   }
-  export interface CancelRef {
-    cancel?: () => void;
-  }
   /**
    * Base class that all solvers must extend.
    */
@@ -2047,9 +2044,17 @@ declare global {
      */
     abstract get id(): string;
     /**
+     * The author(s) of the solver.
+     */
+    abstract get author(): string;
+    /**
      * A short paragraph describing when the user should use this solver.
      */
     abstract get description(): string;
+    /**
+     * Whether the solver supports cancellation. If `true`, the solver must respond to the abort signal if it is provided.
+     */
+    abstract get supportsCancellation(): boolean;
     /**
      * Solve the given grid. The implementation should delegate long-running tasks to a worker thread and yield solutions
      * asynchronously.
@@ -2065,12 +2070,12 @@ declare global {
      *
      * @param grid The grid to solve. The provided grid is guaranteed to be supported by the solver. Some tiles in the
      * grid may already be filled by the user. It is up to the solver to decide whether to respect these tiles or not.
-     * @param cancelRef A reference to a function that can be called to cancel the solver. If cancellation is supported,
-     * the solver can assign a function to `cancelRef.cancel` that will stop the solver when called.
+     * @param abortSignal An optional signal that the solver should subscribe to in order to cancel the operation. If the
+     * solver does not support cancellation, it should ignore this parameter.
      */
     abstract solve(
       grid: GridData,
-      cancelRef: CancelRef
+      abortSignal?: AbortSignal
     ): AsyncGenerator<GridData | null>;
     /**
      * Check if the solver supports the current browser environment. This method is called once when the user first clicks
@@ -2103,15 +2108,17 @@ declare global {
   }
   export declare const allSolvers: Map<string, Solver>;
   export declare abstract class EventIteratingSolver extends Solver {
+    readonly supportsCancellation = true;
     protected abstract createWorker(): Worker;
     solve(
       grid: GridData,
-      cancelRef: CancelRef
+      abortSignal?: AbortSignal
     ): AsyncGenerator<GridData | null>;
   }
   export declare class BacktrackSolver extends EventIteratingSolver {
     private static readonly supportedInstrs;
     readonly id = 'backtrack';
+    readonly author = 'ALaggyDev';
     readonly description =
       'Solves puzzles using backtracking with optimizations (blazingly fast). Support most rules and symbols (including underclued).';
     protected createWorker(): Worker;
@@ -2624,6 +2631,7 @@ declare global {
   }
   export declare class UniversalSolver extends EventIteratingSolver {
     readonly id = 'universal';
+    readonly author = 'romain22222, Lysine';
     readonly description =
       'A backtracking solver that supports all rules and symbols (including underclued) but is less optimized.';
     protected createWorker(): Worker;
@@ -2714,8 +2722,10 @@ declare global {
   ): import('grilops').Direction;
   export declare class Z3Solver extends Solver {
     readonly id = 'z3';
+    readonly author = 'Lysine';
     readonly description =
       'Good for confirming that a solution is unique, especially for larger puzzles. It is otherwise slower than most solvers in small to medium-sized puzzles.';
+    readonly supportsCancellation = false;
     isEnvironmentSupported(): Promise<boolean>;
     solve(grid: GridData): AsyncGenerator<GridData | null>;
     isInstructionSupported(instructionId: string): boolean;

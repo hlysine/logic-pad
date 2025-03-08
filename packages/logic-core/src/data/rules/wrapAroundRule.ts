@@ -218,7 +218,7 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
       return `The top and bottom edges are ${vertical}${verticalReverse}.`;
     }
     if (this.vertical === Wrapping.None) {
-      return `The left and right edges are ${horizontal}${verticalReverse}.`;
+      return `The left and right edges are ${horizontal}${horizontalReverse}.`;
     }
     if (horizontal === vertical) {
       if (horizontalReverse !== '') {

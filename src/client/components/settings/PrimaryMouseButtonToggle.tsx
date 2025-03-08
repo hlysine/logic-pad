@@ -1,22 +1,14 @@
-import { memo, useState } from 'react';
-import { siteOptions } from '../../uiHelper';
+import { memo } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export default memo(function PrimaryMouseButtonToggle() {
-  const [flippedPrimaryButton, setFlippedPrimaryButton] = useState(
-    siteOptions.flipPrimaryMouseButton
+  const [flippedPrimaryButton, setFlippedPrimaryButton] = useSettings(
+    'flipPrimaryMouseButton'
   );
-  const togglePrimaryButton = () => {
-    setFlippedPrimaryButton(sa => {
-      const val = !sa;
-      siteOptions.flipPrimaryMouseButton = val;
-      window.localStorage.setItem('flipPrimaryMouseButton', String(val));
-      return val;
-    });
-  };
   return (
     <div
       className="tooltip tooltip-info tooltip-bottom"
-      data-tip="Whether to use white for left click (Reload to take effect)"
+      data-tip="Whether to use left click for light tiles (Reload to take effect)"
     >
       <div className="form-control">
         <label className="label cursor-pointer">
@@ -25,7 +17,7 @@ export default memo(function PrimaryMouseButtonToggle() {
             type="checkbox"
             className="toggle"
             checked={flippedPrimaryButton}
-            onChange={togglePrimaryButton}
+            onChange={e => setFlippedPrimaryButton(e.currentTarget.checked)}
           />
         </label>
       </div>

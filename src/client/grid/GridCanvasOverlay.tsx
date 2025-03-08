@@ -54,6 +54,7 @@ export default memo(
         const resizeHandler = () => {
           const divWidth = current.offsetWidth;
           const newSize = width === 0 ? 0 : divWidth / width;
+          if (newSize <= 0) return;
           setTileSize(newSize);
           onResize?.(newSize);
         };

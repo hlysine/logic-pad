@@ -23,16 +23,18 @@ export interface MainGridProps {
   animated?: boolean;
 }
 
-export function computeTileSize(grid: GridData) {
+export function computeTileSize(grid: GridData, responsive: boolean) {
+  const windowWidth = responsive ? window.innerWidth : 1920;
+  const windowHeight = responsive ? window.innerHeight : 1080;
   const newSize =
-    window.innerWidth < 1280
+    windowWidth < 1280
       ? Math.min(
-          (window.innerWidth - 120) / grid.width,
-          (window.innerHeight - 180) / grid.height
+          (windowWidth - 120) / grid.width,
+          (windowHeight - 180) / grid.height
         )
       : Math.min(
-          (window.innerWidth - 120 - 640) / grid.width,
-          (window.innerHeight - 180) / grid.height
+          (windowWidth - 120 - 640) / grid.width,
+          (windowHeight - 180) / grid.height
         );
   return Math.floor(
     Math.max(25, Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize))
@@ -47,7 +49,7 @@ export default memo(function MainGrid({
   animated = animated ?? true;
   const gridContext = useGrid();
   const { grid, solution } = gridContext;
-  const { scale, setScale } = useDisplay();
+  const { scale, setScale, responsiveScale } = useDisplay();
   const { onTileClick } = useToolbox();
   const [tileConfig, setTileConfig] = useState<{
     width: number;
@@ -62,7 +64,7 @@ export default memo(function MainGrid({
       setTileConfig({
         width: grid.width,
         height: grid.height,
-        tileSize: computeTileSize(grid),
+        tileSize: computeTileSize(grid, responsiveScale),
       });
     const preventDefault = (e: Event) => e.preventDefault();
     window.addEventListener('resize', resizeHandler);
@@ -74,7 +76,7 @@ export default memo(function MainGrid({
       window.removeEventListener('gesturestart', preventDefault);
       window.removeEventListener('gesturechange', preventDefault);
     };
-  }, [grid]);
+  }, [grid, responsiveScale]);
 
   const bind = usePinch(
     ({ offset: [newScale] }) => {
@@ -137,7 +139,6 @@ export default memo(function MainGrid({
           }
           handleTileClick(x, y, target, flood, gridContext, false);
         }}
-        type={animated ? 'auto' : 'canvas'}
         bleed={grid.wrapAround.value ? 0.5 : 0}
       >
         <GridStateConsumer>

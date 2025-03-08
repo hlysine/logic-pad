@@ -40,6 +40,9 @@ import LotusSymbol, {
 import MinesweeperSymbol, {
   instance as minesweeperInstance,
 } from '../../symbols/minesweeperSymbol.js';
+import FocusSymbol, {
+  instance as focusInstance,
+} from '../../symbols/focusSymbol.js';
 import MyopiaSymbol, {
   instance as myopiaInstance,
 } from '../../symbols/myopiaSymbol.js';
@@ -65,6 +68,7 @@ import LotusBTModule from './symbols/lotus.js';
 import MinesweeperBTModule from './symbols/minesweeper.js';
 import MyopiaBTModule from './symbols/myopia.js';
 import ViewpointBTModule from './symbols/viewpoint.js';
+import FocusBTModule from './symbols/focus.js';
 
 function translateToBTGridData(grid: GridData): BTGridData {
   const tiles: BTTile[][] = array(grid.width, grid.height, (x, y) => {
@@ -101,6 +105,8 @@ function translateToBTGridData(grid: GridData): BTGridData {
         module = new MyopiaBTModule(symbol as MyopiaSymbol);
       } else if (id === minesweeperInstance.id) {
         module = new MinesweeperBTModule(symbol as MinesweeperSymbol);
+      } else if (id === focusInstance.id) {
+        module = new FocusBTModule(symbol as FocusSymbol);
       } else if (id === letterInstance.id) {
         continue;
       }

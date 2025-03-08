@@ -16,8 +16,9 @@ import GridConnections from '@logic-pad/core/data/gridConnections';
 import { cn } from '../../uiHelper.ts';
 import SymbolOverlay from '../../grid/SymbolOverlay.tsx';
 import GridZoneOverlay from '../../grid/GridZoneOverlay.tsx';
+import { useSettings } from '../../contexts/SettingsContext.tsx';
 
-export interface WrapAroundOverlayPartProps {
+interface WrapAroundOverlayPartProps {
   instruction: WrapAroundRule;
 }
 
@@ -137,7 +138,8 @@ export default memo(function WrapAroundOverlayPart({
   instruction,
 }: WrapAroundOverlayPartProps) {
   const { grid } = useGrid();
-  const { scale } = useDisplay();
+  const { scale, responsiveScale } = useDisplay();
+  const [visualizeWrapArounds] = useSettings('visualizeWrapArounds');
   const leftGrid = useMemo(() => {
     if (instruction.horizontal === Wrapping.None) return grid;
     return instruction.horizontal === Wrapping.Wrap ||
@@ -177,14 +179,15 @@ export default memo(function WrapAroundOverlayPart({
       setTileConfig({
         width: grid.width,
         height: grid.height,
-        tileSize: computeTileSize(grid),
+        tileSize: computeTileSize(grid, responsiveScale),
       });
     window.addEventListener('resize', resizeHandler);
     resizeHandler();
     return () => {
       window.removeEventListener('resize', resizeHandler);
     };
-  }, [grid]);
+  }, [grid, responsiveScale]);
+  if (!visualizeWrapArounds) return null;
   if (
     tileConfig.tileSize === 0 ||
     tileConfig.width !== grid.width ||

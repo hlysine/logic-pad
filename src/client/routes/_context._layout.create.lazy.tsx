@@ -9,7 +9,7 @@ import PuzzleEditorScreen from '../screens/PuzzleEditorScreen';
 import { IoWarningOutline } from 'react-icons/io5';
 import CopyLink from '../components/CopyLink';
 import { defaultGrid, useGrid } from '../contexts/GridContext';
-import { siteOptions } from '../uiHelper';
+import { useSettings } from '../contexts/SettingsContext';
 
 export const Route = createLazyFileRoute('/_context/_layout/create')({
   component: memo(function CreateMode() {
@@ -20,14 +20,14 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
       solutionHandling: SolutionHandling.Remove,
     });
     const { grid } = useGrid();
-    useBlocker(
-      () =>
-        siteOptions.bypassExitConfirmation ||
-        window.confirm('Are you sure you want to leave?'),
-      !params.d &&
-        !grid.equals(defaultGrid) &&
-        !siteOptions.bypassExitConfirmation
-    );
+    const [enableExitConfirmation] = useSettings('enableExitConfirmation');
+    useBlocker({
+      shouldBlockFn: () =>
+        enableExitConfirmation &&
+        !window.confirm('Are you sure you want to leave?'),
+      disabled:
+        !!params.d || grid.equals(defaultGrid) || !enableExitConfirmation,
+    });
 
     return (
       <PuzzleEditorScreen>

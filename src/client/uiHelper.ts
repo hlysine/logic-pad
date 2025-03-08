@@ -19,22 +19,10 @@ export function eq(a: number, b: number) {
   return Math.abs(a - b) < epsilon;
 }
 
-export const siteOptions = {
-  reducedMotionOverride:
-    window.localStorage.getItem('reducedMotion') === 'true',
-  bypassExitConfirmation:
-    window.localStorage.getItem('bypassExitConfirmation') === 'true',
-  flipPrimaryMouseButton:
-    window.localStorage.getItem('flipPrimaryMouseButton') === 'true',
-};
-
 export const externalReducedMotion = () =>
   // @ts-expect-error for browser support
   window.matchMedia(`(prefers-reduced-motion: reduce)`) === true ||
   window.matchMedia(`(prefers-reduced-motion: reduce)`).matches;
-
-export const prefersReducedMotion = () =>
-  siteOptions.reducedMotionOverride || externalReducedMotion();
 
 export const mousePosition = { clientX: 0, clientY: 0 };
 

@@ -20,6 +20,7 @@ export interface SymbolToolProps {
   sample: Symbol;
   component: React.NamedExoticComponent<SymbolProps<any>>;
   order?: number;
+  defaultHidden?: boolean;
   onNewSymbol?: (symbol: Symbol, grid: GridData) => Symbol;
 }
 
@@ -30,6 +31,7 @@ export default memo(function SymbolTool({
   sample,
   component: Component,
   order,
+  defaultHidden,
   onNewSymbol,
 }: SymbolToolProps) {
   id = id ?? sample.id;
@@ -40,6 +42,7 @@ export default memo(function SymbolTool({
       description="Left click to place a symbol. Click again to configure it."
       order={order}
       hotkey={hotkey}
+      defaultHidden={defaultHidden}
       gridOverlay={
         <ConfigConsumer>
           {({ setLocation, setRef }) => {

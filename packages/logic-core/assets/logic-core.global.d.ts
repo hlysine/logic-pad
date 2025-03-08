@@ -567,7 +567,7 @@ declare global {
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     get searchVariants(): SearchVariant[];
-    validateGrid(grid: GridData): RuleState;
+    validateGrid(_grid: GridData): RuleState;
     onSetGrid(
       _oldGrid: GridData,
       newGrid: GridData,
@@ -2357,6 +2357,43 @@ declare global {
       y: number
     ): Position$1 | null;
   }
+  export declare class FocusSymbol extends NumberSymbol {
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID;
+    /**
+     * **Focus Numbers count directly adjacent cells of the same color**
+     * @param x - The x-coordinate of the symbol.
+     * @param y - The y-coordinate of the symbol.
+     * @param number - The focus number.
+     */
+    constructor(x: number, y: number, number: number);
+    get id(): string;
+    get placementStep(): number;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    countTiles(grid: GridData): {
+      completed: number;
+      possible: number;
+    };
+    copyWith({
+      x,
+      y,
+      number,
+    }: {
+      x?: number;
+      y?: number;
+      number?: number;
+    }): this;
+    withNumber(number: number): this;
+  }
+  export declare class FocusBTModule extends BTModule {
+    instr: FocusSymbol;
+    private cachedCheckResult?;
+    constructor(instr: FocusSymbol);
+    checkGlobal(grid: BTGridData): CheckResult | false;
+    private buildCheckAndRating;
+  }
   export declare class GalaxySymbol extends DirectionLinkerSymbol {
     readonly x: number;
     readonly y: number;
@@ -2464,7 +2501,7 @@ declare global {
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
-     * **Minesweeper numbers count opposite cells in 8 adjacent spaces**
+     * **Minesweeper Numbers count opposite cells in 8 adjacent spaces**
      *
      * @param x - The x-coordinate of the symbol.
      * @param y - The y-coordinate of the symbol.

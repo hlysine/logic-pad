@@ -1,18 +1,11 @@
-import { memo, useState } from 'react';
-import { externalReducedMotion, siteOptions } from '../../uiHelper';
+import { memo } from 'react';
+import { externalReducedMotion } from '../../uiHelper';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export default memo(function AnimationToggle() {
-  const [reduceMotion, setReduceMotion] = useState(
-    siteOptions.reducedMotionOverride
+  const [enableFancyAnimations, setEnableFancyAnimations] = useSettings(
+    'enableFancyAnimations'
   );
-  const toggleReduceMotion = () => {
-    setReduceMotion(sa => {
-      const val = !sa;
-      siteOptions.reducedMotionOverride = val;
-      window.localStorage.setItem('reducedMotion', String(val));
-      return val;
-    });
-  };
   const external = externalReducedMotion();
   return (
     <div
@@ -29,9 +22,9 @@ export default memo(function AnimationToggle() {
           <input
             type="checkbox"
             className="toggle"
-            checked={external ? false : !reduceMotion}
+            checked={external ? false : enableFancyAnimations}
             disabled={external}
-            onChange={toggleReduceMotion}
+            onChange={e => setEnableFancyAnimations(e.currentTarget.checked)}
           />
         </label>
       </div>

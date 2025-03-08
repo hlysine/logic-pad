@@ -1,5 +1,12 @@
+# 0.8.0
+
+- Added focus numbers, supported by backtrack and universal solvers
+- Capitalized Minesweeper Numbers for consistency
+- Fixed minesweeper and focus numbers counting tiles twice in reversed wrap-around grids
+
 # 0.7.1
 
+- Fixed viewpoints in wrap-around grids
 - Fixed pattern detection, galaxies and lotuses when all edges are reverse-wrapped
   - Reverse-wrapping all edges simulates a real projective plane which is one-sided and cannot count the same tile twice in patterns
 

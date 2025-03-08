@@ -104,7 +104,12 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
       grid.height * tileSize + 2 * BLEED
     );
 
-    if (!position) return;
+    if (
+      !position ||
+      !Number.isFinite(position.x) ||
+      !Number.isFinite(position.y)
+    )
+      return;
     const tile = grid.getTile(position.x, position.y);
     if (!tile.exists) return;
 

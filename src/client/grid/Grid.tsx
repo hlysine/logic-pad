@@ -3,7 +3,7 @@ import GridData from '@logic-pad/core/data/grid';
 import { Color } from '@logic-pad/core/data/primitives';
 import CanvasGrid from './canvasGrid/Grid';
 import DOMGrid from './domGrid/Grid';
-import { prefersReducedMotion } from '../../client/uiHelper.ts';
+import { useReducedMotion } from '../contexts/SettingsContext.tsx';
 
 export interface GridProps {
   size: number;
@@ -20,10 +20,11 @@ export default memo(function Grid({
   ...props
 }: GridProps & { type?: 'dom' | 'canvas' | 'auto' }) {
   type ??= 'auto';
+  const prefersReducedMotion = useReducedMotion();
   if (
     type === 'canvas' ||
     (type === 'auto' &&
-      (props.grid.width * props.grid.height > 500 || prefersReducedMotion()))
+      (props.grid.width * props.grid.height > 500 || prefersReducedMotion))
   ) {
     return <CanvasGrid {...props} />;
   }

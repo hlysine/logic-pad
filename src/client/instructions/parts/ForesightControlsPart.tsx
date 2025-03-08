@@ -1,12 +1,51 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import { PartPlacement, PartSpec } from './types';
 import ForesightRule, {
   instance as foresightInstance,
 } from '@logic-pad/core/data/rules/foresightRule';
-import { useForesight } from '../../contexts/ForesightContext.tsx';
 import { IoIosEye } from 'react-icons/io';
 import { Color, Position } from '@logic-pad/core/data/primitives';
+import { useTheme } from '../../contexts/ThemeContext.tsx';
+import OutlineOverlay from '../../grid/OutlineOverlay.tsx';
+import GridData from '@logic-pad/core/data/grid';
+import InstructionPartPortal from '../InstructionPartPortal.tsx';
+
+export interface Foresight {
+  grid: GridData | null;
+  position: Position | null;
+  message: string | null;
+}
+
+interface ForesightOverlayPartProps {
+  position: Position | null;
+}
+
+const ForesightOverlayPart = memo(function ForesightOverlayPart({
+  position,
+}: ForesightOverlayPartProps) {
+  const { theme } = useTheme();
+  const { grid } = useGrid();
+  const accentColor = useMemo(
+    () =>
+      window.getComputedStyle(document.getElementById('color-ref-accent')!)
+        .color,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [theme]
+  );
+
+  const positions = useMemo(() => (position ? [[position]] : null), [position]);
+
+  if (positions === null) return null;
+  return (
+    <OutlineOverlay
+      positions={positions}
+      width={grid.width}
+      height={grid.height}
+      color={accentColor}
+    ></OutlineOverlay>
+  );
+});
 
 export interface ForesightControlsPartProps {
   instruction: ForesightRule;
@@ -18,14 +57,24 @@ export default memo(function ForesightControlsPart({
   instruction,
 }: ForesightControlsPartProps) {
   const { grid, solution } = useGrid();
-  const {
-    setForesight,
-    message,
-    position,
-    grid: foresightGrid,
-  } = useForesight();
+  const [foresight, setForesightRaw] = useState<Foresight>(() => ({
+    grid: null,
+    position: null,
+    message: null,
+  }));
   const [charges, setCharges] = useState(0);
   const [progress, setProgress] = useState(0);
+
+  const setForesight = useCallback(
+    (
+      grid: GridData | null,
+      position: Position | null,
+      message: string | null
+    ) => {
+      setForesightRaw({ grid, position, message });
+    },
+    [setForesightRaw]
+  );
 
   useEffect(() => {
     if (instruction.startFull) {
@@ -51,24 +100,27 @@ export default memo(function ForesightControlsPart({
   }, [progress, instruction.count]);
 
   useEffect(() => {
-    if (foresightGrid === null && (message != null || position != null)) {
-      setForesight(foresightGrid, null, null);
-    } else if (foresightGrid !== grid) {
+    if (
+      foresight.grid === null &&
+      (foresight.message != null || foresight.position != null)
+    ) {
+      setForesight(foresight.grid, null, null);
+    } else if (foresight.grid !== grid && foresight.grid !== null) {
       setForesight(null, null, null);
     }
-  }, [foresightGrid, grid, message, position, setForesight]);
+  }, [foresight, grid, setForesight]);
 
   if (!solution) return null;
 
   return (
     <>
-      {message && (
+      {foresight.message && (
         <div className="card grow-0 shrink-0 card-side rounded-none bg-primary/10">
           <figure className="shrink-0 p-2">
             <IoIosEye size={16} />
           </figure>
           <div className="card-body p-4">
-            <p>{message}</p>
+            <p>{foresight.message}</p>
           </div>
         </div>
       )}
@@ -144,6 +196,9 @@ export default memo(function ForesightControlsPart({
           max="100"
         ></progress>
       </div>
+      <InstructionPartPortal placement={PartPlacement.MainGridOverlay}>
+        <ForesightOverlayPart position={foresight.position} />
+      </InstructionPartPortal>
     </>
   );
 });

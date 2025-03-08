@@ -3,7 +3,14 @@ import GridData from '../grid.js';
 import { Color, Position } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
-export default class MinesweeperSymbol extends NumberSymbol {
+const OFFSETS = [
+  [0, -1],
+  [1, 0],
+  [0, 1],
+  [-1, 0],
+];
+
+export default class FocusSymbol extends NumberSymbol {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -29,26 +36,25 @@ export default class MinesweeperSymbol extends NumberSymbol {
   ]);
 
   private static readonly EXAMPLE_GRID = Object.freeze(
-    GridData.create(['wwbww', 'wwbwb', 'wwbwb', 'bwwww'])
-      .addSymbol(new MinesweeperSymbol(1, 1, 3))
-      .addSymbol(new MinesweeperSymbol(3, 1, 5))
-      .addSymbol(new MinesweeperSymbol(4, 1, 4))
-      .addSymbol(new MinesweeperSymbol(2, 3, 1))
+    GridData.create(['wwwww', 'bbbbw', 'wwbbw', 'wwwww']).withSymbols([
+      new FocusSymbol(0, 0, 1),
+      new FocusSymbol(4, 1, 2),
+      new FocusSymbol(1, 3, 3),
+    ])
   );
 
   /**
-   * **Minesweeper Numbers count opposite cells in 8 adjacent spaces**
-   *
+   * **Focus Numbers count directly adjacent cells of the same color**
    * @param x - The x-coordinate of the symbol.
    * @param y - The y-coordinate of the symbol.
-   * @param number - The number of cells seen by the symbol.
+   * @param number - The focus number.
    */
   public constructor(x: number, y: number, number: number) {
     super(x, y, number);
   }
 
   public get id(): string {
-    return `minesweeper`;
+    return `focus`;
   }
 
   public get placementStep(): number {
@@ -56,15 +62,15 @@ export default class MinesweeperSymbol extends NumberSymbol {
   }
 
   public get explanation(): string {
-    return `*Minesweeper Numbers* count opposite cells in 8 adjacent spaces`;
+    return '*Focus Numbers* count directly adjacent cells of the same color';
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return MinesweeperSymbol.CONFIGS;
+    return FocusSymbol.CONFIGS;
   }
 
   public createExampleGrid(): GridData {
-    return MinesweeperSymbol.EXAMPLE_GRID;
+    return FocusSymbol.EXAMPLE_GRID;
   }
 
   public countTiles(grid: GridData): { completed: number; possible: number } {
@@ -74,23 +80,22 @@ export default class MinesweeperSymbol extends NumberSymbol {
     if (color === Color.Gray)
       return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
     let gray = 0;
-    let opposite = 0;
+    let same = 0;
     const visited: Position[] = [];
-    for (let y = this.y - 1; y <= this.y + 1; y++) {
-      for (let x = this.x - 1; x <= this.x + 1; x++) {
-        if (x === this.x && y === this.y) continue;
-        if (grid.wrapAround.value) {
-          const pos = grid.toArrayCoordinates(x, y);
-          if (visited.some(v => v.x === pos.x && v.y === pos.y)) continue;
-          visited.push(pos);
-        }
-        const tile = grid.getTile(x, y);
-        if (!tile.exists) continue;
-        if (tile.color === Color.Gray) gray++;
-        else if (tile.color !== color) opposite++;
+    for (const [dx, dy] of OFFSETS) {
+      const x = this.x + dx;
+      const y = this.y + dy;
+      if (grid.wrapAround.value) {
+        const pos = grid.toArrayCoordinates(x, y);
+        if (visited.some(v => v.x === pos.x && v.y === pos.y)) continue;
+        visited.push(pos);
       }
+      const tile = grid.getTile(x, y);
+      if (!tile.exists) continue;
+      if (tile.color === Color.Gray) gray++;
+      else if (tile.color === color) same++;
     }
-    return { completed: opposite, possible: opposite + gray };
+    return { completed: same, possible: same + gray };
   }
 
   public copyWith({
@@ -102,7 +107,7 @@ export default class MinesweeperSymbol extends NumberSymbol {
     y?: number;
     number?: number;
   }): this {
-    return new MinesweeperSymbol(
+    return new FocusSymbol(
       x ?? this.x,
       y ?? this.y,
       number ?? this.number
@@ -114,4 +119,4 @@ export default class MinesweeperSymbol extends NumberSymbol {
   }
 }
 
-export const instance = new MinesweeperSymbol(0, 0, 1);
+export const instance = new FocusSymbol(0, 0, 1);

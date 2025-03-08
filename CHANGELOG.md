@@ -1,3 +1,38 @@
+# 28/2/2025
+
+- Fixed browser zoom and device pixel ratio affecting the generated puzzle image
+
+# 27/2/2025
+
+- Fixed minesweeper and focus numbers counting tiles twice in reversed wrap-around grids
+- Capitalized Minesweeper Numbers for consistency
+- Fixed a crash due to the tile count overlay activating while the grid is rendering
+
+# 26/2/2025
+
+- Cut the number of samples loaded by music grids to reduce memory usage
+- Improved dragging behavior: tiles of opposite color will only be replaced if you stared dragging from a tile of opposite color
+
+# 25/2/2025
+
+- Added **Focus Numbers**, supported by backtrack and universal solvers
+- Non-standard tools are now hidden behind a toggle by default
+- Redesigned the minesweeper symbol
+- Moved the zone tool to last and reworked keybinds
+
+# 24/2/2025
+
+- Rework site settings to mostly be applied instantly
+  - **Note: all site settings are reset**
+- Moved wrap-around visualization toggle to site settings
+
+# 23/2/2025
+
+- Added a toggle to turn off wrap-around visualizations
+- Fixed viewpoints in wrap-around grids
+- Fixed padding in a grid-only puzzle image
+- Fixed the code editor being cut off on large screens
+
 # 22/2/2025
 
 - You can now color the semi-transparent tiles directly in wrap-around rule

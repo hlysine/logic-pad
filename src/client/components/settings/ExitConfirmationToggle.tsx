@@ -1,18 +1,10 @@
-import { memo, useState } from 'react';
-import { siteOptions } from '../../uiHelper';
+import { memo } from 'react';
+import { useSettings } from '../../contexts/SettingsContext';
 
 export default memo(function ExitConfirmationToggle() {
-  const [bypassExitConfirmation, setBypassExitConfirmation] = useState(
-    siteOptions.bypassExitConfirmation
+  const [enableExitConfirmation, setEnableExitConfirmation] = useSettings(
+    'enableExitConfirmation'
   );
-  const toggleExitConfirmation = () => {
-    setBypassExitConfirmation(sa => {
-      const val = !sa;
-      siteOptions.bypassExitConfirmation = val;
-      window.localStorage.setItem('bypassExitConfirmation', String(val));
-      return val;
-    });
-  };
   return (
     <div
       className="tooltip tooltip-info tooltip-bottom"
@@ -24,8 +16,8 @@ export default memo(function ExitConfirmationToggle() {
           <input
             type="checkbox"
             className="toggle"
-            checked={!bypassExitConfirmation}
-            onChange={toggleExitConfirmation}
+            checked={enableExitConfirmation}
+            onChange={e => setEnableExitConfirmation(e.currentTarget.checked)}
           />
         </label>
       </div>

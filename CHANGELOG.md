@@ -1,3 +1,7 @@
+# 8/3/2025
+
+- Added support for reversed reflection in the wrap-around rule
+
 # 28/2/2025
 
 - Fixed browser zoom and device pixel ratio affecting the generated puzzle image

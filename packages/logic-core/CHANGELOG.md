@@ -1,3 +1,7 @@
+# 0.9.0
+
+- Added reversed reflection in wrap-around rule
+
 # 0.8.0
 
 - Added focus numbers, supported by backtrack and universal solvers

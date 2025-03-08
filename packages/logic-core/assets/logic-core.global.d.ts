@@ -86,6 +86,7 @@ declare global {
     None = 'none',
     Wrap = 'wrap',
     WrapReverse = 'wrap-reverse',
+    ReflectReverse = 'reflect-reverse',
   }
   export declare const WRAPPINGS: readonly Wrapping[];
   export declare enum Direction {
@@ -650,9 +651,7 @@ declare global {
     readonly vertical: Wrapping;
     private static readonly EXAMPLE_GRID_NONE;
     private static readonly EXAMPLE_GRID_HORIZONTAL;
-    private static readonly EXAMPLE_GRID_HORIZONTAL_REVERSE;
     private static readonly EXAMPLE_GRID_VERTICAL;
-    private static readonly EXAMPLE_GRID_VERTICAL_REVERSE;
     private static readonly SEARCH_VARIANTS;
     private static readonly CONFIGS;
     /**

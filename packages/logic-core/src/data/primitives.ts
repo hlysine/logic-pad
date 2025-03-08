@@ -89,12 +89,14 @@ export enum Wrapping {
   None = 'none',
   Wrap = 'wrap',
   WrapReverse = 'wrap-reverse',
+  ReflectReverse = 'reflect-reverse',
 }
 
 export const WRAPPINGS: readonly Wrapping[] = [
   Wrapping.None,
   Wrapping.Wrap,
   Wrapping.WrapReverse,
+  Wrapping.ReflectReverse,
 ];
 
 export enum Direction {

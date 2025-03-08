@@ -1,6 +1,10 @@
 # 8/3/2025
 
 - Added support for reversed reflection in the wrap-around rule
+- Small solver improvements
+  - All solvers now report "No solution" if no tiles are filled in an underclued grid
+  - Display author name of solvers
+  - Internal API change to the cancellation mechanism
 
 # 28/2/2025
 

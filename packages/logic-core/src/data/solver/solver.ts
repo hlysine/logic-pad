@@ -2,10 +2,6 @@ import GridData from '../grid.js';
 import { allRules } from '../rules/index.js';
 import { allSymbols } from '../symbols/index.js';
 
-export interface CancelRef {
-  cancel?: () => void;
-}
-
 /**
  * Base class that all solvers must extend.
  */
@@ -18,9 +14,19 @@ export default abstract class Solver {
   public abstract get id(): string;
 
   /**
+   * The author(s) of the solver.
+   */
+  public abstract get author(): string;
+
+  /**
    * A short paragraph describing when the user should use this solver.
    */
   public abstract get description(): string;
+
+  /**
+   * Whether the solver supports cancellation. If `true`, the solver must respond to the abort signal if it is provided.
+   */
+  public abstract get supportsCancellation(): boolean;
 
   /**
    * Solve the given grid. The implementation should delegate long-running tasks to a worker thread and yield solutions
@@ -37,12 +43,12 @@ export default abstract class Solver {
    *
    * @param grid The grid to solve. The provided grid is guaranteed to be supported by the solver. Some tiles in the
    * grid may already be filled by the user. It is up to the solver to decide whether to respect these tiles or not.
-   * @param cancelRef A reference to a function that can be called to cancel the solver. If cancellation is supported,
-   * the solver can assign a function to `cancelRef.cancel` that will stop the solver when called.
+   * @param abortSignal An optional signal that the solver should subscribe to in order to cancel the operation. If the
+   * solver does not support cancellation, it should ignore this parameter.
    */
   public abstract solve(
     grid: GridData,
-    cancelRef: CancelRef
+    abortSignal?: AbortSignal
   ): AsyncGenerator<GridData | null>;
 
   /**

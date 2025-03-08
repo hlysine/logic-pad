@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
@@ -63,11 +63,14 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
           <div className="modal-box text-base-content">
             <h3 className="font-bold text-xl">Available solvers</h3>
             {[...allSolvers.values()].map(solver => (
-              <p key={solver.id} className="py-2 text-left">
-                <b className="text-lg">{solver.id}</b>
-                <br />
-                {solver.description}
-              </p>
+              <Fragment key={solver.id}>
+                <p className="py-2 text-left">
+                  <b className="text-xl">{solver.id}</b>
+                  <span className="text-sm ms-4"> by {solver.author}</span>
+                  <br />
+                </p>
+                <p className="pb-2 text-left">{solver.description}</p>
+              </Fragment>
             ))}
             <div className="modal-action">
               <form method="dialog">

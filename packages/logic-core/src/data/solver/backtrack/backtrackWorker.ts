@@ -397,6 +397,12 @@ onmessage = e => {
 
   solve(grid, solution => {
     // if (count === 0) console.timeLog('Solve time', 'First solution');
+    if (solution) {
+      if (solution.resetTiles().colorEquals(solution)) {
+        postMessage(null);
+        return false;
+      }
+    }
 
     postMessage(Serializer.stringifyGrid(solution));
 

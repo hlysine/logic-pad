@@ -22,7 +22,6 @@ import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
 import { IconBaseProps } from 'react-icons';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
-import { CancelRef } from '@logic-pad/core/data/solver/solver';
 
 const SolverSelector = lazy(() => import('./SolverSelector'));
 
@@ -60,7 +59,7 @@ export default memo(function PuzzleChecklist() {
   const { solver } = useSolver();
 
   const solverRequest = useRef(0);
-  const [solveRef, setSolveRef] = useState<CancelRef | null>(null);
+  const [solveRef, setSolveRef] = useState<AbortController | null>(null);
   const [solution, setSolution] = useState<TiedToGrid<GridData | null> | null>(
     null
   );
@@ -71,14 +70,14 @@ export default memo(function PuzzleChecklist() {
     if (solution && !solution.grid.resetTiles().equals(grid.resetTiles())) {
       setSolution(null);
       if (solveRef !== null) {
-        solveRef.cancel?.();
+        solveRef.abort();
         setSolveRef(null);
       }
     }
     if (alternate && !alternate.grid.resetTiles().equals(grid.resetTiles())) {
       setAlternate(null);
       if (solveRef !== null) {
-        solveRef.cancel?.();
+        solveRef.abort();
         setSolveRef(null);
       }
     }
@@ -302,12 +301,12 @@ export default memo(function PuzzleChecklist() {
             <span className="flex-1 text-start">
               {solution === null ? 'Solving...' : 'Verifying...'}
             </span>
-            {solveRef?.cancel && (
+            {solver?.supportsCancellation && (
               <button
                 type="button"
                 className="btn btn-sm"
                 onClick={() => {
-                  solveRef.cancel?.();
+                  solveRef.abort();
                   setSolveRef(null);
                 }}
               >
@@ -334,15 +333,15 @@ export default memo(function PuzzleChecklist() {
               <SolverSelector
                 onSolve={async solver => {
                   const requestId = ++solverRequest.current;
-                  const cancelRef: CancelRef = {};
-                  setSolveRef(cancelRef);
+                  const abortController = new AbortController();
+                  setSolveRef(abortController);
                   setSolution(null);
                   setAlternate(null);
                   try {
                     let isAlternate = false;
                     for await (const solution of solver.solve(
                       grid,
-                      cancelRef
+                      abortController.signal
                     )) {
                       if (!isAlternate) {
                         if (requestId !== solverRequest.current) break;
@@ -357,7 +356,7 @@ export default memo(function PuzzleChecklist() {
                   } catch (ex) {
                     console.error(ex);
                   } finally {
-                    cancelRef.cancel?.();
+                    abortController.abort();
                     setSolveRef(null);
                   }
                 }}

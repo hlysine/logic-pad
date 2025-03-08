@@ -1,6 +1,9 @@
 # 0.9.0
 
 - Added reversed reflection in wrap-around rule
+- Breaking API change to solvers
+  - The `solve` method now accept an `AbortSignal` for cancellation
+  - Added new fields to solvers: `author` and `supportsCancellation`
 
 # 0.8.0
 

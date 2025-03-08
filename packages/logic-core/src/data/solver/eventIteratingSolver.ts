@@ -1,18 +1,21 @@
 import GridData from '../grid.js';
 import { Serializer } from '../serializer/allSerializers.js';
-import Solver, { CancelRef } from './solver.js';
+import Solver from './solver.js';
 import { EventIterator } from 'event-iterator';
 
 export default abstract class EventIteratingSolver extends Solver {
+  public readonly supportsCancellation = true;
+
   protected abstract createWorker(): Worker;
 
   public async *solve(
     grid: GridData,
-    cancelRef: CancelRef
+    abortSignal?: AbortSignal
   ): AsyncGenerator<GridData | null> {
     const worker = this.createWorker();
 
-    cancelRef.cancel = () => worker.terminate();
+    const terminateHandler = () => worker.terminate();
+    abortSignal?.addEventListener('abort', terminateHandler);
 
     try {
       const iterator = new EventIterator<GridData>(({ push, stop, fail }) => {
@@ -39,6 +42,7 @@ export default abstract class EventIteratingSolver extends Solver {
       yield null;
     } finally {
       worker.terminate();
+      abortSignal?.removeEventListener('abort', terminateHandler);
     }
   }
 }

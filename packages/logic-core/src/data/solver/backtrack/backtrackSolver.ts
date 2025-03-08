@@ -40,6 +40,8 @@ export default class BacktrackSolver extends EventIteratingSolver {
 
   public readonly id = 'backtrack';
 
+  public readonly author = 'ALaggyDev';
+
   public readonly description =
     'Solves puzzles using backtracking with optimizations (blazingly fast). Support most rules and symbols (including underclued).';
 

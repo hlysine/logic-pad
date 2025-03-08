@@ -4,6 +4,8 @@ import EventIteratingSolver from '../eventIteratingSolver.js';
 export default class UniversalSolver extends EventIteratingSolver {
   public readonly id = 'universal';
 
+  public readonly author = 'romain22222, Lysine';
+
   public readonly description =
     'A backtracking solver that supports all rules and symbols (including underclued) but is less optimized.';
 

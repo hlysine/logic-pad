@@ -104,6 +104,12 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
     new WrapAroundRule(Wrapping.Wrap, Wrapping.None).searchVariant(),
     new WrapAroundRule(Wrapping.None, Wrapping.Wrap).searchVariant(),
     new WrapAroundRule(Wrapping.Wrap, Wrapping.Wrap).searchVariant(),
+    new WrapAroundRule(Wrapping.ReflectReverse, Wrapping.None).searchVariant(),
+    new WrapAroundRule(Wrapping.None, Wrapping.ReflectReverse).searchVariant(),
+    new WrapAroundRule(
+      Wrapping.ReflectReverse,
+      Wrapping.ReflectReverse
+    ).searchVariant(),
   ];
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([

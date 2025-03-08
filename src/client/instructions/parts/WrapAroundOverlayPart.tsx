@@ -208,8 +208,7 @@ export default memo(function WrapAroundOverlayPart({
               (instruction.horizontal === Wrapping.WrapReverse ||
                 instruction.horizontal === Wrapping.ReflectReverse) &&
                 '-scale-y-100',
-              instruction.horizontal === Wrapping.Reflect ||
-                instruction.horizontal === Wrapping.ReflectReverse
+              instruction.horizontal === Wrapping.ReflectReverse
                 ? '-scale-x-100 mask-fade-r'
                 : 'mask-fade-l'
             )}
@@ -226,8 +225,7 @@ export default memo(function WrapAroundOverlayPart({
               (instruction.horizontal === Wrapping.WrapReverse ||
                 instruction.horizontal === Wrapping.ReflectReverse) &&
                 '-scale-y-100',
-              instruction.horizontal === Wrapping.Reflect ||
-                instruction.horizontal === Wrapping.ReflectReverse
+              instruction.horizontal === Wrapping.ReflectReverse
                 ? '-scale-x-100 mask-fade-l'
                 : 'mask-fade-r'
             )}
@@ -248,8 +246,7 @@ export default memo(function WrapAroundOverlayPart({
               (instruction.vertical === Wrapping.WrapReverse ||
                 instruction.vertical === Wrapping.ReflectReverse) &&
                 '-scale-x-100',
-              instruction.vertical === Wrapping.Reflect ||
-                instruction.vertical === Wrapping.ReflectReverse
+              instruction.vertical === Wrapping.ReflectReverse
                 ? '-scale-y-100 mask-fade-b'
                 : 'mask-fade-t'
             )}
@@ -266,8 +263,7 @@ export default memo(function WrapAroundOverlayPart({
               (instruction.vertical === Wrapping.WrapReverse ||
                 instruction.vertical === Wrapping.ReflectReverse) &&
                 '-scale-x-100',
-              instruction.vertical === Wrapping.Reflect ||
-                instruction.vertical === Wrapping.ReflectReverse
+              instruction.vertical === Wrapping.ReflectReverse
                 ? '-scale-y-100 mask-fade-t'
                 : 'mask-fade-b'
             )}

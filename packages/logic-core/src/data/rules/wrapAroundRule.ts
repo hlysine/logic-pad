@@ -46,25 +46,6 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
       .addSymbol(new LetterSymbol(4, 1, 'B'))
       .addSymbol(new LetterSymbol(0, 3, 'B'))
       .addSymbol(new LetterSymbol(4, 3, 'A')),
-    [Wrapping.Reflect]: GridData.create([
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-      'bwwwb',
-      'wwwww',
-    ])
-      .addSymbol(
-        new MyopiaSymbol(0, 1, false, orientationToggle(Orientation.Left))
-      )
-      .addSymbol(
-        new MyopiaSymbol(0, 3, false, orientationToggle(Orientation.Left))
-      )
-      .addSymbol(
-        new MyopiaSymbol(4, 1, false, orientationToggle(Orientation.Right))
-      )
-      .addSymbol(
-        new MyopiaSymbol(4, 3, false, orientationToggle(Orientation.Right))
-      ),
     [Wrapping.ReflectReverse]: GridData.create([
       'wwwww',
       'bwwww',
@@ -104,25 +85,6 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
       .addSymbol(new LetterSymbol(3, 0, 'D'))
       .addSymbol(new LetterSymbol(1, 4, 'D'))
       .addSymbol(new LetterSymbol(3, 4, 'C')),
-    [Wrapping.Reflect]: GridData.create([
-      'wbwbw',
-      'wwwww',
-      'wwwww',
-      'wwwww',
-      'wbwbw',
-    ])
-      .addSymbol(
-        new MyopiaSymbol(1, 0, false, orientationToggle(Orientation.Up))
-      )
-      .addSymbol(
-        new MyopiaSymbol(3, 0, false, orientationToggle(Orientation.Up))
-      )
-      .addSymbol(
-        new MyopiaSymbol(1, 4, false, orientationToggle(Orientation.Down))
-      )
-      .addSymbol(
-        new MyopiaSymbol(3, 4, false, orientationToggle(Orientation.Down))
-      ),
     [Wrapping.ReflectReverse]: GridData.create([
       'wbwww',
       'wwwww',
@@ -190,11 +152,7 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
       ) {
         y = grid.height - 1 - y;
       }
-      if (
-        (this.horizontal === Wrapping.Reflect ||
-          this.horizontal === Wrapping.ReflectReverse) &&
-        idx % 2 === 1
-      ) {
+      if (this.horizontal === Wrapping.ReflectReverse && idx % 2 === 1) {
         x = grid.width - 1 - x;
       }
     }
@@ -208,11 +166,7 @@ export default class WrapAroundRule extends Rule implements GetTileHandler {
       ) {
         x = grid.width - 1 - x;
       }
-      if (
-        (this.vertical === Wrapping.Reflect ||
-          this.vertical === Wrapping.ReflectReverse) &&
-        idx % 2 === 1
-      ) {
+      if (this.vertical === Wrapping.ReflectReverse && idx % 2 === 1) {
         y = grid.height - 1 - y;
       }
     }

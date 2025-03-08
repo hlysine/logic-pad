@@ -1,3 +1,7 @@
+# 8/3/2025
+
+- Added support for reversed reflection in the wrap-around rule
+
 # 28/2/2025
 
 - Fixed browser zoom and device pixel ratio affecting the generated puzzle image
@@ -41,7 +45,6 @@
 
 # 21/2/2025
 
-- (WIP) Added support for reflection and reversed reflection in the wrap-around rule
 - Fixed validation of lotuses and galaxies in wrap-around grids
 - Added a new option in image sharing - grid only
 - Fixed wrap-around rule in 0-size grids

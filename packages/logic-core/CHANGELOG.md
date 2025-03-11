@@ -1,3 +1,7 @@
+# 0.10.0
+
+- Added the cspuz solver
+
 # 0.9.0
 
 - Added reversed reflection in wrap-around rule

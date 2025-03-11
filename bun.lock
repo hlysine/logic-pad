@@ -24,6 +24,7 @@
         "grilops": "^0.1.1",
         "html2canvas-pro": "^1.5.8",
         "lodash": "^4.17.21",
+        "logic-pad-solver-core": "^0.1.1",
         "million": "^3.1.11",
         "monaco-editor": "^0.47.0",
         "monaco-themes": "^0.4.4",
@@ -1143,6 +1144,8 @@
     "lodash.merge": ["lodash.merge@4.6.2", "", {}, "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="],
 
     "lodash.sortby": ["lodash.sortby@4.7.0", "", {}, "sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA=="],
+
+    "logic-pad-solver-core": ["logic-pad-solver-core@0.1.1", "", {}, "sha512-YNbkU488R2YPxxIEuyFB3dEB7z3xaAgOJMlW85eH3NAWNlO/d4maM3znalkhRwAHGxBaafaIEtFee5l8+iJtag=="],
 
     "longest-streak": ["longest-streak@3.1.0", "", {}, "sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g=="],
 

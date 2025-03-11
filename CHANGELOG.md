@@ -1,3 +1,7 @@
+# 11/3/2025
+
+- Added the cspuz solver - WebAssembly based CSP reduction solver with incredible performance
+
 # 8/3/2025
 
 - Added support for reversed reflection in the wrap-around rule

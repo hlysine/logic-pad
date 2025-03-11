@@ -18,28 +18,34 @@ export default abstract class EventIteratingSolver extends Solver {
     abortSignal?.addEventListener('abort', terminateHandler);
 
     try {
-      const iterator = new EventIterator<GridData>(({ push, stop, fail }) => {
-        worker.postMessage(Serializer.stringifyGrid(grid.resetTiles()));
+      const iterator = new EventIterator<GridData | null>(
+        ({ push, stop, fail }) => {
+          worker.postMessage(Serializer.stringifyGrid(grid.resetTiles()));
 
-        worker.addEventListener('message', (e: MessageEvent<string | null>) => {
-          if (e.data) {
-            push(Serializer.parseGrid(e.data));
-          } else {
-            stop();
-          }
-        });
+          worker.addEventListener(
+            'message',
+            (e: MessageEvent<string | null>) => {
+              if (e.data) {
+                push(Serializer.parseGrid(e.data));
+              } else if (e.data === null) {
+                push(null);
+                stop(); // Stop after the first signal for out of solutions
+              } else {
+                stop();
+              }
+            }
+          );
 
-        worker.addEventListener('error', (e: ErrorEvent) => {
-          alert(`Error while solving!\n${e.message}`);
-          fail(e as unknown as Error);
-        });
-      });
+          worker.addEventListener('error', (e: ErrorEvent) => {
+            alert(`Error while solving!\n${e.message}`);
+            fail(e as unknown as Error);
+          });
+        }
+      );
 
       for await (const solution of iterator) {
         yield solution;
       }
-
-      yield null;
     } finally {
       worker.terminate();
       abortSignal?.removeEventListener('abort', terminateHandler);

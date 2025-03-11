@@ -14,7 +14,7 @@ import { instance as minesweeperInstance } from '../../symbols/minesweeperSymbol
 import { instance as focusInstance } from '../../symbols/focusSymbol.js';
 import { instance as myopiaInstance } from '../../symbols/myopiaSymbol.js';
 import { instance as viewpointInstance } from '../../symbols/viewpointSymbol.js';
-import { instance as connectAllInstance } from '../z3/modules/connectAllModule.js';
+import { instance as connectAllInstance } from '../../rules/connectAllRule.js';
 import EventIteratingSolver from '../eventIteratingSolver.js';
 
 export default class BacktrackSolver extends EventIteratingSolver {
@@ -43,7 +43,7 @@ export default class BacktrackSolver extends EventIteratingSolver {
   public readonly author = 'ALaggyDev';
 
   public readonly description =
-    'Solves puzzles using backtracking with optimizations (blazingly fast). Support most rules and symbols (including underclued).';
+    'Solves puzzles pretty fast using backtracking with optimizations. Support most rules and symbols (including underclued).';
 
   protected createWorker(): Worker {
     return new Worker(new URL(`./backtrackWorker.js`, import.meta.url), {

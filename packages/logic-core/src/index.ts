@@ -73,6 +73,8 @@ import LotusBTModule from './data/solver/backtrack/symbols/lotus.js';
 import MinesweeperBTModule from './data/solver/backtrack/symbols/minesweeper.js';
 import MyopiaBTModule from './data/solver/backtrack/symbols/myopia.js';
 import ViewpointBTModule from './data/solver/backtrack/symbols/viewpoint.js';
+import CspuzSolver from './data/solver/cspuz/cspuzSolver.js';
+import { gridToJson } from './data/solver/cspuz/jsonify.js';
 import EventIteratingSolver from './data/solver/eventIteratingSolver.js';
 import Solver from './data/solver/solver.js';
 import UniversalSolver from './data/solver/universal/universalSolver.js';
@@ -220,6 +222,8 @@ export {
   MinesweeperBTModule,
   MyopiaBTModule,
   ViewpointBTModule,
+  CspuzSolver,
+  gridToJson,
   EventIteratingSolver,
   Solver,
   UniversalSolver,

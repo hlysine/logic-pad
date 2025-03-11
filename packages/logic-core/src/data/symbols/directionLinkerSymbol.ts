@@ -226,40 +226,32 @@ export default class DirectionLinkerSymbol extends Symbol {
 
     // 1x2
     if (x % 1 === 0) {
-      return [
-        makeTurtle(
-          { x, y: y - 0.5 },
-          {
-            x,
-            y:
-              y +
-              (this.linkedDirections[Direction.Up] === Direction.Up &&
-              this.linkedDirections[Direction.Down] === Direction.Down
-                ? -0.5
-                : 0.5),
-          },
-          grid
-        ),
-      ];
+      if (
+        this.linkedDirections[Direction.Up] === Direction.Up &&
+        this.linkedDirections[Direction.Down] === Direction.Down
+      ) {
+        return [
+          makeTurtle({ x, y: y - 0.5 }, { x, y: y - 0.5 }, grid),
+          makeTurtle({ x, y: y + 0.5 }, { x, y: y + 0.5 }, grid),
+        ];
+      } else {
+        return [makeTurtle({ x, y: y - 0.5 }, { x, y: y + 0.5 }, grid)];
+      }
     }
 
     // 2x1
     if (y % 1 === 0) {
-      return [
-        makeTurtle(
-          { x: x - 0.5, y },
-          {
-            x:
-              x +
-              (this.linkedDirections[Direction.Left] === Direction.Left &&
-              this.linkedDirections[Direction.Right] === Direction.Right
-                ? -0.5
-                : 0.5),
-            y,
-          },
-          grid
-        ),
-      ];
+      if (
+        this.linkedDirections[Direction.Left] === Direction.Left &&
+        this.linkedDirections[Direction.Right] === Direction.Right
+      ) {
+        return [
+          makeTurtle({ x: x - 0.5, y }, { x: x - 0.5, y }, grid),
+          makeTurtle({ x: x + 0.5, y }, { x: x + 0.5, y }, grid),
+        ];
+      } else {
+        return [makeTurtle({ x: x - 0.5, y }, { x: x + 0.5, y }, grid)];
+      }
     }
 
     // 2x2

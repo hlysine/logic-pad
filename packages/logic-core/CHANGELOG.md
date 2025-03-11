@@ -1,3 +1,7 @@
+# 0.10.1
+
+- Fixed lotus between two tiles not checking half of the tiles
+
 # 0.10.0
 
 - Added the cspuz solver

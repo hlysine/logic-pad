@@ -1,6 +1,7 @@
 # 11/3/2025
 
 - Added the cspuz solver - WebAssembly based CSP reduction solver with incredible performance
+- Fixed lotuses between two tiles missing certain checks
 
 # 8/3/2025
 

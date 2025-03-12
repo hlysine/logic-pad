@@ -153,8 +153,10 @@ export default class GridData {
         arrayOrWidth,
         height!,
         tiles,
-        connections,
-        zones,
+        connections
+          ? GridConnections.validateEdges(connections, arrayOrWidth, height!)
+          : connections,
+        zones ? GridZones.validateEdges(zones, arrayOrWidth, height!) : zones,
         newSymbols,
         newRules
       );

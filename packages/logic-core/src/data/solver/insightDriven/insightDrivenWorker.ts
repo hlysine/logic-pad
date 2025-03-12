@@ -7,15 +7,18 @@ import Instruction from '../../instruction.js';
 import Rule from '../../rules/rule.js';
 import { AreaNumberHasRightSize } from "./lemmas/AreaNumberHasRightSize.js";
 
-export type Lemma = {
-  isAppliable: (grid: GridData) => boolean; // Say if the lemma is appliable to the grid
-  apply: (grid: GridData) => GridData; // Apply the lemma to the grid
-  score: number; // How difficult the lemma is to manage
-  requirements: {
-    instruction: Instruction;
-    presence: boolean;
-  }[]; // The base requirements for the lemma to be appliable
-};
+export class Lemma {
+  isAppliable: (grid: GridData) => boolean;
+  apply: (grid: GridData) => GridData;
+  score: number;
+  requirements: { instruction: Instruction; presence: boolean }[];
+  constructor(isAppliable: (grid: GridData) => boolean, apply: (grid: GridData) => GridData, score: number, requirements: { instruction: Instruction; presence: boolean; }[]) {
+    this.isAppliable = isAppliable;
+    this.apply = apply;
+    this.score = score;
+    this.requirements = requirements;
+  }
+}
 
 const allLemmas: Lemma[] = [
   AreaNumberHasRightSize,

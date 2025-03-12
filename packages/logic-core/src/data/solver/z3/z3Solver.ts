@@ -24,7 +24,7 @@ export default class Z3Solver extends Solver {
 
   public readonly supportsCancellation = false;
 
-  public async isEnvironmentSupported(): Promise<boolean> {
+  protected async isEnvironmentSupported(): Promise<boolean> {
     try {
       await init();
       return true;

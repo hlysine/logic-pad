@@ -102,7 +102,7 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
           onClick={async () => {
             let support = environmentCheck;
             if (support === undefined) {
-              support = await solver.isEnvironmentSupported();
+              support = await solver.environmentCheck.value;
               setEnvironmentCheck(support);
             }
             if (!support) return;

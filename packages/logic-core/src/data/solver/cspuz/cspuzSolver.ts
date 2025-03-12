@@ -47,7 +47,7 @@ export default class CspuzSolver extends EventIteratingSolver {
   public readonly author = 'semiexp';
 
   public readonly description =
-    'A blazingly fast WebAssembly solver that supports most rules and symbols (including underclued). No uniqueness check yet.';
+    'A blazingly fast WebAssembly solver that supports most rules and symbols (including underclued).';
 
   protected createWorker(): Worker {
     return new Worker(new URL('./cspuzWorker.js', import.meta.url), {

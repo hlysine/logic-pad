@@ -1,3 +1,4 @@
+import { CachedAccess } from '../dataHelper.js';
 import GridData from '../grid.js';
 import { allRules } from '../rules/index.js';
 import { allSymbols } from '../symbols/index.js';
@@ -60,9 +61,13 @@ export default abstract class Solver {
    *
    * @returns A promise that resolves to `true` if the environment is supported, or `false` otherwise.
    */
-  public isEnvironmentSupported(): Promise<boolean> {
+  protected isEnvironmentSupported(): Promise<boolean> {
     return Promise.resolve(true);
   }
+
+  public readonly environmentCheck = CachedAccess.of(() =>
+    this.isEnvironmentSupported()
+  );
 
   /**
    * Check if the solver supports the given instruction. This is used to render a small indication in the UI for each

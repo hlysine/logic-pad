@@ -1,3 +1,8 @@
+# 12/3/2025
+
+- Added the auto solver - automatically selects the fastest solver based on environment and grid support
+- Added support for uniqueness checking in the cspuz solver
+
 # 11/3/2025
 
 - Added the cspuz solver - WebAssembly based CSP reduction solver with incredible performance

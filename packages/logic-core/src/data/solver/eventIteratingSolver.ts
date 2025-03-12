@@ -8,6 +8,16 @@ export default abstract class EventIteratingSolver extends Solver {
 
   protected abstract createWorker(): Worker;
 
+  protected isEnvironmentSupported(): Promise<boolean> {
+    try {
+      const worker = this.createWorker();
+      worker.terminate();
+      return Promise.resolve(true);
+    } catch (ex) {
+      return Promise.resolve(false);
+    }
+  }
+
   public async *solve(
     grid: GridData,
     abortSignal?: AbortSignal

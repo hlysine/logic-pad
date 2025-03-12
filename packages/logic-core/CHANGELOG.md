@@ -1,3 +1,8 @@
+# 0.10.2
+
+- Added support for checking uniqueness in the cspuz solver
+- Added the auto solver
+
 # 0.10.1
 
 - Fixed lotus between two tiles not checking half of the tiles

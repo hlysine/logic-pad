@@ -53,6 +53,7 @@ import SerializerBase from './data/serializer/serializerBase.js';
 import SerializerV0 from './data/serializer/serializer_v0.js';
 import { getShapeVariants, normalizeShape, positionsToShape, shapeEquals, tilesToShape } from './data/shapes.js';
 import { allSolvers } from './data/solver/allSolvers.js';
+import AutoSolver from './data/solver/auto/autoSolver.js';
 import BacktrackSolver from './data/solver/backtrack/backtrackSolver.js';
 import BTModule, { BTGridData, BTTile, IntArray2D, colorToBTTile, createOneTileResult, getOppositeColor } from './data/solver/backtrack/data.js';
 import BanPatternBTModule from './data/solver/backtrack/rules/banPattern.js';
@@ -196,6 +197,7 @@ export {
   shapeEquals,
   tilesToShape,
   allSolvers,
+  AutoSolver,
   BacktrackSolver,
   BTModule,
   BTGridData,

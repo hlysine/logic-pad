@@ -2087,7 +2087,8 @@ declare global {
      *
      * @returns A promise that resolves to `true` if the environment is supported, or `false` otherwise.
      */
-    isEnvironmentSupported(): Promise<boolean>;
+    protected isEnvironmentSupported(): Promise<boolean>;
+    readonly environmentCheck: CachedAccess<Promise<boolean>>;
     /**
      * Check if the solver supports the given instruction. This is used to render a small indication in the UI for each
      * instruction in the editor.
@@ -2108,9 +2109,25 @@ declare global {
     isGridSupported(grid: GridData): boolean;
   }
   export declare const allSolvers: Map<string, Solver>;
+  export declare class AutoSolver extends Solver {
+    readonly id = 'auto';
+    readonly author = 'various contributors';
+    readonly description =
+      'Automatically select the fastest solver based on supported instructions and environment.';
+    readonly supportsCancellation = true;
+    private gridSupportCache;
+    isGridSupported(grid: GridData): boolean;
+    isInstructionSupported(instructionId: string): boolean;
+    protected isEnvironmentSupported(): Promise<boolean>;
+    solve(
+      grid: GridData,
+      abortSignal?: AbortSignal | undefined
+    ): AsyncGenerator<GridData | null>;
+  }
   export declare abstract class EventIteratingSolver extends Solver {
     readonly supportsCancellation = true;
     protected abstract createWorker(): Worker;
+    protected isEnvironmentSupported(): Promise<boolean>;
     solve(
       grid: GridData,
       abortSignal?: AbortSignal
@@ -2635,7 +2652,7 @@ declare global {
     readonly id = 'cspuz';
     readonly author = 'semiexp';
     readonly description =
-      'A blazingly fast WebAssembly solver that supports most rules and symbols (including underclued). No uniqueness check yet.';
+      'A blazingly fast WebAssembly solver that supports most rules and symbols (including underclued).';
     protected createWorker(): Worker;
     isGridSupported(grid: GridData): boolean;
     isInstructionSupported(instructionId: string): boolean;
@@ -2739,7 +2756,7 @@ declare global {
     readonly description =
       '(Obsolete) A WebAssembly solver that supports a limited set of rules and symbols.';
     readonly supportsCancellation = false;
-    isEnvironmentSupported(): Promise<boolean>;
+    protected isEnvironmentSupported(): Promise<boolean>;
     solve(grid: GridData): AsyncGenerator<GridData | null>;
     isInstructionSupported(instructionId: string): boolean;
     isGridSupported(grid: GridData): boolean;

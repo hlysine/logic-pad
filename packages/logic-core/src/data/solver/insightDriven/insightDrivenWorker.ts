@@ -3,10 +3,11 @@ import GridData from '../../grid.js';
 import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
 import validateGrid from '../../validate.js';
 import { State } from '../../primitives.js';
-import { AreaNumberHasRightSize } from './lemmas/AreaNumberHasRightSize.js';
 import { Lemma } from './LemmaUtils.js';
+import { AreaNumberHasRightSize } from './lemmas/AreaNumberHasRightSize.js';
+import { AreaNumberHasExactAvailability } from './lemmas/AreaNumberHasExactAvailability.js';
 
-const allLemmas: Lemma[] = [AreaNumberHasRightSize];
+const allLemmas: Lemma[] = [AreaNumberHasRightSize,AreaNumberHasExactAvailability];
 
 function getAvailableLemmas(grid: GridData): Lemma[] {
   return allLemmas
@@ -42,12 +43,11 @@ function solveNormal(
     if (!applyingLemma) {
       break; // No more lemmas to apply // TODO : find a way to handle no available lemmas
     }
+    console.log(`Applied lemma ${applyingLemma.id}`);
     appliedLemmas.push(applyingLemma);
     isValid = validateGrid(input, null);
   }
-  appliedLemmas.forEach(lemma => {
-    console.log(`Applied lemma ${lemma.id}`);
-  });
+  console.log("Total score: ", appliedLemmas.reduce((acc, lemma) => acc + lemma.score, 0));
   submitSolution(isValid.final !== State.Error ? input : null);
 }
 

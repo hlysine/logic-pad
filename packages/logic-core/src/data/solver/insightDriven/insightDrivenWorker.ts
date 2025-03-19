@@ -3,12 +3,16 @@ import GridData from '../../grid.js';
 import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
 import validateGrid from '../../validate.js';
 import { State } from '../../primitives.js';
-import { Lemma } from './LemmaUtils.js';
+import { Lemma } from './lemmaUtils.js';
 import { AreaNumberHasRightSize } from './lemmas/AreaNumberHasRightSize.js';
 import { AreaNumberHasExactAvailability } from './lemmas/AreaNumberHasExactAvailability.js';
 import { AreaNumberImpossibleSymbolColor } from './lemmas/AreaNumberImpossibleSymbolColor.js';
 
-const allLemmas: Lemma[] = [AreaNumberHasRightSize,AreaNumberHasExactAvailability, AreaNumberImpossibleSymbolColor];
+const allLemmas: Lemma[] = [
+  AreaNumberHasRightSize,
+  AreaNumberHasExactAvailability,
+  AreaNumberImpossibleSymbolColor,
+];
 
 function getAvailableLemmas(grid: GridData): Lemma[] {
   return allLemmas
@@ -30,7 +34,7 @@ function solveNormal(
 
   const availableLemmas = getAvailableLemmas(input);
   let applyingLemma: Lemma | null = null;
-  let applied= false;
+  let applied = false;
   const appliedLemmas: Lemma[] = [];
   while (isValid.final === State.Incomplete) {
     applyingLemma = null;
@@ -48,7 +52,10 @@ function solveNormal(
     appliedLemmas.push(applyingLemma);
     isValid = validateGrid(input, null);
   }
-  console.log("Total score: ", appliedLemmas.reduce((acc, lemma) => acc + lemma.score, 0));
+  console.log(
+    'Total score: ',
+    appliedLemmas.reduce((acc, lemma) => acc + lemma.score, 0)
+  );
   submitSolution(isValid.final !== State.Error ? input : null);
 }
 

@@ -1,4 +1,4 @@
-import { Lemma, makeBasicRequirementFunction } from '../LemmaUtils.js';
+import { Lemma, makeBasicRequirementFunction } from '../lemmaUtils.js';
 import AreaNumberSymbol from '../../../symbols/areaNumberSymbol.js';
 import OffByXRule from '../../../rules/offByXRule.js';
 import { Color, State } from '../../../primitives.js';

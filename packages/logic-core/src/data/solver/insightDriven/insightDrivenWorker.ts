@@ -3,35 +3,17 @@ import GridData from '../../grid.js';
 import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
 import validateGrid from '../../validate.js';
 import { State } from '../../primitives.js';
-import Instruction from '../../instruction.js';
-import Rule from '../../rules/rule.js';
-import { AreaNumberHasRightSize } from "./lemmas/AreaNumberHasRightSize.js";
+import { AreaNumberHasRightSize } from './lemmas/AreaNumberHasRightSize.js';
+import { Lemma } from './LemmaUtils.js';
 
-export class Lemma {
-  isAppliable: (grid: GridData) => boolean;
-  apply: (grid: GridData) => GridData;
-  score: number;
-  requirements: { instruction: Instruction; presence: boolean }[];
-  constructor(isAppliable: (grid: GridData) => boolean, apply: (grid: GridData) => GridData, score: number, requirements: { instruction: Instruction; presence: boolean; }[]) {
-    this.isAppliable = isAppliable;
-    this.apply = apply;
-    this.score = score;
-    this.requirements = requirements;
-  }
-}
-
-const allLemmas: Lemma[] = [
-  AreaNumberHasRightSize,
-];
+const allLemmas: Lemma[] = [AreaNumberHasRightSize];
 
 function getAvailableLemmas(grid: GridData): Lemma[] {
-  return allLemmas.filter(lemma => {
-    return lemma.requirements.every(req => {
-      return !(req.instruction instanceof Rule
-        ? grid.findRule(rule => rule.id === req.instruction.id)
-        : grid.findSymbol(symbol => symbol.id === req.instruction.id)) !== req.presence;
-    });
-  });
+  return allLemmas
+    .filter(lemma => {
+      return lemma.requirements(grid);
+    })
+    .sort((a, b) => a.score - b.score);
 }
 
 function solveNormal(
@@ -45,20 +27,27 @@ function solveNormal(
   }
 
   const availableLemmas = getAvailableLemmas(input);
-
+  let applyingLemma: Lemma | null = null;
+  let applied= false;
+  const appliedLemmas: Lemma[] = [];
   while (isValid.final === State.Incomplete) {
-    const appliableLemmas = availableLemmas.filter(lemma => {
-      return lemma.isAppliable(input);
-    });
-    if (appliableLemmas.length === 0) {
-      break; // No more lemmas to apply
+    applyingLemma = null;
+    for (const lemma of availableLemmas) {
+      [applied, input] = lemma.apply(input);
+      if (applied) {
+        applyingLemma = lemma;
+        break;
+      }
     }
-    const bestLemma = appliableLemmas.reduce((best, current) =>
-      best.score < current.score ? best : current
-    );
-    input = bestLemma.apply(input);
+    if (!applyingLemma) {
+      break; // No more lemmas to apply // TODO : find a way to handle no available lemmas
+    }
+    appliedLemmas.push(applyingLemma);
     isValid = validateGrid(input, null);
   }
+  appliedLemmas.forEach(lemma => {
+    console.log(`Applied lemma ${lemma.id}`);
+  });
   submitSolution(isValid.final !== State.Error ? input : null);
 }
 

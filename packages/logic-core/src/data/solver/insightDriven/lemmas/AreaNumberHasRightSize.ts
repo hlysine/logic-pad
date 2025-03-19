@@ -1,4 +1,4 @@
-import { Lemma } from '../insightDrivenWorker.js';
+import { Lemma, makeBasicRequirementFunction } from '../LemmaUtils.js';
 import AreaNumberSymbol from '../../../symbols/areaNumberSymbol.js';
 import OffByXRule from '../../../rules/offByXRule.js';
 import { Color, State } from '../../../primitives.js';
@@ -13,21 +13,15 @@ function getUnsatisfiedAreaNumberSymbols(grid: GridData): AreaNumberSymbol[] {
 }
 
 export const AreaNumberHasRightSize: Lemma = {
-  isAppliable: grid => {
-    // First find every area number symbol which is not satisfied
-    const areaNumberSymbols: AreaNumberSymbol[] =
-      getUnsatisfiedAreaNumberSymbols(grid);
-
-    // For each of these symbols, is there any that has exactly the right number of tiles?
-    return areaNumberSymbols.some(
-      symbol => symbol.countTiles(grid).completed === symbol.number
-    );
-  },
-  apply: grid => {
+  id: 'AreaNumberHasRightSize',
+  apply: (grid: GridData) => {
     // Find the first area number symbol which is not satisfied and has exactly the right number of tiles
-    const areaNumberSymbol: AreaNumberSymbol = getUnsatisfiedAreaNumberSymbols(
-      grid
-    ).find(symbol => symbol.countTiles(grid).completed === symbol.number)!;
+    const unsatisfiedAreaNumberSymbol: AreaNumberSymbol[] =
+      getUnsatisfiedAreaNumberSymbols(grid);
+    const areaNumberSymbol: AreaNumberSymbol = unsatisfiedAreaNumberSymbol.find(
+      symbol => symbol.countTiles(grid).completed === symbol.number
+    )!;
+    if (!areaNumberSymbol) return [false, grid]; // No symbol found
     // Surround the empty tiles around the area number region using the opposite color
     const thisX = Math.floor(areaNumberSymbol.x);
     const thisY = Math.floor(areaNumberSymbol.y);
@@ -61,10 +55,10 @@ export const AreaNumberHasRightSize: Lemma = {
         }
       }
     );
-    return grid;
+    return [true, grid];
   },
   score: 1,
-  requirements: [
+  requirements: makeBasicRequirementFunction([
     {
       instruction: areaNumberInstance,
       presence: true,
@@ -73,5 +67,5 @@ export const AreaNumberHasRightSize: Lemma = {
       instruction: new OffByXRule(0),
       presence: false,
     },
-  ],
+  ]),
 };

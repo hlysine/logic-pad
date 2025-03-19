@@ -6,8 +6,9 @@ import { State } from '../../primitives.js';
 import { Lemma } from './LemmaUtils.js';
 import { AreaNumberHasRightSize } from './lemmas/AreaNumberHasRightSize.js';
 import { AreaNumberHasExactAvailability } from './lemmas/AreaNumberHasExactAvailability.js';
+import { AreaNumberImpossibleSymbolColor } from './lemmas/AreaNumberImpossibleSymbolColor.js';
 
-const allLemmas: Lemma[] = [AreaNumberHasRightSize,AreaNumberHasExactAvailability];
+const allLemmas: Lemma[] = [AreaNumberHasRightSize,AreaNumberHasExactAvailability, AreaNumberImpossibleSymbolColor];
 
 function getAvailableLemmas(grid: GridData): Lemma[] {
   return allLemmas

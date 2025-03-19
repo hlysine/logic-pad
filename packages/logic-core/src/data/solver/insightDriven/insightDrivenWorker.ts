@@ -9,15 +9,15 @@ import { AreaNumberHasExactAvailability } from './lemmas/AreaNumberHasExactAvail
 import { AreaNumberImpossibleSymbolColor } from './lemmas/AreaNumberImpossibleSymbolColor.js';
 
 const allLemmas: Lemma[] = [
-  AreaNumberHasRightSize,
-  AreaNumberHasExactAvailability,
-  AreaNumberImpossibleSymbolColor,
+  new AreaNumberHasRightSize(),
+  new AreaNumberHasExactAvailability(),
+  new AreaNumberImpossibleSymbolColor(),
 ];
 
 function getAvailableLemmas(grid: GridData): Lemma[] {
   return allLemmas
     .filter(lemma => {
-      return lemma.requirements(grid);
+      return lemma.isApplicable(grid);
     })
     .sort((a, b) => a.score - b.score);
 }

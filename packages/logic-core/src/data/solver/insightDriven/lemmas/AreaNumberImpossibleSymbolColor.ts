@@ -1,10 +1,10 @@
-import { Lemma, makeBasicRequirementFunction } from '../lemmaUtils.js';
-import AreaNumberSymbol from '../../../symbols/areaNumberSymbol.js';
-import OffByXRule from '../../../rules/offByXRule.js';
+import { Lemma } from '../lemmaUtils.js';
+import AreaNumberSymbol, {
+  instance as areaNumberInstance,
+} from '../../../symbols/areaNumberSymbol.js';
+import { instance as offByXInstance } from '../../../rules/offByXRule.js';
 import { Color, State } from '../../../primitives.js';
 import GridData from '../../../grid.js';
-
-const areaNumberInstance = new AreaNumberSymbol(0, 0, 0);
 
 function getUnsatisfiedGrayAreaNumberSymbols(
   grid: GridData
@@ -17,9 +17,11 @@ function getUnsatisfiedGrayAreaNumberSymbols(
   );
 }
 
-export const AreaNumberImpossibleSymbolColor: Lemma = {
-  id: 'AreaNumberImpossibleSymbolColor',
-  apply: (grid: GridData) => {
+export class AreaNumberImpossibleSymbolColor extends Lemma {
+  public readonly id = 'AreaNumberImpossibleSymbolColor';
+  public readonly score = 3;
+
+  public apply(grid: GridData): [boolean, GridData] {
     // Find the first area number symbol which is not satisfied and has exactly the right number of tiles
     const unsatisfiedGrayAreaNumberSymbol: AreaNumberSymbol[] =
       getUnsatisfiedGrayAreaNumberSymbols(grid);
@@ -55,16 +57,18 @@ export const AreaNumberImpossibleSymbolColor: Lemma = {
     }
     if (!areaNumberSymbol) return [false, grid]; // No symbol found
     return [true, (checks[0] ? tmpGrid1 : tmpGrid2!)!];
-  },
-  score: 3,
-  requirements: makeBasicRequirementFunction([
-    {
-      instruction: areaNumberInstance,
-      presence: true,
-    },
-    {
-      instruction: new OffByXRule(0),
-      presence: false,
-    },
-  ]),
-};
+  }
+
+  public isApplicable(grid: GridData) {
+    return Lemma.basicRequirements(grid, [
+      {
+        instructionId: areaNumberInstance.id,
+        presence: true,
+      },
+      {
+        instructionId: offByXInstance.id,
+        presence: false,
+      },
+    ]);
+  }
+}

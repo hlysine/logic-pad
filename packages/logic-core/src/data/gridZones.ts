@@ -54,6 +54,40 @@ export default class GridZones {
     );
   }
 
+  public static validateEdges(
+    connections: GridZones,
+    width: number,
+    height: number
+  ): GridZones {
+    const newEdges: Edge[] = [];
+    for (const edge of connections.edges) {
+      if (
+        edge.x1 < -1 ||
+        edge.x1 >= width + 1 ||
+        edge.y1 < -1 ||
+        edge.y1 >= height + 1
+      ) {
+        continue;
+      }
+      if (
+        edge.x2 < -1 ||
+        edge.x2 >= width + 1 ||
+        edge.y2 < -1 ||
+        edge.y2 >= height + 1
+      ) {
+        continue;
+      }
+      if (Math.abs(edge.x1 - edge.x2) + Math.abs(edge.y1 - edge.y2) !== 1) {
+        continue;
+      }
+      newEdges.push(edge);
+    }
+    if (newEdges.length === connections.edges.length) {
+      return connections;
+    }
+    return new GridZones(newEdges);
+  }
+
   public insertColumn(index: number): GridZones {
     return new GridZones(
       this.edges.map(edge => {

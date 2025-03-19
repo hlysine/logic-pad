@@ -120,6 +120,30 @@ export default class GridConnections extends GridZones {
     return new GridConnections(edges);
   }
 
+  public static validateEdges(
+    connections: GridConnections,
+    width: number,
+    height: number
+  ): GridConnections {
+    const newEdges: Edge[] = [];
+    for (const edge of connections.edges) {
+      if (edge.x1 < 0 || edge.x1 >= width || edge.y1 < 0 || edge.y1 >= height) {
+        continue;
+      }
+      if (edge.x2 < 0 || edge.x2 >= width || edge.y2 < 0 || edge.y2 >= height) {
+        continue;
+      }
+      if (Math.abs(edge.x1 - edge.x2) + Math.abs(edge.y1 - edge.y2) !== 1) {
+        continue;
+      }
+      newEdges.push(edge);
+    }
+    if (newEdges.length === connections.edges.length) {
+      return connections;
+    }
+    return new GridConnections(newEdges);
+  }
+
   public insertColumn(index: number): GridConnections {
     return new GridConnections(
       this.edges.flatMap(edge => {

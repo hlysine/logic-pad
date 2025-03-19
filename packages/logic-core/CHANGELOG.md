@@ -1,3 +1,7 @@
+# 0.10.3
+
+- Added checks to remove out-of-bound connections/zones
+
 # 0.10.2
 
 - Added support for checking uniqueness in the cspuz solver

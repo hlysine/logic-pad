@@ -2,6 +2,7 @@
 
 - Added the auto solver - automatically selects the fastest solver based on environment and grid support
 - Added support for uniqueness checking in the cspuz solver
+- Out-of-bounds grid connections/zones are no longer allowed
 
 # 11/3/2025
 

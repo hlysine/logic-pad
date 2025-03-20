@@ -21,6 +21,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import RuleData from '@logic-pad/core/data/rules/rule';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.ts';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -49,11 +50,25 @@ export default memo(function InstructionList({
   const { grid, setGrid } = useGrid();
   const { state } = useGridState();
   const filteredRules = useMemo<SortableItem[]>(() => {
-    if (editable)
-      return grid.rules.map((rule, i) => ({
-        id: i,
-        rule,
-      }));
+    if (editable) {
+      const uniqueIds = new Map<string, number>();
+      return grid.rules.map(rule => {
+        const serialized = Serializer.stringifyRule(rule);
+        let id: number;
+        if (uniqueIds.has(serialized)) {
+          const i = uniqueIds.get(serialized)!;
+          id = i + 1;
+          uniqueIds.set(serialized, id);
+        } else {
+          id = 0;
+          uniqueIds.set(serialized, 0);
+        }
+        return {
+          id: `${id}-${serialized}`,
+          rule,
+        };
+      });
+    }
     return grid.rules
       .filter(rule => rule.visibleWhenSolving)
       .map((rule, i) => ({
@@ -189,7 +204,7 @@ export default memo(function InstructionList({
         {(editable ? wrapWithDraggable : (t: React.ReactNode) => t)(
           filteredRules.map(({ rule, id }, i) => (
             <Instruction
-              key={rule.id + i.toString()}
+              key={id}
               editable={editable}
               id={id}
               instruction={rule}

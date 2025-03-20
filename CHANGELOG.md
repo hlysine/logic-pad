@@ -1,3 +1,7 @@
+# 20/3/2025
+
+- Improved the accuracy of drag-and-drop animations in the editor's rule list
+
 # 12/3/2025
 
 - Added the auto solver - automatically selects the fastest solver based on environment and grid support

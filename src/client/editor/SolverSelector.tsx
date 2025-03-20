@@ -96,7 +96,7 @@ export default memo(function SolverSelector({ onSolve }: SolverSelectorProps) {
         <button
           type="button"
           className={cn(
-            'btn btn-outline btn-info btn-sm',
+            'btn btn-outline btn-primary btn-sm',
             environmentCheck === false && 'btn-error'
           )}
           onClick={async () => {

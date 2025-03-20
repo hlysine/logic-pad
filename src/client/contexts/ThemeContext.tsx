@@ -5,8 +5,8 @@ import { createContext, memo, useContext, useEffect, useState } from 'react';
 export const themeKey = 'theme';
 
 export const SUPPORTED_THEMES = [
-  ['light', 'vs'],
   ['dark', 'vs-dark'],
+  ['light', 'vs'],
   ['cupcake', 'vs'],
   ['bumblebee', 'vs'],
   ['emerald', 'vs'],

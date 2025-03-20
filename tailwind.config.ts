@@ -60,8 +60,32 @@ const tailwindConfig = {
   plugins: [daisyui, radialGradientPlugin],
   daisyui: {
     themes: [
-      'light',
-      'dark',
+      {
+        light: {
+          'color-scheme': 'light',
+          primary: '#185abd',
+          'primary-content': '#ffffff',
+          secondary: 'oklch(69.71% 0.329 342.55)',
+          'secondary-content': 'oklch(98.71% 0.0106 342.55)',
+          accent: '#8f8569',
+          'accent-content': '#ffffff',
+          neutral: '#e0e0e0',
+          'neutral-content': '#555555',
+          'base-100': '#F9F9F9',
+          'base-200': '#F3F3F3',
+          'base-300': '#E5E6E6',
+          'base-content': '#1f2937',
+          'error-content': '#ffffff',
+          'success-content': '#ffffff',
+          info: '#c2d5f2',
+        },
+      },
+      {
+        dark: {
+          ...themes.dark,
+          neutral: '#343c47',
+        },
+      },
       'cupcake',
       'bumblebee',
       'emerald',
@@ -73,7 +97,14 @@ const tailwindConfig = {
       'halloween',
       'garden',
       'forest',
-      'aqua',
+      {
+        aqua: {
+          ...themes.aqua,
+          accent: '#ffe999',
+          'neutral-content': '#ffffff',
+          success: '#5ad579',
+        },
+      },
       {
         lofi: {
           ...themes.lofi,

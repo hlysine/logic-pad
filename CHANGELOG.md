@@ -1,6 +1,10 @@
 # 20/3/2025
 
 - Improved the accuracy of drag-and-drop animations in the editor's rule list
+- Color adjustments
+  - Light theme no longer has a dark background
+  - Dark theme now has a slightly brighter background to contrast with dark tiles
+  - Aqua theme now uses white text for contrast
 
 # 12/3/2025
 

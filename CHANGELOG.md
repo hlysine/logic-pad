@@ -1,3 +1,7 @@
+# 21/3/2025
+
+- Removed top nav bar shadow
+
 # 20/3/2025
 
 - Improved the accuracy of drag-and-drop animations in the editor's rule list

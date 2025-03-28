@@ -1,3 +1,4 @@
+import GridData from './grid.js';
 import { Color, Position } from './primitives.js';
 import TileData from './tile.js';
 
@@ -148,5 +149,29 @@ export function normalizeShape(shape: Shape): Shape {
   return variants.reduce(
     (min, variant) => (compareShape(variant, min) < 0 ? variant : min),
     variants[0]
+  );
+}
+
+export function sanitizePatternGrid(
+  pattern: GridData,
+  tileMapper: (tile: TileData) => TileData = t => t
+): GridData {
+  return (
+    pattern
+      // unlock all tiles
+      .withTiles(tiles =>
+        tiles.map(row =>
+          row.map(t =>
+            tileMapper(
+              t.exists
+                ? t.withFixed(false)
+                : t.copyWith({ exists: true, color: Color.Gray, fixed: false })
+            )
+          )
+        )
+      )
+      // strip all symbols and rules
+      .withRules([])
+      .withSymbols(new Map())
   );
 }

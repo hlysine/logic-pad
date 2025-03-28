@@ -2,7 +2,12 @@ import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
 import { array } from '../dataHelper.js';
 import { Color, RuleState, State, Position } from '../primitives.js';
-import { Shape, getShapeVariants, tilesToShape } from '../shapes.js';
+import {
+  Shape,
+  getShapeVariants,
+  sanitizePatternGrid,
+  tilesToShape,
+} from '../shapes.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class BanPatternRule extends Rule {
@@ -35,20 +40,7 @@ export default class BanPatternRule extends Rule {
    */
   public constructor(pattern: GridData) {
     super();
-    this.pattern = pattern
-      // unlock all tiles
-      .withTiles(tiles =>
-        tiles.map(row =>
-          row.map(t =>
-            t.exists
-              ? t.withFixed(false)
-              : t.copyWith({ exists: true, color: Color.Gray, fixed: false })
-          )
-        )
-      )
-      // strip all symbols and rules
-      .withRules([])
-      .withSymbols(new Map());
+    this.pattern = sanitizePatternGrid(pattern);
     this.cache = getShapeVariants(tilesToShape(this.pattern.tiles));
   }
 

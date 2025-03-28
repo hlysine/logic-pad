@@ -1,6 +1,7 @@
 # 28/3/2025
 
 - Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present
+- Added "All light/dark area must contain this pattern" rule
 
 # 21/3/2025
 

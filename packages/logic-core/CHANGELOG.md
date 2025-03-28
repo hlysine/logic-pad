@@ -1,3 +1,7 @@
+# 0.11.0
+
+- Added "All light/dark area must contain this pattern" rule
+
 # 0.10.4
 
 - Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present

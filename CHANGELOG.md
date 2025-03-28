@@ -1,3 +1,7 @@
+# 28/3/2025
+
+- Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present
+
 # 21/3/2025
 
 - Removed top nav bar shadow

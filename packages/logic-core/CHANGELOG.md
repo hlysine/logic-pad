@@ -1,3 +1,7 @@
+# 0.10.4
+
+- Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present
+
 # 0.10.3
 
 - Added checks to remove out-of-bound connections/zones

@@ -95,7 +95,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
-    exclude: ['@logic-pad/core'],
+    exclude: ['@logic-pad/core', 'logic-pad-solver-core'],
     include: ['event-iterator', 'z3-solver'],
   },
   resolve: {

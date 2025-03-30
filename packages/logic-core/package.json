@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "type": "module",
   "files": [
     "dist",
@@ -58,6 +58,7 @@
     "events": "^3.3.0",
     "grilops": "^0.1.2",
     "lodash": "^4.17.21",
+    "logic-pad-solver-core": "^0.1.2",
     "z3-solver": "^4.13.0",
     "zod": "^3.24.1"
   },

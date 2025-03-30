@@ -1,3 +1,7 @@
+# 30/3/2025
+
+- Updated the cspuz solver to fix lotuses/galaxies
+
 # 28/3/2025
 
 - Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present

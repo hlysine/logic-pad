@@ -1,3 +1,7 @@
+# 0.11.1
+
+- Updated logic-pad-solver-core to 0.1.2
+
 # 0.11.0
 
 - Added "All light/dark area must contain this pattern" rule

@@ -1,3 +1,7 @@
+# 14/4/2025
+
+- Excluded the wrap-around rule from the auto solver's optimization
+
 # 30/3/2025
 
 - Updated the cspuz solver to fix lotuses/galaxies

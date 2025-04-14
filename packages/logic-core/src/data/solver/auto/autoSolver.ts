@@ -4,6 +4,7 @@ import { instance as lyingSymbolInstance } from '../../rules/lyingSymbolRule.js'
 import { instance as offByXInstance } from '../../rules/offByXRule.js';
 import { instance as lotusInstance } from '../../symbols/lotusSymbol.js';
 import { instance as galaxyInstance } from '../../symbols/galaxySymbol.js';
+import { instance as wrapAroundInstance } from '../../rules/wrapAroundRule.js';
 import { allSolvers } from '../allSolvers.js';
 import Solver from '../solver.js';
 import UndercluedRule from '../../rules/undercluedRule.js';
@@ -22,6 +23,7 @@ export default class AutoSolver extends Solver {
   private static readonly nonAdditiveInstructions = new Set([
     offByXInstance.id,
     lyingSymbolInstance.id,
+    wrapAroundInstance.id,
   ]);
 
   public isGridSupported(grid: GridData): boolean {

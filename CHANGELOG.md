@@ -1,3 +1,7 @@
+# 30/4/2025
+
+- Fixed myopia not being satisfied when placed near the edge of the grid
+
 # 14/4/2025
 
 - Excluded the wrap-around rule from the auto solver's optimization

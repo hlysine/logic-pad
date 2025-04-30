@@ -1,4 +1,5 @@
 import { AnyConfig, ConfigType } from '../config.js';
+import { move } from '../dataHelper.js';
 import GridData from '../grid.js';
 import {
   Color,
@@ -136,17 +137,25 @@ export default class MyopiaSymbol extends MultiEntrySymbol {
       };
     const pos = { x: this.x, y: this.y };
     allDirections.forEach(direction => {
+      let stopped = false;
       grid.iterateDirectionAll(
-        pos,
+        move(pos, direction),
         direction,
-        t => !t.exists || t.color === tile.color,
+        t => {
+          if (!t.exists) return true;
+          if (t.color === tile.color) return true;
+          stopped = true;
+          return false;
+        },
         () => {
           map[direction].min++;
         }
       );
-      let stopped = false;
+      if (!stopped && map[direction].min === 0)
+        map[direction].min = Number.MAX_SAFE_INTEGER;
+      stopped = false;
       grid.iterateDirectionAll(
-        pos,
+        move(pos, direction),
         direction,
         t => {
           if (!t.exists) return true;

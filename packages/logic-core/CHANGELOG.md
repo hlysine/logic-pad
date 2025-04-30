@@ -1,3 +1,7 @@
+# 0.11.2
+
+- Fixed myopia not being satisfied when placed near the edge of the grid
+
 # 0.11.1
 
 - Updated logic-pad-solver-core to 0.1.2

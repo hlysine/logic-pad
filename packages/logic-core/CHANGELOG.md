@@ -1,6 +1,7 @@
 # 0.11.2
 
 - Fixed myopia not being satisfied when placed near the edge of the grid
+- Fixed ban pattern rule missing some checks for reverse reflective grids
 
 # 0.11.1
 

@@ -1,6 +1,7 @@
 # 30/4/2025
 
 - Fixed myopia not being satisfied when placed near the edge of the grid
+- Fixed ban pattern rule missing some checks for reverse reflective grids
 
 # 14/4/2025
 

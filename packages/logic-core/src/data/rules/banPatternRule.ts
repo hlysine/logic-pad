@@ -2,7 +2,12 @@ import { AnyConfig, ConfigType } from '../config.js';
 import GridData from '../grid.js';
 import { array } from '../dataHelper.js';
 import { Color, RuleState, State, Position } from '../primitives.js';
-import { Shape, getShapeVariants, tilesToShape } from '../shapes.js';
+import {
+  Shape,
+  getShapeVariants,
+  sanitizePatternGrid,
+  tilesToShape,
+} from '../shapes.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class BanPatternRule extends Rule {
@@ -35,20 +40,7 @@ export default class BanPatternRule extends Rule {
    */
   public constructor(pattern: GridData) {
     super();
-    this.pattern = pattern
-      // unlock all tiles
-      .withTiles(tiles =>
-        tiles.map(row =>
-          row.map(t =>
-            t.exists
-              ? t.withFixed(false)
-              : t.copyWith({ exists: true, color: Color.Gray, fixed: false })
-          )
-        )
-      )
-      // strip all symbols and rules
-      .withRules([])
-      .withSymbols(new Map());
+    this.pattern = sanitizePatternGrid(pattern);
     this.cache = getShapeVariants(tilesToShape(this.pattern.tiles));
   }
 
@@ -93,14 +85,26 @@ export default class BanPatternRule extends Rule {
 
   public validateGrid(grid: GridData): RuleState {
     for (const pattern of this.cache) {
-      for (let y = 0; y <= grid.height - 1; y++) {
-        for (let x = 0; x <= grid.width - 1; x++) {
+      let startX, startY, endX, endY;
+      if (grid.wrapAround.value) {
+        startX = -pattern.width;
+        startY = -pattern.height;
+        endX = grid.width - 1;
+        endY = grid.height - 1;
+      } else {
+        startX = 0;
+        startY = 0;
+        endX = grid.width - pattern.width;
+        endY = grid.height - pattern.height;
+      }
+      for (let y = startY; y <= endY; y++) {
+        for (let x = startX; x <= endX; x++) {
           let match = true;
           const visited: Position[] = [];
           for (const tile of pattern.elements) {
             const pos = grid.toArrayCoordinates(x + tile.x, y + tile.y);
             if (
-              grid.wrapAround.value && // optimization: not need to check visited if wrapAround is disabled
+              grid.wrapAround.value && // optimization: no need to check visited if wrapAround is disabled
               visited.some(p => p.x === pos.x && p.y === pos.y)
             ) {
               match = false;

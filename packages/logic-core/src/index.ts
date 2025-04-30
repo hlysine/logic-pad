@@ -26,6 +26,7 @@ import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
 import CompletePatternRule from './data/rules/completePatternRule.js';
 import ConnectAllRule from './data/rules/connectAllRule.js';
+import ContainsShapeRule from './data/rules/containsShapeRule.js';
 import CustomRule from './data/rules/customRule.js';
 import ForesightRule from './data/rules/foresightRule.js';
 import { allRules } from './data/rules/index.js';
@@ -51,7 +52,7 @@ import GzipCompressor from './data/serializer/compressor/gzipCompressor.js';
 import StreamCompressor from './data/serializer/compressor/streamCompressor.js';
 import SerializerBase from './data/serializer/serializerBase.js';
 import SerializerV0 from './data/serializer/serializer_v0.js';
-import { getShapeVariants, normalizeShape, positionsToShape, shapeEquals, tilesToShape } from './data/shapes.js';
+import { getShapeVariants, normalizeShape, positionsToShape, sanitizePatternGrid, shapeEquals, tilesToShape } from './data/shapes.js';
 import { allSolvers } from './data/solver/allSolvers.js';
 import AutoSolver from './data/solver/auto/autoSolver.js';
 import BacktrackSolver from './data/solver/backtrack/backtrackSolver.js';
@@ -165,6 +166,7 @@ export {
   CellCountRule,
   CompletePatternRule,
   ConnectAllRule,
+  ContainsShapeRule,
   CustomRule,
   ForesightRule,
   allRules,
@@ -194,6 +196,7 @@ export {
   getShapeVariants,
   normalizeShape,
   positionsToShape,
+  sanitizePatternGrid,
   shapeEquals,
   tilesToShape,
   allSolvers,

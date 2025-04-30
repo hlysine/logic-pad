@@ -11,6 +11,7 @@ export { instance as CellCountPerZoneRule } from './cellCountPerZoneRule.js';
 export { instance as CellCountRule } from './cellCountRule.js';
 export { instance as CompletePatternRule } from './completePatternRule.js';
 export { instance as ConnectAllRule } from './connectAllRule.js';
+export { instance as ContainsShapeRule } from './containsShapeRule.js';
 export { instance as CustomRule } from './customRule.js';
 export { instance as ForesightRule } from './foresightRule.js';
 export { instance as LyingSymbolRule } from './lyingSymbolRule.js';

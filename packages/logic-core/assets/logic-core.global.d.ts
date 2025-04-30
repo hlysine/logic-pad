@@ -160,6 +160,11 @@ declare global {
      * @returns The deduplicated array of edges.
      */
     static deduplicateEdges(edges: readonly Edge[]): readonly Edge[];
+    static validateEdges(
+      connections: GridZones,
+      width: number,
+      height: number
+    ): GridZones;
     insertColumn(index: number): GridZones;
     insertRow(index: number): GridZones;
     removeColumn(index: number): GridZones;
@@ -206,6 +211,11 @@ declare global {
      * @returns The created connections. You can apply this to a GridData object using GridData.withConnections.
      */
     static create(array: string[]): GridConnections;
+    static validateEdges(
+      connections: GridConnections,
+      width: number,
+      height: number
+    ): GridConnections;
     insertColumn(index: number): GridConnections;
     insertRow(index: number): GridConnections;
     removeColumn(index: number): GridConnections;
@@ -1495,6 +1505,10 @@ declare global {
   ): Shape;
   export declare function getShapeVariants(shape: Shape): Shape[];
   export declare function normalizeShape(shape: Shape): Shape;
+  export declare function sanitizePatternGrid(
+    pattern: GridData,
+    tileMapper?: (tile: TileData) => TileData
+  ): GridData;
   export declare class BanPatternRule extends Rule {
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
@@ -1582,6 +1596,46 @@ declare global {
     validateGrid(grid: GridData): RuleState;
     copyWith({ color }: { color?: Color }): this;
     withColor(color: Color): this;
+  }
+  export type ShapeRegions = {
+    regions: {
+      positions: Position$1[];
+      shape: Shape;
+      count: number;
+    }[];
+    complete: boolean;
+  };
+  export declare abstract class RegionShapeRule extends Rule {
+    readonly color: Color;
+    /**
+     * @param color - The color of the regions to compare.
+     */
+    constructor(color: Color);
+    protected getShapeRegions(grid: GridData): ShapeRegions;
+    withColor(color: Color): this;
+  }
+  export declare class ContainsShapeRule extends RegionShapeRule {
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly CONFIGS;
+    private static readonly SEARCH_VARIANTS;
+    readonly pattern: GridData;
+    readonly cache: Shape[];
+    /**
+     * **All &lt;color&gt; areas must contain this pattern**
+     *
+     * @param color - The color of the regions to compare.
+     * @param pattern - GridData representing the required pattern. Only non-gray tiles are considered.
+     */
+    constructor(color: Color, pattern: GridData);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color, pattern }: { color?: Color; pattern?: GridData }): this;
+    withPattern(pattern: GridData): this;
   }
   export declare class CustomRule extends Rule {
     readonly description: string;
@@ -1824,23 +1878,6 @@ declare global {
     copyWith({ color, size }: { color?: Color; size?: number }): this;
     withColor(color: Color): this;
     withSize(size: number): this;
-  }
-  export type ShapeRegions = {
-    regions: {
-      positions: Position$1[];
-      shape: Shape;
-      count: number;
-    }[];
-    complete: boolean;
-  };
-  export declare abstract class RegionShapeRule extends Rule {
-    readonly color: Color;
-    /**
-     * @param color - The color of the regions to compare.
-     */
-    constructor(color: Color);
-    protected getShapeRegions(grid: GridData): ShapeRegions;
-    withColor(color: Color): this;
   }
   export declare class SameShapeRule extends RegionShapeRule {
     private static readonly CONFIGS;
@@ -2115,10 +2152,14 @@ declare global {
     readonly description =
       'Automatically select the fastest solver based on supported instructions and environment.';
     readonly supportsCancellation = true;
-    private gridSupportCache;
+    private static readonly nonAdditiveInstructions;
     isGridSupported(grid: GridData): boolean;
     isInstructionSupported(instructionId: string): boolean;
     protected isEnvironmentSupported(): Promise<boolean>;
+    private fillSolution;
+    private fixGrid;
+    private solveWithProgress;
+    private solveOne;
     solve(
       grid: GridData,
       abortSignal?: AbortSignal | undefined

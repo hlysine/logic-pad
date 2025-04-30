@@ -1,3 +1,33 @@
+# 30/4/2025
+
+- Fixed myopia not being satisfied when placed near the edge of the grid
+- Fixed ban pattern rule missing some checks for reverse reflective grids
+
+# 14/4/2025
+
+- Excluded the wrap-around rule from the auto solver's optimization
+
+# 30/3/2025
+
+- Updated the cspuz solver to fix lotuses/galaxies
+
+# 28/3/2025
+
+- Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present
+- Added "All light/dark area must contain this pattern" rule
+
+# 21/3/2025
+
+- Removed top nav bar shadow
+
+# 20/3/2025
+
+- Improved the accuracy of drag-and-drop animations in the editor's rule list
+- Color adjustments
+  - Light theme no longer has a dark background
+  - Dark theme now has a slightly brighter background to contrast with dark tiles
+  - Aqua theme now uses white text for contrast
+
 # 12/3/2025
 
 - Added the auto solver - automatically selects the fastest solver based on environment and grid support

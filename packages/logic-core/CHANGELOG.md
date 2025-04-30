@@ -1,3 +1,20 @@
+# 0.11.2
+
+- Fixed myopia not being satisfied when placed near the edge of the grid
+- Fixed ban pattern rule missing some checks for reverse reflective grids
+
+# 0.11.1
+
+- Updated logic-pad-solver-core to 0.1.2
+
+# 0.11.0
+
+- Added "All light/dark area must contain this pattern" rule
+
+# 0.10.4
+
+- Optimized the auto solver by combining results from multiple solvers when unsupported instructions are present
+
 # 0.10.3
 
 - Added checks to remove out-of-bound connections/zones

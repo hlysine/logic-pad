@@ -1,3 +1,7 @@
+# 8/6/2025
+
+- Fixed playback line position in music grids where the playback track and the grid have different BPM
+
 # 30/4/2025
 
 - Fixed myopia not being satisfied when placed near the edge of the grid

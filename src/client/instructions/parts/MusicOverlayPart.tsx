@@ -1,5 +1,7 @@
-import { PartPlacement, PartSpec } from './types';
-import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
+import { InstructionPartProps, PartPlacement, PartSpec } from './types';
+import MusicGridRule, {
+  instance as musicGridInstance,
+} from '@logic-pad/core/data/rules/musicGridRule';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import * as Tone from 'tone';
 import { useGrid } from '../../contexts/GridContext.tsx';
@@ -10,7 +12,34 @@ import { Color } from '@logic-pad/core/data/primitives';
 
 const BLEED = 5;
 
-export default memo(function MusicOverlayPart() {
+export type MusicOverlayPartProps = InstructionPartProps<MusicGridRule>;
+
+/**
+ * Convert the pointer position in track to pointer position in grid with the same playtime.
+ */
+function interpolateTrackPosition(
+  positionInTrack: number,
+  instruction: MusicGridRule
+): number {
+  if (instruction.track?.musicGrid.value === undefined) return positionInTrack;
+  let trackBpm = 120;
+  let gridBpm = 120;
+  let positionInGrid = 0;
+  for (let i = 0; i < positionInTrack; i++) {
+    const trackColumn = instruction.track.musicGrid.value.controlLines.find(
+      x => x.column === i
+    );
+    const gridColumn = instruction.controlLines.find(x => x.column === i);
+    if (trackColumn) trackBpm = trackColumn.bpm ?? trackBpm;
+    if (gridColumn) gridBpm = gridColumn.bpm ?? gridBpm;
+    positionInGrid += (gridBpm / trackBpm) * Math.min(1, positionInTrack - i);
+  }
+  return positionInGrid;
+}
+
+export default memo(function MusicOverlayPart({
+  instruction,
+}: MusicOverlayPartProps) {
   const { grid } = useGrid();
   const canvasRef = useRef<RawCanvasRef>(null);
   const [tileSize, setTileSize] = useState(0);
@@ -55,7 +84,10 @@ export default memo(function MusicOverlayPart() {
     const handle = Tone.getTransport().scheduleRepeat(
       time => {
         Tone.getDraw().schedule(() => {
-          const position = Tone.getTransport().ticks / Tone.getTransport().PPQ;
+          const position = interpolateTrackPosition(
+            Tone.getTransport().ticks / Tone.getTransport().PPQ,
+            instruction
+          );
           const prevPos = prevPosition.current;
           prevPosition.current = position;
           if (canvasRef.current && tileSize !== 0) {
@@ -116,7 +148,7 @@ export default memo(function MusicOverlayPart() {
     return () => {
       Tone.getTransport().clear(handle);
     };
-  }, [grid, infoColor, accentColor, tileSize]);
+  }, [grid, instruction, infoColor, accentColor, tileSize]);
 
   useEffect(() => {
     targetRef.current?.scrollIntoView({ behavior: 'instant' });

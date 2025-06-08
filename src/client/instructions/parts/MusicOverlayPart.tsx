@@ -84,10 +84,12 @@ export default memo(function MusicOverlayPart({
     const handle = Tone.getTransport().scheduleRepeat(
       time => {
         Tone.getDraw().schedule(() => {
-          const position = interpolateTrackPosition(
-            Tone.getTransport().ticks / Tone.getTransport().PPQ,
-            instruction
-          );
+          const position = playbackState.isSolution
+            ? interpolateTrackPosition(
+                Tone.getTransport().ticks / Tone.getTransport().PPQ,
+                instruction
+              )
+            : Tone.getTransport().ticks / Tone.getTransport().PPQ;
           const prevPos = prevPosition.current;
           prevPosition.current = position;
           if (canvasRef.current && tileSize !== 0) {

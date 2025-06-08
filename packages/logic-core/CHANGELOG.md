@@ -1,6 +1,7 @@
 # 0.11.3
 
 - Fixed out-of-bounds grid zones
+- Fixed music grid track defaulting to a gray grid
 
 # 0.11.2
 

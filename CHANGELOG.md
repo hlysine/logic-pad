@@ -2,6 +2,7 @@
 
 - Fixed playback line position in music grids where the playback track and the grid have different BPM
 - Fixed out-of-bounds grid zones
+- Fixed music grid track defaulting to a gray grid
 
 # 30/4/2025
 

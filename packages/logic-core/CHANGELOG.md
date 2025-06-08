@@ -1,3 +1,7 @@
+# 0.11.3
+
+- Fixed out-of-bounds grid zones
+
 # 0.11.2
 
 - Fixed myopia not being satisfied when placed near the edge of the grid

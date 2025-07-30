@@ -186,6 +186,16 @@ export default class DirectionLinkerSymbol extends Symbol {
             color1: baseColor1,
             color2: baseColor2,
           };
+          const newColor1 = getColor(newArrTurtle.pos1, grid);
+          const newColor2 = getColor(newArrTurtle.pos2, grid);
+          if (
+            newColor1 !== baseColor1 &&
+            newColor2 !== baseColor2 &&
+            newColor1 !== Color.Gray &&
+            newColor2 !== Color.Gray
+          ) {
+            continue;
+          }
           if (
             checkedCouples.some(
               ({ pos1, pos2 }) =>

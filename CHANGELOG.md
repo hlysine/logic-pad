@@ -1,3 +1,7 @@
+# 30/7/2025
+
+- Fixed incorrect validation on galaxy symbols (solvers are unaffected)
+
 # 8/6/2025
 
 - Fixed playback line position in music grids where the playback track and the grid have different BPM

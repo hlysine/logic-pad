@@ -1,3 +1,7 @@
+# 0.11.4
+
+- Fixed incorrect validation on galaxy symbols (solvers are unaffected)
+
 # 0.11.3
 
 - Fixed out-of-bounds grid zones

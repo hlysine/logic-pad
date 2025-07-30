@@ -26,7 +26,7 @@
       "@logic-pad/core": ["./packages/logic-core/src/index.ts"]
     }
   },
-  "include": ["src", "api"],
+  "include": ["src"],
   "exclude": ["**/*.global.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

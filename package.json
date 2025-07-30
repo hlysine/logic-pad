@@ -11,12 +11,10 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "client:dev": "vite --host",
-    "server:dev": "bun --watch src/server/index.ts",
     "dev": "concurrently \"bun:*:dev\"",
     "start": "bun src/server/index.ts",
     "client:build": "bunx --bun tsc && bunx --bun vite build",
-    "server:build": "bun-vercel ./src/server/vercel.ts --funcPath api",
-    "build": "bun run client:build && bun run server:build",
+    "build": "bun run client:build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "client:preview": "vite preview",
     "check-bundle": "bunx vite-bundle-visualizer",
@@ -27,7 +25,6 @@
   },
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",
-    "@hlysine/bun-vercel": "^1.0.0-alpha.8",
     "@hlysine/piano": "^0.2.1",
     "@monaco-editor/react": "^4.6.0",
     "@tanstack/react-router": "^1.106.0",

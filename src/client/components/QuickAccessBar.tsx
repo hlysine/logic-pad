@@ -14,12 +14,12 @@ export default memo(function QuickAccessBar({
 }: QuickAccessBarProps) {
   return (
     <div className={cn('flex items-center gap-1', className)}>
-      <Settings />
       <Suspense fallback={<Loading className="w-24" />}>
         <ThemeSwitcher />
       </Suspense>
+      <Settings />
       <a
-        className="btn btn-square"
+        className="btn btn-square btn-ghost text-neutral-content"
         aria-label="GitHub repository"
         href="https://github.com/hlysine/logic-pad"
         target="_blank"

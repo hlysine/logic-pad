@@ -93,6 +93,18 @@ export default defineConfig({
     fs: {
       allow: [searchForWorkspaceRoot(process.cwd()), './', '../logic-core'], // allow serving files from the logic-core package for local testing
     },
+    proxy: {
+      '/appwrite': {
+        target: 'https://appwrite.logic-pad.com',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/appwrite/, '/v1'),
+      },
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
   },
   optimizeDeps: {
     exclude: ['@logic-pad/core', 'logic-pad-solver-core'],

@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './../routes/__root'
 import { Route as IndexImport } from './../routes/index'
+import { Route as OauthCallbackImport } from './../routes/oauth.callback'
 import { Route as ContextLayoutSolveImport } from './../routes/_context._layout.solve'
 import { Route as ContextLayoutPerfectionImport } from './../routes/_context._layout.perfection'
 import { Route as ContextLayoutCreateImport } from './../routes/_context._layout.create'
@@ -42,6 +43,12 @@ const ContextLayoutLazyRoute = ContextLayoutLazyImport.update({
 } as any).lazy(() =>
   import('./../routes/_context._layout.lazy').then((d) => d.Route),
 )
+
+const OauthCallbackRoute = OauthCallbackImport.update({
+  id: '/oauth/callback',
+  path: '/oauth/callback',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ContextLayoutSolveRoute = ContextLayoutSolveImport.update({
   id: '/solve',
@@ -83,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof ContextLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/oauth/callback': {
+      id: '/oauth/callback'
+      path: '/oauth/callback'
+      fullPath: '/oauth/callback'
+      preLoaderRoute: typeof OauthCallbackImport
       parentRoute: typeof rootRoute
     }
     '/_context/_layout': {
@@ -148,6 +162,7 @@ const ContextLazyRouteWithChildren = ContextLazyRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof ContextLayoutLazyRouteWithChildren
+  '/oauth/callback': typeof OauthCallbackRoute
   '/create': typeof ContextLayoutCreateRoute
   '/perfection': typeof ContextLayoutPerfectionRoute
   '/solve': typeof ContextLayoutSolveRoute
@@ -156,6 +171,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof ContextLayoutLazyRouteWithChildren
+  '/oauth/callback': typeof OauthCallbackRoute
   '/create': typeof ContextLayoutCreateRoute
   '/perfection': typeof ContextLayoutPerfectionRoute
   '/solve': typeof ContextLayoutSolveRoute
@@ -165,6 +181,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_context': typeof ContextLazyRouteWithChildren
+  '/oauth/callback': typeof OauthCallbackRoute
   '/_context/_layout': typeof ContextLayoutLazyRouteWithChildren
   '/_context/_layout/create': typeof ContextLayoutCreateRoute
   '/_context/_layout/perfection': typeof ContextLayoutPerfectionRoute
@@ -173,13 +190,14 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/create' | '/perfection' | '/solve'
+  fullPaths: '/' | '' | '/oauth/callback' | '/create' | '/perfection' | '/solve'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/create' | '/perfection' | '/solve'
+  to: '/' | '' | '/oauth/callback' | '/create' | '/perfection' | '/solve'
   id:
     | '__root__'
     | '/'
     | '/_context'
+    | '/oauth/callback'
     | '/_context/_layout'
     | '/_context/_layout/create'
     | '/_context/_layout/perfection'
@@ -190,11 +208,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContextLazyRoute: typeof ContextLazyRouteWithChildren
+  OauthCallbackRoute: typeof OauthCallbackRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContextLazyRoute: ContextLazyRouteWithChildren,
+  OauthCallbackRoute: OauthCallbackRoute,
 }
 
 export const routeTree = rootRoute
@@ -208,7 +228,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_context"
+        "/_context",
+        "/oauth/callback"
       ]
     },
     "/": {
@@ -219,6 +240,9 @@ export const routeTree = rootRoute
       "children": [
         "/_context/_layout"
       ]
+    },
+    "/oauth/callback": {
+      "filePath": "oauth.callback.tsx"
     },
     "/_context/_layout": {
       "filePath": "_context._layout.lazy.tsx",

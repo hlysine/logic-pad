@@ -3,6 +3,7 @@ import { FaGithub } from 'react-icons/fa';
 import { cn } from '../../client/uiHelper.ts';
 import Loading from './Loading';
 import Settings from './Settings.tsx';
+import AccountControl from './AccountControl.tsx';
 const ThemeSwitcher = lazy(() => import('./ThemeSwitcher'));
 
 export interface QuickAccessBarProps {
@@ -27,6 +28,7 @@ export default memo(function QuickAccessBar({
       >
         <FaGithub size={24} />
       </a>
+      <AccountControl />
     </div>
   );
 });

@@ -7,7 +7,7 @@ export interface AccordionProps {
 
 export default memo(function Accordion({ title, children }: AccordionProps) {
   return (
-    <div className="collapse collapse-arrow shrink-0 bg-base-100 text-base-content overflow-visible">
+    <div className="collapse collapse-arrow shrink-0 bg-base-100 text-base-content">
       <input
         type="checkbox"
         name="gui-editor-accordion"

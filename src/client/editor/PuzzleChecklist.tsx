@@ -11,8 +11,10 @@ import { useEmbed } from '../contexts/EmbedContext.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Accordion from '../components/Accordion';
 import { useGridState } from '../contexts/GridStateContext.tsx';
-import { Color, State } from '@logic-pad/core/data/primitives';
-import { MetadataSchema } from '@logic-pad/core/data/puzzle';
+import {
+  PuzzleChecklistItem,
+  validatePuzzleChecklist,
+} from '@logic-pad/core/data/puzzle';
 import GridData from '@logic-pad/core/data/grid';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
@@ -47,6 +49,62 @@ function ChecklistItem({
     </div>
   );
 }
+
+const checklistItemMap = {
+  metadataValid: (item: PuzzleChecklistItem) => (
+    <ChecklistItem
+      key="metadataValid"
+      type={item.success ? 'success' : 'error'}
+      tooltip={
+        item.success
+          ? 'All required metadata fields are filled'
+          : 'Fill all required metadata fields'
+      }
+    >
+      {item.success ? 'Metadata valid' : 'Metadata invalid'}
+    </ChecklistItem>
+  ),
+  autoValidation: (item: PuzzleChecklistItem) => (
+    <ChecklistItem
+      key="autoValidation"
+      type={item.success ? 'success' : 'info'}
+      tooltip={
+        item.success
+          ? 'You puzzle solution is automatically validated'
+          : 'Only the solution you provide will be accepted'
+      }
+    >
+      {item.success ? 'Auto validation' : 'Solution required'}
+    </ChecklistItem>
+  ),
+  solutionIsValid: (item: PuzzleChecklistItem) => (
+    <ChecklistItem
+      key="solutionIsValid"
+      type={item.success ? 'success' : 'error'}
+      tooltip="A valid solution is required to prove that the puzzle is solvable"
+    >
+      {item.success ? 'Solution valid' : 'Solution invalid'}
+    </ChecklistItem>
+  ),
+  solutionIsComplete: (item: PuzzleChecklistItem) => (
+    <ChecklistItem
+      key="solutionIsComplete"
+      type={item.success ? 'success' : 'error'}
+      tooltip="A complete solution is required to prove that the puzzle is solvable"
+    >
+      {item.success ? 'Solution complete' : 'Solution incomplete'}
+    </ChecklistItem>
+  ),
+  solutionIsNotEmpty: (item: PuzzleChecklistItem) => (
+    <ChecklistItem
+      key="solutionIsNotEmpty"
+      type={item.success ? 'success' : 'error'}
+      tooltip="Solution cannot be empty"
+    >
+      {item.success ? 'Solution not empty' : 'Solution empty'}
+    </ChecklistItem>
+  ),
+};
 
 interface TiedToGrid<T> {
   grid: GridData;
@@ -84,24 +142,10 @@ export default memo(function PuzzleChecklist() {
     }
   }, [grid, solution, alternate, solveRef]);
 
-  const metadataValid = useMemo(
-    () => MetadataSchema.safeParse(metadata).success,
-    [metadata]
+  const checklist = useMemo(
+    () => validatePuzzleChecklist(metadata, grid, state),
+    [metadata, grid, state]
   );
-
-  const autoValidation = useMemo(() => !grid.requireSolution(), [grid]);
-
-  const solutionIsNotEmpty = useMemo(
-    () =>
-      grid.tiles.some(row =>
-        row.some(tile => !tile.fixed && tile.color !== Color.Gray)
-      ),
-    [grid]
-  );
-
-  const solutionIsComplete = useMemo(() => grid.isComplete(), [grid]);
-
-  const solutionIsValid = state.final !== State.Error;
 
   const autoSolvable = useMemo(
     () => solver?.isGridSupported(grid) ?? false,
@@ -109,14 +153,7 @@ export default memo(function PuzzleChecklist() {
   );
 
   const checklistComplete =
-    metadataValid &&
-    (autoValidation
-      ? solution !== null
-        ? solution.value !== null
-        : solutionIsComplete && solutionIsValid
-      : solution !== null
-        ? solution.value !== null
-        : solutionIsNotEmpty);
+    checklist.isValid && (solution === null || solution.value !== null);
 
   if (!features.checklist) return null;
 
@@ -134,50 +171,8 @@ export default memo(function PuzzleChecklist() {
       }
     >
       <div className="flex flex-col gap-2 text-sm">
-        <ChecklistItem
-          key="metadataValid"
-          type={metadataValid ? 'success' : 'error'}
-          tooltip={
-            metadataValid
-              ? 'All required metadata fields are filled'
-              : 'Fill all required metadata fields'
-          }
-        >
-          {metadataValid ? 'Metadata valid' : 'Metadata invalid'}
-        </ChecklistItem>
-        <ChecklistItem
-          key="autoValidation"
-          type="info"
-          tooltip={
-            autoValidation
-              ? 'You puzzle solution is automatically validated'
-              : 'Only the solution you provide will be accepted'
-          }
-        >
-          {autoValidation ? 'Auto validation' : 'Solution required'}
-        </ChecklistItem>
-        {autoValidation ? (
-          <>
-            <ChecklistItem
-              key="solutionIsValid"
-              type={solutionIsValid && solutionIsComplete ? 'success' : 'error'}
-              tooltip="A valid and complete solution is required to prove that the puzzle is solvable"
-            >
-              {solutionIsValid && solutionIsComplete
-                ? 'Solution valid'
-                : solutionIsValid
-                  ? 'Solution incomplete'
-                  : 'Solution invalid'}
-            </ChecklistItem>
-          </>
-        ) : (
-          <ChecklistItem
-            key="solutionIsNotEmpty"
-            type={solutionIsNotEmpty ? 'success' : 'error'}
-            tooltip="Solution cannot be empty"
-          >
-            {solutionIsNotEmpty ? 'Solution not empty' : 'Solution empty'}
-          </ChecklistItem>
+        {checklist.items.map(item =>
+          checklistItemMap[item.id as keyof typeof checklistItemMap]?.(item)
         )}
         {solution !== null && (
           <>

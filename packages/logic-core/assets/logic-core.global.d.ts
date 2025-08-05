@@ -1490,6 +1490,20 @@ declare global {
    * The first type is the most important one.
    */
   export declare function getPuzzleTypes(grid: GridData): PuzzleType[];
+  export interface PuzzleChecklistItem {
+    id: string;
+    success: boolean;
+    mandatory: boolean;
+  }
+  export interface PuzzleChecklist {
+    items: PuzzleChecklistItem[];
+    isValid: boolean;
+  }
+  export declare function validatePuzzleChecklist(
+    metadata: PuzzleMetadata,
+    gridWithSolution: GridData,
+    state: GridState
+  ): PuzzleChecklist;
   export interface ShapeElement {
     x: number;
     y: number;

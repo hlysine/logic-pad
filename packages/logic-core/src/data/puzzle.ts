@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import GridData from './grid.js';
-import { PuzzleType } from './primitives.js';
+import { Color, GridState, PuzzleType, State } from './primitives.js';
 
 export type PuzzleMetadata = {
   /**
@@ -84,4 +84,63 @@ export function getPuzzleTypes(grid: GridData): PuzzleType[] {
     types.push(PuzzleType.Logic);
   }
   return types;
+}
+
+export interface PuzzleChecklistItem {
+  id: string;
+  success: boolean;
+  mandatory: boolean;
+}
+
+export interface PuzzleChecklist {
+  items: PuzzleChecklistItem[];
+  isValid: boolean;
+}
+
+export function validatePuzzleChecklist(
+  metadata: PuzzleMetadata,
+  gridWithSolution: GridData,
+  state: GridState
+): PuzzleChecklist {
+  const checklist: PuzzleChecklist = {
+    items: [],
+    isValid: true,
+  };
+  checklist.items.push({
+    id: 'metadataValid',
+    success: MetadataSchema.safeParse(metadata).success,
+    mandatory: true,
+  });
+  if (gridWithSolution.requireSolution()) {
+    checklist.items.push({
+      id: 'autoValidation',
+      success: false,
+      mandatory: false,
+    });
+    checklist.items.push({
+      id: 'solutionIsNotEmpty',
+      success: gridWithSolution.tiles.some(row =>
+        row.some(tile => !tile.fixed && tile.color !== Color.Gray)
+      ),
+      mandatory: true,
+    });
+  } else {
+    checklist.items.push({
+      id: 'autoValidation',
+      success: true,
+      mandatory: false,
+    });
+    checklist.items.push({
+      id: 'solutionIsComplete',
+      success: gridWithSolution.isComplete(),
+      mandatory: true,
+    });
+    checklist.items.push({
+      id: 'solutionIsValid',
+      success: state.final !== State.Error,
+      mandatory: true,
+    });
+  }
+  checklist.isValid = !checklist.items.some(x => !x.success && x.mandatory);
+  return checklist;
 }

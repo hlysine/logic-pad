@@ -1,3 +1,7 @@
+# 0.12.3
+
+- Implement puzzle checklist logic
+
 # 0.12.2
 
 - getPuzzleTypes now only require GridData as parameter

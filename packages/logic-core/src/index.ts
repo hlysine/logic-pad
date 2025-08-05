@@ -20,7 +20,7 @@ import GridConnections from './data/gridConnections.js';
 import GridZones from './data/gridZones.js';
 import Instruction from './data/instruction.js';
 import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, PuzzleType, State, WRAPPINGS, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
-import { MetadataSchema, PuzzleSchema, getPuzzleTypes } from './data/puzzle.js';
+import { MetadataSchema, PuzzleSchema, getPuzzleTypes, validatePuzzleChecklist } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
@@ -163,6 +163,7 @@ export {
   MetadataSchema,
   PuzzleSchema,
   getPuzzleTypes,
+  validatePuzzleChecklist,
   BanPatternRule,
   CellCountPerZoneRule,
   CellCountRule,

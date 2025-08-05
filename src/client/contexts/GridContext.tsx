@@ -20,7 +20,6 @@ const defaultMetadata: PuzzleMetadata = {
   title: '',
   author: '',
   description: '',
-  link: '',
   difficulty: 1,
 };
 

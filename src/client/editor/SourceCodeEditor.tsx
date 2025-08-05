@@ -19,7 +19,6 @@ const defaultCode = `/** @type Puzzle */
   solution: null,
   difficulty: 1,
   author: '',
-  link: '',
   description: ''
 })
 `;

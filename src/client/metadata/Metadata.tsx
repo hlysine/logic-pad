@@ -1,6 +1,5 @@
 import { memo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
-import { FiExternalLink } from 'react-icons/fi';
 import Difficulty from './Difficulty';
 import DocumentTitle from '../components/DocumentTitle';
 import Markdown from '../components/Markdown';
@@ -41,22 +40,6 @@ export default memo(function Metadata({
       >
         {metadata.author}
       </div>
-      {!simplified && metadata.link.trim().length > 0 && (
-        <a
-          className={cn(
-            'btn btn-ghost justify-start flex-nowrap flex flex-shrink-0',
-            responsive ? 'btn-sm lg:btn-md' : 'btn-md'
-          )}
-          href={metadata.link}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="whitespace-nowrap text-ellipsis grow overflow-x-clip">
-            {metadata.link}
-          </span>
-          <FiExternalLink size={24} />
-        </a>
-      )}
       {!simplified && (
         <div className="overflow-y-auto">
           <Markdown

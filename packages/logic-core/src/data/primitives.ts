@@ -20,6 +20,16 @@ export enum MajorRule {
   WrapAround = 'wrap_around',
 }
 
+/**
+ * General puzzle types for categorization. One puzzle can have multiple types.
+ */
+export enum PuzzleType {
+  Logic = 'logic',
+  Underclued = 'underclued',
+  Pattern = 'pattern',
+  Music = 'music',
+}
+
 export enum State {
   /**
    * Describes the violation of a rule.

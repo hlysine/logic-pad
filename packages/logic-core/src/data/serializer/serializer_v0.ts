@@ -23,7 +23,7 @@ import { array, escape, unescape } from '../dataHelper.js';
 import { allRules } from '../rules/index.js';
 import { allSymbols } from '../symbols/index.js';
 import SerializerBase from './serializerBase.js';
-import { Puzzle, PuzzleMetadata } from '../puzzle.js';
+import { Puzzle, PuzzleData, PuzzleMetadata } from '../puzzle.js';
 import { ControlLine, Row } from '../rules/musicControlLine.js';
 import GridZones from '../gridZones.js';
 
@@ -558,7 +558,7 @@ export default class SerializerV0 extends SerializerBase {
     );
   }
 
-  public stringifyPuzzle(puzzle: Puzzle): string {
+  public stringifyGridWithSolution(puzzle: PuzzleData): string {
     let grid = puzzle.grid;
     if (puzzle.solution !== null) {
       const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
@@ -575,26 +575,42 @@ export default class SerializerV0 extends SerializerBase {
       });
       grid = puzzle.grid.copyWith({ tiles });
     }
+    return this.stringifyGrid(grid);
+  }
+
+  public parseGridWithSolution(input: string): PuzzleData {
+    const grid = this.parseGrid(input);
+    const reset = grid.resetTiles();
+    return {
+      grid: reset,
+      solution: grid.colorEquals(reset) ? null : grid,
+    };
+  }
+
+  public stringifyPuzzle(puzzle: Puzzle): string {
     return JSON.stringify({
       title: puzzle.title,
-      grid: this.stringifyGrid(grid),
+      grid: this.stringifyGridWithSolution(puzzle),
       difficulty: puzzle.difficulty,
-      link: puzzle.link,
       author: puzzle.author,
       description: puzzle.description,
     });
   }
 
   public parsePuzzle(input: string): Puzzle {
-    const { grid: gridString, ...metadata } = JSON.parse(
-      input
-    ) as PuzzleMetadata & { grid: string };
-    const grid = this.parseGrid(gridString);
-    const reset = grid.resetTiles();
+    const {
+      grid: gridString,
+      title,
+      author,
+      description,
+      difficulty,
+    } = JSON.parse(input) as PuzzleMetadata & { grid: string };
     return {
-      ...metadata,
-      grid: reset,
-      solution: grid.colorEquals(reset) ? null : grid,
+      title,
+      author,
+      description,
+      difficulty,
+      ...this.parseGridWithSolution(gridString),
     };
   }
 }

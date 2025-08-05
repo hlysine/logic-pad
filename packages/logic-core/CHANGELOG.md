@@ -1,3 +1,8 @@
+# 0.12.0
+
+- Removed "link" attribute from puzzle metadata
+- Added helper functions for online mode
+
 # 0.11.4
 
 - Fixed incorrect validation on galaxy symbols (solvers are unaffected)

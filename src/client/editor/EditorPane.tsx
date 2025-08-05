@@ -1,12 +1,14 @@
 import { Suspense, lazy, memo, useState } from 'react';
 import { cn } from '../../client/uiHelper.ts';
 import Loading from '../components/Loading';
+import MetadataEditor from './MetadataEditor.tsx';
 
-const GUIEditor = lazy(() => import('./GUIEditor'));
+const ToolboxEditor = lazy(() => import('./ToolboxEditor'));
 const SourceCodeEditor = lazy(() => import('./SourceCodeEditor'));
 
 const panes = [
-  ['GUI', <GUIEditor key="GUI" />],
+  ['Info', <MetadataEditor key="Info" />],
+  ['Tools', <ToolboxEditor key="Tools" />],
   ['Code', <SourceCodeEditor key="Code" loading={<Loading />} />],
 ] as const;
 

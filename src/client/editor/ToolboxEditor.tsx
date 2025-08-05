@@ -36,76 +36,80 @@ export default memo(function ToolboxEditor() {
   ));
 
   return (
-    <div className="flex flex-col gap-2">
-      <GridConsumer>
-        {({ grid, setGrid }) => (
-          <GridSizeEditor grid={grid} setGrid={setGrid} />
-        )}
-      </GridConsumer>
-      <span className="divider mt-0 mb-0"></span>
-      <div className="flex flex-col gap-2">
-        <span className="text-sm font-bold">{name ?? 'No tool selected'}</span>
-        <span
-          className={cn(
-            'inline-block text-sm h-0 transition-[height]',
-            description && 'h-[2.5em]'
-          )}
-        >
-          {description}
-        </span>
-      </div>
-      <span className="divider mt-0 mb-0"></span>
-      <div className="flex flex-wrap gap-2 justify-center">
-        {allTools.map((Tool, i) => (
-          <Tool key={i} />
-        ))}
+    <div className="grow overflow-y-auto overflow-x-hidden">
+      <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col gap-2">
         <GridConsumer>
-          {({ grid }) => (
-            <InstructionPartOutlet
-              grid={grid}
-              placement={PartPlacement.Toolbox}
-            />
+          {({ grid, setGrid }) => (
+            <GridSizeEditor grid={grid} setGrid={setGrid} />
           )}
         </GridConsumer>
-      </div>
-      <button
-        type="button"
-        className="btn btn-sm w-fit self-center"
-        onClick={() => setShowMoreTools(!showMoreTools)}
-      >
-        {showMoreTools ? 'Show less' : 'Show more'}
-      </button>
-      <span className="divider mt-0 mb-0"></span>
-      <div className="flex gap-4 justify-between items-center pr-4">
+        <span className="divider mt-0 mb-0"></span>
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-bold">Presets</span>
-          <span className="text-sm">
-            Quickly place identical symbols with presets.
+          <span className="text-sm font-bold">
+            {name ?? 'No tool selected'}
+          </span>
+          <span
+            className={cn(
+              'inline-block text-sm h-0 transition-[height]',
+              description && 'h-[2.5em]'
+            )}
+          >
+            {description}
           </span>
         </div>
-        <div
-          className="tooltip tooltip-left tooltip-info"
-          data-tip="Remove selected preset"
-        >
-          <button
-            type="button"
-            aria-label="Remove selected preset"
-            className="btn btn-square"
-            disabled={!selectedPreset}
-            onClick={() =>
-              setPresets(presets.filter(x => x !== selectedPreset))
-            }
-          >
-            <RiDeleteBin6Line />
-          </button>
+        <span className="divider mt-0 mb-0"></span>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {allTools.map((Tool, i) => (
+            <Tool key={i} />
+          ))}
+          <GridConsumer>
+            {({ grid }) => (
+              <InstructionPartOutlet
+                grid={grid}
+                placement={PartPlacement.Toolbox}
+              />
+            )}
+          </GridConsumer>
         </div>
-      </div>
-      <div className="flex flex-wrap gap-2 justify-center">
-        {presetTools.length > 0 ? (
-          presetTools
-        ) : (
-          <span className="text-xs opacity-70 p-4">No presets saved.</span>
-        )}
+        <button
+          type="button"
+          className="btn btn-sm w-fit self-center"
+          onClick={() => setShowMoreTools(!showMoreTools)}
+        >
+          {showMoreTools ? 'Show less' : 'Show more'}
+        </button>
+        <span className="divider mt-0 mb-0"></span>
+        <div className="flex gap-4 justify-between items-center pr-4">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-bold">Presets</span>
+            <span className="text-sm">
+              Quickly place identical symbols with presets.
+            </span>
+          </div>
+          <div
+            className="tooltip tooltip-left tooltip-info"
+            data-tip="Remove selected preset"
+          >
+            <button
+              type="button"
+              aria-label="Remove selected preset"
+              className="btn btn-square"
+              disabled={!selectedPreset}
+              onClick={() =>
+                setPresets(presets.filter(x => x !== selectedPreset))
+              }
+            >
+              <RiDeleteBin6Line />
+            </button>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {presetTools.length > 0 ? (
+            presetTools
+          ) : (
+            <span className="text-xs opacity-70 p-4">No presets saved.</span>
+          )}
+        </div>
       </div>
     </div>
   );

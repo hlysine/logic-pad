@@ -14,11 +14,16 @@ export interface OnlineContext {
    * The current user, or null if not logged in or offline.
    */
   me: UserBrief | null;
+  /**
+   * Refresh the online status and user data.
+   */
+  refresh: () => Promise<void>;
 }
 
 const context = createContext<OnlineContext>({
   isOnline: defaultOnline,
   me: null,
+  refresh: async () => {},
 });
 
 export const useOnline = () => {
@@ -47,8 +52,12 @@ export default memo(function OnlineContext({
     () => ({
       isOnline: onlineQuery.data ?? defaultOnline,
       me: meQuery.data ?? null,
+      refresh: async () => {
+        await onlineQuery.refetch();
+        await meQuery.refetch();
+      },
     }),
-    [onlineQuery.data, meQuery.data]
+    [onlineQuery, meQuery]
   );
 
   return <context.Provider value={value}>{children}</context.Provider>;

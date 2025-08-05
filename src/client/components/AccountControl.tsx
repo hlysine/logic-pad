@@ -4,10 +4,17 @@ import { IoCloudOffline } from 'react-icons/io5';
 import { cn } from '../uiHelper';
 import { FaGoogle } from 'react-icons/fa';
 import { api } from '../online/api';
+import { useQuery } from '@tanstack/react-query';
+import Loading from './Loading';
 
 export default memo(function AccountControl() {
   const { isOnline, me } = useOnline();
   const [open, setOpen] = useState(false);
+  const avatarQuery = useQuery({
+    queryKey: ['avatar', me?.id],
+    queryFn: () => (me ? api.getAvatar(me.id) : null),
+    enabled: !!me,
+  });
   if (!isOnline) {
     return (
       <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">
@@ -50,4 +57,18 @@ export default memo(function AccountControl() {
       </>
     );
   }
+  return (
+    <div className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
+      {avatarQuery.isSuccess ? (
+        <img
+          src={avatarQuery.data ?? undefined}
+          alt="Avatar"
+          className="w-8 h-8 rounded-full"
+        />
+      ) : (
+        <Loading className="w-8 h-8" />
+      )}
+      {me.name}
+    </div>
+  );
 });

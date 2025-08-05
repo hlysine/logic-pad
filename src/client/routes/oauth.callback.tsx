@@ -1,7 +1,15 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { api } from '../online/api';
+import { useEffect } from 'react';
+import { useOnline } from '../contexts/OnlineContext';
 
 function OAuthCallback() {
+  const online = useOnline();
+  const navigate = useNavigate();
+  useEffect(() => {
+    void online.refresh();
+    void navigate({ to: '/' });
+  }, [online, navigate]);
   return <div>Redirecting...</div>;
 }
 
@@ -17,9 +25,6 @@ export const Route = createFileRoute('/oauth/callback')({
     }
     try {
       await api.callbackOAuth(userId, secret);
-    } finally {
-      // eslint-disable-next-line @typescript-eslint/only-throw-error, no-unsafe-finally
-      throw redirect({ to: '/' });
-    }
+    } catch (_ex) {}
   },
 });

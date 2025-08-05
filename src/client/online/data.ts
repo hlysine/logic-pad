@@ -24,7 +24,6 @@ export interface UserBrief {
   updatedAt: string;
   accessedAt: string;
   name: string;
-  avatar: string | null;
   solveCount: number;
   createCount: number;
   description: string;

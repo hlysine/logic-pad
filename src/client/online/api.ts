@@ -35,4 +35,18 @@ export const api = {
       .then(res => res.data)
       .catch(() => null);
   },
+  getUser: async (userId: string) => {
+    return await axios
+      .get<UserBrief>(`/user/${userId}`)
+      .then(res => res.data)
+      .catch(() => null);
+  },
+  getAvatar: async (userId: string) => {
+    return await axios
+      .get<Blob>(`/user/${userId}/avatar`, {
+        responseType: 'blob',
+      })
+      .then(res => URL.createObjectURL(res.data))
+      .catch(() => null);
+  },
 };

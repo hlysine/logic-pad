@@ -1,5 +1,5 @@
 import GridData from '../grid.js';
-import { Puzzle } from '../puzzle.js';
+import { Puzzle, PuzzleData } from '../puzzle.js';
 import Rule from '../rules/rule.js';
 import Symbol from '../symbols/symbol.js';
 import SerializerV0 from './serializer_v0.js';
@@ -55,6 +55,13 @@ const Serializer = {
   parseGrid(input: string): GridData {
     const { serializer, data } = selectSerializer(input);
     return serializer.parseGrid(data);
+  },
+  stringifyGridWithSolution(puzzle: PuzzleData): string {
+    return `${defaultSerializer.version}_${defaultSerializer.stringifyGridWithSolution(puzzle)}`;
+  },
+  parseGridWithSolution(input: string): PuzzleData {
+    const { serializer, data } = selectSerializer(input);
+    return serializer.parseGridWithSolution(data);
   },
   /**
    * Convert a puzzle to a string.

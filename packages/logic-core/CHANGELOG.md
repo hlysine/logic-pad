@@ -1,3 +1,7 @@
+# 0.12.1
+
+- Expose grid with solution serialization publicly
+
 # 0.12.0
 
 - Removed "link" attribute from puzzle metadata

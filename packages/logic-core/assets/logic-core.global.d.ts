@@ -1970,6 +1970,8 @@ declare global {
     parseSymbol(input: string): Symbol$1;
     stringifyGrid(grid: GridData): string;
     parseGrid(input: string): GridData;
+    stringifyGridWithSolution(puzzle: PuzzleData): string;
+    parseGridWithSolution(input: string): PuzzleData;
     /**
      * Convert a puzzle to a string.
      * @param puzzle The puzzle to convert.

@@ -64,6 +64,19 @@ const checklistItemMap = {
       {item.success ? 'Metadata valid' : 'Metadata invalid'}
     </ChecklistItem>
   ),
+  gridValid: (item: PuzzleChecklistItem) => (
+    <ChecklistItem
+      key="gridValid"
+      type={item.success ? 'success' : 'error'}
+      tooltip={
+        item.success
+          ? 'Grid dimensions are valid'
+          : 'Grid dimensions must be greater than zero'
+      }
+    >
+      {item.success ? 'Grid valid' : 'Grid invalid'}
+    </ChecklistItem>
+  ),
   autoValidation: (item: PuzzleChecklistItem) => (
     <ChecklistItem
       key="autoValidation"

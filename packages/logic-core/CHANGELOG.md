@@ -1,3 +1,7 @@
+# 0.12.4
+
+- Add new checklist item for valid grid dimension
+
 # 0.12.3
 
 - Implement puzzle checklist logic

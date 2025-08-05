@@ -111,6 +111,11 @@ export function validatePuzzleChecklist(
     success: MetadataSchema.safeParse(metadata).success,
     mandatory: true,
   });
+  checklist.items.push({
+    id: 'gridValid',
+    success: gridWithSolution.width > 0 && gridWithSolution.height > 0,
+    mandatory: true,
+  });
   if (gridWithSolution.requireSolution()) {
     checklist.items.push({
       id: 'autoValidation',

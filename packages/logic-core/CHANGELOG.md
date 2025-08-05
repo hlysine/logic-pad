@@ -1,3 +1,7 @@
+# 0.12.2
+
+- getPuzzleTypes now only require GridData as parameter
+
 # 0.12.1
 
 - Expose grid with solution serialization publicly

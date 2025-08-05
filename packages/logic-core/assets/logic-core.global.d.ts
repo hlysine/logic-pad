@@ -1489,7 +1489,7 @@ declare global {
    * Get the types of a puzzle based on its grid properties. The returned types are ordered by their priority.
    * The first type is the most important one.
    */
-  export declare function getPuzzleTypes(puzzle: Puzzle): PuzzleType[];
+  export declare function getPuzzleTypes(grid: GridData): PuzzleType[];
   export interface ShapeElement {
     x: number;
     y: number;

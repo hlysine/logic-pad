@@ -66,18 +66,18 @@ export type Puzzle = PuzzleMetadata & PuzzleData;
  * Get the types of a puzzle based on its grid properties. The returned types are ordered by their priority.
  * The first type is the most important one.
  */
-export function getPuzzleTypes(puzzle: Puzzle): PuzzleType[] {
+export function getPuzzleTypes(grid: GridData): PuzzleType[] {
   const types: PuzzleType[] = [];
   let logic = true;
-  if (puzzle.grid.musicGrid.value) {
+  if (grid.musicGrid.value) {
     types.push(PuzzleType.Music);
     logic = false;
   }
-  if (puzzle.grid.completePattern.value) {
+  if (grid.completePattern.value) {
     types.push(PuzzleType.Pattern);
     logic = false;
   }
-  if (puzzle.grid.underclued.value) {
+  if (grid.underclued.value) {
     types.push(PuzzleType.Underclued);
   }
   if (logic) {

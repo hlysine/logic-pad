@@ -1,11 +1,36 @@
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { api } from '../online/api';
-import { FaGoogle } from 'react-icons/fa';
+import { FaDiscord, FaGoogle } from 'react-icons/fa';
+import { IconType } from 'react-icons';
+
+interface AuthButtonProps {
+  provider: string;
+  label: string;
+  icon: IconType;
+}
+
+function AuthButton({ provider, label, icon: Icon }: AuthButtonProps) {
+  return (
+    <button
+      className="btn btn-outline font-thin text-lg w-full"
+      onClick={() => {
+        api.signInWithOAuth(
+          provider,
+          window.location.origin + '/oauth/callback',
+          window.location.origin
+        );
+      }}
+    >
+      {<Icon size={24} />}
+      {label}
+    </button>
+  );
+}
 
 function Auth() {
   return (
     <div className="flex items-center justify-center w-full h-full min-h-screen">
-      <div className="card bg-base-100 card-lg shadow-sm overflow-hidden max-w-full">
+      <div className="card bg-base-100 card-lg shadow-sm overflow-hidden max-w-full w-[500px] m-4">
         <div className="bg-base-200 p-4">
           <Link
             to="/"
@@ -26,20 +51,17 @@ function Auth() {
             </h2>
             <p className="text-lg">Sign in or sign up here</p>
           </div>
-          <div className="justify-end card-actions">
-            <button
-              className="btn btn-outline w-full"
-              onClick={() =>
-                api.signInWithOAuth(
-                  'google',
-                  window.location.origin + '/oauth/callback',
-                  window.location.origin
-                )
-              }
-            >
-              <FaGoogle size={24} />
-              Sign in with Google
-            </button>
+          <div className="justify-end card-actions flex-col gap-4 w-full">
+            <AuthButton
+              provider="google"
+              label="Sign in with Google"
+              icon={FaGoogle}
+            />
+            <AuthButton
+              provider="discord"
+              label="Sign in with Discord"
+              icon={FaDiscord}
+            />
             <p>More providers coming soon</p>
           </div>
         </div>

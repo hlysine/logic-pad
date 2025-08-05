@@ -8,6 +8,7 @@ export const SiteSettingsSchema = z.object({
   flipPrimaryMouseButton: z.boolean().default(false),
   visualizeWrapArounds: z.boolean().default(true),
   showMoreTools: z.boolean().default(false),
+  offlineMode: z.boolean().default(false),
 });
 
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;

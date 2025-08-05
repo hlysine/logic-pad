@@ -5,6 +5,7 @@ import ResetSite from './settings/ResetSite';
 import ExitConfirmationToggle from './settings/ExitConfirmationToggle';
 import PrimaryMouseButtonToggle from './settings/PrimaryMouseButtonToggle';
 import WrapAroundVisualizationToggle from './settings/WrapAroundVisualizationToggle';
+import OfflineModeToggle from './settings/OfflineModeToggle';
 
 export default memo(function Settings() {
   return (
@@ -31,6 +32,7 @@ export default memo(function Settings() {
             <ExitConfirmationToggle />
             <PrimaryMouseButtonToggle />
             <WrapAroundVisualizationToggle />
+            <OfflineModeToggle />
           </div>
           <div className="modal-action self-stretch">
             <form method="dialog" className="flex w-full justify-between gap-4">

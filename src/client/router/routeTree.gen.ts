@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './../routes/__root'
+import { Route as AuthImport } from './../routes/auth'
 import { Route as IndexImport } from './../routes/index'
 import { Route as OauthCallbackImport } from './../routes/oauth.callback'
 import { Route as ContextLayoutSolveImport } from './../routes/_context._layout.solve'
@@ -30,6 +31,12 @@ const ContextLazyRoute = ContextLazyImport.update({
   id: '/_context',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./../routes/_context.lazy').then((d) => d.Route))
+
+const AuthRoute = AuthImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -83,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthImport
       parentRoute: typeof rootRoute
     }
     '/_context': {
@@ -161,6 +175,7 @@ const ContextLazyRouteWithChildren = ContextLazyRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '': typeof ContextLayoutLazyRouteWithChildren
   '/oauth/callback': typeof OauthCallbackRoute
   '/create': typeof ContextLayoutCreateRoute
@@ -170,6 +185,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '': typeof ContextLayoutLazyRouteWithChildren
   '/oauth/callback': typeof OauthCallbackRoute
   '/create': typeof ContextLayoutCreateRoute
@@ -180,6 +196,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/_context': typeof ContextLazyRouteWithChildren
   '/oauth/callback': typeof OauthCallbackRoute
   '/_context/_layout': typeof ContextLayoutLazyRouteWithChildren
@@ -190,12 +207,27 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/oauth/callback' | '/create' | '/perfection' | '/solve'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | ''
+    | '/oauth/callback'
+    | '/create'
+    | '/perfection'
+    | '/solve'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/oauth/callback' | '/create' | '/perfection' | '/solve'
+  to:
+    | '/'
+    | '/auth'
+    | ''
+    | '/oauth/callback'
+    | '/create'
+    | '/perfection'
+    | '/solve'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/_context'
     | '/oauth/callback'
     | '/_context/_layout'
@@ -207,12 +239,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   ContextLazyRoute: typeof ContextLazyRouteWithChildren
   OauthCallbackRoute: typeof OauthCallbackRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   ContextLazyRoute: ContextLazyRouteWithChildren,
   OauthCallbackRoute: OauthCallbackRoute,
 }
@@ -228,12 +262,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/auth",
         "/_context",
         "/oauth/callback"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/auth": {
+      "filePath": "auth.tsx"
     },
     "/_context": {
       "filePath": "_context.lazy.tsx",

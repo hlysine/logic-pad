@@ -1,15 +1,14 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { useOnline } from '../contexts/OnlineContext';
 import { IoCloudOffline } from 'react-icons/io5';
-import { cn } from '../uiHelper';
-import { FaGoogle } from 'react-icons/fa';
 import { api } from '../online/api';
 import { useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
+import { useNavigate } from '@tanstack/react-router';
 
 export default memo(function AccountControl() {
-  const { isOnline, me } = useOnline();
-  const [open, setOpen] = useState(false);
+  const { isOnline, me, refresh } = useOnline();
+  const navigate = useNavigate();
   const avatarQuery = useQuery({
     queryKey: ['avatar', me?.id],
     queryFn: () => (me ? api.getAvatar(me.id) : null),
@@ -28,47 +27,49 @@ export default memo(function AccountControl() {
       <>
         <div
           className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit"
-          onClick={() => setOpen(true)}
+          onClick={async () => {
+            await navigate({
+              to: '/auth',
+            });
+          }}
         >
           Sign in / sign up
         </div>
-        <dialog id="auth_modal" className={cn('modal', open && 'modal-open')}>
-          <div className="modal-box flex flex-col gap-4 items-center">
-            <h3 className="font-bold text-2xl">Continue with an account</h3>
-            <p>Support for more providers coming soon</p>
-            <button
-              className="btn btn-primary btn-outline btn-md w-full gap-4"
-              onClick={() =>
-                api.signInWithOAuth(
-                  'google',
-                  window.location.origin + '/oauth/callback',
-                  window.location.origin
-                )
-              }
-            >
-              <FaGoogle size={24} />
-              Sign in with Google
-            </button>
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button onClick={() => setOpen(false)}>close</button>
-          </form>
-        </dialog>
       </>
     );
   }
   return (
-    <div className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
-      {avatarQuery.isSuccess ? (
-        <img
-          src={avatarQuery.data ?? undefined}
-          alt="Avatar"
-          className="w-8 h-8 rounded-full"
-        />
-      ) : (
-        <Loading className="w-8 h-8" />
-      )}
-      {me.name}
-    </div>
+    <details className="dropdown dropdown-end">
+      <summary className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
+        {avatarQuery.isSuccess ? (
+          <img
+            src={avatarQuery.data ?? undefined}
+            alt="Avatar"
+            className="w-8 h-8 rounded-full"
+          />
+        ) : (
+          <Loading className="w-8 h-8" />
+        )}
+        {me.name}
+      </summary>
+      <ul className="menu dropdown-content bg-base-100 rounded-box z-50 w-52 mt-2 p-2 shadow-sm">
+        <li>
+          <a>Profile</a>
+        </li>
+        <li>
+          <a>My stuff</a>
+        </li>
+        <li>
+          <a
+            onClick={async () => {
+              await api.logout();
+              await refresh();
+            }}
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+    </details>
   );
 });

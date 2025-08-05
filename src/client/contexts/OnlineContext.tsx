@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createContext, memo, useContext, useMemo } from 'react';
 import { api } from '../online/api';
 import { UserBrief } from '../online/data';
+import { useSettings } from './SettingsContext';
 
 const defaultOnline = true;
 
@@ -37,6 +38,8 @@ export default memo(function OnlineContext({
 }: {
   children: React.ReactNode;
 }) {
+  const [offlineMode] = useSettings('offlineMode');
+
   const onlineQuery = useQuery({
     queryKey: ['isOnline'],
     queryFn: api.isOnline,
@@ -50,14 +53,14 @@ export default memo(function OnlineContext({
 
   const value = useMemo(
     () => ({
-      isOnline: onlineQuery.data ?? defaultOnline,
+      isOnline: !offlineMode && (onlineQuery.data ?? defaultOnline),
       me: meQuery.data ?? null,
       refresh: async () => {
         await onlineQuery.refetch();
         await meQuery.refetch();
       },
     }),
-    [onlineQuery, meQuery]
+    [offlineMode, onlineQuery, meQuery]
   );
 
   return <context.Provider value={value}>{children}</context.Provider>;

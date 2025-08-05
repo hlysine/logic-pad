@@ -35,6 +35,9 @@ export const api = {
       .then(res => res.data)
       .catch(() => null);
   },
+  logout: async () => {
+    await axios.delete('/auth/logout');
+  },
   getUser: async (userId: string) => {
     return await axios
       .get<UserBrief>(`/user/${userId}`)

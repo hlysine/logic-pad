@@ -1,24 +1,22 @@
 import InstructionList from '../instructions/InstructionList';
 import { EditorEditControls } from '../components/EditControls';
-import MainGrid from '../grid/MainGrid';
-import RulerOverlay from '../grid/RulerOverlay';
 import { GridConsumer } from '../contexts/GridContext';
 import InstructionSearch from '../instructions/InstructionSearch';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import DocumentTitle from '../components/DocumentTitle';
 import TouchControls from '../components/TouchControls';
 import ConfigContext from '../contexts/ConfigContext';
 import ConfigPopup from '../configs/ConfigPopup';
-import EditorPane from '../editor/EditorPane';
+import EditorSideTabs from '../editor/EditorSideTabs';
 import ToolboxContext from '../contexts/ToolboxContext';
-import ToolboxOverlay from '../editor/ToolboxOverlay';
 import { useEmbed } from '../contexts/EmbedContext';
 import PuzzleChecklist from '../editor/PuzzleChecklist';
 import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import ModeVariantLoader from '../router/ModeVariantLoader';
 import { Mode } from '@logic-pad/core/data/primitives';
+import EditorCenterTabs from '../editor/EditorCenterTabs';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -28,6 +26,7 @@ export default memo(function PuzzleEditorScreen({
   children,
 }: PuzzleEditorScreenProps) {
   const { features } = useEmbed();
+  const [editorMode, setEditorMode] = useState<'grid' | 'info'>('grid');
   return (
     <ToolboxContext>
       <ConfigContext>
@@ -36,7 +35,10 @@ export default memo(function PuzzleEditorScreen({
           left={
             <>
               <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
-              <EditorPane />
+              <EditorSideTabs
+                editorMode={editorMode}
+                onEditorModeChange={setEditorMode}
+              />
               <div className="shrink-0 flex-col gap-1 hidden has-[*]:flex">
                 <GridConsumer>
                   {({ grid }) => (
@@ -60,16 +62,7 @@ export default memo(function PuzzleEditorScreen({
               <ModeVariantLoader mode={Mode.Create} />
             </>
           }
-          center={
-            <MainGrid useToolboxClick={true}>
-              <GridConsumer>
-                {({ grid }) => (
-                  <RulerOverlay width={grid.width} height={grid.height} />
-                )}
-              </GridConsumer>
-              <ToolboxOverlay />
-            </MainGrid>
-          }
+          center={<EditorCenterTabs editorMode={editorMode} />}
           right={
             <>
               <div className="h-full flex flex-col items-center justify-center gap-4">

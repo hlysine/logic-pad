@@ -1,4 +1,3 @@
-import ModeSwitcher from '../components/ModeSwitcher';
 import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
@@ -21,7 +20,6 @@ export const Route = createLazyFileRoute('/_context/_layout')({
               Logic Pad
             </Link>
           </div>
-          <ModeSwitcher />
           <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />
         </header>
         <Outlet />

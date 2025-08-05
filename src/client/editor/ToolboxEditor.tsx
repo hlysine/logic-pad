@@ -37,7 +37,7 @@ export default memo(function ToolboxEditor() {
 
   return (
     <div className="grow overflow-y-auto overflow-x-hidden">
-      <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col gap-2">
+      <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col gap-2 shadow">
         <GridConsumer>
           {({ grid, setGrid }) => (
             <GridSizeEditor grid={grid} setGrid={setGrid} />

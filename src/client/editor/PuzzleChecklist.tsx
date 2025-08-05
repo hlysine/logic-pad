@@ -12,27 +12,20 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import Accordion from '../components/Accordion';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { Color, State } from '@logic-pad/core/data/primitives';
-import { BiSolidFlagCheckered } from 'react-icons/bi';
-import { BsCreditCard2Front, BsPatchCheckFill } from 'react-icons/bs';
-import { FaCircleHalfStroke, FaHourglassHalf } from 'react-icons/fa6';
 import { MetadataSchema } from '@logic-pad/core/data/puzzle';
-import { RiRobot2Fill } from 'react-icons/ri';
 import GridData from '@logic-pad/core/data/grid';
-import { HiViewGrid, HiViewGridAdd } from 'react-icons/hi';
-import { IconBaseProps } from 'react-icons';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
+import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 
 const SolverSelector = lazy(() => import('./SolverSelector'));
 
 function ChecklistItem({
-  icon: Icon,
-  iconClass,
+  type,
   children,
   tooltip,
 }: {
-  icon: React.JSXElementConstructor<IconBaseProps>;
-  iconClass: string;
+  type: 'success' | 'error' | 'info' | 'none';
   children: React.ReactNode;
   tooltip?: string;
 }) {
@@ -41,7 +34,15 @@ function ChecklistItem({
       className="flex items-center gap-2 tooltip tooltip-top tooltip-info"
       data-tip={tooltip}
     >
-      <Icon size={22} className={iconClass} />
+      {type === 'success' ? (
+        <FaCheckCircle size={22} className="text-success" />
+      ) : type === 'error' ? (
+        <FaTimesCircle size={22} className="text-error" />
+      ) : type === 'info' ? (
+        <FaInfoCircle size={22} className="text-info" />
+      ) : (
+        <FaInfoCircle size={22} className="opacity-0" />
+      )}
       {children}
     </div>
   );
@@ -135,8 +136,7 @@ export default memo(function PuzzleChecklist() {
       <div className="flex flex-col gap-2 text-sm">
         <ChecklistItem
           key="metadataValid"
-          icon={BsCreditCard2Front}
-          iconClass={metadataValid ? 'text-success' : 'text-error'}
+          type={metadataValid ? 'success' : 'error'}
           tooltip={
             metadataValid
               ? 'All required metadata fields are filled'
@@ -147,8 +147,7 @@ export default memo(function PuzzleChecklist() {
         </ChecklistItem>
         <ChecklistItem
           key="autoValidation"
-          icon={BiSolidFlagCheckered}
-          iconClass={autoValidation ? 'text-success' : 'text-success/50'}
+          type="info"
           tooltip={
             autoValidation
               ? 'You puzzle solution is automatically validated'
@@ -161,12 +160,7 @@ export default memo(function PuzzleChecklist() {
           <>
             <ChecklistItem
               key="solutionIsValid"
-              icon={BsPatchCheckFill}
-              iconClass={
-                solutionIsValid && solutionIsComplete
-                  ? 'text-success'
-                  : 'text-error'
-              }
+              type={solutionIsValid && solutionIsComplete ? 'success' : 'error'}
               tooltip="A valid and complete solution is required to prove that the puzzle is solvable"
             >
               {solutionIsValid && solutionIsComplete
@@ -179,8 +173,7 @@ export default memo(function PuzzleChecklist() {
         ) : (
           <ChecklistItem
             key="solutionIsNotEmpty"
-            icon={FaCircleHalfStroke}
-            iconClass={solutionIsNotEmpty ? 'text-success' : 'text-error'}
+            type={solutionIsNotEmpty ? 'success' : 'error'}
             tooltip="Solution cannot be empty"
           >
             {solutionIsNotEmpty ? 'Solution not empty' : 'Solution empty'}
@@ -190,10 +183,7 @@ export default memo(function PuzzleChecklist() {
           <>
             <ChecklistItem
               key="solution"
-              icon={HiViewGrid}
-              iconClass={
-                solution.value !== null ? 'text-success' : 'text-error'
-              }
+              type={solution.value !== null ? 'success' : 'error'}
               tooltip={
                 solution.value !== null
                   ? 'Solution found. Click to view'
@@ -228,13 +218,12 @@ export default memo(function PuzzleChecklist() {
             {(alternate !== null || !solveRef) && (
               <ChecklistItem
                 key="alternate"
-                icon={HiViewGridAdd}
-                iconClass={
+                type={
                   alternate !== null
                     ? alternate.value !== null
-                      ? 'text-success/50'
-                      : 'text-success'
-                    : 'opacity-0'
+                      ? 'info'
+                      : 'success'
+                    : 'none'
                 }
                 tooltip={
                   alternate !== null
@@ -290,8 +279,7 @@ export default memo(function PuzzleChecklist() {
         {solveRef && (
           <ChecklistItem
             key="solving"
-            icon={FaHourglassHalf}
-            iconClass={'text-info'}
+            type="info"
             tooltip={
               solution === null
                 ? 'Solving...'
@@ -319,8 +307,7 @@ export default memo(function PuzzleChecklist() {
           <>
             <ChecklistItem
               key="autoSolvable"
-              icon={RiRobot2Fill}
-              iconClass={autoSolvable ? 'text-success' : 'text-success/50'}
+              type={autoSolvable ? 'success' : 'info'}
               tooltip={
                 autoSolvable
                   ? 'Can be solved automatically by the solver'

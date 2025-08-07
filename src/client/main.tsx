@@ -7,8 +7,9 @@ import { routeTree } from './router/routeTree.gen';
 import NotFound from './router/NotFound';
 import { themeKey } from './contexts/ThemeContext.tsx';
 import { cleanReload } from './components/settings/ResetSite.tsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import OnlineContext from './contexts/OnlineContext.tsx';
+import { queryClient } from './online/api.ts';
 
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
@@ -44,8 +45,6 @@ function Redirector() {
 window.addEventListener('vite:preloadError', async () => {
   await cleanReload();
 });
-
-const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('app')!).render(
   <React.StrictMode>

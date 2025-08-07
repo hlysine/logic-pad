@@ -19,6 +19,7 @@ import { Route as OauthCallbackImport } from './../routes/oauth.callback'
 import { Route as ContextLayoutSolveImport } from './../routes/_context._layout.solve'
 import { Route as ContextLayoutPerfectionImport } from './../routes/_context._layout.perfection'
 import { Route as ContextLayoutCreateImport } from './../routes/_context._layout.create'
+import { Route as ContextLayoutEditPuzzleIdImport } from './../routes/_context._layout.edit.$puzzleId'
 
 // Create Virtual Routes
 
@@ -81,6 +82,16 @@ const ContextLayoutCreateRoute = ContextLayoutCreateImport.update({
   import('./../routes/_context._layout.create.lazy').then((d) => d.Route),
 )
 
+const ContextLayoutEditPuzzleIdRoute = ContextLayoutEditPuzzleIdImport.update({
+  id: '/edit/$puzzleId',
+  path: '/edit/$puzzleId',
+  getParentRoute: () => ContextLayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_context._layout.edit.$puzzleId.lazy').then(
+    (d) => d.Route,
+  ),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -141,6 +152,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContextLayoutSolveImport
       parentRoute: typeof ContextLayoutLazyImport
     }
+    '/_context/_layout/edit/$puzzleId': {
+      id: '/_context/_layout/edit/$puzzleId'
+      path: '/edit/$puzzleId'
+      fullPath: '/edit/$puzzleId'
+      preLoaderRoute: typeof ContextLayoutEditPuzzleIdImport
+      parentRoute: typeof ContextLayoutLazyImport
+    }
   }
 }
 
@@ -150,12 +168,14 @@ interface ContextLayoutLazyRouteChildren {
   ContextLayoutCreateRoute: typeof ContextLayoutCreateRoute
   ContextLayoutPerfectionRoute: typeof ContextLayoutPerfectionRoute
   ContextLayoutSolveRoute: typeof ContextLayoutSolveRoute
+  ContextLayoutEditPuzzleIdRoute: typeof ContextLayoutEditPuzzleIdRoute
 }
 
 const ContextLayoutLazyRouteChildren: ContextLayoutLazyRouteChildren = {
   ContextLayoutCreateRoute: ContextLayoutCreateRoute,
   ContextLayoutPerfectionRoute: ContextLayoutPerfectionRoute,
   ContextLayoutSolveRoute: ContextLayoutSolveRoute,
+  ContextLayoutEditPuzzleIdRoute: ContextLayoutEditPuzzleIdRoute,
 }
 
 const ContextLayoutLazyRouteWithChildren =
@@ -181,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/create': typeof ContextLayoutCreateRoute
   '/perfection': typeof ContextLayoutPerfectionRoute
   '/solve': typeof ContextLayoutSolveRoute
+  '/edit/$puzzleId': typeof ContextLayoutEditPuzzleIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -191,6 +212,7 @@ export interface FileRoutesByTo {
   '/create': typeof ContextLayoutCreateRoute
   '/perfection': typeof ContextLayoutPerfectionRoute
   '/solve': typeof ContextLayoutSolveRoute
+  '/edit/$puzzleId': typeof ContextLayoutEditPuzzleIdRoute
 }
 
 export interface FileRoutesById {
@@ -203,6 +225,7 @@ export interface FileRoutesById {
   '/_context/_layout/create': typeof ContextLayoutCreateRoute
   '/_context/_layout/perfection': typeof ContextLayoutPerfectionRoute
   '/_context/_layout/solve': typeof ContextLayoutSolveRoute
+  '/_context/_layout/edit/$puzzleId': typeof ContextLayoutEditPuzzleIdRoute
 }
 
 export interface FileRouteTypes {
@@ -215,6 +238,7 @@ export interface FileRouteTypes {
     | '/create'
     | '/perfection'
     | '/solve'
+    | '/edit/$puzzleId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -224,6 +248,7 @@ export interface FileRouteTypes {
     | '/create'
     | '/perfection'
     | '/solve'
+    | '/edit/$puzzleId'
   id:
     | '__root__'
     | '/'
@@ -234,6 +259,7 @@ export interface FileRouteTypes {
     | '/_context/_layout/create'
     | '/_context/_layout/perfection'
     | '/_context/_layout/solve'
+    | '/_context/_layout/edit/$puzzleId'
   fileRoutesById: FileRoutesById
 }
 
@@ -288,7 +314,8 @@ export const routeTree = rootRoute
       "children": [
         "/_context/_layout/create",
         "/_context/_layout/perfection",
-        "/_context/_layout/solve"
+        "/_context/_layout/solve",
+        "/_context/_layout/edit/$puzzleId"
       ]
     },
     "/_context/_layout/create": {
@@ -301,6 +328,10 @@ export const routeTree = rootRoute
     },
     "/_context/_layout/solve": {
       "filePath": "_context._layout.solve.tsx",
+      "parent": "/_context/_layout"
+    },
+    "/_context/_layout/edit/$puzzleId": {
+      "filePath": "_context._layout.edit.$puzzleId.tsx",
       "parent": "/_context/_layout"
     }
   }

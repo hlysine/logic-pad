@@ -1,11 +1,6 @@
 /* Sync with backend */
 
-export enum PuzzleType {
-  Logic = 'logic',
-  Underclued = 'underclued',
-  Pattern = 'pattern',
-  Music = 'music',
-}
+import { PuzzleType } from '@logic-pad/core/data/primitives';
 
 export enum ResourceStatus {
   Private = 'private',
@@ -22,7 +17,6 @@ export interface UserBrief {
   id: string;
   createdAt: string;
   updatedAt: string;
-  accessedAt: string;
   name: string;
   solveCount: number;
   createCount: number;
@@ -86,6 +80,7 @@ export interface Attempt {
 }
 
 export interface UserFull extends UserBrief {
+  accessedAt: string;
   followedCollections: CollectionBrief[];
   createdPuzzles: CollectionBrief;
   lovedPuzzles: CollectionBrief;

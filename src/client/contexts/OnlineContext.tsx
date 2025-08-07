@@ -35,32 +35,38 @@ export const OnlineConsumer = context.Consumer;
 
 export default memo(function OnlineContext({
   children,
+  forceOffline,
 }: {
   children: React.ReactNode;
+  forceOffline?: boolean;
 }) {
+  forceOffline ??= false;
   const [offlineMode] = useSettings('offlineMode');
 
   const onlineQuery = useQuery({
     queryKey: ['isOnline'],
     queryFn: api.isOnline,
+    enabled: !forceOffline && !offlineMode,
   });
 
   const meQuery = useQuery({
     queryKey: ['me'],
     queryFn: api.getMe,
-    enabled: onlineQuery.data ?? defaultOnline,
+    enabled:
+      !forceOffline && !offlineMode && (onlineQuery.data ?? defaultOnline),
   });
 
   const value = useMemo(
     () => ({
-      isOnline: !offlineMode && (onlineQuery.data ?? defaultOnline),
+      isOnline:
+        !forceOffline && !offlineMode && (onlineQuery.data ?? defaultOnline),
       me: meQuery.data ?? null,
       refresh: async () => {
         await onlineQuery.refetch();
         await meQuery.refetch();
       },
     }),
-    [offlineMode, onlineQuery, meQuery]
+    [forceOffline, offlineMode, onlineQuery, meQuery]
   );
 
   return <context.Provider value={value}>{children}</context.Provider>;

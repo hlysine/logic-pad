@@ -1,5 +1,6 @@
 import { Suspense, lazy, memo } from 'react';
 import Loading from '../components/Loading.tsx';
+import { useOnline } from '../contexts/OnlineContext.tsx';
 
 const EditorMainGrid = lazy(() => import('./EditorMainGrid.tsx'));
 const EditorOnlineTab = lazy(() => import('./EditorOnlineTab.tsx'));
@@ -16,9 +17,10 @@ export interface EditorCenterTabsProps {
 export default memo(function EditorCenterTabs({
   editorMode,
 }: EditorCenterTabsProps) {
+  const online = useOnline();
   return (
     <Suspense fallback={<Loading />}>
-      {panes[editorMode === 'grid' ? 0 : 1][1]}
+      {panes[editorMode === 'grid' || !online.isOnline ? 0 : 1][1]}
     </Suspense>
   );
 });

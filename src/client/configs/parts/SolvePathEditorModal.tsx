@@ -20,6 +20,7 @@ import { GridData } from '@logic-pad/core/index';
 import { Puzzle, PuzzleMetadata } from '@logic-pad/core/data/puzzle';
 import { invokeSetGrid } from '@logic-pad/core/data/events/onSetGrid';
 import FullScreenModal from '../../components/FullScreenModal';
+import OnlineContext from '../../contexts/OnlineContext';
 
 export interface SolvePathEditorModalProps {
   onChange: (solvePath: Position[]) => void;
@@ -110,68 +111,70 @@ export default memo(
         >
           {initialState && (
             <EmbedContext name="solve-path-modal">
-              <DisplayContext>
-                <EditContext>
-                  <GridStateContext>
-                    <GridContext
-                      initialGrid={initialState.grid}
-                      initialSolution={initialState.solution}
-                      initialMetadata={() => {
-                        const {
-                          grid: _1,
-                          solution: _2,
-                          ...metadata
-                        } = initialState;
-                        return metadata;
-                      }}
-                    >
-                      <EditConsumer>
-                        {({ clearHistory }) => {
-                          return (
-                            <GridConsumer>
-                              {({ setGridRaw: setInnerGrid }) => {
-                                const onReset = () => {
-                                  const { grid, solution } = prepareGrid(
-                                    initialState.grid,
-                                    []
-                                  );
-                                  setInnerGrid(grid, solution);
-                                  setTempSolvePath([]);
-                                  clearHistory(grid);
-                                };
-                                return (
-                                  <PerfectionScreen
-                                    solvePath={tempSolvePath}
-                                    setSolvePath={setTempSolvePath}
-                                    onReset={onReset}
-                                  >
-                                    <button
-                                      type="button"
-                                      className="btn"
-                                      onClick={onReset}
-                                    >
-                                      Reset progress (R)
-                                    </button>
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary"
-                                      onClick={() => {
-                                        setInitialState(null);
-                                      }}
-                                    >
-                                      Save and exit
-                                    </button>
-                                  </PerfectionScreen>
-                                );
-                              }}
-                            </GridConsumer>
-                          );
+              <OnlineContext forceOffline={true}>
+                <DisplayContext>
+                  <EditContext>
+                    <GridStateContext>
+                      <GridContext
+                        initialGrid={initialState.grid}
+                        initialSolution={initialState.solution}
+                        initialMetadata={() => {
+                          const {
+                            grid: _1,
+                            solution: _2,
+                            ...metadata
+                          } = initialState;
+                          return metadata;
                         }}
-                      </EditConsumer>
-                    </GridContext>
-                  </GridStateContext>
-                </EditContext>
-              </DisplayContext>
+                      >
+                        <EditConsumer>
+                          {({ clearHistory }) => {
+                            return (
+                              <GridConsumer>
+                                {({ setGridRaw: setInnerGrid }) => {
+                                  const onReset = () => {
+                                    const { grid, solution } = prepareGrid(
+                                      initialState.grid,
+                                      []
+                                    );
+                                    setInnerGrid(grid, solution);
+                                    setTempSolvePath([]);
+                                    clearHistory(grid);
+                                  };
+                                  return (
+                                    <PerfectionScreen
+                                      solvePath={tempSolvePath}
+                                      setSolvePath={setTempSolvePath}
+                                      onReset={onReset}
+                                    >
+                                      <button
+                                        type="button"
+                                        className="btn"
+                                        onClick={onReset}
+                                      >
+                                        Reset progress (R)
+                                      </button>
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                          setInitialState(null);
+                                        }}
+                                      >
+                                        Save and exit
+                                      </button>
+                                    </PerfectionScreen>
+                                  );
+                                }}
+                              </GridConsumer>
+                            );
+                          }}
+                        </EditConsumer>
+                      </GridContext>
+                    </GridStateContext>
+                  </EditContext>
+                </DisplayContext>
+              </OnlineContext>
             </EmbedContext>
           )}
         </FullScreenModal>

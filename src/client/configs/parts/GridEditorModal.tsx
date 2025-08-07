@@ -18,6 +18,7 @@ import EditContext from '../../contexts/EditContext.tsx';
 import GridStateContext from '../../contexts/GridStateContext.tsx';
 import { useDelta } from 'react-delta-hooks';
 import FullScreenModal from '../../components/FullScreenModal.tsx';
+import OnlineContext from '../../contexts/OnlineContext.tsx';
 
 export interface GridEditorModalProps {
   onChange: (grid: GridData) => void;
@@ -67,34 +68,36 @@ export default memo(
                   checklist: false,
                 })}
               >
-                <DisplayContext>
-                  <EditContext>
-                    <GridStateContext>
-                      <GridContext grid={tempGrid} setGrid={setTempGrid}>
-                        <PuzzleEditorScreen>
-                          <button
-                            type="button"
-                            className="btn"
-                            onClick={() => {
-                              setTempGrid(outerGrid);
-                            }}
-                          >
-                            Copy from main grid
-                          </button>
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={() => {
-                              setOpen(false);
-                            }}
-                          >
-                            Save and exit
-                          </button>
-                        </PuzzleEditorScreen>
-                      </GridContext>
-                    </GridStateContext>
-                  </EditContext>
-                </DisplayContext>
+                <OnlineContext forceOffline={true}>
+                  <DisplayContext>
+                    <EditContext>
+                      <GridStateContext>
+                        <GridContext grid={tempGrid} setGrid={setTempGrid}>
+                          <PuzzleEditorScreen>
+                            <button
+                              type="button"
+                              className="btn"
+                              onClick={() => {
+                                setTempGrid(outerGrid);
+                              }}
+                            >
+                              Copy from main grid
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setOpen(false);
+                              }}
+                            >
+                              Save and exit
+                            </button>
+                          </PuzzleEditorScreen>
+                        </GridContext>
+                      </GridStateContext>
+                    </EditContext>
+                  </DisplayContext>
+                </OnlineContext>
               </EmbedContext>
             )}
           </GridConsumer>

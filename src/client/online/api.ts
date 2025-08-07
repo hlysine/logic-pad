@@ -1,5 +1,8 @@
 import axiosStatic from 'axios';
-import { UserBrief } from './data';
+import { PuzzleFull, UserBrief } from './data';
+import { QueryClient } from '@tanstack/react-query';
+
+export const queryClient = new QueryClient();
 
 export const axios = axiosStatic.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT as string,
@@ -51,5 +54,10 @@ export const api = {
       })
       .then(res => URL.createObjectURL(res.data))
       .catch(() => null);
+  },
+  getPuzzleFull: async (puzzleId: string) => {
+    return await axios
+      .get<PuzzleFull>(`/puzzle/${puzzleId}`)
+      .then(res => res.data);
   },
 };

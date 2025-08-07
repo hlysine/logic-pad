@@ -8,25 +8,28 @@ import SolverContext from '../contexts/SolverContext.tsx';
 import PWAPrompt from '../components/PWAPrompt.tsx';
 import EmbedContext from '../contexts/EmbedContext.tsx';
 import InstructionPartsContext from '../contexts/InstructionPartsContext.tsx';
+import OnlinePuzzleContext from '../contexts/OnlinePuzzleContext.tsx';
 
 export const Route = createLazyFileRoute('/_context')({
   component: memo(function Context() {
     return (
       <EmbedContext name="root">
-        <DisplayContext>
-          <EditContext>
-            <GridStateContext>
-              <GridContext>
-                <SolverContext>
-                  <InstructionPartsContext>
-                    <PWAPrompt />
-                    <Outlet />
-                  </InstructionPartsContext>
-                </SolverContext>
-              </GridContext>
-            </GridStateContext>
-          </EditContext>
-        </DisplayContext>
+        <OnlinePuzzleContext>
+          <DisplayContext>
+            <EditContext>
+              <GridStateContext>
+                <GridContext>
+                  <SolverContext>
+                    <InstructionPartsContext>
+                      <PWAPrompt />
+                      <Outlet />
+                    </InstructionPartsContext>
+                  </SolverContext>
+                </GridContext>
+              </GridStateContext>
+            </EditContext>
+          </DisplayContext>
+        </OnlinePuzzleContext>
       </EmbedContext>
     );
   }),

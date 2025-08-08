@@ -13,78 +13,73 @@ export enum FeedbackType {
   Report = 'report',
 }
 
-export interface UserBrief {
+export interface ResourceResponse {
   id: string;
   createdAt: string;
   updatedAt: string;
-  name: string;
+}
+
+export enum AutoCollection {
+  CreatedPuzzles = 'createdPuzzles',
+  LovedPuzzles = 'lovedPuzzles',
+  SolvedPuzzles = 'solvedPuzzles',
+}
+
+export interface UserBrief extends ResourceResponse {
   solveCount: number;
   createCount: number;
   description: string;
+  name: string;
 }
 
-export interface PuzzleBrief {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt?: string | null;
+export interface PuzzleBrief extends ResourceResponse {
   title: string;
   description: string;
   designDifficulty: number;
   ratedDifficulty: number[];
-  creator: UserBrief;
   solveCount: number;
   loveCount: number;
+  types: PuzzleType[];
   width: number;
   height: number;
   status: ResourceStatus;
-  types: PuzzleType[];
+  publishedAt?: string | null;
+  creator: UserBrief;
 }
 
-export interface CollectionBrief {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
+export interface CollectionBrief extends ResourceResponse {
   title: string;
   description: string;
-  minDifficulty: number;
-  maxDifficulty: number;
-  creator: UserBrief;
-  puzzleCount: number;
+  puzzleCount: number | null;
   followCount: number;
   status: ResourceStatus;
-  isSpecial: boolean;
-  types: PuzzleType[];
+  creator: UserBrief;
+  autoPopulate: string | null;
 }
 
-export interface Feedback {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
+export interface Feedback extends ResourceResponse {
   title: string;
   description: string;
   data: string | null;
+  type: FeedbackType;
   creator: UserBrief;
   puzzle: PuzzleBrief;
-  type: FeedbackType;
 }
 
-export interface Attempt {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  puzzle: PuzzleBrief;
-  user: UserBrief;
+export interface Completion extends ResourceResponse {
   ratedDifficulty: number | null;
   solvedAt: string | null;
   msTimeUsed: number | null;
+  loved: boolean;
+  puzzle: PuzzleBrief;
+  user: UserBrief;
 }
 
 export interface UserFull extends UserBrief {
   accessedAt: string;
-  followedCollections: CollectionBrief[];
   createdPuzzles: CollectionBrief;
   lovedPuzzles: CollectionBrief;
+  solvedPuzzles: CollectionBrief;
 }
 
 export interface PuzzleFull extends PuzzleBrief {

@@ -359,6 +359,9 @@ export default memo(function PuzzleChecklist() {
             </Suspense>
           </>
         )}
+        {checklistComplete && (
+          <button className="btn btn-primary">Publish puzzle</button>
+        )}
       </div>
     </Accordion>
   );

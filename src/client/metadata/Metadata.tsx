@@ -34,7 +34,7 @@ export default memo(function Metadata({
       </h1>
       <div
         className={cn(
-          'badge badge-secondary  rounded-lg flex-shrink-0',
+          'badge badge-secondary rounded-lg flex-shrink-0',
           responsive ? 'lg:badge-lg' : 'badge-lg'
         )}
       >

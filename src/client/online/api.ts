@@ -39,7 +39,9 @@ export const api = {
       .catch(() => null);
   },
   logout: async () => {
+    await queryClient.invalidateQueries();
     await axios.delete('/auth/logout');
+    window.location.reload();
   },
   getUser: async (userId: string) => {
     return await axios
@@ -55,9 +57,9 @@ export const api = {
       .then(res => URL.createObjectURL(res.data))
       .catch(() => null);
   },
-  getPuzzleFull: async (puzzleId: string) => {
+  getPuzzleFullForEdit: async (puzzleId: string) => {
     return await axios
-      .get<PuzzleFull>(`/puzzle/${puzzleId}`)
+      .get<PuzzleFull>(`/puzzle/${puzzleId}/edit`)
       .then(res => res.data);
   },
 };

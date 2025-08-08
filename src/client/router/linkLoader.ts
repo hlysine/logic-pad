@@ -7,6 +7,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { array } from '@logic-pad/core/data/dataHelper';
 import { useGridState } from '../contexts/GridStateContext';
 import { Puzzle } from '@logic-pad/core/data/puzzle';
+import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',
@@ -75,6 +76,7 @@ export default function useLinkLoader(
   const { setGrid, setMetadata } = useGrid();
   const { clearHistory } = useEdit();
   const { setRevealSpoiler } = useGridState();
+  const { setId, setLastSaved } = useOnlinePuzzle();
   const navigate = useNavigate({ from: '/solve' });
   const [result, setResult] = useState<LinkLoaderResult | undefined>(undefined);
   useEffect(() => {
@@ -83,6 +85,7 @@ export default function useLinkLoader(
         originalParams: params,
         solutionStripped: false,
       };
+      setId('');
       if (params.d) {
         const behavior = params.loader ?? solutionBehavior;
         const decompressed = await Compressor.decompress(params.d);
@@ -95,12 +98,16 @@ export default function useLinkLoader(
             if (tile.fixed) return tile;
             return tile.withColor(solution.getTile(x, y).color);
           });
-          setGrid(grid.withTiles(tiles), null);
+          const newGrid = grid.withTiles(tiles);
+          setGrid(newGrid, null);
+          setLastSaved(newGrid);
         } else if (behavior === SolutionHandling.LoadHidden) {
           setGrid(grid, solution);
+          setLastSaved(grid);
         } else {
           result.solutionStripped = solution !== null && grid.requireSolution();
           setGrid(grid, null);
+          setLastSaved(grid);
         }
         setMetadata(metadata);
         setRevealSpoiler(false);

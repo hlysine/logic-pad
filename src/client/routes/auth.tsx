@@ -54,12 +54,12 @@ function Auth() {
           <div className="justify-end card-actions flex-col gap-4 w-full">
             <AuthButton
               provider="google"
-              label="Sign in with Google"
+              label="Continue with Google"
               icon={FaGoogle}
             />
             <AuthButton
               provider="discord"
-              label="Sign in with Discord"
+              label="Continue with Discord"
               icon={FaDiscord}
             />
             <p>More providers coming soon</p>

@@ -95,5 +95,6 @@ module.exports = {
       },
     ],
     'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
+    '@typescript-eslint/only-throw-error': 'off',
   },
 };

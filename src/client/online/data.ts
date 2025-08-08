@@ -27,6 +27,7 @@ export interface PuzzleBrief {
   id: string;
   createdAt: string;
   updatedAt: string;
+  publishedAt?: string | null;
   title: string;
   description: string;
   designDifficulty: number;

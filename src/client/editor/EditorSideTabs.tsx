@@ -21,7 +21,7 @@ export default memo(function EditorSideTabs({
   editorMode,
   onEditorModeChange,
 }: EditorSideTabsProps) {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   useEffect(() => {
     if (activeTab === 0 && editorMode !== 'info') {
       onEditorModeChange('info');

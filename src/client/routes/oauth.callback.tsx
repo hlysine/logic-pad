@@ -2,15 +2,21 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { api } from '../online/api';
 import { useEffect } from 'react';
 import { useOnline } from '../contexts/OnlineContext';
+import Loading from '../components/Loading';
+import deferredRedirect from '../router/deferredRedirect';
 
 function OAuthCallback() {
   const online = useOnline();
   const navigate = useNavigate();
   useEffect(() => {
-    void online.refresh();
-    void navigate({ to: '/' });
+    void (async () => {
+      await online.refresh();
+      if (!(await deferredRedirect.execute())) {
+        await navigate({ to: '/' });
+      }
+    })();
   }, [online, navigate]);
-  return <div>Redirecting...</div>;
+  return <Loading />;
 }
 
 export const Route = createFileRoute('/oauth/callback')({

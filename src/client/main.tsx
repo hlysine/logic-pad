@@ -15,7 +15,7 @@ import { queryClient } from './online/api.ts';
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
 document.documentElement.dataset.theme = savedTheme;
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   defaultNotFoundComponent: NotFound,
   defaultPreload: 'intent',

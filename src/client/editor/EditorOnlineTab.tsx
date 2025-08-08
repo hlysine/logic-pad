@@ -5,8 +5,42 @@ import { puzzleQueryOptions } from '../routes/_context._layout.edit.$puzzleId';
 import { ResourceStatus } from '../online/data';
 import { FaCheckSquare, FaHeart } from 'react-icons/fa';
 import Loading from '../components/Loading';
+import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
+import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
+import { useGrid } from '../contexts/GridContext';
+import deferredRedirect from '../router/deferredRedirect';
+import { SolutionHandling } from '../router/linkLoader';
+import { useOnline } from '../contexts/OnlineContext';
+
+const SignInWithProgress = () => {
+  const { metadata, grid, solution } = useGrid();
+  return (
+    <button
+      className="btn btn-primary"
+      onClick={async () => {
+        const data = await Compressor.compress(
+          Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+        );
+        await deferredRedirect.setAndNavigate(
+          {
+            to: '/create',
+            search: {
+              loader: SolutionHandling.LoadVisible,
+              d: data,
+            },
+            ignoreBlocker: true,
+          },
+          { to: '/auth' }
+        );
+      }}
+    >
+      Sign in / sign up
+    </button>
+  );
+};
 
 export default memo(function EditorOnlineTab() {
+  const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
   const { data, isLoading } = useQuery(puzzleQueryOptions(id));
 
@@ -18,11 +52,26 @@ export default memo(function EditorOnlineTab() {
     return (
       <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px]">
         <p className="text-2xl font-bold">Editing offline</p>
-        <p>
-          Upload your puzzle to access it anywhere. Your puzzle will be kept as
-          a private draft until you publish it.
-        </p>
-        <button className="btn btn-primary">Upload</button>
+        {!isOnline ? (
+          <p>Go online to upload your puzzle and access it from anywhere.</p>
+        ) : !me ? (
+          <>
+            <p>
+              Sign in to upload your puzzle and access it from anywhere. Your
+              will keep your current progress by signing in with the button
+              below.
+            </p>
+            <SignInWithProgress />
+          </>
+        ) : (
+          <>
+            <p>
+              Upload your puzzle to access it from anywhere. Your puzzle will be
+              kept as a private draft until you publish it.
+            </p>
+            <button className="btn btn-primary">Upload</button>
+          </>
+        )}
       </div>
     );
   }

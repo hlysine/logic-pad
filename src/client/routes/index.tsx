@@ -1,5 +1,5 @@
-import { Link, createFileRoute } from '@tanstack/react-router';
-import { Suspense, lazy, memo, useRef, useState } from 'react';
+import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
+import { Suspense, lazy, memo, useEffect, useRef, useState } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
 import { puzzleTypeFilters } from '../components/PuzzleCard';
 import Changelog from '../components/Changelog';
@@ -8,6 +8,7 @@ import GridData from '@logic-pad/core/data/grid';
 import GridConnections from '@logic-pad/core/data/gridConnections';
 import useLinkLoader from '../router/linkLoader';
 import PWAPrompt from '../components/PWAPrompt';
+import toast from 'react-hot-toast';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -43,7 +44,27 @@ export const Route = createFileRoute('/')({
     const curatedPuzzles = useRef<HTMLDivElement>(null);
     const [filter, setFilter] = useState<string>('All');
     const search = Route.useSearch();
+    const navigate = useNavigate();
     useLinkLoader(search, { cleanUrl: true, allowEmpty: true });
+    useEffect(() => {
+      let toastId: string | undefined;
+      // this is likely due to OAuth errors
+      if ('error' in search) {
+        // display a toast and clear the search params
+        toastId = toast.error('An error occurred. Please try again.');
+        void navigate({
+          to: '/',
+          search: {},
+          ignoreBlocker: true,
+        });
+      }
+      return () => {
+        if (toastId) {
+          toast.dismiss(toastId);
+        }
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
       <>
         <div className="flex flex-col min-h-dvh shrink-0">

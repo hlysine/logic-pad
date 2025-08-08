@@ -112,7 +112,7 @@ export default function useLinkLoader(
         setMetadata(metadata);
         setRevealSpoiler(false);
         clearHistory(grid);
-        if (cleanUrl) await navigate({ search: {} });
+        if (cleanUrl) await navigate({ search: {}, ignoreBlocker: true });
       } else if (!allowEmpty) {
         await navigate({ to: '/' });
       }

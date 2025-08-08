@@ -2,7 +2,7 @@ import InstructionList from '../instructions/InstructionList';
 import { EditorEditControls } from '../components/EditControls';
 import { GridConsumer } from '../contexts/GridContext';
 import InstructionSearch from '../instructions/InstructionSearch';
-import { memo, useState } from 'react';
+import { memo, useRef, useState } from 'react';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import DocumentTitle from '../components/DocumentTitle';
 import TouchControls from '../components/TouchControls';
@@ -17,6 +17,7 @@ import { PartPlacement } from '../instructions/parts/types';
 import ModeVariantLoader from '../router/ModeVariantLoader';
 import { Mode } from '@logic-pad/core/data/primitives';
 import EditorCenterTabs from '../editor/EditorCenterTabs';
+import PreviewModal, { PreviewRef } from '../editor/PreviewModal';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ export default memo(function PuzzleEditorScreen({
 }: PuzzleEditorScreenProps) {
   const { features } = useEmbed();
   const [editorMode, setEditorMode] = useState<'grid' | 'info'>('grid');
+  const previewRef = useRef<PreviewRef>(null);
   return (
     <ToolboxContext>
       <ConfigContext>
@@ -71,6 +73,19 @@ export default memo(function PuzzleEditorScreen({
                 <ConfigPopup key="config-popup" />
               </div>
               <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
+                <GridConsumer>
+                  {({ grid, metadata }) => (
+                    <>
+                      <button
+                        className="btn"
+                        onClick={() => previewRef.current?.open(grid, metadata)}
+                      >
+                        Preview puzzle
+                      </button>
+                      <PreviewModal ref={previewRef} />
+                    </>
+                  )}
+                </GridConsumer>
                 <PuzzleChecklist />
                 {children}
               </div>

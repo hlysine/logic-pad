@@ -42,14 +42,22 @@ export default memo(function SolveScreen({ children }: SolveScreenProps) {
               />
             )}
           </GridConsumer>
-          {children}
           <TouchControls />
           <SolveEditControls />
           <ModeVariantLoader mode={Mode.Solve} />
         </>
       }
       center={<MainGrid useToolboxClick={false} />}
-      right={<InstructionList />}
+      right={
+        <>
+          <div className="h-full flex flex-col items-center justify-center gap-4">
+            <InstructionList />
+          </div>
+          <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
+            {children}
+          </div>
+        </>
+      }
     />
   );
 });

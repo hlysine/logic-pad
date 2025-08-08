@@ -10,7 +10,10 @@ interface EmbedContext {
   features: Features;
   embedChildren: string[];
   setFeatures: (value: Features) => void;
-  setEmbedChildren: (value: string[]) => void;
+  setEmbedChildren: (
+    value: string[] | ((children: string[]) => string[])
+  ) => void;
+  isTopLevel: boolean;
 }
 
 const context = createContext<EmbedContext>({
@@ -22,6 +25,7 @@ const context = createContext<EmbedContext>({
   embedChildren: [],
   setFeatures: () => {},
   setEmbedChildren: () => {},
+  isTopLevel: true,
 });
 
 export const useEmbed = () => {
@@ -46,17 +50,14 @@ export default memo(function EmbedContext({
       checklist: true,
     }
   );
-  const { embedChildren, setEmbedChildren } = useEmbed();
+  const { setEmbedChildren } = useEmbed();
   const [embedChildrenOnSelf, setEmbedChildrenOnSelf] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!embedChildren.includes(name)) {
-      setEmbedChildren([...embedChildren, name]);
-    }
+    const currentName = name;
+    setEmbedChildren(children => [...children, currentName]);
     return () => {
-      if (embedChildren.includes(name)) {
-        setEmbedChildren(embedChildren.filter(k => k !== name));
-      }
+      setEmbedChildren(children => children.filter(k => k !== currentName));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -68,6 +69,7 @@ export default memo(function EmbedContext({
         setFeatures,
         embedChildren: embedChildrenOnSelf,
         setEmbedChildren: setEmbedChildrenOnSelf,
+        isTopLevel: embedChildrenOnSelf.length === 0,
       }}
     >
       {children}

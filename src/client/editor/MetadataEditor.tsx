@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import Difficulty from '../metadata/Difficulty.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
@@ -10,6 +10,12 @@ export default memo(function MetadataEditor() {
   const { metadata, setMetadata } = useGrid();
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
+
+  useEffect(() => {
+    if (isOnline && !id && me !== null && metadata.author !== me.name) {
+      setMetadata({ ...metadata, author: me.name });
+    }
+  }, [isOnline, id, me, metadata, setMetadata]);
 
   return (
     <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col grow h-full gap-2 shadow">

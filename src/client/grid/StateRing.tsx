@@ -5,12 +5,14 @@ import anime from 'animejs';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { useRouterState } from '@tanstack/react-router';
 import { useReducedMotion } from '../contexts/SettingsContext.tsx';
+import { useEmbed } from '../contexts/EmbedContext.tsx';
 
 export interface GridRingProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
   width: number;
   height: number;
   animated?: boolean;
+  className?: string;
 }
 
 function ringBorder(state: State) {
@@ -26,13 +28,14 @@ function ringBorder(state: State) {
 
 export default memo(
   forwardRef<HTMLDivElement, GridRingProps>(function StateRing(
-    { children, width, height, animated, ...rest }: GridRingProps,
+    { children, width, height, animated, className, ...rest }: GridRingProps,
     ref
   ) {
     animated = animated ?? true;
     const { state } = useGridState();
     const router = useRouterState();
     const prefersReducedMotion = useReducedMotion();
+    const { isTopLevel } = useEmbed();
 
     useEffect(() => {
       if (State.isSatisfied(state.final) && !prefersReducedMotion) {
@@ -81,13 +84,14 @@ export default memo(
           ringBorder(state.final),
           State.isSatisfied(state.final)
             ? 'first:*:opacity-100 first:*:duration-[1.5s]'
-            : 'first:*:opacity-0 first:*:duration-[0.5s]'
+            : 'first:*:opacity-0 first:*:duration-[0.5s]',
+          className
         )}
         {...rest}
       >
         <div
           className={
-            animated
+            animated && isTopLevel
               ? 'block fixed inset-0 transition-all ease-out bg-radient-circle-c from-transparent to-success/10 z-[1000] pointer-events-none'
               : 'hidden'
           }

@@ -1,4 +1,4 @@
-import axiosStatic from 'axios';
+import axiosStatic, { AxiosError } from 'axios';
 import { PuzzleFull, UserBrief } from './data';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -7,6 +7,18 @@ export const queryClient = new QueryClient();
 export const axios = axiosStatic.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT as string,
 });
+
+export interface ApiError {
+  summary: string;
+}
+
+const rethrowError = (error: AxiosError<ApiError>) => {
+  if (error.response) {
+    throw new Error(error.response.data.summary);
+  } else {
+    throw error;
+  }
+};
 
 export const api = {
   isOnline: async () => {
@@ -40,7 +52,7 @@ export const api = {
   },
   logout: async () => {
     await queryClient.invalidateQueries();
-    await axios.delete('/auth/logout');
+    await axios.delete('/auth/logout').catch(rethrowError);
     window.location.reload();
   },
   getUser: async (userId: string) => {
@@ -60,6 +72,23 @@ export const api = {
   getPuzzleFullForEdit: async (puzzleId: string) => {
     return await axios
       .get<PuzzleFull>(`/puzzle/${puzzleId}/edit`)
-      .then(res => res.data);
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  createPuzzle: async (
+    title: string,
+    description: string,
+    designDifficulty: number,
+    data: string
+  ) => {
+    return await axios
+      .post<{ id: string }>('/puzzle/create', {
+        title,
+        description,
+        designDifficulty,
+        data,
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
   },
 };

@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { puzzleQueryOptions } from '../routes/_context._layout.edit.$puzzleId';
 import { ResourceStatus } from '../online/data';
 import { FaCheckSquare, FaHeart } from 'react-icons/fa';
@@ -12,6 +12,9 @@ import deferredRedirect from '../router/deferredRedirect';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnline } from '../contexts/OnlineContext';
 import RatedDifficulty from '../components/RatedDifficulty';
+import { api } from '../online/api';
+import { useNavigate } from '@tanstack/react-router';
+import toast from 'react-hot-toast';
 
 const SignInWithProgress = () => {
   const { metadata, grid, solution } = useGrid();
@@ -36,6 +39,49 @@ const SignInWithProgress = () => {
       }}
     >
       Sign in / sign up
+    </button>
+  );
+};
+
+const UploadPuzzle = () => {
+  const uploadPuzzle = useMutation({
+    mutationFn: (data: Parameters<typeof api.createPuzzle>) => {
+      return api.createPuzzle(...data);
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
+  const { metadata, grid } = useGrid();
+  const navigate = useNavigate();
+
+  if (uploadPuzzle.isPending) {
+    return <Loading />;
+  }
+
+  if (uploadPuzzle.isSuccess) {
+    return (
+      <button className="btn btn-primary btn-disabled">Redirecting...</button>
+    );
+  }
+
+  return (
+    <button
+      className="btn btn-primary"
+      onClick={async () => {
+        const data = await Compressor.compress(Serializer.stringifyGrid(grid));
+        const puzzle = await uploadPuzzle.mutateAsync([
+          metadata.title,
+          metadata.description,
+          metadata.difficulty,
+          data,
+        ]);
+        await navigate({
+          to: `/edit/${puzzle.id}`,
+        });
+      }}
+    >
+      Upload
     </button>
   );
 };
@@ -70,7 +116,7 @@ export default memo(function EditorOnlineTab() {
               Upload your puzzle to access it from anywhere. Your puzzle will be
               kept as a private draft until you publish it.
             </p>
-            <button className="btn btn-primary">Upload</button>
+            <UploadPuzzle />
           </>
         )}
       </div>

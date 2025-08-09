@@ -19,6 +19,10 @@ import GridData from '@logic-pad/core/data/grid';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
 import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
+import { puzzleQueryOptions } from '../routes/_context._layout.edit.$puzzleId.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
+import { ResourceStatus } from '../online/data.ts';
 
 const SolverSelector = lazy(() => import('./SolverSelector'));
 
@@ -124,11 +128,20 @@ interface TiedToGrid<T> {
   value: T;
 }
 
-export default memo(function PuzzleChecklist() {
+export interface PuzzleChecklistProps {
+  onPublish?: () => void;
+}
+
+export default memo(function PuzzleChecklist({
+  onPublish,
+}: PuzzleChecklistProps) {
   const { features } = useEmbed();
   const { grid, metadata, setGrid } = useGrid();
   const { state } = useGridState();
   const { solver } = useSolver();
+
+  const { id } = useOnlinePuzzle();
+  const { data, isLoading } = useQuery(puzzleQueryOptions(id));
 
   const solverRequest = useRef(0);
   const [solveRef, setSolveRef] = useState<AbortController | null>(null);
@@ -359,8 +372,12 @@ export default memo(function PuzzleChecklist() {
             </Suspense>
           </>
         )}
-        {checklistComplete && (
-          <button className="btn btn-primary">Publish puzzle</button>
+        {checklistComplete && !isLoading && !!id && !!data && (
+          <button className="btn btn-primary" onClick={onPublish}>
+            {data?.status === ResourceStatus.Private
+              ? 'Publish puzzle'
+              : 'Puzzle statistics'}
+          </button>
         )}
       </div>
     </Accordion>

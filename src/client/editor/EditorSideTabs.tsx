@@ -25,12 +25,20 @@ export default memo(function EditorSideTabs({
   const { features } = useEmbed();
   const [activeTab, setActiveTab] = useState(1);
   useEffect(() => {
-    if (activeTab === 0 && editorMode !== 'info') {
+    if (editorMode === 'grid' && activeTab === 0) {
+      setActiveTab(1);
+    } else if (editorMode === 'info' && activeTab > 0) {
+      setActiveTab(0);
+    }
+  }, [editorMode, activeTab]);
+  const changeTab = (newTab: number) => {
+    setActiveTab(newTab);
+    if (newTab === 0 && editorMode !== 'info') {
       onEditorModeChange('info');
-    } else if (activeTab > 0 && editorMode !== 'grid') {
+    } else if (newTab > 0 && editorMode !== 'grid') {
       onEditorModeChange('grid');
     }
-  }, [activeTab, editorMode, onEditorModeChange]);
+  };
 
   return (
     <div className="flex-1 flex flex-col gap-2">
@@ -45,7 +53,7 @@ export default memo(function EditorSideTabs({
                 activeTab === i && 'tab-active',
                 i === 0 && 'bg-primary text-primary-content font-bold'
               )}
-              onClick={() => setActiveTab(i)}
+              onClick={() => changeTab(i)}
             >
               {name}
             </a>

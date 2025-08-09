@@ -86,7 +86,7 @@ export default memo(function PuzzleEditorScreen({
                     </>
                   )}
                 </GridConsumer>
-                <PuzzleChecklist />
+                <PuzzleChecklist onPublish={() => setEditorMode('info')} />
                 {children}
               </div>
             </>

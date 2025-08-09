@@ -22,10 +22,14 @@ export default memo(function MetadataEditor() {
       <label className="form-control">
         <div className="label">
           <span className="label-text">Title</span>
+          <span className="label-text text-sm opacity-70 self-end">
+            {metadata.title.length}/100
+          </span>
         </div>
         <input
           type="text"
           placeholder="Required"
+          maxLength={100}
           className={cn(
             'input input-bordered w-full',
             metadata.title === '' && 'input-error'
@@ -55,6 +59,7 @@ export default memo(function MetadataEditor() {
               'input input-bordered w-full',
               metadata.author === '' && 'input-error'
             )}
+            maxLength={100}
             value={metadata.author}
             onChange={e => setMetadata({ ...metadata, author: e.target.value })}
           />
@@ -72,10 +77,14 @@ export default memo(function MetadataEditor() {
       <label className="form-control flex-1">
         <div className="label">
           <span className="label-text">Description</span>
+          <span className="label-text text-sm opacity-70 self-end">
+            {metadata.description.length}/500
+          </span>
         </div>
         <textarea
           className="textarea textarea-bordered h-full resize-none"
           placeholder="Optional text"
+          maxLength={500}
           value={metadata.description}
           onChange={e =>
             setMetadata({ ...metadata, description: e.target.value })

@@ -1,8 +1,15 @@
 import axiosStatic, { AxiosError } from 'axios';
-import { PuzzleFull, PuzzleLove, UserBrief } from './data';
+import { Completion, PuzzleFull, PuzzleLove, UserBrief } from './data';
 import { QueryClient } from '@tanstack/react-query';
+import onlineSolveTracker from '../router/onlineSolveTracker';
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export const axios = axiosStatic.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT as string,
@@ -28,6 +35,7 @@ export const api = {
       .catch(() => false);
   },
   signInWithOAuth: (provider: string, success: string, error: string) => {
+    onlineSolveTracker.clearSolveRecords();
     const url = new URL(window.location.origin);
     url.pathname = '/api/auth/oauth/' + provider;
     url.searchParams.set('success', success);
@@ -52,6 +60,7 @@ export const api = {
   },
   logout: async () => {
     await queryClient.invalidateQueries();
+    onlineSolveTracker.clearSolveRecords();
     await axios.delete('/auth/logout').catch(rethrowError);
     window.location.reload();
   },
@@ -129,6 +138,35 @@ export const api = {
   setPuzzleLove: async (puzzleId: string, loved: boolean) => {
     return await axios
       .put<PuzzleLove>(`/puzzle/${puzzleId}/love`, { loved })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  completionBegin: async (puzzleId: string) => {
+    return await axios
+      .post<Completion>(`/completion/${puzzleId}/begin`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  completionSolvingBeacon: (puzzleId: string, msTimeElapsed: number) => {
+    const headers = {
+      type: 'application/json',
+    };
+    const blob = new Blob([JSON.stringify({ msTimeElapsed })], headers);
+    return navigator.sendBeacon(
+      (import.meta.env.VITE_API_ENDPOINT as string) +
+        `/completion/${puzzleId}/solving`,
+      blob
+    );
+  },
+  completionSolving: async (puzzleId: string, msTimeElapsed: number) => {
+    return await axios
+      .post<Completion>(`/completion/${puzzleId}/solving`, { msTimeElapsed })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  completionComplete: async (puzzleId: string) => {
+    return await axios
+      .post<Completion>(`/completion/${puzzleId}/complete`)
       .then(res => res.data)
       .catch(rethrowError);
   },

@@ -55,7 +55,7 @@ export default memo(
                       <SolveScreen>
                         <button
                           type="button"
-                          className="btn btn-primary"
+                          className="btn btn-primary rounded-2xl"
                           onClick={() => {
                             setInitialState(null);
                           }}

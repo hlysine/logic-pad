@@ -7,17 +7,17 @@ import { api, queryClient } from '../online/api';
 import Loading from './Loading';
 import toast from 'react-hot-toast';
 
-const puzzleLoveQueryOptions = (puzzleId: string) =>
+const puzzleLoveQueryOptions = (puzzleId: string, enabled: boolean) =>
   queryOptions({
     queryKey: ['puzzle', 'love', puzzleId],
     queryFn: () => api.getPuzzleLove(puzzleId),
-    enabled: puzzleId.length > 0,
+    enabled: enabled && puzzleId.length > 0,
   });
 
 export default memo(function PuzzleLoveButton() {
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
-  const puzzleLove = useQuery(puzzleLoveQueryOptions(id));
+  const puzzleLove = useQuery(puzzleLoveQueryOptions(id, isOnline && !!me));
   const setPuzzleLove = useMutation({
     mutationFn: (data: Parameters<typeof api.setPuzzleLove>) => {
       return api.setPuzzleLove(...data);

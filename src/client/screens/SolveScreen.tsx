@@ -14,6 +14,7 @@ import { memo } from 'react';
 import SharePuzzleImage from '../components/SharePuzzleImage';
 import OnlineMetadata from '../metadata/OnlineMetadata';
 import PuzzleLoveButton from '../components/PuzzleLoveButton';
+import PuzzleSolveControl from '../components/PuzzleSolveControl';
 
 export interface SolveScreenProps {
   quickActions?: React.ReactNode;
@@ -67,6 +68,7 @@ export default memo(function SolveScreen({
             <InstructionList />
           </div>
           <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
+            <PuzzleSolveControl />
             {children}
           </div>
         </>

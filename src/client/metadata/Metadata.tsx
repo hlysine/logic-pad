@@ -23,7 +23,12 @@ export default memo(function Metadata({
   return (
     <div className="flex flex-col gap-4 text-neutral-content">
       <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
-      <Difficulty value={metadata.difficulty} />
+      <div
+        className="tooltip tooltip-info tooltip-right w-fit"
+        data-tip={`Design difficulty: ${metadata.difficulty}`}
+      >
+        <Difficulty value={metadata.difficulty} />
+      </div>
       <h1
         className={cn(
           'flex-shrink-0',

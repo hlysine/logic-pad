@@ -96,7 +96,7 @@ const SavePuzzle = memo(function SavePuzzle() {
         solution: null,
       });
       await queryClient.invalidateQueries({
-        queryKey: ['puzzle', id],
+        queryKey: ['puzzle', 'edit', id],
       });
     },
   });

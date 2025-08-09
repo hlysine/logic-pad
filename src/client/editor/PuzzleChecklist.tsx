@@ -19,7 +19,7 @@ import GridData from '@logic-pad/core/data/grid';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
 import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
-import { puzzleQueryOptions } from '../routes/_context._layout.create.$puzzleId.tsx';
+import { puzzleEditQueryOptions } from '../routes/_context._layout.create.$puzzleId.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 import { ResourceStatus } from '../online/data.ts';
@@ -141,7 +141,7 @@ export default memo(function PuzzleChecklist({
   const { solver } = useSolver();
 
   const { id } = useOnlinePuzzle();
-  const { data, isLoading } = useQuery(puzzleQueryOptions(id));
+  const { data, isLoading } = useQuery(puzzleEditQueryOptions(id));
 
   const solverRequest = useRef(0);
   const [solveRef, setSolveRef] = useState<AbortController | null>(null);

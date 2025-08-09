@@ -1,5 +1,5 @@
 import axiosStatic, { AxiosError } from 'axios';
-import { PuzzleFull, UserBrief } from './data';
+import { PuzzleFull, PuzzleLove, UserBrief } from './data';
 import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient();
@@ -75,6 +75,12 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  getPuzzleFullForSolve: async (puzzleId: string) => {
+    return await axios
+      .get<PuzzleFull>(`/puzzle/${puzzleId}/solve`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
   createPuzzle: async (
     title: string,
     description: string,
@@ -111,6 +117,18 @@ export const api = {
   publishPuzzle: async (puzzleId: string) => {
     return await axios
       .post<{ id: string }>(`/puzzle/${puzzleId}/publish`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  getPuzzleLove: async (puzzleId: string) => {
+    return await axios
+      .get<PuzzleLove>(`/puzzle/${puzzleId}/love`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  setPuzzleLove: async (puzzleId: string, loved: boolean) => {
+    return await axios
+      .put<PuzzleLove>(`/puzzle/${puzzleId}/love`, { loved })
       .then(res => res.data)
       .catch(rethrowError);
   },

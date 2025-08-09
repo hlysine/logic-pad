@@ -11,6 +11,7 @@ import GridStateContext, {
 } from '../contexts/GridStateContext';
 import GridContext, { useGrid } from '../contexts/GridContext';
 import DisplayContext, { useDisplay } from '../contexts/DisplayContext';
+import { FaAngleDown, FaCamera } from 'react-icons/fa';
 
 interface CopyImageButtonProps {
   canvas?: HTMLCanvasElement | null;
@@ -187,7 +188,7 @@ const ImageGenerator = memo(function ImageGenerator() {
   return (
     <div
       tabIndex={0}
-      className="dropdown-content flex flex-col bg-base-100 rounded-box z-[1] w-full max-w-[320px] p-4 shadow mt-4 mb-4"
+      className="dropdown-content flex flex-col bg-base-100 rounded-box z-[1] w-[320px] p-4 shadow mt-4 mb-4"
     >
       <div className="overflow-hidden h-0 w-0 scale-50">
         <PuzzleImage
@@ -238,25 +239,19 @@ const ImageGenerator = memo(function ImageGenerator() {
   );
 });
 
-export interface SharePuzzleImageProps {
-  className?: string;
-}
-
-export default memo(function SharePuzzleImage({
-  className,
-}: SharePuzzleImageProps) {
+export default memo(function SharePuzzleImage() {
   const [open, setOpen] = useState(false);
   return (
-    <div className="dropdown dropdown-open dropdown-bottom xl:dropdown-top w-full max-w-[320px] self-center">
-      <div
-        tabIndex={0}
+    <details className="dropdown dropdown-open dropdown-bottom xl:dropdown-top self-center">
+      <summary
+        className="tooltip tooltip-info tooltip-right btn btn-md btn-ghost flex items-center w-fit focus:z-50"
         role="button"
-        className={cn('btn btn-sm lg:btn-md w-full', className)}
+        data-tip={open ? 'Close panel' : 'Share puzzle image'}
         onClick={() => setOpen(v => !v)}
       >
-        {open ? 'Close' : 'Share Puzzle Image'}
-      </div>
+        {open ? <FaAngleDown size={24} /> : <FaCamera size={24} />}
+      </summary>
       {open && <ImageGenerator />}
-    </div>
+    </details>
   );
 });

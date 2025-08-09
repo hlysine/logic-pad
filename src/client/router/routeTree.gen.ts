@@ -19,6 +19,7 @@ import { Route as OauthCallbackImport } from './../routes/oauth.callback'
 import { Route as ContextLayoutSolveIndexImport } from './../routes/_context._layout.solve.index'
 import { Route as ContextLayoutPerfectionIndexImport } from './../routes/_context._layout.perfection.index'
 import { Route as ContextLayoutCreateIndexImport } from './../routes/_context._layout.create.index'
+import { Route as ContextLayoutSolvePuzzleIdImport } from './../routes/_context._layout.solve.$puzzleId'
 import { Route as ContextLayoutCreatePuzzleIdImport } from './../routes/_context._layout.create.$puzzleId'
 
 // Create Virtual Routes
@@ -85,6 +86,18 @@ const ContextLayoutCreateIndexRoute = ContextLayoutCreateIndexImport.update({
   import('./../routes/_context._layout.create.index.lazy').then((d) => d.Route),
 )
 
+const ContextLayoutSolvePuzzleIdRoute = ContextLayoutSolvePuzzleIdImport.update(
+  {
+    id: '/solve/$puzzleId',
+    path: '/solve/$puzzleId',
+    getParentRoute: () => ContextLayoutLazyRoute,
+  } as any,
+).lazy(() =>
+  import('./../routes/_context._layout.solve.$puzzleId.lazy').then(
+    (d) => d.Route,
+  ),
+)
+
 const ContextLayoutCreatePuzzleIdRoute =
   ContextLayoutCreatePuzzleIdImport.update({
     id: '/create/$puzzleId',
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContextLayoutCreatePuzzleIdImport
       parentRoute: typeof ContextLayoutLazyImport
     }
+    '/_context/_layout/solve/$puzzleId': {
+      id: '/_context/_layout/solve/$puzzleId'
+      path: '/solve/$puzzleId'
+      fullPath: '/solve/$puzzleId'
+      preLoaderRoute: typeof ContextLayoutSolvePuzzleIdImport
+      parentRoute: typeof ContextLayoutLazyImport
+    }
     '/_context/_layout/create/': {
       id: '/_context/_layout/create/'
       path: '/create'
@@ -170,6 +190,7 @@ declare module '@tanstack/react-router' {
 
 interface ContextLayoutLazyRouteChildren {
   ContextLayoutCreatePuzzleIdRoute: typeof ContextLayoutCreatePuzzleIdRoute
+  ContextLayoutSolvePuzzleIdRoute: typeof ContextLayoutSolvePuzzleIdRoute
   ContextLayoutCreateIndexRoute: typeof ContextLayoutCreateIndexRoute
   ContextLayoutPerfectionIndexRoute: typeof ContextLayoutPerfectionIndexRoute
   ContextLayoutSolveIndexRoute: typeof ContextLayoutSolveIndexRoute
@@ -177,6 +198,7 @@ interface ContextLayoutLazyRouteChildren {
 
 const ContextLayoutLazyRouteChildren: ContextLayoutLazyRouteChildren = {
   ContextLayoutCreatePuzzleIdRoute: ContextLayoutCreatePuzzleIdRoute,
+  ContextLayoutSolvePuzzleIdRoute: ContextLayoutSolvePuzzleIdRoute,
   ContextLayoutCreateIndexRoute: ContextLayoutCreateIndexRoute,
   ContextLayoutPerfectionIndexRoute: ContextLayoutPerfectionIndexRoute,
   ContextLayoutSolveIndexRoute: ContextLayoutSolveIndexRoute,
@@ -203,6 +225,7 @@ export interface FileRoutesByFullPath {
   '': typeof ContextLayoutLazyRouteWithChildren
   '/oauth/callback': typeof OauthCallbackRoute
   '/create/$puzzleId': typeof ContextLayoutCreatePuzzleIdRoute
+  '/solve/$puzzleId': typeof ContextLayoutSolvePuzzleIdRoute
   '/create': typeof ContextLayoutCreateIndexRoute
   '/perfection': typeof ContextLayoutPerfectionIndexRoute
   '/solve': typeof ContextLayoutSolveIndexRoute
@@ -214,6 +237,7 @@ export interface FileRoutesByTo {
   '': typeof ContextLayoutLazyRouteWithChildren
   '/oauth/callback': typeof OauthCallbackRoute
   '/create/$puzzleId': typeof ContextLayoutCreatePuzzleIdRoute
+  '/solve/$puzzleId': typeof ContextLayoutSolvePuzzleIdRoute
   '/create': typeof ContextLayoutCreateIndexRoute
   '/perfection': typeof ContextLayoutPerfectionIndexRoute
   '/solve': typeof ContextLayoutSolveIndexRoute
@@ -227,6 +251,7 @@ export interface FileRoutesById {
   '/oauth/callback': typeof OauthCallbackRoute
   '/_context/_layout': typeof ContextLayoutLazyRouteWithChildren
   '/_context/_layout/create/$puzzleId': typeof ContextLayoutCreatePuzzleIdRoute
+  '/_context/_layout/solve/$puzzleId': typeof ContextLayoutSolvePuzzleIdRoute
   '/_context/_layout/create/': typeof ContextLayoutCreateIndexRoute
   '/_context/_layout/perfection/': typeof ContextLayoutPerfectionIndexRoute
   '/_context/_layout/solve/': typeof ContextLayoutSolveIndexRoute
@@ -240,6 +265,7 @@ export interface FileRouteTypes {
     | ''
     | '/oauth/callback'
     | '/create/$puzzleId'
+    | '/solve/$puzzleId'
     | '/create'
     | '/perfection'
     | '/solve'
@@ -250,6 +276,7 @@ export interface FileRouteTypes {
     | ''
     | '/oauth/callback'
     | '/create/$puzzleId'
+    | '/solve/$puzzleId'
     | '/create'
     | '/perfection'
     | '/solve'
@@ -261,6 +288,7 @@ export interface FileRouteTypes {
     | '/oauth/callback'
     | '/_context/_layout'
     | '/_context/_layout/create/$puzzleId'
+    | '/_context/_layout/solve/$puzzleId'
     | '/_context/_layout/create/'
     | '/_context/_layout/perfection/'
     | '/_context/_layout/solve/'
@@ -317,6 +345,7 @@ export const routeTree = rootRoute
       "parent": "/_context",
       "children": [
         "/_context/_layout/create/$puzzleId",
+        "/_context/_layout/solve/$puzzleId",
         "/_context/_layout/create/",
         "/_context/_layout/perfection/",
         "/_context/_layout/solve/"
@@ -324,6 +353,10 @@ export const routeTree = rootRoute
     },
     "/_context/_layout/create/$puzzleId": {
       "filePath": "_context._layout.create.$puzzleId.tsx",
+      "parent": "/_context/_layout"
+    },
+    "/_context/_layout/solve/$puzzleId": {
+      "filePath": "_context._layout.solve.$puzzleId.tsx",
       "parent": "/_context/_layout"
     },
     "/_context/_layout/create/": {

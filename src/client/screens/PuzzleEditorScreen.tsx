@@ -19,6 +19,7 @@ import { Mode } from '@logic-pad/core/data/primitives';
 import EditorCenterTabs from '../editor/EditorCenterTabs';
 import PreviewModal, { PreviewRef } from '../editor/PreviewModal';
 import PuzzleSaveControl from '../components/PuzzleSaveControl';
+import { FaEye } from 'react-icons/fa';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -79,11 +80,12 @@ export default memo(function PuzzleEditorScreen({
                     {({ grid, metadata }) => (
                       <>
                         <button
-                          className="btn"
+                          className="btn rounded-2xl"
                           onClick={() =>
                             previewRef.current?.open(grid, metadata)
                           }
                         >
+                          <FaEye size={18} />
                           Preview puzzle
                         </button>
                         <PreviewModal ref={previewRef} />

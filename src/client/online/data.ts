@@ -30,6 +30,7 @@ export interface UserBrief extends ResourceResponse {
   createCount: number;
   description: string;
   name: string;
+  title: string | null;
 }
 
 export interface PuzzleBrief extends ResourceResponse {
@@ -69,10 +70,13 @@ export interface Feedback extends ResourceResponse {
 export interface Completion extends ResourceResponse {
   ratedDifficulty: number | null;
   solvedAt: string | null;
-  msTimeUsed: number | null;
+  msTimeUsed: number;
+  puzzle: string;
+  user: string;
+}
+
+export interface PuzzleLove {
   loved: boolean;
-  puzzle: PuzzleBrief;
-  user: UserBrief;
 }
 
 export interface UserFull extends UserBrief {

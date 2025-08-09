@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { puzzleQueryOptions } from '../routes/_context._layout.create.$puzzleId';
+import { puzzleEditQueryOptions } from '../routes/_context._layout.create.$puzzleId';
 import { ResourceStatus } from '../online/data';
 import { FaCheckSquare, FaHeart } from 'react-icons/fa';
 import Loading from '../components/Loading';
@@ -11,7 +11,7 @@ import { useGrid } from '../contexts/GridContext';
 import deferredRedirect from '../router/deferredRedirect';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnline } from '../contexts/OnlineContext';
-import RatedDifficulty from '../components/RatedDifficulty';
+import RatedDifficulty from '../metadata/RatedDifficulty';
 import { api, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
@@ -102,7 +102,7 @@ const PublishPuzzle = memo(function PublishPuzzle() {
     },
     async onSuccess() {
       await queryClient.refetchQueries({
-        queryKey: ['puzzle', id],
+        queryKey: ['puzzle', 'edit', id],
       });
     },
   });
@@ -134,7 +134,7 @@ const PublishPuzzle = memo(function PublishPuzzle() {
 export default memo(function EditorOnlineTab() {
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
-  const { data, isLoading } = useQuery(puzzleQueryOptions(id));
+  const { data, isLoading } = useQuery(puzzleEditQueryOptions(id));
 
   if (isLoading) {
     return <Loading />;

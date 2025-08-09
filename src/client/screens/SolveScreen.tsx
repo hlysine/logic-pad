@@ -11,12 +11,19 @@ import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import ModeVariantLoader from '../router/ModeVariantLoader';
 import { memo } from 'react';
+import SharePuzzleImage from '../components/SharePuzzleImage';
+import OnlineMetadata from '../metadata/OnlineMetadata';
+import PuzzleLoveButton from '../components/PuzzleLoveButton';
 
 export interface SolveScreenProps {
+  quickActions?: React.ReactNode;
   children?: React.ReactNode;
 }
 
-export default memo(function SolveScreen({ children }: SolveScreenProps) {
+export default memo(function SolveScreen({
+  quickActions,
+  children,
+}: SolveScreenProps) {
   return (
     <ThreePaneLayout
       collapsible={false}
@@ -34,6 +41,7 @@ export default memo(function SolveScreen({ children }: SolveScreenProps) {
               )}
             </GridConsumer>
           </div>
+          <OnlineMetadata />
           <GridConsumer>
             {({ grid }) => (
               <InstructionPartOutlet
@@ -42,6 +50,11 @@ export default memo(function SolveScreen({ children }: SolveScreenProps) {
               />
             )}
           </GridConsumer>
+          <div className="flex gap-1">
+            <PuzzleLoveButton />
+            <SharePuzzleImage />
+            {quickActions}
+          </div>
           <TouchControls />
           <SolveEditControls />
           <ModeVariantLoader mode={Mode.Solve} />

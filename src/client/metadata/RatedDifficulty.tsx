@@ -50,11 +50,11 @@ export default memo(function RatedDifficulty({
       />
       <div
         className={cn(
-          'collapse-title font-medium flex gap-2 items-center p-0 min-h-0 after:!top-auto after:!bottom-auto',
+          'collapse-title font-medium flex gap-2 items-center p-0 min-h-0 after:!top-3',
           !collapsible && 'after:!hidden'
         )}
       >
-        Rated: <Difficulty className="inline-block" value={median} />
+        Rated difficulty: <Difficulty className="inline-block" value={median} />
       </div>
       <div className="collapse-content !p-0">
         {median === 0 ? (

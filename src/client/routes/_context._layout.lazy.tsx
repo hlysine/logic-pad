@@ -1,6 +1,7 @@
 import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
+import AlphaBadge from '../components/AlphaBadge';
 
 export const Route = createLazyFileRoute('/_context/_layout')({
   component: memo(function Layout() {
@@ -31,6 +32,7 @@ export const Route = createLazyFileRoute('/_context/_layout')({
             >
               Create
             </Link>
+            <AlphaBadge />
           </div>
           <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />
         </header>

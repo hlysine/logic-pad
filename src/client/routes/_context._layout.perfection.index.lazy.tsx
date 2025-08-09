@@ -5,7 +5,7 @@ import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../screens/PerfectionScreen';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
 
-export const Route = createLazyFileRoute('/_context/_layout/perfection')({
+export const Route = createLazyFileRoute('/_context/_layout/perfection/')({
   component: memo(function PerfectionMode() {
     const params = Route.useSearch();
     useLinkLoader(params, {

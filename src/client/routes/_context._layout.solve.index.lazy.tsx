@@ -10,11 +10,11 @@ import { GridConsumer } from '../contexts/GridContext';
 import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 import SharePuzzleImage from '../components/SharePuzzleImage';
 
-export const Route = createLazyFileRoute('/_context/_layout/solve')({
+export const Route = createLazyFileRoute('/_context/_layout/solve/')({
   component: memo(function SolveMode() {
     const params = Route.useSearch();
     const navigate = useNavigate();
-    const search = useSearch({ from: '/_context/_layout/solve' });
+    const search = useSearch({ from: '/_context/_layout/solve/' });
     useLinkLoader(params, { allowEmpty: false });
     return (
       <SolveScreen>

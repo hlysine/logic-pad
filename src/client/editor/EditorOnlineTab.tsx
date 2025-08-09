@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { puzzleQueryOptions } from '../routes/_context._layout.edit.$puzzleId';
+import { puzzleQueryOptions } from '../routes/_context._layout.create.$puzzleId';
 import { ResourceStatus } from '../online/data';
 import { FaCheckSquare, FaHeart } from 'react-icons/fa';
 import Loading from '../components/Loading';
@@ -81,7 +81,7 @@ const UploadPuzzle = memo(function UploadPuzzle() {
           data,
         ]);
         await navigate({
-          to: `/edit/${puzzle.id}`,
+          to: `/create/${puzzle.id}`,
           ignoreBlocker: true,
         });
       }}

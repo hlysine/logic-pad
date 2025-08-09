@@ -10,7 +10,7 @@ export const puzzleQueryOptions = (puzzleId: string) =>
     enabled: puzzleId.length > 0,
   });
 
-export const Route = createFileRoute('/_context/_layout/edit/$puzzleId')({
+export const Route = createFileRoute('/_context/_layout/create/$puzzleId')({
   loader: async ({ params }) => {
     try {
       return await queryClient.ensureQueryData(

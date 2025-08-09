@@ -4,13 +4,13 @@ import PuzzleEditorScreen from '../screens/PuzzleEditorScreen';
 import { useGrid } from '../contexts/GridContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { puzzleQueryOptions } from './_context._layout.edit.$puzzleId';
+import { puzzleQueryOptions } from './_context._layout.create.$puzzleId';
 import useOnlineLinkLoader from '../router/onlineLinkLoader';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { puzzleEquals } from '@logic-pad/core/data/puzzle';
 
-export const Route = createLazyFileRoute('/_context/_layout/edit/$puzzleId')({
+export const Route = createLazyFileRoute('/_context/_layout/create/$puzzleId')({
   component: memo(function OnlineCreateMode() {
     const { data } = useSuspenseQuery(
       puzzleQueryOptions(Route.useParams().puzzleId)

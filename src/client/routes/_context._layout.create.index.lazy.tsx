@@ -10,7 +10,7 @@ import { IoWarningOutline } from 'react-icons/io5';
 import { defaultGrid, useGrid } from '../contexts/GridContext';
 import { useSettings } from '../contexts/SettingsContext';
 
-export const Route = createLazyFileRoute('/_context/_layout/create')({
+export const Route = createLazyFileRoute('/_context/_layout/create/')({
   component: memo(function CreateMode() {
     const params = Route.useSearch();
     const navigate = useNavigate();

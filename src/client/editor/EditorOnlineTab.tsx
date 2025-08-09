@@ -34,7 +34,7 @@ const SignInWithProgress = () => {
             },
             ignoreBlocker: true,
           },
-          { to: '/auth' }
+          { to: '/auth', ignoreBlocker: true }
         );
       }}
     >

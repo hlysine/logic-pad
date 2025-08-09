@@ -9,6 +9,7 @@ import GridConnections from '@logic-pad/core/data/gridConnections';
 import useLinkLoader from '../router/linkLoader';
 import PWAPrompt from '../components/PWAPrompt';
 import toast from 'react-hot-toast';
+import deferredRedirect from '../router/deferredRedirect';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -48,16 +49,20 @@ export const Route = createFileRoute('/')({
     useLinkLoader(search, { cleanUrl: true, allowEmpty: true });
     useEffect(() => {
       let toastId: string | undefined;
-      // this is likely due to OAuth errors
-      if ('error' in search) {
-        // display a toast and clear the search params
-        toastId = toast.error('An error occurred. Please try again.');
-        void navigate({
-          to: '/',
-          search: {},
-          ignoreBlocker: true,
-        });
-      }
+      void (async () => {
+        // this is likely due to OAuth errors
+        if ('error' in search) {
+          // display a toast and clear the search params
+          toastId = toast.error('An error occurred. Please try again.');
+          if (!(await deferredRedirect.execute())) {
+            void navigate({
+              to: '/',
+              search: {},
+              ignoreBlocker: true,
+            });
+          }
+        }
+      })();
       return () => {
         if (toastId) {
           toast.dismiss(toastId);

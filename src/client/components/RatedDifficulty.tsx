@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
+import './ratedDifficulty.css';
 
 export interface RatedDifficultyProps {
   collapsible?: boolean;
@@ -63,7 +64,7 @@ export default memo(function RatedDifficulty({
             {ratedDifficulty.map((value, index) => (
               <div
                 key={index}
-                className="w-1/3 bg-secondary tooltip tooltip-info"
+                className="w-1/3 bg-secondary tooltip tooltip-info origin-bottom animate-grow"
                 style={{
                   height: `${(value / max) * 100}%`,
                 }}

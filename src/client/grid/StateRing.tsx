@@ -38,7 +38,7 @@ export default memo(
     const { isTopLevel } = useEmbed();
 
     useEffect(() => {
-      if (State.isSatisfied(state.final) && !prefersReducedMotion) {
+      if (State.isSatisfied(state.final) && !prefersReducedMotion && animated) {
         anime({
           targets: '.logic-animated .logic-tile',
           scale: [
@@ -48,14 +48,10 @@ export default memo(
           delay: anime.stagger(20, { grid: [width, height], from: 'center' }),
         });
       }
-    }, [state.final, width, height, prefersReducedMotion]);
+    }, [state.final, width, height, prefersReducedMotion, animated]);
 
     useEffect(() => {
-      if (
-        prefersReducedMotion ||
-        router.location.pathname === '/create' ||
-        !animated
-      ) {
+      if (prefersReducedMotion || !animated) {
         anime({
           targets: '.logic-animated .logic-tile',
           scale: 1,

@@ -151,7 +151,9 @@ export default memo(function PuzzleSaveControl({
     return (
       <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
         Editing offline
-        <CopyLink />
+        <div className="flex items-center gap-2">
+          <CopyLink />
+        </div>
       </div>
     );
   }

@@ -6,7 +6,7 @@ import ToolboxOverlay from './ToolboxOverlay';
 
 export default memo(function EditorMainGrid() {
   return (
-    <MainGrid useToolboxClick={true} key="Grid">
+    <MainGrid useToolboxClick={true} key="Grid" animated={false}>
       <GridConsumer>
         {({ grid }) => <RulerOverlay width={grid.width} height={grid.height} />}
       </GridConsumer>

@@ -12,11 +12,11 @@ import deferredRedirect from '../router/deferredRedirect';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnline } from '../contexts/OnlineContext';
 import RatedDifficulty from '../components/RatedDifficulty';
-import { api } from '../online/api';
+import { api, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
 
-const SignInWithProgress = () => {
+const SignInWithProgress = memo(function SignInWithProgress() {
   const { metadata, grid, solution } = useGrid();
   return (
     <button
@@ -41,9 +41,9 @@ const SignInWithProgress = () => {
       Sign in / sign up
     </button>
   );
-};
+});
 
-const UploadPuzzle = () => {
+const UploadPuzzle = memo(function UploadPuzzle() {
   const uploadPuzzle = useMutation({
     mutationFn: (data: Parameters<typeof api.createPuzzle>) => {
       return api.createPuzzle(...data);
@@ -86,10 +86,50 @@ const UploadPuzzle = () => {
         });
       }}
     >
-      Upload
+      Upload puzzle
     </button>
   );
-};
+});
+
+const PublishPuzzle = memo(function PublishPuzzle() {
+  const { id } = useOnlinePuzzle();
+  const publishPuzzle = useMutation({
+    mutationFn: (puzzleId: string) => {
+      return api.publishPuzzle(puzzleId);
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+    async onSuccess() {
+      await queryClient.refetchQueries({
+        queryKey: ['puzzle', id],
+      });
+    },
+  });
+
+  if (publishPuzzle.isPending) {
+    return (
+      <button className="btn btn-primary btn-disabled">
+        <Loading />
+      </button>
+    );
+  }
+
+  if (publishPuzzle.isSuccess) {
+    return (
+      <button className="btn btn-primary btn-disabled">Refreshing...</button>
+    );
+  }
+
+  return (
+    <button
+      className="btn btn-primary"
+      onClick={async () => await publishPuzzle.mutateAsync(id)}
+    >
+      Publish puzzle
+    </button>
+  );
+});
 
 export default memo(function EditorOnlineTab() {
   const { isOnline, me } = useOnline();
@@ -151,7 +191,7 @@ export default memo(function EditorOnlineTab() {
           <li>You cannot unpublish a puzzle.</li>
           <li>Do not publish unfinished puzzles.</li>
         </ul>
-        <button className="btn btn-primary">Publish puzzle</button>
+        <PublishPuzzle />
       </div>
     );
   }

@@ -108,4 +108,10 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  publishPuzzle: async (puzzleId: string) => {
+    return await axios
+      .post<{ id: string }>(`/puzzle/${puzzleId}/publish`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
 };

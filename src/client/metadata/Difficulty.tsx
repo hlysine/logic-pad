@@ -7,6 +7,7 @@ export interface DifficultyProps {
   readonly?: boolean;
   onChange?: (value: number) => void;
   size?: 'xs' | 'sm' | 'md' | 'lg';
+  className?: string;
 }
 
 function sizeToRating(size: DifficultyProps['size']) {
@@ -27,6 +28,7 @@ export default memo(function Difficulty({
   readonly,
   onChange,
   size,
+  className,
 }: DifficultyProps) {
   readonly = readonly ?? !onChange;
   size = size ?? 'md';
@@ -36,7 +38,8 @@ export default memo(function Difficulty({
         className={cn(
           'rating',
           sizeToRating(size),
-          'tooltip tooltip-info w-fit tooltip-right'
+          'tooltip tooltip-info w-fit tooltip-right',
+          className
         )}
         data-tip="Unrated"
       >
@@ -45,7 +48,7 @@ export default memo(function Difficulty({
     );
   }
   return (
-    <div className={cn('rating', sizeToRating(size))}>
+    <div className={cn('rating', sizeToRating(size), className)}>
       {[
         <input
           key={-1}

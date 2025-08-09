@@ -11,6 +11,7 @@ import { useGrid } from '../contexts/GridContext';
 import deferredRedirect from '../router/deferredRedirect';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnline } from '../contexts/OnlineContext';
+import RatedDifficulty from '../components/RatedDifficulty';
 
 const SignInWithProgress = () => {
   const { metadata, grid, solution } = useGrid();
@@ -123,7 +124,10 @@ export default memo(function EditorOnlineTab() {
           ? `Published at ${new Date(data.publishedAt).toLocaleString()}`
           : ''}
       </div>
-      <p className="opacity-50">TODO: add rating statistics</p>
+      <RatedDifficulty
+        collapsible={false}
+        ratedDifficulty={data.ratedDifficulty}
+      />
       <div className="divider" />
       <p className="text-2xl font-bold">Feedback</p>
       <p className="opacity-50">TODO: add feedback</p>

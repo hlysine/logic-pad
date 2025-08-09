@@ -66,6 +66,8 @@ export default memo(
                   instructions: false,
                   metadata: false,
                   checklist: false,
+                  saveControl: false,
+                  preview: false,
                 })}
               >
                 <OnlineContext forceOffline={true}>

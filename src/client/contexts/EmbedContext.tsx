@@ -4,6 +4,8 @@ interface Features {
   instructions: boolean;
   metadata: boolean;
   checklist: boolean;
+  saveControl: boolean;
+  preview: boolean;
 }
 
 interface EmbedContext {
@@ -21,6 +23,8 @@ const context = createContext<EmbedContext>({
     instructions: true,
     metadata: true,
     checklist: true,
+    saveControl: true,
+    preview: true,
   },
   embedChildren: [],
   setFeatures: () => {},
@@ -48,6 +52,8 @@ export default memo(function EmbedContext({
       instructions: true,
       metadata: true,
       checklist: true,
+      saveControl: true,
+      preview: true,
     }
   );
   const { setEmbedChildren } = useEmbed();

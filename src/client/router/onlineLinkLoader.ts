@@ -64,14 +64,26 @@ export default function useOnlineLinkLoader(
         });
         const newGrid = grid.withTiles(tiles);
         setGrid(newGrid, null);
-        setLastSaved(newGrid);
+        setLastSaved({
+          ...metadata,
+          grid: newGrid,
+          solution: null,
+        });
       } else if (behavior === SolutionHandling.LoadHidden) {
         setGrid(grid, solution);
-        setLastSaved(grid);
+        setLastSaved({
+          ...metadata,
+          grid,
+          solution,
+        });
       } else {
         result.solutionStripped = solution !== null && grid.requireSolution();
         setGrid(grid, null);
-        setLastSaved(grid);
+        setLastSaved({
+          ...metadata,
+          grid,
+          solution: null,
+        });
       }
       setId(puzzle.id);
       setMetadata(metadata);

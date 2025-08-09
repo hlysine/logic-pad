@@ -8,6 +8,7 @@ import { puzzleQueryOptions } from './_context._layout.edit.$puzzleId';
 import useOnlineLinkLoader from '../router/onlineLinkLoader';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
+import { puzzleEquals } from '@logic-pad/core/data/puzzle';
 
 export const Route = createLazyFileRoute('/_context/_layout/edit/$puzzleId')({
   component: memo(function OnlineCreateMode() {
@@ -20,12 +21,14 @@ export const Route = createLazyFileRoute('/_context/_layout/edit/$puzzleId')({
     });
 
     const [enableExitConfirmation] = useSettings('enableExitConfirmation');
-    const { grid } = useGrid();
+    const { metadata, grid } = useGrid();
     useBlocker({
       shouldBlockFn: () =>
         enableExitConfirmation &&
         !window.confirm('Are you sure you want to leave?'),
-      disabled: grid.equals(lastSaved) || !enableExitConfirmation,
+      disabled:
+        puzzleEquals(lastSaved, { ...metadata, grid, solution: null }) ||
+        !enableExitConfirmation,
     });
 
     return <PuzzleEditorScreen></PuzzleEditorScreen>;

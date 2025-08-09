@@ -129,11 +129,11 @@ interface TiedToGrid<T> {
 }
 
 export interface PuzzleChecklistProps {
-  onPublish?: () => void;
+  onTabSwitch?: () => void;
 }
 
 export default memo(function PuzzleChecklist({
-  onPublish,
+  onTabSwitch,
 }: PuzzleChecklistProps) {
   const { features } = useEmbed();
   const { grid, metadata, setGrid } = useGrid();
@@ -373,7 +373,7 @@ export default memo(function PuzzleChecklist({
           </>
         )}
         {checklistComplete && !isLoading && !!id && !!data && (
-          <button className="btn btn-primary" onClick={onPublish}>
+          <button className="btn btn-primary" onClick={onTabSwitch}>
             {data?.status === ResourceStatus.Private
               ? 'Publish puzzle'
               : 'Puzzle statistics'}

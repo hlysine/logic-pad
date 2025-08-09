@@ -56,7 +56,11 @@ const UploadPuzzle = () => {
   const navigate = useNavigate();
 
   if (uploadPuzzle.isPending) {
-    return <Loading />;
+    return (
+      <button className="btn btn-primary btn-disabled">
+        <Loading />
+      </button>
+    );
   }
 
   if (uploadPuzzle.isSuccess) {
@@ -78,6 +82,7 @@ const UploadPuzzle = () => {
         ]);
         await navigate({
           to: `/edit/${puzzle.id}`,
+          ignoreBlocker: true,
         });
       }}
     >
@@ -98,7 +103,7 @@ export default memo(function EditorOnlineTab() {
   if (id.length === 0 || !data) {
     return (
       <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px]">
-        <p className="text-2xl font-bold">Editing offline</p>
+        <p className="text-2xl font-bold">Editing locally</p>
         {!isOnline ? (
           <p>Go online to upload your puzzle and access it from anywhere.</p>
         ) : !me ? (
@@ -116,6 +121,7 @@ export default memo(function EditorOnlineTab() {
               Upload your puzzle to access it from anywhere. Your puzzle will be
               kept as a private draft until you publish it.
             </p>
+            <p>Only upload puzzles that you created yourself.</p>
             <UploadPuzzle />
           </>
         )}

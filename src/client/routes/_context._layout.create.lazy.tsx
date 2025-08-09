@@ -7,7 +7,6 @@ import { memo } from 'react';
 import useLinkLoader, { SolutionHandling } from '../router/linkLoader';
 import PuzzleEditorScreen from '../screens/PuzzleEditorScreen';
 import { IoWarningOutline } from 'react-icons/io5';
-import CopyLink from '../components/CopyLink';
 import { defaultGrid, useGrid } from '../contexts/GridContext';
 import { useSettings } from '../contexts/SettingsContext';
 
@@ -57,7 +56,6 @@ export const Route = createLazyFileRoute('/_context/_layout/create')({
             </div>
           </div>
         )}
-        <CopyLink />
       </PuzzleEditorScreen>
     );
   }),

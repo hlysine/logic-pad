@@ -3,7 +3,7 @@ import { router } from '../main';
 
 class DeferredRedirect {
   set(location: NavigateOptions) {
-    localStorage.setItem('deferredRedirect', JSON.stringify(location));
+    sessionStorage.setItem('deferredRedirect', JSON.stringify(location));
   }
 
   async setAndNavigate(
@@ -15,7 +15,7 @@ class DeferredRedirect {
   }
 
   async execute(): Promise<boolean> {
-    const serialized = localStorage.getItem('deferredRedirect');
+    const serialized = sessionStorage.getItem('deferredRedirect');
     if (!serialized) return false;
     const location = JSON.parse(serialized) as NavigateOptions;
     try {

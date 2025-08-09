@@ -10,7 +10,7 @@ export const Route = createLazyFileRoute('/_context/_layout')({
           <div className="flex xl:basis-[320px] flex-wrap grow shrink items-center gap-4">
             <Link
               to="/"
-              className="text-xl md:text-3xl text-neutral-content flex items-center gap-2"
+              className="text-xl md:text-3xl text-neutral-content flex items-center gap-2 force-serif"
             >
               <img
                 src="/logo.svg"

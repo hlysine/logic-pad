@@ -1,18 +1,27 @@
 import { createContext, memo, useContext, useMemo, useState } from 'react';
-import GridData from '@logic-pad/core/data/grid';
 import { defaultGrid } from './GridContext';
+import { Puzzle } from '@logic-pad/core/data/puzzle';
+
+const defaultPuzzle = {
+  title: '',
+  description: '',
+  author: '',
+  difficulty: 1,
+  grid: defaultGrid,
+  solution: null,
+};
 
 export interface OnlinePuzzleContext {
   id: string;
   setId: (id: string) => void;
-  lastSaved: GridData;
-  setLastSaved: (grid: GridData) => void;
+  lastSaved: Puzzle;
+  setLastSaved: (puzzle: Puzzle) => void;
 }
 
 const context = createContext<OnlinePuzzleContext>({
   id: '',
   setId: () => {},
-  lastSaved: defaultGrid,
+  lastSaved: defaultPuzzle,
   setLastSaved: () => {},
 });
 
@@ -28,7 +37,7 @@ export default memo(function OnlinePuzzleContext({
   children: React.ReactNode;
 }) {
   const [id, setId] = useState<string>('');
-  const [lastSaved, setLastSaved] = useState<GridData>(defaultGrid);
+  const [lastSaved, setLastSaved] = useState<Puzzle>(defaultPuzzle);
 
   const value = useMemo(
     () => ({

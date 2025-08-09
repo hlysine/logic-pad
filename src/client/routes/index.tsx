@@ -87,7 +87,7 @@ export const Route = createFileRoute('/')({
                 />
               </div>
               <div className="flex flex-col gap-4">
-                <h1 className="text-accent text-4xl lg:text-6xl font-medium">
+                <h1 className="text-accent text-4xl lg:text-6xl font-medium force-serif">
                   Logic Pad
                 </h1>
                 <span className="text-xl lg:text-2xl">

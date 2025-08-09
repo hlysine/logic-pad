@@ -4,8 +4,8 @@
 
 :root {
   font-family:
-    Palatino,
     Palatino Linotype,
+    Palatino,
     Palatino LT STD,
     Book Antiqua,
     Georgia,
@@ -21,6 +21,16 @@
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.force-serif {
+  font-family:
+    Palatino Linotype,
+    Palatino,
+    Palatino LT STD,
+    Book Antiqua,
+    Georgia,
+    serif;
 }
 
 * {

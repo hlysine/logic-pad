@@ -18,6 +18,7 @@ import ModeVariantLoader from '../router/ModeVariantLoader';
 import { Mode } from '@logic-pad/core/data/primitives';
 import EditorCenterTabs from '../editor/EditorCenterTabs';
 import PreviewModal, { PreviewRef } from '../editor/PreviewModal';
+import PuzzleSaveControl from '../components/PuzzleSaveControl';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -73,20 +74,29 @@ export default memo(function PuzzleEditorScreen({
                 <ConfigPopup key="config-popup" />
               </div>
               <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
-                <GridConsumer>
-                  {({ grid, metadata }) => (
-                    <>
-                      <button
-                        className="btn"
-                        onClick={() => previewRef.current?.open(grid, metadata)}
-                      >
-                        Preview puzzle
-                      </button>
-                      <PreviewModal ref={previewRef} />
-                    </>
-                  )}
-                </GridConsumer>
-                <PuzzleChecklist onPublish={() => setEditorMode('info')} />
+                {features.preview && (
+                  <GridConsumer>
+                    {({ grid, metadata }) => (
+                      <>
+                        <button
+                          className="btn"
+                          onClick={() =>
+                            previewRef.current?.open(grid, metadata)
+                          }
+                        >
+                          Preview puzzle
+                        </button>
+                        <PreviewModal ref={previewRef} />
+                      </>
+                    )}
+                  </GridConsumer>
+                )}
+                <PuzzleChecklist onTabSwitch={() => setEditorMode('info')} />
+                {features.saveControl && (
+                  <PuzzleSaveControl
+                    onTabSwitch={() => setEditorMode('info')}
+                  />
+                )}
                 {children}
               </div>
             </>

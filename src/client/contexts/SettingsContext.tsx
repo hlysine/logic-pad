@@ -9,6 +9,7 @@ export const SiteSettingsSchema = z.object({
   visualizeWrapArounds: z.boolean().default(true),
   showMoreTools: z.boolean().default(false),
   offlineMode: z.boolean().default(false),
+  sansSerifFont: z.boolean().default(false),
 });
 
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;

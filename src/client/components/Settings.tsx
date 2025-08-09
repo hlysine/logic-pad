@@ -6,6 +6,7 @@ import ExitConfirmationToggle from './settings/ExitConfirmationToggle';
 import PrimaryMouseButtonToggle from './settings/PrimaryMouseButtonToggle';
 import WrapAroundVisualizationToggle from './settings/WrapAroundVisualizationToggle';
 import OfflineModeToggle from './settings/OfflineModeToggle';
+import SansSerifToggle from './settings/SansSerifToggle';
 
 export default memo(function Settings() {
   return (
@@ -32,6 +33,7 @@ export default memo(function Settings() {
             <ExitConfirmationToggle />
             <PrimaryMouseButtonToggle />
             <WrapAroundVisualizationToggle />
+            <SansSerifToggle />
             <OfflineModeToggle />
           </div>
           <div className="modal-action self-stretch">

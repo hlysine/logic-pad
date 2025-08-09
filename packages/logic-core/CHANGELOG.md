@@ -1,3 +1,7 @@
+# 0.12.5
+
+- Add puzzle equality check
+
 # 0.12.4
 
 - Add new checklist item for valid grid dimension

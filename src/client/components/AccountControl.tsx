@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
 import { useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
+import { FaBan } from 'react-icons/fa';
 
 export default memo(function AccountControl() {
   const { isOnline, me, refresh } = useOnline();
@@ -24,6 +25,18 @@ export default memo(function AccountControl() {
     );
   }
   if (!me) {
+    if (routerState.location.pathname === '/create') {
+      // Disable button in create mode because this loses puzzle data
+      // users should sign in via the online panel instead
+      return (
+        <>
+          <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">
+            <FaBan />
+            Not signed in
+          </div>
+        </>
+      );
+    }
     return (
       <>
         <div
@@ -53,7 +66,7 @@ export default memo(function AccountControl() {
         )}
         {me.name}
       </summary>
-      <ul className="menu dropdown-content bg-base-100 rounded-box z-50 w-52 mt-2 p-2 shadow-sm">
+      <ul className="menu dropdown-content bg-base-300 rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
         <li>
           <a>Profile</a>
         </li>

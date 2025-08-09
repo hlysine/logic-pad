@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
@@ -10,6 +10,7 @@ import { cleanReload } from './components/settings/ResetSite.tsx';
 import { QueryClientProvider } from '@tanstack/react-query';
 import OnlineContext from './contexts/OnlineContext.tsx';
 import { queryClient } from './online/api.ts';
+import { useSettings } from './contexts/SettingsContext.tsx';
 
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
@@ -38,6 +39,16 @@ function Redirector() {
   return null;
 }
 
+function FontSwitcher() {
+  const [sansSerif] = useSettings('sansSerifFont');
+  useEffect(() => {
+    document.documentElement.style.fontFamily = sansSerif
+      ? '-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji"'
+      : 'Palatino Linotype,Palatino,Palatino LT STD,Book Antiqua,Georgia,serif';
+  }, [sansSerif]);
+  return null;
+}
+
 /**
  * Reload the page when a preload error occurs. This usually happens during a new deployment when the user still
  * has the old version of the site open.
@@ -52,6 +63,7 @@ ReactDOM.createRoot(document.getElementById('app')!).render(
       <OnlineContext>
         <>
           <Redirector />
+          <FontSwitcher />
           <div id="color-ref-error" className="text-error hidden">
             {/* For canvas components to retrieve this color */}
           </div>

@@ -91,4 +91,21 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  savePuzzle: async (
+    puzzleId: string,
+    title: string,
+    description: string,
+    designDifficulty: number,
+    data: string
+  ) => {
+    return await axios
+      .put<{ id: string }>('/puzzle/' + puzzleId, {
+        title,
+        description,
+        designDifficulty,
+        data,
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
 };

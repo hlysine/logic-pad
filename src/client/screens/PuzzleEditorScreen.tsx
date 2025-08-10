@@ -94,6 +94,7 @@ export default memo(function PuzzleEditorScreen({
                 <ConfigPopup key="config-popup" />
               </div>
               <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
+                {children}
                 {features.preview && (
                   <GridConsumer>
                     {({ grid, metadata }) => (
@@ -116,7 +117,6 @@ export default memo(function PuzzleEditorScreen({
                 {features.saveControl && (
                   <PuzzleSaveControl onTabSwitch={switchToOnlineTab} />
                 )}
-                {children}
               </div>
             </>
           }

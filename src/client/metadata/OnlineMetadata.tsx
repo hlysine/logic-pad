@@ -5,6 +5,7 @@ import { useOnline } from '../contexts/OnlineContext';
 import { useQuery } from '@tanstack/react-query';
 import { puzzleSolveQueryOptions } from '../routes/_layout.solve.$puzzleId';
 import Loading from '../components/Loading';
+import { FaCheckSquare, FaHeart } from 'react-icons/fa';
 
 export default memo(function OnlineMetadata() {
   const { isOnline } = useOnline();
@@ -18,9 +19,11 @@ export default memo(function OnlineMetadata() {
     <>
       <div className="flex gap-2">
         <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
+          <FaCheckSquare className="inline-block me-2" />
           {puzzle.data!.solveCount} solves
         </span>
         <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
+          <FaHeart className="inline-block me-2" />
           {puzzle.data!.loveCount} loves
         </span>
       </div>

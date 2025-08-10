@@ -96,9 +96,11 @@ const UploadPuzzle = memo(function UploadPuzzle() {
 // million-ignore
 const PublishPuzzle = memo(function PublishPuzzle() {
   const { id } = useOnlinePuzzle();
+  const { metadata, grid } = useGrid();
   const publishPuzzle = useMutation({
-    mutationFn: (puzzleId: string) => {
-      return api.publishPuzzle(puzzleId);
+    mutationFn: async (data: Parameters<typeof api.savePuzzle>) => {
+      await api.savePuzzle(...data);
+      return await api.publishPuzzle(data[0]);
     },
     onError(error) {
       toast.error(error.message);
@@ -127,7 +129,18 @@ const PublishPuzzle = memo(function PublishPuzzle() {
   return (
     <button
       className="btn btn-primary"
-      onClick={async () => await publishPuzzle.mutateAsync(id!)}
+      onClick={async () => {
+        await publishPuzzle.mutateAsync([
+          id!,
+          metadata.title,
+          metadata.description,
+          metadata.difficulty,
+          await Compressor.compress(Serializer.stringifyGrid(grid)),
+        ]);
+        await queryClient.invalidateQueries({
+          queryKey: ['puzzle', 'edit', id],
+        });
+      }}
     >
       Publish puzzle
     </button>

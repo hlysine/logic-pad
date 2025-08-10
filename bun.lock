@@ -12,7 +12,7 @@
         "@tanstack/router-devtools": "^1.131.2",
         "@use-gesture/react": "^10.3.1",
         "@vercel/speed-insights": "^1.2.0",
-        "animejs": "^3.2.2",
+        "animejs": "^4.1.2",
         "axios": "^1.11.0",
         "compression-streams-polyfill": "^0.1.7",
         "event-iterator": "^2.0.0",
@@ -582,7 +582,7 @@
 
     "ajv": ["ajv@6.12.6", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "fast-json-stable-stringify": "^2.0.0", "json-schema-traverse": "^0.4.1", "uri-js": "^4.2.2" } }, "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g=="],
 
-    "animejs": ["animejs@3.2.2", "", {}, "sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ=="],
+    "animejs": ["animejs@4.1.2", "", {}, "sha512-QojQzHzN4ZCOGk4Seir5CWPHGKFPpMAsen3KEj/BHsIKDceH0xKd3FBWflyKiNefKG2fn3+ofpY9jD/UXhpY6A=="],
 
     "ansi-regex": ["ansi-regex@5.0.1", "", {}, "sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ=="],
 

@@ -1,7 +1,7 @@
-import { forwardRef, memo, useEffect } from 'react';
+import { forwardRef, memo, useEffect, useId } from 'react';
 import { cn } from '../uiHelper.ts';
 import { State } from '@logic-pad/core/data/primitives';
-import anime from 'animejs';
+import { animate, stagger } from 'animejs';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { useRouterState } from '@tanstack/react-router';
 import { useReducedMotion } from '../contexts/SettingsContext.tsx';
@@ -32,6 +32,7 @@ export default memo(
     ref
   ) {
     animated = animated ?? true;
+    const id = useId();
     const { state } = useGridState();
     const router = useRouterState();
     const prefersReducedMotion = useReducedMotion();
@@ -39,34 +40,32 @@ export default memo(
 
     useEffect(() => {
       if (State.isSatisfied(state.final) && !prefersReducedMotion && animated) {
-        anime({
-          targets: '.logic-animated .logic-tile',
+        animate(`#${id}.logic-animated .logic-tile`, {
           scale: [
-            { value: 0.7, easing: 'easeOutSine', duration: 100 },
-            { value: 1, easing: 'easeOutQuad', duration: 500 },
+            { to: 0.7, ease: 'outSine', duration: 100 },
+            { to: 1, ease: 'outQuad', duration: 500 },
           ],
-          delay: anime.stagger(20, { grid: [width, height], from: 'center' }),
+          delay: stagger(20, { grid: [width, height], from: 'center' }),
         });
       }
-    }, [state.final, width, height, prefersReducedMotion, animated]);
+    }, [state.final, width, height, prefersReducedMotion, animated, id]);
 
     useEffect(() => {
       if (prefersReducedMotion || !animated) {
-        anime({
-          targets: '.logic-animated .logic-tile',
+        animate(`#${id}.logic-animated .logic-tile`, {
           scale: 1,
           duration: 0,
           delay: 0,
         });
       } else {
-        anime({
-          targets: '.logic-animated .logic-tile',
+        animate(`#${id}.logic-animated .logic-tile`, {
           scale: [0, 1],
-          delay: anime.stagger(10, {
+          delay: stagger(20, {
             grid: [width, height],
             from: 'center',
             start: 100,
           }),
+          duration: 300,
         });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,6 +74,7 @@ export default memo(
     return (
       <div
         ref={ref}
+        id={id}
         className={cn(
           'w-fit h-fit border-4 p-4 rounded-xl transition-all delay-150 duration-150 ease-out logic-animated',
           ringBorder(state.final),

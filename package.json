@@ -30,7 +30,7 @@
     "@tanstack/router-devtools": "^1.131.2",
     "@use-gesture/react": "^10.3.1",
     "@vercel/speed-insights": "^1.2.0",
-    "animejs": "^3.2.2",
+    "animejs": "^4.1.2",
     "axios": "^1.11.0",
     "compression-streams-polyfill": "^0.1.7",
     "event-iterator": "^2.0.0",

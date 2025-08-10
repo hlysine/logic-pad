@@ -20,10 +20,6 @@ export default defineConfig({
           src: 'node_modules/z3-solver/build/z3-built.wasm',
           dest: 'assets',
         },
-        {
-          src: 'node_modules/z3-solver/build/z3-built.worker.js',
-          dest: 'assets',
-        },
       ],
     }),
     replaceCodePlugin({

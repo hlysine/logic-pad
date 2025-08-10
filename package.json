@@ -10,7 +10,7 @@
   },
   "license": "AGPL-3.0-only",
   "scripts": {
-    "dev": "vite --host",
+    "dev": "vite --force --host",
     "start": "bun src/server/index.ts",
     "build": "bunx --bun tsc && bunx --bun vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -53,7 +53,7 @@
     "react-responsive": "^10.0.1",
     "remark-inline-spoiler": "^1.0.1",
     "tone": "^14.9.17",
-    "z3-solver": "^4.13.0",
+    "z3-solver": "^4.15.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {

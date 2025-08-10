@@ -36,10 +36,10 @@ export default memo(function Settings() {
             <SansSerifToggle />
             <OfflineModeToggle />
           </div>
-          <div className="modal-action self-stretch">
-            <form method="dialog" className="flex w-full justify-between gap-4">
-              <ResetSite />
+          <div className="modal-action self-stretch justify-between">
+            <ResetSite />
 
+            <form method="dialog" className="flex justify-between gap-4">
               {/* if there is a button in form, it will close the modal */}
               <button className="btn">Close</button>
             </form>

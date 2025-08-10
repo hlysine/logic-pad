@@ -3,11 +3,11 @@ import { queryOptions } from '@tanstack/react-query';
 import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 
-export const puzzleEditQueryOptions = (puzzleId: string) =>
+export const puzzleEditQueryOptions = (puzzleId: string | null) =>
   queryOptions({
     queryKey: ['puzzle', 'edit', puzzleId],
-    queryFn: () => api.getPuzzleFullForEdit(puzzleId),
-    enabled: puzzleId.length > 0,
+    queryFn: () => api.getPuzzleFullForEdit(puzzleId!),
+    enabled: !!puzzleId,
   });
 
 export const Route = createFileRoute('/_context/_layout/create/$puzzleId')({

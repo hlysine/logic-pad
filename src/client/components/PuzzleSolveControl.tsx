@@ -24,7 +24,10 @@ const SolveTrackerAnonymous = memo(function SolveTracker() {
     }
   }, [isOnline, me, id, state.final]);
 
-  const solved = useMemo(() => onlineSolveTracker.isSolved(id), [id]);
+  const solved = useMemo(
+    () => (!id ? false : onlineSolveTracker.isSolved(id)),
+    [id]
+  );
 
   if (!isOnline || !!me || !id) return null;
 
@@ -56,7 +59,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
   const { id } = useOnlinePuzzle();
   const completionBegin = useQuery({
     queryKey: ['completion', 'begin', id],
-    queryFn: () => api.completionBegin(id),
+    queryFn: () => api.completionBegin(id!),
     enabled: isOnline && !!me && !!id,
   });
 
@@ -68,7 +71,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
       console.log('Event triggered');
       if (document.visibilityState === 'hidden') {
         msElapsedTime.current += Date.now() - activeStartTick.current;
-        onlineSolveTracker.sendSolving(id, msElapsedTime.current);
+        if (id) onlineSolveTracker.sendSolving(id, msElapsedTime.current);
         msElapsedTime.current = 0;
       } else {
         activeStartTick.current = Date.now();

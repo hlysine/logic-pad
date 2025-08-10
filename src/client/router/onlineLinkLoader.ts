@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useGrid } from '../contexts/GridContext';
 import { useEdit } from '../contexts/EditContext';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
@@ -40,6 +40,10 @@ export default function useOnlineLinkLoader(
   const [result, setResult] = useState<OnlineLinkLoaderResult | undefined>(
     undefined
   );
+  useLayoutEffect(() => {
+    setId(puzzle.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     void (async () => {
       const result = {
@@ -85,7 +89,6 @@ export default function useOnlineLinkLoader(
           solution: null,
         });
       }
-      setId(puzzle.id);
       setMetadata(metadata);
       setRevealSpoiler(false);
       clearHistory(grid);

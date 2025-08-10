@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useGrid } from '../contexts/GridContext';
 import { useEdit } from '../contexts/EditContext';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
@@ -79,13 +79,16 @@ export default function useLinkLoader(
   const { setId, setLastSaved } = useOnlinePuzzle();
   const navigate = useNavigate({ from: '/solve' });
   const [result, setResult] = useState<LinkLoaderResult | undefined>(undefined);
+  useLayoutEffect(() => {
+    setId(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     void (async () => {
       const result = {
         originalParams: params,
         solutionStripped: false,
       };
-      setId('');
       if (params.d) {
         const behavior = params.loader ?? solutionBehavior;
         const decompressed = await Compressor.decompress(params.d);

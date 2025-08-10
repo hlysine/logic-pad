@@ -124,7 +124,7 @@ const PublishPuzzle = memo(function PublishPuzzle() {
   return (
     <button
       className="btn btn-primary"
-      onClick={async () => await publishPuzzle.mutateAsync(id)}
+      onClick={async () => await publishPuzzle.mutateAsync(id!)}
     >
       Publish puzzle
     </button>
@@ -140,7 +140,7 @@ export default memo(function EditorOnlineTab() {
     return <Loading />;
   }
 
-  if (id.length === 0 || !data) {
+  if (!id || !data) {
     return (
       <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px]">
         <p className="text-2xl font-bold">Editing locally</p>

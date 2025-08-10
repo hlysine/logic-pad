@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import SolveScreen from '../screens/SolveScreen';
-import PerfectionModeLink from '../components/PerfectionModeButton';
+import PerfectionModeLink from '../components/quickActions/PerfectionModeButton';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import useOnlineLinkLoader from '../router/onlineLinkLoader';
 import { puzzleSolveQueryOptions } from './_context._layout.solve.$puzzleId';

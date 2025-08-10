@@ -1,16 +1,16 @@
 import { forwardRef, memo, useEffect, useMemo, useRef, useState } from 'react';
-import MainGrid from '../grid/MainGrid';
-import InstructionList from '../instructions/InstructionList';
-import { cn } from '../uiHelper';
-import Metadata from '../metadata/Metadata';
-import Loading from './Loading';
+import MainGrid from '../../grid/MainGrid';
+import InstructionList from '../../instructions/InstructionList';
+import { cn } from '../../uiHelper';
+import Metadata from '../../metadata/Metadata';
+import Loading from '../Loading';
 import html2canvas from 'html2canvas-pro';
 import GridStateContext, {
   defaultState,
   useGridState,
-} from '../contexts/GridStateContext';
-import GridContext, { useGrid } from '../contexts/GridContext';
-import DisplayContext, { useDisplay } from '../contexts/DisplayContext';
+} from '../../contexts/GridStateContext';
+import GridContext, { useGrid } from '../../contexts/GridContext';
+import DisplayContext, { useDisplay } from '../../contexts/DisplayContext';
 import { FaAngleDown, FaCamera } from 'react-icons/fa';
 
 interface CopyImageButtonProps {

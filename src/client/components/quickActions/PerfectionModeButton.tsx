@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useGrid } from '../contexts/GridContext';
+import { useGrid } from '../../contexts/GridContext';
 import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import { FaStar } from 'react-icons/fa';

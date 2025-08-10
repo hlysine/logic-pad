@@ -11,10 +11,11 @@ import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import ModeVariantLoader from '../router/ModeVariantLoader';
 import { memo } from 'react';
-import SharePuzzleImage from '../components/SharePuzzleImage';
+import SharePuzzleImage from '../components/quickActions/SharePuzzleImage';
 import OnlineMetadata from '../metadata/OnlineMetadata';
-import PuzzleLoveButton from '../components/PuzzleLoveButton';
+import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
 import PuzzleSolveControl from '../components/PuzzleSolveControl';
+import PuzzleEditButton from '../components/quickActions/PuzzleEditButton';
 
 export interface SolveScreenProps {
   quickActions?: React.ReactNode;
@@ -54,6 +55,7 @@ export default memo(function SolveScreen({
           <div className="flex gap-1">
             <PuzzleLoveButton />
             <SharePuzzleImage />
+            <PuzzleEditButton />
             {quickActions}
           </div>
           <TouchControls />

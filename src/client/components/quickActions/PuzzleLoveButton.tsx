@@ -1,17 +1,17 @@
 import { memo } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useOnline } from '../contexts/OnlineContext';
-import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
+import { useOnline } from '../../contexts/OnlineContext';
+import { useOnlinePuzzle } from '../../contexts/OnlinePuzzleContext';
 import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
-import { api, queryClient } from '../online/api';
-import Loading from './Loading';
+import { api, queryClient } from '../../online/api';
+import Loading from '../Loading';
 import toast from 'react-hot-toast';
 
-const puzzleLoveQueryOptions = (puzzleId: string, enabled: boolean) =>
+const puzzleLoveQueryOptions = (puzzleId: string | null, enabled: boolean) =>
   queryOptions({
     queryKey: ['puzzle', 'love', puzzleId],
-    queryFn: () => api.getPuzzleLove(puzzleId),
-    enabled: enabled && puzzleId.length > 0,
+    queryFn: () => api.getPuzzleLove(puzzleId!),
+    enabled: enabled && !!puzzleId,
   });
 
 export default memo(function PuzzleLoveButton() {
@@ -27,8 +27,9 @@ export default memo(function PuzzleLoveButton() {
     },
   });
 
-  if (!isOnline || !me) return null;
-  if (puzzleLove.isPending) return <Loading className="w-14" />;
+  if (!isOnline || !me || !id) return null;
+  if (puzzleLove.isPending || setPuzzleLove.isPending)
+    return <Loading className="w-14" />;
   return (
     <button
       className="tooltip tooltip-info tooltip-right btn btn-md btn-ghost flex items-center w-fit focus:z-50"

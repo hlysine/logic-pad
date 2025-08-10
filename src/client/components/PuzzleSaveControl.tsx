@@ -103,7 +103,7 @@ const SavePuzzle = memo(function SavePuzzle() {
   const save = async () => {
     const data = await Compressor.compress(Serializer.stringifyGrid(grid));
     savePuzzle.mutate([
-      id,
+      id!,
       metadata.title,
       metadata.description,
       metadata.difficulty,

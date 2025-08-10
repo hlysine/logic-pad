@@ -12,10 +12,8 @@ export default memo(function ExitBlocker() {
   useBlocker({
     shouldBlockFn: () =>
       enableExitConfirmation &&
+      !puzzleEquals(lastSaved, { ...metadata, grid, solution: null }) &&
       !window.confirm('Are you sure you want to leave?'),
-    disabled:
-      puzzleEquals(lastSaved, { ...metadata, grid, solution: null }) ||
-      !enableExitConfirmation,
   });
   return null;
 });

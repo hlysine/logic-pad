@@ -11,6 +11,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import OnlineContext from './contexts/OnlineContext.tsx';
 import { queryClient } from './online/api.ts';
 import { useSettings } from './contexts/SettingsContext.tsx';
+import Loading from './components/Loading.tsx';
 
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
@@ -21,6 +22,7 @@ export const router = createRouter({
   defaultNotFoundComponent: NotFound,
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 1000 * 60 * 5,
+  defaultPendingComponent: () => <Loading />,
 });
 
 declare module '@tanstack/react-router' {

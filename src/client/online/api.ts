@@ -36,8 +36,9 @@ export const api = {
   },
   signInWithOAuth: (provider: string, success: string, error: string) => {
     onlineSolveTracker.clearSolveRecords();
-    const url = new URL(window.location.origin);
-    url.pathname = '/api/auth/oauth/' + provider;
+    const url = new URL(
+      (import.meta.env.VITE_API_ENDPOINT as string) + '/auth/oauth/' + provider
+    );
     url.searchParams.set('success', success);
     url.searchParams.set('error', error);
     window.location.href = url.toString();

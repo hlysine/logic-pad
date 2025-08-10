@@ -1,4 +1,3 @@
-import DocumentTitle from '../components/DocumentTitle';
 import { PerfectionEditControls } from '../components/EditControls';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
@@ -32,7 +31,7 @@ export default memo(function PerfectionScreen({
         collapsible={false}
         left={
           <>
-            <DocumentTitle>Logic Pad</DocumentTitle>
+            <title>Logic Pad</title>
             <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
               <Metadata />
               <GridConsumer>

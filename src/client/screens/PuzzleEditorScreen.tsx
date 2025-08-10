@@ -4,7 +4,6 @@ import { GridConsumer } from '../contexts/GridContext';
 import InstructionSearch from '../instructions/InstructionSearch';
 import { memo, useRef, useState } from 'react';
 import ThreePaneLayout from '../components/ThreePaneLayout';
-import DocumentTitle from '../components/DocumentTitle';
 import TouchControls from '../components/TouchControls';
 import ConfigContext from '../contexts/ConfigContext';
 import ConfigPopup from '../configs/ConfigPopup';
@@ -38,7 +37,7 @@ export default memo(function PuzzleEditorScreen({
           collapsible={true}
           left={
             <>
-              <DocumentTitle>Puzzle Editor - Logic Pad</DocumentTitle>
+              <title>Puzzle Editor - Logic Pad</title>
               <EditorSideTabs
                 editorMode={editorMode}
                 onEditorModeChange={setEditorMode}

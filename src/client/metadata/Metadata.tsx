@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Difficulty from './Difficulty';
-import DocumentTitle from '../components/DocumentTitle';
 import Markdown from '../components/Markdown';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { cn } from '../uiHelper.ts';
@@ -22,7 +21,7 @@ export default memo(function Metadata({
 
   return (
     <div className="flex flex-col gap-4 text-neutral-content">
-      <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
+      <title>{metadata.title} - Logic Pad</title>
       <div
         className="tooltip tooltip-info tooltip-right w-fit"
         data-tip={`Design difficulty: ${metadata.difficulty}`}

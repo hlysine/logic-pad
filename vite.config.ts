@@ -1,4 +1,3 @@
-import million from 'million/compiler';
 import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { tanstackRouter } from '@tanstack/router-vite-plugin';
@@ -30,7 +29,6 @@ export default defineConfig({
         },
       ],
     }),
-    million.vite({ auto: true, telemetry: false }),
     react(),
     tanstackRouter({
       routesDirectory: './src/client/routes',

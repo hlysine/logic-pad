@@ -8,6 +8,7 @@ import { useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
 import { FaBan } from 'react-icons/fa';
 
+// million-ignore
 export default memo(function AccountControl() {
   const { isOnline, me, refresh } = useOnline();
   const routerState = useRouterState();
@@ -39,7 +40,7 @@ export default memo(function AccountControl() {
     }
     return (
       <>
-        <div
+        <button
           className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit"
           onClick={async () => {
             await deferredRedirect.setAndNavigate(routerState.location, {
@@ -48,7 +49,7 @@ export default memo(function AccountControl() {
           }}
         >
           Sign in / sign up
-        </div>
+        </button>
       </>
     );
   }

@@ -12,6 +12,8 @@ import { api } from '../online/api.ts';
 import Loading from './Loading.tsx';
 import Difficulty from '../metadata/Difficulty.tsx';
 import toast from 'react-hot-toast';
+import { animate } from 'animejs';
+import { useReducedMotion } from '../contexts/SettingsContext.tsx';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
@@ -86,6 +88,42 @@ const RatePuzzle = memo(function RatePuzzle({
   );
 });
 
+const PuzzleCompleted = memo(function PuzzleCompleted({
+  initialRating,
+}: {
+  initialRating: number;
+}) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
+  useEffect(() => {
+    if (!panelRef.current) return;
+    if (reducedMotion) return;
+    animate(panelRef.current, {
+      opacity: [0, 1],
+      translateY: [50, 0],
+      duration: 300,
+      ease: 'outExpo',
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return (
+    <div className="overflow-hidden">
+      <div
+        ref={panelRef}
+        className="flex flex-col p-4 gap-4 leading-8 rounded-2xl shadow-md bg-base-100 text-base-content items-start justify-between"
+      >
+        <div className="text-2xl">Puzzle solved!</div>
+        <div>How difficult was this puzzle?</div>
+        <RatePuzzle initialRating={initialRating} />
+        <div>Found a problem?</div>
+        <button className="btn btn-disabled w-full">
+          Send feedback (Coming soon)
+        </button>
+      </div>
+    </div>
+  );
+});
+
 const SolveTrackerSignedIn = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
@@ -147,15 +185,9 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
   }
 
   return (
-    <div className="flex flex-col p-4 gap-4 leading-8 rounded-2xl shadow-md bg-base-100 text-base-content items-start justify-between">
-      <div className="text-2xl">Puzzle solved!</div>
-      <div>How difficult was this puzzle?</div>
-      <RatePuzzle initialRating={completionBegin.data!.ratedDifficulty ?? 0} />
-      <div>Found a problem?</div>
-      <button className="btn btn-disabled w-full">
-        Send feedback (Coming soon)
-      </button>
-    </div>
+    <PuzzleCompleted
+      initialRating={completionBegin.data!.ratedDifficulty ?? 0}
+    />
   );
 });
 

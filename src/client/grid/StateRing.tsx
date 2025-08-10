@@ -70,7 +70,7 @@ export default memo(function StateRing({
           from: 'center',
           start: 100,
         }),
-        duration: 300,
+        duration: 200,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

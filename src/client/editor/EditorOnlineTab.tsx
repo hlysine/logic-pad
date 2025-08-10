@@ -16,6 +16,7 @@ import { api, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
 
+// million-ignore
 const SignInWithProgress = memo(function SignInWithProgress() {
   const { metadata, grid, solution } = useGrid();
   return (
@@ -43,6 +44,7 @@ const SignInWithProgress = memo(function SignInWithProgress() {
   );
 });
 
+// million-ignore
 const UploadPuzzle = memo(function UploadPuzzle() {
   const uploadPuzzle = useMutation({
     mutationFn: (data: Parameters<typeof api.createPuzzle>) => {
@@ -91,6 +93,7 @@ const UploadPuzzle = memo(function UploadPuzzle() {
   );
 });
 
+// million-ignore
 const PublishPuzzle = memo(function PublishPuzzle() {
   const { id } = useOnlinePuzzle();
   const publishPuzzle = useMutation({
@@ -131,6 +134,7 @@ const PublishPuzzle = memo(function PublishPuzzle() {
   );
 });
 
+// million-ignore
 export default memo(function EditorOnlineTab() {
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
@@ -142,7 +146,7 @@ export default memo(function EditorOnlineTab() {
 
   if (!id || !data) {
     return (
-      <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px]">
+      <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px] animate-online-tab">
         <p className="text-2xl font-bold">Editing locally</p>
         {!isOnline ? (
           <p>Go online to upload your puzzle and access it from anywhere.</p>
@@ -171,7 +175,7 @@ export default memo(function EditorOnlineTab() {
 
   if (data.status === ResourceStatus.Private) {
     return (
-      <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px]">
+      <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px] animate-online-tab">
         <p className="text-2xl font-bold">Online information</p>
         <div className="flex gap-2 items-center">
           <div className="badge badge-lg badge-neutral p-4">Private</div>
@@ -197,7 +201,7 @@ export default memo(function EditorOnlineTab() {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px]">
+    <div className="flex flex-col gap-4 p-8 bg-base-100 text-base-content rounded-2xl shadow-lg w-full max-w-[800px] animate-online-tab">
       <p className="text-2xl font-bold">Online information</p>
       <div className="flex gap-4 items-center">
         <div className="badge badge-lg badge-info p-4">Public</div>

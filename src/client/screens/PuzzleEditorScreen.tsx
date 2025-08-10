@@ -19,6 +19,7 @@ import EditorCenterTabs from '../editor/EditorCenterTabs';
 import PreviewModal, { PreviewRef } from '../editor/PreviewModal';
 import PuzzleSaveControl from '../components/PuzzleSaveControl';
 import { FaEye } from 'react-icons/fa';
+import { animate } from 'animejs';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -30,6 +31,25 @@ export default memo(function PuzzleEditorScreen({
   const { features } = useEmbed();
   const [editorMode, setEditorMode] = useState<'grid' | 'info'>('grid');
   const previewRef = useRef<PreviewRef>(null);
+  const switchToOnlineTab = () => {
+    if (editorMode === 'info') {
+      animate('.animate-online-tab', {
+        scale: [
+          {
+            to: 1.05,
+            duration: 100,
+          },
+          {
+            to: 1,
+            duration: 200,
+          },
+        ],
+        ease: 'inOutSine',
+      });
+    } else {
+      setEditorMode('info');
+    }
+  };
   return (
     <ToolboxContext>
       <ConfigContext>
@@ -92,11 +112,9 @@ export default memo(function PuzzleEditorScreen({
                     )}
                   </GridConsumer>
                 )}
-                <PuzzleChecklist onTabSwitch={() => setEditorMode('info')} />
+                <PuzzleChecklist onTabSwitch={switchToOnlineTab} />
                 {features.saveControl && (
-                  <PuzzleSaveControl
-                    onTabSwitch={() => setEditorMode('info')}
-                  />
+                  <PuzzleSaveControl onTabSwitch={switchToOnlineTab} />
                 )}
                 {children}
               </div>

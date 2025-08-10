@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { Puzzle, PuzzleSchema } from '@logic-pad/core/data/puzzle';
@@ -11,6 +11,7 @@ import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import handleTileClick from '../grid/handleTileClick';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { array } from '@logic-pad/core/data/dataHelper';
+import toast from 'react-hot-toast';
 
 const defaultCode = `/** @type Puzzle */
 ({
@@ -50,10 +51,6 @@ export default memo(function SourceCodeEditor({
     if (saved)
       editor.restoreViewState(JSON.parse(saved) as editor.ICodeEditorViewState);
   };
-  const [toast, setToast] = useState<{
-    message: string;
-    handle: number;
-  } | null>(null);
   const monaco = useMonaco();
   const { theme } = useTheme();
   const { setTool } = useToolbox();
@@ -129,17 +126,11 @@ export default memo(function SourceCodeEditor({
           setGrid(grid, solution);
         }
       } catch (error) {
-        if (toast !== null) clearTimeout(toast.handle);
-        const handle = window.setTimeout(() => setToast(null), 5000);
         if (error instanceof ZodError) {
-          setToast({
-            message:
-              error.errors[0].path.join('.') + ': ' + error.errors[0].message,
-            handle,
-          });
+          toast.error(error.issues[0].message);
           console.error('Validation error thrown from code editor:', error);
         } else if (error instanceof Error) {
-          setToast({ message: error.message, handle });
+          toast.error(error.message);
           if (error.stack) {
             const match = error.stack.match(/<anonymous>:(\d+):(\d+)/);
             if (match) {
@@ -212,13 +203,6 @@ export default memo(function SourceCodeEditor({
         >
           Load puzzle
         </button>
-      </div>
-      <div className="toast toast-start mb-40 z-50">
-        {toast && (
-          <div className="alert alert-error w-[290px] whitespace-normal">
-            <span>{toast.message}</span>
-          </div>
-        )}
       </div>
     </>
   );

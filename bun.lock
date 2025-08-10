@@ -36,7 +36,7 @@
         "remark-inline-spoiler": "^1.0.1",
         "tone": "^14.9.17",
         "z3-solver": "^4.15.2",
-        "zod": "^3.22.4",
+        "zod": "^4.0.17",
       },
       "devDependencies": {
         "@tanstack/router-vite-plugin": "^1.131.2",
@@ -1699,7 +1699,7 @@
 
     "z3-solver": ["z3-solver@4.15.2", "", { "dependencies": { "async-mutex": "^0.3.2" } }, "sha512-ep80oXDusv5z+NKoSJPDJ7+wnjdAyLsdcvD8jA6VkhxlDxtqwPBLGNl7UZ2VsVsSoJ+O4F9CKo0USIaCnOqjNw=="],
 
-    "zod": ["zod@3.22.4", "", {}, "sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg=="],
+    "zod": ["zod@4.0.17", "", {}, "sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ=="],
 
     "zwitch": ["zwitch@2.0.4", "", {}, "sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A=="],
 

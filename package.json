@@ -54,7 +54,7 @@
     "remark-inline-spoiler": "^1.0.1",
     "tone": "^14.9.17",
     "z3-solver": "^4.15.2",
-    "zod": "^3.22.4"
+    "zod": "^4.0.17"
   },
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.131.2",

@@ -9,6 +9,7 @@ import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
 import { useTheme } from '../../contexts/ThemeContext.tsx';
 import { playbackState } from './instruments.ts';
 import { Color } from '@logic-pad/core/data/primitives';
+import debounce from 'lodash/debounce';
 
 const BLEED = 5;
 
@@ -45,7 +46,6 @@ export default memo(function MusicOverlayPart({
   const [tileSize, setTileSize] = useState(0);
   const targetRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
-  const [targetPosition, setTargetPosition] = useState(0);
   const tileAnimations = useRef<number[][]>([]);
   const prevPosition = useRef(-1);
 
@@ -68,6 +68,21 @@ export default memo(function MusicOverlayPart({
         .color,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [theme]
+  );
+
+  const updateTargetPosition = useMemo(
+    () =>
+      debounce(
+        (position: number) => {
+          if (targetRef.current) {
+            targetRef.current.style.left = `${position}em`;
+            targetRef.current.scrollIntoView({ behavior: 'instant' });
+          }
+        },
+        20,
+        { leading: true, trailing: true }
+      ),
+    [targetRef]
   );
 
   useEffect(() => {
@@ -140,7 +155,7 @@ export default memo(function MusicOverlayPart({
               ? infoColor
               : accentColor;
             ctx.stroke();
-            setTargetPosition(position);
+            updateTargetPosition(position);
           }
         }, time);
       },
@@ -150,11 +165,14 @@ export default memo(function MusicOverlayPart({
     return () => {
       Tone.getTransport().clear(handle);
     };
-  }, [grid, instruction, infoColor, accentColor, tileSize]);
-
-  useEffect(() => {
-    targetRef.current?.scrollIntoView({ behavior: 'instant' });
-  }, [targetPosition]);
+  }, [
+    grid,
+    instruction,
+    infoColor,
+    accentColor,
+    tileSize,
+    updateTargetPosition,
+  ]);
 
   return (
     <GridCanvasOverlay
@@ -167,7 +185,6 @@ export default memo(function MusicOverlayPart({
       <div
         ref={targetRef}
         className="absolute w-48 h-0 opacity-0 -top-12 xl:top-1/2"
-        style={{ left: `${targetPosition}em` }}
       ></div>
     </GridCanvasOverlay>
   );

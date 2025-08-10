@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { RefObject, memo, useEffect, useRef, useState } from 'react';
 import { getConfigurable, useConfig } from '../contexts/ConfigContext.tsx';
 import Config from './parts/Config';
 import Rule from '@logic-pad/core/data/rules/rule';
@@ -102,7 +102,7 @@ export default memo(function ConfigPopup() {
   useEffect(() => {
     const handler = () => {
       if (!ref || !popupRef.current) return;
-      const styles = getPosition(ref, popupRef);
+      const styles = getPosition(ref, popupRef as RefObject<HTMLDivElement>);
       if (!styles) return;
       popupRef.current.style.left = styles.left;
       popupRef.current.style.top = styles.top;

@@ -13,8 +13,8 @@ import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
 const gap = 8;
 
 function getPosition(
-  targetRef: React.RefObject<HTMLElement>,
-  boxRef: React.RefObject<HTMLElement>
+  targetRef: RefObject<HTMLElement>,
+  boxRef: RefObject<HTMLElement>
 ) {
   let targetRect = targetRef.current?.getBoundingClientRect();
   let boxRect = boxRef.current?.getBoundingClientRect();

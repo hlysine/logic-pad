@@ -1,4 +1,4 @@
-import { forwardRef, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, Ref, useEffect, useMemo, useRef, useState } from 'react';
 import MainGrid from '../../grid/MainGrid';
 import InstructionList from '../../instructions/InstructionList';
 import { cn } from '../../uiHelper';
@@ -58,58 +58,54 @@ interface PuzzleImageProps {
   resetGrid: boolean;
   resetScale: boolean;
   gridOnly: boolean;
+  ref?: Ref<HTMLDivElement>;
 }
 
-const PuzzleImage = memo(
-  forwardRef<HTMLDivElement, PuzzleImageProps>(function PuzzleImage(
-    { resetGrid, resetScale, gridOnly }: PuzzleImageProps,
-    ref
-  ) {
-    const { grid, metadata } = useGrid();
-    const { state } = useGridState();
-    const { scale } = useDisplay();
+const PuzzleImage = memo(function PuzzleImage({
+  resetGrid,
+  resetScale,
+  gridOnly,
+  ref,
+}: PuzzleImageProps) {
+  const { grid, metadata } = useGrid();
+  const { state } = useGridState();
+  const { scale } = useDisplay();
 
-    const newGrid = useMemo(
-      () => (resetGrid ? grid.resetTiles() : grid),
-      [grid, resetGrid]
-    );
+  const newGrid = useMemo(
+    () => (resetGrid ? grid.resetTiles() : grid),
+    [grid, resetGrid]
+  );
 
-    return (
+  return (
+    <div
+      ref={ref}
+      className="fixed top-0 left-0 shrink-0 w-fit h-fit bg-neutral border-0 m-0 pointer-events-none opacity-0 p-[8px]"
+    >
       <div
-        ref={ref}
-        className="fixed top-0 left-0 shrink-0 w-fit h-fit bg-neutral border-0 m-0 pointer-events-none opacity-0 p-[8px]"
+        className={cn(
+          'w-fit h-fit flex gap-4 items-center',
+          gridOnly ? 'p-4' : 'py-4 pl-4 pr-0'
+        )}
       >
-        <div
-          className={cn(
-            'w-fit h-fit flex gap-4 items-center',
-            gridOnly ? 'p-4' : 'py-4 pl-4 pr-0'
-          )}
-        >
-          <DisplayContext
-            scale={resetScale ? 1 : scale}
-            responsiveScale={false}
-          >
-            <GridStateContext state={resetGrid ? defaultState : state}>
-              <GridContext grid={newGrid} initialMetadata={metadata}>
-                <div className="flex flex-col gap-4">
-                  {gridOnly || (
-                    <Metadata simplified={true} responsive={false} />
-                  )}
-                  <MainGrid useToolboxClick={false} animated={false} />
+        <DisplayContext scale={resetScale ? 1 : scale} responsiveScale={false}>
+          <GridStateContext state={resetGrid ? defaultState : state}>
+            <GridContext grid={newGrid} initialMetadata={metadata}>
+              <div className="flex flex-col gap-4">
+                {gridOnly || <Metadata simplified={true} responsive={false} />}
+                <MainGrid useToolboxClick={false} animated={false} />
+              </div>
+              {gridOnly || (
+                <div className="pr-2">
+                  <InstructionList responsive={false} />
                 </div>
-                {gridOnly || (
-                  <div className="pr-2">
-                    <InstructionList responsive={false} />
-                  </div>
-                )}
-              </GridContext>
-            </GridStateContext>
-          </DisplayContext>
-        </div>
+              )}
+            </GridContext>
+          </GridStateContext>
+        </DisplayContext>
       </div>
-    );
-  })
-);
+    </div>
+  );
+});
 
 const ImageGenerator = memo(function ImageGenerator() {
   const containerRef = useRef<HTMLDivElement>(null);

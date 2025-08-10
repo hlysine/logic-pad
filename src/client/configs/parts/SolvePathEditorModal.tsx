@@ -1,10 +1,4 @@
-import {
-  forwardRef,
-  memo,
-  useEffect,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import { memo, Ref, useEffect, useImperativeHandle, useState } from 'react';
 import { cn } from '../../uiHelper';
 import EmbedContext from '../../contexts/EmbedContext';
 import GridContext, { GridConsumer } from '../../contexts/GridContext';
@@ -22,12 +16,13 @@ import { invokeSetGrid } from '@logic-pad/core/data/events/onSetGrid';
 import FullScreenModal from '../../components/FullScreenModal';
 import OnlineContext from '../../contexts/OnlineContext';
 
-export interface SolvePathEditorModalProps {
-  onChange: (solvePath: Position[]) => void;
-}
-
 export interface SolvePathEditorRef {
   open: (value: Position[], grid: GridData, metadata: PuzzleMetadata) => void;
+}
+
+export interface SolvePathEditorModalProps {
+  onChange: (solvePath: Position[]) => void;
+  ref?: Ref<SolvePathEditorRef>;
 }
 
 function prepareGrid(
@@ -75,112 +70,108 @@ function prepareGrid(
   }
 }
 
-export default memo(
-  forwardRef<SolvePathEditorRef, SolvePathEditorModalProps>(
-    function SolvePathEditorModal(
-      { onChange }: SolvePathEditorModalProps,
-      ref
-    ) {
-      /**
-       * initialState also specifies the open state of the modal.
-       */
-      const [initialState, setInitialState] = useState<Puzzle | null>(null);
-      const [tempSolvePath, setTempSolvePath] = useState<Position[]>([]);
+export default memo(function SolvePathEditorModal({
+  onChange,
+  ref,
+}: SolvePathEditorModalProps) {
+  /**
+   * initialState also specifies the open state of the modal.
+   */
+  const [initialState, setInitialState] = useState<Puzzle | null>(null);
+  const [tempSolvePath, setTempSolvePath] = useState<Position[]>([]);
 
-      useImperativeHandle(ref, () => ({
-        open: (value: Position[], grid: GridData, metadata: PuzzleMetadata) => {
-          const { grid: newGrid, solution } = prepareGrid(grid, value);
-          setInitialState({ ...metadata, grid: newGrid, solution });
-          setTempSolvePath(value);
-        },
-      }));
+  useImperativeHandle(ref, () => ({
+    open: (value: Position[], grid: GridData, metadata: PuzzleMetadata) => {
+      const { grid: newGrid, solution } = prepareGrid(grid, value);
+      setInitialState({ ...metadata, grid: newGrid, solution });
+      setTempSolvePath(value);
+    },
+  }));
 
-      const openDelta = useDelta(initialState);
-      useEffect(() => {
-        if (!openDelta) return;
-        if (!openDelta.curr && openDelta.prev) {
-          onChange(tempSolvePath);
-        }
-      }, [onChange, openDelta, tempSolvePath]);
-
-      return (
-        <FullScreenModal
-          title="Edit solve path"
-          className={cn('modal', initialState && 'modal-open')}
-          onClose={() => setInitialState(null)}
-        >
-          {initialState && (
-            <EmbedContext name="solve-path-modal">
-              <OnlineContext forceOffline={true}>
-                <DisplayContext>
-                  <EditContext>
-                    <GridStateContext>
-                      <GridContext
-                        initialGrid={initialState.grid}
-                        initialSolution={initialState.solution}
-                        initialMetadata={() => {
-                          const {
-                            grid: _1,
-                            solution: _2,
-                            ...metadata
-                          } = initialState;
-                          return metadata;
-                        }}
-                      >
-                        <EditConsumer>
-                          {({ clearHistory }) => {
-                            return (
-                              <GridConsumer>
-                                {({ setGridRaw: setInnerGrid }) => {
-                                  const onReset = () => {
-                                    const { grid, solution } = prepareGrid(
-                                      initialState.grid,
-                                      []
-                                    );
-                                    setInnerGrid(grid, solution);
-                                    setTempSolvePath([]);
-                                    clearHistory(grid);
-                                  };
-                                  return (
-                                    <PerfectionScreen
-                                      solvePath={tempSolvePath}
-                                      setSolvePath={setTempSolvePath}
-                                      onReset={onReset}
-                                    >
-                                      <button
-                                        type="button"
-                                        className="btn"
-                                        onClick={onReset}
-                                      >
-                                        Reset progress (R)
-                                      </button>
-                                      <button
-                                        type="button"
-                                        className="btn btn-primary"
-                                        onClick={() => {
-                                          setInitialState(null);
-                                        }}
-                                      >
-                                        Save and exit
-                                      </button>
-                                    </PerfectionScreen>
-                                  );
-                                }}
-                              </GridConsumer>
-                            );
-                          }}
-                        </EditConsumer>
-                      </GridContext>
-                    </GridStateContext>
-                  </EditContext>
-                </DisplayContext>
-              </OnlineContext>
-            </EmbedContext>
-          )}
-        </FullScreenModal>
-      );
+  const openDelta = useDelta(initialState);
+  useEffect(() => {
+    if (!openDelta) return;
+    if (!openDelta.curr && openDelta.prev) {
+      onChange(tempSolvePath);
     }
-  )
-);
+  }, [onChange, openDelta, tempSolvePath]);
+
+  return (
+    <FullScreenModal
+      title="Edit solve path"
+      className={cn('modal', initialState && 'modal-open')}
+      onClose={() => setInitialState(null)}
+    >
+      {initialState && (
+        <EmbedContext name="solve-path-modal">
+          <OnlineContext forceOffline={true}>
+            <DisplayContext>
+              <EditContext>
+                <GridStateContext>
+                  <GridContext
+                    initialGrid={initialState.grid}
+                    initialSolution={initialState.solution}
+                    initialMetadata={() => {
+                      const {
+                        grid: _1,
+                        solution: _2,
+                        ...metadata
+                      } = initialState;
+                      return metadata;
+                    }}
+                  >
+                    <EditConsumer>
+                      {({ clearHistory }) => {
+                        return (
+                          <GridConsumer>
+                            {({ setGridRaw: setInnerGrid }) => {
+                              const onReset = () => {
+                                const { grid, solution } = prepareGrid(
+                                  initialState.grid,
+                                  []
+                                );
+                                setInnerGrid(grid, solution);
+                                setTempSolvePath([]);
+                                clearHistory(grid);
+                              };
+                              return (
+                                <PerfectionScreen
+                                  solvePath={tempSolvePath}
+                                  setSolvePath={setTempSolvePath}
+                                  onReset={onReset}
+                                >
+                                  <button
+                                    type="button"
+                                    className="btn"
+                                    onClick={onReset}
+                                  >
+                                    Reset progress (R)
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                      setInitialState(null);
+                                    }}
+                                  >
+                                    Save and exit
+                                  </button>
+                                </PerfectionScreen>
+                              );
+                            }}
+                          </GridConsumer>
+                        );
+                      }}
+                    </EditConsumer>
+                  </GridContext>
+                </GridStateContext>
+              </EditContext>
+            </DisplayContext>
+          </OnlineContext>
+        </EmbedContext>
+      )}
+    </FullScreenModal>
+  );
+});
 
 export const type = undefined;

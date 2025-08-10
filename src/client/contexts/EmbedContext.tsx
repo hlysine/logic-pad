@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, memo, use, useEffect, useState } from 'react';
 
 interface Features {
   instructions: boolean;
@@ -18,7 +18,7 @@ interface EmbedContext {
   isTopLevel: boolean;
 }
 
-const context = createContext<EmbedContext>({
+const Context = createContext<EmbedContext>({
   features: {
     instructions: true,
     metadata: true,
@@ -33,10 +33,10 @@ const context = createContext<EmbedContext>({
 });
 
 export const useEmbed = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const EmbedConsumer = context.Consumer;
+export const EmbedConsumer = Context.Consumer;
 
 export default memo(function EmbedContext({
   name,
@@ -69,7 +69,7 @@ export default memo(function EmbedContext({
   }, []);
 
   return (
-    <context.Provider
+    <Context
       value={{
         features,
         setFeatures,
@@ -79,6 +79,6 @@ export default memo(function EmbedContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

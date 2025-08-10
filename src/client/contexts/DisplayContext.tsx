@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, use, useState } from 'react';
 
 interface DisplayContext {
   scale: number;
@@ -7,7 +7,7 @@ interface DisplayContext {
   setResponsiveScale: (value: boolean) => void;
 }
 
-const context = createContext<DisplayContext>({
+const Context = createContext<DisplayContext>({
   scale: 1,
   setScale: () => {},
   responsiveScale: true,
@@ -15,10 +15,10 @@ const context = createContext<DisplayContext>({
 });
 
 export const useDisplay = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const DisplayConsumer = context.Consumer;
+export const DisplayConsumer = Context.Consumer;
 
 export default memo(function DisplayContext({
   children,
@@ -43,7 +43,7 @@ export default memo(function DisplayContext({
     setExternalResponsiveScale ?? setInternalResponsiveScale;
 
   return (
-    <context.Provider
+    <Context
       value={{
         scale,
         setScale,
@@ -52,6 +52,6 @@ export default memo(function DisplayContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

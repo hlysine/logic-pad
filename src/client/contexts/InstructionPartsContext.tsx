@@ -1,4 +1,4 @@
-import { ReactNode, createContext, memo, useContext, useState } from 'react';
+import { ReactNode, createContext, memo, use, useState } from 'react';
 import { PartPlacement } from '../instructions/parts/types';
 
 interface InstructionPartsContext {
@@ -7,17 +7,17 @@ interface InstructionPartsContext {
   removePart: (placement: PartPlacement, part: ReactNode) => void;
 }
 
-const context = createContext<InstructionPartsContext>({
+const Context = createContext<InstructionPartsContext>({
   parts: new Map(),
   addPart: () => {},
   removePart: () => {},
 });
 
 export const useInstructionParts = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const InstructionPartsConsumer = context.Consumer;
+export const InstructionPartsConsumer = Context.Consumer;
 
 export default memo(function InstructionPartsContext({
   children,
@@ -51,7 +51,7 @@ export default memo(function InstructionPartsContext({
   };
 
   return (
-    <context.Provider
+    <Context
       value={{
         parts,
         addPart,
@@ -59,6 +59,6 @@ export default memo(function InstructionPartsContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

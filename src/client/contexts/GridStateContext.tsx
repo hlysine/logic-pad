@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, use, useState } from 'react';
 import { GridState, State } from '@logic-pad/core/data/primitives';
 
 interface GridStateContext {
@@ -14,7 +14,7 @@ export const defaultState: GridState = {
   symbols: new Map(),
 };
 
-const context = createContext<GridStateContext>({
+const Context = createContext<GridStateContext>({
   state: defaultState,
   revealSpoiler: false,
   setState: () => {},
@@ -22,10 +22,10 @@ const context = createContext<GridStateContext>({
 });
 
 export const useGridState = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const GridStateConsumer = context.Consumer;
+export const GridStateConsumer = Context.Consumer;
 
 export default memo(function GridStateContext({
   children,
@@ -50,7 +50,7 @@ export default memo(function GridStateContext({
   };
 
   return (
-    <context.Provider
+    <Context
       value={{
         state,
         revealSpoiler,
@@ -59,6 +59,6 @@ export default memo(function GridStateContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

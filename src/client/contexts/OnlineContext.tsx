@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, memo, useContext, useMemo } from 'react';
+import { createContext, memo, use, useMemo } from 'react';
 import { api } from '../online/api';
 import { UserBrief } from '../online/data';
 import { useSettings } from './SettingsContext';
@@ -21,17 +21,17 @@ export interface OnlineContext {
   refresh: () => Promise<void>;
 }
 
-const context = createContext<OnlineContext>({
+const Context = createContext<OnlineContext>({
   isOnline: defaultOnline,
   me: null,
   refresh: async () => {},
 });
 
 export const useOnline = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const OnlineConsumer = context.Consumer;
+export const OnlineConsumer = Context.Consumer;
 
 export default memo(function OnlineContext({
   children,
@@ -69,5 +69,5 @@ export default memo(function OnlineContext({
     [forceOffline, offlineMode, onlineQuery, meQuery]
   );
 
-  return <context.Provider value={value}>{children}</context.Provider>;
+  return <Context value={value}>{children}</Context>;
 });

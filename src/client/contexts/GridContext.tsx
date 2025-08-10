@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, memo, use, useEffect, useState } from 'react';
 import GridData from '@logic-pad/core/data/grid';
 import { useEdit } from './EditContext.tsx';
 import { PuzzleMetadata } from '@logic-pad/core/data/puzzle';
@@ -23,7 +23,7 @@ const defaultMetadata: PuzzleMetadata = {
   difficulty: 1,
 };
 
-const context = createContext<GridContext>({
+const Context = createContext<GridContext>({
   grid: defaultGrid,
   solution: null,
   metadata: defaultMetadata,
@@ -33,10 +33,10 @@ const context = createContext<GridContext>({
 });
 
 export const useGrid = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const GridConsumer = context.Consumer;
+export const GridConsumer = Context.Consumer;
 
 export interface GridContextProps {
   children: React.ReactNode;
@@ -83,7 +83,7 @@ export default memo(function GridContext({
   };
 
   return (
-    <context.Provider
+    <Context
       value={{
         grid,
         solution,
@@ -96,6 +96,6 @@ export default memo(function GridContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

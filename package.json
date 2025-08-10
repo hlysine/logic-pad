@@ -39,7 +39,6 @@
     "fuzzysort-esm": "^3.0.1",
     "grilops": "^0.1.2",
     "html2canvas-pro": "^1.5.11",
-    "lodash": "^4.17.21",
     "logic-pad-solver-core": "^0.1.2",
     "monaco-editor": "^0.52.2",
     "monaco-themes": "^0.4.6",
@@ -60,7 +59,6 @@
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.131.2",
     "@types/bun": "^1.2.19",
-    "@types/lodash": "^4.17.20",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@typescript-eslint/eslint-plugin": "^8.39.0",

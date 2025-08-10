@@ -7,7 +7,23 @@
 }
 
 .markdown h1 {
+  @apply text-2xl font-semibold mt-4 mb-2;
+}
+
+.markdown h2 {
+  @apply text-2xl mt-4 mb-2;
+}
+
+.markdown h3 {
+  @apply text-xl mt-4 mb-2;
+}
+
+.markdown h4 {
   @apply text-lg font-semibold mt-4 mb-2;
+}
+
+.markdown a[href] {
+  @apply underline;
 }
 
 .markdown .spoiler {

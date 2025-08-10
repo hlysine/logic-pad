@@ -170,4 +170,10 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  ratePuzzle: async (puzzleId: string, rating: number) => {
+    return await axios
+      .put<{ id: string }>(`/completion/${puzzleId}/rate`, { rating })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
 };

@@ -1,15 +1,17 @@
 import { useOnline } from '../contexts/OnlineContext.tsx';
 import { PiSignInBold } from 'react-icons/pi';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import deferredRedirect from '../router/deferredRedirect.ts';
 import { useRouterState } from '@tanstack/react-router';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { State } from '@logic-pad/core/index.ts';
 import onlineSolveTracker from '../router/onlineSolveTracker.ts';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '../online/api.ts';
 import Loading from './Loading.tsx';
+import Difficulty from '../metadata/Difficulty.tsx';
+import toast from 'react-hot-toast';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
@@ -51,6 +53,36 @@ const SolveTrackerAnonymous = memo(function SolveTracker() {
         </div>
       </div>
     </div>
+  );
+});
+
+const RatePuzzle = memo(function RatePuzzle({
+  initialRating,
+}: {
+  initialRating: number;
+}) {
+  const { id } = useOnlinePuzzle();
+  const rateQuery = useMutation({
+    mutationFn: (data: Parameters<typeof api.ratePuzzle>) => {
+      return api.ratePuzzle(...data);
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
+  const [rating, setRating] = useState(initialRating);
+  if (rateQuery.isPending) {
+    return <Loading className="h-8" />;
+  }
+  return (
+    <Difficulty
+      value={rating}
+      readonly={false}
+      onChange={value => {
+        void rateQuery.mutateAsync([id!, value]);
+        setRating(value);
+      }}
+    />
   );
 });
 
@@ -113,6 +145,18 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
       </div>
     );
   }
+
+  return (
+    <div className="flex flex-col p-4 gap-4 leading-8 rounded-2xl shadow-md bg-base-100 text-base-content items-start justify-between">
+      <div className="text-2xl">Puzzle solved!</div>
+      <div>How difficult was this puzzle?</div>
+      <RatePuzzle initialRating={completionBegin.data!.ratedDifficulty ?? 0} />
+      <div>Found a problem?</div>
+      <button className="btn btn-disabled w-full">
+        Send feedback (Coming soon)
+      </button>
+    </div>
+  );
 });
 
 export default memo(function PuzzleSolveControl() {

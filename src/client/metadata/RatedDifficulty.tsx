@@ -17,7 +17,7 @@ function medianFromHistogram(ratedDifficulty: number[]) {
   for (let i = 0; i < ratedDifficulty.length; i++) {
     current += ratedDifficulty[i];
     if (current >= half) {
-      return i;
+      return i + 1;
     }
   }
 

@@ -59,18 +59,39 @@ const MarkdownAsync = lazy(async () => {
       ...mdProps
     }: MarkdownProps) {
       inline = inline ?? false;
-      return (
-        <Markdown
-          {...baseProps}
-          components={inline ? inlineComponents : baseComponents}
-          {...mdProps}
-          className={cn(
-            'markdown',
-            className,
-            revealSpoiler && 'spoiler-reveal'
-          )}
-        />
-      );
+      if (inline) {
+        return (
+          <span
+            className={cn(
+              'markdown',
+              className,
+              revealSpoiler && 'spoiler-reveal'
+            )}
+          >
+            <Markdown
+              {...baseProps}
+              components={inline ? inlineComponents : baseComponents}
+              {...mdProps}
+            />
+          </span>
+        );
+      } else {
+        return (
+          <div
+            className={cn(
+              'markdown',
+              className,
+              revealSpoiler && 'spoiler-reveal'
+            )}
+          >
+            <Markdown
+              {...baseProps}
+              components={inline ? inlineComponents : baseComponents}
+              {...mdProps}
+            />
+          </div>
+        );
+      }
     }),
   };
 });

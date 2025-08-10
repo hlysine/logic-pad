@@ -36,7 +36,7 @@ export default function useLinkLoader(
       const result = {
         originalData: puzzle.data,
         solutionStripped: false,
-        puzzleId: null,
+        puzzleId: puzzle.id,
       };
       let initialPuzzle: Puzzle;
       const decompressed = await Compressor.decompress(puzzle.data);

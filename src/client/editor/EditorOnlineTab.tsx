@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { puzzleEditQueryOptions } from '../routes/_context._layout.create.$puzzleId';
+import { puzzleEditQueryOptions } from '../routes/_layout.create.$puzzleId';
 import { ResourceStatus } from '../online/data';
 import { FaCheckSquare, FaHeart } from 'react-icons/fa';
 import Loading from '../components/Loading';

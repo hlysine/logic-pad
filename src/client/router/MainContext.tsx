@@ -1,0 +1,52 @@
+import { Puzzle } from '@logic-pad/core/data/puzzle';
+import { memo, useMemo } from 'react';
+import PWAPrompt from '../components/PWAPrompt';
+import DisplayContext from '../contexts/DisplayContext';
+import EditContext from '../contexts/EditContext';
+import EmbedContext from '../contexts/EmbedContext';
+import GridContext from '../contexts/GridContext';
+import GridStateContext from '../contexts/GridStateContext';
+import InstructionPartsContext from '../contexts/InstructionPartsContext';
+import OnlinePuzzleContext from '../contexts/OnlinePuzzleContext';
+import SolverContext from '../contexts/SolverContext';
+
+export interface MainContextProps {
+  puzzleId: string | null;
+  initialPuzzle: Puzzle;
+  children: React.ReactNode;
+}
+
+export default memo(function MainContext({
+  puzzleId,
+  initialPuzzle,
+  children,
+}: MainContextProps) {
+  const props = useMemo(() => {
+    const { grid, solution, ...metadata } = initialPuzzle;
+    return { grid, solution, metadata };
+  }, [initialPuzzle]);
+  return (
+    <EmbedContext name="root">
+      <OnlinePuzzleContext id={puzzleId}>
+        <DisplayContext>
+          <EditContext initialGrid={props.grid}>
+            <GridStateContext>
+              <GridContext
+                initialGrid={props.grid}
+                initialSolution={props.solution}
+                initialMetadata={props.metadata}
+              >
+                <SolverContext>
+                  <InstructionPartsContext>
+                    <PWAPrompt />
+                    {children}
+                  </InstructionPartsContext>
+                </SolverContext>
+              </GridContext>
+            </GridStateContext>
+          </EditContext>
+        </DisplayContext>
+      </OnlinePuzzleContext>
+    </EmbedContext>
+  );
+});

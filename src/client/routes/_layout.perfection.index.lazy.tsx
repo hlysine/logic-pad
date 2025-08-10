@@ -4,11 +4,12 @@ import useLinkLoader from '../router/linkLoader';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
 import PerfectionScreen from '../screens/PerfectionScreen';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
+import MainContext from '../router/MainContext';
 
-export const Route = createLazyFileRoute('/_context/_layout/perfection/')({
+export const Route = createLazyFileRoute('/_layout/perfection/')({
   component: memo(function PerfectionMode() {
     const params = Route.useSearch();
-    useLinkLoader(params, {
+    const result = useLinkLoader(params, {
       allowEmpty: false,
       modifyPuzzle: puzzle => {
         puzzle.grid = puzzle.grid.withRules(rules => [
@@ -24,6 +25,13 @@ export const Route = createLazyFileRoute('/_context/_layout/perfection/')({
       },
     });
 
-    return <PerfectionScreen />;
+    return (
+      <MainContext
+        puzzleId={result.puzzleId}
+        initialPuzzle={result.initialPuzzle}
+      >
+        <PerfectionScreen />
+      </MainContext>
+    );
   }),
 });

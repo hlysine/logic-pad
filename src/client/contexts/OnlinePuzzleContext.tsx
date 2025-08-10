@@ -13,14 +13,12 @@ const defaultPuzzle = {
 
 export interface OnlinePuzzleContext {
   id: string | null;
-  setId: (id: string | null) => void;
   lastSaved: Puzzle;
   setLastSaved: (puzzle: Puzzle) => void;
 }
 
 const context = createContext<OnlinePuzzleContext>({
   id: null,
-  setId: () => {},
   lastSaved: defaultPuzzle,
   setLastSaved: () => {},
 });
@@ -33,16 +31,18 @@ export const OnlinePuzzleConsumer = context.Consumer;
 
 export default memo(function OnlinePuzzleContext({
   children,
+  id,
+  initialPuzzle = defaultPuzzle,
 }: {
   children: React.ReactNode;
+  id: string | null;
+  initialPuzzle?: Puzzle;
 }) {
-  const [id, setId] = useState<string | null>(null);
-  const [lastSaved, setLastSaved] = useState<Puzzle>(defaultPuzzle);
+  const [lastSaved, setLastSaved] = useState<Puzzle>(initialPuzzle);
 
   const value = useMemo(
     () => ({
       id,
-      setId,
       lastSaved,
       setLastSaved,
     }),

@@ -27,12 +27,14 @@ export const EditConsumer = context.Consumer;
 
 export default memo(function EditContext({
   children,
+  initialGrid = null,
 }: {
   children: React.ReactNode;
+  initialGrid?: GridData | null;
 }) {
   const [undoStack, setUndoStack] = useState<GridData[]>([]);
   const [redoStack, setRedoStack] = useState<GridData[]>([]);
-  const [lastGrid, setLastGrid] = useState<GridData | null>(null);
+  const [lastGrid, setLastGrid] = useState<GridData | null>(initialGrid);
 
   const addToUndoStack = (grid: GridData) => {
     setUndoStack(stack => {

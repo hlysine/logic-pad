@@ -3,7 +3,7 @@ import RatedDifficulty from './RatedDifficulty';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useOnline } from '../contexts/OnlineContext';
 import { useQuery } from '@tanstack/react-query';
-import { puzzleSolveQueryOptions } from '../routes/_context._layout.solve.$puzzleId';
+import { puzzleSolveQueryOptions } from '../routes/_layout.solve.$puzzleId';
 import Loading from '../components/Loading';
 
 export default memo(function OnlineMetadata() {

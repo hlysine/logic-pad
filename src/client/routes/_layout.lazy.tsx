@@ -3,7 +3,7 @@ import { memo } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
 import AlphaBadge from '../components/AlphaBadge';
 
-export const Route = createLazyFileRoute('/_context/_layout')({
+export const Route = createLazyFileRoute('/_layout')({
   component: memo(function Layout() {
     return (
       <>

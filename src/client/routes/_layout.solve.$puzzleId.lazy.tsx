@@ -4,18 +4,24 @@ import SolveScreen from '../screens/SolveScreen';
 import PerfectionModeLink from '../components/quickActions/PerfectionModeButton';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import useOnlineLinkLoader from '../router/onlineLinkLoader';
-import { puzzleSolveQueryOptions } from './_context._layout.solve.$puzzleId';
+import { puzzleSolveQueryOptions } from './_layout.solve.$puzzleId';
+import MainContext from '../router/MainContext';
 
-export const Route = createLazyFileRoute('/_context/_layout/solve/$puzzleId')({
+export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
   component: memo(function OnlineSolveMode() {
     const { data } = useSuspenseQuery(
       puzzleSolveQueryOptions(Route.useParams().puzzleId)
     );
-    useOnlineLinkLoader(data);
+    const result = useOnlineLinkLoader(data);
     return (
-      <SolveScreen
-        quickActions={[<PerfectionModeLink key="perfectionModeLink" />]}
-      />
+      <MainContext
+        puzzleId={result.puzzleId}
+        initialPuzzle={result.initialPuzzle}
+      >
+        <SolveScreen
+          quickActions={[<PerfectionModeLink key="perfectionModeLink" />]}
+        />
+      </MainContext>
     );
   }),
 });

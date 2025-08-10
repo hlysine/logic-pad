@@ -19,7 +19,7 @@ import GridData from '@logic-pad/core/data/grid';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import Loading from '../components/Loading';
 import { FaCheckCircle, FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
-import { puzzleEditQueryOptions } from '../routes/_context._layout.create.$puzzleId.tsx';
+import { puzzleEditQueryOptions } from '../routes/_layout.create.$puzzleId.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 import { ResourceStatus } from '../online/data.ts';

@@ -63,9 +63,7 @@ export default memo(function Grid({
   );
 
   useEffect(() => {
-    if (!canvasCtx.current) {
-      canvasCtx.current = canvasRef.current?.getContext('2d') ?? null;
-    }
+    canvasCtx.current ??= canvasRef.current?.getContext('2d') ?? null;
     if (!canvasCtx.current) return;
     const ctx = canvasCtx.current;
     for (let y = 0; y < grid.height; y++) {

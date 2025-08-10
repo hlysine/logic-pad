@@ -31,7 +31,9 @@ export const validateSearch = (
   search: Record<string, unknown>
 ): PuzzleParams => {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     d: search.d ? String(search.d) : undefined,
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     loader: search.loader ? validateLoader(String(search.loader)) : undefined,
   };
 };

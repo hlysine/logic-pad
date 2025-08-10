@@ -28,7 +28,7 @@ export default class Z3Solver extends Solver {
     try {
       await init();
       return true;
-    } catch (ex) {
+    } catch (_ex) {
       return false;
     }
   }

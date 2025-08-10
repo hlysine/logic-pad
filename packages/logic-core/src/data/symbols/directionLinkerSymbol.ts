@@ -3,9 +3,7 @@ import GridData from '../grid.js';
 import { Color, Direction, Position, State } from '../primitives.js';
 import Symbol from './symbol.js';
 
-export type DirectionLinkerMap = {
-  [key in Direction]: Direction;
-};
+export type DirectionLinkerMap = Record<Direction, Direction>;
 
 type Turtle = {
   pos1: Position;

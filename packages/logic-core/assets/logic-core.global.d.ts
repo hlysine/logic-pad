@@ -106,9 +106,7 @@ declare global {
     Right = 'right',
   }
   export declare const DIRECTIONS: readonly Direction[];
-  export type DirectionMap<T> = {
-    [key in Direction]: T;
-  };
+  export type DirectionMap<T> = Record<Direction, T>;
   export type DirectionToggle = Readonly<DirectionMap<boolean>>;
   export declare function directionToggle(
     ...directions: readonly Direction[]
@@ -129,9 +127,7 @@ declare global {
     UpLeft = 'up-left',
   }
   export declare const ORIENTATIONS: readonly Orientation[];
-  export type OrientationMap<T> = {
-    [key in Orientation]: T;
-  };
+  export type OrientationMap<T> = Record<Orientation, T>;
   export type OrientationToggle = Readonly<OrientationMap<boolean>>;
   export declare function orientationToggle(
     ...orientations: readonly Orientation[]
@@ -1170,11 +1166,7 @@ declare global {
      * @param color The color of the tile. If undefined, all colors are included.
      * @returns The count of tiles that satisfy the given conditions.
      */
-    getTileCount(
-      exists: boolean,
-      fixed?: boolean | undefined,
-      color?: Color | undefined
-    ): number;
+    getTileCount(exists: boolean, fixed?: boolean, color?: Color): number;
     /**
      * Get the count of tiles that satisfy the given conditions for each color.
      * @param color The color of the tiles.
@@ -2191,7 +2183,7 @@ declare global {
     private solveOne;
     solve(
       grid: GridData,
-      abortSignal?: AbortSignal | undefined
+      abortSignal?: AbortSignal
     ): AsyncGenerator<GridData | null>;
   }
   export declare abstract class EventIteratingSolver extends Solver {
@@ -2412,9 +2404,7 @@ declare global {
     checkGlobal(grid: BTGridData): CheckResult | false;
     private buildCheckAndRating;
   }
-  export type DirectionLinkerMap = {
-    [key in Direction]: Direction;
-  };
+  export type DirectionLinkerMap = Record<Direction, Direction>;
   export declare class DirectionLinkerSymbol extends Symbol$1 {
     readonly x: number;
     readonly y: number;

@@ -70,8 +70,8 @@ class SettingsStore {
     return this.settings[key];
   }
 
-  public getSubscriber<const T extends keyof SiteSettings>(
-    key: T
+  public getSubscriber(
+    key: keyof SiteSettings
   ): (listener: () => void) => () => void {
     return this.subscriptions[key].subscribe;
   }

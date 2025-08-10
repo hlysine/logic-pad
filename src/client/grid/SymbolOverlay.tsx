@@ -88,7 +88,7 @@ export default memo(function SymbolOverlay({
           }
 
           let symbolState = state?.get(symbol.id)?.[i];
-          if (!symbolState) symbolState = State.Incomplete;
+          symbolState ??= State.Incomplete;
           const tile = grid.getTile(Math.floor(symbol.x), Math.floor(symbol.y));
           return (
             <Symbol

@@ -132,7 +132,7 @@ export default memo(function SourceCodeEditor({
         } else if (error instanceof Error) {
           toast.error(error.message);
           if (error.stack) {
-            const match = error.stack.match(/<anonymous>:(\d+):(\d+)/);
+            const match = /<anonymous>:(\d+):(\d+)/.exec(error.stack);
             if (match) {
               const [_, line, column] = match;
               editorRef.current.focus();

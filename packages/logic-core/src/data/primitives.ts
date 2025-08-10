@@ -123,7 +123,7 @@ export const DIRECTIONS: readonly Direction[] = [
   Direction.Right,
 ];
 
-export type DirectionMap<T> = { [key in Direction]: T };
+export type DirectionMap<T> = Record<Direction, T>;
 
 export type DirectionToggle = Readonly<DirectionMap<boolean>>;
 
@@ -162,7 +162,7 @@ export const ORIENTATIONS: readonly Orientation[] = [
   Orientation.UpLeft,
 ];
 
-export type OrientationMap<T> = { [key in Orientation]: T };
+export type OrientationMap<T> = Record<Orientation, T>;
 
 export type OrientationToggle = Readonly<OrientationMap<boolean>>;
 

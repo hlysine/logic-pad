@@ -7,7 +7,7 @@ import SerializerBase from './serializerBase.js';
 
 const allSerializers = new Map<number, SerializerBase>();
 
-function register<T extends SerializerBase>(prototype: T) {
+function register(prototype: SerializerBase) {
   allSerializers.set(prototype.version, prototype);
 }
 
@@ -19,7 +19,7 @@ function selectSerializer(input: string): {
   serializer: SerializerBase;
   data: string;
 } {
-  const match = input.match(/^(\d+)_/);
+  const match = /^(\d+)_/.exec(input);
   const version = match ? parseInt(match[1]) : 0;
   const serializer = allSerializers.get(version);
   if (serializer) {

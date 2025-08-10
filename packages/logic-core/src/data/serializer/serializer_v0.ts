@@ -4,7 +4,14 @@ import Rule from '../rules/rule.js';
 import TileData from '../tile.js';
 import Symbol from '../symbols/symbol.js';
 import Instruction from '../instruction.js';
-import { AnyConfig, ConfigType } from '../config.js';
+import {
+  AnyConfig,
+  ConfigType,
+  IconConfig,
+  NullableNoteConfig,
+  NullableNumberConfig,
+  OrientationConfig,
+} from '../config.js';
 import {
   Color,
   Comparison,
@@ -100,7 +107,7 @@ export default class SerializerV0 extends SerializerBase {
         case 'r':
           rows.push(
             ...value.split(',').map(row => {
-              const match = row.match(/^v([\d.]*?)n(.*)$/);
+              const match = /^v([\d.]*?)n(.*)$/.exec(row);
               if (!match) return new Row(null, null);
               const [, velocity, note] = match;
               return new Row(
@@ -132,7 +139,9 @@ export default class SerializerV0 extends SerializerBase {
         return (
           config.field +
           '=' +
-          String(instruction[config.field as keyof Instruction])
+          (instruction[
+            config.field as keyof Instruction
+          ] as OrientationConfig['default'])
         );
       case ConfigType.NullableBoolean:
         return (
@@ -150,7 +159,11 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           (instruction[config.field as keyof Instruction] === null
             ? ''
-            : String(instruction[config.field as keyof Instruction]))
+            : String(
+                instruction[
+                  config.field as keyof Instruction
+                ] as NullableNumberConfig['default']
+              ))
         );
       case ConfigType.DirectionToggle:
         return (
@@ -187,7 +200,11 @@ export default class SerializerV0 extends SerializerBase {
         return (
           config.field +
           '=' +
-          escape(String(instruction[config.field as keyof Instruction]))
+          escape(
+            instruction[
+              config.field as keyof Instruction
+            ] as IconConfig['default']
+          )
         );
       case ConfigType.NullableNote:
         return (
@@ -196,7 +213,13 @@ export default class SerializerV0 extends SerializerBase {
           escape(
             instruction[config.field as keyof Instruction] === null
               ? ''
-              : escape(String(instruction[config.field as keyof Instruction]))
+              : escape(
+                  String(
+                    instruction[
+                      config.field as keyof Instruction
+                    ] as NullableNoteConfig['default']
+                  )
+                )
           )
         );
       case ConfigType.Tile:

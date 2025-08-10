@@ -105,7 +105,7 @@ export default class CspuzSolver extends EventIteratingSolver {
         abortController.abort();
       }
       return true;
-    } catch (ex) {
+    } catch (_ex) {
       return false;
     }
   }

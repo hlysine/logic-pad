@@ -18,7 +18,7 @@
         "event-iterator": "^2.0.0",
         "events": "^3.3.0",
         "fuzzysort-esm": "^3.0.1",
-        "grilops": "^0.1.1",
+        "grilops": "^0.1.2",
         "html2canvas-pro": "^1.5.8",
         "lodash": "^4.17.21",
         "logic-pad-solver-core": "^0.1.2",
@@ -958,7 +958,7 @@
 
     "graphemer": ["graphemer@1.4.0", "", {}, "sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag=="],
 
-    "grilops": ["grilops@0.1.1", "", { "dependencies": { "z3-solver": "^4.13.0" } }, "sha512-lLP2weJY3o9QbwErNpQnsv6ByOhhUhxCKndv1pipC35ky/Lz20ciUgjkKs4SFvLJt1C3xbL3NGP53slUGB64wA=="],
+    "grilops": ["grilops@0.1.2", "", { "dependencies": { "z3-solver": "^4.13.0" } }, "sha512-UQCccyHmiVxLyGZJMVDajw7SsedZF2AYkPc2Kb4ox5Meu8+KX4sDUi1Be/f4lyz+INAoTazjHN+vtrf4ZJfb5g=="],
 
     "has-bigints": ["has-bigints@1.0.2", "", {}, "sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ=="],
 

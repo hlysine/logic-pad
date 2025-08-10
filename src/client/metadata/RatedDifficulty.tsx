@@ -13,6 +13,8 @@ function medianFromHistogram(ratedDifficulty: number[]) {
   const total = ratedDifficulty.reduce((acc, val) => acc + val, 0);
   const half = total / 2;
 
+  if (total === 0) return 0;
+
   let current = 0;
   for (let i = 0; i < ratedDifficulty.length; i++) {
     current += ratedDifficulty[i];
@@ -46,7 +48,7 @@ export default memo(function RatedDifficulty({
       <input
         type="checkbox"
         name="gui-editor-accordion"
-        defaultChecked={true}
+        defaultChecked={!collapsible}
       />
       <div
         className={cn(
@@ -54,7 +56,8 @@ export default memo(function RatedDifficulty({
           !collapsible && 'after:!hidden'
         )}
       >
-        Rated difficulty: <Difficulty className="inline-block" value={median} />
+        Rated difficulty:{' '}
+        <Difficulty className="flex items-center" value={median} />
       </div>
       <div className="collapse-content !p-0">
         {median === 0 ? (

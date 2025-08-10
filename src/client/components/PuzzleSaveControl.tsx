@@ -16,6 +16,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 const CopyLink = memo(function CopyLink() {
   const { grid, solution, metadata } = useGrid();
   const [tooltip, setTooltip] = useState<string | null>(null);
+  const { id } = useOnlinePuzzle();
   useEffect(() => {
     if (tooltip && tooltip.length > 0) {
       const timeout = window.setTimeout(() => setTooltip(null), 2000);
@@ -39,13 +40,18 @@ const CopyLink = memo(function CopyLink() {
           <li>
             <a
               onClick={async () => {
-                const data = await Compressor.compress(
-                  Serializer.stringifyPuzzle({ ...metadata, grid, solution })
-                );
                 const url = new URL(window.location.href);
-                url.searchParams.set('loader', 'visible');
-                url.searchParams.set('d', data);
-                url.pathname = '/create';
+                if (id) {
+                  url.pathname = '/create/' + id;
+                } else {
+                  const data = await Compressor.compress(
+                    Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+                  );
+                  url.searchParams.set('loader', 'visible');
+                  url.searchParams.set('d', data);
+                  url.pathname = '/create';
+                  await navigator.clipboard.writeText(url.href);
+                }
                 await navigator.clipboard.writeText(url.href);
                 setTooltip('Copied!');
                 detailsRef.current!.open = false;
@@ -57,12 +63,16 @@ const CopyLink = memo(function CopyLink() {
           <li>
             <a
               onClick={async () => {
-                const data = await Compressor.compress(
-                  Serializer.stringifyPuzzle({ ...metadata, grid, solution })
-                );
                 const url = new URL(window.location.href);
-                url.searchParams.set('d', data);
-                url.pathname = '/solve';
+                if (id) {
+                  url.pathname = '/solve/' + id;
+                } else {
+                  const data = await Compressor.compress(
+                    Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+                  );
+                  url.searchParams.set('d', data);
+                  url.pathname = '/solve';
+                }
                 await navigator.clipboard.writeText(url.href);
                 setTooltip('Copied!');
                 detailsRef.current!.open = false;

@@ -176,7 +176,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
     );
   }
 
-  if (!completionBegin.data!.solvedAt) {
+  if (!completionBegin.data!.solvedAt && !State.isSatisfied(state.final)) {
     return (
       <div className="flex p-2 ps-4 leading-8 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
         New puzzle

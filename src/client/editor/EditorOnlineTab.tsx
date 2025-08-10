@@ -224,6 +224,17 @@ export default memo(function EditorOnlineTab() {
         collapsible={false}
         ratedDifficulty={data.ratedDifficulty}
       />
+      <button
+        className="btn btn-primary"
+        onClick={async () => {
+          const url = new URL(window.location.href);
+          url.pathname = '/solve/' + id;
+          await navigator.clipboard.writeText(url.href);
+          toast.success('Link copied!');
+        }}
+      >
+        Copy solve link
+      </button>
       <div className="divider" />
       <p className="text-2xl font-bold">Feedback</p>
       <p className="opacity-50">TODO: add feedback</p>

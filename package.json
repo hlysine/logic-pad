@@ -37,7 +37,7 @@
     "events": "^3.3.0",
     "fuzzysort-esm": "^3.0.1",
     "grilops": "^0.1.2",
-    "html2canvas-pro": "^1.5.8",
+    "html2canvas-pro": "^1.5.11",
     "lodash": "^4.17.21",
     "logic-pad-solver-core": "^0.1.2",
     "million": "^3.1.11",

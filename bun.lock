@@ -19,7 +19,7 @@
         "events": "^3.3.0",
         "fuzzysort-esm": "^3.0.1",
         "grilops": "^0.1.2",
-        "html2canvas-pro": "^1.5.8",
+        "html2canvas-pro": "^1.5.11",
         "lodash": "^4.17.21",
         "logic-pad-solver-core": "^0.1.2",
         "million": "^3.1.11",
@@ -980,7 +980,7 @@
 
     "html-url-attributes": ["html-url-attributes@3.0.0", "", {}, "sha512-/sXbVCWayk6GDVg3ctOX6nxaVj7So40FcFAnWlWGNAB1LpYKcV5Cd10APjPjW80O7zYW2MsjBV4zZ7IZO5fVow=="],
 
-    "html2canvas-pro": ["html2canvas-pro@1.5.8", "", { "dependencies": { "css-line-break": "^2.1.0", "text-segmentation": "^1.0.3" } }, "sha512-bVGAU7IvhBwBlRAmX6QhekX8lsaxmYoF6zIwf/HNlHscjx+KN8jw/U4PQRYqeEVm9+m13hcS1l5ChJB9/e29Lw=="],
+    "html2canvas-pro": ["html2canvas-pro@1.5.11", "", { "dependencies": { "css-line-break": "^2.1.0", "text-segmentation": "^1.0.3" } }, "sha512-W4pEeKLG8+9a54RDOSiEKq7gRXXDzt0ORMaLXX+l6a3urSKbmnkmyzcRDCtgTOzmHLaZTLG2wiTQMJqKLlSh3w=="],
 
     "hyphenate-style-name": ["hyphenate-style-name@1.1.0", "", {}, "sha512-WDC/ui2VVRrz3jOVi+XtjqkDjiVjTtFaAGiW37k6b+ohyQ5wYDOGkvCZa8+H0nx3gyvv0+BST9xuOgIyGQ00gw=="],
 

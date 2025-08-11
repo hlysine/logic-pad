@@ -11,6 +11,7 @@ import Metadata from '../metadata/Metadata';
 import { Mode, Position } from '@logic-pad/core/data/primitives';
 import ModeVariantLoader from '../router/ModeVariantLoader';
 import { memo } from 'react';
+import DocumentTitle from '../components/DocumentTitle';
 
 export interface PerfectionScreenProps {
   children?: React.ReactNode;
@@ -31,7 +32,7 @@ export default memo(function PerfectionScreen({
         collapsible={false}
         left={
           <>
-            <title>Logic Pad</title>
+            <DocumentTitle>Logic Pad</DocumentTitle>
             <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
               <Metadata />
               <GridConsumer>

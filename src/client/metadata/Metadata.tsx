@@ -6,6 +6,7 @@ import { useGridState } from '../contexts/GridStateContext.tsx';
 import { cn } from '../uiHelper.ts';
 import UserBadge from './UserBadge.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
+import DocumentTitle from '../components/DocumentTitle.tsx';
 
 export interface MetadataProps {
   simplified?: boolean;
@@ -24,7 +25,7 @@ export default memo(function Metadata({
 
   return (
     <div className="flex flex-col gap-4 text-neutral-content">
-      <title>{metadata.title} - Logic Pad</title>
+      <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
       <div
         className="tooltip tooltip-info tooltip-right w-fit"
         data-tip={`Design difficulty: ${metadata.difficulty}`}

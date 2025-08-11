@@ -15,6 +15,7 @@ import OnlineMetadata from '../metadata/OnlineMetadata';
 import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
 import PuzzleSolveControl from '../components/PuzzleSolveControl';
 import PuzzleEditButton from '../components/quickActions/PuzzleEditButton';
+import DocumentTitle from '../components/DocumentTitle';
 
 export interface SolveScreenProps {
   quickActions?: React.ReactNode;
@@ -30,7 +31,7 @@ export default memo(function SolveScreen({
       collapsible={false}
       left={
         <>
-          <title>Logic Pad</title>
+          <DocumentTitle>Logic Pad</DocumentTitle>
           <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
             <Metadata />
             <GridConsumer>

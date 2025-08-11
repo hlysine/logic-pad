@@ -3,13 +3,14 @@ import ThemeContext from '../contexts/ThemeContext.tsx';
 import TanStackDevTools from '../router/TanStackDevTools';
 import { memo } from 'react';
 import { Toaster } from 'react-hot-toast';
+import DocumentTitle from '../components/DocumentTitle.tsx';
 
 export const Route = createRootRoute({
   component: memo(function Root() {
     return (
       <ThemeContext>
         <div className="h-dvh w-dvw overflow-y-auto overflow-x-hidden bg-neutral text-neutral-content">
-          <title>Logic Pad</title>
+          <DocumentTitle>Logic Pad</DocumentTitle>
           <Toaster
             toastOptions={{
               className: '!bg-base-100 !text-base-content',

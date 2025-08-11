@@ -20,6 +20,7 @@ import PreviewModal, { PreviewRef } from '../editor/PreviewModal';
 import PuzzleSaveControl from '../components/PuzzleSaveControl';
 import { FaEye } from 'react-icons/fa';
 import { animate } from 'animejs';
+import DocumentTitle from '../components/DocumentTitle';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -57,7 +58,15 @@ export default memo(function PuzzleEditorScreen({
           collapsible={true}
           left={
             <>
-              <title>Puzzle Editor - Logic Pad</title>
+              <GridConsumer>
+                {({ metadata }) => (
+                  <DocumentTitle>
+                    {metadata.title.length > 0
+                      ? `${metadata.title} - Puzzle Editor - Logic Pad`
+                      : `Puzzle Editor - Logic Pad`}
+                  </DocumentTitle>
+                )}
+              </GridConsumer>
               <EditorSideTabs
                 editorMode={editorMode}
                 onEditorModeChange={setEditorMode}

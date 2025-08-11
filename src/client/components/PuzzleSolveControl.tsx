@@ -8,7 +8,7 @@ import { useGridState } from '../contexts/GridStateContext.tsx';
 import { State } from '@logic-pad/core/index.ts';
 import onlineSolveTracker from '../router/onlineSolveTracker.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { api } from '../online/api.ts';
+import { api, queryClient } from '../online/api.ts';
 import Loading from './Loading.tsx';
 import Difficulty from '../metadata/Difficulty.tsx';
 import toast from 'react-hot-toast';
@@ -80,9 +80,12 @@ const RatePuzzle = memo(function RatePuzzle({
     <Difficulty
       value={rating}
       readonly={false}
-      onChange={value => {
-        void rateQuery.mutateAsync([id!, value]);
+      onChange={async value => {
+        await rateQuery.mutateAsync([id!, value]);
         setRating(value);
+        await queryClient.refetchQueries({
+          queryKey: ['puzzle', 'solve', id],
+        });
       }}
     />
   );
@@ -161,7 +164,14 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
     if (!isOnline || !me || !id) return;
     if (State.isSatisfied(state.final)) {
       msElapsedTime.current += Date.now() - activeStartTick.current;
-      void onlineSolveTracker.completeSolve(id, msElapsedTime.current);
+      void onlineSolveTracker
+        .completeSolve(id, msElapsedTime.current)
+        .then(async newSolve => {
+          if (newSolve)
+            await queryClient.refetchQueries({
+              queryKey: ['puzzle', 'solve', id],
+            });
+        });
       msElapsedTime.current = 0;
     }
   }, [isOnline, me, id, state.final]);

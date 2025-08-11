@@ -44,6 +44,9 @@ export default memo(function PuzzleLoveButton() {
         await queryClient.setQueryData(['puzzle', 'love', id], {
           loved: newLove.loved,
         });
+        await queryClient.refetchQueries({
+          queryKey: ['puzzle', 'solve', id],
+        });
       }}
     >
       {puzzleLove.data!.loved ? (

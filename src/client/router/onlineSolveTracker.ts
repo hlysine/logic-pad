@@ -1,11 +1,14 @@
 import { api } from '../online/api';
 
 class OnlineSolveTracker {
-  async completeSolve(puzzleId: string, msTimeElapsed?: number) {
+  async completeSolve(
+    puzzleId: string,
+    msTimeElapsed?: number
+  ): Promise<boolean> {
     const alreadySolved = JSON.parse(
       sessionStorage.getItem('alreadySolved') ?? '[]'
     ) as string[];
-    if (alreadySolved.includes(puzzleId)) return;
+    if (alreadySolved.includes(puzzleId)) return false;
 
     alreadySolved.push(puzzleId);
     sessionStorage.setItem('alreadySolved', JSON.stringify(alreadySolved));
@@ -13,6 +16,7 @@ class OnlineSolveTracker {
     if (msTimeElapsed !== undefined)
       await api.completionSolving(puzzleId, msTimeElapsed);
     await api.completionComplete(puzzleId);
+    return true;
   }
 
   sendSolving(puzzleId: string, msTimeElapsed: number) {

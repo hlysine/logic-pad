@@ -137,7 +137,7 @@ const PublishPuzzle = memo(function PublishPuzzle() {
           metadata.difficulty,
           await Compressor.compress(Serializer.stringifyGrid(grid)),
         ]);
-        await queryClient.invalidateQueries({
+        await queryClient.refetchQueries({
           queryKey: ['puzzle', 'edit', id],
         });
       }}

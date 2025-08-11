@@ -2,21 +2,26 @@ import { memo } from 'react';
 import { useOnline } from '../contexts/OnlineContext';
 import { IoCloudOffline } from 'react-icons/io5';
 import { api } from '../online/api';
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
 import { useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
 import { FaBan } from 'react-icons/fa';
+import { UserBrief } from '../online/data';
+
+export const avatarQueryOptions = (user: UserBrief | null) =>
+  queryOptions({
+    queryKey: ['avatar', user?.id],
+    queryFn: () => (user ? api.getAvatar(user.id) : null),
+    enabled: !!user,
+    staleTime: Infinity,
+  });
 
 // million-ignore
 export default memo(function AccountControl() {
   const { isOnline, me, refresh } = useOnline();
   const routerState = useRouterState();
-  const avatarQuery = useQuery({
-    queryKey: ['avatar', me?.id],
-    queryFn: () => (me ? api.getAvatar(me.id) : null),
-    enabled: !!me,
-  });
+  const avatarQuery = useQuery(avatarQueryOptions(me));
   if (!isOnline) {
     return (
       <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">
@@ -59,7 +64,7 @@ export default memo(function AccountControl() {
         {avatarQuery.isSuccess ? (
           <img
             src={avatarQuery.data ?? undefined}
-            alt="Avatar"
+            alt={`${me.name}'s avatar`}
             className="w-8 h-8 rounded-full"
           />
         ) : (

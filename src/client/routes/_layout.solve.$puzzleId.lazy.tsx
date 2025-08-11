@@ -16,6 +16,7 @@ export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
     return (
       <MainContext
         puzzleId={result.puzzleId}
+        puzzle={data}
         initialPuzzle={result.initialPuzzle}
       >
         <SolveScreen

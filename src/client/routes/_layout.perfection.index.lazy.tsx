@@ -28,6 +28,7 @@ export const Route = createLazyFileRoute('/_layout/perfection/')({
     return (
       <MainContext
         puzzleId={result.puzzleId}
+        puzzle={null}
         initialPuzzle={result.initialPuzzle}
       >
         <PerfectionScreen />

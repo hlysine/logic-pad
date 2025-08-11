@@ -9,15 +9,18 @@ import GridStateContext from '../contexts/GridStateContext';
 import InstructionPartsContext from '../contexts/InstructionPartsContext';
 import OnlinePuzzleContext from '../contexts/OnlinePuzzleContext';
 import SolverContext from '../contexts/SolverContext';
+import { PuzzleFull } from '../online/data';
 
 export interface MainContextProps {
   puzzleId: string | null;
+  puzzle: PuzzleFull | null;
   initialPuzzle: Puzzle;
   children: React.ReactNode;
 }
 
 export default memo(function MainContext({
   puzzleId,
+  puzzle,
   initialPuzzle,
   children,
 }: MainContextProps) {
@@ -27,7 +30,7 @@ export default memo(function MainContext({
   }, [initialPuzzle]);
   return (
     <EmbedContext name="root">
-      <OnlinePuzzleContext id={puzzleId}>
+      <OnlinePuzzleContext id={puzzleId} puzzle={puzzle}>
         <DisplayContext>
           <EditContext initialGrid={props.grid}>
             <GridStateContext>

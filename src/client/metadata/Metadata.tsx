@@ -4,6 +4,8 @@ import Difficulty from './Difficulty';
 import Markdown from '../components/Markdown';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { cn } from '../uiHelper.ts';
+import UserBadge from './UserBadge.tsx';
+import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 
 export interface MetadataProps {
   simplified?: boolean;
@@ -18,6 +20,7 @@ export default memo(function Metadata({
   responsive = responsive ?? true;
   const { metadata } = useGrid();
   const { revealSpoiler } = useGridState();
+  const { puzzle } = useOnlinePuzzle();
 
   return (
     <div className="flex flex-col gap-4 text-neutral-content">
@@ -36,14 +39,7 @@ export default memo(function Metadata({
       >
         {metadata.title}
       </h1>
-      <div
-        className={cn(
-          'badge badge-secondary rounded-lg flex-shrink-0',
-          responsive ? 'lg:badge-lg' : 'badge-lg'
-        )}
-      >
-        {metadata.author}
-      </div>
+      <UserBadge user={puzzle?.creator} name={metadata.author} />
       {!simplified && (
         <div className="overflow-y-auto">
           <Markdown

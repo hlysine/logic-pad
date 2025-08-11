@@ -4,12 +4,13 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useOnline } from '../contexts/OnlineContext.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
+import UserBadge from '../metadata/UserBadge.tsx';
 
 // million-ignore
 export default memo(function MetadataEditor() {
   const { metadata, setMetadata } = useGrid();
   const { isOnline, me } = useOnline();
-  const { id } = useOnlinePuzzle();
+  const { id, puzzle } = useOnlinePuzzle();
 
   useEffect(() => {
     if (isOnline && !id && me !== null && metadata.author !== me.name) {
@@ -43,9 +44,7 @@ export default memo(function MetadataEditor() {
           <div className="label">
             <span className="label-text">Author</span>
           </div>
-          <div className="badge badge-lg badge-secondary rounded-lg flex-shrink-0">
-            {id ? metadata.author : me!.name}
-          </div>
+          <UserBadge user={puzzle?.creator ?? me} />
         </label>
       ) : (
         <label className="form-control">

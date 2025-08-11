@@ -1,0 +1,77 @@
+import { memo } from 'react';
+import { cn } from '../uiHelper';
+import { UserBrief } from '../online/data';
+import { useQuery } from '@tanstack/react-query';
+import { avatarQueryOptions } from '../components/AccountControl';
+import Loading from '../components/Loading';
+import { FaCheckSquare, FaEdit } from 'react-icons/fa';
+
+export interface UserBadgeProps {
+  user?: UserBrief | null;
+  name?: string;
+  responsive?: boolean;
+}
+
+export default memo(function UserBadge({
+  user,
+  name,
+  responsive,
+}: UserBadgeProps) {
+  responsive ??= true;
+  name ??= user?.name;
+
+  const avatarQuery = useQuery(avatarQueryOptions(user ?? null));
+
+  const tooltipContent = user ? (
+    <div className="absolute bottom-0 left-0 w-0 h-0 z-50 opacity-0 peer-hover:opacity-100 transition-opacity select-none pointer-events-none">
+      <div className="w-80 h-fit mt-2 flex flex-col gap-4 bg-base-300 shadow-lg rounded-2xl p-4">
+        <div className="flex gap-4">
+          {avatarQuery.isSuccess ? (
+            <img
+              src={avatarQuery.data ?? undefined}
+              alt={`${name}'s avatar`}
+              className="w-16 h-16 rounded-full shrink-0"
+            />
+          ) : (
+            <Loading className="w-16 h-16 shrink-0" />
+          )}
+          <div className="flex flex-col">
+            <span className="text-xl font-bold">{user.name}</span>
+            {user.title && (
+              <span className="text-sm text-accent font-semibold">
+                {user.title}
+              </span>
+            )}
+            <div className="flex gap-2 mt-2">
+              <div className="badge badge-xs badge-neutral py-1 px-2 h-fit w-fit flex gap-1">
+                <FaCheckSquare />
+                Solved {user.solveCount}
+              </div>
+              <div className="badge badge-xs badge-neutral py-1 px-2 h-fit w-fit flex gap-1">
+                <FaEdit />
+                Created {user.createCount}
+              </div>
+            </div>
+          </div>
+        </div>
+        {user.description.length > 0 && (
+          <div className="text-sm text-muted">{user.description}</div>
+        )}
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <div className="relative w-fit">
+      <button
+        className={cn(
+          'badge badge-secondary rounded-lg flex-shrink-0 peer',
+          responsive ? 'lg:badge-lg' : 'badge-lg'
+        )}
+      >
+        {name}
+      </button>
+      {tooltipContent}
+    </div>
+  );
+});

@@ -90,6 +90,11 @@ export interface PuzzleFull extends PuzzleBrief {
   data: string;
 }
 
+export interface SearchResult<T extends ResourceResponse> {
+  total: number;
+  results: T[];
+}
+
 export interface CollectionFull extends CollectionBrief {
   puzzles: PuzzleBrief[];
 }

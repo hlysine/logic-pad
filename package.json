@@ -11,7 +11,6 @@
   "license": "AGPL-3.0-only",
   "scripts": {
     "dev": "vite --force --host",
-    "start": "bun src/server/index.ts",
     "build": "bunx --bun tsc && bunx --bun vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -28,6 +27,7 @@
     "@tanstack/react-query": "^5.84.2",
     "@tanstack/react-router": "^1.131.2",
     "@tanstack/react-router-devtools": "^1.131.2",
+    "@tanstack/zod-adapter": "^1.131.7",
     "@use-gesture/react": "^10.3.1",
     "@vercel/speed-insights": "^1.2.0",
     "animejs": "^4.1.2",
@@ -39,6 +39,7 @@
     "fuzzysort-esm": "^3.0.1",
     "grilops": "^0.1.2",
     "html2canvas-pro": "^1.5.11",
+    "lodash": "^4.17.21",
     "logic-pad-solver-core": "^0.1.2",
     "monaco-editor": "^0.52.2",
     "monaco-themes": "^0.4.6",
@@ -59,6 +60,7 @@
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.131.2",
     "@types/bun": "^1.2.19",
+    "@types/lodash": "^4.17.20",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@typescript-eslint/eslint-plugin": "^8.39.0",

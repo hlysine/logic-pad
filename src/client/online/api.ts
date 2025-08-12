@@ -1,5 +1,12 @@
 import axiosStatic, { AxiosError } from 'axios';
-import { Completion, PuzzleFull, PuzzleLove, UserBrief } from './data';
+import {
+  Completion,
+  PuzzleBrief,
+  PuzzleFull,
+  PuzzleLove,
+  SearchResult,
+  UserBrief,
+} from './data';
 import { QueryClient } from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
 
@@ -175,6 +182,14 @@ export const api = {
   ratePuzzle: async (puzzleId: string, rating: number) => {
     return await axios
       .put<{ id: string }>(`/completion/${puzzleId}/rate`, { rating })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  searchPuzzles: async (query: string, cursor?: string) => {
+    return await axios
+      .get<SearchResult<PuzzleBrief>>(`/puzzle/search`, {
+        params: { q: query, cursor },
+      })
       .then(res => res.data)
       .catch(rethrowError);
   },

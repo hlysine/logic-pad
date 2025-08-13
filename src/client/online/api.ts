@@ -100,6 +100,12 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  getPuzzleBriefForSolve: async (puzzleId: string) => {
+    return await axios
+      .get<PuzzleBrief>(`/puzzle/${puzzleId}/solve/brief`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
   createPuzzle: async (
     title: string,
     description: string,

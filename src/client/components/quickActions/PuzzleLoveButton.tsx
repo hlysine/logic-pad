@@ -6,6 +6,7 @@ import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { api, queryClient } from '../../online/api';
 import Loading from '../Loading';
 import toast from 'react-hot-toast';
+import { PuzzleFull } from '../../online/data';
 
 const puzzleLoveQueryOptions = (puzzleId: string | null, enabled: boolean) =>
   queryOptions({
@@ -19,17 +20,40 @@ export default memo(function PuzzleLoveButton() {
   const { id } = useOnlinePuzzle();
   const puzzleLove = useQuery(puzzleLoveQueryOptions(id, isOnline && !!me));
   const setPuzzleLove = useMutation({
-    mutationFn: (data: Parameters<typeof api.setPuzzleLove>) => {
-      return api.setPuzzleLove(...data);
+    mutationFn: (variables: Parameters<typeof api.setPuzzleLove>) => {
+      return api.setPuzzleLove(...variables);
     },
-    onError(error) {
+    onMutate: async (variables: Parameters<typeof api.setPuzzleLove>) => {
+      await queryClient.cancelQueries({
+        queryKey: ['puzzle', 'love', variables[0]],
+      });
+      const previousLove = queryClient.getQueryData([
+        'puzzle',
+        'love',
+        variables[0],
+      ])!;
+      queryClient.setQueryData(['puzzle', 'love', variables[0]], {
+        loved: variables[1],
+      });
+      return { previousLove };
+    },
+    onError(error, variables, context) {
       toast.error(error.message);
+      if (context)
+        queryClient.setQueryData(
+          ['puzzle', 'love', variables[0]],
+          context.previousLove
+        );
+    },
+    onSettled(_data, _error, variables) {
+      void queryClient.invalidateQueries({
+        queryKey: ['puzzle', 'love', variables[0]],
+      });
     },
   });
 
   if (!isOnline || !me || !id) return null;
-  if (puzzleLove.isPending || setPuzzleLove.isPending)
-    return <Loading className="w-14" />;
+  if (puzzleLove.isPending) return <Loading className="w-14" />;
   return (
     <button
       className="tooltip tooltip-info tooltip-right btn btn-md btn-ghost flex items-center w-fit focus:z-50"
@@ -44,9 +68,14 @@ export default memo(function PuzzleLoveButton() {
         await queryClient.setQueryData(['puzzle', 'love', id], {
           loved: newLove.loved,
         });
-        await queryClient.refetchQueries({
-          queryKey: ['puzzle', 'solve', id],
-        });
+        const puzzleBrief = await api.getPuzzleBriefForSolve(id);
+        await queryClient.setQueryData(
+          ['puzzle', 'solve', id],
+          (puzzle: PuzzleFull) => ({
+            ...puzzle,
+            ...puzzleBrief,
+          })
+        );
       }}
     >
       {puzzleLove.data!.loved ? (

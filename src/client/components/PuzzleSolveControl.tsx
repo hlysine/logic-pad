@@ -14,6 +14,7 @@ import Difficulty from '../metadata/Difficulty.tsx';
 import toast from 'react-hot-toast';
 import { animate } from 'animejs';
 import { useReducedMotion } from '../contexts/SettingsContext.tsx';
+import { PuzzleFull } from '../online/data.ts';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
@@ -64,18 +65,20 @@ const RatePuzzle = memo(function RatePuzzle({
   initialRating: number;
 }) {
   const { id } = useOnlinePuzzle();
+  const [rating, setRating] = useState(initialRating);
   const rateQuery = useMutation({
-    mutationFn: (data: Parameters<typeof api.ratePuzzle>) => {
-      return api.ratePuzzle(...data);
+    mutationFn: (variables: Parameters<typeof api.ratePuzzle>) => {
+      return api.ratePuzzle(...variables);
     },
-    onError(error) {
+    onMutate: variables => {
+      setRating(variables[1]);
+      return { rating };
+    },
+    onError(error, _variables, context) {
       toast.error(error.message);
+      if (context) setRating(context.rating);
     },
   });
-  const [rating, setRating] = useState(initialRating);
-  if (rateQuery.isPending) {
-    return <Loading className="h-8" />;
-  }
   return (
     <Difficulty
       value={rating}
@@ -83,9 +86,14 @@ const RatePuzzle = memo(function RatePuzzle({
       onChange={async value => {
         await rateQuery.mutateAsync([id!, value]);
         setRating(value);
-        await queryClient.refetchQueries({
-          queryKey: ['puzzle', 'solve', id],
-        });
+        const puzzleBrief = await api.getPuzzleBriefForSolve(id!);
+        await queryClient.setQueryData(
+          ['puzzle', 'solve', id],
+          (puzzle: PuzzleFull) => ({
+            ...puzzle,
+            ...puzzleBrief,
+          })
+        );
       }}
     />
   );

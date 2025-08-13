@@ -28,6 +28,7 @@
     "@tanstack/react-router": "^1.131.2",
     "@tanstack/react-router-devtools": "^1.131.2",
     "@tanstack/zod-adapter": "^1.131.7",
+    "@uidotdev/usehooks": "^2.4.1",
     "@use-gesture/react": "^10.3.1",
     "@vercel/speed-insights": "^1.2.0",
     "animejs": "^4.1.2",

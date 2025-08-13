@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { SearchParams } from '../routes/_layout.search';
+import { useDebounce } from '@uidotdev/usehooks';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from './api';
 import { FaChevronDown } from 'react-icons/fa';
@@ -12,16 +13,23 @@ export interface SearchResultsProps {
 }
 
 export default memo(function SearchResults({ params }: SearchResultsProps) {
+  const debouncedParams = useDebounce(params, 500);
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ['puzzle', 'search', params],
+    queryKey: ['puzzle', 'search', debouncedParams],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
-      return api.searchPuzzles(params.q ?? '', pageParam);
+      return api.searchPuzzles(debouncedParams.q ?? '', pageParam);
     },
     initialPageParam: undefined,
-    getNextPageParam: lastPage =>
-      lastPage.results.length > 0
+    getNextPageParam: (lastPage, allPages) => {
+      const totalCount = allPages.reduce(
+        (acc, page) => acc + page.results.length,
+        0
+      );
+      if (totalCount === lastPage.total) return undefined;
+      return lastPage.results.length > 0
         ? lastPage.results[lastPage.results.length - 1].id
-        : undefined,
+        : undefined;
+    },
     getPreviousPageParam: firstPage =>
       firstPage.results.length > 0 ? firstPage.results[0].id : undefined,
     throwOnError(error) {
@@ -34,6 +42,9 @@ export default memo(function SearchResults({ params }: SearchResultsProps) {
 
   return (
     <div className="flex flex-col gap-4 items-center">
+      {data && data.pages.length > 0 && (
+        <div className="w-full">{data.pages[0].total} results</div>
+      )}
       <div className="flex flex-wrap gap-4 justify-center">
         {data?.pages.flatMap(page =>
           page.results.map(puzzle => (
@@ -41,12 +52,15 @@ export default memo(function SearchResults({ params }: SearchResultsProps) {
           ))
         )}
       </div>
-      {isFetching && <Loading />}
-      {hasNextPage && (
+      {isFetching ? (
+        <Loading />
+      ) : hasNextPage ? (
         <button className="btn" onClick={async () => await fetchNextPage()}>
           Load more
           <FaChevronDown />
         </button>
+      ) : (
+        <div>No more results</div>
       )}
     </div>
   );

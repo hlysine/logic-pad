@@ -191,7 +191,7 @@ export const Route = createLazyFileRoute('/_layout/search')({
           async (query: string) => {
             await navigate({ search: { ...search, q: query } });
           },
-          500,
+          100,
           { trailing: true }
         ),
       [navigate, search]

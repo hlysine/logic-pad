@@ -1,3 +1,17 @@
+# 13/8/2025
+
+**PREVIEW BRANCH**
+
+- First preview for Logic Pad online mode
+  - Sign in/sign up with your Google or Discord account
+  - Upload and publish your puzzles
+  - Solve online puzzles and give them loves and ratings
+  - Search for online puzzles with queries and filters
+- Updated multiple core dependencies
+- Reworked page loading flow and suspension
+- Added an option to use sans-serif font
+- Added an option to disable all online features
+
 # 30/7/2025
 
 - Fixed incorrect validation on galaxy symbols (solvers are unaffected)

@@ -94,6 +94,57 @@ const UploadPuzzle = memo(function UploadPuzzle() {
 });
 
 // million-ignore
+const DeletePuzzle = memo(function DeletePuzzle() {
+  const { id } = useOnlinePuzzle();
+  const navigate = useNavigate();
+  const { metadata, grid, solution } = useGrid();
+  const deletePuzzle = useMutation({
+    mutationFn: async (puzzleId: string) => {
+      await api.deletePuzzle(puzzleId);
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
+
+  if (deletePuzzle.isPending) {
+    return (
+      <button className="btn btn-error btn-disabled">
+        <Loading />
+      </button>
+    );
+  }
+
+  if (deletePuzzle.isSuccess) {
+    return (
+      <button className="btn btn-error btn-disabled">Redirecting...</button>
+    );
+  }
+
+  return (
+    <button
+      className="btn btn-error"
+      onClick={async () => {
+        await deletePuzzle.mutateAsync(id!);
+        const data = await Compressor.compress(
+          Serializer.stringifyPuzzle({ ...metadata, grid, solution })
+        );
+        await navigate({
+          to: '/create',
+          search: {
+            loader: SolutionHandling.LoadVisible,
+            d: data,
+          },
+          ignoreBlocker: true,
+        });
+      }}
+    >
+      Delete puzzle
+    </button>
+  );
+});
+
+// million-ignore
 const PublishPuzzle = memo(function PublishPuzzle() {
   const { id } = useOnlinePuzzle();
   const { metadata, grid } = useGrid();
@@ -194,6 +245,7 @@ export default memo(function EditorOnlineTab() {
           <div className="badge badge-lg badge-neutral p-4">Private</div>
         </div>
         <div>Created at {new Date(data.createdAt).toLocaleString()}</div>
+        <DeletePuzzle />
         <div className="divider" />
         <p className="text-2xl font-bold">Publish puzzle</p>
         <p>

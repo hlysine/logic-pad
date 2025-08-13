@@ -250,7 +250,7 @@ export default memo(function EditorOnlineTab() {
       </button>
       <div className="divider" />
       <p className="text-2xl font-bold">Feedback</p>
-      <p className="opacity-50">TODO: add feedback</p>
+      <p className="opacity-50">Not available yet</p>
     </div>
   );
 });

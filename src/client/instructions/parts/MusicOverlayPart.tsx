@@ -80,6 +80,8 @@ export default memo(function MusicOverlayPart({
     };
   }, []);
 
+  const shouldUpdatePosition = useRef<boolean>(false);
+
   useEffect(() => {
     const handle = Tone.getTransport().scheduleRepeat(
       time => {
@@ -141,6 +143,7 @@ export default memo(function MusicOverlayPart({
               : accentColor;
             ctx.stroke();
             targetPosition.current = position;
+            shouldUpdatePosition.current = true;
           }
         }, time);
       },
@@ -154,9 +157,14 @@ export default memo(function MusicOverlayPart({
 
   useEffect(() => {
     const handle = setInterval(() => {
-      if (Tone.getTransport().state === 'started' && targetRef.current) {
+      if (
+        Tone.getTransport().state === 'started' &&
+        targetRef.current &&
+        shouldUpdatePosition.current
+      ) {
         targetRef.current.style.left = `${targetPosition.current}em`;
         targetRef.current.scrollIntoView({ behavior: 'instant' });
+        shouldUpdatePosition.current = false;
       }
     }, 1000 / 30);
     return () => {

@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.12.5",
+  "version": "0.12.6",
   "type": "module",
   "files": [
     "dist",
@@ -56,10 +56,10 @@
     "grilops": "^0.1.2",
     "logic-pad-solver-core": "^0.1.2",
     "z3-solver": "^4.13.0",
-    "zod": "^3.24.1"
+    "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@types/bun": "^1.0.12",
+    "@types/bun": "^1.2.20",
     "@types/glob": "^9.0.0",
     "dts-bundle-generator": "^9.5.1",
     "fast-glob": "^3.3.3",

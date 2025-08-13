@@ -1,3 +1,7 @@
+# 0.12.6
+
+- Remove unused dependencies and update others
+
 # 0.12.5
 
 - Add puzzle equality check

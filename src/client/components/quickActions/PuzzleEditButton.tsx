@@ -28,7 +28,7 @@ export default memo(function PuzzleEditButton() {
           isOnline &&
           me &&
           puzzleQuery.data &&
-          puzzleQuery.data.id === me.id
+          puzzleQuery.data.creator.id === me.id
         ) {
           await navigate({
             to: `/create/${puzzleQuery.data.id}`,

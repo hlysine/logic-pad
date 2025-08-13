@@ -21,7 +21,7 @@ export const Route = createLazyFileRoute('/_layout')({
               Logic Pad
             </Link>
             <Link
-              to="/solve"
+              to="/search"
               className="md:text-lg text-neutral-content flex items-center gap-2"
             >
               Explore

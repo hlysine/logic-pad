@@ -5,6 +5,7 @@ import { api } from './api';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import toast from 'react-hot-toast';
+import PuzzleCard from './PuzzleCard';
 
 export interface SearchResultsProps {
   params: SearchParams;
@@ -28,13 +29,16 @@ export default memo(function SearchResults({ params }: SearchResultsProps) {
       return false;
     },
     retry: false,
+    staleTime: 1000 * 60,
   });
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4 justify-center">
         {data?.pages.flatMap(page =>
-          page.results.map(puzzle => <p key={puzzle.id}>{puzzle.title}</p>)
+          page.results.map(puzzle => (
+            <PuzzleCard key={puzzle.id} puzzle={puzzle} />
+          ))
         )}
       </div>
       {isFetching && <Loading />}

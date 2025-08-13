@@ -6,17 +6,17 @@ import { avatarQueryOptions } from '../components/AccountControl';
 import Loading from '../components/Loading';
 import { FaCheckSquare, FaEdit } from 'react-icons/fa';
 
-export interface UserBadgeProps {
+export interface UserCardProps {
   user?: UserBrief | null;
   name?: string;
   responsive?: boolean;
 }
 
-export default memo(function UserBadge({
+export default memo(function UserCard({
   user,
   name,
   responsive,
-}: UserBadgeProps) {
+}: UserCardProps) {
   responsive ??= true;
   name ??= user?.name;
 

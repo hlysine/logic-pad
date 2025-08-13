@@ -4,7 +4,7 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useOnline } from '../contexts/OnlineContext.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
-import UserBadge from '../metadata/UserBadge.tsx';
+import UserCard from '../metadata/UserCard.tsx';
 
 // million-ignore
 export default memo(function MetadataEditor() {
@@ -44,7 +44,7 @@ export default memo(function MetadataEditor() {
           <div className="label">
             <span className="label-text">Author</span>
           </div>
-          <UserBadge user={puzzle?.creator ?? me} />
+          <UserCard user={puzzle?.creator ?? me} />
         </label>
       ) : (
         <label className="form-control">

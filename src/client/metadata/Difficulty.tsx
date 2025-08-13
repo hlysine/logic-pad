@@ -48,7 +48,14 @@ export default memo(function Difficulty({
     );
   }
   return (
-    <div className={cn('rating', sizeToRating(size), className)}>
+    <div
+      className={cn(
+        'rating',
+        sizeToRating(size),
+        className,
+        'flex items-center'
+      )}
+    >
       {[
         <input
           key={-1}

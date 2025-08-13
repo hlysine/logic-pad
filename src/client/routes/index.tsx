@@ -106,19 +106,15 @@ export const Route = createFileRoute('/')({
                     to="/create"
                     className="btn btn-md lg:btn-lg btn-accent"
                   >
-                    Create your own puzzle
+                    Create new puzzle
                   </Link>
-                  <button
+                  <Link
                     type="button"
+                    to="/search"
                     className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                    onClick={() =>
-                      curatedPuzzles.current?.scrollIntoView({
-                        behavior: 'smooth',
-                      })
-                    }
                   >
-                    Check out some examples
-                  </button>
+                    Explore puzzles
+                  </Link>
                 </div>
                 <Changelog />
               </div>

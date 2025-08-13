@@ -4,7 +4,7 @@ import Difficulty from './Difficulty';
 import Markdown from '../components/Markdown';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { cn } from '../uiHelper.ts';
-import UserBadge from './UserBadge.tsx';
+import UserCard from './UserCard.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 import DocumentTitle from '../components/DocumentTitle.tsx';
 
@@ -40,7 +40,7 @@ export default memo(function Metadata({
       >
         {metadata.title}
       </h1>
-      <UserBadge user={puzzle?.creator} name={metadata.author} />
+      <UserCard user={puzzle?.creator} name={metadata.author} />
       {!simplified && (
         <div className="overflow-y-auto">
           <Markdown

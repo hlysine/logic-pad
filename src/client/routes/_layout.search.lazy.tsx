@@ -216,7 +216,7 @@ export const Route = createLazyFileRoute('/_layout/search')({
               <a role="tab" className="tab tab-active">
                 Puzzles
               </a>
-              <a role="tab" className="tab">
+              <a role="tab" className="tab opacity-50">
                 Collections
               </a>
             </div>

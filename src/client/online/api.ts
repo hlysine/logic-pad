@@ -9,6 +9,7 @@ import {
 } from './data';
 import { QueryClient } from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
+import { SearchParams } from '../routes/_layout.search';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -185,10 +186,10 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  searchPuzzles: async (query: string, cursor?: string) => {
+  searchPuzzles: async (query: SearchParams, cursor?: string) => {
     return await axios
       .get<SearchResult<PuzzleBrief>>(`/puzzle/search`, {
-        params: { q: query, cursor },
+        params: { ...query, cursor },
       })
       .then(res => res.data)
       .catch(rethrowError);

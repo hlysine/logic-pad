@@ -74,10 +74,10 @@ export default memo(function AccountControl() {
       </summary>
       <ul className="menu dropdown-content bg-base-300 rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
         <li>
-          <a>Profile</a>
+          <a className="opacity-50">Profile</a>
         </li>
         <li>
-          <a>My stuff</a>
+          <a className="opacity-50">My stuff</a>
         </li>
         <li>
           <a

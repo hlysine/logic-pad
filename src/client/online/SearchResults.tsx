@@ -17,7 +17,7 @@ export default memo(function SearchResults({ params }: SearchResultsProps) {
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     queryKey: ['puzzle', 'search', debouncedParams],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
-      return api.searchPuzzles(debouncedParams.q ?? '', pageParam);
+      return api.searchPuzzles(debouncedParams, pageParam);
     },
     initialPageParam: undefined,
     getNextPageParam: (lastPage, allPages) => {

@@ -1417,20 +1417,7 @@ declare global {
       description: z.ZodString;
       difficulty: z.ZodNumber;
     },
-    'strict',
-    z.ZodTypeAny,
-    {
-      description: string;
-      title: string;
-      author: string;
-      difficulty: number;
-    },
-    {
-      description: string;
-      title: string;
-      author: string;
-      difficulty: number;
-    }
+    z.core.$strict
   >;
   export declare const PuzzleSchema: z.ZodObject<
     {
@@ -1438,27 +1425,10 @@ declare global {
       author: z.ZodString;
       description: z.ZodString;
       difficulty: z.ZodNumber;
-      grid: z.ZodType<GridData, z.ZodTypeDef, GridData>;
-      solution: z.ZodNullable<z.ZodType<GridData, z.ZodTypeDef, GridData>>;
+      grid: z.ZodCustom<GridData, GridData>;
+      solution: z.ZodNullable<z.ZodCustom<GridData, GridData>>;
     },
-    'strict',
-    z.ZodTypeAny,
-    {
-      description: string;
-      grid: GridData;
-      title: string;
-      author: string;
-      difficulty: number;
-      solution: GridData | null;
-    },
-    {
-      description: string;
-      grid: GridData;
-      title: string;
-      author: string;
-      difficulty: number;
-      solution: GridData | null;
-    }
+    z.core.$strict
   >;
   export type PuzzleData = {
     /**

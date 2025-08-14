@@ -2,6 +2,8 @@
 
 **PREVIEW BRANCH**
 
+- You can now change your username in /settings
+- Certain pages now redirect to home page when you are not online/signed in
 - Fixed config popup not working for symbols
 - Fixed hotkeys not working in certain keyboard layouts
 - Implemented online perfection mode

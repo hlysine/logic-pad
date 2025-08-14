@@ -80,6 +80,9 @@ export default memo(function AccountControl() {
           <Link to="/my-stuff">My stuff</Link>
         </li>
         <li>
+          <Link to="/settings">Settings</Link>
+        </li>
+        <li>
           <a
             onClick={async () => {
               await api.logout();

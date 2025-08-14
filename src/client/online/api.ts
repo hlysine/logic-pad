@@ -10,12 +10,18 @@ import {
 import { QueryClient } from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
 import { SearchParams } from '../routes/_layout.search';
+import toast from 'react-hot-toast';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
       staleTime: 10 * 1000,
+    },
+    mutations: {
+      onError(error) {
+        toast.error(error.message);
+      },
     },
   },
 });
@@ -68,6 +74,9 @@ export const api = {
       .get<UserBrief>('/user/me')
       .then(res => res.data)
       .catch(() => null);
+  },
+  updateMe: async (data: Partial<Pick<UserBrief, 'name'>>) => {
+    return await axios.put<UserBrief>('/user/me', data).catch(() => null);
   },
   logout: async () => {
     await queryClient.invalidateQueries();

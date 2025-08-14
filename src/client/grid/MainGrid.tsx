@@ -16,6 +16,7 @@ import { PartPlacement } from '../instructions/parts/types';
 import ErrorOverlay from './ErrorOverlay';
 import { usePinch } from '@use-gesture/react';
 import GridZoneOverlay from './GridZoneOverlay.tsx';
+import { useSettings } from '../contexts/SettingsContext.tsx';
 
 export interface MainGridProps {
   useToolboxClick: boolean;
@@ -23,18 +24,23 @@ export interface MainGridProps {
   animated?: boolean;
 }
 
-export function computeTileSize(grid: GridData, responsive: boolean) {
+export function computeTileSize(
+  grid: GridData,
+  responsive: boolean,
+  visualizeWrapArounds: boolean
+) {
+  const extraMargin = visualizeWrapArounds && grid.wrapAround.value ? 55 : 0;
   const windowWidth = responsive ? window.innerWidth : 1920;
   const windowHeight = responsive ? window.innerHeight : 1080;
   const newSize =
     windowWidth < 1280
       ? Math.min(
-          (windowWidth - 120) / grid.width,
-          (windowHeight - 180) / grid.height
+          (windowWidth - 128 - extraMargin) / grid.width,
+          (windowHeight - 180 - extraMargin) / grid.height
         )
       : Math.min(
-          (windowWidth - 120 - 640) / grid.width,
-          (windowHeight - 180) / grid.height
+          (windowWidth - 128 - 640 - extraMargin) / grid.width,
+          (windowHeight - 180 - extraMargin) / grid.height
         );
   return Math.floor(
     Math.max(25, Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize))
@@ -58,13 +64,14 @@ export default memo(function MainGrid({
   }>({ width: 0, height: 0, tileSize: 0 });
 
   const stateRingRef = useRef<HTMLDivElement>(null);
+  const [visualizeWrapArounds] = useSettings('visualizeWrapArounds');
 
   useEffect(() => {
     const resizeHandler = () =>
       setTileConfig({
         width: grid.width,
         height: grid.height,
-        tileSize: computeTileSize(grid, responsiveScale),
+        tileSize: computeTileSize(grid, responsiveScale, visualizeWrapArounds),
       });
     const preventDefault = (e: Event) => e.preventDefault();
     window.addEventListener('resize', resizeHandler);
@@ -76,7 +83,7 @@ export default memo(function MainGrid({
       window.removeEventListener('gesturestart', preventDefault);
       window.removeEventListener('gesturechange', preventDefault);
     };
-  }, [grid, responsiveScale]);
+  }, [grid, responsiveScale, visualizeWrapArounds]);
 
   const bind = usePinch(
     ({ offset: [newScale] }) => {

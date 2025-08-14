@@ -19,6 +19,7 @@ import { Route as LayoutSolveIndexRouteImport } from './../routes/_layout.solve.
 import { Route as LayoutPerfectionIndexRouteImport } from './../routes/_layout.perfection.index'
 import { Route as LayoutCreateIndexRouteImport } from './../routes/_layout.create.index'
 import { Route as LayoutSolvePuzzleIdRouteImport } from './../routes/_layout.solve.$puzzleId'
+import { Route as LayoutPerfectionPuzzleIdRouteImport } from './../routes/_layout.perfection.$puzzleId'
 import { Route as LayoutCreatePuzzleIdRouteImport } from './../routes/_layout.create.$puzzleId'
 
 const LayoutLazyRouteImport = createFileRoute('/_layout')()
@@ -85,6 +86,16 @@ const LayoutSolvePuzzleIdRoute = LayoutSolvePuzzleIdRouteImport.update({
 } as any).lazy(() =>
   import('./../routes/_layout.solve.$puzzleId.lazy').then((d) => d.Route),
 )
+const LayoutPerfectionPuzzleIdRoute =
+  LayoutPerfectionPuzzleIdRouteImport.update({
+    id: '/perfection/$puzzleId',
+    path: '/perfection/$puzzleId',
+    getParentRoute: () => LayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./../routes/_layout.perfection.$puzzleId.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const LayoutCreatePuzzleIdRoute = LayoutCreatePuzzleIdRouteImport.update({
   id: '/create/$puzzleId',
   path: '/create/$puzzleId',
@@ -100,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/oauth/callback': typeof OauthCallbackRoute
   '/my-stuff': typeof LayoutMyStuffLazyRoute
   '/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
+  '/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
   '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
   '/create': typeof LayoutCreateIndexRoute
   '/perfection': typeof LayoutPerfectionIndexRoute
@@ -112,6 +124,7 @@ export interface FileRoutesByTo {
   '/oauth/callback': typeof OauthCallbackRoute
   '/my-stuff': typeof LayoutMyStuffLazyRoute
   '/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
+  '/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
   '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
   '/create': typeof LayoutCreateIndexRoute
   '/perfection': typeof LayoutPerfectionIndexRoute
@@ -126,6 +139,7 @@ export interface FileRoutesById {
   '/oauth/callback': typeof OauthCallbackRoute
   '/_layout/my-stuff': typeof LayoutMyStuffLazyRoute
   '/_layout/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
+  '/_layout/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
   '/_layout/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
   '/_layout/create/': typeof LayoutCreateIndexRoute
   '/_layout/perfection/': typeof LayoutPerfectionIndexRoute
@@ -140,6 +154,7 @@ export interface FileRouteTypes {
     | '/oauth/callback'
     | '/my-stuff'
     | '/create/$puzzleId'
+    | '/perfection/$puzzleId'
     | '/solve/$puzzleId'
     | '/create'
     | '/perfection'
@@ -152,6 +167,7 @@ export interface FileRouteTypes {
     | '/oauth/callback'
     | '/my-stuff'
     | '/create/$puzzleId'
+    | '/perfection/$puzzleId'
     | '/solve/$puzzleId'
     | '/create'
     | '/perfection'
@@ -165,6 +181,7 @@ export interface FileRouteTypes {
     | '/oauth/callback'
     | '/_layout/my-stuff'
     | '/_layout/create/$puzzleId'
+    | '/_layout/perfection/$puzzleId'
     | '/_layout/solve/$puzzleId'
     | '/_layout/create/'
     | '/_layout/perfection/'
@@ -250,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSolvePuzzleIdRouteImport
       parentRoute: typeof LayoutLazyRoute
     }
+    '/_layout/perfection/$puzzleId': {
+      id: '/_layout/perfection/$puzzleId'
+      path: '/perfection/$puzzleId'
+      fullPath: '/perfection/$puzzleId'
+      preLoaderRoute: typeof LayoutPerfectionPuzzleIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
     '/_layout/create/$puzzleId': {
       id: '/_layout/create/$puzzleId'
       path: '/create/$puzzleId'
@@ -264,6 +288,7 @@ interface LayoutLazyRouteChildren {
   LayoutSearchRoute: typeof LayoutSearchRoute
   LayoutMyStuffLazyRoute: typeof LayoutMyStuffLazyRoute
   LayoutCreatePuzzleIdRoute: typeof LayoutCreatePuzzleIdRoute
+  LayoutPerfectionPuzzleIdRoute: typeof LayoutPerfectionPuzzleIdRoute
   LayoutSolvePuzzleIdRoute: typeof LayoutSolvePuzzleIdRoute
   LayoutCreateIndexRoute: typeof LayoutCreateIndexRoute
   LayoutPerfectionIndexRoute: typeof LayoutPerfectionIndexRoute
@@ -274,6 +299,7 @@ const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
   LayoutSearchRoute: LayoutSearchRoute,
   LayoutMyStuffLazyRoute: LayoutMyStuffLazyRoute,
   LayoutCreatePuzzleIdRoute: LayoutCreatePuzzleIdRoute,
+  LayoutPerfectionPuzzleIdRoute: LayoutPerfectionPuzzleIdRoute,
   LayoutSolvePuzzleIdRoute: LayoutSolvePuzzleIdRoute,
   LayoutCreateIndexRoute: LayoutCreateIndexRoute,
   LayoutPerfectionIndexRoute: LayoutPerfectionIndexRoute,

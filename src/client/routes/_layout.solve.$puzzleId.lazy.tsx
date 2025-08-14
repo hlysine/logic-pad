@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import SolveScreen from '../screens/SolveScreen';
-import PerfectionModeLink from '../components/quickActions/PerfectionModeButton';
+import PerfectionModeButton from '../components/quickActions/PerfectionModeButton';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import useOnlineLinkLoader from '../router/onlineLinkLoader';
 import { puzzleSolveQueryOptions } from './_layout.solve.$puzzleId';
@@ -20,7 +20,7 @@ export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
         initialPuzzle={result.initialPuzzle}
       >
         <SolveScreen
-          quickActions={[<PerfectionModeLink key="perfectionModeLink" />]}
+          quickActions={[<PerfectionModeButton key="perfectionModeButton" />]}
         />
       </MainContext>
     );

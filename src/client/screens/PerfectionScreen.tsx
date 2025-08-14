@@ -12,8 +12,13 @@ import { Mode, Position } from '@logic-pad/core/data/primitives';
 import ModeVariantLoader from '../router/ModeVariantLoader';
 import { memo } from 'react';
 import DocumentTitle from '../components/DocumentTitle';
+import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
+import SharePuzzleImage from '../components/quickActions/SharePuzzleImage';
+import PuzzleEditButton from '../components/quickActions/PuzzleEditButton';
+import PuzzleSolveControl from '../components/PuzzleSolveControl';
 
 export interface PerfectionScreenProps {
+  quickActions?: React.ReactNode;
   children?: React.ReactNode;
   solvePath?: Position[];
   setSolvePath?: (solvePath: Position[]) => void;
@@ -21,6 +26,7 @@ export interface PerfectionScreenProps {
 }
 
 export default memo(function PerfectionScreen({
+  quickActions,
   children,
   solvePath,
   setSolvePath,
@@ -52,6 +58,12 @@ export default memo(function PerfectionScreen({
                 />
               )}
             </GridConsumer>
+            <div className="flex gap-1">
+              <PuzzleLoveButton />
+              <SharePuzzleImage />
+              <PuzzleEditButton />
+              {quickActions}
+            </div>
             <TouchControls />
             <PerfectionEditControls onReset={onReset} />
             <ModeVariantLoader mode={Mode.Perfection} />
@@ -64,6 +76,7 @@ export default memo(function PerfectionScreen({
               <InstructionList />
             </div>
             <div className="p-2 w-full flex flex-col items-stretch justify-end gap-2 shrink-0">
+              <PuzzleSolveControl />
               {children}
             </div>
           </>

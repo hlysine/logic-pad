@@ -22,6 +22,7 @@ export const queryClient = new QueryClient({
 
 export const axios = axiosStatic.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT as string,
+  withCredentials: true,
 });
 
 export interface ApiError {

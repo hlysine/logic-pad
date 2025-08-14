@@ -1,3 +1,13 @@
+# 14/8/2025
+
+**PREVIEW BRANCH**
+
+- Fixed config popup not working for symbols
+- Fixed hotkeys not working in certain keyboard layouts
+- Implemented online perfection mode
+- Fixed difficulty ratings interfering with each other
+- Improved grid resizing logic to account for wrap-around grids
+
 # 13/8/2025
 
 **PREVIEW BRANCH**
@@ -7,6 +17,7 @@
   - Upload and publish your puzzles
   - Solve online puzzles and give them loves and ratings
   - Search for online puzzles with queries and filters
+  - Access your own puzzles in the "My Stuff" page
 - Updated multiple core dependencies
 - Reworked page loading flow and suspension
 - Added an option to use sans-serif font

@@ -11,6 +11,13 @@ export const puzzleEditQueryOptions = (puzzleId: string | null) =>
   });
 
 export const Route = createFileRoute('/_layout/create/$puzzleId')({
+  beforeLoad: ({ context }) => {
+    if (!context.isOnline) {
+      throw redirect({
+        to: '/',
+      });
+    }
+  },
   loader: async ({ params }) => {
     try {
       return await queryClient.ensureQueryData(

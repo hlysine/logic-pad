@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { zodValidator } from '@tanstack/zod-adapter';
 import z from 'zod';
 
@@ -14,5 +14,12 @@ const searchSchema = z.object({
 export type SearchParams = z.infer<typeof searchSchema>;
 
 export const Route = createFileRoute('/_layout/search')({
+  beforeLoad: ({ context }) => {
+    if (!context.isOnline) {
+      throw redirect({
+        to: '/',
+      });
+    }
+  },
   validateSearch: zodValidator(searchSchema),
 });

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useId } from 'react';
 import { cn } from '../../client/uiHelper.ts';
 import { BsQuestionCircleFill } from 'react-icons/bs';
 
@@ -30,6 +30,7 @@ export default memo(function Difficulty({
   size,
   className,
 }: DifficultyProps) {
+  const radioId = useId();
   readonly = readonly ?? !onChange;
   size = size ?? 'md';
   if (readonly && value === 0) {
@@ -60,7 +61,7 @@ export default memo(function Difficulty({
         <input
           key={-1}
           type="radio"
-          name="difficulty-rating"
+          name={`difficulty-rating-${radioId}`}
           className="rating-hidden pointer-events-none hidden"
           checked={value === 0}
           readOnly={true}
@@ -69,7 +70,7 @@ export default memo(function Difficulty({
           <input
             key={i}
             type="radio"
-            name="difficulty-rating"
+            name={`difficulty-rating-${radioId}`}
             className={cn(
               'mask mask-circle bg-accent scale-[0.8]',
               !readonly &&

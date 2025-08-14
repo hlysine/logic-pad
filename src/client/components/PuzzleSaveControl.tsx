@@ -123,6 +123,7 @@ const SavePuzzle = memo(function SavePuzzle() {
   useHotkeys('ctrl+s', save, {
     preventDefault: true,
     enabled: !!id,
+    useKey: true,
   });
 
   return (

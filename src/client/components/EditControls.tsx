@@ -38,14 +38,17 @@ const EditControls = memo(function EditControls({
   useHotkeys('z', undo, {
     preventDefault: true,
     enabled: embedChildren.length === 0,
+    useKey: true,
   });
   useHotkeys('r', restart, {
     preventDefault: true,
     enabled: embedChildren.length === 0,
+    useKey: true,
   });
   useHotkeys('y', redo, {
     preventDefault: true,
     enabled: embedChildren.length === 0,
+    useKey: true,
   });
 
   return (

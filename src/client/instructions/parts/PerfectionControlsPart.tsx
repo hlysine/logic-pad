@@ -47,6 +47,7 @@ export default memo(function PerfectionControlsPart({
       state.final === State.Error &&
       embedChildren.length === 0,
     preventDefault: true,
+    useKey: true,
   });
 
   const gridDelta = useDelta(grid);

@@ -88,6 +88,7 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
       keydown: true,
       keyup: true,
       preventDefault: true,
+      useKey: true,
     },
     [canvasRef, tileSize]
   );

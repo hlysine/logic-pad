@@ -55,6 +55,7 @@ export default memo(function ToolboxItem({
       preventDefault: true,
       keydown: hotkey !== undefined,
       keyup: false,
+      useKey: true,
     }
   );
 

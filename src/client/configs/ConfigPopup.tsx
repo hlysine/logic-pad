@@ -64,6 +64,16 @@ function getPosition(
   return ret;
 }
 
+function containsPoint(element: HTMLElement, clientX: number, clientY: number) {
+  const rect = element.getBoundingClientRect();
+  return (
+    clientX >= rect.left &&
+    clientX <= rect.right &&
+    clientY >= rect.top &&
+    clientY <= rect.bottom
+  );
+}
+
 export default memo(function ConfigPopup() {
   const { location, ref, setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
@@ -88,8 +98,11 @@ export default memo(function ConfigPopup() {
   useEffect(() => {
     const handleClick = (e: PointerEvent) => {
       if (
-        !popupRef.current?.contains(e.target as Node) &&
-        !ref?.current?.contains(e.target as Node)
+        !(
+          popupRef.current &&
+          containsPoint(popupRef.current, e.clientX, e.clientY)
+        ) &&
+        !(ref?.current && containsPoint(ref.current, e.clientX, e.clientY))
       ) {
         setLocation(undefined);
         setRef(undefined);

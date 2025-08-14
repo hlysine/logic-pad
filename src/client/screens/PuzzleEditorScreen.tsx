@@ -52,8 +52,8 @@ export default memo(function PuzzleEditorScreen({
     }
   };
   return (
-    <ToolboxContext>
-      <ConfigContext>
+    <ConfigContext>
+      <ToolboxContext>
         <ThreePaneLayout
           collapsible={true}
           left={
@@ -130,7 +130,7 @@ export default memo(function PuzzleEditorScreen({
             </>
           }
         />
-      </ConfigContext>
-    </ToolboxContext>
+      </ToolboxContext>
+    </ConfigContext>
   );
 });

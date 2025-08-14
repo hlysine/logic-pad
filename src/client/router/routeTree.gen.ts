@@ -22,6 +22,7 @@ import { Route as LayoutSolvePuzzleIdRouteImport } from './../routes/_layout.sol
 import { Route as LayoutCreatePuzzleIdRouteImport } from './../routes/_layout.create.$puzzleId'
 
 const LayoutLazyRouteImport = createFileRoute('/_layout')()
+const LayoutMyStuffLazyRouteImport = createFileRoute('/_layout/my-stuff')()
 
 const LayoutLazyRoute = LayoutLazyRouteImport.update({
   id: '/_layout',
@@ -37,6 +38,13 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LayoutMyStuffLazyRoute = LayoutMyStuffLazyRouteImport.update({
+  id: '/my-stuff',
+  path: '/my-stuff',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.my-stuff.lazy').then((d) => d.Route),
+)
 const OauthCallbackRoute = OauthCallbackRouteImport.update({
   id: '/oauth/callback',
   path: '/oauth/callback',
@@ -90,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/search': typeof LayoutSearchRoute
   '/oauth/callback': typeof OauthCallbackRoute
+  '/my-stuff': typeof LayoutMyStuffLazyRoute
   '/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
   '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
   '/create': typeof LayoutCreateIndexRoute
@@ -101,6 +110,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/search': typeof LayoutSearchRoute
   '/oauth/callback': typeof OauthCallbackRoute
+  '/my-stuff': typeof LayoutMyStuffLazyRoute
   '/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
   '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
   '/create': typeof LayoutCreateIndexRoute
@@ -114,6 +124,7 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutLazyRouteWithChildren
   '/_layout/search': typeof LayoutSearchRoute
   '/oauth/callback': typeof OauthCallbackRoute
+  '/_layout/my-stuff': typeof LayoutMyStuffLazyRoute
   '/_layout/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
   '/_layout/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
   '/_layout/create/': typeof LayoutCreateIndexRoute
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/search'
     | '/oauth/callback'
+    | '/my-stuff'
     | '/create/$puzzleId'
     | '/solve/$puzzleId'
     | '/create'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/search'
     | '/oauth/callback'
+    | '/my-stuff'
     | '/create/$puzzleId'
     | '/solve/$puzzleId'
     | '/create'
@@ -150,6 +163,7 @@ export interface FileRouteTypes {
     | '/_layout'
     | '/_layout/search'
     | '/oauth/callback'
+    | '/_layout/my-stuff'
     | '/_layout/create/$puzzleId'
     | '/_layout/solve/$puzzleId'
     | '/_layout/create/'
@@ -186,6 +200,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_layout/my-stuff': {
+      id: '/_layout/my-stuff'
+      path: '/my-stuff'
+      fullPath: '/my-stuff'
+      preLoaderRoute: typeof LayoutMyStuffLazyRouteImport
+      parentRoute: typeof LayoutLazyRoute
     }
     '/oauth/callback': {
       id: '/oauth/callback'
@@ -241,6 +262,7 @@ declare module '@tanstack/react-router' {
 
 interface LayoutLazyRouteChildren {
   LayoutSearchRoute: typeof LayoutSearchRoute
+  LayoutMyStuffLazyRoute: typeof LayoutMyStuffLazyRoute
   LayoutCreatePuzzleIdRoute: typeof LayoutCreatePuzzleIdRoute
   LayoutSolvePuzzleIdRoute: typeof LayoutSolvePuzzleIdRoute
   LayoutCreateIndexRoute: typeof LayoutCreateIndexRoute
@@ -250,6 +272,7 @@ interface LayoutLazyRouteChildren {
 
 const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
   LayoutSearchRoute: LayoutSearchRoute,
+  LayoutMyStuffLazyRoute: LayoutMyStuffLazyRoute,
   LayoutCreatePuzzleIdRoute: LayoutCreatePuzzleIdRoute,
   LayoutSolvePuzzleIdRoute: LayoutSolvePuzzleIdRoute,
   LayoutCreateIndexRoute: LayoutCreateIndexRoute,

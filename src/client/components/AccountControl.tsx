@@ -4,7 +4,7 @@ import { IoCloudOffline } from 'react-icons/io5';
 import { api } from '../online/api';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
-import { useRouterState } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
 import { FaBan } from 'react-icons/fa';
 import { UserBrief } from '../online/data';
@@ -77,7 +77,7 @@ export default memo(function AccountControl() {
           <a className="opacity-50">Profile</a>
         </li>
         <li>
-          <a className="opacity-50">My stuff</a>
+          <Link to="/my-stuff">My stuff</Link>
         </li>
         <li>
           <a

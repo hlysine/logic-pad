@@ -204,4 +204,12 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  listMyPuzzles: async (cursor?: string) => {
+    return await axios
+      .get<SearchResult<PuzzleBrief>>(`/user/me/puzzles`, {
+        params: { cursor },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
 };

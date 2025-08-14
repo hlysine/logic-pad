@@ -7,6 +7,7 @@ import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import toast from 'react-hot-toast';
 import PuzzleCard from './PuzzleCard';
+import { useNavigate } from '@tanstack/react-router';
 
 export interface SearchResultsProps {
   params: SearchParams;
@@ -14,6 +15,7 @@ export interface SearchResultsProps {
 
 export default memo(function SearchResults({ params }: SearchResultsProps) {
   const debouncedParams = useDebounce(params, 500);
+  const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     queryKey: ['puzzle', 'search', debouncedParams],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
@@ -48,7 +50,15 @@ export default memo(function SearchResults({ params }: SearchResultsProps) {
       <div className="flex flex-wrap gap-4 justify-center">
         {data?.pages.flatMap(page =>
           page.results.map(puzzle => (
-            <PuzzleCard key={puzzle.id} puzzle={puzzle} />
+            <PuzzleCard
+              key={puzzle.id}
+              puzzle={puzzle}
+              onClick={async () => {
+                await navigate({
+                  to: `/solve/${puzzle.id}`,
+                });
+              }}
+            />
           ))
         )}
       </div>

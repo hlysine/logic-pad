@@ -1,16 +1,16 @@
 import { memo, useMemo } from 'react';
-import { PuzzleBrief } from './data';
+import { PuzzleBrief, ResourceStatus } from './data';
 import { FaCheckSquare, FaHeart, FaMusic } from 'react-icons/fa';
 import { PiCheckerboardFill } from 'react-icons/pi';
 import { TbLayoutGridRemove, TbLayoutGrid } from 'react-icons/tb';
 import { PuzzleType } from '@logic-pad/core/index';
 import { BsQuestionSquare } from 'react-icons/bs';
 import Difficulty from '../metadata/Difficulty';
-import { useNavigate } from '@tanstack/react-router';
 import { cn } from '../uiHelper';
 
 export interface PuzzleCardProps {
   puzzle: PuzzleBrief;
+  onClick?: () => void;
 }
 
 function getIconForType(type: PuzzleType) {
@@ -116,24 +116,23 @@ const PuzzleIcon = memo(function PuzzleIcon({
   }
 });
 
-export default memo(function PuzzleCard({ puzzle }: PuzzleCardProps) {
-  const navigate = useNavigate();
-
+export default memo(function PuzzleCard({ puzzle, onClick }: PuzzleCardProps) {
   return (
     <div className="w-[320px] h-[116px] hover:z-50">
       <div
-        className="w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 bg-base-300 rounded-xl shadow-md wrapper hover:shadow-xl hover:bg-base-100 transition-all"
+        className={cn(
+          'w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',
+          puzzle.status === ResourceStatus.Private
+            ? `bg-base-300/50 hover:bg-base-100/50`
+            : 'bg-base-300 hover:bg-base-100'
+        )}
         role="button"
-        onClick={async () => {
-          await navigate({
-            to: `/solve/${puzzle.id}`,
-          });
-        }}
+        onClick={onClick}
       >
         <PuzzleIcon types={puzzle.types} size={36} className="shrink-0" />
         <div className="flex flex-col">
           <h2 className="text-lg font-bold whitespace-nowrap [.wrapper:hover_&]:whitespace-normal overflow-hidden text-ellipsis">
-            {puzzle.title}
+            {puzzle.title.length === 0 ? 'Untitled Puzzle' : puzzle.title}
           </h2>
           <div className="badge badge-neutral bg-neutral/40 badge-md mt-1">
             {puzzle.creator.name}

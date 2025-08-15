@@ -1,3 +1,12 @@
+# 15/8/2025
+
+**PREVIEW BRANCH**
+
+- Fixed route protection redirecting incorrectly
+- Added "any" option to search filters and optimized search UI
+- Added search UI to my-stuff page
+- Added a section in settings to manage account providers
+
 # 14/8/2025
 
 **PREVIEW BRANCH**

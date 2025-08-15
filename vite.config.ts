@@ -46,6 +46,7 @@ export default defineConfig({
       ],
       workbox: {
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
+        navigateFallbackDenylist: [/^\/api/],
       },
       manifest: {
         name: 'Logic Pad',

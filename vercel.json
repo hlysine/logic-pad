@@ -1,6 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://api.logic-pad.com/:match*"
+    },
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "outputDirectory": "dist",
   "headers": [
     {

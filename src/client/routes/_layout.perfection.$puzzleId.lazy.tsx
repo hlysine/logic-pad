@@ -8,9 +8,11 @@ import PerfectionScreen from '../screens/PerfectionScreen';
 import SolveModeButton from '../components/quickActions/SolveModeButton';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
+import { useRouteProtection } from '../router/useRouteProtection';
 
 export const Route = createLazyFileRoute('/_layout/perfection/$puzzleId')({
   component: memo(function OnlinePerfectionMode() {
+    useRouteProtection('online');
     const { data } = useSuspenseQuery(
       puzzleSolveQueryOptions(Route.useParams().puzzleId)
     );

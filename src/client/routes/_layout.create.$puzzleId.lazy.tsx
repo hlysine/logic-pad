@@ -7,9 +7,11 @@ import useOnlineLinkLoader from '../router/onlineLinkLoader';
 import { SolutionHandling } from '../router/linkLoader';
 import MainContext from '../router/MainContext';
 import ExitBlocker from '../router/ExitBlocker';
+import { useRouteProtection } from '../router/useRouteProtection';
 
 export const Route = createLazyFileRoute('/_layout/create/$puzzleId')({
   component: memo(function OnlineCreateMode() {
+    useRouteProtection('login');
     const { data } = useSuspenseQuery(
       puzzleEditQueryOptions(Route.useParams().puzzleId)
     );

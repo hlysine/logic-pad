@@ -19,7 +19,7 @@ export const avatarQueryOptions = (user: UserBrief | null) =>
 
 // million-ignore
 export default memo(function AccountControl() {
-  const { isOnline, me, refresh } = useOnline();
+  const { isOnline, me, isPending, refresh } = useOnline();
   const routerState = useRouterState();
   const avatarQuery = useQuery(avatarQueryOptions(me));
   if (!isOnline) {
@@ -29,6 +29,11 @@ export default memo(function AccountControl() {
         Offline
       </div>
     );
+  }
+  if (isPending) {
+    <button className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
+      <Loading className="w-8 h-8" />
+    </button>;
   }
   if (!me) {
     if (routerState.location.pathname === '/create') {

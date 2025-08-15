@@ -10,6 +10,8 @@ class DeferredRedirect {
     currentLocation: NavigateOptions,
     destination: NavigateOptions
   ) {
+    console.log(currentLocation, destination);
+    if (currentLocation.to === destination.to) return;
     this.set(currentLocation);
     await router.navigate(destination);
   }

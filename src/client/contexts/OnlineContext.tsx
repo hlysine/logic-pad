@@ -16,6 +16,10 @@ export interface OnlineContext {
    */
   me: UserBrief | null;
   /**
+   * Whether the online status or user data is currently being fetched.
+   */
+  isPending: boolean;
+  /**
    * Refresh the online status and user data.
    */
   refresh: () => Promise<void>;
@@ -24,6 +28,7 @@ export interface OnlineContext {
 const Context = createContext<OnlineContext>({
   isOnline: defaultOnline,
   me: null,
+  isPending: false,
   refresh: async () => {},
 });
 
@@ -61,6 +66,7 @@ export default memo(function OnlineContext({
       isOnline:
         !forceOffline && !offlineMode && (onlineQuery.data ?? defaultOnline),
       me: meQuery.data ?? null,
+      isPending: onlineQuery.isLoading || meQuery.isLoading,
       refresh: async () => {
         await onlineQuery.refetch();
         await meQuery.refetch();

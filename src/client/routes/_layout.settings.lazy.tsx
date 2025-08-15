@@ -7,8 +7,10 @@ import { api, queryClient } from '../online/api';
 import Loading from '../components/Loading';
 import toast from 'react-hot-toast';
 import { UserBrief } from '../online/data';
+import { useRouteProtection } from '../router/useRouteProtection';
 
 const AccountSettings = memo(function AccountSettings() {
+  useRouteProtection('login');
   const { me, refresh } = useOnline();
 
   const updateMe = useMutation({

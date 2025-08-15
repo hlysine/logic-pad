@@ -6,9 +6,11 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import useOnlineLinkLoader from '../router/onlineLinkLoader';
 import { puzzleSolveQueryOptions } from './_layout.solve.$puzzleId';
 import MainContext from '../router/MainContext';
+import { useRouteProtection } from '../router/useRouteProtection';
 
 export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
   component: memo(function OnlineSolveMode() {
+    useRouteProtection('online');
     const { data } = useSuspenseQuery(
       puzzleSolveQueryOptions(Route.useParams().puzzleId)
     );

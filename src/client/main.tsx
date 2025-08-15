@@ -8,7 +8,7 @@ import NotFound from './router/NotFound';
 import { themeKey } from './contexts/ThemeContext.tsx';
 import { cleanReload } from './components/settings/ResetSite.tsx';
 import { QueryClientProvider } from '@tanstack/react-query';
-import OnlineContext, { OnlineConsumer } from './contexts/OnlineContext.tsx';
+import OnlineContext from './contexts/OnlineContext.tsx';
 import { queryClient } from './online/api.ts';
 import { useSettings } from './contexts/SettingsContext.tsx';
 import Loading from './components/Loading.tsx';
@@ -23,11 +23,6 @@ export const router = createRouter({
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 1000 * 60 * 5,
   defaultPendingComponent: () => <Loading />,
-  context: {
-    isOnline: true,
-    me: null,
-    refresh: () => Promise.resolve(),
-  },
 });
 
 declare module '@tanstack/react-router' {
@@ -96,9 +91,7 @@ ReactDOM.createRoot(document.getElementById('app')!).render(
             {/* For canvas components to retrieve this color */}
           </div>
           <SpeedInsights />
-          <OnlineConsumer>
-            {context => <RouterProvider router={router} context={context} />}
-          </OnlineConsumer>
+          <RouterProvider router={router} />
         </>
       </OnlineContext>
     </QueryClientProvider>

@@ -1,6 +1,4 @@
 import { memo } from 'react';
-import { SearchParams } from '../routes/_layout.search';
-import { useDebounce } from '@uidotdev/usehooks';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from './api';
 import { FaChevronDown } from 'react-icons/fa';
@@ -8,18 +6,20 @@ import Loading from '../components/Loading';
 import toast from 'react-hot-toast';
 import PuzzleCard from './PuzzleCard';
 import { useNavigate } from '@tanstack/react-router';
+import { PuzzleSearchParams } from './PuzzleSearchQuery';
 
-export interface SearchResultsProps {
-  params: SearchParams;
+export interface PuzzleSearchResultsProps {
+  params: PuzzleSearchParams;
 }
 
-export default memo(function SearchResults({ params }: SearchResultsProps) {
-  const debouncedParams = useDebounce(params, 500);
+export default memo(function PuzzleSearchResults({
+  params,
+}: PuzzleSearchResultsProps) {
   const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ['puzzle', 'search', debouncedParams],
+    queryKey: ['puzzle', 'search', params],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
-      return api.searchPuzzles(debouncedParams, pageParam);
+      return api.searchPuzzles(params, pageParam);
     },
     initialPageParam: undefined,
     getNextPageParam: (lastPage, allPages) => {

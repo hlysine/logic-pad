@@ -1,12 +1,11 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
 import ThemeContext from '../contexts/ThemeContext.tsx';
 import TanStackDevTools from '../router/TanStackDevTools';
 import { memo } from 'react';
 import { Toaster } from 'react-hot-toast';
 import DocumentTitle from '../components/DocumentTitle.tsx';
-import { OnlineContext } from '../contexts/OnlineContext.tsx';
 
-export const Route = createRootRouteWithContext<OnlineContext>()({
+export const Route = createRootRoute({
   component: memo(function Root() {
     return (
       <ThemeContext>

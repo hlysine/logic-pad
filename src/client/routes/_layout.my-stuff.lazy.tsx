@@ -7,9 +7,11 @@ import toast from 'react-hot-toast';
 import { api } from '../online/api';
 import PuzzleCard from '../online/PuzzleCard';
 import Loading from '../components/Loading';
+import { useRouteProtection } from '../router/useRouteProtection';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff')({
   component: memo(function MyStuff() {
+    useRouteProtection('login');
     const navigate = useNavigate();
     const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
       queryKey: ['user', 'me', 'puzzles'],

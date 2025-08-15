@@ -4,8 +4,9 @@ import {
   PuzzleBrief,
   PuzzleFull,
   PuzzleLove,
-  SearchResult,
+  ListResponse,
   UserBrief,
+  Identity,
 } from './data';
 import { QueryClient } from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
@@ -68,6 +69,15 @@ export const api = {
         secret,
       },
     });
+  },
+  listIdentities: async () => {
+    return await axios
+      .get<ListResponse<Identity>>('/auth/identities')
+      .then(res => res.data)
+      .catch(() => null);
+  },
+  deleteIdentity: async (identityId: string) => {
+    await axios.delete(`/auth/identity/${identityId}`).catch(rethrowError);
   },
   getMe: async () => {
     return await axios
@@ -207,16 +217,16 @@ export const api = {
   },
   searchPuzzles: async (query: PuzzleSearchParams, cursor?: string) => {
     return await axios
-      .get<SearchResult<PuzzleBrief>>(`/puzzle/search`, {
+      .get<ListResponse<PuzzleBrief>>(`/puzzle/search`, {
         params: { ...query, cursor },
       })
       .then(res => res.data)
       .catch(rethrowError);
   },
-  listMyPuzzles: async (cursor?: string) => {
+  listMyPuzzles: async (query: PuzzleSearchParams, cursor?: string) => {
     return await axios
-      .get<SearchResult<PuzzleBrief>>(`/user/me/puzzles`, {
-        params: { cursor },
+      .get<ListResponse<PuzzleBrief>>(`/user/me/puzzles`, {
+        params: { ...query, cursor },
       })
       .then(res => res.data)
       .catch(rethrowError);

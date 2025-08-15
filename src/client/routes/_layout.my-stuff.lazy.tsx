@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import TopBottomLayout from '../components/TopBottomLayout';
 import { FaChevronDown } from 'react-icons/fa';
@@ -8,15 +8,17 @@ import { api } from '../online/api';
 import PuzzleCard from '../online/PuzzleCard';
 import Loading from '../components/Loading';
 import { useRouteProtection } from '../router/useRouteProtection';
+import PuzzleSearchQuery from '../online/PuzzleSearchQuery';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff')({
   component: memo(function MyStuff() {
     useRouteProtection('login');
-    const navigate = useNavigate();
+    const navigate = Route.useNavigate();
+    const search = Route.useSearch();
     const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-      queryKey: ['user', 'me', 'puzzles'],
+      queryKey: ['user', 'me', 'puzzles', search],
       queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
-        return api.listMyPuzzles(pageParam);
+        return api.listMyPuzzles(search, pageParam);
       },
       initialPageParam: undefined,
       getNextPageParam: (lastPage, allPages) => {
@@ -44,7 +46,18 @@ export const Route = createLazyFileRoute('/_layout/my-stuff')({
         top={
           <>
             <div className="text-3xl mt-8">My stuff</div>
-            <div>Work in progress</div>
+            <div role="tablist" className="tabs tabs-lg tabs-bordered">
+              <a role="tab" className="tab tab-active">
+                Puzzles
+              </a>
+              <a role="tab" className="tab opacity-50">
+                Collections
+              </a>
+            </div>
+            <PuzzleSearchQuery
+              params={search}
+              onChange={async params => await navigate({ search: params })}
+            />
           </>
         }
       >

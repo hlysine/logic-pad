@@ -1,35 +1,9 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
-import { api } from '../online/api';
-import { FaDiscord, FaGoogle } from 'react-icons/fa';
-import { IconType } from 'react-icons';
 import { useOnline } from '../contexts/OnlineContext';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import deferredRedirect from '../router/deferredRedirect';
-
-interface AuthButtonProps {
-  provider: string;
-  label: string;
-  icon: IconType;
-}
-
-function AuthButton({ provider, label, icon: Icon }: AuthButtonProps) {
-  return (
-    <button
-      className="btn btn-outline font-thin text-lg w-full"
-      onClick={() => {
-        api.signInWithOAuth(
-          provider,
-          window.location.origin + '/oauth/callback',
-          window.location.origin
-        );
-      }}
-    >
-      {<Icon size={24} />}
-      {label}
-    </button>
-  );
-}
+import AuthProviders from '../online/AuthProviders';
 
 export const Route = createFileRoute('/auth')({
   component: function Auth() {
@@ -73,19 +47,7 @@ export const Route = createFileRoute('/auth')({
               </h2>
               <p className="text-lg">Sign in or sign up here</p>
             </div>
-            <div className="justify-end card-actions flex-col gap-4 w-full">
-              <AuthButton
-                provider="google"
-                label="Continue with Google"
-                icon={FaGoogle}
-              />
-              <AuthButton
-                provider="discord"
-                label="Continue with Discord"
-                icon={FaDiscord}
-              />
-              <p>More providers coming soon</p>
-            </div>
+            <AuthProviders />
           </div>
         </div>
       </div>

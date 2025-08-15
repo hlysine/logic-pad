@@ -75,6 +75,11 @@ export interface Completion extends ResourceResponse {
   user: string;
 }
 
+export interface Identity extends ResourceResponse {
+  provider: string;
+  email: string;
+}
+
 export interface PuzzleLove {
   loved: boolean;
 }
@@ -90,11 +95,11 @@ export interface PuzzleFull extends PuzzleBrief {
   data: string;
 }
 
-export interface SearchResult<T extends ResourceResponse> {
-  total: number;
-  results: T[];
-}
-
 export interface CollectionFull extends CollectionBrief {
   puzzles: PuzzleBrief[];
+}
+
+export interface ListResponse<T extends ResourceResponse> {
+  total: number;
+  results: T[];
 }

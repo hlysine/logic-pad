@@ -14,10 +14,21 @@ export const Route = createLazyFileRoute('/_layout/search')({
     return (
       <TopBottomLayout
         top={
-          <PuzzleSearchQuery
-            params={search}
-            onChange={async params => await navigate({ search: params })}
-          />
+          <>
+            <div className="text-3xl mt-8">Search</div>
+            <div role="tablist" className="tabs tabs-lg tabs-bordered">
+              <a role="tab" className="tab tab-active">
+                Puzzles
+              </a>
+              <a role="tab" className="tab opacity-50">
+                Collections
+              </a>
+            </div>
+            <PuzzleSearchQuery
+              params={search}
+              onChange={async params => await navigate({ search: params })}
+            />
+          </>
         }
       >
         <PuzzleSearchResults params={search} />

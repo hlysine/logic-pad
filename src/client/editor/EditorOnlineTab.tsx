@@ -15,6 +15,7 @@ import RatedDifficulty from '../metadata/RatedDifficulty';
 import { api, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
+import { toRelativeDate } from '../uiHelper';
 
 // million-ignore
 const SignInWithProgress = memo(function SignInWithProgress() {
@@ -244,7 +245,7 @@ export default memo(function EditorOnlineTab() {
         <div className="flex gap-2 items-center">
           <div className="badge badge-lg badge-neutral p-4">Private</div>
         </div>
-        <div>Created at {new Date(data.createdAt).toLocaleString()}</div>
+        <div>Created {toRelativeDate(new Date(data.createdAt))}</div>
         <DeletePuzzle />
         <div className="divider" />
         <p className="text-2xl font-bold">Publish puzzle</p>
@@ -279,10 +280,10 @@ export default memo(function EditorOnlineTab() {
         </span>
       </div>
       <div>
-        Created at {new Date(data.createdAt).toLocaleString()}
+        Created {toRelativeDate(new Date(data.createdAt))}
         <br />
         {data.publishedAt
-          ? `Published at ${new Date(data.publishedAt).toLocaleString()}`
+          ? `Published ${toRelativeDate(new Date(data.publishedAt))}`
           : ''}
       </div>
       <RatedDifficulty

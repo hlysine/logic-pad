@@ -244,15 +244,6 @@ export default memo(function PuzzleSearchQuery({
   }, []);
   return (
     <>
-      <div className="text-3xl mt-8">Search</div>
-      <div role="tablist" className="tabs tabs-lg tabs-bordered">
-        <a role="tab" className="tab tab-active">
-          Puzzles
-        </a>
-        <a role="tab" className="tab opacity-50">
-          Collections
-        </a>
-      </div>
       <label className="input input-bordered flex items-center gap-2 w-full">
         <FaSearch />
         <input

@@ -4,6 +4,7 @@ import TopBottomLayout from '../components/TopBottomLayout';
 import PuzzleSearchResults from '../online/PuzzleSearchResults';
 import PuzzleSearchQuery from '../online/PuzzleSearchQuery';
 import { useRouteProtection } from '../router/useRouteProtection';
+import { FaSearch } from 'react-icons/fa';
 
 export const Route = createLazyFileRoute('/_layout/search')({
   component: memo(function Home() {
@@ -15,7 +16,10 @@ export const Route = createLazyFileRoute('/_layout/search')({
       <TopBottomLayout
         top={
           <>
-            <div className="text-3xl mt-8">Search</div>
+            <div className="text-3xl mt-8">
+              <FaSearch className="inline-block me-2" />
+              Search
+            </div>
             <div role="tablist" className="tabs tabs-lg tabs-bordered">
               <a role="tab" className="tab tab-active">
                 Puzzles

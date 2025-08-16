@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import TopBottomLayout from '../components/TopBottomLayout';
-import { FaChevronDown } from 'react-icons/fa';
+import { FaChevronDown, FaFolder } from 'react-icons/fa';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { api } from '../online/api';
@@ -45,7 +45,10 @@ export const Route = createLazyFileRoute('/_layout/my-stuff')({
       <TopBottomLayout
         top={
           <>
-            <div className="text-3xl mt-8">My stuff</div>
+            <div className="text-3xl mt-8">
+              <FaFolder className="inline-block me-2" />
+              My stuff
+            </div>
             <div role="tablist" className="tabs tabs-lg tabs-bordered">
               <a role="tab" className="tab tab-active">
                 Puzzles

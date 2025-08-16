@@ -11,6 +11,7 @@ import { useRouteProtection } from '../router/useRouteProtection';
 import { FaDiscord, FaGoogle, FaQuestion, FaTrash } from 'react-icons/fa';
 import { toRelativeDate } from '../uiHelper';
 import AuthProviders from '../online/AuthProviders';
+import { IoSettingsSharp } from 'react-icons/io5';
 
 interface SettingsSectionProps {
   header: ReactNode;
@@ -220,7 +221,10 @@ export const Route = createLazyFileRoute('/_layout/settings')({
       <TopBottomLayout
         top={
           <>
-            <div className="text-3xl mt-8">Settings</div>
+            <div className="text-3xl mt-8">
+              <IoSettingsSharp className="inline-block me-2" />
+              Settings
+            </div>
           </>
         }
       >

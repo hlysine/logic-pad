@@ -4,22 +4,22 @@ import { api } from './api';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import toast from 'react-hot-toast';
-import PuzzleCard from './PuzzleCard';
 import { useNavigate } from '@tanstack/react-router';
-import { PuzzleSearchParams } from './PuzzleSearchQuery';
+import { CollectionSearchParams } from './CollectionSearchQuery';
+import CollectionCard from './CollectionCard';
 
-export interface PuzzleSearchResultsProps {
-  params: PuzzleSearchParams;
+export interface CollectionSearchResultsProps {
+  params: CollectionSearchParams;
 }
 
-export default memo(function PuzzleSearchResults({
+export default memo(function CollectionSearchResults({
   params,
-}: PuzzleSearchResultsProps) {
+}: CollectionSearchResultsProps) {
   const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-    queryKey: ['puzzle', 'search', params],
+    queryKey: ['collection', 'search', params],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
-      return api.searchPuzzles(params, pageParam);
+      return api.searchCollections(params, pageParam);
     },
     initialPageParam: undefined,
     getNextPageParam: (lastPage, allPages) => {
@@ -45,17 +45,17 @@ export default memo(function PuzzleSearchResults({
   return (
     <div className="flex flex-col gap-4 items-center">
       {data && data.pages.length > 0 && (
-        <div className="w-full">{data.pages[0].total} puzzles</div>
+        <div className="w-full">{data.pages[0].total} collections</div>
       )}
       <div className="flex flex-wrap gap-4 justify-center">
         {data?.pages.flatMap(page =>
-          page.results.map(puzzle => (
-            <PuzzleCard
-              key={puzzle.id}
-              puzzle={puzzle}
+          page.results.map(collection => (
+            <CollectionCard
+              key={collection.id}
+              collection={collection}
               onClick={async () => {
                 await navigate({
-                  to: `/solve/${puzzle.id}`,
+                  to: `/collection/${collection.id}`,
                 });
               }}
             />

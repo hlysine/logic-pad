@@ -1,12 +1,12 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { memo } from 'react';
 import TopBottomLayout from '../components/TopBottomLayout';
-import PuzzleSearchResults from '../online/PuzzleSearchResults';
-import PuzzleSearchQuery from '../online/PuzzleSearchQuery';
 import { useRouteProtection } from '../router/useRouteProtection';
 import { FaSearch } from 'react-icons/fa';
+import CollectionSearchQuery from '../online/CollectionSearchQuery';
+import CollectionSearchResults from '../online/CollectionSearchResults';
 
-export const Route = createLazyFileRoute('/_layout/search')({
+export const Route = createLazyFileRoute('/_layout/search/collections')({
   component: memo(function Home() {
     useRouteProtection('online');
     const navigate = Route.useNavigate();
@@ -17,25 +17,29 @@ export const Route = createLazyFileRoute('/_layout/search')({
         top={
           <>
             <div className="text-3xl mt-8">
-              <FaSearch className="inline-block me-2" />
+              <FaSearch className="inline-block me-4" />
               Search
             </div>
             <div role="tablist" className="tabs tabs-lg tabs-bordered">
-              <a role="tab" className="tab tab-active">
+              <Link to="/search/puzzles" role="tab" className="tab">
                 Puzzles
-              </a>
-              <a role="tab" className="tab opacity-50">
+              </Link>
+              <Link
+                to="/search/collections"
+                role="tab"
+                className="tab tab-active"
+              >
                 Collections
-              </a>
+              </Link>
             </div>
-            <PuzzleSearchQuery
+            <CollectionSearchQuery
               params={search}
               onChange={async params => await navigate({ search: params })}
             />
           </>
         }
       >
-        <PuzzleSearchResults params={search} />
+        <CollectionSearchResults params={search} />
       </TopBottomLayout>
     );
   }),

@@ -282,11 +282,11 @@ export default memo(function PuzzleSearchQuery({
               onClick={() => {
                 let newParams: PuzzleSearchParams;
                 if (displayParams.sort === `${ordering.id}-asc`) {
-                  newParams = { ...displayParams, sort: `${ordering.id}-desc` };
-                } else if (displayParams.sort === `${ordering.id}-desc`) {
                   newParams = { ...displayParams, sort: undefined };
-                } else {
+                } else if (displayParams.sort === `${ordering.id}-desc`) {
                   newParams = { ...displayParams, sort: `${ordering.id}-asc` };
+                } else {
+                  newParams = { ...displayParams, sort: `${ordering.id}-desc` };
                 }
                 updateParams(newParams);
               }}

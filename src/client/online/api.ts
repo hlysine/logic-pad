@@ -7,11 +7,15 @@ import {
   ListResponse,
   UserBrief,
   Identity,
+  CollectionBrief,
+  CollectionFollow,
+  ResourceStatus,
 } from './data';
 import { QueryClient } from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
 import toast from 'react-hot-toast';
 import { PuzzleSearchParams } from './PuzzleSearchQuery';
+import { CollectionSearchParams } from './CollectionSearchQuery';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -226,6 +230,86 @@ export const api = {
   listMyPuzzles: async (query: PuzzleSearchParams, cursor?: string) => {
     return await axios
       .get<ListResponse<PuzzleBrief>>(`/user/me/puzzles`, {
+        params: { ...query, cursor },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  getCollectionBrief: async (collectionId: string) => {
+    return await axios
+      .get<CollectionBrief>(`/collection/${collectionId}`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  listCollectionPuzzles: async (collectionId: string, cursor?: string) => {
+    return await axios
+      .get<ListResponse<PuzzleBrief>>(`/collection/${collectionId}/puzzles`, {
+        params: { cursor },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  getCollectionFollow: async (collectionId: string) => {
+    return await axios
+      .get<CollectionFollow>(`/collection/${collectionId}/follow`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  setCollectionFollow: async (collectionId: string, followed: boolean) => {
+    return await axios
+      .put<CollectionFollow>(`/collection/${collectionId}/follow`, {
+        followed,
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  createCollection: async (title: string, description?: string) => {
+    return await axios
+      .post<{ id: string }>(`/collection/create`, {
+        title,
+        description,
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  updateCollection: async (
+    collectionId: string,
+    title?: string,
+    description?: string,
+    status?: ResourceStatus
+  ) => {
+    await axios
+      .put<CollectionBrief>(`/collection/${collectionId}`, {
+        title,
+        description,
+        status,
+      })
+      .catch(rethrowError);
+  },
+  deleteCollection: async (collectionId: string) => {
+    await axios.delete(`/collection/${collectionId}`).catch(rethrowError);
+  },
+  addToCollection: async (collectionId: string, puzzleId: string) => {
+    await axios
+      .post(`/collection/${collectionId}/add`, { puzzleId })
+      .catch(rethrowError);
+  },
+  removeFromCollection: async (collectionId: string, puzzleId: string) => {
+    await axios
+      .post(`/collection/${collectionId}/remove`, { puzzleId })
+      .catch(rethrowError);
+  },
+  searchCollections: async (query: CollectionSearchParams, cursor?: string) => {
+    return await axios
+      .get<ListResponse<CollectionBrief>>(`/collection/search`, {
+        params: { ...query, cursor },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  listMyCollections: async (query: CollectionSearchParams, cursor?: string) => {
+    return await axios
+      .get<ListResponse<CollectionBrief>>(`/user/me/collections`, {
         params: { ...query, cursor },
       })
       .then(res => res.data)

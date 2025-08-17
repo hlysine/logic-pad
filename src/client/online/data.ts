@@ -84,6 +84,10 @@ export interface PuzzleLove {
   loved: boolean;
 }
 
+export interface CollectionFollow {
+  followed: boolean;
+}
+
 export interface UserFull extends UserBrief {
   accessedAt: string;
   createdPuzzles: CollectionBrief;
@@ -93,10 +97,6 @@ export interface UserFull extends UserBrief {
 
 export interface PuzzleFull extends PuzzleBrief {
   data: string;
-}
-
-export interface CollectionFull extends CollectionBrief {
-  puzzles: PuzzleBrief[];
 }
 
 export interface ListResponse<T extends ResourceResponse> {

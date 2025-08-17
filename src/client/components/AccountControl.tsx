@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { useOnline } from '../contexts/OnlineContext';
 import { IoCloudOffline } from 'react-icons/io5';
 import { api } from '../online/api';
@@ -22,6 +22,7 @@ export default memo(function AccountControl() {
   const { isOnline, me, isPending, refresh } = useOnline();
   const routerState = useRouterState();
   const avatarQuery = useQuery(avatarQueryOptions(me));
+  const detailsRef = useRef<HTMLDetailsElement>(null);
   if (!isOnline) {
     return (
       <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">
@@ -64,7 +65,7 @@ export default memo(function AccountControl() {
     );
   }
   return (
-    <details className="dropdown dropdown-end">
+    <details ref={detailsRef} className="dropdown dropdown-end">
       <summary className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
         {avatarQuery.isSuccess ? (
           <img
@@ -82,16 +83,27 @@ export default memo(function AccountControl() {
           <a className="opacity-50">Profile</a>
         </li>
         <li>
-          <Link to="/my-stuff">My stuff</Link>
+          <Link
+            to="/my-stuff"
+            onClick={() => (detailsRef.current!.open = false)}
+          >
+            My stuff
+          </Link>
         </li>
         <li>
-          <Link to="/settings">Settings</Link>
+          <Link
+            to="/settings"
+            onClick={() => (detailsRef.current!.open = false)}
+          >
+            Settings
+          </Link>
         </li>
         <li>
           <a
             onClick={async () => {
               await api.logout();
               await refresh();
+              detailsRef.current!.open = false;
             }}
           >
             Logout

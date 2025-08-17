@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
-import TopBottomLayout from '../components/TopBottomLayout';
+import ResponsiveLayout from '../components/ResponsiveLayout';
 import { FaChevronDown, FaThList, FaUser } from 'react-icons/fa';
 import {
   useSuspenseInfiniteQuery,
@@ -36,37 +36,33 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
     );
 
     return (
-      <TopBottomLayout
-        top={
-          <>
-            <div className="text-3xl mt-8">
-              <FaThList className="inline-block me-4" />
-              {collectionBrief.title}
-            </div>
-            <UserCard user={collectionBrief.creator} />
-            <div className="flex gap-4 items-center">
-              <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
-                <FaUser className="inline-block me-2" />
-                {collectionBrief.followCount} follows
-              </span>
-              <span className="opacity-80">
-                Created {toRelativeDate(new Date(collectionBrief.createdAt))}
-              </span>
-              <span className="opacity-80">
-                Updated {toRelativeDate(new Date(collectionBrief.updatedAt))}
-              </span>
-            </div>
-            <div className="flex gap-4 items-center mt-4">
-              <div className="flex-1">{collectionBrief.description}</div>
-              {collectionBrief.status === ResourceStatus.Public ? (
-                <CollectionFollowButton collectionId={collectionBrief.id} />
-              ) : (
-                <div className="btn btn-disabled">Private collection</div>
-              )}
-            </div>
-          </>
-        }
-      >
+      <ResponsiveLayout>
+        <div className="text-3xl mt-8">
+          <FaThList className="inline-block me-4" />
+          {collectionBrief.title}
+        </div>
+        <UserCard user={collectionBrief.creator} />
+        <div className="flex gap-4 items-center">
+          <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
+            <FaUser className="inline-block me-2" />
+            {collectionBrief.followCount} follows
+          </span>
+          <span className="opacity-80">
+            Created {toRelativeDate(new Date(collectionBrief.createdAt))}
+          </span>
+          <span className="opacity-80">
+            Updated {toRelativeDate(new Date(collectionBrief.updatedAt))}
+          </span>
+        </div>
+        <div className="flex gap-4 items-center mt-4">
+          <div className="flex-1">{collectionBrief.description}</div>
+          {collectionBrief.status === ResourceStatus.Public ? (
+            <CollectionFollowButton collectionId={collectionBrief.id} />
+          ) : (
+            <div className="btn btn-disabled">Private collection</div>
+          )}
+        </div>
+        <div className="divider" />
         <div className="flex flex-col gap-4 items-center">
           {puzzles && puzzles.pages.length > 0 && (
             <div className="w-full">{puzzles.pages[0].total} puzzles</div>
@@ -95,7 +91,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
             </button>
           ) : null}
         </div>
-      </TopBottomLayout>
+      </ResponsiveLayout>
     );
   }),
 });

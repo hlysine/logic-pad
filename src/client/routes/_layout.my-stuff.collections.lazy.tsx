@@ -1,7 +1,6 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { memo } from 'react';
-import TopBottomLayout from '../components/TopBottomLayout';
-import { FaChevronDown, FaFolder } from 'react-icons/fa';
+import { FaChevronDown } from 'react-icons/fa';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { api } from '../online/api';
@@ -42,32 +41,24 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
     });
 
     return (
-      <TopBottomLayout
-        top={
-          <>
-            <div className="text-3xl mt-8">
-              <FaFolder className="inline-block me-4" />
-              My stuff
-            </div>
-            <div role="tablist" className="tabs tabs-lg tabs-bordered">
-              <Link to="/my-stuff/puzzles" role="tab" className="tab">
-                Puzzles
-              </Link>
-              <Link
-                to="/my-stuff/collections"
-                role="tab"
-                className="tab tab-active"
-              >
-                Collections
-              </Link>
-            </div>
-            <CollectionSearchQuery
-              params={search}
-              onChange={async params => await navigate({ search: params })}
-            />
-          </>
-        }
-      >
+      <>
+        <div role="tablist" className="tabs tabs-lg tabs-bordered">
+          <Link to="/my-stuff/puzzles" role="tab" className="tab">
+            Puzzles
+          </Link>
+          <Link
+            to="/my-stuff/collections"
+            role="tab"
+            className="tab tab-active"
+          >
+            Collections
+          </Link>
+        </div>
+        <CollectionSearchQuery
+          params={search}
+          onChange={async params => await navigate({ search: params })}
+        />
+        <div className="divider" />
         <div className="flex flex-col gap-4 items-center">
           {data && data.pages.length > 0 && (
             <div className="w-full">{data.pages[0].total} collections</div>
@@ -98,7 +89,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
             <div>No more results</div>
           )}
         </div>
-      </TopBottomLayout>
+      </>
     );
   }),
 });

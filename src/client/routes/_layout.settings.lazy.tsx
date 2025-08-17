@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo, ReactNode, useEffect, useMemo, useState } from 'react';
-import TopBottomLayout from '../components/TopBottomLayout';
+import ResponsiveLayout from '../components/ResponsiveLayout';
 import { useOnline } from '../contexts/OnlineContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api, queryClient } from '../online/api';
@@ -218,20 +218,16 @@ const IdentitiesSettings = memo(function IdentitiesSettings() {
 export const Route = createLazyFileRoute('/_layout/settings')({
   component: memo(function Settings() {
     return (
-      <TopBottomLayout
-        top={
-          <>
-            <div className="text-3xl mt-8">
-              <IoSettingsSharp className="inline-block me-2" />
-              Settings
-            </div>
-          </>
-        }
-      >
+      <ResponsiveLayout>
+        <div className="text-3xl mt-8">
+          <IoSettingsSharp className="inline-block me-2" />
+          Settings
+        </div>
+        <div className="divider" />
         <ProfileSettings />
         <div className="divider my-4" />
         <IdentitiesSettings />
-      </TopBottomLayout>
+      </ResponsiveLayout>
     );
   }),
 });

@@ -12,6 +12,7 @@ import { FaDiscord, FaGoogle, FaQuestion, FaTrash } from 'react-icons/fa';
 import { toRelativeDate } from '../uiHelper';
 import AuthProviders from '../online/AuthProviders';
 import { IoSettingsSharp } from 'react-icons/io5';
+import deferredRedirect from '../router/deferredRedirect';
 
 interface SettingsSectionProps {
   header: ReactNode;
@@ -171,7 +172,9 @@ const AddProviderButton = memo(function AddProviderButton() {
           <h3 className="font-semibold text-xl">
             Add a provider to your account
           </h3>
-          <AuthProviders />
+          <AuthProviders
+            onBeforeRedirect={() => deferredRedirect.set({ to: '/settings' })}
+          />
         </div>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>

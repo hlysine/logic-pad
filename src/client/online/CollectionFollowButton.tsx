@@ -62,7 +62,7 @@ export default memo(function CollectionFollowButton({
   if (collectionFollow.isPending) return <Loading className="w-14" />;
   return (
     <button
-      className="tooltip tooltip-info tooltip-right btn btn-md btn-ghost flex items-center w-fit focus:z-50"
+      className="tooltip tooltip-info tooltip-top btn btn-md btn-ghost flex items-center w-fit focus:z-50"
       data-tip={
         collectionFollow.data!.followed
           ? 'Unfollow this collection'

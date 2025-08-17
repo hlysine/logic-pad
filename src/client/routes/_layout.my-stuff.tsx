@@ -86,7 +86,7 @@ export const Route = createFileRoute('/_layout/my-stuff')({
   component: memo(function MyStuff() {
     return (
       <ResponsiveLayout>
-        <div className="flex mt-8 items-center justify-between">
+        <div className="flex mt-8 items-center justify-between flex-wrap gap-4">
           <div className="text-3xl">
             <FaFolder className="inline-block me-4" />
             My stuff

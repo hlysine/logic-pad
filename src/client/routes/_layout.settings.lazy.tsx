@@ -28,7 +28,7 @@ const SettingsSection = memo(function SettingsSection({
       <div className="flex flex-col gap-2 w-96 max-w-full shrink-0">
         {header}
       </div>
-      <div className="flex flex-col gap-4 min-w-96 grow">{children}</div>
+      <div className="flex flex-col gap-4 md:min-w-96 grow">{children}</div>
     </div>
   );
 });

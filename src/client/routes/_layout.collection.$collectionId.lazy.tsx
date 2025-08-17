@@ -1,7 +1,13 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
-import { FaChevronDown, FaThList, FaTrash, FaUser } from 'react-icons/fa';
+import {
+  FaChevronDown,
+  FaPlus,
+  FaThList,
+  FaTrash,
+  FaUser,
+} from 'react-icons/fa';
 import {
   mutationOptions,
   useMutation,
@@ -97,20 +103,21 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
 
     return (
       <ResponsiveLayout>
-        <div className="flex items-center text-3xl mt-8">
-          <FaThList className="inline-block me-4 shrink-0" />
-          <EditableField
-            initialValue={collectionBrief.title}
-            editable={collectionBrief.creator.id === me?.id}
-            pending={updateCollection.isPending}
-            onEdit={async newValue => {
-              await updateCollection.mutateAsync([
-                params.collectionId,
-                newValue,
-              ]);
-            }}
-          />
-          <div className="flex-1" />
+        <div className="flex items-center text-3xl mt-8 flex-wrap gap-4 justify-between">
+          <div className="flex items-center">
+            <FaThList className="inline-block me-4 shrink-0" />
+            <EditableField
+              initialValue={collectionBrief.title}
+              editable={collectionBrief.creator.id === me?.id}
+              pending={updateCollection.isPending}
+              onEdit={async newValue => {
+                await updateCollection.mutateAsync([
+                  params.collectionId,
+                  newValue,
+                ]);
+              }}
+            />
+          </div>
           {collectionBrief.creator.id === me?.id && (
             <div className="flex gap-4 justify-end items-center bg-base-100 rounded-lg overflow-hidden ps-2 shrink-0">
               <div className="form-control me-2">
@@ -192,7 +199,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
           )}
         </div>
         <UserCard user={collectionBrief.creator} />
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center flex-wrap">
           {collectionBrief.status === ResourceStatus.Public && (
             <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
               <FaUser className="inline-block me-2" />
@@ -228,9 +235,15 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         </div>
         <div className="divider" />
         <div className="flex flex-col gap-4 items-center">
-          {puzzles && puzzles.pages.length > 0 && (
-            <div className="w-full">{puzzles.pages[0].total} puzzles</div>
-          )}
+          <div className="flex gap-4 items-center w-full">
+            {puzzles && puzzles.pages.length > 0 && (
+              <div className="w-full">{puzzles.pages[0].total} puzzles</div>
+            )}
+            <button className="btn">
+              <FaPlus />
+              Add puzzles
+            </button>
+          </div>
           <div className="flex flex-wrap gap-4 justify-center">
             {puzzles?.pages.flatMap(page =>
               page.results.map(puzzle => (

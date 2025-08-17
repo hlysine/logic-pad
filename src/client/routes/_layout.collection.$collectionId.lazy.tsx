@@ -190,15 +190,17 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         </div>
         <UserCard user={collectionBrief.creator} />
         <div className="flex gap-4 items-center">
-          <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
-            <FaUser className="inline-block me-2" />
-            {collectionBrief.followCount} follows
-          </span>
+          {collectionBrief.status === ResourceStatus.Public && (
+            <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
+              <FaUser className="inline-block me-2" />
+              {collectionBrief.followCount} follows
+            </span>
+          )}
           <span className="opacity-80">
             Created {toRelativeDate(new Date(collectionBrief.createdAt))}
           </span>
           <span className="opacity-80">
-            Updated {toRelativeDate(new Date(collectionBrief.updatedAt))}
+            Updated {toRelativeDate(new Date(collectionBrief.modifiedAt))}
           </span>
         </div>
         <div className="flex gap-4 items-center">

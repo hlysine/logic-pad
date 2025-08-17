@@ -56,6 +56,7 @@ export interface CollectionBrief extends ResourceResponse {
   status: ResourceStatus;
   creator: UserBrief;
   autoPopulate: string | null;
+  modifiedAt: string;
 }
 
 export interface Feedback extends ResourceResponse {

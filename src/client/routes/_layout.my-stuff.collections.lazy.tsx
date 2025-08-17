@@ -85,9 +85,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
               Load more
               <FaChevronDown />
             </button>
-          ) : (
-            <div>No more results</div>
-          )}
+          ) : null}
         </div>
       </>
     );

@@ -88,6 +88,9 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         toast.error(error.message);
       },
       async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: ['user', 'me', 'collections', {}],
+        });
         await navigate({ to: '/my-stuff/collections' });
       },
     });

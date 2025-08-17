@@ -21,5 +21,5 @@ export const useRouteProtection = (level: 'online' | 'login') => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isPending]);
+  }, [isPending, isOnline]);
 };

@@ -110,7 +110,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
           <div className="flex-1" />
           {collectionBrief.creator.id === me?.id && (
             <div className="flex gap-4 justify-end items-center bg-base-100 rounded-lg overflow-hidden ps-2 shrink-0">
-              <div className="form-control">
+              <div className="form-control me-2">
                 <label className="label cursor-pointer flex gap-2">
                   <span className="label-text">Public collection</span>
                   <input
@@ -130,19 +130,21 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
                   />
                 </label>
               </div>
-              <button
-                className="tooltip tooltip-error tooltip-left btn btn-error rounded-none"
-                data-tip="Delete this collection"
-                onClick={() =>
-                  (
-                    document.getElementById(
-                      'deleteCollectionModal'
-                    ) as HTMLDialogElement
-                  ).showModal()
-                }
-              >
-                <FaTrash />
-              </button>
+              {collectionBrief.autoPopulate === null && (
+                <button
+                  className="tooltip tooltip-error tooltip-left btn btn-error rounded-none"
+                  data-tip="Delete this collection"
+                  onClick={() =>
+                    (
+                      document.getElementById(
+                        'deleteCollectionModal'
+                      ) as HTMLDialogElement
+                    ).showModal()
+                  }
+                >
+                  <FaTrash />
+                </button>
+              )}
               <dialog id="deleteCollectionModal" className="modal">
                 <div className="modal-box">
                   <h3 className="font-bold text-xl">

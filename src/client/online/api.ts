@@ -76,7 +76,7 @@ export const api = {
   },
   listIdentities: async () => {
     return await axios
-      .get<ListResponse<Identity>>('/auth/identities')
+      .get<ListResponse<Identity>>('/auth/identity/list')
       .then(res => res.data)
       .catch(() => null);
   },

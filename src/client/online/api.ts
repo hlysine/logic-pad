@@ -289,14 +289,14 @@ export const api = {
   deleteCollection: async (collectionId: string) => {
     await axios.delete(`/collection/${collectionId}`).catch(rethrowError);
   },
-  addToCollection: async (collectionId: string, puzzleId: string) => {
+  addToCollection: async (collectionId: string, puzzleIds: string[]) => {
     await axios
-      .post(`/collection/${collectionId}/add`, { puzzleId })
+      .post(`/collection/${collectionId}/add`, { puzzleIds })
       .catch(rethrowError);
   },
-  removeFromCollection: async (collectionId: string, puzzleId: string) => {
+  removeFromCollection: async (collectionId: string, puzzleIds: string[]) => {
     await axios
-      .post(`/collection/${collectionId}/remove`, { puzzleId })
+      .post(`/collection/${collectionId}/remove`, { puzzleIds })
       .catch(rethrowError);
   },
   searchCollections: async (query: CollectionSearchParams, cursor?: string) => {

@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import { memo, ReactNode, useMemo } from 'react';
 import { PuzzleBrief, ResourceStatus } from './data';
 import { FaCheckSquare, FaHeart, FaMusic } from 'react-icons/fa';
 import { PiCheckerboardFill } from 'react-icons/pi';
@@ -11,6 +11,7 @@ import { cn } from '../uiHelper';
 export interface PuzzleCardProps {
   puzzle: PuzzleBrief;
   onClick?: () => void;
+  children?: ReactNode;
 }
 
 function getIconForType(type: PuzzleType) {
@@ -116,12 +117,16 @@ const PuzzleIcon = memo(function PuzzleIcon({
   }
 });
 
-export default memo(function PuzzleCard({ puzzle, onClick }: PuzzleCardProps) {
+export default memo(function PuzzleCard({
+  puzzle,
+  onClick,
+  children,
+}: PuzzleCardProps) {
   return (
     <div className="w-[320px] h-[116px] hover:z-50">
       <div
         className={cn(
-          'w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',
+          'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',
           puzzle.status === ResourceStatus.Private
             ? `bg-base-300/50 hover:bg-base-100/50`
             : 'bg-base-300 hover:bg-base-100'
@@ -158,6 +163,7 @@ export default memo(function PuzzleCard({ puzzle, onClick }: PuzzleCardProps) {
             </span>
           </div>
         </div>
+        {children}
       </div>
     </div>
   );

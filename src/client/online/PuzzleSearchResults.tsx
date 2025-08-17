@@ -1,21 +1,24 @@
-import { memo } from 'react';
+import { memo, ReactNode } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from './api';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import toast from 'react-hot-toast';
 import PuzzleCard from './PuzzleCard';
-import { useNavigate } from '@tanstack/react-router';
 import { PuzzleSearchParams } from './PuzzleSearchQuery';
+import { PuzzleBrief } from './data';
 
 export interface PuzzleSearchResultsProps {
   params: PuzzleSearchParams;
+  onClick: (puzzle: PuzzleBrief) => void;
+  puzzleCardChildren?: (puzzle: PuzzleBrief) => ReactNode;
 }
 
 export default memo(function PuzzleSearchResults({
   params,
+  onClick,
+  puzzleCardChildren,
 }: PuzzleSearchResultsProps) {
-  const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
     queryKey: ['puzzle', 'search', params],
     queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
@@ -53,12 +56,10 @@ export default memo(function PuzzleSearchResults({
             <PuzzleCard
               key={puzzle.id}
               puzzle={puzzle}
-              onClick={async () => {
-                await navigate({
-                  to: `/solve/${puzzle.id}`,
-                });
-              }}
-            />
+              onClick={() => onClick?.(puzzle)}
+            >
+              {puzzleCardChildren?.(puzzle)}
+            </PuzzleCard>
           ))
         )}
       </div>

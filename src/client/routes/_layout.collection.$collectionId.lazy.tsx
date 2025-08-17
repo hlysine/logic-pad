@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
   FaChevronDown,
@@ -29,6 +29,7 @@ import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 import { useOnline } from '../contexts/OnlineContext';
 import EditableField from '../components/EditableField';
+import AddPuzzleModal from '../online/AddPuzzleModal';
 
 const updateCollectionOptions = (collectionId: string) =>
   mutationOptions({
@@ -100,6 +101,23 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         await navigate({ to: '/my-stuff/collections' });
       },
     });
+    const addToCollection = useMutation({
+      mutationFn: (variables: Parameters<typeof api.addToCollection>) => {
+        return api.addToCollection(...variables);
+      },
+      onError(error) {
+        toast.error(error.message);
+      },
+      async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: ['collection', collectionBrief.id],
+        });
+        await queryClient.invalidateQueries({
+          queryKey: ['collection', collectionBrief.id, 'puzzles'],
+        });
+      },
+    });
+    const addPuzzleModalRef = useRef<{ open: () => void }>(null);
 
     return (
       <ResponsiveLayout>
@@ -239,10 +257,26 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
             {puzzles && puzzles.pages.length > 0 && (
               <div className="w-full">{puzzles.pages[0].total} puzzles</div>
             )}
-            <button className="btn">
-              <FaPlus />
-              Add puzzles
-            </button>
+            {addToCollection.isPending ? (
+              <Loading className="h-12 w-24" />
+            ) : (
+              <button
+                className="btn"
+                onClick={() => addPuzzleModalRef.current?.open()}
+              >
+                <FaPlus />
+                Add puzzles
+              </button>
+            )}
+            <AddPuzzleModal
+              ref={addPuzzleModalRef}
+              onSubmit={async puzzles => {
+                await addToCollection.mutateAsync([
+                  collectionBrief.id,
+                  puzzles,
+                ]);
+              }}
+            />
           </div>
           <div className="flex flex-wrap gap-4 justify-center">
             {puzzles?.pages.flatMap(page =>

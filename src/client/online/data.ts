@@ -89,11 +89,11 @@ export interface CollectionFollow {
   followed: boolean;
 }
 
-export interface UserFull extends UserBrief {
+export interface UserDetail {
   accessedAt: string;
-  createdPuzzles: CollectionBrief;
-  lovedPuzzles: CollectionBrief;
-  solvedPuzzles: CollectionBrief;
+  createdPuzzlesCollection: string | null;
+  createdPuzzles: PuzzleBrief[];
+  createdCollections: CollectionBrief[];
 }
 
 export interface PuzzleFull extends PuzzleBrief {

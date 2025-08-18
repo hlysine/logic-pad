@@ -57,9 +57,11 @@ const ProfileSettings = memo(function ProfileSettings() {
   });
 
   const [username, setUsername] = useState(me?.name ?? '');
+  const [description, setDescription] = useState(me?.description ?? '');
 
   useEffect(() => {
     setUsername(me?.name ?? '');
+    setDescription(me?.description ?? '');
   }, [me]);
 
   if (!me) return null;
@@ -86,13 +88,26 @@ const ProfileSettings = memo(function ProfileSettings() {
           onChange={e => setUsername(e.target.value)}
         />
       </label>
+      <label className="form-control w-full shrink-0">
+        <div className="label">
+          <span className="label-text text-lg">Description</span>
+          <span className="label-text-alt">{description.length}/500</span>
+        </div>
+        <textarea
+          placeholder="Type here"
+          className="textarea textarea-bordered w-full"
+          maxLength={500}
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
+      </label>
       {updateMe.isPending ? (
         <Loading className="self-end w-fit" />
       ) : (
         <button
           className="btn btn-primary self-end max-w-xs"
           onClick={async () => {
-            await updateMe.mutateAsync({ name: username });
+            await updateMe.mutateAsync({ name: username, description });
           }}
         >
           Save

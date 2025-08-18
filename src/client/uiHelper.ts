@@ -11,22 +11,27 @@ const twMerge = extendTailwindMerge({
 
 const relativeTimeFormat = new Intl.RelativeTimeFormat('en');
 
-export function toRelativeDate(date: Date) {
+export function toRelativeDate(
+  date: Date,
+  accuracy: 'second' | 'day' = 'second'
+) {
   const msOffset = date.getTime() - Date.now();
-  if (-msOffset < 10 * 1000) {
+  if (-msOffset < 10 * 1000 && accuracy === 'second') {
     return 'a few seconds ago';
-  } else if (-msOffset < 60 * 1000) {
+  } else if (-msOffset < 60 * 1000 && accuracy === 'second') {
     return relativeTimeFormat.format(Math.round(msOffset / 1000), 'second');
-  } else if (-msOffset < 60 * 60 * 1000) {
+  } else if (-msOffset < 60 * 60 * 1000 && accuracy === 'second') {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60),
       'minute'
     );
-  } else if (-msOffset < 24 * 60 * 60 * 1000) {
+  } else if (-msOffset < 24 * 60 * 60 * 1000 && accuracy === 'second') {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60 / 60),
       'hour'
     );
+  } else if (-msOffset < 24 * 60 * 60 * 1000) {
+    return 'today';
   } else if (-msOffset < 30 * 24 * 60 * 60 * 1000) {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60 / 60 / 24),

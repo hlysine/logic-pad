@@ -25,6 +25,7 @@ import { Route as LayoutCreateIndexRouteImport } from './../routes/_layout.creat
 import { Route as LayoutSolvePuzzleIdRouteImport } from './../routes/_layout.solve.$puzzleId'
 import { Route as LayoutSearchPuzzlesRouteImport } from './../routes/_layout.search.puzzles'
 import { Route as LayoutSearchCollectionsRouteImport } from './../routes/_layout.search.collections'
+import { Route as LayoutProfileUserIdRouteImport } from './../routes/_layout.profile.$userId'
 import { Route as LayoutPerfectionPuzzleIdRouteImport } from './../routes/_layout.perfection.$puzzleId'
 import { Route as LayoutMyStuffPuzzlesRouteImport } from './../routes/_layout.my-stuff.puzzles'
 import { Route as LayoutMyStuffCollectionsRouteImport } from './../routes/_layout.my-stuff.collections'
@@ -121,6 +122,13 @@ const LayoutSearchCollectionsRoute = LayoutSearchCollectionsRouteImport.update({
 } as any).lazy(() =>
   import('./../routes/_layout.search.collections.lazy').then((d) => d.Route),
 )
+const LayoutProfileUserIdRoute = LayoutProfileUserIdRouteImport.update({
+  id: '/profile/$userId',
+  path: '/profile/$userId',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.profile.$userId.lazy').then((d) => d.Route),
+)
 const LayoutPerfectionPuzzleIdRoute =
   LayoutPerfectionPuzzleIdRouteImport.update({
     id: '/perfection/$puzzleId',
@@ -178,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/my-stuff/collections': typeof LayoutMyStuffCollectionsRoute
   '/my-stuff/puzzles': typeof LayoutMyStuffPuzzlesRoute
   '/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
+  '/profile/$userId': typeof LayoutProfileUserIdRoute
   '/search/collections': typeof LayoutSearchCollectionsRoute
   '/search/puzzles': typeof LayoutSearchPuzzlesRoute
   '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
@@ -197,6 +206,7 @@ export interface FileRoutesByTo {
   '/my-stuff/collections': typeof LayoutMyStuffCollectionsRoute
   '/my-stuff/puzzles': typeof LayoutMyStuffPuzzlesRoute
   '/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
+  '/profile/$userId': typeof LayoutProfileUserIdRoute
   '/search/collections': typeof LayoutSearchCollectionsRoute
   '/search/puzzles': typeof LayoutSearchPuzzlesRoute
   '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
@@ -220,6 +230,7 @@ export interface FileRoutesById {
   '/_layout/my-stuff/collections': typeof LayoutMyStuffCollectionsRoute
   '/_layout/my-stuff/puzzles': typeof LayoutMyStuffPuzzlesRoute
   '/_layout/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
+  '/_layout/profile/$userId': typeof LayoutProfileUserIdRoute
   '/_layout/search/collections': typeof LayoutSearchCollectionsRoute
   '/_layout/search/puzzles': typeof LayoutSearchPuzzlesRoute
   '/_layout/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/my-stuff/collections'
     | '/my-stuff/puzzles'
     | '/perfection/$puzzleId'
+    | '/profile/$userId'
     | '/search/collections'
     | '/search/puzzles'
     | '/solve/$puzzleId'
@@ -262,6 +274,7 @@ export interface FileRouteTypes {
     | '/my-stuff/collections'
     | '/my-stuff/puzzles'
     | '/perfection/$puzzleId'
+    | '/profile/$userId'
     | '/search/collections'
     | '/search/puzzles'
     | '/solve/$puzzleId'
@@ -284,6 +297,7 @@ export interface FileRouteTypes {
     | '/_layout/my-stuff/collections'
     | '/_layout/my-stuff/puzzles'
     | '/_layout/perfection/$puzzleId'
+    | '/_layout/profile/$userId'
     | '/_layout/search/collections'
     | '/_layout/search/puzzles'
     | '/_layout/solve/$puzzleId'
@@ -408,6 +422,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutSearchCollectionsRouteImport
       parentRoute: typeof LayoutSearchRoute
     }
+    '/_layout/profile/$userId': {
+      id: '/_layout/profile/$userId'
+      path: '/profile/$userId'
+      fullPath: '/profile/$userId'
+      preLoaderRoute: typeof LayoutProfileUserIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
     '/_layout/perfection/$puzzleId': {
       id: '/_layout/perfection/$puzzleId'
       path: '/perfection/$puzzleId'
@@ -485,6 +506,7 @@ interface LayoutLazyRouteChildren {
   LayoutCollectionCollectionIdRoute: typeof LayoutCollectionCollectionIdRoute
   LayoutCreatePuzzleIdRoute: typeof LayoutCreatePuzzleIdRoute
   LayoutPerfectionPuzzleIdRoute: typeof LayoutPerfectionPuzzleIdRoute
+  LayoutProfileUserIdRoute: typeof LayoutProfileUserIdRoute
   LayoutSolvePuzzleIdRoute: typeof LayoutSolvePuzzleIdRoute
   LayoutCreateIndexRoute: typeof LayoutCreateIndexRoute
   LayoutPerfectionIndexRoute: typeof LayoutPerfectionIndexRoute
@@ -498,6 +520,7 @@ const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
   LayoutCollectionCollectionIdRoute: LayoutCollectionCollectionIdRoute,
   LayoutCreatePuzzleIdRoute: LayoutCreatePuzzleIdRoute,
   LayoutPerfectionPuzzleIdRoute: LayoutPerfectionPuzzleIdRoute,
+  LayoutProfileUserIdRoute: LayoutProfileUserIdRoute,
   LayoutSolvePuzzleIdRoute: LayoutSolvePuzzleIdRoute,
   LayoutCreateIndexRoute: LayoutCreateIndexRoute,
   LayoutPerfectionIndexRoute: LayoutPerfectionIndexRoute,

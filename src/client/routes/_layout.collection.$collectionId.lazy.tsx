@@ -396,7 +396,10 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         <div className="divider" />
         <CollectionPuzzles
           collectionId={params.collectionId}
-          editable={collectionBrief.creator.id === me?.id}
+          editable={
+            collectionBrief.creator.id === me?.id &&
+            collectionBrief.autoPopulate === null
+          }
         />
       </ResponsiveLayout>
     );

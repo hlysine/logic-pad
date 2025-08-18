@@ -11,6 +11,7 @@ import {
   CollectionFollow,
   ResourceStatus,
   ResourceResponse,
+  UserDetail,
 } from './data';
 import {
   DataTag,
@@ -117,7 +118,7 @@ export const api = {
       .then(res => res.data)
       .catch(() => null);
   },
-  updateMe: async (data: Partial<Pick<UserBrief, 'name'>>) => {
+  updateMe: async (data: Partial<Pick<UserBrief, 'name' | 'description'>>) => {
     return await axios.put<UserBrief>('/user/me', data).catch(() => null);
   },
   logout: async () => {
@@ -129,6 +130,12 @@ export const api = {
   getUser: async (userId: string) => {
     return await axios
       .get<UserBrief>(`/user/${userId}`)
+      .then(res => res.data)
+      .catch(() => null);
+  },
+  getUserDetail: async (userId: string) => {
+    return await axios
+      .get<UserDetail>(`/user/${userId}/detail`)
       .then(res => res.data)
       .catch(() => null);
   },

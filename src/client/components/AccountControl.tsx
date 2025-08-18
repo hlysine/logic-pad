@@ -7,13 +7,12 @@ import Loading from './Loading';
 import { Link, useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
 import { FaBan } from 'react-icons/fa';
-import { UserBrief } from '../online/data';
 
-export const avatarQueryOptions = (user: UserBrief | null) =>
+export const avatarQueryOptions = (userId: string | null) =>
   queryOptions({
-    queryKey: ['avatar', user?.id],
-    queryFn: () => (user ? api.getAvatar(user.id) : null),
-    enabled: !!user,
+    queryKey: ['avatar', userId],
+    queryFn: () => (userId ? api.getAvatar(userId) : null),
+    enabled: !!userId,
     staleTime: Infinity,
   });
 
@@ -21,7 +20,7 @@ export const avatarQueryOptions = (user: UserBrief | null) =>
 export default memo(function AccountControl() {
   const { isOnline, me, isPending, refresh } = useOnline();
   const routerState = useRouterState();
-  const avatarQuery = useQuery(avatarQueryOptions(me));
+  const avatarQuery = useQuery(avatarQueryOptions(me?.id ?? null));
   const detailsRef = useRef<HTMLDetailsElement>(null);
   if (!isOnline) {
     return (
@@ -80,7 +79,12 @@ export default memo(function AccountControl() {
       </summary>
       <ul className="menu dropdown-content bg-base-300 rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
         <li>
-          <a className="opacity-50">Profile</a>
+          <Link
+            to={'/profile/' + me.id}
+            onClick={() => (detailsRef.current!.open = false)}
+          >
+            Profile
+          </Link>
         </li>
         <li>
           <Link

@@ -62,7 +62,7 @@ export default memo(function CollectionFollowButton({
   if (collectionFollow.isPending) return <Loading className="w-14" />;
   return (
     <button
-      className="tooltip tooltip-info tooltip-top btn btn-md btn-ghost flex items-center w-fit focus:z-50"
+      className="tooltip tooltip-info tooltip-top btn btn-md btn-primary flex items-center w-fit focus:z-50"
       data-tip={
         collectionFollow.data!.followed
           ? 'Unfollow this collection'
@@ -82,9 +82,9 @@ export default memo(function CollectionFollowButton({
       }}
     >
       {collectionFollow.data!.followed ? (
-        <RiUserFollowFill size={24} className="text-primary" />
+        <RiUserFollowFill size={20} />
       ) : (
-        <FaPlus size={24} />
+        <FaPlus size={20} />
       )}
       {collectionFollow.data!.followed ? 'Following' : 'Follow'}
     </button>

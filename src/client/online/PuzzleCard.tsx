@@ -10,6 +10,7 @@ import { cn } from '../uiHelper';
 
 export interface PuzzleCardProps {
   puzzle: PuzzleBrief;
+  expandable?: boolean;
   onClick?: () => void;
   children?: ReactNode;
 }
@@ -119,11 +120,12 @@ export const PuzzleIcon = memo(function PuzzleIcon({
 
 export default memo(function PuzzleCard({
   puzzle,
+  expandable = true,
   onClick,
   children,
 }: PuzzleCardProps) {
   return (
-    <div className="w-[320px] h-[116px] hover:z-50">
+    <div className="w-[320px] h-[116px] hover:z-50 shrink-0">
       <div
         className={cn(
           'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',
@@ -136,7 +138,12 @@ export default memo(function PuzzleCard({
       >
         <PuzzleIcon types={puzzle.types} size={36} className="shrink-0" />
         <div className="flex flex-col">
-          <h2 className="text-lg font-bold whitespace-nowrap [.wrapper:hover_&]:whitespace-normal overflow-hidden text-ellipsis">
+          <h2
+            className={cn(
+              'text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis',
+              expandable && '[.wrapper:hover_&]:whitespace-normal'
+            )}
+          >
             {puzzle.title.length === 0 ? 'Untitled Puzzle' : puzzle.title}
           </h2>
           <div className="badge badge-neutral bg-neutral/40 badge-md mt-1">

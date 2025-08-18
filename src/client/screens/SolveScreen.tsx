@@ -9,7 +9,7 @@ import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import ModeVariantLoader from '../router/ModeVariantLoader';
-import { memo } from 'react';
+import React, { memo } from 'react';
 import SharePuzzleImage from '../components/quickActions/SharePuzzleImage';
 import OnlineMetadata from '../metadata/OnlineMetadata';
 import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
@@ -20,11 +20,13 @@ import DocumentTitle from '../components/DocumentTitle';
 export interface SolveScreenProps {
   quickActions?: React.ReactNode;
   children?: React.ReactNode;
+  topLeft?: React.ReactNode;
 }
 
 export default memo(function SolveScreen({
   quickActions,
   children,
+  topLeft,
 }: SolveScreenProps) {
   return (
     <ThreePaneLayout
@@ -32,6 +34,7 @@ export default memo(function SolveScreen({
       left={
         <>
           <DocumentTitle>Logic Pad</DocumentTitle>
+          {topLeft}
           <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
             <Metadata />
             <GridConsumer>

@@ -2,8 +2,7 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { memo } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { api } from '../online/api';
+import { api, bidirectionalInfiniteQuery } from '../online/api';
 import Loading from '../components/Loading';
 import { useRouteProtection } from '../router/useRouteProtection';
 import CollectionSearchQuery from '../online/CollectionSearchQuery';
@@ -14,31 +13,13 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
     useRouteProtection('login');
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
-    const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
-      queryKey: ['user', 'me', 'collections', search],
-      queryFn: ({ pageParam }: { pageParam: string | undefined }) => {
-        return api.listMyCollections(search, pageParam);
-      },
-      initialPageParam: undefined,
-      getNextPageParam: (lastPage, allPages) => {
-        const totalCount = allPages.reduce(
-          (acc, page) => acc + page.results.length,
-          0
-        );
-        if (totalCount === lastPage.total) return undefined;
-        return lastPage.results.length > 0
-          ? lastPage.results[lastPage.results.length - 1].id
-          : undefined;
-      },
-      getPreviousPageParam: firstPage =>
-        firstPage.results.length > 0 ? firstPage.results[0].id : undefined,
-      throwOnError(error) {
-        toast.error(error.message);
-        return false;
-      },
-      retry: false,
-      staleTime: 1000 * 60,
-    });
+    const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
+      bidirectionalInfiniteQuery(
+        ['user', 'me', 'collections', search],
+        (cursorBefore, cursorAfter) =>
+          api.listMyCollections(search, cursorBefore, cursorAfter)
+      )
+    );
 
     return (
       <>

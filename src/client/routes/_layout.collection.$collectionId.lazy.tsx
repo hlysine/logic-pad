@@ -287,6 +287,9 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
                   onClick={async () => {
                     await navigate({
                       to: `/solve/${puzzle.id}`,
+                      search: {
+                        collection: collectionBrief.id,
+                      },
                     });
                   }}
                 />

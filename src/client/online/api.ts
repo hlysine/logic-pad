@@ -10,8 +10,17 @@ import {
   CollectionBrief,
   CollectionFollow,
   ResourceStatus,
+  ResourceResponse,
 } from './data';
-import { QueryClient } from '@tanstack/react-query';
+import {
+  DataTag,
+  DefaultError,
+  InfiniteData,
+  infiniteQueryOptions,
+  QueryClient,
+  QueryKey,
+  UseSuspenseInfiniteQueryOptions,
+} from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
 import toast from 'react-hot-toast';
 import { PuzzleSearchParams } from './PuzzleSearchQuery';
@@ -219,18 +228,26 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  searchPuzzles: async (query: PuzzleSearchParams, cursor?: string) => {
+  searchPuzzles: async (
+    query: PuzzleSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
     return await axios
       .get<ListResponse<PuzzleBrief>>(`/puzzle/search`, {
-        params: { ...query, cursor },
+        params: { ...query, cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);
   },
-  listMyPuzzles: async (query: PuzzleSearchParams, cursor?: string) => {
+  listMyPuzzles: async (
+    query: PuzzleSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
     return await axios
       .get<ListResponse<PuzzleBrief>>(`/user/me/puzzles`, {
-        params: { ...query, cursor },
+        params: { ...query, cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);
@@ -241,10 +258,14 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  listCollectionPuzzles: async (collectionId: string, cursor?: string) => {
+  listCollectionPuzzles: async (
+    collectionId: string,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
     return await axios
       .get<ListResponse<PuzzleBrief>>(`/collection/${collectionId}/puzzles`, {
-        params: { cursor },
+        params: { cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);
@@ -299,20 +320,86 @@ export const api = {
       .post(`/collection/${collectionId}/remove`, { puzzleIds })
       .catch(rethrowError);
   },
-  searchCollections: async (query: CollectionSearchParams, cursor?: string) => {
+  searchCollections: async (
+    query: CollectionSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
     return await axios
       .get<ListResponse<CollectionBrief>>(`/collection/search`, {
-        params: { ...query, cursor },
+        params: { ...query, cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);
   },
-  listMyCollections: async (query: CollectionSearchParams, cursor?: string) => {
+  listMyCollections: async (
+    query: CollectionSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
     return await axios
       .get<ListResponse<CollectionBrief>>(`/user/me/collections`, {
-        params: { ...query, cursor },
+        params: { ...query, cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);
   },
 };
+
+export const bidirectionalInfiniteQuery = <
+  TQueryFnData extends ListResponse<ResourceResponse>,
+  TError = DefaultError,
+  TData = InfiniteData<TQueryFnData>,
+  TQueryKey extends QueryKey = QueryKey,
+>(
+  queryKey: TQueryKey,
+  queryFn: (
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => Promise<TQueryFnData>
+): UseSuspenseInfiniteQueryOptions<
+  TQueryFnData,
+  TError,
+  TData,
+  TQueryKey,
+  { cursorBefore?: string; cursorAfter?: string } | undefined
+> & {
+  queryKey: DataTag<TQueryKey, InfiniteData<TQueryFnData>, TError>;
+} =>
+  infiniteQueryOptions<
+    TQueryFnData,
+    TError,
+    TData,
+    TQueryKey,
+    { cursorBefore?: string; cursorAfter?: string } | undefined
+  >({
+    queryKey,
+    queryFn: ({ pageParam = {} }) => {
+      return queryFn(pageParam.cursorBefore, pageParam.cursorAfter);
+    },
+    initialPageParam: undefined,
+    getNextPageParam: (lastPage, _allPages, lastPageParams) => {
+      return lastPage.results.length > 0
+        ? {
+            cursorAfter: lastPage.results[lastPage.results.length - 1].id,
+          }
+        : lastPageParams?.cursorBefore
+          ? { cursorAfter: lastPageParams.cursorBefore }
+          : undefined;
+    },
+    getPreviousPageParam: (firstPage, _allPages, firstPageParams) => {
+      return firstPage.results.length > 0
+        ? {
+            cursorBefore: firstPage.results[0].id,
+          }
+        : firstPageParams?.cursorAfter
+          ? { cursorBefore: firstPageParams.cursorAfter }
+          : undefined;
+    },
+    throwOnError(error) {
+      toast.error((error as Error).message);
+      return false;
+    },
+    retry: false,
+    staleTime: 1000 * 60,
+  });

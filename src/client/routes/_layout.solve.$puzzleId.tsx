@@ -2,6 +2,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { queryOptions } from '@tanstack/react-query';
 import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
+import { zodValidator } from '@tanstack/zod-adapter';
+import z from 'zod';
 
 export const puzzleSolveQueryOptions = (puzzleId: string | null) =>
   queryOptions({
@@ -11,6 +13,11 @@ export const puzzleSolveQueryOptions = (puzzleId: string | null) =>
   });
 
 export const Route = createFileRoute('/_layout/solve/$puzzleId')({
+  validateSearch: zodValidator(
+    z.object({
+      collection: z.string().optional(),
+    })
+  ),
   loader: async ({ params }) => {
     try {
       return await queryClient.ensureQueryData(

@@ -10,6 +10,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useNavigate, useRouterState } from '@tanstack/react-router';
 import UserCard from '../metadata/UserCard';
 import Difficulty from '../metadata/Difficulty';
+import { cn } from '../uiHelper';
 
 export interface CollectionSidebarProps {
   collectionId: string | null;
@@ -30,7 +31,8 @@ export default memo(function CollectionSidebar({
     ...bidirectionalInfiniteQuery(
       ['collection', collectionId, 'puzzles'],
       (cursorBefore, cursorAfter) =>
-        api.listCollectionPuzzles(collectionId!, cursorBefore, cursorAfter)
+        api.listCollectionPuzzles(collectionId!, cursorBefore, cursorAfter),
+      false
     ),
     initialData: {
       pages: [
@@ -118,7 +120,10 @@ export default memo(function CollectionSidebar({
                   <>
                     <button
                       key={puzzle.id}
-                      className="btn btn-ghost w-full h-fit flex flex-row flex-nowrap gap-2 items-center justify-start text-start"
+                      className={cn(
+                        'btn w-full h-fit flex flex-row flex-nowrap gap-2 py-2 items-center justify-start text-start',
+                        puzzle.id === id ? '' : 'btn-ghost'
+                      )}
                       onClick={async () => {
                         const newPath = routerState.location.pathname
                           .split('/')

@@ -375,7 +375,8 @@ export const bidirectionalInfiniteQuery = <
   queryFn: (
     cursorBefore?: string,
     cursorAfter?: string
-  ) => Promise<TQueryFnData>
+  ) => Promise<TQueryFnData>,
+  predictEndOfQuery = true
 ): UseSuspenseInfiniteQueryOptions<
   TQueryFnData,
   TError,
@@ -399,7 +400,9 @@ export const bidirectionalInfiniteQuery = <
     initialPageParam: undefined,
     getNextPageParam: (lastPage, _allPages, lastPageParams) => {
       return lastPage.results.length === 30 ||
-        (!lastPageParams?.cursorAfter && !lastPageParams?.cursorBefore)
+        (!predictEndOfQuery &&
+          !lastPageParams?.cursorAfter &&
+          !lastPageParams?.cursorBefore)
         ? {
             cursorAfter: lastPage.results[lastPage.results.length - 1].id,
           }
@@ -409,7 +412,9 @@ export const bidirectionalInfiniteQuery = <
     },
     getPreviousPageParam: (firstPage, _allPages, firstPageParams) => {
       return firstPage.results.length === 30 ||
-        (!firstPageParams?.cursorAfter && !firstPageParams?.cursorBefore)
+        (!predictEndOfQuery &&
+          !firstPageParams?.cursorAfter &&
+          !firstPageParams?.cursorBefore)
         ? {
             cursorBefore: firstPage.results[0].id,
           }

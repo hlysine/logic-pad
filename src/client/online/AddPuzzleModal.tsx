@@ -4,7 +4,7 @@ import PuzzleSearchQuery, {
 } from '../online/PuzzleSearchQuery';
 import PuzzleSearchResults from '../online/PuzzleSearchResults';
 import { cn } from '../uiHelper';
-import { FaCheck, FaPlus } from 'react-icons/fa';
+import { FaPlus } from 'react-icons/fa';
 
 export interface AddPuzzlesModalProps {
   ref: React.Ref<{ open: () => void }>;
@@ -82,7 +82,9 @@ export default memo(function AddPuzzlesModal({
                 )}
               >
                 {selectedPuzzles.includes(puzzle.id) ? (
-                  <FaCheck size={24} />
+                  <div className="text-xl">
+                    {selectedPuzzles.indexOf(puzzle.id) + 1}
+                  </div>
                 ) : (
                   <FaPlus size={24} />
                 )}

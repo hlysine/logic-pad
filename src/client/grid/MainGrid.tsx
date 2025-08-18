@@ -29,19 +29,29 @@ export function computeTileSize(
   responsive: boolean,
   visualizeWrapArounds: boolean
 ) {
-  const extraMargin = visualizeWrapArounds && grid.wrapAround.value ? 55 : 0;
+  const extraMargin = visualizeWrapArounds && grid.wrapAround.value ? 2 : 0;
   const windowWidth = responsive ? window.innerWidth : 1920;
   const windowHeight = responsive ? window.innerHeight : 1080;
   const newSize =
-    windowWidth < 1280
+    windowWidth < 640
       ? Math.min(
-          (windowWidth - 128 - extraMargin) / grid.width,
-          (windowHeight - 180 - extraMargin) / grid.height
+          (windowWidth - 45) / (grid.width + extraMargin),
+          (windowHeight - 180) / (grid.height + extraMargin)
         )
-      : Math.min(
-          (windowWidth - 128 - 640 - extraMargin) / grid.width,
-          (windowHeight - 180 - extraMargin) / grid.height
-        );
+      : windowWidth < 1024
+        ? Math.min(
+            (windowWidth - 140) / (grid.width + extraMargin),
+            (windowHeight - 180) / (grid.height + extraMargin)
+          )
+        : windowWidth < 1280
+          ? Math.min(
+              (windowWidth - 140 - 320) / (grid.width + extraMargin),
+              (windowHeight - 290) / (grid.height + extraMargin)
+            )
+          : Math.min(
+              (windowWidth - 130 - 640) / (grid.width + extraMargin),
+              (windowHeight - 170) / (grid.height + extraMargin)
+            );
   return Math.floor(
     Math.max(25, Math.min(100 + Math.max(grid.width, grid.height) * 2, newSize))
   );

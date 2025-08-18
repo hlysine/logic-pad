@@ -20,6 +20,7 @@ import PuzzleSolveControl from '../components/PuzzleSolveControl';
 export interface PerfectionScreenProps {
   quickActions?: React.ReactNode;
   children?: React.ReactNode;
+  topLeft?: React.ReactNode;
   solvePath?: Position[];
   setSolvePath?: (solvePath: Position[]) => void;
   onReset?: () => void;
@@ -28,6 +29,7 @@ export interface PerfectionScreenProps {
 export default memo(function PerfectionScreen({
   quickActions,
   children,
+  topLeft,
   solvePath,
   setSolvePath,
   onReset,
@@ -39,6 +41,7 @@ export default memo(function PerfectionScreen({
         left={
           <>
             <DocumentTitle>Logic Pad</DocumentTitle>
+            {topLeft}
             <div className="flex flex-col gap-2 justify-self-stretch flex-1 justify-center">
               <Metadata />
               <GridConsumer>

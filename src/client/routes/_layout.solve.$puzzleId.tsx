@@ -13,6 +13,7 @@ export const puzzleSolveQueryOptions = (puzzleId: string | null) =>
   });
 
 export const Route = createFileRoute('/_layout/solve/$puzzleId')({
+  remountDeps: ({ params }) => params.puzzleId,
   validateSearch: zodValidator(
     z.object({
       collection: z.string().optional(),

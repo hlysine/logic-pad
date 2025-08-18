@@ -26,11 +26,34 @@ import toast from 'react-hot-toast';
 import { PuzzleSearchParams } from './PuzzleSearchQuery';
 import { CollectionSearchParams } from './CollectionSearchQuery';
 
+export interface ApiErrorResponse {
+  summary: string;
+}
+
+class ApiError extends Error {
+  constructor(
+    message: string,
+    public status: number
+  ) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
       staleTime: 10 * 1000,
+      retry(failureCount, error) {
+        if (error instanceof ApiError) {
+          if (error.status >= 400 && error.status < 500) {
+            return false;
+          }
+        }
+        return failureCount < 3;
+      },
     },
     mutations: {
       onError(error) {
@@ -45,13 +68,9 @@ export const axios = axiosStatic.create({
   withCredentials: true,
 });
 
-export interface ApiError {
-  summary: string;
-}
-
-const rethrowError = (error: AxiosError<ApiError>) => {
+const rethrowError = (error: AxiosError<ApiErrorResponse>) => {
   if (error.response) {
-    throw new Error(error.response.data.summary);
+    throw new ApiError(error.response.data.summary, error.response.status);
   } else {
     throw error;
   }
@@ -379,7 +398,8 @@ export const bidirectionalInfiniteQuery = <
     },
     initialPageParam: undefined,
     getNextPageParam: (lastPage, _allPages, lastPageParams) => {
-      return lastPage.results.length > 0
+      return lastPage.results.length === 30 ||
+        (!lastPageParams?.cursorAfter && !lastPageParams?.cursorBefore)
         ? {
             cursorAfter: lastPage.results[lastPage.results.length - 1].id,
           }
@@ -388,7 +408,8 @@ export const bidirectionalInfiniteQuery = <
           : undefined;
     },
     getPreviousPageParam: (firstPage, _allPages, firstPageParams) => {
-      return firstPage.results.length > 0
+      return firstPage.results.length === 30 ||
+        (!firstPageParams?.cursorAfter && !firstPageParams?.cursorBefore)
         ? {
             cursorBefore: firstPage.results[0].id,
           }

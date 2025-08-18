@@ -9,10 +9,12 @@ import SolveModeButton from '../components/quickActions/SolveModeButton';
 import { instance as foresightInstance } from '@logic-pad/core/data/rules/foresightRule';
 import PerfectionRule from '@logic-pad/core/data/rules/perfectionRule';
 import { useRouteProtection } from '../router/useRouteProtection';
+import CollectionSidebar from '../online/CollectionSidebar';
 
 export const Route = createLazyFileRoute('/_layout/perfection/$puzzleId')({
   component: memo(function OnlinePerfectionMode() {
     useRouteProtection('online');
+    const search = Route.useSearch();
     const { data } = useSuspenseQuery(
       puzzleSolveQueryOptions(Route.useParams().puzzleId)
     );
@@ -37,7 +39,10 @@ export const Route = createLazyFileRoute('/_layout/perfection/$puzzleId')({
         initialPuzzle={result.initialPuzzle}
       >
         <PerfectionScreen
-          quickActions={[<SolveModeButton key="solveModeButton" />]}
+          quickActions={[<SolveModeButton key="-solveModeButton" />]}
+          topLeft={
+            <CollectionSidebar collectionId={search.collection ?? null} />
+          }
         />
       </MainContext>
     );

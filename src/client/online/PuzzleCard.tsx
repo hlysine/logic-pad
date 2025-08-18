@@ -27,7 +27,7 @@ function getIconForType(type: PuzzleType) {
   }
 }
 
-const PuzzleIcon = memo(function PuzzleIcon({
+export const PuzzleIcon = memo(function PuzzleIcon({
   types,
   className,
   size,

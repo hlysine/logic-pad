@@ -17,6 +17,7 @@ export const collectionInfiniteQueryOptions = (collectionId: string) =>
   );
 
 export const Route = createFileRoute('/_layout/collection/$collectionId')({
+  remountDeps: ({ params }) => params.collectionId,
   loader: async ({ params }) => {
     try {
       await Promise.all([

@@ -11,8 +11,8 @@ import CollectionSidebar from '../online/CollectionSidebar';
 
 export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
   component: memo(function OnlineSolveMode() {
-    const search = Route.useSearch();
     useRouteProtection('online');
+    const search = Route.useSearch();
     const { data } = useSuspenseQuery(
       puzzleSolveQueryOptions(Route.useParams().puzzleId)
     );
@@ -24,7 +24,7 @@ export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
         initialPuzzle={result.initialPuzzle}
       >
         <SolveScreen
-          quickActions={[<PerfectionModeButton key="perfectionModeButton" />]}
+          quickActions={[<PerfectionModeButton key="-perfectionModeButton" />]}
           topLeft={
             <CollectionSidebar collectionId={search.collection ?? null} />
           }

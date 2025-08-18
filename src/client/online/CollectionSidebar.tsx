@@ -7,7 +7,7 @@ import { collectionQueryOptions } from '../routes/_layout.collection.$collection
 import Loading from '../components/Loading';
 import { PuzzleIcon } from './PuzzleCard';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { useNavigate, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import UserCard from '../metadata/UserCard';
 import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
@@ -29,7 +29,7 @@ export default memo(function CollectionSidebar({
   });
   const puzzleList = useInfiniteQuery({
     ...bidirectionalInfiniteQuery(
-      ['collection', collectionId, 'puzzles'],
+      ['collection', collectionId, 'puzzles', 'sidebar'],
       (cursorBefore, cursorAfter) =>
         api.listCollectionPuzzles(collectionId!, cursorBefore, cursorAfter),
       false
@@ -97,8 +97,13 @@ export default memo(function CollectionSidebar({
         <div className="h-full w-full pointer-events-none">
           <div className="h-full w-[350px] max-w-full shrink-0 grow-0 flex flex-col items-center p-4 bg-neutral text-neutral-content self-stretch pointer-events-auto">
             <div className="flex flex-col gap-2 items-start w-full">
-              <div className="text-accent text-sm uppercase">Collection</div>
-              <div className="text-2xl">{collection.data.title}</div>
+              <Link
+                to={'/collection/' + collectionId}
+                className="btn btn-ghost flex flex-col flex-nowrap gap-2 items-start text-start [&>*]:shrink-0 h-fit w-full px-2 -mx-2"
+              >
+                <div className="text-accent text-sm uppercase">Collection</div>
+                <div className="text-2xl">{collection.data.title}</div>
+              </Link>
               <UserCard user={collection.data.creator} />
               <div>{collection.data.description}</div>
             </div>

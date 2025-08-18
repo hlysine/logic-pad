@@ -125,7 +125,10 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   Cancel
                 </button>
                 <button
-                  className="btn btn-error"
+                  className={cn(
+                    'btn',
+                    selectedPuzzles?.length > 0 ? 'btn-error' : 'btn-disabled'
+                  )}
                   onClick={async () => {
                     if (selectedPuzzles.length > 0) {
                       await removeFromCollection.mutateAsync([

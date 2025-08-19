@@ -1,8 +1,7 @@
 import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { FaSearch, FaChevronUp, FaChevronDown } from 'react-icons/fa';
-
-import z from 'zod';
+import { z } from 'zod';
 
 export const puzzleSearchSchema = z.object({
   q: z.string().optional(),

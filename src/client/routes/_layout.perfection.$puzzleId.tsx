@@ -3,7 +3,7 @@ import { queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 import { puzzleSolveQueryOptions } from './_layout.solve.$puzzleId';
 import { zodValidator } from '@tanstack/zod-adapter';
-import z from 'zod';
+import { z } from 'zod';
 
 export const Route = createFileRoute('/_layout/perfection/$puzzleId')({
   remountDeps: ({ params }) => params.puzzleId,

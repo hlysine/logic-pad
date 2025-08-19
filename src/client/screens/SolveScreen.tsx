@@ -9,13 +9,17 @@ import InstructionPartOutlet from '../instructions/InstructionPartOutlet';
 import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import ModeVariantLoader from '../router/ModeVariantLoader';
-import React, { memo } from 'react';
-import SharePuzzleImage from '../components/quickActions/SharePuzzleImage';
+import React, { lazy, memo, Suspense } from 'react';
 import OnlineMetadata from '../metadata/OnlineMetadata';
 import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
 import PuzzleSolveControl from '../components/PuzzleSolveControl';
 import PuzzleEditButton from '../components/quickActions/PuzzleEditButton';
 import DocumentTitle from '../components/DocumentTitle';
+import Loading from '../components/Loading';
+
+const SharePuzzleImage = lazy(
+  () => import('../components/quickActions/SharePuzzleImage')
+);
 
 export interface SolveScreenProps {
   quickActions?: React.ReactNode;
@@ -57,7 +61,9 @@ export default memo(function SolveScreen({
           </GridConsumer>
           <div className="flex gap-1">
             <PuzzleLoveButton />
-            <SharePuzzleImage />
+            <Suspense fallback={<Loading className="w-12 h-12" />}>
+              <SharePuzzleImage />
+            </Suspense>
             <PuzzleEditButton />
             {quickActions}
           </div>

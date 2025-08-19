@@ -9,26 +9,33 @@ import { FaPlay } from 'react-icons/fa';
 import Loading from '../../components/Loading';
 import { Color } from '@logic-pad/core/data/primitives';
 import { array } from '@logic-pad/core/data/dataHelper';
-import {
-  CachedPlayback,
-  cleanUp,
-  drum,
-  piano,
-  pianoImmediate,
-  pianoImmediatePedal,
-  playGrid,
-  playImmediate,
-  playbackState,
-} from './instruments.ts';
 import GridData from '@logic-pad/core/data/grid';
-import * as Tone from 'tone';
+import type { CachedPlayback } from './instruments.ts';
+
+const ToneImport = import('tone');
+const instrumentsImport = import('./instruments.ts');
 
 export type MusicControlsPartProps = InstructionPartProps<MusicGridRule>;
 
 const MusicControls = lazy(async function () {
-  await piano.load();
-  await pianoImmediate.load();
-  await pianoImmediatePedal.load();
+  const [
+    Tone,
+    {
+      cleanUp,
+      drum,
+      piano,
+      pianoImmediate,
+      pianoImmediatePedal,
+      playGrid,
+      playImmediate,
+      playbackState,
+    },
+  ] = await Promise.all([ToneImport, instrumentsImport]);
+  await Promise.all([
+    piano.load(),
+    pianoImmediate.load(),
+    pianoImmediatePedal.load(),
+  ]);
   await new Promise<void>(resolve => {
     const interval = setInterval(() => {
       if (Object.values(drum).every(player => player.loaded)) {

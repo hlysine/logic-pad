@@ -1,8 +1,7 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { FaSearch, FaChevronUp, FaChevronDown } from 'react-icons/fa';
-
-import z from 'zod';
+import { z } from 'zod';
 
 export const collectionSearchSchema = z.object({
   q: z.string().optional(),

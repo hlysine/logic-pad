@@ -3,7 +3,7 @@ import { queryOptions } from '@tanstack/react-query';
 import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 import { zodValidator } from '@tanstack/zod-adapter';
-import z from 'zod';
+import { z } from 'zod';
 
 export const puzzleSolveQueryOptions = (puzzleId: string | null) =>
   queryOptions({

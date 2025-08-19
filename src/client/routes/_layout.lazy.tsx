@@ -32,6 +32,12 @@ export const Route = createLazyFileRoute('/_layout')({
             >
               Create
             </Link>
+            <Link
+              to="/uploader"
+              className="md:text-lg text-neutral-content flex items-center gap-2"
+            >
+              Upload
+            </Link>
             <AlphaBadge />
           </div>
           <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />

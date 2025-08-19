@@ -45,6 +45,8 @@ export interface GridContextProps {
   initialMetadata?: PuzzleMetadata | (() => PuzzleMetadata);
   grid?: GridData;
   setGrid?: (value: GridData) => void;
+  metadata?: PuzzleMetadata;
+  setMetadata?: (value: PuzzleMetadata) => void;
 }
 
 export default memo(function GridContext({
@@ -54,6 +56,8 @@ export default memo(function GridContext({
   initialMetadata,
   grid: externalGrid,
   setGrid: setExternalGrid,
+  metadata: externalMetadata,
+  setMetadata: setExternalMetadata,
 }: GridContextProps) {
   const { recordEdit, clearHistory } = useEdit();
   const { setState } = useGridState();
@@ -62,12 +66,14 @@ export default memo(function GridContext({
   const [solution, setSolution] = useState<GridData | null>(
     initialSolution === undefined ? null : initialSolution
   );
-  const [metadata, setMetadata] = useState<PuzzleMetadata>(
+  const [internalMetadata, setInternalMetadata] = useState<PuzzleMetadata>(
     initialMetadata ?? defaultMetadata
   );
 
   const grid = externalGrid ?? internalGrid;
   const setGrid = setExternalGrid ?? setInternalGrid;
+  const metadata = externalMetadata ?? internalMetadata;
+  const setMetadata = setExternalMetadata ?? setInternalMetadata;
 
   useEffect(() => {
     clearHistory(grid);

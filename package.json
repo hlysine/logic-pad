@@ -44,6 +44,7 @@
     "logic-pad-solver-core": "^0.1.2",
     "monaco-editor": "^0.52.2",
     "monaco-themes": "^0.4.6",
+    "p-queue": "^8.1.0",
     "react": "^19.1.1",
     "react-delta-hooks": "^1.1.5",
     "react-dom": "^19.1.1",

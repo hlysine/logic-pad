@@ -1,0 +1,683 @@
+import { createLazyFileRoute } from '@tanstack/react-router';
+import { memo, RefObject, useRef, useSyncExternalStore } from 'react';
+import { useRouteProtection } from '../router/useRouteProtection';
+import ResponsiveLayout from '../components/ResponsiveLayout';
+import { FaExternalLinkAlt, FaTrash, FaUpload } from 'react-icons/fa';
+import {
+  allSolvers,
+  Compressor,
+  GridData,
+  Serializer,
+  State,
+  validateGrid,
+  validatePuzzleChecklist,
+} from '@logic-pad/core/index';
+import PQueue from 'p-queue';
+import Loading from '../components/Loading';
+import Difficulty from '../metadata/Difficulty';
+import PuzzleEditorModal, {
+  PuzzleEditorRef,
+} from '../editor/PuzzleEditorModal';
+import { Puzzle } from '@logic-pad/core/data/puzzle';
+import { cn } from '../uiHelper';
+
+const debugInput = `
+Essentially hexagonal 1
+
+https://logic-pad.com/create?loader=visible&d=dfl_fY5Ni8IwEIb_iozgKZTGtSCRHtrgbU_qvaQ11mCYSJqSdrf735caw3qQHXgyH-87TNLqG5xyWgKDfddJdEpoPS6uchCtQaEXFAi0Vp2BAU0HSqcTTZn3SRLwvq4Dr1WMOKnrv-qd_k6LF5Jk4jRlRZEkgaIoywDnZRngfO7CJOpRC87A_7vxwnScDrXA6i6ckxbJM-fZkK2WdL3ZnbLVMtvuvEfE-a_xwWcEF6cPV2iOIR2Yla0yWAkrBWmMNjY_C3sjnfqS-YY1UuuqMT26V_ExyNdbIHBWl4tqeu1GYB8EtMIbMAACondXY4HB59gplLNVdo1Vd6cMzpafXw%3D%3D
+
+Essentially hexagonal 2
+
+https://logic-pad.com/create?loader=visible&d=dfl_7ZLPb4IwFID_FfNMPDUNMjFLDQfB3XZS76Zg1cbuYaAEyNj_vmAlUEaWZbuuSX997_XrC9Q5vIOWWglg8JJlArXkSlWTiyj5OUGuJi4QOKfyCAxcp3Sdeu86jBZF1GvNjo4xs2ibgWOMmuXQ94UZYJ8eY7QLdL4RZtdj4Bijndyub8D6ers-m9Gu4GF9Fht-ANvXsTpsfsp6HQR2p2MsCMJws-n3IBhj_76_-eod5m-RSEnpz6lHKt-hHjHIX7BBbNHFntx6G3E83LjWIkXymH2v9GbTubtY7b3Z1HteFQUiNu-hHfDRTFY4v2eZzc5MW_YTcRQhYvOw2uG34mW5fIiXnbj13d39G8z43R1xgihifeBKkThRSeofeXoFAkd5Osk4V7oC5hFQEq_AAAjwXF-SFBi8VplE0aSKLE7lTcsEm5SPTw%3D%3D
+
+Essentially hexagonal 3
+
+https://logic-pad.com/create?loader=visible&d=dfl_7ZVNT4MwGMe_iqmJp6bhRXCp4VBAvXhS7wtsdTbWskCXjTi_uykMN3lpe9jBgyQ8Dfx_z3sCzvwTSCY5BRjcVRUVkmWc1xdvdJetCpHxCx9AsCrZEmDgBzvf27_4AUYICcNlhSgbx9MW2SB6_RDEhJylnTPVcqa5_O9oFPnf0d_f0T7xQ_WRISSOdTeyY-I4SdJ0-kZ2DCFpaq7GyKhMumzIkjlXPabeCbFltLtQDVkyulyqIVM9B0bXe5qa53NgdLsgxLyvjjHkakdow2h6b4doy0zuosMsmenOO8zMaHrvMN18TpipXXSYbl8ds3_mVEpawl3koADWUYgC2L6KCP7RPLcRnVEx7DvGR831GtGdjareTT9sMhCbCEPV9_uu6cDVux5Vm2J-13SHe2PwnVExHHg-DEo6zXo_mMRp4Pt-4FPxYf9U1R95wav5mpbzkq5YIeCi2AgZOXBR8KKMlln5jvNMzNeZ8hHwcEbhzru6dL3r25fw6jKY3W63eb7dtrYVErcR2ofn9niaiBX2YqmfV2tFnh-tOCqaHACCJXt9ZYsNlzXAMwg4E-8AAwBBtpFvRQkweKwrJqhCabUo2VqyQijk6xs%3D
+
+https://logic-pad.com/solve?d=dfl_RY47C4MwGEX_SrmCU4amKJRIB7FjJ3VyER_RhsqnaMRH0_9erKW9y-HAGe4xfUIr3UgIXGU-1oduXNdGgqHuVQkBPjsm5oKIyARc-L7vm8REJswzSrtMa9kT-_Lizq5t8ZPjxa5tuWePfpumafob7VXAP9UuyY5oRwiGUlWVKsZGLxCcoVH0gAAYslHf2x4Ct2VQtJ0t5VD0qtOqpS15vQE%3D`;
+
+type UploadEntryData = {
+  data: string;
+} & (
+  | {
+      status: 'decoding';
+    }
+  | {
+      status: 'verified';
+      gridWithSolution: GridData;
+      solutionStatus: 'included' | 'unique' | 'alt';
+      title: string;
+      description: string;
+      author: string;
+      difficulty: number;
+    }
+  | {
+      status: 'solving' | 'invalid';
+      gridWithSolution: GridData;
+      solutionStatus: 'unknown' | 'included' | 'unique' | 'alt' | 'none';
+      title: string;
+      description: string;
+      author: string;
+      difficulty: number;
+      error: string;
+    }
+  | {
+      status: 'uploaded' | 'published';
+      gridWithSolution: GridData;
+      title: string;
+      description: string;
+      author: string;
+      difficulty: number;
+      id: string;
+    }
+);
+
+type UploadEntry = UploadEntryData & {
+  listeners: (() => void)[];
+};
+
+function getErrorMessage(checklistItem: string) {
+  switch (checklistItem) {
+    case 'metadataValid':
+      return 'Invalid metadata';
+    case 'gridValid':
+      return 'Invalid grid size';
+    case 'solutionIsNotEmpty':
+      return 'Missing solution';
+    case 'solutionIsComplete':
+      return 'Incomplete solution';
+    case 'solutionIsValid':
+      return 'Invalid solution';
+    default:
+      return 'Unknown error';
+  }
+}
+
+const linkRegex = /https?:\/\/[\w\-.]+\/\w+\?(?:[\w=&])*d=([\w_%-]+)/gm;
+
+class UploadManager {
+  private uploads: readonly UploadEntry[] = [];
+  public taskQueue = new PQueue({ concurrency: 5 });
+  private arrayListeners: (() => void)[] = [];
+
+  public subscribeToArray = (listener: () => void) => {
+    this.arrayListeners.push(listener);
+    return () => {
+      this.arrayListeners = this.arrayListeners.filter(l => l !== listener);
+    };
+  };
+
+  public getUploads = () => {
+    return this.uploads;
+  };
+
+  public subscribeToEntry = (data: string) => {
+    return (listener: () => void) => {
+      const entry = this.uploads.find(e => e.data === data);
+      if (entry) {
+        entry.listeners.push(listener);
+        return () => {
+          const entry = this.uploads.find(e => e.data === data);
+          if (entry)
+            entry.listeners = entry.listeners.filter(l => l !== listener);
+        };
+      }
+      return () => {};
+    };
+  };
+
+  public getEntry = (data: string) => () => {
+    return this.uploads.find(e => e.data === data);
+  };
+
+  public extractFromText = (text: string) => {
+    const links = text.matchAll(linkRegex);
+    for (const match of links) {
+      if (match[1]) {
+        this.add(match[1]);
+      }
+    }
+  };
+
+  public add = (data: string) => {
+    if (data.length === 0) return;
+    if (this.uploads.find(e => e.data === data)) return;
+    console.log('Adding upload', data);
+    const entry: UploadEntry = {
+      status: 'decoding',
+      data,
+      listeners: [],
+    };
+    this.uploads = [...this.uploads, entry];
+    this.enqueueDecode(entry);
+    this.notifyArrayChange();
+  };
+
+  public edit = (newEntry: {
+    data: string;
+    gridWithSolution: GridData;
+    title: string;
+    description: string;
+    author: string;
+    difficulty: number;
+  }) => {
+    const entry = this.uploads.find(e => e.data === newEntry.data);
+    if (!entry) return;
+    const resetGrid = newEntry.gridWithSolution.resetTiles();
+    if (resetGrid.colorEquals(newEntry.gridWithSolution)) {
+      this.updateEntryVerification(newEntry.data, {
+        title: newEntry.title,
+        description: newEntry.description,
+        author: newEntry.author,
+        difficulty: newEntry.difficulty,
+        grid: newEntry.gridWithSolution,
+        solution: null,
+      });
+    } else {
+      this.updateEntryVerification(newEntry.data, {
+        title: newEntry.title,
+        description: newEntry.description,
+        author: newEntry.author,
+        difficulty: newEntry.difficulty,
+        grid: resetGrid,
+        solution: newEntry.gridWithSolution,
+      });
+    }
+  };
+
+  public delete = (data: string) => {
+    this.uploads = this.uploads.filter(e => e.data !== data);
+    this.notifyArrayChange();
+  };
+
+  private notifyArrayChange = () => {
+    for (const listener of this.arrayListeners) {
+      listener();
+    }
+  };
+
+  private notifyEntryChange = (data: string) => {
+    const entry = this.uploads.find(e => e.data === data);
+    for (const listener of entry?.listeners ?? []) {
+      listener();
+    }
+  };
+
+  private replace = (entry: UploadEntryData) => {
+    const index = this.uploads.findIndex(e => e.data === entry.data);
+    if (index !== -1) {
+      this.uploads = [
+        ...this.uploads.slice(0, index),
+        { ...entry, listeners: this.uploads[index].listeners },
+        ...this.uploads.slice(index + 1),
+      ];
+      this.notifyEntryChange(entry.data);
+    }
+  };
+
+  private enqueueDecode = (entry: UploadEntry) => {
+    void this.taskQueue.add(
+      async () => {
+        const puzzle = Serializer.parsePuzzle(
+          await Compressor.decompress(decodeURIComponent(entry.data))
+        );
+        this.updateEntryVerification(entry.data, puzzle);
+      },
+      { id: entry.data }
+    );
+  };
+
+  public enqueueSolve = (entry: UploadEntry) => {
+    const controller = new AbortController();
+    void (async () => {
+      try {
+        await this.taskQueue.add(
+          async ({ signal }) => {
+            let updatedEntry = this.uploads.find(e => e.data === entry.data);
+            if (!updatedEntry) return;
+            if (
+              updatedEntry.status !== 'invalid' &&
+              updatedEntry.status !== 'verified'
+            )
+              return;
+            this.replace({
+              status: 'solving',
+              data: updatedEntry.data,
+              title: updatedEntry.title,
+              author: updatedEntry.author,
+              description: updatedEntry.description,
+              difficulty: updatedEntry.difficulty,
+              gridWithSolution: updatedEntry.gridWithSolution,
+              solutionStatus: 'unknown',
+              error: 'Solving',
+            });
+            const solver = [...allSolvers.values()][0];
+            console.log('Finding solver', solver);
+            if (!solver) return;
+            try {
+              let isAlternate = false;
+              for await (const solution of solver.solve(
+                updatedEntry.gridWithSolution,
+                signal
+              )) {
+                console.log('Solver response', solution);
+                if (!isAlternate) {
+                  updatedEntry = this.uploads.find(e => e.data === entry.data);
+                  console.log('Updated entry', updatedEntry);
+                  if (!updatedEntry) return;
+                  if (updatedEntry.status !== 'solving') return;
+                  if (solution) {
+                    this.replace({
+                      status: 'solving',
+                      data: updatedEntry.data,
+                      title: updatedEntry.title,
+                      author: updatedEntry.author,
+                      description: updatedEntry.description,
+                      difficulty: updatedEntry.difficulty,
+                      gridWithSolution: solution,
+                      solutionStatus: 'unique',
+                      error: 'Checking uniqueness',
+                    });
+                  } else {
+                    this.replace({
+                      status: 'invalid',
+                      data: updatedEntry.data,
+                      title: updatedEntry.title,
+                      author: updatedEntry.author,
+                      description: updatedEntry.description,
+                      difficulty: updatedEntry.difficulty,
+                      gridWithSolution: updatedEntry.gridWithSolution,
+                      solutionStatus: 'none',
+                      error: 'No solution',
+                    });
+                  }
+                  isAlternate = true;
+                } else {
+                  updatedEntry = this.uploads.find(e => e.data === entry.data);
+                  if (!updatedEntry) return;
+                  if (updatedEntry.status !== 'solving') return;
+                  if (solution) {
+                    this.replace({
+                      status: 'verified',
+                      data: updatedEntry.data,
+                      title: updatedEntry.title,
+                      author: updatedEntry.author,
+                      description: updatedEntry.description,
+                      difficulty: updatedEntry.difficulty,
+                      gridWithSolution: updatedEntry.gridWithSolution,
+                      solutionStatus: 'alt',
+                    });
+                  } else {
+                    this.replace({
+                      status: 'verified',
+                      data: updatedEntry.data,
+                      title: updatedEntry.title,
+                      author: updatedEntry.author,
+                      description: updatedEntry.description,
+                      difficulty: updatedEntry.difficulty,
+                      gridWithSolution: updatedEntry.gridWithSolution,
+                      solutionStatus: 'unique',
+                    });
+                  }
+                  break;
+                }
+              }
+            } catch (ex) {
+              console.error(ex);
+            } finally {
+              controller.abort();
+              updatedEntry = this.uploads.find(e => e.data === entry.data);
+              if (updatedEntry?.status === 'solving') {
+                this.replace({
+                  status: 'verified',
+                  data: updatedEntry.data,
+                  title: updatedEntry.title,
+                  author: updatedEntry.author,
+                  description: updatedEntry.description,
+                  difficulty: updatedEntry.difficulty,
+                  gridWithSolution: updatedEntry.gridWithSolution,
+                  solutionStatus: 'included',
+                });
+              }
+            }
+          },
+          { id: entry.data, signal: controller.signal }
+        );
+      } catch (_) {
+        const updatedEntry = this.uploads.find(e => e.data === entry.data);
+        if (updatedEntry?.status === 'solving') {
+          this.replace({
+            status: 'invalid',
+            data: updatedEntry.data,
+            title: updatedEntry.title,
+            author: updatedEntry.author,
+            description: updatedEntry.description,
+            difficulty: updatedEntry.difficulty,
+            gridWithSolution: updatedEntry.gridWithSolution,
+            solutionStatus: 'unknown',
+            error: 'Solver aborted',
+          });
+        }
+      }
+    })();
+    return controller;
+  };
+
+  private updateEntryVerification = (data: string, puzzle: Puzzle) => {
+    if (puzzle.solution) {
+      const state = validateGrid(puzzle.grid, puzzle.solution);
+      const checklist = validatePuzzleChecklist(
+        {
+          title: puzzle.title,
+          description: puzzle.description,
+          difficulty: puzzle.difficulty,
+          author: puzzle.author,
+        },
+        puzzle.solution,
+        state
+      );
+      if (checklist.isValid) {
+        this.replace({
+          status: 'verified',
+          data,
+          gridWithSolution: puzzle.solution,
+          solutionStatus: 'included',
+          title: puzzle.title,
+          author: puzzle.author,
+          description: puzzle.description,
+          difficulty: puzzle.difficulty,
+        });
+      } else {
+        this.replace({
+          status: 'invalid',
+          data,
+          gridWithSolution: puzzle.solution,
+          solutionStatus: State.isSatisfied(state.final)
+            ? 'included'
+            : 'unknown',
+          title: puzzle.title,
+          author: puzzle.author,
+          description: puzzle.description,
+          difficulty: puzzle.difficulty,
+          error: getErrorMessage(
+            checklist.items.find(item => !item.success && item.mandatory)?.id ??
+              'unknown'
+          ),
+        });
+      }
+    } else {
+      this.replace({
+        status: 'invalid',
+        data,
+        gridWithSolution: puzzle.grid,
+        solutionStatus: 'unknown',
+        title: puzzle.title,
+        author: puzzle.author,
+        description: puzzle.description,
+        difficulty: puzzle.difficulty,
+        error: getErrorMessage('solutionIsNotEmpty'),
+      });
+    }
+  };
+}
+
+function useUploadManager(managerRef: RefObject<UploadManager>) {
+  return useSyncExternalStore(
+    managerRef.current.subscribeToArray,
+    managerRef.current.getUploads
+  );
+}
+
+function useUploadEntry(managerRef: RefObject<UploadManager>, data: string) {
+  return useSyncExternalStore(
+    managerRef.current.subscribeToEntry(data),
+    managerRef.current.getEntry(data)
+  );
+}
+
+const UploadEntryRow = memo(function UploadEntryRow({
+  data,
+  uploadManager,
+}: {
+  data: string;
+  uploadManager: RefObject<UploadManager>;
+}) {
+  const entry = useUploadEntry(uploadManager, data);
+  const puzzleEditorRef = useRef<PuzzleEditorRef>(null);
+  const solverRef = useRef<AbortController | null>(null);
+  if (!entry) return null;
+  const puzzleInfo =
+    entry.status !== 'decoding' ? (
+      <div className="flex gap-2 items-center">
+        {entry.status === 'solving' && <Loading className="w-6 h-6" />}
+        <div className="font-mono max-w-xs whitespace-nowrap overflow-hidden text-ellipsis">
+          {entry.title}
+        </div>
+        <div className="badge badge-secondary badge-sm shrink-0">
+          {entry.author}
+        </div>
+        <Difficulty value={entry.difficulty} size="xs" />
+        <div
+          className="tooltip tooltip-info tooltip-top"
+          data-tip="Open in a new tab"
+        >
+          <button
+            className="btn btn-sm btn-square btn-ghost"
+            onClick={async () => {
+              const resetGrid = entry.gridWithSolution.resetTiles();
+              let puzzle: Puzzle;
+              if (resetGrid.colorEquals(entry.gridWithSolution)) {
+                puzzle = {
+                  title: entry.title,
+                  description: entry.description,
+                  author: entry.author,
+                  difficulty: entry.difficulty,
+                  grid: entry.gridWithSolution,
+                  solution: null,
+                };
+              } else {
+                puzzle = {
+                  title: entry.title,
+                  description: entry.description,
+                  author: entry.author,
+                  difficulty: entry.difficulty,
+                  grid: resetGrid,
+                  solution: entry.gridWithSolution,
+                };
+              }
+              const data = await Compressor.compress(
+                Serializer.stringifyPuzzle(puzzle)
+              );
+              const url = new URL(window.location.origin);
+              url.pathname = '/create';
+              url.searchParams.set('loader', 'visible');
+              url.searchParams.set('d', data);
+              window.open(url.toString(), '_blank');
+            }}
+          >
+            <FaExternalLinkAlt />
+          </button>
+        </div>
+        <div
+          className="tooltip tooltip-error tooltip-top"
+          data-tip="Delete this puzzle"
+        >
+          <button
+            className="btn btn-sm btn-ghost btn-square text-error"
+            onClick={() => uploadManager.current.delete(entry.data)}
+          >
+            <FaTrash />
+          </button>
+        </div>
+      </div>
+    ) : (
+      <div className="flex gap-2 items-center">
+        <Loading className="w-6 h-6" />
+        <div className="font-mono max-w-xs whitespace-nowrap overflow-hidden text-ellipsis">
+          {entry.data}
+        </div>
+      </div>
+    );
+  const controls =
+    entry.status === 'invalid' || entry.status === 'verified' ? (
+      <>
+        <button
+          className="btn btn-sm"
+          onClick={() => {
+            solverRef.current = uploadManager.current.enqueueSolve(entry);
+          }}
+        >
+          Auto-solve
+        </button>
+        <button
+          className="btn btn-sm"
+          onClick={() => {
+            puzzleEditorRef.current?.open(
+              {
+                title: entry.title,
+                description: entry.description,
+                author: entry.author,
+                difficulty: entry.difficulty,
+              },
+              entry.gridWithSolution
+            );
+          }}
+        >
+          Edit
+        </button>
+        <PuzzleEditorModal
+          ref={puzzleEditorRef}
+          onChange={(metadata, gridWithSolution) => {
+            uploadManager.current.edit({
+              data: entry.data,
+              title: metadata.title,
+              description: metadata.description,
+              author: metadata.author,
+              difficulty: metadata.difficulty,
+              gridWithSolution,
+            });
+          }}
+        />
+        <div
+          className={cn(
+            'badge shrink-0',
+            (entry.solutionStatus === 'alt' ||
+              entry.solutionStatus === 'unknown' ||
+              entry.solutionStatus === 'included') &&
+              'badge-info',
+            entry.solutionStatus === 'unique' && 'badge-success',
+            entry.solutionStatus === 'none' && 'badge-error'
+          )}
+        >
+          {entry.solutionStatus === 'alt' && 'Alternate solution'}
+          {entry.solutionStatus === 'unknown' && 'Unknown solution'}
+          {entry.solutionStatus === 'included' && 'Solution provided'}
+          {entry.solutionStatus === 'unique' && 'Unique solution'}
+          {entry.solutionStatus === 'none' && 'No solution'}
+        </div>
+      </>
+    ) : entry.status === 'solving' ? (
+      <>
+        <button
+          className="btn btn-sm"
+          onClick={() => {
+            solverRef.current?.abort();
+          }}
+        >
+          Cancel solve
+        </button>
+      </>
+    ) : null;
+  return (
+    <div key={entry.data} className="flex flex-col gap-1">
+      <div className="flex gap-2 items-center justify-between min-h-8 flex-wrap [&>*]:shrink-0">
+        {entry.status === 'decoding' ? (
+          <>
+            {puzzleInfo}
+            <div className="badge shrink-0">Decoding...</div>
+          </>
+        ) : entry.status === 'invalid' ? (
+          <>
+            {puzzleInfo}
+            <div className="flex gap-2 items-center">
+              <div>{entry.error}</div>
+              {controls}
+              <div className="badge badge-error shrink-0">Invalid</div>
+            </div>
+          </>
+        ) : entry.status === 'verified' ? (
+          <>
+            {puzzleInfo}
+            <div className="flex gap-2 items-center">
+              {controls}
+              <div className="badge badge-success shrink-0">Verified</div>
+            </div>
+          </>
+        ) : entry.status === 'solving' ? (
+          <>
+            {puzzleInfo}
+            <div className="flex gap-2 items-center">
+              <div>{entry.error}</div>
+              {controls}
+              <div className="badge badge-info shrink-0">Solving</div>
+            </div>
+          </>
+        ) : null}
+      </div>
+      <div className="divider m-0" />
+    </div>
+  );
+});
+
+export const Route = createLazyFileRoute('/_layout/uploader')({
+  component: memo(function Uploader() {
+    useRouteProtection('login');
+    const uploadManager = useRef<UploadManager>(null!);
+    uploadManager.current ??= new UploadManager();
+
+    const entries = useUploadManager(uploadManager);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    return (
+      <ResponsiveLayout>
+        <div className="text-3xl">
+          <FaUpload className="inline-block me-4" />
+          Puzzle uploader [WIP]
+        </div>
+        <div>
+          Paste puzzles links into the box below. You can paste multiple links
+          and their data will be automatically extracted.
+        </div>
+        <div>
+          You can edit the extracted puzzle data before uploading or use the
+          auto solver to generate missing solutions.
+        </div>
+        <div className="divider m-0" />
+        {entries.map(entry => (
+          <UploadEntryRow
+            key={entry.data}
+            data={entry.data}
+            uploadManager={uploadManager}
+          />
+        ))}
+        <textarea
+          ref={textareaRef}
+          defaultValue={debugInput}
+          placeholder="Paste puzzle links here"
+          className="textarea textarea-bordered"
+        ></textarea>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            uploadManager.current.extractFromText(
+              textareaRef.current?.value ?? ''
+            );
+            textareaRef.current!.value = '';
+          }}
+        >
+          Load links
+        </button>
+      </ResponsiveLayout>
+    );
+  }),
+});

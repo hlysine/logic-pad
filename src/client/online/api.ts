@@ -13,6 +13,7 @@ import {
   ResourceResponse,
   UserDetail,
   FrontPage,
+  PersonalFrontPage,
 } from './data';
 import {
   DataTag,
@@ -374,6 +375,12 @@ export const api = {
   getFrontPage: async () => {
     return await axios
       .get<FrontPage>(`/frontpage`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  getPersonalFrontPage: async () => {
+    return await axios
+      .get<PersonalFrontPage>(`/frontpage/me`)
       .then(res => res.data)
       .catch(rethrowError);
   },

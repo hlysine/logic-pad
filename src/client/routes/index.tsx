@@ -11,6 +11,8 @@ import toast from 'react-hot-toast';
 import deferredRedirect from '../router/deferredRedirect';
 import AlphaBadge from '../components/AlphaBadge';
 import FrontPageLists from '../online/FrontPageLists';
+import PersonalFrontPageLists from '../online/PersonalFrontPageLists';
+import { useOnline } from '../contexts/OnlineContext';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -44,6 +46,7 @@ export const Route = createFileRoute('/')({
   component: memo(function Home() {
     const search = Route.useSearch();
     const navigate = useNavigate();
+    const { me } = useOnline();
     useLinkLoader(search, { cleanUrl: true, allowEmpty: true });
     useEffect(() => {
       let toastId: string | undefined;
@@ -118,10 +121,15 @@ export const Route = createFileRoute('/')({
             </div>
           </div>
         </div>
-        <div className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center">
+        <div className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center [&>*]:shrink-0">
           <Suspense fallback={<Loading />}>
             <FrontPageLists />
           </Suspense>
+          {me && (
+            <Suspense fallback={<Loading />}>
+              <PersonalFrontPageLists />
+            </Suspense>
+          )}
         </div>
       </>
     );

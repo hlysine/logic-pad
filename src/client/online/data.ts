@@ -107,6 +107,10 @@ export interface FrontPage {
   newestCollections: CollectionBrief[];
 }
 
+export interface PersonalFrontPage {
+  followedCollections: CollectionBrief[];
+}
+
 export interface ListResponse<T extends ResourceResponse> {
   total: number;
   results: T[];

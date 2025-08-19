@@ -33,6 +33,10 @@
     serif;
 }
 
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
 * {
   min-width: 0;
   min-height: 0;
@@ -83,8 +87,9 @@ summary::marker {
 .grid-glow {
   --tw-shadow: 0px 0px 300px 300px rgba(0, 0, 0, 0.3);
   --tw-shadow-colored: 0px 0px 300px 300px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow:
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
 }
 
 .mask-fade-l {

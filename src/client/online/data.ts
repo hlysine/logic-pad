@@ -100,6 +100,11 @@ export interface PuzzleFull extends PuzzleBrief {
   data: string;
 }
 
+export interface FrontPage {
+  newestPuzzles: PuzzleBrief[];
+  newestCollections: CollectionBrief[];
+}
+
 export interface ListResponse<T extends ResourceResponse> {
   total: number;
   results: T[];

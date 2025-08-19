@@ -58,20 +58,20 @@ export default memo(function CollectionFollowButton({
     },
   });
 
-  if (!isOnline || !me) return null;
+  if (!isOnline || !me || collectionFollow.error) return null;
   if (collectionFollow.isPending) return <Loading className="w-14" />;
   return (
     <button
       className="tooltip tooltip-info tooltip-top btn btn-md btn-primary flex items-center w-fit focus:z-50"
       data-tip={
-        collectionFollow.data!.followed
+        collectionFollow.data.followed
           ? 'Unfollow this collection'
           : 'Follow this collection'
       }
       onClick={async () => {
         const newFollow = await setCollectionFollow.mutateAsync([
           collectionId,
-          !collectionFollow.data!.followed,
+          !collectionFollow.data.followed,
         ]);
         await queryClient.setQueryData(['puzzle', 'love', collectionId], {
           followed: newFollow.followed,
@@ -81,12 +81,12 @@ export default memo(function CollectionFollowButton({
         });
       }}
     >
-      {collectionFollow.data!.followed ? (
+      {collectionFollow.data.followed ? (
         <RiUserFollowFill size={20} />
       ) : (
         <FaPlus size={20} />
       )}
-      {collectionFollow.data!.followed ? 'Following' : 'Follow'}
+      {collectionFollow.data.followed ? 'Following' : 'Follow'}
     </button>
   );
 });

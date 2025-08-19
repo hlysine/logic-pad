@@ -1,7 +1,6 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Suspense, lazy, memo, useEffect, useRef, useState } from 'react';
+import { Suspense, lazy, memo, useEffect } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
-import { puzzleTypeFilters } from '../components/PuzzleCard';
 import Changelog from '../components/Changelog';
 import Loading from '../components/Loading';
 import GridData from '@logic-pad/core/data/grid';
@@ -11,6 +10,7 @@ import PWAPrompt from '../components/PWAPrompt';
 import toast from 'react-hot-toast';
 import deferredRedirect from '../router/deferredRedirect';
 import AlphaBadge from '../components/AlphaBadge';
+import FrontPageLists from '../online/FrontPageLists';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -39,12 +39,9 @@ const FrontPageGrid = lazy(async () => {
     }),
   };
 });
-const CuratedPuzzles = lazy(() => import('../components/CuratedPuzzles'));
 
 export const Route = createFileRoute('/')({
   component: memo(function Home() {
-    const curatedPuzzles = useRef<HTMLDivElement>(null);
-    const [filter, setFilter] = useState<string>('All');
     const search = Route.useSearch();
     const navigate = useNavigate();
     useLinkLoader(search, { cleanUrl: true, allowEmpty: true });
@@ -73,7 +70,7 @@ export const Route = createFileRoute('/')({
     }, []);
     return (
       <>
-        <div className="flex flex-col min-h-dvh shrink-0">
+        <div className="flex flex-col shrink-0">
           <PWAPrompt />
           <QuickAccessBar className="justify-end px-8 py-2" />
           <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
@@ -121,31 +118,10 @@ export const Route = createFileRoute('/')({
             </div>
           </div>
         </div>
-        <div
-          ref={curatedPuzzles}
-          className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 min-h-dvh"
-        >
-          <div className="flex justify-between items-start flex-wrap">
-            <h2 className="text-2xl lg:text-4xl">Curated Puzzles</h2>
-            <ul className="menu menu-vertical md:menu-horizontal bg-base-100/15 text-neutral-content rounded-box">
-              {puzzleTypeFilters.map(({ name, icon: Icon }) => (
-                <li key={name}>
-                  <a
-                    className={name === filter ? 'bg-base-300/20' : ''}
-                    onClick={() => setFilter(name)}
-                  >
-                    <Icon />
-                    {name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-wrap gap-8 justify-center items-center">
-            <Suspense fallback={<Loading />}>
-              <CuratedPuzzles filter={filter} />
-            </Suspense>
-          </div>
+        <div className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center">
+          <Suspense fallback={<Loading />}>
+            <FrontPageLists />
+          </Suspense>
         </div>
       </>
     );

@@ -125,7 +125,7 @@ export default memo(function PuzzleCard({
   children,
 }: PuzzleCardProps) {
   return (
-    <div className="w-[320px] h-[116px] hover:z-50 shrink-0">
+    <div className="w-[320px] h-[116px] hover:z-50 shrink-0 grow-0">
       <div
         className={cn(
           'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',

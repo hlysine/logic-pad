@@ -16,7 +16,7 @@ export default memo(function CollectionCard({
   onClick,
 }: CollectionCardProps) {
   return (
-    <div className="w-[320px] h-[96px] hover:z-50 shrink-0">
+    <div className="w-[320px] h-[96px] hover:z-50 shrink-0 grow-0">
       <div
         className={cn(
           'w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',

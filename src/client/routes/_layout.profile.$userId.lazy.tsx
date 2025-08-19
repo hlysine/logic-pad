@@ -109,8 +109,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
           <Loading />
         ) : (
           <>
-            <div className="text-2xl">Created puzzles</div>
             <HorizontalScroller
+              title="Created puzzles"
               onExpand={
                 userDetail!.createdPuzzlesCollection
                   ? async () => {
@@ -135,8 +135,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                 />
               ))}
             </HorizontalScroller>
-            <div className="text-2xl">Created collections</div>
             <HorizontalScroller
+              title="Created collections"
               onExpand={async () => {
                 await navigate({
                   to: '/search/collections',

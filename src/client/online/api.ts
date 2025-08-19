@@ -12,6 +12,7 @@ import {
   ResourceStatus,
   ResourceResponse,
   UserDetail,
+  FrontPage,
 } from './data';
 import {
   DataTag,
@@ -367,6 +368,12 @@ export const api = {
       .get<ListResponse<CollectionBrief>>(`/user/me/collections`, {
         params: { ...query, cursorBefore, cursorAfter },
       })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  getFrontPage: async () => {
+    return await axios
+      .get<FrontPage>(`/frontpage`)
       .then(res => res.data)
       .catch(rethrowError);
   },

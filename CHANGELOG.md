@@ -1,3 +1,17 @@
+# 19/8/2025
+
+**PREVIEW BRANCH**
+
+- Added collections - group puzzles into a playlist for easy access
+  - You are free to create, modify and delete any of your collections
+  - Opening a puzzle from a collection creates a sidebar where you can quickly switch to other puzzles in the same collection
+  - Every user has collections for created, loved and solved puzzles, with their contents being updated automatically
+  - Following a user follows their "Created puzzles" collection
+- Added profile page
+- Added puzzle and collection lists in the front page
+- Fixed identity association - you can now sign in to the same Logic Pad account with accounts of different emails
+- Improved grid resize algorithm for mobile and tablet screens
+
 # 15/8/2025
 
 **PREVIEW BRANCH**

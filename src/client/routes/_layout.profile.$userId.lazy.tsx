@@ -157,6 +157,28 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                 />
               ))}
             </HorizontalScroller>
+            {userDetail?.solvedPuzzles && (
+              <HorizontalScroller
+                title="Solved puzzles"
+                onExpand={async () => {
+                  if (userDetail.solvedPuzzlesCollection)
+                    await navigate({
+                      to: '/collection/' + userDetail.solvedPuzzlesCollection,
+                    });
+                }}
+              >
+                {userDetail.solvedPuzzles.map(puzzle => (
+                  <PuzzleCard
+                    key={puzzle.id}
+                    puzzle={puzzle}
+                    expandable={false}
+                    onClick={async () => {
+                      await navigate({ to: '/solve/' + puzzle.id });
+                    }}
+                  />
+                ))}
+              </HorizontalScroller>
+            )}
           </>
         )}
       </ResponsiveLayout>

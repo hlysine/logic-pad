@@ -48,7 +48,7 @@ export default memo(function HorizontalScroller({
           !!children &&
           (!Array.isArray(children) || children.length > 0) && (
             <button
-              className="tooltip tooltip-info tooltip-left btn btn-ghost h-full px-0"
+              className="tooltip tooltip-info tooltip-left btn btn-ghost self-center px-0"
               data-tip="View more"
               onClick={onExpand}
             >

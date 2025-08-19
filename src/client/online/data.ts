@@ -91,9 +91,11 @@ export interface CollectionFollow {
 
 export interface UserDetail {
   accessedAt: string;
+  solvedPuzzlesCollection: string | null;
   createdPuzzlesCollection: string | null;
   createdPuzzles: PuzzleBrief[];
   createdCollections: CollectionBrief[];
+  solvedPuzzles: PuzzleBrief[] | null;
 }
 
 export interface PuzzleFull extends PuzzleBrief {

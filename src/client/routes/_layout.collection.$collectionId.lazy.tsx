@@ -86,9 +86,6 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex gap-4 items-center w-full">
-        {puzzles && puzzles.pages.length > 0 && (
-          <div className="w-full">{puzzles.pages[0].total} puzzles</div>
-        )}
         {editable && (
           <>
             {addToCollection.isPending ? (

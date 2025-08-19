@@ -136,7 +136,16 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               ))}
             </HorizontalScroller>
             <div className="text-2xl">Created collections</div>
-            <HorizontalScroller>
+            <HorizontalScroller
+              onExpand={async () => {
+                await navigate({
+                  to: '/search/collections',
+                  search: {
+                    q: `creator=${userBrief.id}`,
+                  },
+                });
+              }}
+            >
               {userDetail!.createdCollections.map(collection => (
                 <CollectionCard
                   key={collection.id}

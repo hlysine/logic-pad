@@ -37,9 +37,6 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
         />
         <div className="divider" />
         <div className="flex flex-col gap-4 items-center">
-          {data && data.pages.length > 0 && (
-            <div className="w-full">{data.pages[0].total} puzzles</div>
-          )}
           <div className="flex flex-wrap gap-4 justify-center">
             {data?.pages.flatMap(page =>
               page.results.map(puzzle => (

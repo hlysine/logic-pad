@@ -25,9 +25,6 @@ export default memo(function CollectionSearchResults({
 
   return (
     <div className="flex flex-col gap-4 items-center">
-      {data && data.pages.length > 0 && (
-        <div className="w-full">{data.pages[0].total} collections</div>
-      )}
       <div className="flex flex-wrap gap-4 justify-center">
         {data?.pages.flatMap(page =>
           page.results.map(collection => (

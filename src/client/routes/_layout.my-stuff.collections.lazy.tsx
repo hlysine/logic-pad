@@ -39,7 +39,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
           params={search}
           onChange={async params => await navigate({ search: params })}
         />
-        <div className="divider" />
+        <div className="divider m-0" />
         <div className="flex flex-col gap-4 items-center">
           <div className="flex flex-wrap gap-4 justify-center">
             {data?.pages.flatMap(page =>

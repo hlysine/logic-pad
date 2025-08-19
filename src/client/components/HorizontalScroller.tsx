@@ -43,15 +43,23 @@ export default memo(function HorizontalScroller({
         )}
       >
         {children}
-        {onExpand && scrollable && (
-          <button
-            className="tooltip tooltip-info tooltip-left btn btn-ghost h-full px-0"
-            data-tip="View more"
-            onClick={onExpand}
-          >
-            <BsChevronCompactRight size={36} />
-          </button>
-        )}
+        {onExpand &&
+          scrollable &&
+          !!children &&
+          (!Array.isArray(children) || children.length > 0) && (
+            <button
+              className="tooltip tooltip-info tooltip-left btn btn-ghost h-full px-0"
+              data-tip="View more"
+              onClick={onExpand}
+            >
+              <BsChevronCompactRight size={36} />
+            </button>
+          )}
+        {!children || (Array.isArray(children) && children.length === 0) ? (
+          <div className="flex items-center justify-center py-4">
+            <p className="text-sm opacity-80">Nothing here yet</p>
+          </div>
+        ) : null}
       </div>
     </>
   );

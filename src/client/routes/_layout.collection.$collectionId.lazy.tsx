@@ -85,7 +85,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
   const [selectedPuzzles, setSelectedPuzzles] = useState<string[] | null>(null);
   return (
     <div className="flex flex-col gap-4 items-center">
-      <div className="flex gap-4 items-center w-full">
+      <div className="flex gap-4 items-center w-full justify-end">
         {editable && (
           <>
             {addToCollection.isPending ? (
@@ -152,7 +152,12 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
               puzzle={puzzle}
               onClick={async () => {
                 if (selectedPuzzles !== null) {
-                  setSelectedPuzzles(selection => [...selection!, puzzle.id]);
+                  setSelectedPuzzles(selection => {
+                    if (selection?.includes(puzzle.id)) {
+                      return selection.filter(id => id !== puzzle.id);
+                    }
+                    return [...(selection ?? []), puzzle.id];
+                  });
                 } else {
                   await navigate({
                     to: `/solve/${puzzle.id}`,

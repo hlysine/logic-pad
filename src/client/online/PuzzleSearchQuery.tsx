@@ -254,11 +254,11 @@ export default memo(function PuzzleSearchQuery({
           onChange={e => updateParams({ ...displayParams, q: e.target.value })}
         />
       </label>
-      <div className="grid grid-cols-[minmax(8rem,auto)_minmax(0,1fr)] items-start gap-y-2">
+      <div className="grid grid-cols-[minmax(8rem,auto)_minmax(0,1fr)] items-start gap-y-1">
         {filters.map(filter => (
           <Fragment key={filter.name}>
             <div>{filter.name}</div>
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex gap-2 flex-wrap">
               {filter.options.map(option => (
                 <button
                   key={option.id}
@@ -273,8 +273,8 @@ export default memo(function PuzzleSearchQuery({
             </div>
           </Fragment>
         ))}
-        <div className="mt-4">Sort by</div>
-        <div className="flex gap-4 mt-4 flex-wrap">
+        <div className="mt-2">Sort by</div>
+        <div className="flex gap-4 mt-2 flex-wrap">
           {orderings.map(ordering => (
             <button
               key={ordering.id}

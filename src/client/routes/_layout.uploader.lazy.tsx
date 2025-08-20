@@ -1,5 +1,5 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
-import { memo, RefObject, useRef, useSyncExternalStore } from 'react';
+import { createLazyFileRoute, useBlocker } from '@tanstack/react-router';
+import { memo, RefObject, useMemo, useRef, useSyncExternalStore } from 'react';
 import { useRouteProtection } from '../router/useRouteProtection';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import { FaExternalLinkAlt, FaTrash, FaUpload } from 'react-icons/fa';
@@ -21,21 +21,6 @@ import PuzzleEditorModal, {
 import { Puzzle } from '@logic-pad/core/data/puzzle';
 import { cn } from '../uiHelper';
 
-const debugInput = `
-Essentially hexagonal 1
-
-https://logic-pad.com/create?loader=visible&d=dfl_fY5Ni8IwEIb_iozgKZTGtSCRHtrgbU_qvaQ11mCYSJqSdrf735caw3qQHXgyH-87TNLqG5xyWgKDfddJdEpoPS6uchCtQaEXFAi0Vp2BAU0HSqcTTZn3SRLwvq4Dr1WMOKnrv-qd_k6LF5Jk4jRlRZEkgaIoywDnZRngfO7CJOpRC87A_7vxwnScDrXA6i6ckxbJM-fZkK2WdL3ZnbLVMtvuvEfE-a_xwWcEF6cPV2iOIR2Yla0yWAkrBWmMNjY_C3sjnfqS-YY1UuuqMT26V_ExyNdbIHBWl4tqeu1GYB8EtMIbMAACondXY4HB59gplLNVdo1Vd6cMzpafXw%3D%3D
-
-Essentially hexagonal 2
-
-https://logic-pad.com/create?loader=visible&d=dfl_7ZLPb4IwFID_FfNMPDUNMjFLDQfB3XZS76Zg1cbuYaAEyNj_vmAlUEaWZbuuSX997_XrC9Q5vIOWWglg8JJlArXkSlWTiyj5OUGuJi4QOKfyCAxcp3Sdeu86jBZF1GvNjo4xs2ibgWOMmuXQ94UZYJ8eY7QLdL4RZtdj4Bijndyub8D6ers-m9Gu4GF9Fht-ANvXsTpsfsp6HQR2p2MsCMJws-n3IBhj_76_-eod5m-RSEnpz6lHKt-hHjHIX7BBbNHFntx6G3E83LjWIkXymH2v9GbTubtY7b3Z1HteFQUiNu-hHfDRTFY4v2eZzc5MW_YTcRQhYvOw2uG34mW5fIiXnbj13d39G8z43R1xgihifeBKkThRSeofeXoFAkd5Osk4V7oC5hFQEq_AAAjwXF-SFBi8VplE0aSKLE7lTcsEm5SPTw%3D%3D
-
-Essentially hexagonal 3
-
-https://logic-pad.com/create?loader=visible&d=dfl_7ZVNT4MwGMe_iqmJp6bhRXCp4VBAvXhS7wtsdTbWskCXjTi_uykMN3lpe9jBgyQ8Dfx_z3sCzvwTSCY5BRjcVRUVkmWc1xdvdJetCpHxCx9AsCrZEmDgBzvf27_4AUYICcNlhSgbx9MW2SB6_RDEhJylnTPVcqa5_O9oFPnf0d_f0T7xQ_WRISSOdTeyY-I4SdJ0-kZ2DCFpaq7GyKhMumzIkjlXPabeCbFltLtQDVkyulyqIVM9B0bXe5qa53NgdLsgxLyvjjHkakdow2h6b4doy0zuosMsmenOO8zMaHrvMN18TpipXXSYbl8ds3_mVEpawl3koADWUYgC2L6KCP7RPLcRnVEx7DvGR831GtGdjareTT9sMhCbCEPV9_uu6cDVux5Vm2J-13SHe2PwnVExHHg-DEo6zXo_mMRp4Pt-4FPxYf9U1R95wav5mpbzkq5YIeCi2AgZOXBR8KKMlln5jvNMzNeZ8hHwcEbhzru6dL3r25fw6jKY3W63eb7dtrYVErcR2ofn9niaiBX2YqmfV2tFnh-tOCqaHACCJXt9ZYsNlzXAMwg4E-8AAwBBtpFvRQkweKwrJqhCabUo2VqyQijk6xs%3D
-
-https://logic-pad.com/solve?d=dfl_RY47C4MwGEX_SrmCU4amKJRIB7FjJ3VyER_RhsqnaMRH0_9erKW9y-HAGe4xfUIr3UgIXGU-1oduXNdGgqHuVQkBPjsm5oKIyARc-L7vm8REJswzSrtMa9kT-_Lizq5t8ZPjxa5tuWePfpumafob7VXAP9UuyY5oRwiGUlWVKsZGLxCcoVH0gAAYslHf2x4Ct2VQtJ0t5VD0qtOqpS15vQE%3D`;
-
 type UploadEntryData = {
   data: string;
 } & (
@@ -52,7 +37,7 @@ type UploadEntryData = {
       difficulty: number;
     }
   | {
-      status: 'solving' | 'invalid';
+      status: 'invalid';
       gridWithSolution: GridData;
       solutionStatus: 'unknown' | 'included' | 'unique' | 'alt' | 'none';
       title: string;
@@ -60,6 +45,17 @@ type UploadEntryData = {
       author: string;
       difficulty: number;
       error: string;
+    }
+  | {
+      status: 'solving';
+      gridWithSolution: GridData;
+      solutionStatus: 'unknown' | 'included' | 'unique' | 'alt' | 'none';
+      title: string;
+      description: string;
+      author: string;
+      difficulty: number;
+      error: string;
+      solverRef: AbortController;
     }
   | {
       status: 'uploaded' | 'published';
@@ -142,7 +138,6 @@ class UploadManager {
   public add = (data: string) => {
     if (data.length === 0) return;
     if (this.uploads.find(e => e.data === data)) return;
-    console.log('Adding upload', data);
     const entry: UploadEntry = {
       status: 'decoding',
       data,
@@ -228,6 +223,13 @@ class UploadManager {
   };
 
   public enqueueSolve = (entry: UploadEntry) => {
+    if (entry.status !== 'invalid' && entry.status !== 'verified') return;
+    if (
+      entry.solutionStatus !== 'included' &&
+      entry.solutionStatus !== 'unknown'
+    )
+      return;
+    if (entry.gridWithSolution.requireSolution()) return;
     const controller = new AbortController();
     void (async () => {
       try {
@@ -250,9 +252,9 @@ class UploadManager {
               gridWithSolution: updatedEntry.gridWithSolution,
               solutionStatus: 'unknown',
               error: 'Solving',
+              solverRef: controller,
             });
             const solver = [...allSolvers.values()][0];
-            console.log('Finding solver', solver);
             if (!solver) return;
             try {
               let isAlternate = false;
@@ -260,10 +262,8 @@ class UploadManager {
                 updatedEntry.gridWithSolution,
                 signal
               )) {
-                console.log('Solver response', solution);
                 if (!isAlternate) {
                   updatedEntry = this.uploads.find(e => e.data === entry.data);
-                  console.log('Updated entry', updatedEntry);
                   if (!updatedEntry) return;
                   if (updatedEntry.status !== 'solving') return;
                   if (solution) {
@@ -277,6 +277,7 @@ class UploadManager {
                       gridWithSolution: solution,
                       solutionStatus: 'unique',
                       error: 'Checking uniqueness',
+                      solverRef: controller,
                     });
                   } else {
                     this.replace({
@@ -346,17 +347,26 @@ class UploadManager {
       } catch (_) {
         const updatedEntry = this.uploads.find(e => e.data === entry.data);
         if (updatedEntry?.status === 'solving') {
-          this.replace({
-            status: 'invalid',
-            data: updatedEntry.data,
-            title: updatedEntry.title,
-            author: updatedEntry.author,
-            description: updatedEntry.description,
-            difficulty: updatedEntry.difficulty,
-            gridWithSolution: updatedEntry.gridWithSolution,
-            solutionStatus: 'unknown',
-            error: 'Solver aborted',
-          });
+          const resetGrid = updatedEntry.gridWithSolution.resetTiles();
+          if (resetGrid.colorEquals(updatedEntry.gridWithSolution)) {
+            this.updateEntryVerification(updatedEntry.data, {
+              title: updatedEntry.title,
+              author: updatedEntry.author,
+              description: updatedEntry.description,
+              difficulty: updatedEntry.difficulty,
+              grid: updatedEntry.gridWithSolution,
+              solution: null,
+            });
+          } else {
+            this.updateEntryVerification(updatedEntry.data, {
+              title: updatedEntry.title,
+              author: updatedEntry.author,
+              description: updatedEntry.description,
+              difficulty: updatedEntry.difficulty,
+              grid: resetGrid,
+              solution: updatedEntry.gridWithSolution,
+            });
+          }
         }
       }
     })();
@@ -444,11 +454,17 @@ const UploadEntryRow = memo(function UploadEntryRow({
 }) {
   const entry = useUploadEntry(uploadManager, data);
   const puzzleEditorRef = useRef<PuzzleEditorRef>(null);
-  const solverRef = useRef<AbortController | null>(null);
+  const autoSolvable = useMemo(() => {
+    if (entry && 'gridWithSolution' in entry) {
+      return !entry.gridWithSolution.requireSolution();
+    } else {
+      return false;
+    }
+  }, [entry]);
   if (!entry) return null;
   const puzzleInfo =
     entry.status !== 'decoding' ? (
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center flex-wrap">
         {entry.status === 'solving' && <Loading className="w-6 h-6" />}
         <div className="font-mono max-w-xs whitespace-nowrap overflow-hidden text-ellipsis">
           {entry.title}
@@ -511,7 +527,7 @@ const UploadEntryRow = memo(function UploadEntryRow({
         </div>
       </div>
     ) : (
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center flex-wrap">
         <Loading className="w-6 h-6" />
         <div className="font-mono max-w-xs whitespace-nowrap overflow-hidden text-ellipsis">
           {entry.data}
@@ -521,14 +537,18 @@ const UploadEntryRow = memo(function UploadEntryRow({
   const controls =
     entry.status === 'invalid' || entry.status === 'verified' ? (
       <>
-        <button
-          className="btn btn-sm"
-          onClick={() => {
-            solverRef.current = uploadManager.current.enqueueSolve(entry);
-          }}
-        >
-          Auto-solve
-        </button>
+        {autoSolvable ? (
+          <button
+            className="btn btn-sm"
+            onClick={() => {
+              uploadManager.current.enqueueSolve(entry);
+            }}
+          >
+            Auto-solve
+          </button>
+        ) : (
+          <div className="btn btn-sm btn-disabled">Not auto-solvable</div>
+        )}
         <button
           className="btn btn-sm"
           onClick={() => {
@@ -562,11 +582,12 @@ const UploadEntryRow = memo(function UploadEntryRow({
           className={cn(
             'badge shrink-0',
             (entry.solutionStatus === 'alt' ||
-              entry.solutionStatus === 'unknown' ||
               entry.solutionStatus === 'included') &&
               'badge-info',
             entry.solutionStatus === 'unique' && 'badge-success',
-            entry.solutionStatus === 'none' && 'badge-error'
+            (entry.solutionStatus === 'none' ||
+              entry.solutionStatus === 'unknown') &&
+              'badge-error'
           )}
         >
           {entry.solutionStatus === 'alt' && 'Alternate solution'}
@@ -581,48 +602,33 @@ const UploadEntryRow = memo(function UploadEntryRow({
         <button
           className="btn btn-sm"
           onClick={() => {
-            solverRef.current?.abort();
+            entry.solverRef.abort();
           }}
         >
           Cancel solve
         </button>
       </>
     ) : null;
+  const statusBadge =
+    entry.status === 'decoding' ? (
+      <div className="badge shrink-0">Decoding...</div>
+    ) : entry.status === 'invalid' ? (
+      <div className="badge badge-error shrink-0">Invalid</div>
+    ) : entry.status === 'verified' ? (
+      <div className="badge badge-success shrink-0">Verified</div>
+    ) : entry.status === 'solving' ? (
+      <div className="badge badge-info shrink-0">Solving...</div>
+    ) : null;
+
   return (
     <div key={entry.data} className="flex flex-col gap-1">
-      <div className="flex gap-2 items-center justify-between min-h-8 flex-wrap [&>*]:shrink-0">
-        {entry.status === 'decoding' ? (
-          <>
-            {puzzleInfo}
-            <div className="badge shrink-0">Decoding...</div>
-          </>
-        ) : entry.status === 'invalid' ? (
-          <>
-            {puzzleInfo}
-            <div className="flex gap-2 items-center">
-              <div>{entry.error}</div>
-              {controls}
-              <div className="badge badge-error shrink-0">Invalid</div>
-            </div>
-          </>
-        ) : entry.status === 'verified' ? (
-          <>
-            {puzzleInfo}
-            <div className="flex gap-2 items-center">
-              {controls}
-              <div className="badge badge-success shrink-0">Verified</div>
-            </div>
-          </>
-        ) : entry.status === 'solving' ? (
-          <>
-            {puzzleInfo}
-            <div className="flex gap-2 items-center">
-              <div>{entry.error}</div>
-              {controls}
-              <div className="badge badge-info shrink-0">Solving</div>
-            </div>
-          </>
-        ) : null}
+      <div className="flex gap-2 items-center justify-between min-h-8 flex-wrap">
+        {puzzleInfo}
+        <div className="flex gap-2 items-center flex-wrap">
+          {'error' in entry && <div>{entry.error}</div>}
+          {controls}
+          {statusBadge}
+        </div>
       </div>
       <div className="divider m-0" />
     </div>
@@ -638,6 +644,11 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
     const entries = useUploadManager(uploadManager);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    useBlocker({
+      shouldBlockFn: () => !window.confirm('Are you sure you want to leave?'),
+      disabled: entries.length === 0,
+    });
+
     return (
       <ResponsiveLayout>
         <div className="text-3xl">
@@ -652,6 +663,19 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
           You can edit the extracted puzzle data before uploading or use the
           auto solver to generate missing solutions.
         </div>
+        <div className="flex gap-2 items-center justify-between">
+          <div>{entries.length} uploads</div>
+          <button
+            className="btn btn-sm"
+            onClick={() => {
+              uploadManager.current.getUploads().forEach(entry => {
+                uploadManager.current.enqueueSolve(entry);
+              });
+            }}
+          >
+            Auto-solve all
+          </button>
+        </div>
         <div className="divider m-0" />
         {entries.map(entry => (
           <UploadEntryRow
@@ -662,7 +686,6 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
         ))}
         <textarea
           ref={textareaRef}
-          defaultValue={debugInput}
           placeholder="Paste puzzle links here"
           className="textarea textarea-bordered"
         ></textarea>

@@ -11,6 +11,8 @@ import { useDelta } from 'react-delta-hooks';
 import FullScreenModal from '../components/FullScreenModal.tsx';
 import OnlineContext from '../contexts/OnlineContext.tsx';
 import { PuzzleMetadata } from '@logic-pad/core/data/puzzle.ts';
+import SolverContext from '../contexts/SolverContext.tsx';
+import InstructionPartsContext from '../contexts/InstructionPartsContext.tsx';
 
 export interface PuzzleEditorRef {
   open: (metadata: PuzzleMetadata, gridWithSolution: GridData) => void;
@@ -77,17 +79,21 @@ export default memo(function PuzzleEditorModal({
                     metadata={tempMetadata}
                     setMetadata={setTempMetadata}
                   >
-                    <PuzzleEditorScreen>
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => {
-                          setOpen(false);
-                        }}
-                      >
-                        Save and exit
-                      </button>
-                    </PuzzleEditorScreen>
+                    <SolverContext>
+                      <InstructionPartsContext>
+                        <PuzzleEditorScreen>
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => {
+                              setOpen(false);
+                            }}
+                          >
+                            Save and exit
+                          </button>
+                        </PuzzleEditorScreen>
+                      </InstructionPartsContext>
+                    </SolverContext>
                   </GridContext>
                 </GridStateContext>
               </EditContext>

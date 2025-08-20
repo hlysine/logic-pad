@@ -115,6 +115,13 @@ export const Route = createFileRoute('/')({
                   >
                     Explore puzzles
                   </Link>
+                  <Link
+                    type="button"
+                    to="/uploader"
+                    className="btn btn-md lg:btn-lg btn-accent btn-outline"
+                  >
+                    Import puzzles
+                  </Link>
                 </div>
                 <Changelog />
               </div>

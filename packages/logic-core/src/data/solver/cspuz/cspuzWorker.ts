@@ -47,6 +47,11 @@ onmessage = e => {
 
   postSolution(grid, solverResult);
 
+  if (isUnderclued) {
+    postMessage(null);
+    return;
+  }
+
   // Make use of the underclued mode to determine solution uniqueness
   if (solverResult !== null && !('error' in solverResult) && !isUnderclued) {
     const undercluedResult = solveLogicPad(puzzleData, true);

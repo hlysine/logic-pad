@@ -14,6 +14,7 @@ import {
   UserDetail,
   FrontPage,
   PersonalFrontPage,
+  Comment,
 } from './data';
 import {
   DataTag,
@@ -383,6 +384,32 @@ export const api = {
       .get<PersonalFrontPage>(`/frontpage/me`)
       .then(res => res.data)
       .catch(rethrowError);
+  },
+  listComments: async (
+    puzzleId: string,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<ListResponse<Comment>>(`/comments/${puzzleId}`, {
+        params: { cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  createComment: async (puzzleId: string, content: string) => {
+    return await axios
+      .post<{ id: string }>(`/comments/${puzzleId}`, { content })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  updateComment: async (commentId: string, content: string) => {
+    await axios
+      .put<Comment>(`/comments/${commentId}`, { content })
+      .catch(rethrowError);
+  },
+  deleteComment: async (commentId: string) => {
+    await axios.delete(`/comments/${commentId}`).catch(rethrowError);
   },
 };
 

@@ -15,6 +15,8 @@ import toast from 'react-hot-toast';
 import { animate } from 'animejs';
 import { useReducedMotion } from '../contexts/SettingsContext.tsx';
 import { PuzzleFull } from '../online/data.ts';
+import CommentSidebar from '../online/CommentSidebar.tsx';
+import { FaComment } from 'react-icons/fa';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
@@ -101,8 +103,12 @@ const RatePuzzle = memo(function RatePuzzle({
 
 const PuzzleCompleted = memo(function PuzzleCompleted({
   initialRating,
+  openComments,
+  setOpenComments,
 }: {
   initialRating: number;
+  openComments: boolean;
+  setOpenComments: (open: boolean) => void;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
@@ -114,6 +120,7 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
       translateY: [50, 0],
       duration: 300,
       ease: 'outExpo',
+      onComplete: () => panelRef.current!.style.removeProperty('transform'),
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -126,9 +133,16 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
         <div className="text-2xl">Puzzle solved!</div>
         <div>How difficult was this puzzle?</div>
         <RatePuzzle initialRating={initialRating} />
-        <div>Found a problem?</div>
-        <button className="btn btn-disabled w-full">
-          Send feedback (Coming soon)
+        <CommentSidebar
+          open={openComments}
+          onClose={() => setOpenComments(false)}
+          key="commentSidebar"
+        />
+        <button
+          className="btn btn-primary w-full"
+          onClick={() => setOpenComments(!openComments)}
+        >
+          <FaComment /> View comments
         </button>
       </div>
     </div>
@@ -167,6 +181,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
   }, [id, isOnline, me]);
 
   const { state } = useGridState();
+  const [openComments, setOpenComments] = useState(false);
 
   useEffect(() => {
     if (!isOnline || !me || !id) return;
@@ -198,6 +213,17 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
     return (
       <div className="flex p-2 ps-4 leading-8 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
         Unsolved puzzle
+        <CommentSidebar
+          open={openComments}
+          onClose={() => setOpenComments(false)}
+          key="commentSidebar"
+        />
+        <button
+          className="btn btn-sm btn-ghost"
+          onClick={() => setOpenComments(!openComments)}
+        >
+          <FaComment />
+        </button>
       </div>
     );
   }
@@ -205,6 +231,8 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
   return (
     <PuzzleCompleted
       initialRating={completionBegin.data!.ratedDifficulty ?? 0}
+      openComments={openComments}
+      setOpenComments={setOpenComments}
     />
   );
 });

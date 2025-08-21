@@ -59,13 +59,10 @@ export interface CollectionBrief extends ResourceResponse {
   modifiedAt: string;
 }
 
-export interface Feedback extends ResourceResponse {
-  title: string;
-  description: string;
-  data: string | null;
-  type: FeedbackType;
+export interface Comment extends ResourceResponse {
+  puzzleId: string;
   creator: UserBrief;
-  puzzle: PuzzleBrief;
+  content: string;
 }
 
 export interface Completion extends ResourceResponse {

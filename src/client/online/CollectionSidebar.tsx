@@ -70,12 +70,12 @@ export default memo(function CollectionSidebar({
   return (
     <div className="drawer">
       <input
-        id={`three-pane-${drawerId}`}
+        id={`collection-sidebar-${drawerId}`}
         type="checkbox"
         className="drawer-toggle"
       />
       <label
-        htmlFor={`three-pane-${drawerId}`}
+        htmlFor={`collection-sidebar-${drawerId}`}
         className="drawer-content btn btn-ghost drawer-button -ml-4 h-fit gap-4 text-neutral-content rounded-none rounded-r-lg justify-start"
       >
         <RiPlayList2Fill size={24} />
@@ -90,7 +90,7 @@ export default memo(function CollectionSidebar({
       </label>
       <div className="drawer-side !overflow-x-visible !overflow-y-visible z-50 h-full w-full">
         <label
-          htmlFor={`three-pane-${drawerId}`}
+          htmlFor={`collection-sidebar-${drawerId}`}
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>

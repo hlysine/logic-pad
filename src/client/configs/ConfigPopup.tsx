@@ -98,10 +98,7 @@ export default memo(function ConfigPopup() {
   useEffect(() => {
     const handleClick = (e: PointerEvent) => {
       if (
-        !(
-          popupRef.current &&
-          containsPoint(popupRef.current, e.clientX, e.clientY)
-        ) &&
+        !popupRef.current?.contains(e.target as Node) &&
         !(ref?.current && containsPoint(ref.current, e.clientX, e.clientY))
       ) {
         setLocation(undefined);

@@ -22,6 +22,8 @@ import { cn } from '../uiHelper';
 import toast from 'react-hot-toast';
 import { useOnline } from '../contexts/OnlineContext';
 
+const defaultSolver = [...allSolvers.values()][0];
+
 type SolutionStatus = 'missing' | 'manual' | 'unique' | 'multiple' | 'none';
 
 interface DecodingData {
@@ -174,7 +176,7 @@ class UploadManager {
     if (entry.status !== 'local') return;
     if (entry.solutionStatus !== 'manual' && entry.solutionStatus !== 'missing')
       return;
-    if (entry.gridWithSolution.requireSolution()) return;
+    if (!defaultSolver.isGridSupported(entry.gridWithSolution)) return;
     const controller = new AbortController();
     this.updateAndVerify(
       data,
@@ -191,7 +193,7 @@ class UploadManager {
             let updatedEntry = this.uploads.find(e => e.data === entry.data);
             if (!updatedEntry) return;
             if (updatedEntry.status !== 'solving') return;
-            const solver = [...allSolvers.values()][0];
+            const solver = defaultSolver;
             if (!solver) return;
             try {
               let isAlternate = false;
@@ -475,7 +477,7 @@ const UploadEntryRow = memo(function UploadEntryRow({
         entry.solutionStatus === 'missing') &&
       'gridWithSolution' in entry
     ) {
-      return !entry.gridWithSolution.requireSolution();
+      return defaultSolver.isGridSupported(entry.gridWithSolution);
     } else {
       return null;
     }
@@ -705,7 +707,7 @@ const MasterControls = memo(function MasterControls({
           entry.status === 'local' &&
           (entry.solutionStatus === 'manual' ||
             entry.solutionStatus === 'missing') &&
-          !entry.gridWithSolution.requireSolution()
+          defaultSolver.isGridSupported(entry.gridWithSolution)
             ? acc + 1
             : acc,
         0

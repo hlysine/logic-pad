@@ -19,6 +19,8 @@ import PuzzleEditorModal, {
 } from '../editor/PuzzleEditorModal';
 import { Puzzle, PuzzleMetadata } from '@logic-pad/core/data/puzzle';
 import { cn } from '../uiHelper';
+import toast from 'react-hot-toast';
+import { useOnline } from '../contexts/OnlineContext';
 
 type SolutionStatus = 'missing' | 'manual' | 'unique' | 'multiple' | 'none';
 
@@ -66,23 +68,13 @@ interface OnlineEntry extends OnlineData {
   status: 'online';
 }
 
-interface PublishingEntry extends OnlineData {
-  status: 'publishing';
-}
-
-interface PublishedEntry extends OnlineData {
-  status: 'published';
-}
-
 type UploadEntry =
   | DecodingEntry
   | MalformedEntry
   | LocalEntry
   | SolvingEntry
   | UploadingEntry
-  | OnlineEntry
-  | PublishingEntry
-  | PublishedEntry;
+  | OnlineEntry;
 
 function getErrorMessage(checklistItem: string) {
   switch (checklistItem) {
@@ -184,21 +176,21 @@ class UploadManager {
       return;
     if (entry.gridWithSolution.requireSolution()) return;
     const controller = new AbortController();
+    this.updateAndVerify(
+      data,
+      'solving',
+      entry.metadata,
+      entry.gridWithSolution,
+      undefined,
+      controller
+    );
     void (async () => {
       try {
         await this.taskQueue.add(
           async ({ signal }) => {
             let updatedEntry = this.uploads.find(e => e.data === entry.data);
             if (!updatedEntry) return;
-            if (updatedEntry.status !== 'local') return;
-            this.updateAndVerify(
-              data,
-              'solving',
-              updatedEntry.metadata,
-              updatedEntry.gridWithSolution,
-              undefined,
-              controller
-            );
+            if (updatedEntry.status !== 'solving') return;
             const solver = [...allSolvers.values()][0];
             if (!solver) return;
             try {
@@ -285,6 +277,48 @@ class UploadManager {
       }
     })();
     return controller;
+  };
+
+  public enqueueUpload = (data: string) => {
+    const entry = this.uploads.find(e => e.data === data);
+    if (!entry) return;
+    if (entry.status !== 'local') return;
+    if (!entry.checklistStatus) return;
+    this.replace({
+      ...entry,
+      status: 'uploading',
+    });
+    void this.taskQueue.add(
+      async () => {
+        let entry = this.uploads.find(e => e.data === data);
+        if (!entry) return;
+        if (entry.status !== 'uploading') return;
+        console.log('Uploading', entry);
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          entry = this.uploads.find(e => e.data === data);
+          if (!entry) return;
+          if (entry.status !== 'uploading') return;
+          this.replace({
+            puzzleId: Math.floor(Math.random() * 10000).toString(),
+            ...entry,
+            status: 'online',
+          });
+        } catch (ex) {
+          if (ex && typeof ex === 'object')
+            toast.error('message' in ex ? String(ex.message) : 'Upload failed');
+          entry = this.uploads.find(e => e.data === data);
+          if (!entry) return;
+          if (entry.status === 'uploading') {
+            this.replace({
+              ...entry,
+              status: 'local',
+            });
+          }
+        }
+      },
+      { id: data }
+    );
   };
 
   public edit = (
@@ -430,6 +464,7 @@ const UploadEntryRow = memo(function UploadEntryRow({
   data: string;
   uploadManager: RefObject<UploadManager>;
 }) {
+  const { me } = useOnline();
   const entry = useUploadEntry(uploadManager, data);
   const puzzleEditorRef = useRef<PuzzleEditorRef>(null);
   const autoSolvable = useMemo(() => {
@@ -454,7 +489,7 @@ const UploadEntryRow = memo(function UploadEntryRow({
           {entry.metadata.title}
         </div>
         <div className="badge badge-secondary badge-sm shrink-0">
-          {entry.metadata.author}
+          {entry.status === 'online' ? me?.name : entry.metadata.author}
         </div>
         <Difficulty value={entry.metadata.difficulty} size="xs" />
         <div
@@ -464,45 +499,53 @@ const UploadEntryRow = memo(function UploadEntryRow({
           <button
             className="btn btn-sm btn-square btn-ghost"
             onClick={async () => {
-              const resetGrid = entry.gridWithSolution.resetTiles();
-              let puzzle: Puzzle;
-              if (resetGrid.colorEquals(entry.gridWithSolution)) {
-                puzzle = {
-                  ...entry.metadata,
-                  grid: entry.gridWithSolution,
-                  solution: null,
-                };
+              if (entry.status === 'online') {
+                const url = new URL(window.location.origin);
+                url.pathname = '/create/' + entry.puzzleId;
+                window.open(url.toString(), '_blank');
               } else {
-                puzzle = {
-                  ...entry.metadata,
-                  grid: resetGrid,
-                  solution: entry.gridWithSolution,
-                };
+                const resetGrid = entry.gridWithSolution.resetTiles();
+                let puzzle: Puzzle;
+                if (resetGrid.colorEquals(entry.gridWithSolution)) {
+                  puzzle = {
+                    ...entry.metadata,
+                    grid: entry.gridWithSolution,
+                    solution: null,
+                  };
+                } else {
+                  puzzle = {
+                    ...entry.metadata,
+                    grid: resetGrid,
+                    solution: entry.gridWithSolution,
+                  };
+                }
+                const data = await Compressor.compress(
+                  Serializer.stringifyPuzzle(puzzle)
+                );
+                const url = new URL(window.location.origin);
+                url.pathname = '/create';
+                url.searchParams.set('loader', 'visible');
+                url.searchParams.set('d', data);
+                window.open(url.toString(), '_blank');
               }
-              const data = await Compressor.compress(
-                Serializer.stringifyPuzzle(puzzle)
-              );
-              const url = new URL(window.location.origin);
-              url.pathname = '/create';
-              url.searchParams.set('loader', 'visible');
-              url.searchParams.set('d', data);
-              window.open(url.toString(), '_blank');
             }}
           >
             <FaExternalLinkAlt />
           </button>
         </div>
-        <div
-          className="tooltip tooltip-error tooltip-top"
-          data-tip="Delete this puzzle"
-        >
-          <button
-            className="btn btn-sm btn-ghost btn-square text-error"
-            onClick={() => uploadManager.current.delete(entry.data)}
+        {entry.status !== 'online' && (
+          <div
+            className="tooltip tooltip-error tooltip-top"
+            data-tip="Delete this puzzle"
           >
-            <FaTrash />
-          </button>
-        </div>
+            <button
+              className="btn btn-sm btn-ghost btn-square text-error"
+              onClick={() => uploadManager.current.delete(entry.data)}
+            >
+              <FaTrash />
+            </button>
+          </div>
+        )}
       </div>
     ) : (
       <div className="flex gap-2 items-center flex-wrap">
@@ -601,6 +644,35 @@ const UploadEntryRow = memo(function UploadEntryRow({
       <div className="badge badge-info shrink-0">Solving...</div>
     ) : entry.status === 'malformed' ? (
       <div className="badge badge-error shrink-0">Malformed data</div>
+    ) : entry.status === 'uploading' ? (
+      <div className="badge shrink-0">Uploading...</div>
+    ) : entry.status === 'online' ? (
+      <div className="badge badge-success shrink-0">Published</div>
+    ) : null;
+  const uploadControls =
+    entry.status === 'local' && entry.checklistStatus ? (
+      <div
+        className="tooltip tooltip-left tooltip-info"
+        data-tip="Publish this puzzle"
+      >
+        <button
+          className="btn btn-sm btn-primary"
+          onClick={() => {
+            uploadManager.current.enqueueUpload(entry.data);
+          }}
+        >
+          <FaUpload />
+        </button>
+      </div>
+    ) : entry.status !== 'online' ? (
+      <div
+        className="tooltip tooltip-left tooltip-error"
+        data-tip="Pass checklist before uploading"
+      >
+        <div className="btn btn-sm btn-disabled">
+          <FaUpload />
+        </div>
+      </div>
     ) : null;
 
   return (
@@ -611,6 +683,7 @@ const UploadEntryRow = memo(function UploadEntryRow({
           {'error' in entry && <div>{entry.error}</div>}
           {controls}
           {statusBadge}
+          {uploadControls}
         </div>
       </div>
       <div className="divider m-0" />
@@ -631,29 +704,55 @@ const MasterControls = memo(function MasterControls({
         (acc, entry) =>
           entry.status === 'local' &&
           (entry.solutionStatus === 'manual' ||
-            entry.solutionStatus === 'missing')
+            entry.solutionStatus === 'missing') &&
+          !entry.gridWithSolution.requireSolution()
             ? acc + 1
             : acc,
         0
       ),
     [entries]
   );
+  const uploadableCount = useMemo(
+    () =>
+      entries.reduce(
+        (acc, entry) =>
+          entry.status === 'local' && entry.checklistStatus ? acc + 1 : acc,
+        0
+      ),
+    [entries]
+  );
   return (
-    <div className="flex gap-2 items-center justify-between">
+    <div className="flex gap-2 items-center justify-between flex-wrap">
       <div>{entries.length} uploads</div>
-      <button
-        className={cn(
-          'btn btn-sm',
-          (!isQueueIdle || solvableCount === 0) && 'btn-disabled'
-        )}
-        onClick={() => {
-          uploadManager.current.getUploads().forEach(entry => {
-            uploadManager.current.enqueueSolve(entry.data);
-          });
-        }}
-      >
-        Auto-solve all
-      </button>
+      <div className="flex gap-2 items-center flex-wrap">
+        {!isQueueIdle && <div>Working...</div>}
+        <button
+          className={cn(
+            'btn btn-sm',
+            (!isQueueIdle || solvableCount === 0) && 'btn-disabled'
+          )}
+          onClick={() => {
+            uploadManager.current.getUploads().forEach(entry => {
+              uploadManager.current.enqueueSolve(entry.data);
+            });
+          }}
+        >
+          Auto-solve all ({solvableCount})
+        </button>
+        <button
+          className={cn(
+            'btn btn-sm',
+            (!isQueueIdle || uploadableCount === 0) && 'btn-disabled'
+          )}
+          onClick={() => {
+            uploadManager.current.getUploads().forEach(entry => {
+              uploadManager.current.enqueueUpload(entry.data);
+            });
+          }}
+        >
+          Publish all ({uploadableCount})
+        </button>
+      </div>
     </div>
   );
 });
@@ -676,7 +775,7 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
       <ResponsiveLayout>
         <div className="text-3xl mt-4">
           <FaUpload className="inline-block me-4" />
-          Puzzle uploader [WIP]
+          Puzzle uploader
         </div>
         <div>
           Paste puzzles links into the box below. You can paste multiple links

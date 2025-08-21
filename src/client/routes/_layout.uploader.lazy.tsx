@@ -21,6 +21,7 @@ import { Puzzle, PuzzleMetadata } from '@logic-pad/core/data/puzzle';
 import { cn } from '../uiHelper';
 import toast from 'react-hot-toast';
 import { useOnline } from '../contexts/OnlineContext';
+import { api } from '../online/api';
 
 const defaultSolver = [...allSolvers.values()][0];
 
@@ -297,12 +298,21 @@ class UploadManager {
         if (entry.status !== 'uploading') return;
         console.log('Uploading', entry);
         try {
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          const puzzleData = await Compressor.compress(
+            Serializer.stringifyGrid(entry.gridWithSolution)
+          );
+          const result = await api.createPuzzle(
+            entry.metadata.title,
+            entry.metadata.description,
+            entry.metadata.difficulty,
+            puzzleData
+          );
+          const publishResult = await api.publishPuzzle(result.id);
           entry = this.uploads.find(e => e.data === data);
           if (!entry) return;
           if (entry.status !== 'uploading') return;
           this.replace({
-            puzzleId: Math.floor(Math.random() * 10000).toString(),
+            puzzleId: publishResult.id,
             ...entry,
             status: 'online',
           });

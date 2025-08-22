@@ -1,10 +1,10 @@
-import { use, useMemo } from 'react';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { array } from '@logic-pad/core/data/dataHelper';
 import { Puzzle, PuzzleData } from '@logic-pad/core/data/puzzle';
 import { SolutionHandling } from './linkLoader';
 import { PuzzleFull } from '../online/data';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 interface OnlineLinkLoaderResult {
   originalData: string;
@@ -31,8 +31,9 @@ export default function useLinkLoader(
     modifyPuzzle = puzzle => puzzle,
   }: OnlineLinkLoaderParams = {}
 ): OnlineLinkLoaderResult {
-  const result = use<OnlineLinkLoaderResult>(
-    useMemo(async () => {
+  const result = useSuspenseQuery({
+    queryKey: ['puzzle', 'decode', puzzle.id],
+    queryFn: async () => {
       const result = {
         originalData: puzzle.data,
         solutionStripped: false,
@@ -83,7 +84,7 @@ export default function useLinkLoader(
         initialPuzzle,
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-  );
-  return result;
+    },
+  });
+  return result.data;
 }

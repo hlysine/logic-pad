@@ -11,6 +11,7 @@
 - Fixed the auto solver not reporting solution uniqueness
 - Fixed the cspuz solver not reporting solution uniqueness for underclued puzzles
 - Fixed the config popup losing focus when a full-screen modal is open
+- Fixed page suspense not working in Firefox
 
 # 19/8/2025
 

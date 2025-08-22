@@ -1,10 +1,11 @@
-import { use, useLayoutEffect, useMemo } from 'react';
+import { useLayoutEffect } from 'react';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { NavigateOptions, useNavigate } from '@tanstack/react-router';
 import { array } from '@logic-pad/core/data/dataHelper';
 import { Puzzle } from '@logic-pad/core/data/puzzle';
 import { defaultGrid } from '../contexts/GridContext';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',
@@ -72,8 +73,9 @@ export default function useLinkLoader(
   }: LinkLoaderParams = {}
 ): LinkLoaderResult {
   const navigate = useNavigate();
-  const result = use<LinkLoaderResult>(
-    useMemo(async () => {
+  const result = useSuspenseQuery({
+    queryKey: ['puzzle', 'decode-local', params],
+    queryFn: async () => {
       const result = {
         originalParams: params,
         solutionStripped: false,
@@ -134,13 +136,13 @@ export default function useLinkLoader(
         initialPuzzle,
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-  );
+    },
+  });
   useLayoutEffect(() => {
-    if (result.redirect) {
-      void navigate(result.redirect);
+    if (result.data.redirect) {
+      void navigate(result.data.redirect);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return result;
+  return result.data;
 }

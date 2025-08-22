@@ -13,7 +13,7 @@ export const useRouteProtection = (level: 'online' | 'login') => {
     if (level === 'online' && !isOnline) {
       toast.error('You have to be online to access this page');
       void navigate({ to: '/' });
-    } else if (level === 'login' && !me) {
+    } else if (level === 'login' && (!isOnline || !me)) {
       if (isOnline) {
         toast.error('You have to log in to access this page');
         void deferredRedirect.setAndNavigate(routerState.location, {

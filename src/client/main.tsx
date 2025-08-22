@@ -12,6 +12,7 @@ import OnlineContext from './contexts/OnlineContext.tsx';
 import { queryClient } from './online/api.ts';
 import { useSettings } from './contexts/SettingsContext.tsx';
 import Loading from './components/Loading.tsx';
+import Error from './router/Error.tsx';
 
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
@@ -20,6 +21,7 @@ document.documentElement.dataset.theme = savedTheme;
 export const router = createRouter({
   routeTree,
   defaultNotFoundComponent: NotFound,
+  defaultErrorComponent: Error,
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 1000 * 60 * 5,
   defaultPendingComponent: () => <Loading />,

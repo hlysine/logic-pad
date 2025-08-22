@@ -33,6 +33,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
         </div>
         <PuzzleSearchQuery
           params={search}
+          publicPuzzlesOnly={false}
           onChange={async params => await navigate({ search: params })}
         />
         <div className="divider m-0" />

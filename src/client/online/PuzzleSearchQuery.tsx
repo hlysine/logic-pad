@@ -190,6 +190,10 @@ const orderings = [
     text: 'Published Date',
   },
   {
+    id: 'created',
+    text: 'Creation Date',
+  },
+  {
     id: 'solve',
     text: 'Solve Count',
   },
@@ -205,11 +209,16 @@ const orderings = [
 
 export interface PuzzleSearchQueryProps {
   params: PuzzleSearchParams;
+  /**
+   * Sorting by published date is only possible for public puzzles.
+   */
+  publicPuzzlesOnly: boolean;
   onChange: (params: PuzzleSearchParams) => void;
 }
 
 export default memo(function PuzzleSearchQuery({
   params,
+  publicPuzzlesOnly,
   onChange,
 }: PuzzleSearchQueryProps) {
   const [displayParams, setDisplayParams] =
@@ -274,31 +283,43 @@ export default memo(function PuzzleSearchQuery({
         ))}
         <div className="mt-2">Sort by</div>
         <div className="flex gap-4 mt-2 flex-wrap">
-          {orderings.map(ordering => (
-            <button
-              key={ordering.id}
-              className={`btn btn-sm ${displayParams.sort?.startsWith(`${ordering.id}-`) ? '' : 'btn-ghost'}`}
-              onClick={() => {
-                let newParams: PuzzleSearchParams;
-                if (displayParams.sort === `${ordering.id}-asc`) {
-                  newParams = { ...displayParams, sort: undefined };
-                } else if (displayParams.sort === `${ordering.id}-desc`) {
-                  newParams = { ...displayParams, sort: `${ordering.id}-asc` };
-                } else {
-                  newParams = { ...displayParams, sort: `${ordering.id}-desc` };
-                }
-                updateParams(newParams);
-              }}
-            >
-              {ordering.text}
-              {displayParams.sort?.startsWith(`${ordering.id}-`) &&
-                (displayParams.sort.endsWith('-asc') ? (
-                  <FaChevronUp />
-                ) : (
-                  <FaChevronDown />
-                ))}
-            </button>
-          ))}
+          {orderings
+            .filter(ordering =>
+              publicPuzzlesOnly
+                ? ordering.id !== 'created'
+                : ordering.id !== 'published'
+            )
+            .map(ordering => (
+              <button
+                key={ordering.id}
+                className={`btn btn-sm ${displayParams.sort?.startsWith(`${ordering.id}-`) ? '' : 'btn-ghost'}`}
+                onClick={() => {
+                  let newParams: PuzzleSearchParams;
+                  if (displayParams.sort === `${ordering.id}-asc`) {
+                    newParams = { ...displayParams, sort: undefined };
+                  } else if (displayParams.sort === `${ordering.id}-desc`) {
+                    newParams = {
+                      ...displayParams,
+                      sort: `${ordering.id}-asc`,
+                    };
+                  } else {
+                    newParams = {
+                      ...displayParams,
+                      sort: `${ordering.id}-desc`,
+                    };
+                  }
+                  updateParams(newParams);
+                }}
+              >
+                {ordering.text}
+                {displayParams.sort?.startsWith(`${ordering.id}-`) &&
+                  (displayParams.sort.endsWith('-asc') ? (
+                    <FaChevronUp />
+                  ) : (
+                    <FaChevronDown />
+                  ))}
+              </button>
+            ))}
         </div>
       </div>
     </>

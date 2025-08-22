@@ -60,7 +60,11 @@ export default memo(function AddPuzzlesModal({
               </button>
             </div>
           </div>
-          <PuzzleSearchQuery params={params} onChange={setParams} />
+          <PuzzleSearchQuery
+            params={params}
+            publicPuzzlesOnly={true}
+            onChange={setParams}
+          />
           <div className="divider" />
           <PuzzleSearchResults
             params={params}

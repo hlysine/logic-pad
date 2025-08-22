@@ -9,12 +9,12 @@ export default memo(function AlphaBadge({ className }: AlphaBadgeProps) {
   return (
     <div
       className={cn(
-        `tooltip tooltip-bottom tooltip-error badge badge-lg badge-error font-mono`,
+        `tooltip tooltip-bottom tooltip-info badge badge-lg badge-error font-mono`,
         className
       )}
-      data-tip="This version is unstable and databases may be wiped!"
+      data-tip="Back up important data"
     >
-      ALPHA
+      BETA
     </div>
   );
 });

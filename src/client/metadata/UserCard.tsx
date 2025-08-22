@@ -11,12 +11,14 @@ export interface UserCardProps {
   user?: UserBrief | null;
   name?: string;
   responsive?: boolean;
+  className?: string;
 }
 
 export default memo(function UserCard({
   user,
   name,
   responsive,
+  className,
 }: UserCardProps) {
   responsive ??= true;
   name ??= user?.name;
@@ -68,7 +70,8 @@ export default memo(function UserCard({
       <button
         className={cn(
           'badge badge-secondary rounded-lg flex-shrink-0 peer',
-          responsive ? 'lg:badge-lg' : 'badge-lg'
+          responsive ? 'lg:badge-lg' : 'badge-lg',
+          className
         )}
         onClick={async () => {
           if (user) {

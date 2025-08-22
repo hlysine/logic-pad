@@ -12,16 +12,17 @@ export const useRouteProtection = (level: 'online' | 'login') => {
     if (isPending) return;
     if (level === 'online' && !isOnline) {
       toast.error('You have to be online to access this page');
-      void navigate({ to: '/' });
+      void navigate({ to: '/', replace: true });
     } else if (level === 'login' && (!isOnline || !me)) {
       if (isOnline) {
         toast.error('You have to log in to access this page');
         void deferredRedirect.setAndNavigate(routerState.location, {
           to: '/auth',
+          replace: true,
         });
       } else {
         toast.error('You have to be online to access this page');
-        void navigate({ to: '/' });
+        void navigate({ to: '/', replace: true });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

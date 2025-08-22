@@ -43,6 +43,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
   editable,
 }: CollectionPuzzlesProps) {
   const navigate = useNavigate();
+  const { me } = useOnline();
   const {
     data: puzzles,
     fetchNextPage,
@@ -160,7 +161,11 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   });
                 } else {
                   await navigate({
-                    to: `/solve/${puzzle.id}`,
+                    to:
+                      puzzle.status === ResourceStatus.Private &&
+                      puzzle.creator.id === me?.id
+                        ? `/create/${puzzle.id}`
+                        : `/solve/${puzzle.id}`,
                     search: {
                       collection: collectionId,
                     },

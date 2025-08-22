@@ -11,6 +11,8 @@ import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import UserCard from '../metadata/UserCard';
 import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
+import { useOnline } from '../contexts/OnlineContext';
+import { ResourceStatus } from './data';
 
 export interface CollectionSidebarProps {
   collectionId: string | null;
@@ -22,6 +24,7 @@ export default memo(function CollectionSidebar({
   const drawerId = useId();
   const navigate = useNavigate();
   const routerState = useRouterState();
+  const { me } = useOnline();
   const { id, puzzle } = useOnlinePuzzle();
   const collection = useQuery({
     ...collectionQueryOptions(collectionId!),
@@ -127,13 +130,21 @@ export default memo(function CollectionSidebar({
                       key={puzzle.id}
                       className={cn(
                         'btn w-full h-fit flex flex-row flex-nowrap gap-2 py-2 items-center justify-start text-start wrapper',
-                        puzzle.id === id ? '' : 'btn-ghost'
+                        puzzle.id === id ? '' : 'btn-ghost',
+                        puzzle.status === ResourceStatus.Private &&
+                          puzzle.creator.id !== me?.id &&
+                          'btn-disabled'
                       )}
                       onClick={async () => {
-                        const newPath = routerState.location.pathname
+                        let newPath = routerState.location.pathname
                           .split('/')
                           .slice(0, -1)
                           .join('/');
+                        if (
+                          puzzle.status === ResourceStatus.Private &&
+                          puzzle.creator.id === me?.id
+                        )
+                          newPath = '/create';
                         await navigate({
                           to: `${newPath}/${puzzle.id}`,
                           search: {

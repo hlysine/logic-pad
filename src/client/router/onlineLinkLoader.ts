@@ -24,7 +24,7 @@ interface OnlineLinkLoaderParams {
   modifyPuzzle?: (puzzle: PuzzleData) => PuzzleData;
 }
 
-export default function useLinkLoader(
+export default function useOnlineLinkLoader(
   puzzle: PuzzleFull,
   {
     solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,

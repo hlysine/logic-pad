@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { puzzleEditQueryOptions } from '../routes/_layout.create.$puzzleId';
@@ -16,6 +16,7 @@ import { api, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
 import { toRelativeDate } from '../uiHelper';
+import CommentSidebar from '../online/CommentSidebar';
 
 // million-ignore
 const SignInWithProgress = memo(function SignInWithProgress() {
@@ -204,6 +205,7 @@ export default memo(function EditorOnlineTab() {
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
   const { data, isLoading } = useQuery(puzzleEditQueryOptions(id));
+  const [commentsOpen, setCommentsOpen] = useState(false);
 
   if (isLoading) {
     return <Loading />;
@@ -302,8 +304,14 @@ export default memo(function EditorOnlineTab() {
         Copy solve link
       </button>
       <div className="divider" />
-      <p className="text-2xl font-bold">Feedback</p>
-      <p className="opacity-50">Not available yet</p>
+      <p className="text-2xl font-bold">Comments</p>
+      <button className="btn w-full" onClick={() => setCommentsOpen(true)}>
+        Open comments
+      </button>
+      <CommentSidebar
+        open={commentsOpen}
+        onClose={() => setCommentsOpen(false)}
+      />
     </div>
   );
 });

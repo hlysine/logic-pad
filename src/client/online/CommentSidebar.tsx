@@ -14,8 +14,9 @@ import { IoSend } from 'react-icons/io5';
 import { Comment, ListResponse } from './data';
 import { useOnline } from '../contexts/OnlineContext';
 import toast from 'react-hot-toast';
+import { toRelativeDate } from '../uiHelper';
 
-const CommentEntry = memo(function CommentEntry({
+export const CommentEntry = memo(function CommentEntry({
   comment,
 }: {
   comment: Comment;
@@ -132,7 +133,12 @@ const CommentEntry = memo(function CommentEntry({
 
   return (
     <div className="flex flex-col gap-1">
-      <UserCard user={comment.creator} className="!badge-sm !py-2" />
+      <div className="flex gap-2 items-center">
+        <UserCard user={comment.creator} className="!badge-sm !py-2" />
+        <div className="text-sm opacity-80">
+          {toRelativeDate(new Date(comment.createdAt))}
+        </div>
+      </div>
       {editable ? (
         <div className="self-stretch flex gap-1">
           {editing ? (

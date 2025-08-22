@@ -207,6 +207,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
 
 const updateCollectionOptions = (collectionId: string) =>
   mutationOptions({
+    mutationKey: ['collection', collectionId, 'update'],
     mutationFn: (variables: Parameters<typeof api.updateCollection>) => {
       return api.updateCollection(...variables);
     },
@@ -235,9 +236,14 @@ const updateCollectionOptions = (collectionId: string) =>
         );
     },
     onSettled(_data, _error) {
-      void queryClient.invalidateQueries({
-        queryKey: ['collection', collectionId],
-      });
+      if (
+        queryClient.isMutating({
+          mutationKey: ['collection', collectionId, 'update'],
+        }) === 1
+      )
+        void queryClient.invalidateQueries({
+          queryKey: ['collection', collectionId],
+        });
     },
   });
 

@@ -20,6 +20,7 @@ export default memo(function PuzzleLoveButton() {
   const { id } = useOnlinePuzzle();
   const puzzleLove = useQuery(puzzleLoveQueryOptions(id, isOnline && !!me));
   const setPuzzleLove = useMutation({
+    mutationKey: ['puzzle', 'love', 'set', id],
     mutationFn: (variables: Parameters<typeof api.setPuzzleLove>) => {
       return api.setPuzzleLove(...variables);
     },
@@ -46,9 +47,14 @@ export default memo(function PuzzleLoveButton() {
         );
     },
     onSettled(_data, _error, variables) {
-      void queryClient.invalidateQueries({
-        queryKey: ['puzzle', 'love', variables[0]],
-      });
+      if (
+        queryClient.isMutating({
+          mutationKey: ['puzzle', 'love', 'set', variables[0]],
+        }) === 1
+      )
+        void queryClient.invalidateQueries({
+          queryKey: ['puzzle', 'love', variables[0]],
+        });
     },
   });
 

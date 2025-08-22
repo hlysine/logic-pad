@@ -26,6 +26,7 @@ export default memo(function CollectionFollowButton({
     collectionFollowQueryOptions(collectionId, isOnline && !!me)
   );
   const setCollectionFollow = useMutation({
+    mutationKey: ['collection', 'follow', 'set', collectionId],
     mutationFn: (variables: Parameters<typeof api.setCollectionFollow>) => {
       return api.setCollectionFollow(...variables);
     },
@@ -52,9 +53,14 @@ export default memo(function CollectionFollowButton({
         );
     },
     onSettled(_data, _error, variables) {
-      void queryClient.invalidateQueries({
-        queryKey: ['collection', 'follow', variables[0]],
-      });
+      if (
+        queryClient.isMutating({
+          mutationKey: ['collection', 'follow', 'set', variables[0]],
+        }) === 1
+      )
+        void queryClient.invalidateQueries({
+          queryKey: ['collection', 'follow', variables[0]],
+        });
     },
   });
 

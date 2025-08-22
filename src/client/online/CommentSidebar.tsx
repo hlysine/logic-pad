@@ -28,6 +28,7 @@ export const CommentEntry = memo(function CommentEntry({
   const editable = !!me && me.id === comment.creator.id;
 
   const updateComment = useMutation({
+    mutationKey: ['puzzle', id, 'comments', 'update'],
     mutationFn: (variables: Parameters<typeof api.updateComment>) => {
       return api.updateComment(...variables);
     },
@@ -81,12 +82,18 @@ export const CommentEntry = memo(function CommentEntry({
         );
     },
     async onSettled() {
-      await queryClient.invalidateQueries({
-        queryKey: ['puzzle', id, 'comments'],
-      });
+      if (
+        queryClient.isMutating({
+          mutationKey: ['puzzle', id, 'comments', 'update'],
+        }) === 1
+      )
+        await queryClient.invalidateQueries({
+          queryKey: ['puzzle', id, 'comments'],
+        });
     },
   });
   const deleteComment = useMutation({
+    mutationKey: ['puzzle', id, 'comments', 'delete'],
     mutationFn: (variables: Parameters<typeof api.deleteComment>) => {
       return api.deleteComment(...variables);
     },
@@ -125,9 +132,14 @@ export const CommentEntry = memo(function CommentEntry({
         );
     },
     async onSettled() {
-      await queryClient.invalidateQueries({
-        queryKey: ['puzzle', id, 'comments'],
-      });
+      if (
+        queryClient.isMutating({
+          mutationKey: ['puzzle', id, 'comments', 'delete'],
+        }) === 1
+      )
+        await queryClient.invalidateQueries({
+          queryKey: ['puzzle', id, 'comments'],
+        });
     },
   });
 
@@ -202,6 +214,7 @@ export default memo(function CommentSidebar({
     enabled: !!id && !!me && open,
   });
   const addComment = useMutation({
+    mutationKey: ['puzzle', id, 'comments', 'add'],
     mutationFn: (variables: Parameters<typeof api.createComment>) => {
       return api.createComment(...variables);
     },
@@ -279,9 +292,14 @@ export default memo(function CommentSidebar({
       );
     },
     async onSettled() {
-      await queryClient.invalidateQueries({
-        queryKey: ['puzzle', id, 'comments'],
-      });
+      if (
+        queryClient.isMutating({
+          mutationKey: ['puzzle', id, 'comments', 'add'],
+        }) === 1
+      )
+        await queryClient.invalidateQueries({
+          queryKey: ['puzzle', id, 'comments'],
+        });
     },
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);

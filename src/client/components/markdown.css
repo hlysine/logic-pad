@@ -30,10 +30,10 @@
   @apply rounded-md;
 }
 
-.markdown:not(.spoiler-reveal) .spoiler {
-  @apply bg-base-300 text-transparent select-none pointer-events-none;
+.markdown .spoiler.spoiler-reveal {
+  @apply bg-base-300/10;
 }
 
-.markdown.spoiler-reveal .spoiler {
-  @apply bg-base-300/10;
+.markdown .spoiler:not(.spoiler-reveal) {
+  @apply bg-base-300 text-transparent select-none;
 }

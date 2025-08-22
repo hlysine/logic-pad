@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Difficulty from './Difficulty';
 import Markdown from '../components/Markdown';
-import { useGridState } from '../contexts/GridStateContext.tsx';
 import { cn } from '../uiHelper.ts';
 import UserCard from './UserCard.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
@@ -20,7 +19,6 @@ export default memo(function Metadata({
   simplified = simplified ?? false;
   responsive = responsive ?? true;
   const { metadata } = useGrid();
-  const { revealSpoiler } = useGridState();
   const { puzzle } = useOnlinePuzzle();
 
   return (
@@ -43,10 +41,7 @@ export default memo(function Metadata({
       <UserCard user={puzzle?.creator} name={metadata.author} />
       {!simplified && (
         <div className="overflow-y-auto">
-          <Markdown
-            revealSpoiler={revealSpoiler}
-            className={responsive ? 'lg:text-lg' : 'text-lg'}
-          >
+          <Markdown className={responsive ? 'lg:text-lg' : 'text-lg'}>
             {metadata.description}
           </Markdown>
         </div>

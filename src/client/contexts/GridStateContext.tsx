@@ -3,9 +3,7 @@ import { GridState, State } from '@logic-pad/core/data/primitives';
 
 interface GridStateContext {
   state: GridState;
-  revealSpoiler: boolean;
   setState: (value: GridState) => void;
-  setRevealSpoiler: (value: boolean) => void;
 }
 
 export const defaultState: GridState = {
@@ -16,9 +14,7 @@ export const defaultState: GridState = {
 
 const Context = createContext<GridStateContext>({
   state: defaultState,
-  revealSpoiler: false,
   setState: () => {},
-  setRevealSpoiler: () => {},
 });
 
 export const useGridState = () => {
@@ -37,25 +33,15 @@ export default memo(function GridStateContext({
   setState?: (value: GridState) => void;
 }) {
   const [internalState, setInternalState] = useState(defaultState);
-  const [revealSpoiler, setRevealSpoiler] = useState(false);
 
   const state = externalState ?? internalState;
   const setState = setExternalState ?? setInternalState;
-
-  const setStateAndReveal = (value: GridState) => {
-    setState(value);
-    if (State.isSatisfied(value.final)) {
-      setRevealSpoiler(true);
-    }
-  };
 
   return (
     <Context
       value={{
         state,
-        revealSpoiler,
-        setState: setStateAndReveal,
-        setRevealSpoiler,
+        setState,
       }}
     >
       {children}

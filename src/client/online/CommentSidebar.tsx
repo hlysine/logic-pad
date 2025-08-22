@@ -345,7 +345,9 @@ export default memo(function CommentSidebar({
             <div className="flex gap-2 items-center self-stretch mx-2">
               <textarea
                 ref={textareaRef}
-                placeholder="Add a comment..."
+                placeholder={
+                  'Add a comment...\nUse ||double pipes|| for spoilers'
+                }
                 maxLength={5000}
                 className="textarea textarea-bordered flex-grow"
                 onKeyDown={e => {

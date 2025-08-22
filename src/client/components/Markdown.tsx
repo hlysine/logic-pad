@@ -1,4 +1,4 @@
-import { Suspense, lazy, memo } from 'react';
+import { Suspense, lazy, memo, useState } from 'react';
 import { cn } from '../../client/uiHelper.ts';
 import Loading from './Loading';
 import type { Options } from 'react-markdown';
@@ -8,7 +8,7 @@ import './markdown.css';
 export interface MarkdownProps extends Readonly<Options> {
   className?: string;
   inline?: boolean;
-  revealSpoiler?: boolean;
+  onClick?: () => void;
 }
 
 const MarkdownAsync = lazy(async () => {
@@ -36,9 +36,14 @@ const MarkdownAsync = lazy(async () => {
   };
 
   const baseComponents: MarkdownProps['components'] = {
-    spoiler: ({ children }: { children: any }) => {
+    spoiler: function Spoiler({ children }: { children: any }) {
+      const [revealSpoilers, setRevealSpoilers] = useState(false);
       return (
-        <MarkdownAsync className="spoiler" inline={true}>
+        <MarkdownAsync
+          className={cn('spoiler', revealSpoilers && 'spoiler-reveal')}
+          inline={true}
+          onClick={() => setRevealSpoilers(true)}
+        >
           {children}
         </MarkdownAsync>
       );
@@ -55,18 +60,15 @@ const MarkdownAsync = lazy(async () => {
     default: memo(function MarkdownAsync({
       className,
       inline,
-      revealSpoiler,
+      onClick,
       ...mdProps
     }: MarkdownProps) {
       inline = inline ?? false;
       if (inline) {
         return (
           <span
-            className={cn(
-              'markdown',
-              className,
-              revealSpoiler && 'spoiler-reveal'
-            )}
+            className={cn('markdown', className, onClick && 'cursor-pointer')}
+            onClick={onClick}
           >
             <Markdown
               {...baseProps}
@@ -78,11 +80,8 @@ const MarkdownAsync = lazy(async () => {
       } else {
         return (
           <div
-            className={cn(
-              'markdown',
-              className,
-              revealSpoiler && 'spoiler-reveal'
-            )}
+            className={cn('markdown', className, onClick && 'cursor-pointer')}
+            onClick={onClick}
           >
             <Markdown
               {...baseProps}

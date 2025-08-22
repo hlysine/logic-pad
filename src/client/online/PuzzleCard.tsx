@@ -37,6 +37,10 @@ export const PuzzleIcon = memo(function PuzzleIcon({
   className?: string;
   size: number;
 }) {
+  if (types.includes(PuzzleType.Underclued)) {
+    // "Logic" tag is added for searching in underclued puzzles, no need to display both
+    types = types.filter(type => type !== PuzzleType.Logic);
+  }
   const styles = useMemo(
     () => ({
       width: size,

@@ -126,7 +126,7 @@ export default memo(function CollectionSidebar({
                     <button
                       key={puzzle.id}
                       className={cn(
-                        'btn w-full h-fit flex flex-row flex-nowrap gap-2 py-2 items-center justify-start text-start',
+                        'btn w-full h-fit flex flex-row flex-nowrap gap-2 py-2 items-center justify-start text-start wrapper',
                         puzzle.id === id ? '' : 'btn-ghost'
                       )}
                       onClick={async () => {
@@ -145,7 +145,12 @@ export default memo(function CollectionSidebar({
                       <PuzzleIcon
                         types={puzzle.types}
                         size={36}
-                        className="shrink-0"
+                        className={cn(
+                          'shrink-0',
+                          puzzle.id === id
+                            ? ''
+                            : '!bg-neutral [.wrapper:hover_&]:!bg-base-content/0 transition-colors [.wrapper:hover_&]:transition-none'
+                        )}
                       />
                       <div className="flex flex-col items-start gap-2">
                         <h2 className="text-lg font-normal">

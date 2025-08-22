@@ -1,3 +1,17 @@
+# 22/8/2025
+
+**PREVIEW BRANCH**
+
+- Added puzzle uploader
+  - Paste offline puzzle links to publish them in bulk
+  - You can perform last-minute edits and verify solutions with solvers before upload
+- Added puzzle comments
+  - Leave comments that are visible to all signed-in users
+  - You are free to edit and delete your comments
+- Fixed the auto solver not reporting solution uniqueness
+- Fixed the cspuz solver not reporting solution uniqueness for underclued puzzles
+- Fixed the config popup losing focus when a full-screen modal is open
+
 # 19/8/2025
 
 **PREVIEW BRANCH**

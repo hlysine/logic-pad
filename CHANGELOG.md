@@ -1,3 +1,12 @@
+# 23/8/2025
+
+**PREVIEW BRANCH**
+
+- Added additional dialog text for explanation when puzzle checklist is failing
+- Added puzzle checksum detection
+- Fixed back navigation lock in sign in page
+- Clicking on a private puzzle that you own now directs you to the editor
+
 # 22/8/2025
 
 **PREVIEW BRANCH**

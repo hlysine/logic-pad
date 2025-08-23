@@ -27,7 +27,7 @@ import {
 import { escape } from '../dataHelper.js';
 
 export default class SerializerChecksum extends SerializerV0 {
-  public readonly version = 1 as number;
+  public readonly version = 2 as number;
 
   public parseTile(_str: string): TileData {
     throw new Error('Checksum serializer does not support parsing');
@@ -278,12 +278,24 @@ export default class SerializerChecksum extends SerializerV0 {
     throw new Error('Checksum serializer does not support parsing');
   }
 
+  public stringifyGrid(grid: GridData): string {
+    return super.stringifyGrid(grid.resetTiles());
+  }
+
   public parseGrid(_input: string): GridData {
     throw new Error('Checksum serializer does not support parsing');
   }
 
+  public stringifyGridWithSolution(puzzle: PuzzleData): string {
+    return this.stringifyGrid(puzzle.grid);
+  }
+
   public parseGridWithSolution(_input: string): PuzzleData {
     throw new Error('Checksum serializer does not support parsing');
+  }
+
+  public stringifyPuzzle(puzzle: Puzzle): string {
+    return this.stringifyGrid(puzzle.grid);
   }
 
   public parsePuzzle(_input: string): Puzzle {

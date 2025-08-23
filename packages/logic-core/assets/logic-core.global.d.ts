@@ -2101,8 +2101,11 @@ declare global {
     parseRules(_input: string): Rule[];
     stringifySymbols(symbols: ReadonlyMap<string, readonly Symbol$1[]>): string;
     parseSymbols(_input: string): Map<string, Symbol$1[]>;
+    stringifyGrid(grid: GridData): string;
     parseGrid(_input: string): GridData;
+    stringifyGridWithSolution(puzzle: PuzzleData): string;
     parseGridWithSolution(_input: string): PuzzleData;
+    stringifyPuzzle(puzzle: Puzzle): string;
     parsePuzzle(_input: string): Puzzle;
   }
   /**

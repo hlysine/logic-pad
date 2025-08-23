@@ -16,7 +16,7 @@ export default class ChecksumCompressor extends CompressorBase {
     const hashHex = hashArray
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
-    return hashHex;
+    return `${this.id}_${hashHex}`;
   }
 
   public decompress(_input: string): Promise<string> {

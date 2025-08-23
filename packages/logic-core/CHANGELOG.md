@@ -1,3 +1,8 @@
+# 0.13.4
+
+- Strip solution in checksum
+- Append checksum version to hash
+
 # 0.13.3
 
 - Fix crash in checksum serializer

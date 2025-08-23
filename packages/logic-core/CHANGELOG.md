@@ -1,3 +1,7 @@
+# 0.13.2
+
+- Fix crash in checksum serializer
+
 # 0.13.1
 
 - Trim and lower-case all strings in the checksum serializer

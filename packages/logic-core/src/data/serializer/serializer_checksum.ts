@@ -9,6 +9,7 @@ import {
   IconConfig,
   NullableNoteConfig,
   NullableNumberConfig,
+  NumberConfig,
   OrientationConfig,
 } from '../config.js';
 import { Puzzle, PuzzleData } from '../puzzle.js';
@@ -60,10 +61,10 @@ export default class SerializerChecksum extends SerializerV0 {
         return (
           config.field +
           '=' +
-          (
-            instruction[
-              config.field as keyof Instruction
-            ] as OrientationConfig['default']
+          String(
+            instruction[config.field as keyof Instruction] as
+              | OrientationConfig['default']
+              | NumberConfig['default']
           )
             .toLowerCase()
             .trim()

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useId, useState } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { puzzleEditQueryOptions } from '../routes/_layout.create.$puzzleId';
@@ -12,7 +12,7 @@ import deferredRedirect from '../router/deferredRedirect';
 import { SolutionHandling } from '../router/linkLoader';
 import { useOnline } from '../contexts/OnlineContext';
 import RatedDifficulty from '../metadata/RatedDifficulty';
-import { api, queryClient } from '../online/api';
+import { api, ApiError, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
 import { toRelativeDate } from '../uiHelper';
@@ -148,6 +148,7 @@ const DeletePuzzle = memo(function DeletePuzzle() {
 
 // million-ignore
 const PublishPuzzle = memo(function PublishPuzzle() {
+  const modalId = useId();
   const { id } = useOnlinePuzzle();
   const { metadata, grid } = useGrid();
   const publishPuzzle = useMutation({
@@ -156,7 +157,8 @@ const PublishPuzzle = memo(function PublishPuzzle() {
       return await api.publishPuzzle(data[0]);
     },
     onError(error) {
-      toast.error(error.message);
+      if (!(error instanceof ApiError) || error.status !== 451)
+        toast.error(error.message);
     },
     async onSuccess() {
       await queryClient.refetchQueries({
@@ -180,23 +182,68 @@ const PublishPuzzle = memo(function PublishPuzzle() {
   }
 
   return (
-    <button
-      className="btn btn-primary"
-      onClick={async () => {
-        await publishPuzzle.mutateAsync([
-          id!,
-          metadata.title,
-          metadata.description,
-          metadata.difficulty,
-          await Compressor.compress(Serializer.stringifyGrid(grid)),
-        ]);
-        await queryClient.refetchQueries({
-          queryKey: ['puzzle', 'edit', id],
-        });
-      }}
-    >
-      Publish puzzle
-    </button>
+    <>
+      <button
+        className="btn btn-primary"
+        onClick={async () => {
+          await publishPuzzle.mutateAsync([
+            id!,
+            metadata.title,
+            metadata.description,
+            metadata.difficulty,
+            await Compressor.compress(Serializer.stringifyGrid(grid)),
+          ]);
+          await queryClient.refetchQueries({
+            queryKey: ['puzzle', 'edit', id],
+          });
+        }}
+      >
+        Publish puzzle
+      </button>
+      {publishPuzzle.error instanceof ApiError &&
+        publishPuzzle.error.status === 451 && (
+          <dialog
+            id={`publishExternalPuzzleModal-${modalId}`}
+            className="modal modal-open"
+          >
+            <div className="modal-box flex flex-col gap-4 text-base font-thin">
+              <h3 className="font-bold text-xl text-accent">
+                Failed to publish your puzzle
+              </h3>
+              <p className="my-2">{publishPuzzle.error.message}</p>
+              <p>
+                Logic Pad is a place for creators to share their original
+                puzzles.{' '}
+                <b className="font-bold">
+                  Uploading puzzles from other games or publications is strictly
+                  prohibited due to copyright restrictions.
+                </b>
+              </p>
+              <p>
+                Attempting to upload, or circumvent restrictions to upload,
+                copyrighted content will result in a ban from this platform.
+              </p>
+              <p>
+                If you love a puzzle game and want to share it with our
+                community, please create an original puzzle inspired by that
+                game and credit the source in your description. This allows you
+                to introduce others to the game while respecting the game
+                creator&apos;s intellectual property.
+              </p>
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="btn" onClick={() => publishPuzzle.reset()}>
+                    I understand
+                  </button>
+                </form>
+              </div>
+            </div>
+            <form method="dialog" className="modal-backdrop">
+              <button onClick={() => publishPuzzle.reset()}>close</button>
+            </form>
+          </dialog>
+        )}
+    </>
   );
 });
 

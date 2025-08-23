@@ -3,6 +3,7 @@ import {
   lazy,
   memo,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -12,6 +13,7 @@ import { useGrid } from '../contexts/GridContext.tsx';
 import Accordion from '../components/Accordion';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import {
+  PuzzleChecklist,
   PuzzleChecklistItem,
   validatePuzzleChecklist,
 } from '@logic-pad/core/data/puzzle';
@@ -54,6 +56,144 @@ function ChecklistItem({
   );
 }
 
+function ChecklistHelp({
+  checklist,
+  checklistComplete,
+}: {
+  checklist: PuzzleChecklist;
+  checklistComplete: boolean;
+}) {
+  const dialogId = useId();
+  const helpMessage = useMemo(() => {
+    if (checklist.isValid && !checklistComplete) {
+      return (
+        <>
+          <p>The solver has proved that your puzzle has no valid solution.</p>
+          <p>
+            If there are additional rules in your puzzle that make it solvable,
+            please add it as a custome rule / custom symbol.
+          </p>
+          <p>
+            Logic Pad will always consider your solution as valid if custom
+            rules / symbols are involved.
+          </p>
+        </>
+      );
+    }
+    const invalidItems = checklist.items
+      .filter(i => !i.success && i.mandatory)
+      .map(i => i.id);
+    if (invalidItems.includes('metadataValid')) {
+      return (
+        <>
+          <p>
+            Every puzzle needs a title, an author name and a difficulty rating.
+          </p>
+          <p>Fill in those required fields in the Info tab.</p>
+        </>
+      );
+    } else if (invalidItems.includes('gridValid')) {
+      return (
+        <>
+          <p>Your grid either has zero width or zero height.</p>
+          <p>Switch to the Tools tab to change the dimensions of your grid.</p>
+        </>
+      );
+    } else if (invalidItems.includes('solutionIsComplete')) {
+      return (
+        <>
+          <p>
+            Your grid does not include rules that allow gray tiles in the final
+            solution, so your solution must not include gray tiles.
+          </p>
+          <p>
+            Provide a solution by filling in the grid without marking the tiles
+            as clues.
+          </p>
+          <p>
+            If you puzzle has more than one intended solution, use the Mystery:
+            Alternate solution rule to provide alternate solutions.
+          </p>
+          <p>
+            If your intended solution includes gray tiles, add a custom rule /
+            symbol for indication. Logic Pad will then consider your solution as
+            valid.
+          </p>
+        </>
+      );
+    } else if (invalidItems.includes('solutionIsValid')) {
+      return (
+        <>
+          <p>Your solution does not satisfy one of the rules / symbols.</p>
+          <p>Provide a valid solution to prove that your puzzle is solvable.</p>
+          <p>
+            If your intended solution does not satisfy all rules / symbols, add
+            a custom rule / symbol for indication. Logic Pad will then consider
+            your solution as valid.
+          </p>
+        </>
+      );
+    } else if (invalidItems.includes('solutionIsNotEmpty')) {
+      return (
+        <>
+          <p>You have not provided a solution to your puzzle yet.</p>
+          <p>
+            Provide a solution by filling in the grid without marking the tiles
+            as clues.
+          </p>
+          <p>
+            Your grid contains rules / symbols that allow gray tiles, so your
+            solution does not need to completely fill the grid.
+          </p>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <p>Generic checklist failure.</p>
+          <p>
+            Please report this to the developer with a link to the puzzle
+            included.
+          </p>
+        </>
+      );
+    }
+  }, [checklist, checklistComplete]);
+  if (checklistComplete) return null;
+  return (
+    <>
+      <button
+        className="btn btn-outline"
+        onClick={() => {
+          const dialog = document.getElementById(
+            `checklistHelp-${dialogId}`
+          ) as HTMLDialogElement;
+          dialog.showModal();
+        }}
+      >
+        Why is my checklist incomplete?
+      </button>
+      <dialog id={`checklistHelp-${dialogId}`} className="modal">
+        <div className="modal-box flex flex-col gap-4 text-base">
+          <h3 className="font-semibold text-xl text-accent">
+            Your checklist status
+          </h3>
+          {helpMessage}
+          <div className="modal-action">
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
+    </>
+  );
+}
+
 const checklistItemMap = {
   metadataValid: (item: PuzzleChecklistItem) => (
     <ChecklistItem
@@ -62,7 +202,7 @@ const checklistItemMap = {
       tooltip={
         item.success
           ? 'All required metadata fields are filled'
-          : 'Fill all required metadata fields'
+          : 'Fill all required fields in the info tab'
       }
     >
       {item.success ? 'Metadata valid' : 'Metadata invalid'}
@@ -75,7 +215,7 @@ const checklistItemMap = {
       tooltip={
         item.success
           ? 'Grid dimensions are valid'
-          : 'Grid dimensions must be greater than zero'
+          : 'Grid width/height must be greater than zero'
       }
     >
       {item.success ? 'Grid valid' : 'Grid invalid'}
@@ -372,6 +512,10 @@ export default memo(function PuzzleChecklist({
             </Suspense>
           </>
         )}
+        <ChecklistHelp
+          checklist={checklist}
+          checklistComplete={checklistComplete}
+        />
         {checklistComplete && !isLoading && !!id && !!data && (
           <button className="btn btn-primary" onClick={onTabSwitch}>
             {data?.status === ResourceStatus.Private

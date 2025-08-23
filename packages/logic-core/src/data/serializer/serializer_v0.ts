@@ -34,14 +34,14 @@ import { Puzzle, PuzzleData, PuzzleMetadata } from '../puzzle.js';
 import { ControlLine, Row } from '../rules/musicControlLine.js';
 import GridZones from '../gridZones.js';
 
-const OFFSETS = [
+export const OFFSETS = [
   { x: 0, y: -1 },
   { x: -1, y: 0 },
   { x: 1, y: 0 },
   { x: 0, y: 1 },
 ];
 
-const orientationChars = {
+export const orientationChars = {
   [Orientation.Up]: 'u',
   [Orientation.UpRight]: 'x',
   [Orientation.Right]: 'r',
@@ -53,7 +53,7 @@ const orientationChars = {
 };
 
 export default class SerializerV0 extends SerializerBase {
-  public readonly version = 0;
+  public readonly version = 0 as number;
 
   public stringifyTile(tile: TileData): string {
     if (!tile.exists) return '.';

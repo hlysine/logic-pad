@@ -1,3 +1,11 @@
+# 0.13.1
+
+- Trim and lower-case all strings in the checksum serializer
+
+# 0.13.0
+
+- Added checksum serializer and compressor
+
 # 0.12.6
 
 - Remove unused dependencies and update others

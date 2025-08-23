@@ -1987,6 +1987,11 @@ declare global {
     decompress(input: string): Promise<string>;
   }
   export declare const Compressor: MasterCompressor;
+  export declare class ChecksumCompressor extends CompressorBase {
+    get id(): string;
+    compress(input: string): Promise<string>;
+    decompress(_input: string): Promise<string>;
+  }
   export declare abstract class StreamCompressor extends CompressorBase {
     protected abstract get algorithm(): CompressionFormat;
     compress(input: string): Promise<string>;
@@ -2029,8 +2034,22 @@ declare global {
     abstract stringifyPuzzle(puzzle: Puzzle): string;
     abstract parsePuzzle(input: string): Puzzle;
   }
+  export declare const OFFSETS: {
+    x: number;
+    y: number;
+  }[];
+  export declare const orientationChars: {
+    up: string;
+    'up-right': string;
+    right: string;
+    'down-right': string;
+    down: string;
+    'down-left': string;
+    left: string;
+    'up-left': string;
+  };
   export declare class SerializerV0 extends SerializerBase {
-    readonly version = 0;
+    readonly version: number;
     stringifyTile(tile: TileData): string;
     parseTile(str: string): TileData;
     stringifyControlLine(line: ControlLine): string;
@@ -2061,6 +2080,30 @@ declare global {
     parseGridWithSolution(input: string): PuzzleData;
     stringifyPuzzle(puzzle: Puzzle): string;
     parsePuzzle(input: string): Puzzle;
+  }
+  export declare class SerializerChecksum extends SerializerV0 {
+    readonly version: number;
+    parseTile(_str: string): TileData;
+    stringifyControlLine(line: ControlLine): string;
+    parseControlLine(_str: string): ControlLine;
+    stringifyConfig(instruction: Instruction, config: AnyConfig): string;
+    parseConfig(
+      _configs: readonly AnyConfig[],
+      _entry: string
+    ): [string, unknown];
+    parseRule(_str: string): Rule;
+    parseSymbol(_str: string): Symbol$1;
+    parseConnections(_input: string): GridConnections;
+    stringifyZones(zones: GridZones): string;
+    parseZones(_input: string): GridZones;
+    parseTiles(_input: string): TileData[][];
+    stringifyRules(rules: readonly Rule[]): string;
+    parseRules(_input: string): Rule[];
+    stringifySymbols(symbols: ReadonlyMap<string, readonly Symbol$1[]>): string;
+    parseSymbols(_input: string): Map<string, Symbol$1[]>;
+    parseGrid(_input: string): GridData;
+    parseGridWithSolution(_input: string): PuzzleData;
+    parsePuzzle(_input: string): Puzzle;
   }
   /**
    * Base class that all solvers must extend.

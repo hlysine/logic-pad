@@ -1,4 +1,4 @@
-# 0.13.2
+# 0.13.3
 
 - Fix crash in checksum serializer
 

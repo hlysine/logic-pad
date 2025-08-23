@@ -217,7 +217,9 @@ const PublishPuzzle = memo(function PublishPuzzle() {
                 <b className="font-bold">
                   Uploading puzzles from other games or publications is strictly
                   prohibited due to copyright restrictions.
-                </b>
+                </b>{' '}
+                Even if the similarity is unintentional, this restriction still
+                applies.
               </p>
               <p>
                 Attempting to upload, or circumvent restrictions to upload,

@@ -55,6 +55,16 @@ const tailwindConfig = {
         'glow-xl': '0px 0px 43px -3px rgba(0, 0, 0, 0.3)',
         'glow-3xl': '0px 0px 60px -3px rgba(0, 0, 0, 0.3)',
       },
+      fontFamily: {
+        serif: [
+          'Palatino Linotype',
+          'Palatino',
+          'Palatino LT STD',
+          'Book Antiqua',
+          'Georgia',
+          'serif',
+        ],
+      },
     },
   },
   plugins: [daisyui, radialGradientPlugin],

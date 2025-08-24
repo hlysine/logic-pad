@@ -30,7 +30,7 @@ export const Route = createFileRoute('/auth')({
           <div className="bg-base-200 p-4">
             <Link
               to="/"
-              className="text-xl text-neutral-content flex items-center gap-2 force-serif"
+              className="text-xl text-neutral-content flex items-center gap-2 font-serif"
             >
               <img
                 src="/logo.svg"

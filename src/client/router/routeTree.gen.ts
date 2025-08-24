@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './../routes/index'
 import { Route as OauthCallbackRouteImport } from './../routes/oauth.callback'
 import { Route as LayoutSettingsRouteImport } from './../routes/_layout.settings'
 import { Route as LayoutSearchRouteImport } from './../routes/_layout.search'
+import { Route as LayoutPrivacyPolicyRouteImport } from './../routes/_layout.privacy-policy'
 import { Route as LayoutMyStuffRouteImport } from './../routes/_layout.my-stuff'
 import { Route as LayoutSolveIndexRouteImport } from './../routes/_layout.solve.index'
 import { Route as LayoutSearchIndexRouteImport } from './../routes/_layout.search.index'
@@ -71,6 +72,11 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
 const LayoutSearchRoute = LayoutSearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => LayoutLazyRoute,
+} as any)
+const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => LayoutLazyRoute,
 } as any)
 const LayoutMyStuffRoute = LayoutMyStuffRouteImport.update({
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/my-stuff': typeof LayoutMyStuffRouteWithChildren
+  '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/search': typeof LayoutSearchRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/settings': typeof LayoutSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/uploader': typeof LayoutUploaderLazyRoute
@@ -232,6 +240,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_layout': typeof LayoutLazyRouteWithChildren
   '/_layout/my-stuff': typeof LayoutMyStuffRouteWithChildren
+  '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/_layout/search': typeof LayoutSearchRouteWithChildren
   '/_layout/settings': typeof LayoutSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
@@ -257,6 +266,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/my-stuff'
+    | '/privacy-policy'
     | '/search'
     | '/settings'
     | '/oauth/callback'
@@ -279,6 +289,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/privacy-policy'
     | '/settings'
     | '/oauth/callback'
     | '/uploader'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_layout'
     | '/_layout/my-stuff'
+    | '/_layout/privacy-policy'
     | '/_layout/search'
     | '/_layout/settings'
     | '/oauth/callback'
@@ -378,6 +390,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof LayoutSearchRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/privacy-policy': {
+      id: '/_layout/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof LayoutPrivacyPolicyRouteImport
       parentRoute: typeof LayoutLazyRoute
     }
     '/_layout/my-stuff': {
@@ -522,6 +541,7 @@ const LayoutSearchRouteWithChildren = LayoutSearchRoute._addFileChildren(
 
 interface LayoutLazyRouteChildren {
   LayoutMyStuffRoute: typeof LayoutMyStuffRouteWithChildren
+  LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
   LayoutSearchRoute: typeof LayoutSearchRouteWithChildren
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutUploaderLazyRoute: typeof LayoutUploaderLazyRoute
@@ -537,6 +557,7 @@ interface LayoutLazyRouteChildren {
 
 const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
   LayoutMyStuffRoute: LayoutMyStuffRouteWithChildren,
+  LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
   LayoutSearchRoute: LayoutSearchRouteWithChildren,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutUploaderLazyRoute: LayoutUploaderLazyRoute,

@@ -73,73 +73,111 @@ export const Route = createFileRoute('/')({
     }, []);
     return (
       <>
-        <div className="flex flex-col shrink-0">
-          <PWAPrompt />
-          <QuickAccessBar className="justify-end px-8 py-2" />
-          <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
-            <div className="relative order-1 grow shrink self-stretch overflow-visible pointer-events-none -z-10 min-h-64 m-16">
-              <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-fast"></div>
-              <Suspense fallback={null}>
-                <FrontPageGrid />
-              </Suspense>
-            </div>
-            <div className="flex flex-wrap shrink-0 grow-0 justify-center gap-8">
-              <div className="relative w-32 h-32 inline-block">
-                <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-slow"></div>
-                <img
-                  src="/logo.svg"
-                  className="absolute inset-0"
-                  alt="Logic Pad logo"
-                />
+        <div className="flex flex-col gap-4 items-stretch min-h-svh shrink-0">
+          <div className="flex flex-col shrink-0">
+            <PWAPrompt />
+            <QuickAccessBar className="justify-end px-8 py-2" />
+            <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
+              <div className="relative order-1 grow shrink self-stretch overflow-visible pointer-events-none -z-10 min-h-64 m-16">
+                <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-fast"></div>
+                <Suspense fallback={null}>
+                  <FrontPageGrid />
+                </Suspense>
               </div>
-              <div className="flex flex-col gap-4">
-                <h1 className="text-accent text-4xl lg:text-6xl font-medium force-serif">
-                  Logic Pad
-                  <AlphaBadge className="ms-4" />
-                </h1>
-                <span className="text-xl lg:text-2xl">
-                  A modern, open-source web app for grid-based puzzles.
-                </span>
-                <div className="flex flex-wrap gap-4 items-center mt-4">
-                  <Link
-                    type="button"
-                    to="/create"
-                    className="btn btn-md lg:btn-lg btn-accent"
-                  >
-                    Create new puzzle
-                  </Link>
-                  <Link
-                    type="button"
-                    to="/search"
-                    className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                  >
-                    Explore puzzles
-                  </Link>
-                  <Link
-                    type="button"
-                    to="/uploader"
-                    className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                  >
-                    Import puzzles
-                  </Link>
+              <div className="flex flex-wrap shrink-0 grow-0 justify-center gap-8">
+                <div className="relative w-32 h-32 inline-block">
+                  <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-slow"></div>
+                  <img
+                    src="/logo.svg"
+                    className="absolute inset-0"
+                    alt="Logic Pad logo"
+                  />
                 </div>
-                <Changelog />
+                <div className="flex flex-col gap-4">
+                  <h1 className="text-accent text-4xl lg:text-6xl font-medium font-serif">
+                    Logic Pad
+                    <AlphaBadge className="ms-4" />
+                  </h1>
+                  <span className="text-xl lg:text-2xl">
+                    A modern, open-source web app for grid-based puzzles.
+                  </span>
+                  <div className="flex flex-wrap gap-4 items-center mt-4">
+                    <Link
+                      type="button"
+                      to="/create"
+                      className="btn btn-md lg:btn-lg btn-accent"
+                    >
+                      Create new puzzle
+                    </Link>
+                    <Link
+                      type="button"
+                      to="/search"
+                      className="btn btn-md lg:btn-lg btn-accent btn-outline"
+                    >
+                      Explore puzzles
+                    </Link>
+                    <Link
+                      type="button"
+                      to="/uploader"
+                      className="btn btn-md lg:btn-lg btn-accent btn-outline"
+                    >
+                      Import puzzles
+                    </Link>
+                  </div>
+                  <Changelog />
+                </div>
               </div>
             </div>
           </div>
+          <div className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center [&>*]:shrink-0">
+            {isOnline && (
+              <Suspense fallback={<Loading />}>
+                <FrontPageLists />
+              </Suspense>
+            )}
+            {isOnline && me && (
+              <Suspense fallback={<Loading />}>
+                <PersonalFrontPageLists />
+              </Suspense>
+            )}
+          </div>
         </div>
-        <div className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center [&>*]:shrink-0">
-          {isOnline && (
-            <Suspense fallback={<Loading />}>
-              <FrontPageLists />
-            </Suspense>
-          )}
-          {isOnline && me && (
-            <Suspense fallback={<Loading />}>
-              <PersonalFrontPageLists />
-            </Suspense>
-          )}
-        </div>
+        <footer className="footer footer-center bg-base-200/20 text-neutral-content rounded p-4 gap-4 shrink-0">
+          <nav className="grid grid-flow-col gap-8">
+            <a className="link link-hover">Rules</a>
+            <Link to="/privacy-policy" className="link link-hover">
+              Privacy policy
+            </Link>
+            <a
+              className="link link-hover"
+              href="https://github.com/hlysine/logic-pad"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Source code
+            </a>
+            <a
+              className="link link-hover"
+              href="mailto:logic-pad@googlegroups.com"
+            >
+              Email
+            </a>
+          </nav>
+
+          <aside>
+            <p>
+              Copyright © {new Date().getFullYear()} -{' '}
+              <a
+                className="link link-hover"
+                href="https://github.com/hlysine/logic-pad"
+                target="_blank"
+                rel="noreferrer"
+              >
+                See LICENSE for details
+              </a>
+            </p>
+          </aside>
+        </footer>
       </>
     );
   }),

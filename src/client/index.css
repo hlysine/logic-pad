@@ -3,13 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family:
-    Palatino Linotype,
-    Palatino,
-    Palatino LT STD,
-    Book Antiqua,
-    Georgia,
-    serif;
+  @apply font-serif;
   line-height: 1.5;
   font-weight: 400;
   margin: 0;
@@ -21,16 +15,6 @@
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.force-serif {
-  font-family:
-    Palatino Linotype,
-    Palatino,
-    Palatino LT STD,
-    Book Antiqua,
-    Georgia,
-    serif;
 }
 
 .scrollbar-thin {

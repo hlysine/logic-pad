@@ -37,3 +37,15 @@
 .markdown .spoiler:not(.spoiler-reveal) {
   @apply bg-base-300 text-transparent select-none;
 }
+
+.markdown blockquote {
+  @apply bg-info/10 border-l-4 border-info ps-4 pe-2 py-2 my-2;
+}
+
+.markdown blockquote > :first-child {
+  @apply mt-0;
+}
+
+.markdown hr {
+  @apply divider border-0;
+}

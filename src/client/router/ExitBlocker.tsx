@@ -10,10 +10,17 @@ export default memo(function ExitBlocker() {
   const { metadata, grid } = useGrid();
   const { lastSaved } = useOnlinePuzzle();
   useBlocker({
-    shouldBlockFn: () =>
-      enableExitConfirmation &&
-      !puzzleEquals(lastSaved, { ...metadata, grid, solution: null }) &&
-      !window.confirm('Are you sure you want to leave?'),
+    shouldBlockFn: () => {
+      if (
+        !enableExitConfirmation ||
+        puzzleEquals(lastSaved, { ...metadata, grid, solution: null })
+      ) {
+        return false;
+      }
+      return !window.confirm(
+        'There are unsaved changes. Are you sure you want to leave?'
+      );
+    },
   });
   return null;
 });

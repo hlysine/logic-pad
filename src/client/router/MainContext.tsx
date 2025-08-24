@@ -30,7 +30,11 @@ export default memo(function MainContext({
   }, [initialPuzzle]);
   return (
     <EmbedContext name="root">
-      <OnlinePuzzleContext id={puzzleId} puzzle={puzzle}>
+      <OnlinePuzzleContext
+        id={puzzleId}
+        puzzle={puzzle}
+        initialPuzzle={initialPuzzle}
+      >
         <DisplayContext>
           <EditContext initialGrid={props.grid}>
             <GridStateContext>

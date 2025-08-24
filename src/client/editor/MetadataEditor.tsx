@@ -10,13 +10,17 @@ import UserCard from '../metadata/UserCard.tsx';
 export default memo(function MetadataEditor() {
   const { metadata, setMetadata } = useGrid();
   const { isOnline, me } = useOnline();
-  const { id, puzzle } = useOnlinePuzzle();
+  const { id, puzzle, lastSaved, setLastSaved } = useOnlinePuzzle();
 
   useEffect(() => {
     if (isOnline && !id && me !== null && metadata.author !== me.name) {
       setMetadata({ ...metadata, author: me.name });
+      setLastSaved({
+        ...lastSaved,
+        author: me.name,
+      });
     }
-  }, [isOnline, id, me, metadata, setMetadata]);
+  }, [isOnline, id, me, metadata, setMetadata, setLastSaved, lastSaved]);
 
   return (
     <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col grow h-full gap-2 shadow">

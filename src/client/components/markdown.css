@@ -2,6 +2,10 @@
   @apply leading-normal;
 }
 
+.markdown p {
+  @apply mt-2;
+}
+
 .markdown li {
   @apply list-disc ms-5;
 }

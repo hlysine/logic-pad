@@ -13,6 +13,7 @@ import AlphaBadge from '../components/AlphaBadge';
 import FrontPageLists from '../online/FrontPageLists';
 import PersonalFrontPageLists from '../online/PersonalFrontPageLists';
 import { useOnline } from '../contexts/OnlineContext';
+import Footer from '../components/Footer';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -142,42 +143,7 @@ export const Route = createFileRoute('/')({
             )}
           </div>
         </div>
-        <footer className="footer footer-center bg-base-200/20 text-neutral-content rounded p-4 gap-4 shrink-0">
-          <nav className="grid grid-flow-col gap-8">
-            <a className="link link-hover">Rules</a>
-            <Link to="/privacy-policy" className="link link-hover">
-              Privacy policy
-            </Link>
-            <a
-              className="link link-hover"
-              href="https://github.com/hlysine/logic-pad"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Source code
-            </a>
-            <a
-              className="link link-hover"
-              href="mailto:logic-pad@googlegroups.com"
-            >
-              Email
-            </a>
-          </nav>
-
-          <aside>
-            <p>
-              Copyright © {new Date().getFullYear()} -{' '}
-              <a
-                className="link link-hover"
-                href="https://github.com/hlysine/logic-pad"
-                target="_blank"
-                rel="noreferrer"
-              >
-                See LICENSE for details
-              </a>
-            </p>
-          </aside>
-        </footer>
+        <Footer />
       </>
     );
   }),

@@ -16,6 +16,7 @@ import { Route as IndexRouteImport } from './../routes/index'
 import { Route as OauthCallbackRouteImport } from './../routes/oauth.callback'
 import { Route as LayoutSettingsRouteImport } from './../routes/_layout.settings'
 import { Route as LayoutSearchRouteImport } from './../routes/_layout.search'
+import { Route as LayoutRulesRouteImport } from './../routes/_layout.rules'
 import { Route as LayoutPrivacyPolicyRouteImport } from './../routes/_layout.privacy-policy'
 import { Route as LayoutMyStuffRouteImport } from './../routes/_layout.my-stuff'
 import { Route as LayoutSolveIndexRouteImport } from './../routes/_layout.solve.index'
@@ -72,6 +73,11 @@ const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
 const LayoutSearchRoute = LayoutSearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => LayoutLazyRoute,
+} as any)
+const LayoutRulesRoute = LayoutRulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
   getParentRoute: () => LayoutLazyRoute,
 } as any)
 const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
@@ -193,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/my-stuff': typeof LayoutMyStuffRouteWithChildren
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/rules': typeof LayoutRulesRoute
   '/search': typeof LayoutSearchRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
@@ -216,6 +223,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/rules': typeof LayoutRulesRoute
   '/settings': typeof LayoutSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/uploader': typeof LayoutUploaderLazyRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutLazyRouteWithChildren
   '/_layout/my-stuff': typeof LayoutMyStuffRouteWithChildren
   '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/_layout/rules': typeof LayoutRulesRoute
   '/_layout/search': typeof LayoutSearchRouteWithChildren
   '/_layout/settings': typeof LayoutSettingsRoute
   '/oauth/callback': typeof OauthCallbackRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/my-stuff'
     | '/privacy-policy'
+    | '/rules'
     | '/search'
     | '/settings'
     | '/oauth/callback'
@@ -290,6 +300,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/privacy-policy'
+    | '/rules'
     | '/settings'
     | '/oauth/callback'
     | '/uploader'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/_layout'
     | '/_layout/my-stuff'
     | '/_layout/privacy-policy'
+    | '/_layout/rules'
     | '/_layout/search'
     | '/_layout/settings'
     | '/oauth/callback'
@@ -390,6 +402,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof LayoutSearchRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/rules': {
+      id: '/_layout/rules'
+      path: '/rules'
+      fullPath: '/rules'
+      preLoaderRoute: typeof LayoutRulesRouteImport
       parentRoute: typeof LayoutLazyRoute
     }
     '/_layout/privacy-policy': {
@@ -542,6 +561,7 @@ const LayoutSearchRouteWithChildren = LayoutSearchRoute._addFileChildren(
 interface LayoutLazyRouteChildren {
   LayoutMyStuffRoute: typeof LayoutMyStuffRouteWithChildren
   LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
+  LayoutRulesRoute: typeof LayoutRulesRoute
   LayoutSearchRoute: typeof LayoutSearchRouteWithChildren
   LayoutSettingsRoute: typeof LayoutSettingsRoute
   LayoutUploaderLazyRoute: typeof LayoutUploaderLazyRoute
@@ -558,6 +578,7 @@ interface LayoutLazyRouteChildren {
 const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
   LayoutMyStuffRoute: LayoutMyStuffRouteWithChildren,
   LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
+  LayoutRulesRoute: LayoutRulesRoute,
   LayoutSearchRoute: LayoutSearchRouteWithChildren,
   LayoutSettingsRoute: LayoutSettingsRoute,
   LayoutUploaderLazyRoute: LayoutUploaderLazyRoute,

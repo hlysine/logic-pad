@@ -68,22 +68,29 @@ export default memo(function CollectionSearchQuery({
   }, []);
   return (
     <>
-      <label
-        className={cn(
-          'input input-bordered flex items-center gap-2 w-full',
-          !me && 'input-disabled'
-        )}
+      <div
+        className={cn('w-full', !me && 'tooltip tooltip-info tooltip-top')}
+        data-tip={!me && 'Log in to search'}
       >
-        <FaSearch />
-        <input
-          ref={inputRef}
-          type="text"
-          className="grow"
-          placeholder={me ? 'Enter search terms' : 'Log in to search'}
-          disabled={!me}
-          onChange={e => updateParams({ ...displayParams, q: e.target.value })}
-        />
-      </label>
+        <label
+          className={cn(
+            'input input-bordered flex items-center gap-2 w-full',
+            !me && 'input-disabled'
+          )}
+        >
+          <FaSearch />
+          <input
+            ref={inputRef}
+            type="text"
+            className="grow"
+            placeholder={me ? 'Enter search terms' : 'Log in to search'}
+            disabled={!me}
+            onChange={e =>
+              updateParams({ ...displayParams, q: e.target.value })
+            }
+          />
+        </label>
+      </div>
       <div className="grid grid-cols-[minmax(8rem,auto)_minmax(0,1fr)] items-start gap-y-2">
         <div className="mt-2">Sort by</div>
         <div className="flex gap-4 mt-2 flex-wrap">

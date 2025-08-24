@@ -1,3 +1,13 @@
+# 24/8/2025
+
+**PREVIEW BRANCH**
+
+- Added support for drag-and-drop reordering of puzzles in collections
+- Added footer with rules and privacy policy
+- Layout fixes for mobile
+- Improved the exit blocking dialog to only show when necessary
+- Search queries are now reserved for logged in users only to prevent abuse
+
 # 23/8/2025
 
 **PREVIEW BRANCH**

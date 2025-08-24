@@ -1,5 +1,5 @@
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
-import { memo, useRef, useState } from 'react';
+import { memo, ReactNode, useRef, useState } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
   FaCheck,
@@ -10,6 +10,7 @@ import {
   FaUser,
 } from 'react-icons/fa';
 import {
+  InfiniteData,
   mutationOptions,
   useMutation,
   useSuspenseInfiniteQuery,
@@ -25,13 +26,31 @@ import {
 import UserCard from '../metadata/UserCard';
 import { cn, toRelativeDate } from '../uiHelper';
 import CollectionFollowButton from '../online/CollectionFollowButton';
-import { CollectionBrief, ResourceStatus } from '../online/data';
+import {
+  CollectionBrief,
+  ListResponse,
+  PuzzleBrief,
+  ResourceStatus,
+} from '../online/data';
 import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 import { useOnline } from '../contexts/OnlineContext';
 import EditableField from '../components/EditableField';
 import AddPuzzleModal from '../online/AddPuzzleModal';
 import { BiSolidSelectMultiple } from 'react-icons/bi';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  rectSortingStrategy,
+  SortableContext,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 
 interface CollectionPuzzlesProps {
   collectionId: string;
@@ -50,6 +69,88 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
     hasNextPage,
     isFetching,
   } = useSuspenseInfiniteQuery(collectionInfiniteQueryOptions(collectionId));
+  const reorderCollection = useMutation({
+    mutationKey: ['collection', collectionId, 'reorder'],
+    mutationFn: (variables: Parameters<typeof api.reorderCollection>) => {
+      return api.reorderCollection(...variables);
+    },
+    onMutate: async (variables: Parameters<typeof api.reorderCollection>) => {
+      await queryClient.cancelQueries({
+        queryKey: ['collection', collectionId, 'puzzles'],
+      });
+      const previousCollection = queryClient.getQueryData<
+        InfiniteData<ListResponse<PuzzleBrief>>
+      >(['collection', collectionId, 'puzzles'])!;
+
+      queryClient.setQueryData<InfiniteData<ListResponse<PuzzleBrief>>>(
+        ['collection', collectionId, 'puzzles'],
+        previous => {
+          if (!previous) return previous;
+          let moving: PuzzleBrief | null = null;
+          const total = previous.pages.reduce(
+            (acc, page) => acc + page.results.length,
+            0
+          );
+          let movingIndex = 0;
+          let replacingIndex = 0;
+          previous = { ...previous };
+          for (const page of previous.pages) {
+            const idx = page.results.findIndex(p => p.id === variables[2]);
+            if (idx !== -1) {
+              replacingIndex += idx;
+              break;
+            } else {
+              replacingIndex += page.results.length;
+            }
+          }
+          for (const page of previous.pages) {
+            const idx = page.results.findIndex(p => p.id === variables[1]);
+            if (idx !== -1) {
+              moving = page.results[idx];
+              page.results.splice(idx, 1);
+              movingIndex += idx;
+              break;
+            } else {
+              movingIndex += page.results.length;
+            }
+          }
+          if (!moving || movingIndex >= total || replacingIndex >= total)
+            return previous;
+          previous.pages = previous.pages.map(page => {
+            const idx = page.results.findIndex(p => p.id === variables[2]);
+            if (idx === -1) return page;
+            const updatedResults = [...page.results];
+            updatedResults.splice(
+              movingIndex < replacingIndex ? idx + 1 : idx,
+              0,
+              moving
+            );
+            return { ...page, results: updatedResults };
+          });
+          return previous;
+        }
+      );
+      return { previousCollection };
+    },
+    onError(error, _variables, context) {
+      toast.error(error.message);
+      if (context)
+        queryClient.setQueryData(
+          ['collection', collectionId, 'puzzles'],
+          context.previousCollection
+        );
+    },
+    async onSettled(_data, _error) {
+      if (
+        queryClient.isMutating({
+          mutationKey: ['collection', collectionId, 'reorder'],
+        }) === 1
+      )
+        await queryClient.invalidateQueries({
+          queryKey: ['collection', collectionId, 'puzzles'],
+        });
+    },
+  });
   const addToCollection = useMutation({
     mutationFn: (variables: Parameters<typeof api.addToCollection>) => {
       return api.addToCollection(...variables);
@@ -84,11 +185,47 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
   });
   const addPuzzleModalRef = useRef<{ open: () => void }>(null);
   const [selectedPuzzles, setSelectedPuzzles] = useState<string[] | null>(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+  const draggableWrapper = editable
+    ? (children: ReactNode) => (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={({ active, over }) => {
+            if (over && active.id !== over.id) {
+              reorderCollection.mutate([
+                collectionId,
+                active.id as string,
+                over.id as string,
+              ]);
+            }
+          }}
+        >
+          <SortableContext
+            items={puzzles.pages.flatMap(page => page.results)}
+            strategy={rectSortingStrategy}
+          >
+            {children}
+          </SortableContext>
+        </DndContext>
+      )
+    : (children: ReactNode) => children;
+
   return (
     <div className="flex flex-col gap-4 items-center">
-      <div className="flex gap-4 items-center w-full justify-end">
+      <div className="flex gap-4 items-center w-full justify-end shrink-0">
         {editable && (
           <>
+            <div>
+              {reorderCollection.isPending
+                ? 'Reordering...'
+                : 'Drag and drop to reorder'}
+            </div>
             {addToCollection.isPending ? (
               <Loading className="h-12 w-24" />
             ) : (
@@ -146,51 +283,54 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
         )}
       </div>
       <div className="flex flex-wrap gap-4 justify-center">
-        {puzzles?.pages.flatMap(page =>
-          page.results.map(puzzle => (
-            <PuzzleCard
-              key={puzzle.id}
-              puzzle={puzzle}
-              onClick={async () => {
-                if (selectedPuzzles !== null) {
-                  setSelectedPuzzles(selection => {
-                    if (selection?.includes(puzzle.id)) {
-                      return selection.filter(id => id !== puzzle.id);
-                    }
-                    return [...(selection ?? []), puzzle.id];
-                  });
-                } else {
-                  await navigate({
-                    to:
-                      puzzle.status === ResourceStatus.Private &&
-                      puzzle.creator.id === me?.id
-                        ? `/create/${puzzle.id}`
-                        : `/solve/${puzzle.id}`,
-                    search: {
-                      collection: collectionId,
-                    },
-                  });
-                }
-              }}
-            >
-              {selectedPuzzles !== null && (
-                <div
-                  className={cn(
-                    'absolute bottom-0 right-0 w-10 h-10 flex justify-center items-center rounded-tl-xl rounded-br-xl',
-                    selectedPuzzles.includes(puzzle.id)
-                      ? 'bg-accent text-accent-content'
-                      : 'bg-base-100 text-base-content'
-                  )}
-                >
-                  {selectedPuzzles.includes(puzzle.id) ? (
-                    <FaCheck size={24} />
-                  ) : (
-                    <FaPlus size={24} />
-                  )}
-                </div>
-              )}
-            </PuzzleCard>
-          ))
+        {draggableWrapper(
+          puzzles?.pages.flatMap(page =>
+            page.results.map(puzzle => (
+              <PuzzleCard
+                key={puzzle.id}
+                dragDroppable={editable}
+                puzzle={puzzle}
+                onClick={async () => {
+                  if (selectedPuzzles !== null) {
+                    setSelectedPuzzles(selection => {
+                      if (selection?.includes(puzzle.id)) {
+                        return selection.filter(id => id !== puzzle.id);
+                      }
+                      return [...(selection ?? []), puzzle.id];
+                    });
+                  } else {
+                    await navigate({
+                      to:
+                        puzzle.status === ResourceStatus.Private &&
+                        puzzle.creator.id === me?.id
+                          ? `/create/${puzzle.id}`
+                          : `/solve/${puzzle.id}`,
+                      search: {
+                        collection: collectionId,
+                      },
+                    });
+                  }
+                }}
+              >
+                {selectedPuzzles !== null && (
+                  <div
+                    className={cn(
+                      'absolute bottom-0 right-0 w-10 h-10 flex justify-center items-center rounded-tl-xl rounded-br-xl',
+                      selectedPuzzles.includes(puzzle.id)
+                        ? 'bg-accent text-accent-content'
+                        : 'bg-base-100 text-base-content'
+                    )}
+                  >
+                    {selectedPuzzles.includes(puzzle.id) ? (
+                      <FaCheck size={24} />
+                    ) : (
+                      <FaPlus size={24} />
+                    )}
+                  </div>
+                )}
+              </PuzzleCard>
+            ))
+          )
         )}
       </div>
       {isFetching ? (

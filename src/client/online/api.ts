@@ -339,6 +339,18 @@ export const api = {
   deleteCollection: async (collectionId: string) => {
     await axios.delete(`/collection/${collectionId}`).catch(rethrowError);
   },
+  reorderCollection: async (
+    collectionId: string,
+    moving: string,
+    replacing: string
+  ) => {
+    await axios
+      .put(`/collection/${collectionId}/reorder`, {
+        moving,
+        replacing,
+      })
+      .catch(rethrowError);
+  },
   addToCollection: async (collectionId: string, puzzleIds: string[]) => {
     await axios
       .post(`/collection/${collectionId}/add`, { puzzleIds })

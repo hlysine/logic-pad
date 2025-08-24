@@ -7,10 +7,13 @@ import { PuzzleType } from '@logic-pad/core/index';
 import { BsQuestionSquare } from 'react-icons/bs';
 import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 export interface PuzzleCardProps {
   puzzle: PuzzleBrief;
   expandable?: boolean;
+  dragDroppable?: boolean;
   onClick?: () => void;
   children?: ReactNode;
 }
@@ -125,11 +128,27 @@ export const PuzzleIcon = memo(function PuzzleIcon({
 export default memo(function PuzzleCard({
   puzzle,
   expandable = true,
+  dragDroppable = false,
   onClick,
   children,
 }: PuzzleCardProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: puzzle.id });
   return (
-    <div className="w-[320px] h-[116px] hover:z-50 shrink-0 grow-0">
+    <div
+      ref={dragDroppable ? setNodeRef : null}
+      style={
+        dragDroppable
+          ? {
+              transform: CSS.Transform.toString(transform),
+              transition,
+            }
+          : {}
+      }
+      {...(dragDroppable ? attributes : {})}
+      {...(dragDroppable ? listeners : {})}
+      className="w-[320px] h-[116px] hover:z-50 shrink-0 grow-0"
+    >
       <div
         className={cn(
           'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',

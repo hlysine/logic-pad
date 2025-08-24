@@ -33,7 +33,7 @@ export const Route = createLazyFileRoute('/_layout')({
     ];
     return (
       <>
-        <header className="flex shrink-0 flex-wrap justify-between items-center gap-4 px-8 py-2">
+        <header className="flex shrink-0 flex-wrap justify-between items-center lg:gap-4 px-8 py-2">
           <div className="flex xl:basis-[320px] flex-wrap grow shrink items-center gap-8 lg:gap-12">
             {!isLargeMedia && (
               <div className="dropdown">

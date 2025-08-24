@@ -2,6 +2,8 @@ import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { FaSearch, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { z } from 'zod';
+import { useOnline } from '../contexts/OnlineContext';
+import { cn } from '../uiHelper';
 
 export const puzzleSearchSchema = z.object({
   q: z.string().optional(),
@@ -221,12 +223,17 @@ export default memo(function PuzzleSearchQuery({
   publicPuzzlesOnly,
   onChange,
 }: PuzzleSearchQueryProps) {
+  const { me } = useOnline();
   const [displayParams, setDisplayParams] =
     useState<PuzzleSearchParams>(params);
   const updateParams = useMemo(() => {
     const debouncedUpdate = debounce(
       (newParams: PuzzleSearchParams) => {
-        onChange(newParams);
+        if (!me) {
+          onChange({});
+        } else {
+          onChange(newParams);
+        }
       },
       500,
       { trailing: true }
@@ -235,7 +242,7 @@ export default memo(function PuzzleSearchQuery({
       setDisplayParams(newParams);
       debouncedUpdate(newParams);
     };
-  }, [onChange]);
+  }, [onChange, me]);
 
   useEffect(() => {
     setDisplayParams(params);
@@ -252,13 +259,19 @@ export default memo(function PuzzleSearchQuery({
   }, []);
   return (
     <>
-      <label className="input input-bordered flex items-center gap-2 w-full">
+      <label
+        className={cn(
+          'input input-bordered flex items-center gap-2 w-full',
+          !me && 'input-disabled'
+        )}
+      >
         <FaSearch />
         <input
           ref={inputRef}
           type="text"
           className="grow"
-          placeholder="Enter search terms"
+          placeholder={me ? 'Enter search terms' : 'Log in to search'}
+          disabled={!me}
           onChange={e => updateParams({ ...displayParams, q: e.target.value })}
         />
       </label>
@@ -270,7 +283,11 @@ export default memo(function PuzzleSearchQuery({
               {filter.options.map(option => (
                 <button
                   key={option.id}
-                  className={`btn btn-sm ${option.isActive(displayParams) ? '' : 'btn-ghost'}`}
+                  className={cn(
+                    `btn btn-sm`,
+                    option.isActive(displayParams) ? '' : 'btn-ghost',
+                    !me && 'btn-disabled'
+                  )}
                   onClick={() =>
                     updateParams(option.applyFilter(displayParams))
                   }
@@ -292,7 +309,13 @@ export default memo(function PuzzleSearchQuery({
             .map(ordering => (
               <button
                 key={ordering.id}
-                className={`btn btn-sm ${displayParams.sort?.startsWith(`${ordering.id}-`) ? '' : 'btn-ghost'}`}
+                className={cn(
+                  `btn btn-sm`,
+                  displayParams.sort?.startsWith(`${ordering.id}-`)
+                    ? ''
+                    : 'btn-ghost',
+                  !me && 'btn-disabled'
+                )}
                 onClick={() => {
                   let newParams: PuzzleSearchParams;
                   if (displayParams.sort === `${ordering.id}-asc`) {

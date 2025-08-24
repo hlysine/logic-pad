@@ -16,7 +16,7 @@ export default memo(function ThemeSwitcher() {
   };
 
   return (
-    <div className="dropdown dropdown-end">
+    <div className="dropdown">
       <div
         tabIndex={0}
         role="button"

@@ -1,3 +1,9 @@
+# 25/8/2025
+
+**PREVIEW BRANCH**
+
+- Fixed uploader failing due to server rate limit
+
 # 24/8/2025
 
 **PREVIEW BRANCH**

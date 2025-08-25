@@ -100,7 +100,16 @@ const linkRegex = /https?:\/\/[\w\-.]+\/\w+\?(?:[\w=&])*d=([\w_%-]+)/gm;
 
 class UploadManager {
   private uploads: readonly UploadEntry[] = [];
-  public taskQueue = new PQueue({ concurrency: 5 });
+  public taskQueue = new PQueue({
+    concurrency: 5,
+  });
+
+  public uploadQueue = new PQueue({
+    concurrency: 5,
+    interval: 61 * 1000,
+    intervalCap: 60,
+  });
+
   private arrayListeners: (() => void)[] = [];
   private entryListeners: Record<string, (() => void)[]> = {};
 
@@ -167,7 +176,7 @@ class UploadManager {
           });
         }
       },
-      { id: entry.data }
+      { id: entry.data, priority: 20 }
     );
   };
 
@@ -265,7 +274,7 @@ class UploadManager {
               }
             }
           },
-          { id: entry.data, signal: controller.signal }
+          { id: entry.data, signal: controller.signal, priority: 10 }
         );
       } catch (_) {
         const updatedEntry = this.uploads.find(e => e.data === entry.data);
@@ -301,13 +310,22 @@ class UploadManager {
           const puzzleData = await Compressor.compress(
             Serializer.stringifyGrid(entry.gridWithSolution)
           );
-          const result = await api.createPuzzle(
-            entry.metadata.title,
-            entry.metadata.description,
-            entry.metadata.difficulty,
-            puzzleData
+          const publishResult = await this.uploadQueue.add(
+            async () => {
+              const entry = this.uploads.find(e => e.data === data);
+              if (!entry) return;
+              if (entry.status !== 'uploading') return;
+              const result = await api.createPuzzle(
+                entry.metadata.title,
+                entry.metadata.description,
+                entry.metadata.difficulty,
+                puzzleData
+              );
+              return await api.publishPuzzle(result.id);
+            },
+            { id: data }
           );
-          const publishResult = await api.publishPuzzle(result.id);
+          if (!publishResult) throw new Error('Upload canceled');
           entry = this.uploads.find(e => e.data === data);
           if (!entry) return;
           if (entry.status !== 'uploading') return;
@@ -796,6 +814,11 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
         <div>
           You can edit the extracted puzzle data before uploading or use the
           auto solver to generate missing solutions.
+        </div>
+        <div>
+          During large-volume uploads, the uploader may pause to respect server
+          rate limits. Please be patient and allow the uploader to complete the
+          process.
         </div>
         <MasterControls uploadManager={uploadManager} />
         <div className="divider m-0" />

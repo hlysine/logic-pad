@@ -1,3 +1,16 @@
+# 26/8/2025
+
+**PREVIEW BRANCH**
+
+- The editor now selects the color tool by default
+- Added a cursor for symbol insertion
+- Added a name and explanation for each symbol / rule
+- Added expandable explanation for symbol / rule config fields
+- Fixed modifier hotkeys
+- Fixed music grids passing puzzle checklist with no solution provided
+- Fixed exit blocker in puzzle editor not respecting site settings
+- Fixed instruction overflow causing the accent bar to be cut off
+
 # 25/8/2025
 
 **PREVIEW BRANCH**

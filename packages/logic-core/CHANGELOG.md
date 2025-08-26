@@ -1,3 +1,8 @@
+# 0.14.0
+
+- Added name and explanation for every `Configurable`
+- Added explanation for every config field
+
 # 0.13.4
 
 - Strip solution in checksum

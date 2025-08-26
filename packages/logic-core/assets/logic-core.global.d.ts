@@ -344,6 +344,8 @@ declare global {
     get value(): T;
   }
   export declare abstract class Configurable {
+    abstract get title(): string;
+    abstract get configExplanation(): string;
     get configs(): readonly AnyConfig[] | null;
     abstract copyWith(props: Record<string, unknown>): this;
     /**
@@ -357,6 +359,7 @@ declare global {
   export declare abstract class Instruction extends Configurable {
     abstract get id(): string;
     abstract get explanation(): string;
+    get configExplanation(): string;
     abstract createExampleGrid(): GridData;
     /**
      * Indicates that validation by logic is not available and the solution must be used for validation
@@ -492,6 +495,9 @@ declare global {
      * Ranges from 0 to 1
      */
     readonly velocity: number | null;
+    readonly title = 'Music Grid - Row';
+    readonly configExplanation =
+      'Configure the playback settings from this tile onwards.';
     private static readonly CONFIGS;
     constructor(
       /**
@@ -520,6 +526,9 @@ declare global {
     readonly pedal: boolean | null;
     readonly checkpoint: boolean;
     readonly rows: readonly Row[];
+    readonly title = 'Music Grid - Control Line';
+    readonly configExplanation =
+      'Configure the playback settings from this point onwards.';
     private static readonly CONFIGS;
     /**
      * Configure playback settings, taking effect at the given column (inclusive)
@@ -565,6 +574,8 @@ declare global {
     readonly controlLines: readonly ControlLine[];
     readonly track: GridData | null;
     readonly normalizeVelocity: boolean;
+    readonly title = 'Music Grid';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
@@ -621,6 +632,8 @@ declare global {
     ): ControlLine[];
   }
   export declare class CompletePatternRule extends Rule {
+    readonly title = 'Complete The Pattern';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly SEARCH_VARIANTS;
     /**
@@ -639,6 +652,8 @@ declare global {
     get isSingleton(): boolean;
   }
   export declare class UndercluedRule extends Rule {
+    readonly title = 'Underclued';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly SEARCH_VARIANTS;
     /**
@@ -665,6 +680,8 @@ declare global {
   export declare class WrapAroundRule extends Rule implements GetTileHandler {
     readonly horizontal: Wrapping;
     readonly vertical: Wrapping;
+    readonly title = 'Wrap Around';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID_NONE;
     private static readonly EXAMPLE_GRID_HORIZONTAL;
     private static readonly EXAMPLE_GRID_VERTICAL;
@@ -1225,6 +1242,7 @@ declare global {
     readonly type: ConfigType;
     readonly field: string;
     readonly description: string;
+    readonly explanation?: string;
     readonly default: T;
     readonly configurable: boolean;
   }
@@ -1495,6 +1513,7 @@ declare global {
     tileMapper?: (tile: TileData) => TileData
   ): GridData;
   export declare class BanPatternRule extends Rule {
+    readonly title = 'Ban Pattern';
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
@@ -1517,6 +1536,8 @@ declare global {
   }
   export declare class CellCountPerZoneRule extends Rule {
     readonly color: Color;
+    readonly title = 'Equal Count Per Zone';
+    get configExplanation(): string;
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
@@ -1540,6 +1561,7 @@ declare global {
   export declare class CellCountRule extends Rule {
     readonly color: Color;
     readonly count: number;
+    readonly title = 'Total Count';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
@@ -1563,6 +1585,7 @@ declare global {
   }
   export declare class ConnectAllRule extends Rule {
     readonly color: Color;
+    readonly title = 'Connect All';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
@@ -1600,6 +1623,7 @@ declare global {
     withColor(color: Color): this;
   }
   export declare class ContainsShapeRule extends RegionShapeRule {
+    readonly title = 'Areas Contain Pattern';
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
     private static readonly CONFIGS;
@@ -1625,6 +1649,8 @@ declare global {
   export declare class CustomRule extends Rule {
     readonly description: string;
     readonly grid: GridData;
+    readonly title = 'Custom Rule';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     static readonly configs: readonly AnyConfig[];
     private static readonly SEARCH_VARIANTS;
@@ -1657,6 +1683,8 @@ declare global {
     readonly regenInterval: number;
     readonly startFull: boolean;
     readonly solvePath: Position$1[];
+    readonly title = 'Foresight';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
@@ -1697,6 +1725,7 @@ declare global {
     implements FinalValidationHandler
   {
     readonly count: number;
+    readonly title = 'Lying Symbols';
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
@@ -1727,6 +1756,8 @@ declare global {
   {
     readonly solution: GridData;
     readonly visible: boolean;
+    readonly title = 'Alternate Solution';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     private static readonly SEARCH_VARIANTS;
@@ -1770,6 +1801,7 @@ declare global {
     implements SymbolValidationHandler
   {
     readonly number: number;
+    readonly title = 'Off By X';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     private static readonly SEARCH_VARIANTS;
@@ -1799,6 +1831,8 @@ declare global {
     implements SetGridHandler, FinalValidationHandler
   {
     readonly editor: boolean;
+    readonly title = 'Perfection';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly SEARCH_VARIANTS;
     /**
@@ -1842,6 +1876,7 @@ declare global {
   export declare class RegionAreaRule extends Rule {
     readonly color: Color;
     readonly size: number;
+    readonly title = 'Region Area Size';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_DARK;
     private static readonly EXAMPLE_GRID_LIGHT;
@@ -1865,6 +1900,7 @@ declare global {
     withSize(size: number): this;
   }
   export declare class SameShapeRule extends RegionShapeRule {
+    readonly title = 'Same Shape Areas';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
@@ -1887,6 +1923,7 @@ declare global {
     readonly color: Color;
     readonly count: number;
     readonly comparison: Comparison;
+    readonly title = 'Symbols Per Area';
     private static readonly SYMBOL_POSITIONS;
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRIDS;
@@ -1920,6 +1957,7 @@ declare global {
     private static countAllSymbolsOfPosition;
   }
   export declare class UniqueShapeRule extends RegionShapeRule {
+    readonly title = 'Unique Shape Areas';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID_LIGHT;
     private static readonly EXAMPLE_GRID_DARK;
@@ -2341,6 +2379,7 @@ declare global {
     withNumber(number: number): this;
   }
   export declare class AreaNumberSymbol extends NumberSymbol {
+    readonly title = 'Area Number';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -2381,6 +2420,7 @@ declare global {
   }
   export declare class DartSymbol extends NumberSymbol {
     readonly orientation: Orientation;
+    readonly title = 'Dart';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -2421,7 +2461,7 @@ declare global {
     private buildCheckAndRating;
   }
   export type DirectionLinkerMap = Record<Direction, Direction>;
-  export declare class DirectionLinkerSymbol extends Symbol$1 {
+  export declare abstract class DirectionLinkerSymbol extends Symbol$1 {
     readonly x: number;
     readonly y: number;
     private static readonly CONFIGS;
@@ -2442,7 +2482,6 @@ declare global {
     createExampleGrid(): GridData;
     private deltaCoordinate;
     validateSymbol(grid: GridData): State;
-    copyWith({ x, y }: { x?: number; y?: number }): this;
     private getInitialCheckedCouples;
   }
   export declare abstract class DirectionLinkerBTModule extends BTModule {
@@ -2458,6 +2497,7 @@ declare global {
     ): Position$1 | null;
   }
   export declare class FocusSymbol extends NumberSymbol {
+    readonly title = 'Focus Number';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -2497,6 +2537,7 @@ declare global {
   export declare class GalaxySymbol extends DirectionLinkerSymbol {
     readonly x: number;
     readonly y: number;
+    readonly title = 'Galaxy';
     private static readonly linkedDirections;
     /**
      * **Galaxies are centers of rotational symmetry**
@@ -2525,6 +2566,7 @@ declare global {
     readonly x: number;
     readonly y: number;
     readonly letter: string;
+    readonly title = 'Letter';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -2562,6 +2604,7 @@ declare global {
     readonly x: number;
     readonly y: number;
     readonly orientation: Orientation;
+    readonly title = 'Lotus';
     private static readonly linkedDirectionsFromOrientation;
     /**
      * **Areas containing this symbol must be symmetrical**
@@ -2598,6 +2641,7 @@ declare global {
     checkGlobal(grid: BTGridData): false | CheckResult;
   }
   export declare class MinesweeperSymbol extends NumberSymbol {
+    readonly title = 'Minesweeper Number';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -2646,6 +2690,7 @@ declare global {
   export declare class MyopiaSymbol extends MultiEntrySymbol {
     readonly diagonals: boolean;
     readonly directions: OrientationToggle;
+    get title(): 'Framed Myopia Arrow' | 'Myopia Arrow';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     private static readonly EXAMPLE_DIAGONAL_GRID;
@@ -2688,6 +2733,7 @@ declare global {
     checkGlobal(grid: BTGridData): CheckResult | false;
   }
   export declare class ViewpointSymbol extends NumberSymbol {
+    readonly title = 'Viewpoint Number';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**
@@ -2859,6 +2905,8 @@ declare global {
   export declare class CustomIconSymbol extends CustomSymbol {
     readonly icon: string;
     readonly rotation: number;
+    readonly title = 'Custom Icon Symbol';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     /**
@@ -2902,6 +2950,8 @@ declare global {
   export declare class CustomTextSymbol extends CustomSymbol {
     readonly text: string;
     readonly rotation: number;
+    readonly title = 'Custom Text Symbol';
+    get configExplanation(): string;
     private static readonly EXAMPLE_GRID;
     private static readonly CONFIGS;
     /**
@@ -2949,6 +2999,8 @@ declare global {
     readonly x: number;
     readonly y: number;
     readonly revealLocation: boolean;
+    readonly title = 'Hidden Symbol Marker';
+    get configExplanation(): string;
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
     /**

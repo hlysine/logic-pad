@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.13.4",
+  "version": "0.14.0",
   "type": "module",
   "files": [
     "dist",
@@ -43,7 +43,7 @@
   "scripts": {
     "build": "rimraf dist/ && bun run codegen && bunx --bun tsc && bun run typegen",
     "lint": "cd ../../ && eslint ./packages/logic-core --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "codegen": "bun ./scripts/genEntry.ts && bun ./scripts/genImports.ts",
+    "codegen": "bun ./scripts/genImports.ts && bun ./scripts/genEntry.ts",
     "typegen": "bun ./scripts/genTypes.ts",
     "prepublishOnly": "bun run build"
   },

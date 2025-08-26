@@ -21,6 +21,7 @@ export default memo(function ExitBlocker() {
         'There are unsaved changes. Are you sure you want to leave?'
       );
     },
+    disabled: !enableExitConfirmation,
   });
   return null;
 });

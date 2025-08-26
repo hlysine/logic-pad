@@ -11,7 +11,7 @@ export default class OffByXRule
   extends Rule
   implements SymbolValidationHandler
 {
-  public readonly name = 'Off By X';
+  public readonly title = 'Off By X';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

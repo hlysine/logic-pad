@@ -11,7 +11,7 @@ interface Zone {
   possible: number;
 }
 export default class CellCountPerZoneRule extends Rule {
-  public readonly name = 'Equal Count Per Zone';
+  public readonly title = 'Equal Count Per Zone';
 
   public get configExplanation() {
     return 'Use the zone tool to define areas on the grid.';

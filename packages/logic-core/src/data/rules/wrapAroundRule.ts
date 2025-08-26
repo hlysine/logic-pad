@@ -18,7 +18,7 @@ import Symbol from '../symbols/symbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class WrapAroundRule extends Rule implements GetTileHandler {
-  public readonly name = 'Wrap Around';
+  public readonly title = 'Wrap Around';
 
   public get configExplanation() {
     return 'Allow edges to connect with each other and symbols / rules to take effect across edges.';

@@ -2,7 +2,7 @@ import { AnyConfig, ConfigType } from '../config.js';
 import Configurable from '../configurable.js';
 
 export class Row extends Configurable {
-  public readonly name = 'Music Grid - Row';
+  public readonly title = 'Music Grid - Row';
 
   public readonly configExplanation =
     'Configure the playback settings from this tile onwards.';
@@ -65,7 +65,7 @@ export class Row extends Configurable {
 }
 
 export class ControlLine extends Configurable {
-  public readonly name = 'Music Grid - Control Line';
+  public readonly title = 'Music Grid - Control Line';
 
   public readonly configExplanation =
     'Configure the playback settings from this point onwards.';

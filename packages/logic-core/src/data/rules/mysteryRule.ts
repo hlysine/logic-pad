@@ -12,7 +12,7 @@ export default class MysteryRule
   extends Rule
   implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
 {
-  public readonly name = 'Alternate Solution';
+  public readonly title = 'Alternate Solution';
 
   public get configExplanation() {
     return 'You may use multiple instances of this rule to provide multiple alternate solutions.';

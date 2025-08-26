@@ -4,7 +4,7 @@ import { Color } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
 export default class AreaNumberSymbol extends NumberSymbol {
-  public readonly name = 'Area Number';
+  public readonly title = 'Area Number';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

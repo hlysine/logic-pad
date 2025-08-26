@@ -5,7 +5,7 @@ import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class ForesightRule extends Rule {
-  public readonly name = 'Foresight';
+  public readonly title = 'Foresight';
 
   public get configExplanation() {
     return 'Provide automatic hints to the player.';

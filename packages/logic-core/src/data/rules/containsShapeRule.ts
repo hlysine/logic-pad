@@ -12,7 +12,7 @@ import RegionShapeRule from './regionShapeRule.js';
 import { SearchVariant } from './rule.js';
 
 export default class ContainsShapeRule extends RegionShapeRule {
-  public readonly name = 'Areas Contain Pattern';
+  public readonly title = 'Areas Contain Pattern';
 
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
     GridData.create(['nnnnn', 'nnnnn', 'wwwwn', 'nnnnn', 'nnnnn'])

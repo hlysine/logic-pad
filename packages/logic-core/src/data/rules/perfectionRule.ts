@@ -18,7 +18,7 @@ export default class PerfectionRule
   extends Rule
   implements SetGridHandler, FinalValidationHandler
 {
-  public readonly name = 'Perfection';
+  public readonly title = 'Perfection';
 
   public get configExplanation() {
     return 'You should allow players to enable perfection mode themselves instead of enforcing this rule.';

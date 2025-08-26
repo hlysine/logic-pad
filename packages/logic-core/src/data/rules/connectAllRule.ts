@@ -5,7 +5,7 @@ import { Color, Position, RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class ConnectAllRule extends Rule {
-  public readonly name = 'Connect All';
+  public readonly title = 'Connect All';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

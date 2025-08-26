@@ -5,7 +5,7 @@ import { Color, State } from '../primitives.js';
 import Symbol from './symbol.js';
 
 export default class LetterSymbol extends Symbol {
-  public readonly name = 'Letter';
+  public readonly title = 'Letter';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

@@ -13,7 +13,7 @@ import {
 import MultiEntrySymbol from './multiEntrySymbol.js';
 
 export default class MyopiaSymbol extends MultiEntrySymbol {
-  public get name() {
+  public get title() {
     return this.diagonals ? 'Framed Myopia Arrow' : 'Myopia Arrow';
   }
 

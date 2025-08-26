@@ -3,7 +3,7 @@ import GridData from '../grid.js';
 import CustomSymbol from './customSymbol.js';
 
 export default class CustomTextSymbol extends CustomSymbol {
-  public readonly name = 'Custom Text Symbol';
+  public readonly title = 'Custom Text Symbol';
 
   public get configExplanation() {
     return 'A customizable symbol. Your provided solution may override auto-validation.';

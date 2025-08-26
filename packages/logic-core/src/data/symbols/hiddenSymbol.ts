@@ -9,7 +9,7 @@ export default class HiddenSymbol
   extends Symbol
   implements SymbolDisplayHandler
 {
-  public readonly name = 'Hidden Symbol Marker';
+  public readonly title = 'Hidden Symbol Marker';
 
   public get configExplanation() {
     return 'Other symbols in the same location will be hidden until this tile is colored correctly.';

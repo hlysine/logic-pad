@@ -145,7 +145,7 @@ export default memo(function ConfigPopup() {
       style={popupLocation.current}
     >
       <div className="text-accent text-xl font-semibold">
-        {configurable.name}
+        {configurable.title}
       </div>
       <AnnotatedText className="text-sm opacity-80 -mt-2 mb-2">
         {configurable.configExplanation}

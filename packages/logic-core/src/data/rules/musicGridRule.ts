@@ -24,7 +24,7 @@ export default class MusicGridRule
   extends Rule
   implements GridChangeHandler, SetGridHandler, GridResizeHandler
 {
-  public readonly name = 'Music Grid';
+  public readonly title = 'Music Grid';
 
   public get configExplanation() {
     return 'Solve the grid by listening to the solution being played back.';

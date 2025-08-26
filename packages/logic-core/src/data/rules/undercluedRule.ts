@@ -5,7 +5,7 @@ import CustomTextSymbol from '../symbols/customTextSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class UndercluedRule extends Rule {
-  public readonly name = 'Underclued';
+  public readonly title = 'Underclued';
 
   public get configExplanation() {
     return 'A solution must be provided. The solvers may be used to generate one automatically.';

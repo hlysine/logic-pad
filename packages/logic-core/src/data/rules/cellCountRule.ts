@@ -5,7 +5,7 @@ import AreaNumberSymbol from '../symbols/areaNumberSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class CellCountRule extends Rule {
-  public readonly name = 'Total Count';
+  public readonly title = 'Total Count';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

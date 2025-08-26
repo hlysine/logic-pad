@@ -6,7 +6,7 @@ import TileData from '../tile.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class RegionAreaRule extends Rule {
-  public readonly name = 'Region Area Size';
+  public readonly title = 'Region Area Size';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

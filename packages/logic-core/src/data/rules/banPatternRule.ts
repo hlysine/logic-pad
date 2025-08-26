@@ -11,7 +11,7 @@ import {
 import Rule, { SearchVariant } from './rule.js';
 
 export default class BanPatternRule extends Rule {
-  public readonly name = 'Ban Pattern';
+  public readonly title = 'Ban Pattern';
 
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['nnnnn', 'nnnnn', 'wwwwn', 'nnnnn', 'nnnnn'])

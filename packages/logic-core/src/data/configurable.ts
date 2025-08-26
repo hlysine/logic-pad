@@ -1,7 +1,7 @@
 import { AnyConfig, configEquals } from './config.js';
 
 export default abstract class Configurable {
-  public abstract get name(): string;
+  public abstract get title(): string;
 
   public abstract get configExplanation(): string;
 

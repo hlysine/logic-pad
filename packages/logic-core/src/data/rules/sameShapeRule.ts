@@ -6,7 +6,7 @@ import RegionShapeRule from './regionShapeRule.js';
 import { SearchVariant } from './rule.js';
 
 export default class SameShapeRule extends RegionShapeRule {
-  public readonly name = 'Same Shape Areas';
+  public readonly title = 'Same Shape Areas';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {

@@ -4,7 +4,7 @@ import { RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class CustomRule extends Rule {
-  public readonly name = 'Custom Rule';
+  public readonly title = 'Custom Rule';
 
   public get configExplanation() {
     return 'A customizable rule. Your provided solution may override auto-validation.';

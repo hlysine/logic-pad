@@ -25,6 +25,7 @@ export interface ToolboxItemProps {
   hotkey?: string;
   order?: number;
   defaultHidden?: boolean;
+  defaultSelected?: boolean;
 }
 
 export default memo(function ToolboxItem({
@@ -38,6 +39,7 @@ export default memo(function ToolboxItem({
   hotkey,
   order,
   defaultHidden,
+  defaultSelected = false,
 }: ToolboxItemProps) {
   const { toolId, setTool } = useToolbox();
   const [showMoreTools] = useSettings('showMoreTools');
@@ -47,6 +49,12 @@ export default memo(function ToolboxItem({
       setTool(id, name, description, gridOverlay, onTileClick);
     }
   }, [id, name, description, gridOverlay, onTileClick, setTool, toolId]);
+
+  useEffect(() => {
+    if (defaultSelected)
+      setTool(id, name, description, gridOverlay, onTileClick);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useHotkeys(
     hotkey ?? [],

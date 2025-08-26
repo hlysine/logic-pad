@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import { allTools } from './tools';
 import { cn } from '../../client/uiHelper.ts';
@@ -12,14 +12,8 @@ import { PartPlacement } from '../instructions/parts/types';
 import { useSettings } from '../contexts/SettingsContext.tsx';
 
 export default memo(function ToolboxEditor() {
-  const { toolId, name, description, setTool, presets, setPresets } =
-    useToolbox();
+  const { toolId, name, description, presets, setPresets } = useToolbox();
   const [showMoreTools, setShowMoreTools] = useSettings('showMoreTools');
-
-  useEffect(() => {
-    setTool(null, null, null, null, null);
-    return () => setTool(null, null, null, null, null);
-  }, [setTool]);
 
   const selectedPreset = presets.find(
     preset => preset.symbol.id + '_' + preset.name === toolId

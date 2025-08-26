@@ -1,13 +1,17 @@
 import { memo } from 'react';
 
 export interface AnnotatedTextProps {
-  text: string;
+  children: string;
+  className?: string;
 }
 
-export default memo(function AnnotatedText({ text }: AnnotatedTextProps) {
-  const parts = text.split('*');
+export default memo(function AnnotatedText({
+  children,
+  className,
+}: AnnotatedTextProps) {
+  const parts = children.split('*');
   return (
-    <span>
+    <span className={className}>
       {parts.map((part, i) => {
         if (i % 2 === 1) {
           return (

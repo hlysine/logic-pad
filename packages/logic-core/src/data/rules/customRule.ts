@@ -4,6 +4,12 @@ import { RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class CustomRule extends Rule {
+  public readonly name = 'Custom Rule';
+
+  public get configExplanation() {
+    return 'A customizable rule. Your provided solution may override auto-validation.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(GridData.create(5, 4));
 
   public static readonly configs: readonly AnyConfig[] = Object.freeze([

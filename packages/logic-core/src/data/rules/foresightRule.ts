@@ -5,6 +5,12 @@ import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class ForesightRule extends Rule {
+  public readonly name = 'Foresight';
+
+  public get configExplanation() {
+    return 'Provide automatic hints to the player.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['.']).addSymbol(
       new CustomIconSymbol('', GridData.create([]), 0, 0, 'MdRemoveRedEye')

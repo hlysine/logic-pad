@@ -4,6 +4,8 @@ import { Color, Orientation } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
 export default class DartSymbol extends NumberSymbol {
+  public readonly name = 'Dart';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,

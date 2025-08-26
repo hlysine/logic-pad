@@ -28,7 +28,7 @@ function makeTurtle(pos1: Position, pos2: Position, grid: GridData): Turtle {
   };
 }
 
-export default class DirectionLinkerSymbol extends Symbol {
+export default abstract class DirectionLinkerSymbol extends Symbol {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -216,10 +216,6 @@ export default class DirectionLinkerSymbol extends Symbol {
     }
 
     return grayFound ? State.Incomplete : State.Satisfied;
-  }
-
-  public copyWith({ x, y }: { x?: number; y?: number }): this {
-    return new DirectionLinkerSymbol(x ?? this.x, y ?? this.y) as this;
   }
 
   private getInitialCheckedCouples(

@@ -11,6 +11,8 @@ const OFFSETS = [
 ];
 
 export default class FocusSymbol extends NumberSymbol {
+  public readonly name = 'Focus Number';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,

@@ -4,6 +4,8 @@ import { Color, Position } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
 export default class MinesweeperSymbol extends NumberSymbol {
+  public readonly name = 'Minesweeper Number';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,

@@ -3,6 +3,12 @@ import GridData from '../grid.js';
 import CustomSymbol from './customSymbol.js';
 
 export default class CustomIconSymbol extends CustomSymbol {
+  public readonly name = 'Custom Icon Symbol';
+
+  public get configExplanation() {
+    return 'A customizable symbol. Your provided solution may override auto-validation.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(GridData.create(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([

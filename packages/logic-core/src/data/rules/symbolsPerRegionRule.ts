@@ -14,6 +14,8 @@ import Symbol from '../symbols/symbol.js';
 import GridConnections from '../gridConnections.js';
 
 export default class SymbolsPerRegionRule extends Rule {
+  public readonly name = 'Symbols Per Area';
+
   private static readonly SYMBOL_POSITIONS = [
     { x: 1, y: 1 },
     { x: 2, y: 2 },

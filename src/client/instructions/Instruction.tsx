@@ -104,7 +104,7 @@ export default memo(function Instruction({
                 : 'text-sm'
           )}
         >
-          <AnnotatedText text={instruction.explanation} />
+          <AnnotatedText>{instruction.explanation}</AnnotatedText>
         </div>
         <div
           className={cn(

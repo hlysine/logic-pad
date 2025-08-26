@@ -11,6 +11,12 @@ interface Zone {
   possible: number;
 }
 export default class CellCountPerZoneRule extends Rule {
+  public readonly name = 'Equal Count Per Zone';
+
+  public get configExplanation() {
+    return 'Use the zone tool to define areas on the grid.';
+  }
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Color,

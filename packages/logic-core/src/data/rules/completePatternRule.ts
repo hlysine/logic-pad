@@ -3,6 +3,12 @@ import { MajorRule, RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class CompletePatternRule extends Rule {
+  public readonly name = 'Complete The Pattern';
+
+  public get configExplanation() {
+    return 'Complete the grid by pattern recognition. Your provided solution may override auto-validation.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['wbwbw', 'bwbwb', 'wbwbw', 'bwbwb'])
   );

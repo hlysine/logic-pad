@@ -18,6 +18,8 @@ import LotusSymbol from '../symbols/lotusSymbol.js';
 import AreaNumberSymbol from '../symbols/areaNumberSymbol.js';
 
 class IgnoredSymbol extends Symbol {
+  public readonly name = 'Ignored Symbol';
+
   public constructor(
     public readonly symbol: Symbol,
     public readonly state: State
@@ -76,6 +78,8 @@ class IgnoredSymbol extends Symbol {
 }
 
 class IgnoredRule extends Rule {
+  public readonly name = 'Ignored Rule';
+
   public constructor(
     public readonly rule: Rule,
     public readonly state: State
@@ -136,6 +140,8 @@ export default class LyingSymbolRule
   extends Rule
   implements FinalValidationHandler
 {
+  public readonly name = 'Lying Symbols';
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['bbbbw', 'wwbbb', 'bbbbw', 'wbbww']).withSymbols([
       new LetterSymbol(4, 0, 'A'),

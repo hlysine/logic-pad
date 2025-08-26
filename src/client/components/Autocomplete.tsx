@@ -67,7 +67,7 @@ export default memo(function Autocomplete({
                 className="overflow-hidden"
                 onClick={() => confirm(result.target)}
               >
-                <AnnotatedText text={result.target} />
+                <AnnotatedText>{result.target}</AnnotatedText>
               </a>
             </li>
           ))}

@@ -9,6 +9,7 @@ import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
+import AnnotatedText from '../components/AnnotatedText.tsx';
 
 const gap = 8;
 
@@ -143,6 +144,12 @@ export default memo(function ConfigPopup() {
       ref={popupRef}
       style={popupLocation.current}
     >
+      <div className="text-accent text-xl font-semibold">
+        {configurable.name}
+      </div>
+      <AnnotatedText className="text-sm opacity-80 -mt-2 mb-2">
+        {configurable.configExplanation}
+      </AnnotatedText>
       {configs && configs.length > 0 ? (
         configs.map(config => (
           <Config

@@ -2,6 +2,11 @@ import { AnyConfig, ConfigType } from '../config.js';
 import Configurable from '../configurable.js';
 
 export class Row extends Configurable {
+  public readonly name = 'Music Grid - Row';
+
+  public readonly configExplanation =
+    'Configure the playback settings from this tile onwards.';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.NullableNote,
@@ -60,6 +65,11 @@ export class Row extends Configurable {
 }
 
 export class ControlLine extends Configurable {
+  public readonly name = 'Music Grid - Control Line';
+
+  public readonly configExplanation =
+    'Configure the playback settings from this point onwards.';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.NullableNumber,

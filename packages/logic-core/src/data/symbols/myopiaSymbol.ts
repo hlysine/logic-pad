@@ -13,6 +13,10 @@ import {
 import MultiEntrySymbol from './multiEntrySymbol.js';
 
 export default class MyopiaSymbol extends MultiEntrySymbol {
+  public get name() {
+    return this.diagonals ? 'Framed Myopia Arrow' : 'Myopia Arrow';
+  }
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,

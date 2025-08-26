@@ -7,6 +7,10 @@ export default abstract class Instruction extends Configurable {
 
   public abstract get explanation(): string;
 
+  public get configExplanation() {
+    return this.explanation;
+  }
+
   public abstract createExampleGrid(): GridData;
 
   /**

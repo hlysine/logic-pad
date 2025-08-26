@@ -5,6 +5,12 @@ import CustomTextSymbol from '../symbols/customTextSymbol.js';
 import Rule, { SearchVariant } from './rule.js';
 
 export default class UndercluedRule extends Rule {
+  public readonly name = 'Underclued';
+
+  public get configExplanation() {
+    return 'A solution must be provided. The solvers may be used to generate one automatically.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['nbnnn', 'bwbnn', 'nbnnn', 'wwwnn'])
       .addSymbol(new AreaNumberSymbol(1, 1, 1))

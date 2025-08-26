@@ -105,7 +105,7 @@ class UploadManager {
   });
 
   public uploadQueue = new PQueue({
-    concurrency: 5,
+    concurrency: 1,
     interval: 61 * 1000,
     intervalCap: 60,
   });
@@ -514,7 +514,9 @@ const UploadEntryRow = memo(function UploadEntryRow({
   const puzzleInfo =
     entry.status !== 'decoding' && entry.status !== 'malformed' ? (
       <div className="flex gap-2 items-center flex-wrap">
-        {entry.status === 'solving' && <Loading className="w-6 h-6" />}
+        {(entry.status === 'solving' || entry.status === 'uploading') && (
+          <Loading className="w-6 h-6" />
+        )}
         <div className="font-mono max-w-xs whitespace-nowrap overflow-hidden text-ellipsis">
           {entry.metadata.title}
         </div>

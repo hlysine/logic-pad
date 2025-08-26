@@ -25,6 +25,7 @@ export default class LetterSymbol extends Symbol {
       default: 'A',
       field: 'letter',
       description: 'Letter',
+      explanation: 'Use single uppercase letters by convention.',
       configurable: true,
     },
   ]);

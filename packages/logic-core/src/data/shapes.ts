@@ -63,6 +63,12 @@ function recenterShape(shape: Shape): Shape {
   }
   shape.width = maxX - minX + 1;
   shape.height = maxY - minY + 1;
+  if (!Number.isFinite(shape.width)) {
+    shape.width = 0;
+  }
+  if (!Number.isFinite(shape.height)) {
+    shape.height = 0;
+  }
   return shape;
 }
 

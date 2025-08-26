@@ -29,6 +29,8 @@ export default class HiddenSymbol
       default: false,
       field: 'revealLocation',
       description: 'Reveal symbol location',
+      explanation:
+        'Whether to show this symbol when the tile is not yet colored correctly.',
       configurable: true,
     },
   ]);

@@ -5,6 +5,7 @@ import GridData from '@logic-pad/core/data/grid';
 import { FiExternalLink } from 'react-icons/fi';
 import GridEditorModal, { GridEditorRef } from './GridEditorModal';
 import { FaTrashCan } from 'react-icons/fa6';
+import ConfigItem from './ConfigItem';
 
 export interface NullableGridConfigProps {
   configurable: Configurable;
@@ -23,8 +24,7 @@ export default memo(function GridConfig({
   const editorRef = useRef<GridEditorRef>(null);
 
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span className="flex-1">{config.description}</span>
+    <ConfigItem config={config}>
       {grid === null ? (
         <button
           type="button"
@@ -67,7 +67,7 @@ export default memo(function GridConfig({
           />
         </div>
       )}
-    </div>
+    </ConfigItem>
   );
 });
 

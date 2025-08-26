@@ -18,6 +18,7 @@ export default class ForesightRule extends Rule {
       min: 1,
       field: 'count',
       description: 'Foresight count',
+      explanation: 'Maximum number of foresight charges that can be stored.',
       configurable: true,
     },
     {
@@ -26,6 +27,7 @@ export default class ForesightRule extends Rule {
       min: 1,
       field: 'regenInterval',
       description: 'Regen Interval (seconds)',
+      explanation: 'Time taken for one foresight charge to regenerate.',
       configurable: true,
     },
     {
@@ -33,6 +35,7 @@ export default class ForesightRule extends Rule {
       default: false,
       field: 'startFull',
       description: 'Start with full foresight',
+      explanation: 'Whether to start with all foresight charges available.',
       configurable: true,
     },
     {
@@ -40,6 +43,8 @@ export default class ForesightRule extends Rule {
       default: [],
       field: 'solvePath',
       description: 'Intended solve path',
+      explanation:
+        'A logical solve path of the puzzle. Foresight will hint at the location of the next tile if this is available.',
       configurable: true,
     },
   ]);

@@ -11,6 +11,7 @@ import {
 import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { orientationToRotation } from '@logic-pad/core/data/dataHelper';
+import ConfigItem from './ConfigItem.tsx';
 
 export interface OrientationToggleConfigProps {
   configurable: Configurable;
@@ -64,8 +65,7 @@ export default memo(function OrientationToggleConfig({
     config.field as keyof typeof configurable
   ] as unknown as OrientationToggle;
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <div className="grid grid-cols-3 grid-rows-3">
         <OrientationToggleRadio
           checked={value.up}
@@ -129,7 +129,7 @@ export default memo(function OrientationToggleConfig({
           className="col-start-3 row-start-3"
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

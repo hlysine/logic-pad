@@ -39,6 +39,7 @@ export interface Config<T> {
   readonly type: ConfigType;
   readonly field: string;
   readonly description: string;
+  readonly explanation?: string;
   readonly default: T;
   readonly configurable: boolean;
 }

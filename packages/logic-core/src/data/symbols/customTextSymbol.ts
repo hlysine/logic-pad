@@ -26,6 +26,8 @@ export default class CustomTextSymbol extends CustomSymbol {
       placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
+      explanation:
+        'A short descriptive text. Use *asterisks* to highlight keywords. Leave empty to hide the description.',
       configurable: true,
     },
     {
@@ -33,6 +35,7 @@ export default class CustomTextSymbol extends CustomSymbol {
       default: CustomTextSymbol.EXAMPLE_GRID,
       field: 'grid',
       description: 'Thumbnail Grid',
+      explanation: 'An example grid showing the symbol.',
       configurable: true,
     },
     {
@@ -41,6 +44,8 @@ export default class CustomTextSymbol extends CustomSymbol {
       placeholder: 'Short text to be displayed on the symbol',
       field: 'text',
       description: 'Text',
+      explanation:
+        'The text displayed on the grid. You should use no more than 2 lines of 4 characters each.',
       configurable: true,
     },
     {
@@ -48,6 +53,7 @@ export default class CustomTextSymbol extends CustomSymbol {
       default: 0,
       field: 'rotation',
       description: 'Rotation',
+      explanation: 'Rotate the symbol by the given degrees.',
       configurable: true,
     },
   ]);

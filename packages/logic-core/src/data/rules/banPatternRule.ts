@@ -22,6 +22,8 @@ export default class BanPatternRule extends Rule {
       resizable: true,
       field: 'pattern',
       description: 'Pattern',
+      explanation:
+        'The pattern to be banned. Can be a mix of dark and light tiles.',
       configurable: true,
     },
   ]);
@@ -71,6 +73,9 @@ export default class BanPatternRule extends Rule {
     });
     const width = maxX - minX + 1;
     const height = maxY - minY + 1;
+    if (!Number.isFinite(width) || !Number.isFinite(height)) {
+      return GridData.create(0, 0);
+    }
     const tiles = array(width, height, (x, y) => {
       const tile = this.pattern.getTile(x + minX, y + minY);
       if (!tile.exists || tile.color !== Color.Gray) return tile;

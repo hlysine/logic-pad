@@ -5,6 +5,7 @@ import { Orientation } from '@logic-pad/core/data/primitives';
 import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { orientationToRotation } from '@logic-pad/core/data/dataHelper';
+import ConfigItem from './ConfigItem.tsx';
 
 export interface OrientationConfigProps {
   configurable: Configurable;
@@ -56,8 +57,7 @@ export default memo(function OrientationConfig({
     config.field as keyof typeof configurable
   ] as unknown as Orientation;
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <div className="grid grid-cols-3 grid-rows-3">
         <OrientationRadio
           value={value}
@@ -108,7 +108,7 @@ export default memo(function OrientationConfig({
           className="col-start-3 row-start-1"
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

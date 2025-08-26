@@ -12,6 +12,8 @@ export default class CustomRule extends Rule {
       default: 'A *custom* rule',
       field: 'description',
       description: 'Description',
+      explanation:
+        'A short descriptive text. Use *asterisks* to highlight keywords.',
       configurable: true,
     },
     {
@@ -19,6 +21,7 @@ export default class CustomRule extends Rule {
       default: CustomRule.EXAMPLE_GRID,
       field: 'grid',
       description: 'Thumbnail Grid',
+      explanation: 'An example grid showing the rule.',
       configurable: true,
     },
   ]);

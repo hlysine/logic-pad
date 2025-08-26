@@ -5,6 +5,7 @@ import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '@logic-pad/core/data/dataHelper';
 import Configurable from '@logic-pad/core/data/configurable';
+import ConfigItem from './ConfigItem.tsx';
 
 export interface DirectionConfigProps {
   configurable: Configurable;
@@ -54,8 +55,7 @@ export default memo(function DirectionConfig({
     config.field as keyof typeof configurable
   ] as unknown as Direction;
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <div className="grid grid-cols-3 grid-rows-3">
         <DirectionRadio
           value={value}
@@ -82,7 +82,7 @@ export default memo(function DirectionConfig({
           className="col-start-2 row-start-3"
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

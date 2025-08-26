@@ -26,6 +26,8 @@ export default class CustomIconSymbol extends CustomSymbol {
       placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
+      explanation:
+        'A short descriptive text. Use *asterisks* to highlight keywords. Leave empty to hide the description.',
       configurable: true,
     },
     {
@@ -33,6 +35,7 @@ export default class CustomIconSymbol extends CustomSymbol {
       default: CustomIconSymbol.EXAMPLE_GRID,
       field: 'grid',
       description: 'Thumbnail Grid',
+      explanation: 'An example grid showing the symbol.',
       configurable: true,
     },
     {
@@ -40,6 +43,8 @@ export default class CustomIconSymbol extends CustomSymbol {
       default: 'MdQuestionMark',
       field: 'icon',
       description: 'Icon',
+      explanation:
+        'The icon displayed on the grid. All available icons at https://react-icons.github.io/react-icons/icons/md/',
       configurable: true,
     },
     {
@@ -47,6 +52,7 @@ export default class CustomIconSymbol extends CustomSymbol {
       default: 0,
       field: 'rotation',
       description: 'Rotation',
+      explanation: 'Rotate the symbol by the given degrees.',
       configurable: true,
     },
   ]);

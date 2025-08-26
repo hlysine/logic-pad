@@ -155,6 +155,8 @@ export default class LyingSymbolRule
       step: 1,
       field: 'count',
       description: 'Number of liars',
+      explanation:
+        'Number of symbols that are not satisfied in the final solution.',
       configurable: true,
     },
   ]);

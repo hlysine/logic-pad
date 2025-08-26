@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { ConfigType, NumberConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
+import ConfigItem from './ConfigItem';
 
 export interface NumberConfigProps {
   configurable: Configurable;
@@ -18,8 +19,7 @@ export default memo(function NumberConfig({
     config.field as keyof typeof configurable
   ] as unknown as number;
   return (
-    <div className="flex p-2 gap-4 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <input
         type="number"
         className="input min-w-0 grow"
@@ -33,7 +33,7 @@ export default memo(function NumberConfig({
           else setConfig?.(config.field, Number(e.target.value));
         }}
       />
-    </div>
+    </ConfigItem>
   );
 });
 

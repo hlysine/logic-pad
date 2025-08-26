@@ -33,6 +33,8 @@ export default class MyopiaSymbol extends MultiEntrySymbol {
       default: false,
       field: 'diagonals',
       description: 'Include diagonal directions',
+      explanation:
+        'Whether to check diagonals as well. Must be enabled for diagonal arrows.',
       configurable: true,
     },
     {
@@ -40,6 +42,8 @@ export default class MyopiaSymbol extends MultiEntrySymbol {
       default: orientationToggle(Orientation.Up, Orientation.Right),
       field: 'directions',
       description: 'Directions',
+      explanation:
+        'The directions in which an arrow is pointing. A dot will be displayed if no arrows are present.',
       configurable: true,
     },
   ]);

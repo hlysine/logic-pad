@@ -25,6 +25,8 @@ export default class MysteryRule
       resizable: false,
       field: 'solution',
       description: 'Solution',
+      explanation:
+        'The alternate solution to the puzzle. Does not need to satisfy puzzle rules / symbols.',
       configurable: true,
     },
     {
@@ -32,6 +34,7 @@ export default class MysteryRule
       default: true,
       field: 'visible',
       description: 'Visible',
+      explanation: 'Display this rule to the player.',
       configurable: true,
     },
   ]);

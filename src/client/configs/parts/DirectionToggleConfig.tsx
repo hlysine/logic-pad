@@ -5,6 +5,7 @@ import { Direction, DirectionToggle } from '@logic-pad/core/data/primitives';
 import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '@logic-pad/core/data/dataHelper';
+import ConfigItem from './ConfigItem.tsx';
 
 export interface DirectionToggleConfigProps {
   configurable: Configurable;
@@ -55,8 +56,7 @@ export default memo(function DirectionToggleConfig({
     config.field as keyof typeof configurable
   ] as unknown as DirectionToggle;
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <div className="grid grid-cols-3 grid-rows-3">
         <DirectionToggleRadio
           checked={value.up}
@@ -85,7 +85,7 @@ export default memo(function DirectionToggleConfig({
           className="col-start-2 row-start-3"
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

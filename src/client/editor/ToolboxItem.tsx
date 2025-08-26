@@ -57,13 +57,12 @@ export default memo(function ToolboxItem({
   }, []);
 
   useHotkeys(
-    hotkey ?? [],
+    [hotkey ?? ''],
     () => setTool(id, name, description, gridOverlay, onTileClick),
     {
       preventDefault: true,
       keydown: hotkey !== undefined,
       keyup: false,
-      useKey: true,
     }
   );
 

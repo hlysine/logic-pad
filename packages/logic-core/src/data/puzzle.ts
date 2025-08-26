@@ -139,9 +139,13 @@ export function validatePuzzleChecklist(
     });
     checklist.items.push({
       id: 'solutionIsNotEmpty',
-      success: gridWithSolution.tiles.some(row =>
-        row.some(tile => !tile.fixed && tile.color !== Color.Gray)
-      ),
+      success: gridWithSolution.musicGrid.value
+        ? gridWithSolution.tiles.some(row =>
+            row.some(tile => !tile.fixed && tile.color === Color.Dark)
+          )
+        : gridWithSolution.tiles.some(row =>
+            row.some(tile => !tile.fixed && tile.color !== Color.Gray)
+          ),
       mandatory: true,
     });
   } else {

@@ -17,6 +17,37 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.tour-target {
+  position: relative;
+}
+
+.absolute.tour-target {
+  position: absolute;
+}
+
+@keyframes translucent-pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  0% {
+    opacity: 0.5;
+  }
+}
+.animate-translucent-pulse {
+  animation: translucent-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.tour-target::after {
+  @apply -inset-1 rounded-sm pointer-events-none z-10 border-2 border-accent animate-translucent-pulse;
+  position: absolute;
+  opacity: 0.5;
+  background-color: rgba(255, 255, 255, 0.2);
+  content: '';
+}
+
 .scrollbar-thin {
   scrollbar-width: thin;
 }

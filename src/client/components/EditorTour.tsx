@@ -7,7 +7,6 @@ import { useEmbed } from '../contexts/EmbedContext';
 interface TourStep {
   target: string;
   content: React.ReactNode;
-  highlight?: 'brightness' | 'background';
   beforeStep?: () => void;
   afterStep?: () => void;
 }
@@ -67,7 +66,6 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
       },
       {
         target: '.tour-grid',
-        highlight: 'background',
         content: (
           <>
             <div>Click on the grid to apply your selected tool.</div>
@@ -196,49 +194,16 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
         }
       },
     });
-    const animation =
-      step.highlight === 'background'
-        ? animate(step.target, {
-            backgroundColor: [
-              {
-                from: '#FFF0',
-                to: '#FFF2',
-                duration: 1000,
-              },
-            ],
-            loop: true,
-            alternate: true,
-            ease: 'inOutSine',
-            onPause: () => {
-              const elements = document.querySelectorAll(step.target);
-              for (const element of elements) {
-                (element as HTMLElement).style.removeProperty(
-                  'background-color'
-                );
-              }
-            },
-          })
-        : animate(step.target, {
-            filter: [
-              {
-                from: 'brightness(1)',
-                to: 'brightness(1.5)',
-                duration: 1000,
-              },
-            ],
-            loop: true,
-            alternate: true,
-            ease: 'inOutSine',
-            onPause: () => {
-              const elements = document.querySelectorAll(step.target);
-              for (const element of elements) {
-                (element as HTMLElement).style.removeProperty('filter');
-              }
-            },
-          });
+    const elements = document.querySelectorAll(step.target);
+    for (const element of elements) {
+      (element as HTMLElement).classList.add('tour-target');
+    }
     return () => {
       step.afterStep?.();
-      animation.cancel();
+      const elements = document.querySelectorAll(step.target);
+      for (const element of elements) {
+        (element as HTMLElement).classList.remove('tour-target');
+      }
     };
   }, [currentStep, steps]);
   if (!runEditorTour) return null;

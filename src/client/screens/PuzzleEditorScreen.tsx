@@ -111,7 +111,9 @@ export default memo(function PuzzleEditorScreen({
             right={
               <>
                 <div className="h-full flex flex-col items-center justify-center gap-4">
-                  {features.instructions && <InstructionSearch />}
+                  {features.instructions && (
+                    <InstructionSearch className="tour-instruction-search z-10" />
+                  )}
                   <InstructionList editable={features.instructions} />
                   <ConfigPopup key="config-popup" />
                 </div>

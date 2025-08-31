@@ -34,6 +34,7 @@ function Title({ children }: { children: React.ReactNode }) {
 export interface InstructionListProps {
   editable?: boolean;
   responsive?: boolean;
+  className?: string;
 }
 
 interface SortableItem {
@@ -44,6 +45,7 @@ interface SortableItem {
 export default memo(function InstructionList({
   editable,
   responsive,
+  className,
 }: InstructionListProps) {
   editable = editable ?? false;
   responsive = responsive ?? true;
@@ -193,7 +195,8 @@ export default memo(function InstructionList({
     <div
       className={cn(
         'overflow-y-auto scrollbar-thin relative flex justify-end',
-        responsive ? 'lg:left-2' : 'left-2'
+        responsive ? 'lg:left-2' : 'left-2',
+        className
       )}
     >
       <div

@@ -3,12 +3,19 @@ import { allRules } from '@logic-pad/core/data/rules/index';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Rule from '@logic-pad/core/data/rules/rule';
 import Autocomplete from '../components/Autocomplete';
+import { cn } from '../uiHelper.ts';
 
 const ruleList = [...allRules.values()].flatMap(rule => rule.searchVariants);
 const descriptionList = ruleList.map(x => x.description);
 
+export interface InstructionSearchProps {
+  className?: string;
+}
+
 // million-ignore
-export default memo(function InstructionSearch() {
+export default memo(function InstructionSearch({
+  className,
+}: InstructionSearchProps) {
   const { grid, setGrid } = useGrid();
   const [search, setSearch] = useState('');
 
@@ -19,7 +26,7 @@ export default memo(function InstructionSearch() {
 
   return (
     <Autocomplete
-      className="shrink-0 mt-4 w-full max-w-[320px] tour-instruction-search"
+      className={cn('shrink-0 mt-4 w-full max-w-[320px]', className)}
       placeholder="Add a new rule..."
       items={descriptionList}
       value={search}

@@ -2,6 +2,7 @@ import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { EditorTabKey } from '../editor/EditorSideTabs';
 import { animate } from 'animejs';
+import { useEmbed } from '../contexts/EmbedContext';
 
 interface TourStep {
   target: string;
@@ -12,11 +13,11 @@ interface TourStep {
 }
 
 function toggleEditorSideBar(expanded: boolean) {
-  const sideBarCheckbox = document.getElementById(
+  const sideBarCheckbox = document.getElementsByClassName(
     'three-pane-checkbox'
-  ) as HTMLInputElement | null;
-  if (sideBarCheckbox) {
-    sideBarCheckbox.checked = expanded;
+  ) as HTMLCollectionOf<HTMLInputElement>;
+  for (const checkbox of sideBarCheckbox) {
+    checkbox.checked = expanded;
   }
 }
 
@@ -25,6 +26,7 @@ export interface EditorTourProps {
 }
 
 export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
+  const { isTopLevel, features } = useEmbed();
   const [runEditorTour, setRunEditorTour] = useSettings('runEditorTour');
   const [currentStep, setCurrentStep] = useState<number | null>(null);
   const steps = useMemo<TourStep[]>(
@@ -108,6 +110,21 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
         beforeStep: () => {
           setEditorTab('Info');
           toggleEditorSideBar(true);
+        },
+      },
+      {
+        target: '.tour-preview',
+        content: (
+          <>
+            <div>
+              Instead of loading the same puzzle in a new tab, you can preview
+              solving it right in the editor.
+            </div>
+          </>
+        ),
+        beforeStep: () => {
+          setEditorTab('Tools');
+          toggleEditorSideBar(false);
         },
       },
       {
@@ -225,6 +242,16 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
     };
   }, [currentStep, steps]);
   if (!runEditorTour) return null;
+  if (!isTopLevel) return null;
+  // Only do a tour in a full-featured editor, not an embed
+  if (
+    !features.checklist ||
+    !features.instructions ||
+    !features.metadata ||
+    !features.saveControl ||
+    !features.preview
+  )
+    return null;
 
   return (
     <div className="fixed w-screen bottom-0 z-[10000] flex justify-center p-4 pb-48 md:pb-28 xl:pb-4 pointer-events-none">

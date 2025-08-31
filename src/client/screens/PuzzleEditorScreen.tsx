@@ -122,7 +122,7 @@ export default memo(function PuzzleEditorScreen({
                       {({ grid, metadata }) => (
                         <>
                           <button
-                            className="btn rounded-2xl"
+                            className="btn rounded-2xl tour-preview"
                             onClick={() =>
                               previewRef.current?.open(grid, metadata)
                             }

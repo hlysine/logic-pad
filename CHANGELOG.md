@@ -1,3 +1,9 @@
+# 31/8/2025
+
+**PREVIEW BRANCH**
+
+- Added a guided tour of the editor for new users
+
 # 26/8/2025
 
 **PREVIEW BRANCH**

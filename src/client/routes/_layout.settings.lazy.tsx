@@ -76,13 +76,17 @@ const ProfileSettings = memo(function ProfileSettings() {
     >
       <label className="form-control w-full shrink-0">
         <div className="label">
-          <span className="label-text text-lg">Username</span>
-          <span className="label-text-alt">{username.length}/128</span>
+          <span className="label-text text-neutral-content text-lg">
+            Username
+          </span>
+          <span className="label-text-alt text-neutral-content">
+            {username.length}/128
+          </span>
         </div>
         <input
           type="text"
           placeholder="Type here"
-          className="input input-bordered w-full"
+          className="input input-bordered text-base-content w-full"
           maxLength={128}
           value={username}
           onChange={e => setUsername(e.target.value)}
@@ -90,12 +94,16 @@ const ProfileSettings = memo(function ProfileSettings() {
       </label>
       <label className="form-control w-full shrink-0">
         <div className="label">
-          <span className="label-text text-lg">Description</span>
-          <span className="label-text-alt">{description.length}/500</span>
+          <span className="label-text text-neutral-content text-lg">
+            Description
+          </span>
+          <span className="label-text-alt text-neutral-content">
+            {description.length}/500
+          </span>
         </div>
         <textarea
           placeholder="Type here"
-          className="textarea textarea-bordered w-full"
+          className="textarea textarea-bordered text-base-content w-full"
           maxLength={500}
           value={description}
           onChange={e => setDescription(e.target.value)}
@@ -183,7 +191,7 @@ const AddProviderButton = memo(function AddProviderButton() {
         Log in with a new provider
       </button>
       <dialog id="add_provider_modal" className="modal">
-        <div className="modal-box flex flex-col gap-4">
+        <div className="modal-box text-base-content flex flex-col gap-4">
           <h3 className="font-semibold text-xl">
             Add a provider to your account
           </h3>

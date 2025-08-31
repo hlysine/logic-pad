@@ -63,7 +63,7 @@ export const PuzzleIcon = memo(function PuzzleIcon({
       <div
         style={styles}
         className={cn(
-          'relative bg-base-300 [.wrapper:hover_&]:bg-base-100 transition-colors',
+          'relative bg-base-300 [.wrapper:hover_&]:bg-base-100 text-base-content transition-colors',
           className
         )}
       >
@@ -85,7 +85,7 @@ export const PuzzleIcon = memo(function PuzzleIcon({
       <div
         style={styles}
         className={cn(
-          'relative bg-base-300 [.wrapper:hover_&]:bg-base-100 transition-colors',
+          'relative bg-base-300 [.wrapper:hover_&]:bg-base-100 text-base-content transition-colors',
           className
         )}
       >
@@ -106,7 +106,7 @@ export const PuzzleIcon = memo(function PuzzleIcon({
       <div
         style={styles}
         className={cn(
-          'relative bg-base-300 [.wrapper:hover_&]:bg-base-100 transition-colors',
+          'relative bg-base-300 [.wrapper:hover_&]:bg-base-100 text-base-content transition-colors',
           className
         )}
       >
@@ -151,7 +151,7 @@ export default memo(function PuzzleCard({
     >
       <div
         className={cn(
-          'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',
+          'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all text-base-content',
           puzzle.status === ResourceStatus.Private
             ? `bg-base-300/50 hover:bg-base-100/50`
             : 'bg-base-300 hover:bg-base-100'

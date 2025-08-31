@@ -118,7 +118,7 @@ const tailwindConfig = {
       {
         lofi: {
           ...themes.lofi,
-          neutral: '#101010',
+          neutral: '#303030',
           accent: '#999',
         },
       },

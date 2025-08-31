@@ -32,7 +32,7 @@ const NewCollectionModal = memo(function NewCollectionModal() {
 
   return (
     <dialog id="newCollectionModal" className="modal">
-      <div className="modal-box flex flex-col gap-4 items-stretch">
+      <div className="modal-box text-base-content flex flex-col gap-4 items-stretch">
         <h3 className="font-bold text-xl">Create new collection</h3>
         <label className="form-control w-full">
           <div className="label">

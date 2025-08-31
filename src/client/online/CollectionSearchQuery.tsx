@@ -74,7 +74,7 @@ export default memo(function CollectionSearchQuery({
       >
         <label
           className={cn(
-            'input input-bordered flex items-center gap-2 w-full',
+            'input input-bordered bg-base-100 text-base-content flex items-center gap-2 w-full',
             !me && 'input-disabled'
           )}
         >

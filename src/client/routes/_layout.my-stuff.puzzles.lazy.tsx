@@ -24,10 +24,18 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
     return (
       <>
         <div role="tablist" className="tabs tabs-lg tabs-bordered">
-          <Link to="/my-stuff/puzzles" role="tab" className="tab tab-active">
+          <Link
+            to="/my-stuff/puzzles"
+            role="tab"
+            className="tab tab-active text-neutral-content"
+          >
             Puzzles
           </Link>
-          <Link to="/my-stuff/collections" role="tab" className="tab">
+          <Link
+            to="/my-stuff/collections"
+            role="tab"
+            className="tab text-neutral-content"
+          >
             Collections
           </Link>
         </div>

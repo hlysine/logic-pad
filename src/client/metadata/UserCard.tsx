@@ -28,7 +28,7 @@ export default memo(function UserCard({
 
   const tooltipContent = user ? (
     <div className="absolute bottom-0 left-0 w-0 h-0 z-50 opacity-0 peer-hover:opacity-100 transition-opacity select-none pointer-events-none">
-      <div className="w-80 h-fit mt-2 flex flex-col gap-4 bg-base-300 shadow-lg rounded-2xl p-4">
+      <div className="w-80 h-fit mt-2 flex flex-col gap-4 bg-base-300 text-base-content shadow-lg rounded-2xl p-4">
         <div className="flex gap-4">
           {avatarQuery.isSuccess ? (
             <img

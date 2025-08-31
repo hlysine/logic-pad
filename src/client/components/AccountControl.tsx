@@ -77,7 +77,7 @@ export default memo(function AccountControl() {
         )}
         {me.name}
       </summary>
-      <ul className="menu dropdown-content bg-base-300 rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
+      <ul className="menu dropdown-content bg-base-300 text-base-content rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
         <li>
           <Link
             to={'/profile/' + me.id}

@@ -19,7 +19,7 @@ export default memo(function CollectionCard({
     <div className="w-[320px] h-[96px] hover:z-50 shrink-0 grow-0">
       <div
         className={cn(
-          'w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all',
+          'w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all text-base-content',
           collection.status === ResourceStatus.Private
             ? `bg-base-300/50 hover:bg-base-100/50`
             : 'bg-base-300 hover:bg-base-100'

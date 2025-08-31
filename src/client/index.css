@@ -41,10 +41,9 @@
 }
 
 .tour-target::after {
-  @apply -inset-1 rounded-sm pointer-events-none z-10 border-2 border-accent animate-translucent-pulse;
+  @apply -inset-1 rounded-sm pointer-events-none z-10 border-2 border-accent animate-translucent-pulse bg-base-content/20;
   position: absolute;
   opacity: 0.5;
-  background-color: rgba(255, 255, 255, 0.2);
   content: '';
 }
 

@@ -321,7 +321,11 @@ class UploadManager {
                 entry.metadata.difficulty,
                 puzzleData
               );
-              return await api.publishPuzzle(result.id);
+              try {
+                return await api.publishPuzzle(result.id);
+              } catch (_) {
+                await api.deletePuzzle(result.id);
+              }
             },
             { id: data }
           );

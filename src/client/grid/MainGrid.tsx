@@ -166,6 +166,7 @@ export default memo(function MainGrid({
                 solution={solution}
                 state={state.symbols}
                 editable={useToolboxClick}
+                className="tour-grid"
               />
               <InstructionPartOutlet
                 grid={grid}

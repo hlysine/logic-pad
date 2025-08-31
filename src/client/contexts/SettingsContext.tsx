@@ -10,6 +10,7 @@ export const SiteSettingsSchema = z.object({
   showMoreTools: z.boolean().default(false),
   offlineMode: z.boolean().default(false),
   sansSerifFont: z.boolean().default(false),
+  runEditorTour: z.boolean().default(true),
 });
 
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;

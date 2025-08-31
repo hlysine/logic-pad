@@ -17,6 +17,7 @@ export interface SymbolOverlayProps {
   solution: GridData | null;
   state?: GridState['symbols'];
   editable: boolean;
+  className?: string;
 }
 
 function forceGrayFg(symbol: SymbolData, grid: GridData) {
@@ -62,9 +63,10 @@ export default memo(function SymbolOverlay({
   solution,
   state,
   editable,
+  className,
 }: SymbolOverlayProps) {
   return (
-    <GridOverlay>
+    <GridOverlay className={className}>
       {[...grid.symbols.values()].flatMap(symbols =>
         symbols.map((symbol, i) => {
           if (!symbol.visibleWhenSolving && !editable) return null;

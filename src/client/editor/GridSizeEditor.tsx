@@ -49,7 +49,7 @@ export default memo(function GridSizeEditor({
   }, [grid]);
 
   return (
-    <>
+    <div className="flex flex-col gap-2 tour-grid-size-editor">
       <div className="flex gap-2">
         <label className="form-control w-full max-w-xs">
           <div className="label">
@@ -102,6 +102,6 @@ export default memo(function GridSizeEditor({
       >
         Resize
       </button>
-    </>
+    </div>
   );
 });

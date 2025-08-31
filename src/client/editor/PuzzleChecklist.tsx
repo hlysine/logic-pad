@@ -334,6 +334,7 @@ export default memo(function PuzzleChecklist({
           )}
         </>
       }
+      className="tour-puzzle-checklist"
     >
       <div className="flex flex-col gap-2 text-sm">
         {checklist.items.map(item =>

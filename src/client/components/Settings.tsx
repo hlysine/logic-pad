@@ -7,6 +7,7 @@ import PrimaryMouseButtonToggle from './settings/PrimaryMouseButtonToggle';
 import WrapAroundVisualizationToggle from './settings/WrapAroundVisualizationToggle';
 import OfflineModeToggle from './settings/OfflineModeToggle';
 import SansSerifToggle from './settings/SansSerifToggle';
+import ResetEditorTour from './settings/ResetEditorTour';
 
 export default memo(function Settings() {
   return (
@@ -35,6 +36,7 @@ export default memo(function Settings() {
             <WrapAroundVisualizationToggle />
             <SansSerifToggle />
             <OfflineModeToggle />
+            <ResetEditorTour />
           </div>
           <div className="modal-action self-stretch justify-between">
             <ResetSite />

@@ -127,7 +127,7 @@ const SavePuzzle = memo(function SavePuzzle() {
   });
 
   return (
-    <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
+    <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between tour-upload">
       {`Last saved ${lastSavedTime.toLocaleTimeString()}`}
       <div className="flex items-center gap-2">
         <CopyLink />
@@ -160,7 +160,7 @@ export default memo(function PuzzleSaveControl({
 
   if (!isOnline) {
     return (
-      <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
+      <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between tour-upload">
         Editing offline
         <div className="flex items-center gap-2">
           <CopyLink />
@@ -171,7 +171,7 @@ export default memo(function PuzzleSaveControl({
 
   if (!me) {
     return (
-      <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
+      <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between tour-upload">
         Sign in to upload
         <div className="flex items-center gap-2">
           <CopyLink />
@@ -187,7 +187,7 @@ export default memo(function PuzzleSaveControl({
 
   if (!id) {
     return (
-      <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between">
+      <div className="flex p-2 ps-4 rounded-2xl shadow-md bg-base-100 text-base-content items-center justify-between tour-upload">
         Editing locally
         <div className="flex items-center gap-2">
           <CopyLink />

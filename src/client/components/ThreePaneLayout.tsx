@@ -1,4 +1,4 @@
-import { memo, useId } from 'react';
+import { memo } from 'react';
 import './threePaneLayout.css';
 import { IoMenu } from 'react-icons/io5';
 
@@ -17,17 +17,16 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
   right,
   center,
 }: ThreePaneLayoutComponentProps) {
-  const id = useId();
   return (
     <div className="drawer xl:drawer-open lg:h-dvh xl:h-full">
       <input
-        id={`three-pane-${id}`}
+        id="three-pane-checkbox"
         type="checkbox"
         className="drawer-toggle"
       />
       <div className="drawer-content flex justify-center items-center h-fit min-h-full lg:h-full flex-col lg:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
         <label
-          htmlFor={`three-pane-${id}`}
+          htmlFor="three-pane-checkbox"
           className="btn drawer-button xl:hidden fixed z-20 bottom-32 left-0 pl-8 -ml-4 rounded-l-none shadow-lg"
         >
           <IoMenu size={24} /> Open drawer
@@ -46,7 +45,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
       </div>
       <div className="drawer-side !overflow-x-visible !overflow-y-visible z-20 h-full w-full">
         <label
-          htmlFor={`three-pane-${id}`}
+          htmlFor="three-pane-checkbox"
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>

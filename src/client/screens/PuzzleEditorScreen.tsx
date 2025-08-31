@@ -7,7 +7,7 @@ import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
 import ConfigContext from '../contexts/ConfigContext';
 import ConfigPopup from '../configs/ConfigPopup';
-import EditorSideTabs from '../editor/EditorSideTabs';
+import EditorSideTabs, { EditorTabKey } from '../editor/EditorSideTabs';
 import ToolboxContext from '../contexts/ToolboxContext';
 import { useEmbed } from '../contexts/EmbedContext';
 import PuzzleChecklist from '../editor/PuzzleChecklist';
@@ -21,6 +21,7 @@ import PuzzleSaveControl from '../components/PuzzleSaveControl';
 import { FaEye } from 'react-icons/fa';
 import { animate } from 'animejs';
 import DocumentTitle from '../components/DocumentTitle';
+import EditorTour from '../components/EditorTour';
 
 export interface PuzzleEditorScreenProps {
   children?: React.ReactNode;
@@ -30,10 +31,12 @@ export default memo(function PuzzleEditorScreen({
   children,
 }: PuzzleEditorScreenProps) {
   const { features } = useEmbed();
-  const [editorMode, setEditorMode] = useState<'grid' | 'info'>('grid');
+  const [editorTab, setEditorTab] = useState<EditorTabKey>('Tools');
   const previewRef = useRef<PreviewRef>(null);
-  const switchToOnlineTab = () => {
-    if (editorMode === 'info') {
+  const switchToTab = (tab: EditorTabKey) => {
+    if (editorTab !== tab) {
+      setEditorTab(tab);
+    } else if (tab === 'Info') {
       animate('.animate-online-tab', {
         scale: [
           {
@@ -46,90 +49,104 @@ export default memo(function PuzzleEditorScreen({
           },
         ],
         ease: 'inOutSine',
+        onComplete: () => {
+          const elements =
+            document.getElementsByClassName('animate-online-tab');
+          for (const element of elements) {
+            (element as HTMLElement).style.removeProperty('transform');
+          }
+        },
       });
-    } else {
-      setEditorMode('info');
     }
   };
   return (
     <ConfigContext>
       <ToolboxContext>
-        <ThreePaneLayout
-          collapsible={true}
-          left={
-            <>
-              <GridConsumer>
-                {({ metadata }) => (
-                  <DocumentTitle>
-                    {metadata.title.length > 0
-                      ? `${metadata.title} - Puzzle Editor - Logic Pad`
-                      : `Puzzle Editor - Logic Pad`}
-                  </DocumentTitle>
-                )}
-              </GridConsumer>
-              <EditorSideTabs
-                editorMode={editorMode}
-                onEditorModeChange={setEditorMode}
-              />
-              <div className="shrink-0 flex-col gap-1 hidden has-[*]:flex">
+        <>
+          <ThreePaneLayout
+            collapsible={true}
+            left={
+              <>
                 <GridConsumer>
-                  {({ grid }) => (
-                    <InstructionPartOutlet
-                      grid={grid}
-                      placement={PartPlacement.LeftPanel}
-                    />
+                  {({ metadata }) => (
+                    <DocumentTitle>
+                      {metadata.title.length > 0
+                        ? `${metadata.title} - Puzzle Editor - Logic Pad`
+                        : `Puzzle Editor - Logic Pad`}
+                    </DocumentTitle>
                   )}
                 </GridConsumer>
-                <GridConsumer>
-                  {({ grid }) => (
-                    <InstructionPartOutlet
-                      grid={grid}
-                      placement={PartPlacement.LeftBottom}
-                    />
-                  )}
-                </GridConsumer>
-              </div>
-              <TouchControls />
-              <EditorEditControls />
-              <ModeVariantLoader mode={Mode.Create} />
-            </>
-          }
-          center={<EditorCenterTabs editorMode={editorMode} />}
-          right={
-            <>
-              <div className="h-full flex flex-col items-center justify-center gap-4">
-                {features.instructions && <InstructionSearch />}
-                <InstructionList editable={features.instructions} />
-                <ConfigPopup key="config-popup" />
-              </div>
-              <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
-                {children}
-                {features.preview && (
+                <EditorSideTabs
+                  editorTab={editorTab}
+                  onEditorTabChange={setEditorTab}
+                />
+                <div className="shrink-0 flex-col gap-1 hidden has-[*]:flex">
                   <GridConsumer>
-                    {({ grid, metadata }) => (
-                      <>
-                        <button
-                          className="btn rounded-2xl"
-                          onClick={() =>
-                            previewRef.current?.open(grid, metadata)
-                          }
-                        >
-                          <FaEye size={18} />
-                          Preview puzzle
-                        </button>
-                        <PreviewModal ref={previewRef} />
-                      </>
+                    {({ grid }) => (
+                      <InstructionPartOutlet
+                        grid={grid}
+                        placement={PartPlacement.LeftPanel}
+                      />
                     )}
                   </GridConsumer>
-                )}
-                <PuzzleChecklist onTabSwitch={switchToOnlineTab} />
-                {features.saveControl && (
-                  <PuzzleSaveControl onTabSwitch={switchToOnlineTab} />
-                )}
-              </div>
-            </>
-          }
-        />
+                  <GridConsumer>
+                    {({ grid }) => (
+                      <InstructionPartOutlet
+                        grid={grid}
+                        placement={PartPlacement.LeftBottom}
+                      />
+                    )}
+                  </GridConsumer>
+                </div>
+                <TouchControls />
+                <EditorEditControls />
+                <ModeVariantLoader mode={Mode.Create} />
+              </>
+            }
+            center={
+              <EditorCenterTabs
+                editorMode={editorTab === 'Info' ? 'info' : 'grid'}
+              />
+            }
+            right={
+              <>
+                <div className="h-full flex flex-col items-center justify-center gap-4">
+                  {features.instructions && <InstructionSearch />}
+                  <InstructionList editable={features.instructions} />
+                  <ConfigPopup key="config-popup" />
+                </div>
+                <div className="pb-2 w-full flex flex-col self-center items-stretch justify-end gap-2 shrink-0 max-w-[320px]">
+                  {children}
+                  {features.preview && (
+                    <GridConsumer>
+                      {({ grid, metadata }) => (
+                        <>
+                          <button
+                            className="btn rounded-2xl"
+                            onClick={() =>
+                              previewRef.current?.open(grid, metadata)
+                            }
+                          >
+                            <FaEye size={18} />
+                            Preview puzzle
+                          </button>
+                          <PreviewModal ref={previewRef} />
+                        </>
+                      )}
+                    </GridConsumer>
+                  )}
+                  <PuzzleChecklist onTabSwitch={() => switchToTab('Info')} />
+                  {features.saveControl && (
+                    <PuzzleSaveControl
+                      onTabSwitch={() => switchToTab('Info')}
+                    />
+                  )}
+                </div>
+              </>
+            }
+          />
+          <EditorTour setEditorTab={switchToTab} />
+        </>
       </ToolboxContext>
     </ConfigContext>
   );

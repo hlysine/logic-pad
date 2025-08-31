@@ -1231,6 +1231,7 @@ declare global {
     Orientation = 'orientation',
     OrientationToggle = 'orientationToggle',
     Tile = 'tile',
+    Shape = 'shape',
     Grid = 'grid',
     NullableGrid = 'nullableGrid',
     Icon = 'icon',
@@ -1295,6 +1296,10 @@ declare global {
     readonly type: ConfigType.Tile;
     readonly resizable: boolean;
   }
+  export interface ShapeConfig extends Config<GridData> {
+    readonly type: ConfigType.Shape;
+    readonly resizable: boolean;
+  }
   export interface GridConfig extends Config<GridData> {
     readonly type: ConfigType.Grid;
   }
@@ -1328,6 +1333,7 @@ declare global {
     | OrientationConfig
     | OrientationToggleConfig
     | TileConfig
+    | ShapeConfig
     | GridConfig
     | NullableGridConfig
     | IconConfig

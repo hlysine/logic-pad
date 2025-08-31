@@ -1,3 +1,8 @@
+# 0.15.0
+
+- Split tile config type into tile and shape
+- Checksum serialization improvements
+
 # 0.14.0
 
 - Added name and explanation for every `Configurable`

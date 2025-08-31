@@ -25,9 +25,10 @@ import {
   Position,
 } from '../primitives.js';
 import { escape } from '../dataHelper.js';
+import { normalizeShape, tilesToShape } from '../shapes.js';
 
 export default class SerializerChecksum extends SerializerV0 {
-  public readonly version = 2 as number;
+  public readonly version = 3 as number;
 
   public parseTile(_str: string): TileData {
     throw new Error('Checksum serializer does not support parsing');
@@ -171,6 +172,25 @@ export default class SerializerChecksum extends SerializerV0 {
             )
           )
         );
+      case ConfigType.Shape:
+        return (
+          config.field +
+          '=' +
+          escape(
+            normalizeShape(
+              tilesToShape(
+                (
+                  instruction[
+                    config.field as keyof Instruction
+                  ] as unknown as GridData
+                ).tiles
+              )
+            )
+              .elements.map(elm => `${elm.x}-${elm.y}-${elm.color}`)
+              .sort()
+              .join('/')
+          )
+        );
       case ConfigType.NullableGrid:
         return (
           config.field +
@@ -255,6 +275,7 @@ export default class SerializerChecksum extends SerializerV0 {
 
   public stringifyRules(rules: readonly Rule[]): string {
     return `R${rules
+      .filter(rule => rule.necessaryForCompletion)
       .map(rule => this.stringifyRule(rule))
       .sort()
       .join(':')}`;
@@ -269,6 +290,7 @@ export default class SerializerChecksum extends SerializerV0 {
   ): string {
     return `S${Array.from(symbols.values())
       .flat()
+      .filter(symbol => symbol.necessaryForCompletion)
       .map(symbol => this.stringifySymbol(symbol))
       .sort()
       .join(':')}`;

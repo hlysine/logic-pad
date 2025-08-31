@@ -3,6 +3,7 @@
 **PREVIEW BRANCH**
 
 - Added a guided tour of the editor for new users
+- Improved checksum detection for pattern rules
 
 # 26/8/2025
 

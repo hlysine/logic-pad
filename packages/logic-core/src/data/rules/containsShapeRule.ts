@@ -32,7 +32,7 @@ export default class ContainsShapeRule extends RegionShapeRule {
       configurable: true,
     },
     {
-      type: ConfigType.Tile,
+      type: ConfigType.Shape,
       default: ContainsShapeRule.EXAMPLE_GRID_LIGHT,
       resizable: true,
       field: 'pattern',

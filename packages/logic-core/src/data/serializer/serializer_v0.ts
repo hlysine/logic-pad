@@ -223,6 +223,7 @@ export default class SerializerV0 extends SerializerBase {
           )
         );
       case ConfigType.Tile:
+      case ConfigType.Shape:
       case ConfigType.Grid:
         return (
           config.field +
@@ -327,6 +328,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Icon:
         return [config.field, unescape(value)];
       case ConfigType.Tile:
+      case ConfigType.Shape:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
       case ConfigType.NullableGrid:

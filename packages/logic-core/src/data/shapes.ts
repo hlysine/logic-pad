@@ -1,4 +1,6 @@
 import GridData from './grid.js';
+import GridConnections from './gridConnections.js';
+import GridZones from './gridZones.js';
 import { Color, Position } from './primitives.js';
 import TileData from './tile.js';
 
@@ -179,5 +181,7 @@ export function sanitizePatternGrid(
       // strip all symbols and rules
       .withRules([])
       .withSymbols(new Map())
+      .withConnections(new GridConnections())
+      .withZones(new GridZones())
   );
 }

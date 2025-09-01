@@ -133,7 +133,10 @@ export default memo(function Tile({
                       c,
                       c !== Color.Gray && data.color !== Color.Gray
                     );
-                    onTileClick?.(c, e.ctrlKey);
+                    onTileClick?.(
+                      c,
+                      mouseContext.getModifier(e.ctrlKey || e.metaKey)
+                    );
                   }
                 }
               }}
@@ -145,7 +148,10 @@ export default memo(function Tile({
                   let c = mouseContext.getColorForButtons(1);
                   if (c) {
                     if (c === data.color) c = Color.Gray;
-                    onTileClick?.(c, e.ctrlKey);
+                    onTileClick?.(
+                      c,
+                      mouseContext.getModifier(e.ctrlKey || e.metaKey)
+                    );
                   }
                 }
               }}
@@ -167,7 +173,10 @@ export default memo(function Tile({
                     data.color === Color.Gray ||
                     mouseContext.replacing
                   )
-                    onTileClick?.(mouseContext.color, e.ctrlKey);
+                    onTileClick?.(
+                      mouseContext.color,
+                      mouseContext.getModifier(e.ctrlKey || e.metaKey)
+                    );
                 }
               }}
             ></button>

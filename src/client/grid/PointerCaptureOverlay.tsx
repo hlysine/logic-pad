@@ -145,7 +145,13 @@ export default memo(function PointerCaptureOverlay({
                 targetColor !== Color.Gray &&
                 getPointerColor(x, y, opposite(targetColor)) !== Color.Gray
             );
-            onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
+            onTileClick?.(
+              x,
+              y,
+              currentColor,
+              targetColor,
+              mouseContext.getModifier(e.ctrlKey || e.metaKey)
+            );
           }
         }
       }}
@@ -158,7 +164,13 @@ export default memo(function PointerCaptureOverlay({
             const { x, y } = getPointerPosition(e);
             const currentColor = getPointerColor(x, y, targetColor);
             if (targetColor === currentColor) targetColor = Color.Gray;
-            onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
+            onTileClick?.(
+              x,
+              y,
+              currentColor,
+              targetColor,
+              mouseContext.getModifier(e.ctrlKey || e.metaKey)
+            );
           }
         }
         onPointerUp?.(color);
@@ -189,7 +201,13 @@ export default memo(function PointerCaptureOverlay({
             oppositeColor === Color.Gray ||
             mouseContext.replacing
           )
-            onTileClick(x, y, currentColor, mouseContext.color, e.ctrlKey);
+            onTileClick(
+              x,
+              y,
+              currentColor,
+              mouseContext.color,
+              mouseContext.getModifier(e.ctrlKey || e.metaKey)
+            );
         }
       }}
       onPointerLeave={() => {

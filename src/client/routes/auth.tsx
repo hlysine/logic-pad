@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import deferredRedirect from '../router/deferredRedirect';
 import AuthProviders from '../online/AuthProviders';
+import PWAPrompt from '../components/PWAPrompt';
 
 export const Route = createFileRoute('/auth')({
   component: function Auth() {
@@ -26,6 +27,7 @@ export const Route = createFileRoute('/auth')({
     }, [isOnline, me]);
     return (
       <div className="flex items-center justify-center w-full h-full min-h-screen">
+        <PWAPrompt />
         <div className="card bg-base-100 card-lg shadow-sm overflow-hidden max-w-full w-[500px] m-4">
           <div className="bg-base-200 p-4">
             <Link

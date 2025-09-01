@@ -1,6 +1,5 @@
 import { Puzzle } from '@logic-pad/core/data/puzzle';
 import { memo, useMemo } from 'react';
-import PWAPrompt from '../components/PWAPrompt';
 import DisplayContext from '../contexts/DisplayContext';
 import EditContext from '../contexts/EditContext';
 import EmbedContext from '../contexts/EmbedContext';
@@ -44,10 +43,7 @@ export default memo(function MainContext({
                 initialMetadata={props.metadata}
               >
                 <SolverContext>
-                  <InstructionPartsContext>
-                    <PWAPrompt />
-                    {children}
-                  </InstructionPartsContext>
+                  <InstructionPartsContext>{children}</InstructionPartsContext>
                 </SolverContext>
               </GridContext>
             </GridStateContext>

@@ -2,11 +2,14 @@ import { memo, useState } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import Loading from './Loading';
+import { useRouterState } from '@tanstack/react-router';
 
 export default memo(function PWAPrompt() {
   const { needRefresh, updateServiceWorker } = useRegisterSW();
   const [refresh, setRefresh] = needRefresh;
   const [loading, setLoading] = useState(false);
+  const pathname = useRouterState({ select: s => s.location.pathname });
+  if (pathname === '/uploader') return null; // do not prompt for update in the uploader because we cannot preserve page state across reload
   if (!refresh) return null;
   return (
     <div

@@ -4,6 +4,7 @@ import QuickAccessBar from '../components/QuickAccessBar';
 import AlphaBadge from '../components/AlphaBadge';
 import { useMediaQuery } from 'react-responsive';
 import { RiMenu2Fill } from 'react-icons/ri';
+import PWAPrompt from '../components/PWAPrompt';
 
 export const Route = createLazyFileRoute('/_layout')({
   component: memo(function Layout() {
@@ -33,6 +34,7 @@ export const Route = createLazyFileRoute('/_layout')({
     ];
     return (
       <>
+        <PWAPrompt />
         <header className="flex shrink-0 flex-wrap justify-between items-center lg:gap-4 px-8 py-2">
           <div className="flex xl:basis-[320px] flex-wrap grow shrink items-center gap-8 lg:gap-12">
             {!isLargeMedia && (

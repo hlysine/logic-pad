@@ -8,9 +8,8 @@ import ExitBlocker from '../router/ExitBlocker';
 
 export const Route = createLazyFileRoute('/_layout/create/')({
   component: memo(function CreateMode() {
-    const params = Route.useSearch();
     const navigate = useNavigate();
-    const result = useLinkLoader(params, {
+    const result = useLinkLoader({
       cleanUrl: true,
       solutionHandling: SolutionHandling.Remove,
     });

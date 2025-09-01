@@ -14,6 +14,7 @@ import FrontPageLists from '../online/FrontPageLists';
 import PersonalFrontPageLists from '../online/PersonalFrontPageLists';
 import { useOnline } from '../contexts/OnlineContext';
 import Footer from '../components/Footer';
+import { router } from '../main';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -45,15 +46,14 @@ const FrontPageGrid = lazy(async () => {
 
 export const Route = createFileRoute('/')({
   component: memo(function Home() {
-    const search = Route.useSearch();
     const navigate = useNavigate();
     const { isOnline, me } = useOnline();
-    useLinkLoader(search, { cleanUrl: true, allowEmpty: true });
+    useLinkLoader({ cleanUrl: true, allowEmpty: true });
     useEffect(() => {
       let toastId: string | undefined;
       void (async () => {
         // this is likely due to OAuth errors
-        if ('error' in search) {
+        if ('error' in router.state.location.search) {
           // display a toast and clear the search params
           toastId = toast.error('An error occurred. Please try again.');
           if (!(await deferredRedirect.execute())) {

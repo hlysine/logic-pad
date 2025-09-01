@@ -1,17 +1,52 @@
-import { puzzleEquals } from '@logic-pad/core/index';
-import { useBlocker } from '@tanstack/react-router';
-import { memo } from 'react';
-import { useGrid } from '../contexts/GridContext';
+import { Compressor, puzzleEquals, Serializer } from '@logic-pad/core/index';
+import { useBlocker, useNavigate } from '@tanstack/react-router';
+import { memo, useEffect, useState } from 'react';
+import { defaultGrid, useGrid } from '../contexts/GridContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
+import { SolutionHandling } from './linkLoader';
 
 export default memo(function ExitBlocker() {
   const [enableExitConfirmation] = useSettings('enableExitConfirmation');
-  const { metadata, grid } = useGrid();
+  const [willUpdate, setWillUpdate] = useState(false);
+  const { metadata, grid, solution } = useGrid();
   const { lastSaved } = useOnlinePuzzle();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const broadcast = new BroadcastChannel('prepareForUpdate');
+    broadcast.addEventListener('message', () => {
+      setWillUpdate(true);
+      void (async () => {
+        await navigate({
+          to: '.',
+          search: grid.equals(defaultGrid)
+            ? {}
+            : {
+                d: await Compressor.compress(
+                  Serializer.stringifyPuzzle({
+                    ...metadata,
+                    grid,
+                    solution,
+                  })
+                ),
+                loader:
+                  solution === null ? SolutionHandling.LoadVisible : undefined,
+              },
+          ignoreBlocker: true,
+          replace: true,
+        });
+      })();
+    });
+    return () => {
+      broadcast.close();
+    };
+  }, [grid, metadata, navigate, solution]);
+
   useBlocker({
     shouldBlockFn: () => {
       if (
+        willUpdate ||
         !enableExitConfirmation ||
         puzzleEquals(lastSaved, { ...metadata, grid, solution: null })
       ) {
@@ -21,7 +56,10 @@ export default memo(function ExitBlocker() {
         'There are unsaved changes. Are you sure you want to leave?'
       );
     },
-    disabled: !enableExitConfirmation,
+    disabled:
+      willUpdate ||
+      !enableExitConfirmation ||
+      puzzleEquals(lastSaved, { ...metadata, grid, solution: null }),
   });
   return null;
 });

@@ -7,8 +7,7 @@ import MainContext from '../router/MainContext';
 
 export const Route = createLazyFileRoute('/_layout/solve/')({
   component: memo(function SolveMode() {
-    const params = Route.useSearch();
-    const result = useLinkLoader(params, { allowEmpty: false });
+    const result = useLinkLoader({ allowEmpty: false });
 
     return (
       <MainContext

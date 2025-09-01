@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useMemo } from 'react';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { NavigateOptions, useNavigate } from '@tanstack/react-router';
@@ -6,6 +6,7 @@ import { array } from '@logic-pad/core/data/dataHelper';
 import { Puzzle } from '@logic-pad/core/data/puzzle';
 import { defaultGrid } from '../contexts/GridContext';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { router } from '../main';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',
@@ -63,15 +64,13 @@ interface LinkLoaderParams {
   modifyPuzzle?: (puzzle: Puzzle) => Puzzle;
 }
 
-export default function useLinkLoader(
-  params: PuzzleParams,
-  {
-    cleanUrl = false,
-    solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
-    allowEmpty = true,
-    modifyPuzzle = puzzle => puzzle,
-  }: LinkLoaderParams = {}
-): LinkLoaderResult {
+export default function useLinkLoader({
+  cleanUrl = false,
+  solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
+  allowEmpty = true,
+  modifyPuzzle = puzzle => puzzle,
+}: LinkLoaderParams = {}): LinkLoaderResult {
+  const params = useMemo(() => router.state.location.search, []);
   const navigate = useNavigate();
   const result = useSuspenseQuery({
     queryKey: ['puzzle', 'decode-local', params],

@@ -1,3 +1,14 @@
+# 1/9/2025
+
+**PREVIEW BRANCH**
+
+- Added a toggle for flood fill on touch screens
+- Updated the design of private puzzle/collection cards
+- Reworked the site updater for future updates
+  - Every browser tab of Logic Pad now preserves its own state when the update is being applied
+  - Accepting the update prompt no longer triggers exit confirmation dialogs
+  - The update prompt is now available in all pages except the uploader, where updating may cause data loss
+
 # 31/8/2025
 
 **PREVIEW BRANCH**

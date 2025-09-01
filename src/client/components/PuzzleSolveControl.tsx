@@ -3,7 +3,6 @@ import { PiSignInBold } from 'react-icons/pi';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import deferredRedirect from '../router/deferredRedirect.ts';
-import { useRouterState } from '@tanstack/react-router';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { State } from '@logic-pad/core/index.ts';
 import onlineSolveTracker from '../router/onlineSolveTracker.ts';
@@ -17,11 +16,11 @@ import { useReducedMotion } from '../contexts/SettingsContext.tsx';
 import { PuzzleFull } from '../online/data.ts';
 import CommentSidebar from '../online/CommentSidebar.tsx';
 import { FaComment } from 'react-icons/fa';
+import { router } from '../main.tsx';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
   const { id } = useOnlinePuzzle();
-  const routerState = useRouterState();
   const { state } = useGridState();
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const SolveTrackerAnonymous = memo(function SolveTracker() {
           <button
             className="btn btn-sm btn-ghost"
             onClick={async () => {
-              await deferredRedirect.setAndNavigate(routerState.location, {
+              await deferredRedirect.setAndNavigate(router.state.location, {
                 to: '/auth',
               });
             }}

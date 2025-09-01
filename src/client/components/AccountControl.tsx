@@ -19,7 +19,7 @@ export const avatarQueryOptions = (userId: string | null) =>
 // million-ignore
 export default memo(function AccountControl() {
   const { isOnline, me, isPending, refresh } = useOnline();
-  const routerState = useRouterState();
+  const location = useRouterState({ select: s => s.location });
   const avatarQuery = useQuery(avatarQueryOptions(me?.id ?? null));
   const detailsRef = useRef<HTMLDetailsElement>(null);
   if (!isOnline) {
@@ -36,7 +36,7 @@ export default memo(function AccountControl() {
     </button>;
   }
   if (!me) {
-    if (routerState.location.pathname === '/create') {
+    if (location.pathname === '/create') {
       // Disable button in create mode because this loses puzzle data
       // users should sign in via the online panel instead
       return (
@@ -53,7 +53,7 @@ export default memo(function AccountControl() {
         <button
           className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit"
           onClick={async () => {
-            await deferredRedirect.setAndNavigate(routerState.location, {
+            await deferredRedirect.setAndNavigate(location, {
               to: '/auth',
             });
           }}

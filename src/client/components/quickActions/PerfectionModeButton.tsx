@@ -1,13 +1,13 @@
 import { memo } from 'react';
 import { useGrid } from '../../contexts/GridContext';
 import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
-import { useNavigate, useRouterState } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { FaStar } from 'react-icons/fa';
+import { router } from '../../main';
 
 export default memo(function PerfectionModeButton() {
   const { grid } = useGrid();
   const navigate = useNavigate();
-  const routerState = useRouterState();
   if (grid.findRule(r => r.id === musicGridInstance.id)) return null;
   return (
     <button
@@ -15,8 +15,8 @@ export default memo(function PerfectionModeButton() {
       data-tip="Switch to perfection mode"
       onClick={async () => {
         await navigate({
-          to: routerState.location.pathname.replace('/solve', '/perfection'),
-          search: routerState.location.search,
+          to: router.state.location.pathname.replace('/solve', '/perfection'),
+          search: router.state.location.search,
         });
       }}
     >

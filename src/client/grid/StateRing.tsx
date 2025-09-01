@@ -39,7 +39,7 @@ export default memo(function StateRing({
   animated = animated ?? true;
   const id = useId();
   const { state } = useGridState();
-  const router = useRouterState();
+  const location = useRouterState({ select: s => s.location });
   const prefersReducedMotion = useReducedMotion();
   const { isTopLevel } = useEmbed();
 
@@ -74,7 +74,7 @@ export default memo(function StateRing({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [width, height, router.location.pathname, prefersReducedMotion]);
+  }, [width, height, location.pathname, prefersReducedMotion]);
 
   return (
     <div

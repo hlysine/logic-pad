@@ -7,12 +7,13 @@ import { collectionQueryOptions } from '../routes/_layout.collection.$collection
 import Loading from '../components/Loading';
 import { PuzzleIcon } from './PuzzleCard';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import UserCard from '../metadata/UserCard';
 import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
 import { useOnline } from '../contexts/OnlineContext';
 import { ResourceStatus } from './data';
+import { router } from '../main';
 
 export interface CollectionSidebarProps {
   collectionId: string | null;
@@ -23,7 +24,6 @@ export default memo(function CollectionSidebar({
 }: CollectionSidebarProps) {
   const drawerId = useId();
   const navigate = useNavigate();
-  const routerState = useRouterState();
   const { me } = useOnline();
   const { id, puzzle } = useOnlinePuzzle();
   const collection = useQuery({
@@ -136,7 +136,7 @@ export default memo(function CollectionSidebar({
                           'btn-disabled'
                       )}
                       onClick={async () => {
-                        let newPath = routerState.location.pathname
+                        let newPath = router.state.location.pathname
                           .split('/')
                           .slice(0, -1)
                           .join('/');
@@ -148,7 +148,7 @@ export default memo(function CollectionSidebar({
                         await navigate({
                           to: `${newPath}/${puzzle.id}`,
                           search: {
-                            collection: routerState.location.search.collection,
+                            collection: router.state.location.search.collection,
                           },
                         });
                       }}

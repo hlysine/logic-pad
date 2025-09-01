@@ -14,7 +14,7 @@
     "scan": "react-scan localhost:5173",
     "build": "bunx --bun tsc && bunx --bun vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "vite preview --host",
     "check-bundle": "bunx vite-bundle-visualizer",
     "pwa-gen": "npx @vite-pwa/assets-generator --preset minimal-2023 public/logo.svg"
   },

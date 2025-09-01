@@ -1,10 +1,12 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import Loading from './Loading';
 
 export default memo(function PWAPrompt() {
   const { needRefresh, updateServiceWorker } = useRegisterSW();
   const [refresh, setRefresh] = needRefresh;
+  const [loading, setLoading] = useState(false);
   if (!refresh) return null;
   return (
     <div
@@ -13,32 +15,38 @@ export default memo(function PWAPrompt() {
     >
       <FiAlertCircle />
       <span>Update available. Apply update now?</span>
-      <div>
-        <button
-          type="button"
-          className="btn btn-sm"
-          onClick={() => setRefresh(false)}
-        >
-          Later
-        </button>
-        <button
-          type="button"
-          className="btn btn-sm btn-primary"
-          onClick={async () => {
-            // notify all tabs to disable navigation blockers and encode current state
-            const broadcast = new BroadcastChannel('prepareForUpdate');
-            broadcast.postMessage(true);
-            broadcast.close();
-            // wait for tabs to respond
-            await new Promise(resolve => setTimeout(resolve, 1000));
+      {loading ? (
+        <Loading className="w-8" />
+      ) : (
+        <div>
+          <button
+            type="button"
+            className="btn btn-sm"
+            onClick={() => setRefresh(false)}
+          >
+            Later
+          </button>
+          <button
+            type="button"
+            className="btn btn-sm btn-primary"
+            onClick={async () => {
+              setLoading(true);
+              // notify all tabs to disable navigation blockers and encode current state
+              const broadcast = new BroadcastChannel('prepareForUpdate');
+              broadcast.postMessage(true);
+              broadcast.close();
+              // wait for tabs to respond
+              await new Promise(resolve => setTimeout(resolve, 1000));
 
-            await updateServiceWorker(true);
-            setRefresh(false);
-          }}
-        >
-          Reload
-        </button>
-      </div>
+              await updateServiceWorker(true);
+              setRefresh(false);
+              setLoading(false);
+            }}
+          >
+            Reload
+          </button>
+        </div>
+      )}
     </div>
   );
 });

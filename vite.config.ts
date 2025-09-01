@@ -36,9 +36,6 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: 'prompt',
-      devOptions: {
-        enabled: true,
-      },
       includeAssets: [
         'favicon.ico',
         '*.svg',
@@ -98,6 +95,22 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/api/, ''),
       },
     },
+    open: true,
+  },
+  preview: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
+    port: 5173,
+    open: true,
   },
   optimizeDeps: {
     exclude: ['@logic-pad/core', 'logic-pad-solver-core'],

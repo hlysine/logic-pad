@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { CollectionBrief, ResourceStatus } from './data';
-import { FaThList, FaUser } from 'react-icons/fa';
+import { FaEyeSlash, FaThList, FaUser } from 'react-icons/fa';
 import { cn } from '../uiHelper';
 import { TbLayoutGrid } from 'react-icons/tb';
 
@@ -51,12 +51,19 @@ export default memo(function CollectionCard({
                 </span>
               </span>
             )}
-            <span className="flex items-center">
-              <FaUser className="me-2" /> {collection.followCount}
-              <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                follows
+            {collection.status === ResourceStatus.Public ? (
+              <span className="flex items-center">
+                <FaUser className="me-2" /> {collection.followCount}
+                <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
+                  follows
+                </span>
               </span>
-            </span>
+            ) : (
+              <span className="flex items-center">
+                <FaEyeSlash className="me-2" />
+                Private
+              </span>
+            )}
           </div>
         </div>
       </div>

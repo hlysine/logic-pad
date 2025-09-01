@@ -1,6 +1,6 @@
 import { memo, ReactNode, useMemo } from 'react';
 import { PuzzleBrief, ResourceStatus } from './data';
-import { FaCheckSquare, FaHeart, FaMusic } from 'react-icons/fa';
+import { FaCheckSquare, FaEyeSlash, FaHeart, FaMusic } from 'react-icons/fa';
 import { PiCheckerboardFill } from 'react-icons/pi';
 import { TbLayoutGridRemove, TbLayoutGrid } from 'react-icons/tb';
 import { PuzzleType } from '@logic-pad/core/index';
@@ -178,20 +178,29 @@ export default memo(function PuzzleCard({
             </span>
             <Difficulty value={puzzle.designDifficulty} size="sm" />
           </div>
-          <div className="flex gap-4 text-sm opacity-80">
-            <span className="flex items-center">
-              <FaCheckSquare className="me-2" /> {puzzle.solveCount}
-              <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                solves
+          {puzzle.status === ResourceStatus.Public ? (
+            <div className="flex gap-4 text-sm opacity-80">
+              <span className="flex items-center">
+                <FaCheckSquare className="me-2" /> {puzzle.solveCount}
+                <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
+                  solves
+                </span>
               </span>
-            </span>
-            <span className="flex items-center">
-              <FaHeart className="me-2" /> {puzzle.loveCount}
-              <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                loves
+              <span className="flex items-center">
+                <FaHeart className="me-2" /> {puzzle.loveCount}
+                <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
+                  loves
+                </span>
               </span>
-            </span>
-          </div>
+            </div>
+          ) : (
+            <div className="flex gap-4 text-sm opacity-80">
+              <span className="flex items-center">
+                <FaEyeSlash className="me-2" />
+                Private
+              </span>
+            </div>
+          )}
         </div>
         {children}
       </div>

@@ -11,6 +11,8 @@ import toast from 'react-hot-toast';
 import { BiSolidSelectMultiple } from 'react-icons/bi';
 import { cn } from '../uiHelper';
 import { myPuzzlesInfiniteQueryOptions } from './_layout.my-stuff.puzzles';
+import { ResourceStatus } from '../online/data';
+import { FaXmark } from 'react-icons/fa6';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
   component: memo(function MyStuff() {
@@ -102,18 +104,20 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
                   puzzle={puzzle}
                   onClick={async () => {
                     if (selectedPuzzles !== null) {
-                      setSelectedPuzzles(selection => {
-                        if (selection?.includes(puzzle.id)) {
-                          return selection.filter(id => id !== puzzle.id);
-                        }
-                        if ((selection?.length ?? 0) >= 100) {
-                          toast.error(
-                            'You can select up to 100 puzzles at a time'
-                          );
-                          return selection;
-                        }
-                        return [...(selection ?? []), puzzle.id];
-                      });
+                      if (puzzle.status === ResourceStatus.Private) {
+                        setSelectedPuzzles(selection => {
+                          if (selection?.includes(puzzle.id)) {
+                            return selection.filter(id => id !== puzzle.id);
+                          }
+                          if ((selection?.length ?? 0) >= 100) {
+                            toast.error(
+                              'You can select up to 100 puzzles at a time'
+                            );
+                            return selection;
+                          }
+                          return [...(selection ?? []), puzzle.id];
+                        });
+                      }
                     } else {
                       await navigate({
                         to: `/create/${puzzle.id}`,
@@ -130,7 +134,9 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
                           : 'bg-base-100 text-base-content'
                       )}
                     >
-                      {selectedPuzzles.includes(puzzle.id) ? (
+                      {puzzle.status !== ResourceStatus.Private ? (
+                        <FaXmark size={24} className="opacity-50" />
+                      ) : selectedPuzzles.includes(puzzle.id) ? (
                         <FaCheck size={24} />
                       ) : (
                         <FaPlus size={24} />

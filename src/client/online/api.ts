@@ -204,6 +204,12 @@ export const api = {
   deletePuzzle: async (puzzleId: string) => {
     await axios.delete(`/puzzle/${puzzleId}`).catch(rethrowError);
   },
+  deletePuzzles: async (puzzleIds: string[]) => {
+    return await axios
+      .post<{ deleted: string[] }>(`/puzzle/delete`, { puzzleIds })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
   publishPuzzle: async (puzzleId: string) => {
     return await axios
       .post<{ id: string }>(`/puzzle/${puzzleId}/publish`)

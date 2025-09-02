@@ -1,3 +1,15 @@
+# 2/9/2025
+
+**PREVIEW BRANCH**
+
+- Added a dedicated page for followed collections
+- Expanded the front page and profile page to include 2 rows of items
+- Added bulk puzzle deletion in My stuff page
+- Optimized data loading in Search and My stuff pages
+- Optimized data loading in collection page after editing collection details
+- Fixed draggable cards not responding to clicks
+- Fixed cards not being draggable on touch screens
+
 # 1/9/2025
 
 **PREVIEW BRANCH**

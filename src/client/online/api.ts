@@ -13,7 +13,6 @@ import {
   ResourceResponse,
   UserDetail,
   FrontPage,
-  PersonalFrontPage,
   Comment,
 } from './data';
 import {
@@ -397,9 +396,15 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  getPersonalFrontPage: async () => {
+  listMyFollowedCollections: async (
+    query: CollectionSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
     return await axios
-      .get<PersonalFrontPage>(`/frontpage/me`)
+      .get<ListResponse<CollectionBrief>>(`/user/me/followed-collections`, {
+        params: { ...query, cursorBefore, cursorAfter },
+      })
       .then(res => res.data)
       .catch(rethrowError);
   },

@@ -35,7 +35,7 @@ export default memo(function EditableField({
         contentEditable={editable && editing}
         className={cn(
           'border-2 p-1 rounded border-transparent border-dashed',
-          editable && editing && 'border-base-100'
+          editable && editing && 'border-base-100 min-w-24'
         )}
       ></div>
       {pending && <Loading className="w-4 h-4 m-2" />}

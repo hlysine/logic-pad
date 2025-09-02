@@ -4,7 +4,7 @@ import { FaChevronDown, FaFolder } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import { useRouteProtection } from '../router/useRouteProtection';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { followedCollectionInfiniteQueryOptions } from './_layout.my-follows';
+import { followedCollectionsInfiniteQueryOptions } from './_layout.my-follows';
 import CollectionSearchQuery from '../online/CollectionSearchQuery';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import CollectionCard from '../online/CollectionCard';
@@ -15,7 +15,7 @@ export const Route = createLazyFileRoute('/_layout/my-follows')({
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
-      followedCollectionInfiniteQueryOptions(search)
+      followedCollectionsInfiniteQueryOptions(search)
     );
 
     return (

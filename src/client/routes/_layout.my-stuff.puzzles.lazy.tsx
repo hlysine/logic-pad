@@ -2,7 +2,7 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { memo, useState } from 'react';
 import { FaCheck, FaChevronDown, FaPlus, FaTrash } from 'react-icons/fa';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
-import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
+import { api, queryClient } from '../online/api';
 import PuzzleCard from '../online/PuzzleCard';
 import Loading from '../components/Loading';
 import { useRouteProtection } from '../router/useRouteProtection';
@@ -10,6 +10,7 @@ import PuzzleSearchQuery from '../online/PuzzleSearchQuery';
 import toast from 'react-hot-toast';
 import { BiSolidSelectMultiple } from 'react-icons/bi';
 import { cn } from '../uiHelper';
+import { myPuzzlesInfiniteQueryOptions } from './_layout.my-stuff.puzzles';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
   component: memo(function MyStuff() {
@@ -17,11 +18,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
-      bidirectionalInfiniteQuery(
-        ['user', 'me', 'puzzles', search],
-        (cursorBefore, cursorAfter) =>
-          api.listMyPuzzles(search, cursorBefore, cursorAfter)
-      )
+      myPuzzlesInfiniteQueryOptions(search)
     );
     const deletePuzzles = useMutation({
       mutationFn: (variables: Parameters<typeof api.deletePuzzles>) => {

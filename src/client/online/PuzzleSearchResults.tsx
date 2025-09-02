@@ -1,11 +1,11 @@
 import { memo, ReactNode } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { api, bidirectionalInfiniteQuery } from './api';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import PuzzleCard from './PuzzleCard';
 import { PuzzleSearchParams } from './PuzzleSearchQuery';
 import { PuzzleBrief } from './data';
+import { searchPuzzlesInfiniteQueryOptions } from '../routes/_layout.search.puzzles';
 
 export interface PuzzleSearchResultsProps {
   params: PuzzleSearchParams;
@@ -19,11 +19,7 @@ export default memo(function PuzzleSearchResults({
   puzzleCardChildren,
 }: PuzzleSearchResultsProps) {
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
-    bidirectionalInfiniteQuery(
-      ['puzzle', 'search', params],
-      (cursorBefore, cursorAfter) =>
-        api.searchPuzzles(params, cursorBefore, cursorAfter)
-    )
+    searchPuzzlesInfiniteQueryOptions(params)
   );
 
   return (

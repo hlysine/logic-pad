@@ -3,12 +3,12 @@ import { memo } from 'react';
 import HorizontalScroller from '../components/HorizontalScroller';
 import { useNavigate } from '@tanstack/react-router';
 import CollectionCard from './CollectionCard';
-import { followedCollectionInfiniteQueryOptions } from '../routes/_layout.my-follows';
+import { followedCollectionsInfiniteQueryOptions } from '../routes/_layout.my-follows';
 
 export default memo(function PersonalFrontPageLists() {
   const navigate = useNavigate();
   const { data } = useSuspenseInfiniteQuery(
-    followedCollectionInfiniteQueryOptions({})
+    followedCollectionsInfiniteQueryOptions({})
   );
   return (
     <>

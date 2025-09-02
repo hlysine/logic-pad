@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { api, bidirectionalInfiniteQuery } from './api';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import { useNavigate } from '@tanstack/react-router';
 import { CollectionSearchParams } from './CollectionSearchQuery';
 import CollectionCard from './CollectionCard';
+import { searchCollectionsInfiniteQueryOptions } from '../routes/_layout.search.collections';
 
 export interface CollectionSearchResultsProps {
   params: CollectionSearchParams;
@@ -16,11 +16,7 @@ export default memo(function CollectionSearchResults({
 }: CollectionSearchResultsProps) {
   const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
-    bidirectionalInfiniteQuery(
-      ['collection', 'search', params],
-      (cursorBefore, cursorAfter) =>
-        api.searchCollections(params, cursorBefore, cursorAfter)
-    )
+    searchCollectionsInfiniteQueryOptions(params)
   );
 
   return (

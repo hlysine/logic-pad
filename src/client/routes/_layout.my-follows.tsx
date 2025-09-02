@@ -1,10 +1,14 @@
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
-import { CollectionSearchParams } from '../online/CollectionSearchQuery';
+import {
+  CollectionSearchParams,
+  collectionSearchSchema,
+} from '../online/CollectionSearchQuery';
 import { router } from '../main';
+import { zodValidator } from '@tanstack/zod-adapter';
 
-export const followedCollectionInfiniteQueryOptions = (
+export const followedCollectionsInfiniteQueryOptions = (
   search: CollectionSearchParams
 ) =>
   bidirectionalInfiniteQuery(
@@ -14,11 +18,12 @@ export const followedCollectionInfiniteQueryOptions = (
   );
 
 export const Route = createFileRoute('/_layout/my-follows')({
+  validateSearch: zodValidator(collectionSearchSchema),
   loader: async () => {
     try {
       await Promise.all([
         queryClient.ensureInfiniteQueryData(
-          followedCollectionInfiniteQueryOptions(router.state.location.search)
+          followedCollectionsInfiniteQueryOptions(router.state.location.search)
         ),
       ]);
     } catch (error) {

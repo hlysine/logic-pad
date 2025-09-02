@@ -16,9 +16,9 @@ import {
 } from '@dnd-kit/core';
 import {
   arrayMove,
+  rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import RuleData from '@logic-pad/core/data/rules/rule';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.ts';
@@ -156,7 +156,11 @@ export default memo(function InstructionList({
   }, [filteredRules, grid, responsive, symbolMergeMap, symbolSortOrder]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -182,10 +186,7 @@ export default memo(function InstructionList({
         }
       }}
     >
-      <SortableContext
-        items={filteredRules}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={filteredRules} strategy={rectSortingStrategy}>
         {children}
       </SortableContext>
     </DndContext>

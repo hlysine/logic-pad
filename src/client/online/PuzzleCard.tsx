@@ -147,7 +147,10 @@ export default memo(function PuzzleCard({
       }
       {...(dragDroppable ? attributes : {})}
       {...(dragDroppable ? listeners : {})}
-      className="w-[320px] h-[116px] hover:z-50 shrink-0 grow-0"
+      className={cn(
+        'w-[320px] h-[116px] hover:z-50 shrink-0 grow-0',
+        dragDroppable && 'touch-none'
+      )}
     >
       <div
         className={cn(

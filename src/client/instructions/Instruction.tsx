@@ -73,6 +73,7 @@ export default memo(function Instruction({
       {...(editable ? listeners : {})}
       className={cn(
         'flex flex-col w-[320px] items-stretch shrink-0',
+        editable && 'touch-none',
         className
       )}
     >

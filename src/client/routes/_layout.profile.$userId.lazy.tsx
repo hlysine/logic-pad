@@ -111,6 +111,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
           <>
             <HorizontalScroller
               title="Created puzzles"
+              scrollable={false}
+              className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
               onExpand={
                 userDetail!.createdPuzzlesCollection
                   ? async () => {
@@ -137,6 +139,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
             </HorizontalScroller>
             <HorizontalScroller
               title="Created collections"
+              scrollable={false}
+              className="flex-wrap box-content max-h-[calc(96px*2+1rem)] w-full"
               onExpand={async () => {
                 await navigate({
                   to: '/search/collections',
@@ -160,6 +164,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
             {userDetail?.solvedPuzzles && (
               <HorizontalScroller
                 title="Solved puzzles"
+                scrollable={false}
+                className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
                 onExpand={async () => {
                   if (userDetail.solvedPuzzlesCollection)
                     await navigate({

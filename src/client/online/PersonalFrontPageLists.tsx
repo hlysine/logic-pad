@@ -16,7 +16,7 @@ export default memo(function PersonalFrontPageLists() {
       <HorizontalScroller
         title="Followed collections"
         scrollable={false}
-        className="flex-wrap box-content h-[calc(96px*2+1rem)] xl:h-[96px] w-full"
+        className="flex-wrap box-content max-h-[calc(96px*2+1rem)] w-full"
         onExpand={async () => {
           await navigate({
             to: '/search/collections',

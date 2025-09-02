@@ -17,7 +17,7 @@ export default memo(function FrontPageLists() {
       <HorizontalScroller
         title="Newest puzzles"
         scrollable={false}
-        className="flex-wrap box-content h-[calc(116px*2+1rem)] xl:h-[116px] w-full"
+        className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
         onExpand={async () => {
           await navigate({
             to: '/search/puzzles',
@@ -38,7 +38,7 @@ export default memo(function FrontPageLists() {
       <HorizontalScroller
         title="Newest collections"
         scrollable={false}
-        className="flex-wrap box-content h-[calc(96px*2+1rem)] xl:h-[96px] w-full"
+        className="flex-wrap box-content max-h-[calc(96px*2+1rem)] w-full"
         onExpand={async () => {
           await navigate({
             to: '/search/collections',

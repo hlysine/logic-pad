@@ -105,9 +105,6 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
       await queryClient.invalidateQueries({
         queryKey: ['collection', collectionId],
       });
-      await queryClient.invalidateQueries({
-        queryKey: ['collection', collectionId, 'puzzles'],
-      });
     },
   });
   const removeFromCollection = useMutation({
@@ -120,9 +117,6 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
     async onSuccess() {
       await queryClient.invalidateQueries({
         queryKey: ['collection', collectionId],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: ['collection', collectionId, 'puzzles'],
       });
     },
   });
@@ -248,6 +242,10 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                     if (selection?.includes(puzzle.id)) {
                       return selection.filter(id => id !== puzzle.id);
                     }
+                    if ((selection?.length ?? 0) >= 100) {
+                      toast.error('You can select up to 100 puzzles at a time');
+                      return selection;
+                    }
                     return [...(selection ?? []), puzzle.id];
                   });
                 } else {
@@ -304,13 +302,14 @@ const updateCollectionOptions = (collectionId: string) =>
     },
     onMutate: async (variables: Parameters<typeof api.updateCollection>) => {
       await queryClient.cancelQueries({
-        queryKey: ['collection', collectionId],
+        queryKey: ['collection', collectionId, 'info'],
       });
       const previousCollection = queryClient.getQueryData<CollectionBrief>([
         'collection',
         collectionId,
+        'info',
       ])!;
-      queryClient.setQueryData(['collection', collectionId], {
+      queryClient.setQueryData(['collection', collectionId, 'info'], {
         ...previousCollection,
         title: variables[1] ?? previousCollection.title,
         description: variables[2] ?? previousCollection.description,
@@ -322,7 +321,7 @@ const updateCollectionOptions = (collectionId: string) =>
       toast.error(error.message);
       if (context)
         queryClient.setQueryData(
-          ['collection', collectionId],
+          ['collection', collectionId, 'info'],
           context.previousCollection
         );
     },
@@ -333,7 +332,7 @@ const updateCollectionOptions = (collectionId: string) =>
         }) === 1
       )
         void queryClient.invalidateQueries({
-          queryKey: ['collection', collectionId],
+          queryKey: ['collection', collectionId, 'info'],
         });
     },
   });

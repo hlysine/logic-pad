@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 export const collectionQueryOptions = (collectionId: string) =>
   queryOptions({
-    queryKey: ['collection', collectionId],
+    queryKey: ['collection', collectionId, 'info'],
     queryFn: () => api.getCollectionBrief(collectionId),
   });
 

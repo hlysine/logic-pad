@@ -5,6 +5,7 @@ import PuzzleSearchQuery, {
 import PuzzleSearchResults from '../online/PuzzleSearchResults';
 import { cn } from '../uiHelper';
 import { FaPlus } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 export interface AddPuzzlesModalProps {
   ref: React.Ref<{ open: () => void }>;
@@ -68,14 +69,18 @@ export default memo(function AddPuzzlesModal({
           <div className="divider" />
           <PuzzleSearchResults
             params={params}
-            onClick={puzzle =>
+            onClick={puzzle => {
               setSelectedPuzzles(selectedPuzzles => {
                 if (selectedPuzzles.includes(puzzle.id)) {
                   return selectedPuzzles.filter(id => id !== puzzle.id);
                 }
+                if (selectedPuzzles.length >= 100) {
+                  toast.error('You can select up to 100 puzzles at a time');
+                  return selectedPuzzles;
+                }
                 return [...selectedPuzzles, puzzle.id];
-              })
-            }
+              });
+            }}
             puzzleCardChildren={puzzle => (
               <div
                 className={cn(

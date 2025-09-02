@@ -83,7 +83,7 @@ export default memo(function CollectionFollowButton({
           followed: newFollow.followed,
         });
         await queryClient.refetchQueries({
-          queryKey: ['collection', collectionId],
+          queryKey: ['collection', collectionId, 'info'],
         });
       }}
     >

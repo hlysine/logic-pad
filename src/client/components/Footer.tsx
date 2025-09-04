@@ -6,7 +6,8 @@ export default memo(function Footer() {
     <footer className="footer footer-center bg-base-200/20 text-neutral-content rounded p-4 gap-4 shrink-0 self-stretch">
       <aside>
         <p className="font-semibold">
-          Logic Pad v{import.meta.env.VITE_PACKAGE_VERSION}
+          Logic Pad -{' '}
+          {String(import.meta.env.VITE_PACKAGE_VERSION).substring(0, 7)}
         </p>
         <p>
           Copyright © {new Date().getFullYear()} -{' '}

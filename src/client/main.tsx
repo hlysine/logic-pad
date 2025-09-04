@@ -18,7 +18,7 @@ import('@sentry/react').then(Sentry => {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN as string,
     tunnel: (import.meta.env.VITE_API_ENDPOINT as string) + '/sentry',
-    release: `logic-pad@${import.meta.env.VITE_PACKAGE_VERSION}`,
+    release: import.meta.env.VITE_PACKAGE_VERSION,
   });
 });
 

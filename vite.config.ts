@@ -6,7 +6,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import { replaceCodePlugin } from 'vite-plugin-replace';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-import packageJson from './package.json' assert { type: 'json' };
+import { execSync } from 'child_process';
+
+const commitHash = execSync('git rev-parse HEAD').toString().trim();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -89,6 +91,9 @@ export default defineConfig({
       org: 'lysine',
       project: 'logic-pad',
       telemetry: false,
+      release: {
+        name: commitHash,
+      },
     }),
   ],
   server: {
@@ -149,6 +154,6 @@ export default defineConfig({
     sourcemap: true,
   },
   define: {
-    'import.meta.env.VITE_PACKAGE_VERSION': JSON.stringify(packageJson.version),
+    'import.meta.env.VITE_PACKAGE_VERSION': JSON.stringify(commitHash),
   },
 });

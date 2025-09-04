@@ -11,7 +11,7 @@ export default memo(function TileTool() {
       id="tile"
       order={2}
       name="Edit tile"
-      description="Left click to set a tile as given. Right click to remove a tile."
+      description="Left click to set a tile as fixed. Right click to remove a tile."
       hotkey="s"
       gridOverlay={
         <GridConsumer>

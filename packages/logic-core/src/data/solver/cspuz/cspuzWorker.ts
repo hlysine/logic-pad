@@ -73,7 +73,7 @@ onmessage = e => {
           if (color !== null) {
             puzzleData.tiles[y][x].fixed = true;
             puzzleData.tiles[y][x].color = color;
-          } else if (!tweaked) {
+          } else if (!tweaked && puzzleData.tiles[y][x].exists) {
             const positions = grid.connections.getConnectedTiles({ x, y });
             const newColor = solverResult[y][x] === 'dark' ? 'light' : 'dark';
             positions.forEach(({ x: px, y: py }) => {

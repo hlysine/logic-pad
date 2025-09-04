@@ -14,6 +14,14 @@ import { useSettings } from './contexts/SettingsContext.tsx';
 import Loading from './components/Loading.tsx';
 import Error from './router/Error.tsx';
 
+import('@sentry/react').then(Sentry => {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN as string,
+    tunnel: (import.meta.env.VITE_API_ENDPOINT as string) + '/sentry',
+    release: `logic-pad@${import.meta.env.VITE_PACKAGE_VERSION}`,
+  });
+});
+
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
 document.documentElement.dataset.theme = savedTheme;

@@ -1,6 +1,8 @@
 import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
 import EventIteratingSolver from '../eventIteratingSolver.js';
 
+('vite-apply-code-mod');
+
 export default class UniversalSolver extends EventIteratingSolver {
   public readonly id = 'universal';
 

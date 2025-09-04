@@ -22,6 +22,8 @@ import EventIteratingSolver from '../eventIteratingSolver.js';
 import GridData from '../../grid.js';
 import { Color } from '../../primitives.js';
 
+('vite-apply-code-mod');
+
 export default class CspuzSolver extends EventIteratingSolver {
   private static readonly supportedInstrs = [
     minesweeperInstance.id,

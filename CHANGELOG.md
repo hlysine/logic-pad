@@ -3,6 +3,8 @@
 **PREVIEW BRANCH**
 
 - Fixed alternate solution logic in cspuz solver
+- Added Sentry logging to the client and the API server
+- Updated the privacy policy to reflect the use of Sentry
 
 # 2/9/2025
 

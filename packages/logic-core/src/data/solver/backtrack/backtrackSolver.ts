@@ -17,6 +17,8 @@ import { instance as viewpointInstance } from '../../symbols/viewpointSymbol.js'
 import { instance as connectAllInstance } from '../../rules/connectAllRule.js';
 import EventIteratingSolver from '../eventIteratingSolver.js';
 
+('vite-apply-code-mod');
+
 export default class BacktrackSolver extends EventIteratingSolver {
   private static readonly supportedInstrs = [
     areaNumberInstance.id,

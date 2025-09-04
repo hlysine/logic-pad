@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 import { tanstackRouter } from '@tanstack/router-vite-plugin';
@@ -5,6 +6,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import { replaceCodePlugin } from 'vite-plugin-replace';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import packageJson from './package.json' assert { type: 'json' };
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -24,8 +26,12 @@ export default defineConfig({
     replaceCodePlugin({
       replacements: [
         {
-          from: 'Worker.js', // 'js' extension is required when @logic-pad/core is compiled by tsc
-          to: 'Worker.ts', // but vite uses 'ts' extension for worker imports
+          from: /['"]vite-apply-code-mod['"].*/s,
+          to: (source: string) => {
+            // 'js' extension is required when @logic-pad/core is compiled by tsc
+            // but vite uses 'ts' extension for worker imports
+            return source.replaceAll('Worker.js', 'Worker.ts');
+          },
         },
       ],
     }),
@@ -78,6 +84,11 @@ export default defineConfig({
           },
         ],
       },
+    }),
+    sentryVitePlugin({
+      org: 'lysine',
+      project: 'logic-pad',
+      telemetry: false,
     }),
   ],
   server: {
@@ -133,5 +144,11 @@ export default defineConfig({
         ),
       },
     ],
+  },
+  build: {
+    sourcemap: true,
+  },
+  define: {
+    'import.meta.env.VITE_PACKAGE_VERSION': JSON.stringify(packageJson.version),
   },
 });

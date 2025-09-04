@@ -1,3 +1,8 @@
+# 0.15.1
+
+- Fixed the cspuz solver reporting the same solution twice in some grids
+- Use custom directives for code mods
+
 # 0.15.0
 
 - Split tile config type into tile and shape

@@ -117,13 +117,16 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
   useEffect(() => {
     if (!panelRef.current) return;
     if (reducedMotion) return;
-    animate(panelRef.current, {
+    const animation = animate(panelRef.current, {
       opacity: [0, 1],
       translateY: [50, 0],
       duration: 300,
       ease: 'outExpo',
-      onComplete: () => panelRef.current!.style.removeProperty('transform'),
+      onPause: () => panelRef.current?.style.removeProperty('transform'),
     });
+    return () => {
+      animation.cancel();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (

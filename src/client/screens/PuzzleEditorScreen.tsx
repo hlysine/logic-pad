@@ -49,7 +49,7 @@ export default memo(function PuzzleEditorScreen({
           },
         ],
         ease: 'inOutSine',
-        onComplete: () => {
+        onPause: () => {
           const elements =
             document.getElementsByClassName('animate-online-tab');
           for (const element of elements) {

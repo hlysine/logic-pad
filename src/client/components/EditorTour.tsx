@@ -175,7 +175,7 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
     for (const target of targets) {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    animate(step.target, {
+    const animation = animate(step.target, {
       scale: [
         {
           to: 1.15,
@@ -187,7 +187,7 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
         },
       ],
       ease: 'inOutSine',
-      onComplete: () => {
+      onPause: () => {
         const elements = document.querySelectorAll(step.target);
         for (const element of elements) {
           (element as HTMLElement).style.removeProperty('transform');
@@ -199,6 +199,7 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
       (element as HTMLElement).classList.add('tour-target');
     }
     return () => {
+      animation.cancel();
       step.afterStep?.();
       const elements = document.querySelectorAll(step.target);
       for (const element of elements) {

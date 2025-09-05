@@ -79,6 +79,9 @@ const RatePuzzle = memo(function RatePuzzle({
       toast.error(error.message);
       if (context) setRating(context.rating);
     },
+    retry: 5,
+    retryDelay: retryCount =>
+      Math.min(1000 * 2 ** Math.max(0, retryCount - 1), 5000),
   });
   return (
     <Difficulty

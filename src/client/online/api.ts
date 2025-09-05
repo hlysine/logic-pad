@@ -26,7 +26,10 @@ import {
 } from '@tanstack/react-query';
 import onlineSolveTracker from '../router/onlineSolveTracker';
 import toast from 'react-hot-toast';
-import { PuzzleSearchParams } from './PuzzleSearchQuery';
+import {
+  PrivatePuzzleSearchParams,
+  PublicPuzzleSearchParams,
+} from './PuzzleSearchQuery';
 import { CollectionSearchParams } from './CollectionSearchQuery';
 
 export interface ApiErrorResponse {
@@ -263,7 +266,7 @@ export const api = {
       .catch(rethrowError);
   },
   searchPuzzles: async (
-    query: PuzzleSearchParams,
+    query: PublicPuzzleSearchParams,
     cursorBefore?: string,
     cursorAfter?: string
   ) => {
@@ -275,7 +278,7 @@ export const api = {
       .catch(rethrowError);
   },
   listMyPuzzles: async (
-    query: PuzzleSearchParams,
+    query: PrivatePuzzleSearchParams,
     cursorBefore?: string,
     cursorAfter?: string
   ) => {

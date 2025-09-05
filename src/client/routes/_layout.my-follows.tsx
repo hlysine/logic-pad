@@ -23,7 +23,9 @@ export const Route = createFileRoute('/_layout/my-follows')({
     try {
       await Promise.all([
         queryClient.ensureInfiniteQueryData(
-          followedCollectionsInfiniteQueryOptions(router.state.location.search)
+          followedCollectionsInfiniteQueryOptions(
+            router.state.location.search as CollectionSearchParams
+          )
         ),
       ]);
     } catch (error) {

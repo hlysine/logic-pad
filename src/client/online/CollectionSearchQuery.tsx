@@ -6,8 +6,18 @@ import { useOnline } from '../contexts/OnlineContext';
 import { cn } from '../uiHelper';
 
 export const collectionSearchSchema = z.object({
-  q: z.string().optional(),
-  sort: z.string().optional(),
+  q: z.string().optional().catch(undefined),
+  sort: z
+    .enum([
+      'created-asc',
+      'created-desc',
+      'updated-asc',
+      'updated-desc',
+      'follow-asc',
+      'follow-desc',
+    ])
+    .optional()
+    .catch(undefined),
 });
 
 export type CollectionSearchParams = z.infer<typeof collectionSearchSchema>;
@@ -25,7 +35,7 @@ const orderings = [
     id: 'follow',
     text: 'Follow Count',
   },
-];
+] as const;
 
 export interface CollectionSearchQueryProps {
   params: CollectionSearchParams;

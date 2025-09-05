@@ -23,7 +23,9 @@ export const Route = createFileRoute('/_layout/search/collections')({
     try {
       await Promise.all([
         queryClient.ensureInfiniteQueryData(
-          searchCollectionsInfiniteQueryOptions(router.state.location.search)
+          searchCollectionsInfiniteQueryOptions(
+            router.state.location.search as CollectionSearchParams
+          )
         ),
       ]);
     } catch (error) {

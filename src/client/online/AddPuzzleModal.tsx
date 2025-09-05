@@ -1,6 +1,6 @@
 import { memo, useImperativeHandle, useState } from 'react';
 import PuzzleSearchQuery, {
-  PuzzleSearchParams,
+  PublicPuzzleSearchParams,
 } from '../online/PuzzleSearchQuery';
 import PuzzleSearchResults from '../online/PuzzleSearchResults';
 import { cn } from '../uiHelper';
@@ -16,7 +16,7 @@ export default memo(function AddPuzzlesModal({
   ref,
   onSubmit,
 }: AddPuzzlesModalProps) {
-  const [params, setParams] = useState<PuzzleSearchParams>({});
+  const [params, setParams] = useState<PublicPuzzleSearchParams>({});
   const [open, setOpen] = useState(false);
   const [selectedPuzzles, setSelectedPuzzles] = useState<string[]>([]);
 

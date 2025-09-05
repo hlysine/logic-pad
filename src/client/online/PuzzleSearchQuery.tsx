@@ -1,4 +1,4 @@
-import { Fragment, memo, useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { FaSearch, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { z } from 'zod';
@@ -6,21 +6,70 @@ import { useOnline } from '../contexts/OnlineContext';
 import { cn } from '../uiHelper';
 
 export const puzzleSearchSchema = z.object({
-  q: z.string().optional(),
-  type: z.enum(['logic', 'underclued', 'pattern', 'music']).optional(),
-  size: z.enum(['s', 'm', 'l']).optional(),
-  minDiff: z.number().min(1).max(10).optional(),
-  maxDiff: z.number().min(1).max(10).optional(),
-  sort: z.string().optional(),
+  q: z.string().optional().catch(undefined),
+  type: z
+    .enum(['logic', 'underclued', 'pattern', 'music'])
+    .optional()
+    .catch(undefined),
+  size: z.enum(['s', 'm', 'l']).optional().catch(undefined),
+  minDiff: z.number().min(1).max(10).optional().catch(undefined),
+  maxDiff: z.number().min(1).max(10).optional().catch(undefined),
+  sort: z
+    .enum([
+      'published-asc',
+      'published-desc',
+      'solve-asc',
+      'solve-desc',
+      'love-asc',
+      'love-desc',
+      'difficulty-asc',
+      'difficulty-desc',
+    ])
+    .optional()
+    .catch(undefined),
 });
 
-export type PuzzleSearchParams = z.infer<typeof puzzleSearchSchema>;
+export const privatePuzzleSearchSchema = z.object({
+  q: z.string().optional().catch(undefined),
+  type: z
+    .enum(['logic', 'underclued', 'pattern', 'music'])
+    .optional()
+    .catch(undefined),
+  size: z.enum(['s', 'm', 'l']).optional().catch(undefined),
+  minDiff: z.number().min(1).max(10).optional().catch(undefined),
+  maxDiff: z.number().min(1).max(10).optional().catch(undefined),
+  sort: z
+    .enum([
+      'created-asc',
+      'created-desc',
+      'solve-asc',
+      'solve-desc',
+      'love-asc',
+      'love-desc',
+      'difficulty-asc',
+      'difficulty-desc',
+    ])
+    .optional()
+    .catch(undefined),
+});
+
+export type PublicPuzzleSearchParams = z.infer<typeof puzzleSearchSchema>;
+export type PrivatePuzzleSearchParams = z.infer<
+  typeof privatePuzzleSearchSchema
+>;
+export type PuzzleSearchParams<Public extends boolean> = Public extends true
+  ? PublicPuzzleSearchParams
+  : PrivatePuzzleSearchParams;
 
 type FilterOption = {
   id: string;
   text: string | React.ReactElement;
-  applyFilter: (search: PuzzleSearchParams) => PuzzleSearchParams;
-  isActive: (search: PuzzleSearchParams) => boolean;
+  applyFilter: (
+    search: PublicPuzzleSearchParams | PrivatePuzzleSearchParams
+  ) => PublicPuzzleSearchParams | PrivatePuzzleSearchParams;
+  isActive: (
+    search: PublicPuzzleSearchParams | PrivatePuzzleSearchParams
+  ) => boolean;
 };
 
 type Filter = {
@@ -207,28 +256,28 @@ const orderings = [
     id: 'difficulty',
     text: 'Difficulty',
   },
-];
+] as const;
 
-export interface PuzzleSearchQueryProps {
-  params: PuzzleSearchParams;
+export interface PuzzleSearchQueryProps<Public extends boolean> {
+  params: PuzzleSearchParams<Public>;
   /**
    * Sorting by published date is only possible for public puzzles.
    */
-  publicPuzzlesOnly: boolean;
-  onChange: (params: PuzzleSearchParams) => void;
+  publicPuzzlesOnly: Public;
+  onChange: (params: PuzzleSearchParams<Public>) => void;
 }
 
-export default memo(function PuzzleSearchQuery({
+export default function PuzzleSearchQuery<Public extends boolean>({
   params,
   publicPuzzlesOnly,
   onChange,
-}: PuzzleSearchQueryProps) {
+}: PuzzleSearchQueryProps<Public>) {
   const { me } = useOnline();
   const [displayParams, setDisplayParams] =
-    useState<PuzzleSearchParams>(params);
+    useState<PuzzleSearchParams<Public>>(params);
   const updateParams = useMemo(() => {
     const debouncedUpdate = debounce(
-      (newParams: PuzzleSearchParams) => {
+      (newParams: PuzzleSearchParams<Public>) => {
         if (!me) {
           onChange({});
         } else {
@@ -238,7 +287,7 @@ export default memo(function PuzzleSearchQuery({
       500,
       { trailing: true }
     );
-    return (newParams: PuzzleSearchParams) => {
+    return (newParams: PuzzleSearchParams<Public>) => {
       setDisplayParams(newParams);
       debouncedUpdate(newParams);
     };
@@ -296,7 +345,11 @@ export default memo(function PuzzleSearchQuery({
                     !me && 'btn-disabled'
                   )}
                   onClick={() =>
-                    updateParams(option.applyFilter(displayParams))
+                    updateParams(
+                      option.applyFilter(
+                        displayParams
+                      ) as PuzzleSearchParams<Public>
+                    )
                   }
                 >
                   {option.text}
@@ -324,7 +377,7 @@ export default memo(function PuzzleSearchQuery({
                   !me && 'btn-disabled'
                 )}
                 onClick={() => {
-                  let newParams: PuzzleSearchParams;
+                  let newParams: PuzzleSearchParams<Public>;
                   if (displayParams.sort === `${ordering.id}-asc`) {
                     newParams = { ...displayParams, sort: undefined };
                   } else if (displayParams.sort === `${ordering.id}-desc`) {
@@ -354,4 +407,4 @@ export default memo(function PuzzleSearchQuery({
       </div>
     </>
   );
-});
+}

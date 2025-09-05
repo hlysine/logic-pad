@@ -3,12 +3,12 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import PuzzleCard from './PuzzleCard';
-import { PuzzleSearchParams } from './PuzzleSearchQuery';
+import { PublicPuzzleSearchParams } from './PuzzleSearchQuery';
 import { PuzzleBrief } from './data';
 import { searchPuzzlesInfiniteQueryOptions } from '../routes/_layout.search.puzzles';
 
 export interface PuzzleSearchResultsProps {
-  params: PuzzleSearchParams;
+  params: PublicPuzzleSearchParams;
   onClick: (puzzle: PuzzleBrief) => void;
   puzzleCardChildren?: (puzzle: PuzzleBrief) => ReactNode;
 }

@@ -1,3 +1,15 @@
+# 6/9/2025
+
+**PREVIEW BRANCH**
+
+- Improved the symbol insertion cursor to indicate current action
+- Added shortcuts to close the config popup and to delete the selected item
+- Added shortcuts to set direction-related configs
+- Added shortcuts to select preset tools
+- Preset tools can now be re-ordered via drag-and-drop
+- Added a new site config to set keyboard layout for toolbox shortcuts
+- Mouse clicks on the grid are now blocked when the config popup is open
+
 # 4/9/2025
 
 **PREVIEW BRANCH**

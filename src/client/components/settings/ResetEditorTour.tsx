@@ -6,11 +6,11 @@ export default memo(function ResetEditorTour() {
   const [runEditorTour, setRunEditorTour] = useSettings('runEditorTour');
   return (
     <div
-      className="tooltip tooltip-info tooltip-bottom"
+      className="tooltip tooltip-info tooltip-left"
       data-tip={
         runEditorTour
-          ? 'Go to the editor to see the tour'
-          : 'Show the editor tour when you open the editor'
+          ? 'Open the editor to see the tour'
+          : 'Show the tour in the editor'
       }
     >
       <button

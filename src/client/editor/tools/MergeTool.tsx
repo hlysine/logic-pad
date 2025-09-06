@@ -64,7 +64,7 @@ export default memo(function MergeTool() {
       order={5}
       name="Merge tiles"
       description="Left click a gap to merge tiles. Right click to split tiles."
-      hotkey="g"
+      hotkey="tools-4"
       gridOverlay={<MergeToolOverlay />}
       onTileClick={null}
     >

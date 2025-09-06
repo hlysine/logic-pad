@@ -11,6 +11,9 @@ export const SiteSettingsSchema = z.object({
   offlineMode: z.boolean().default(false),
   sansSerifFont: z.boolean().default(false),
   runEditorTour: z.boolean().default(true),
+  keyboardLayout: z
+    .enum(['qwerty', 'azerty', 'dvorak', 'colemak'])
+    .default('qwerty'),
 });
 
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;

@@ -1,6 +1,6 @@
 import { memo, RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
-import ToolboxItem from './ToolboxItem';
+import ToolboxItem, { ToolboxHotkey } from './ToolboxItem';
 import {
   getConfigurableLocation,
   useConfig,
@@ -18,7 +18,7 @@ import GridData from '@logic-pad/core/data/grid';
 export interface SymbolToolProps {
   name: string;
   id?: string;
-  hotkey?: string;
+  hotkey?: ToolboxHotkey;
   sample: Symbol;
   component: React.NamedExoticComponent<SymbolProps<any>>;
   order?: number;

@@ -125,7 +125,7 @@ export default memo(function ResizeRowTool() {
       order={3}
       name="Resize row"
       description="Click between tiles to insert. Click on tiles to remove."
-      hotkey="d"
+      hotkey="tools-2"
       gridOverlay={<ResizeToolOverlay direction="row" />}
       onTileClick={null}
     >

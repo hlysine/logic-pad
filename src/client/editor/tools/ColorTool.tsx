@@ -10,7 +10,7 @@ export default memo(function ColorTool() {
       order={1}
       name="Edit color"
       description="Left/right click to change tile color. Fixed tiles can also be changed."
-      hotkey="a"
+      hotkey="tools-0"
       gridOverlay={null}
       defaultSelected
       onTileClick={(x, y, target, flood, gridContext) => {

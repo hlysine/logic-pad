@@ -8,6 +8,7 @@ import WrapAroundVisualizationToggle from './settings/WrapAroundVisualizationTog
 import OfflineModeToggle from './settings/OfflineModeToggle';
 import SansSerifToggle from './settings/SansSerifToggle';
 import ResetEditorTour from './settings/ResetEditorTour';
+import KeyboardLayoutDropdown from './settings/KeyboardLayoutDropdown';
 
 export default memo(function Settings() {
   return (
@@ -28,23 +29,37 @@ export default memo(function Settings() {
         <IoSettingsOutline size={20} />
       </button>
       <dialog id="settingsModal" className="modal">
-        <div className="modal-box flex flex-col items-center gap-4">
-          <div className="flex flex-col gap-4 max-w-[350px] w-full">
-            <AnimationToggle />
-            <ExitConfirmationToggle />
-            <PrimaryMouseButtonToggle />
-            <WrapAroundVisualizationToggle />
-            <SansSerifToggle />
-            <OfflineModeToggle />
-            <ResetEditorTour />
-          </div>
-          <div className="modal-action self-stretch justify-between">
-            <ResetSite />
-
-            <form method="dialog" className="flex justify-between gap-4">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
-            </form>
+        <div className="modal-box max-h-[70vh]">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex justify-between items-center w-full">
+              <h1 className="font-bold text-2xl text-accent">Site settings</h1>
+              <form method="dialog" className="flex justify-between gap-4">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-square btn-ghost">✕</button>
+              </form>
+            </div>
+            <div className="flex flex-col shrink-0 gap-2 max-w-[350px] w-full">
+              <h3 className="text-xl opacity-80 font-semibold self-start mt-2">
+                Input
+              </h3>
+              <ExitConfirmationToggle />
+              <PrimaryMouseButtonToggle />
+              <KeyboardLayoutDropdown />
+              <h3 className="text-xl opacity-80 font-semibold self-start mt-2">
+                Visual
+              </h3>
+              <AnimationToggle />
+              <WrapAroundVisualizationToggle />
+              <SansSerifToggle />
+              <h3 className="text-xl opacity-80 font-semibold self-start mt-2">
+                Online
+              </h3>
+              <OfflineModeToggle />
+            </div>
+            <div className="modal-action self-stretch justify-between">
+              <ResetSite />
+              <ResetEditorTour />
+            </div>
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">

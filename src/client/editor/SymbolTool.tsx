@@ -37,7 +37,7 @@ export interface SymbolToolProps extends HTMLProps<HTMLDivElement> {
 const SymbolToolOverlay = memo(function SymbolToolOverlay({
   sample,
   onNewSymbol,
-}: SymbolToolProps) {
+}: Pick<SymbolToolProps, 'sample' | 'onNewSymbol'>) {
   const { location, setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
   const [position, setPosition] = useState<Position | null>(null);
@@ -145,6 +145,7 @@ export default memo(function SymbolTool(props: SymbolToolProps) {
     id,
     hotkey,
     sample,
+    onNewSymbol,
     component: Component,
     order,
     defaultHidden,
@@ -159,7 +160,9 @@ export default memo(function SymbolTool(props: SymbolToolProps) {
       order={order}
       hotkey={hotkey}
       defaultHidden={defaultHidden}
-      gridOverlay={<SymbolToolOverlay {...props} />}
+      gridOverlay={
+        <SymbolToolOverlay sample={sample} onNewSymbol={onNewSymbol} />
+      }
       onTileClick={(x, y, target, flood, gridContext) => {
         handleTileClick(x, y, target, flood, gridContext, true);
       }}

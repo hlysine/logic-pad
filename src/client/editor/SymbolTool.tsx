@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
 import ToolboxItem from './ToolboxItem';
 import {
@@ -7,7 +7,7 @@ import {
 } from '../contexts/ConfigContext.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { Color, Position } from '@logic-pad/core/data/primitives';
-import { eq, mousePosition } from '../../client/uiHelper.ts';
+import { cn, eq, mousePosition } from '../../client/uiHelper.ts';
 import PointerCaptureOverlay, {
   getPointerLocation,
 } from '../grid/PointerCaptureOverlay';
@@ -34,6 +34,14 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
   const { grid, setGrid } = useGrid();
   const [position, setPosition] = useState<Position | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const hasSymbol = useMemo(
+    () =>
+      !!position &&
+      !!grid.symbols
+        .get(sample.id)
+        ?.find(n => eq(n.x, position.x) && eq(n.y, position.y)),
+    [grid, sample.id, position]
+  );
 
   useEffect(() => {
     if (!overlayRef.current) return;
@@ -96,8 +104,16 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
     >
       {position && (
         <div
-          className="absolute h-[1em] w-[1em] bg-transparent border-4 border-dashed border-accent rounded-[0.1em] pointer-events-none transition-all"
-          style={{ left: `${position.x}em`, top: `${position.y}em` }}
+          className={cn(
+            'absolute -translate-x-1/2 -translate-y-1/2 bg-transparent border-4 border-dashed rounded-[0.1em] pointer-events-none transition-all',
+            hasSymbol
+              ? 'h-[0.95em] w-[0.95em] border-info'
+              : 'h-[1em] w-[1em] border-accent'
+          )}
+          style={{
+            left: `${position.x + 0.5}em`,
+            top: `${position.y + 0.5}em`,
+          }}
         ></div>
       )}
     </PointerCaptureOverlay>

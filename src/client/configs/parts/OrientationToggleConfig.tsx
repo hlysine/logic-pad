@@ -12,6 +12,7 @@ import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { orientationToRotation } from '@logic-pad/core/data/dataHelper';
 import ConfigItem from './ConfigItem.tsx';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface OrientationToggleConfigProps {
   configurable: Configurable;
@@ -64,9 +65,70 @@ export default memo(function OrientationToggleConfig({
   const value = configurable[
     config.field as keyof typeof configurable
   ] as unknown as OrientationToggle;
+
+  useHotkeys(
+    'up',
+    () => setConfig?.(config.field, { ...value, up: !value.up }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'down',
+    () => setConfig?.(config.field, { ...value, down: !value.down }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'left',
+    () => setConfig?.(config.field, { ...value, left: !value.left }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'right',
+    () => setConfig?.(config.field, { ...value, right: !value.right }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'right+up',
+    () =>
+      setConfig?.(config.field, {
+        ...value,
+        [Orientation.UpRight]: !value[Orientation.UpRight],
+      }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'left+up',
+    () =>
+      setConfig?.(config.field, {
+        ...value,
+        [Orientation.UpLeft]: !value[Orientation.UpLeft],
+      }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'right+down',
+    () =>
+      setConfig?.(config.field, {
+        ...value,
+        [Orientation.DownRight]: !value[Orientation.DownRight],
+      }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'left+down',
+    () =>
+      setConfig?.(config.field, {
+        ...value,
+        [Orientation.DownLeft]: !value[Orientation.DownLeft],
+      }),
+    [value, setConfig, config]
+  );
+
   return (
     <ConfigItem config={config}>
-      <div className="grid grid-cols-3 grid-rows-3">
+      <div
+        className="grid grid-cols-3 grid-rows-3 tooltip tooltip-info tooltip-top"
+        data-tip="Keyboard arrow keys supported"
+      >
         <OrientationToggleRadio
           checked={value.up}
           setChecked={val => setConfig?.(config.field, { ...value, up: val })}

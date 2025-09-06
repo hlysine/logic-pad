@@ -6,6 +6,7 @@ import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { orientationToRotation } from '@logic-pad/core/data/dataHelper';
 import ConfigItem from './ConfigItem.tsx';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface OrientationConfigProps {
   configurable: Configurable;
@@ -56,9 +57,48 @@ export default memo(function OrientationConfig({
   const value = configurable[
     config.field as keyof typeof configurable
   ] as unknown as Orientation;
+
+  useHotkeys('up', () => setConfig?.(config.field, Orientation.Up), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('down', () => setConfig?.(config.field, Orientation.Down), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('left', () => setConfig?.(config.field, Orientation.Left), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('right', () => setConfig?.(config.field, Orientation.Right), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('right+up', () => setConfig?.(config.field, Orientation.UpRight), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('left+up', () => setConfig?.(config.field, Orientation.UpLeft), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys(
+    'right+down',
+    () => setConfig?.(config.field, Orientation.DownRight),
+    [setConfig, config.field]
+  );
+  useHotkeys(
+    'left+down',
+    () => setConfig?.(config.field, Orientation.DownLeft),
+    [setConfig, config.field]
+  );
+
   return (
     <ConfigItem config={config}>
-      <div className="grid grid-cols-3 grid-rows-3">
+      <div
+        className="grid grid-cols-3 grid-rows-3 tooltip tooltip-info tooltip-top"
+        data-tip="Keyboard arrow keys supported"
+      >
         <OrientationRadio
           value={value}
           setValue={value => setConfig?.(config.field, value)}

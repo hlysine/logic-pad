@@ -6,6 +6,7 @@ import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '@logic-pad/core/data/dataHelper';
 import Configurable from '@logic-pad/core/data/configurable';
 import ConfigItem from './ConfigItem.tsx';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface DirectionConfigProps {
   configurable: Configurable;
@@ -54,9 +55,30 @@ export default memo(function DirectionConfig({
   const value = configurable[
     config.field as keyof typeof configurable
   ] as unknown as Direction;
+
+  useHotkeys('up', () => setConfig?.(config.field, Direction.Up), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('down', () => setConfig?.(config.field, Direction.Down), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('left', () => setConfig?.(config.field, Direction.Left), [
+    setConfig,
+    config.field,
+  ]);
+  useHotkeys('right', () => setConfig?.(config.field, Direction.Right), [
+    setConfig,
+    config.field,
+  ]);
+
   return (
     <ConfigItem config={config}>
-      <div className="grid grid-cols-3 grid-rows-3">
+      <div
+        className="grid grid-cols-3 grid-rows-3 tooltip tooltip-info tooltip-top"
+        data-tip="Keyboard arrow keys supported"
+      >
         <DirectionRadio
           value={value}
           setValue={value => setConfig?.(config.field, value)}

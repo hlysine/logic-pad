@@ -30,7 +30,7 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
   sample,
   onNewSymbol,
 }: SymbolToolProps) {
-  const { setLocation, setRef } = useConfig();
+  const { location, setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
   const [position, setPosition] = useState<Position | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -75,6 +75,7 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
         return false;
       }}
       onTileClick={(x, y, from, to) => {
+        if (location) return;
         if (from === Color.Dark) {
           setLocation(
             getConfigurableLocation(

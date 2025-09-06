@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo } from 'react';
+import { HTMLProps, memo, useEffect, useMemo } from 'react';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { Color } from '@logic-pad/core/data/primitives';
@@ -65,7 +65,7 @@ export const toolboxHotkeys: HotkeyLayout = {
 export type ToolboxHotkey =
   `${keyof HotkeyLayout['qwerty']}-${'0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'}`;
 
-export interface ToolboxItemProps {
+export interface ToolboxItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
   name: string;
   description: string;
@@ -81,6 +81,7 @@ export interface ToolboxItemProps {
     | null;
   children: React.ReactNode;
   className?: string;
+  buttonClassName?: string;
   hotkey?: ToolboxHotkey;
   order?: number;
   defaultHidden?: boolean;
@@ -95,20 +96,17 @@ export default memo(function ToolboxItem({
   onTileClick,
   children,
   className,
+  buttonClassName,
   hotkey,
   order,
   defaultHidden,
   defaultSelected = false,
+  style,
+  ...rest
 }: ToolboxItemProps) {
   const { toolId, setTool } = useToolbox();
   const [showMoreTools] = useSettings('showMoreTools');
   const [keyboardLayout] = useSettings('keyboardLayout');
-
-  useEffect(() => {
-    if (toolId === id) {
-      setTool(id, name, description, gridOverlay, onTileClick);
-    }
-  }, [id, name, description, gridOverlay, onTileClick, setTool, toolId]);
 
   useEffect(() => {
     if (defaultSelected)
@@ -138,9 +136,10 @@ export default memo(function ToolboxItem({
 
   return (
     <div
-      className="tooltip tooltip-info"
+      className={cn('tooltip tooltip-info aspect-square', className)}
       data-tip={name + (hotkeyCode ? ` (${hotkeyCode})` : '')}
-      style={{ order }}
+      style={{ ...style, order }}
+      {...rest}
     >
       <button
         type="button"
@@ -148,7 +147,7 @@ export default memo(function ToolboxItem({
         className={cn(
           'btn text-xl p-0 w-12',
           toolId === id && 'btn-primary',
-          className
+          buttonClassName
         )}
         onClick={() => setTool(id, name, description, gridOverlay, onTileClick)}
       >

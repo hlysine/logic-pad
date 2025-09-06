@@ -1,4 +1,12 @@
-import { memo, RefObject, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  HTMLProps,
+  memo,
+  RefObject,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
 import ToolboxItem, { ToolboxHotkey } from './ToolboxItem';
 import {
@@ -15,7 +23,7 @@ import handleTileClick from '../grid/handleTileClick';
 import { SymbolProps } from '../symbols';
 import GridData from '@logic-pad/core/data/grid';
 
-export interface SymbolToolProps {
+export interface SymbolToolProps extends HTMLProps<HTMLDivElement> {
   name: string;
   id?: string;
   hotkey?: ToolboxHotkey;
@@ -140,6 +148,7 @@ export default memo(function SymbolTool(props: SymbolToolProps) {
     component: Component,
     order,
     defaultHidden,
+    ...rest
   } = props;
   id = id ?? sample.id;
   return (
@@ -154,7 +163,8 @@ export default memo(function SymbolTool(props: SymbolToolProps) {
       onTileClick={(x, y, target, flood, gridContext) => {
         handleTileClick(x, y, target, flood, gridContext, true);
       }}
-      className="text-[42px]"
+      buttonClassName="text-[42px]"
+      {...rest}
     >
       <div className="absolute w-[1em] h-[1em]">
         <Component textClass="text-base-content" symbol={sample} />

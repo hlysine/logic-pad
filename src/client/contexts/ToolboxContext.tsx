@@ -4,7 +4,7 @@ import { GridContext } from './GridContext.tsx';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 
-type Presets = { name: string; symbol: Symbol }[];
+export type Presets = { name: string; symbol: Symbol }[];
 
 interface ToolboxContext {
   toolId: string | null;

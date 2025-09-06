@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
 import ToolboxItem from './ToolboxItem';
 import {
@@ -34,13 +34,22 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
   const { grid, setGrid } = useGrid();
   const [position, setPosition] = useState<Position | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const cursorPosition = useMemo(() => {
+    if (location && location.type === 'symbol') {
+      const symbol = grid.symbols.get(location.id)?.at(location.index);
+      if (symbol) return { x: symbol.x, y: symbol.y };
+    }
+    return position;
+  }, [grid, location, position]);
   const hasSymbol = useMemo(
     () =>
-      !!position &&
-      !!grid.symbols
-        .get(sample.id)
-        ?.find(n => eq(n.x, position.x) && eq(n.y, position.y)),
-    [grid, sample.id, position]
+      !!location ||
+      (!!position &&
+        !!grid.symbols
+          .get(sample.id)
+          ?.find(n => eq(n.x, position.x) && eq(n.y, position.y))),
+    [grid, sample.id, position, cursorPosition]
   );
 
   useEffect(() => {
@@ -67,6 +76,7 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
       height={grid.height}
       allowDrag={false}
       step={sample.placementStep}
+      className="symbol-overlay"
       colorMap={(x, y, color) => {
         if (color === Color.Dark)
           return !!grid.symbols
@@ -85,11 +95,11 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
               )!
             )
           );
-          setRef({
-            current: document
-              .elementsFromPoint(mousePosition.clientX, mousePosition.clientY)
-              .find(e => e.classList.contains('logic-tile')) as HTMLElement,
-          });
+          setRef(
+            cursorRef.current
+              ? (cursorRef as RefObject<HTMLDivElement>)
+              : undefined
+          );
         } else if (to === Color.Dark) {
           if (onNewSymbol) {
             setGrid(
@@ -103,20 +113,20 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
       onPointerMove={(x, y) => setPosition({ x, y })}
       onPointerLeave={() => setPosition(null)}
     >
-      {position && (
-        <div
-          className={cn(
-            'absolute -translate-x-1/2 -translate-y-1/2 bg-transparent border-4 border-dashed rounded-[0.1em] pointer-events-none transition-all',
-            hasSymbol
-              ? 'h-[0.95em] w-[0.95em] border-info'
-              : 'h-[1em] w-[1em] border-accent'
-          )}
-          style={{
-            left: `${position.x + 0.5}em`,
-            top: `${position.y + 0.5}em`,
-          }}
-        ></div>
-      )}
+      <div
+        ref={cursorRef}
+        className={cn(
+          'absolute -translate-x-1/2 -translate-y-1/2 bg-transparent border-4 border-dashed rounded-[0.1em] pointer-events-none transition-all',
+          !cursorPosition && 'hidden',
+          hasSymbol
+            ? 'h-[0.95em] w-[0.95em] border-info'
+            : 'h-[1em] w-[1em] border-accent'
+        )}
+        style={{
+          left: `${(cursorPosition?.x ?? 0) + 0.5}em`,
+          top: `${(cursorPosition?.y ?? 0) + 0.5}em`,
+        }}
+      ></div>
     </PointerCaptureOverlay>
   );
 });

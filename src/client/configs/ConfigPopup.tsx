@@ -186,18 +186,37 @@ export default memo(function ConfigPopup() {
   ]);
 
   useEffect(() => {
+    if (!location) return;
     const handleClick = (e: PointerEvent) => {
       if (
         !popupRef.current?.contains(e.target as Node) &&
         !(ref?.current && containsPoint(ref.current, e.clientX, e.clientY))
       ) {
-        setLocation(undefined);
-        setRef(undefined);
+        const symbolOverlay =
+          document.querySelector<HTMLElement>('.symbol-overlay');
+        if (
+          symbolOverlay &&
+          containsPoint(symbolOverlay, e.clientX, e.clientY)
+        ) {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if (e.type === 'pointerup') {
+          setLocation(undefined);
+          setRef(undefined);
+        }
       }
     };
-    document.addEventListener('pointerdown', handleClick);
-    return () => document.removeEventListener('pointerdown', handleClick);
-  }, [setLocation, setRef, ref]);
+    document.addEventListener('pointerdown', handleClick, { capture: true });
+    document.addEventListener('pointerup', handleClick, { capture: true });
+    return () => {
+      document.removeEventListener('pointerdown', handleClick, {
+        capture: true,
+      });
+      document.removeEventListener('pointerup', handleClick, { capture: true });
+    };
+  }, [location, setLocation, setRef, ref]);
 
   useEffect(() => {
     const handler = () => {

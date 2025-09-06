@@ -10,6 +10,7 @@ import { mousePosition } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
 import AnnotatedText from '../components/AnnotatedText.tsx';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const gap = 8;
 
@@ -95,6 +96,94 @@ export default memo(function ConfigPopup() {
     left: '',
     top: '',
   });
+
+  const deleteSymbol = () => {
+    if (configurable instanceof Rule) {
+      setGrid(grid.removeRule(configurable));
+    } else if (configurable instanceof Symbol) {
+      setGrid(grid.removeSymbol(configurable));
+    } else if (configurable instanceof ControlLine) {
+      const musicGrid = grid.musicGrid.value;
+      if (!musicGrid) return;
+      const newLine = configurable.copyWith({
+        bpm: null,
+        pedal: null,
+        checkpoint: false,
+      });
+      if (newLine.isEmpty) {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.filter(
+                line => line !== configurable
+              ),
+            })
+          )
+        );
+      } else {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.map(line =>
+                line === configurable ? newLine : line
+              ),
+            })
+          )
+        );
+      }
+    } else if (configurable instanceof Row) {
+      const musicGrid = grid.musicGrid.value;
+      if (!musicGrid) return;
+      if (location?.type !== 'row') return;
+      const line = musicGrid.controlLines.find(
+        line => line.column === location.column
+      );
+      if (!line) return;
+      const newLine = line.copyWith({
+        rows: line.rows.map((row, i) =>
+          i === location.row ? new Row(null, null) : row
+        ),
+      });
+      if (newLine.isEmpty) {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.filter(
+                l => l.column !== line.column
+              ),
+            })
+          )
+        );
+      } else {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.map(l =>
+                l.column === line.column ? newLine : l
+              ),
+            })
+          )
+        );
+      }
+    }
+    setLocation(undefined);
+    setRef(undefined);
+  };
+
+  useHotkeys('esc', () => {
+    setLocation(undefined);
+    setRef(undefined);
+  });
+
+  useHotkeys('backspace, delete', deleteSymbol, { preventDefault: true }, [
+    grid,
+    location,
+    configurable,
+  ]);
 
   useEffect(() => {
     const handleClick = (e: PointerEvent) => {
@@ -256,88 +345,18 @@ export default memo(function ConfigPopup() {
             </div>
           </div>
         )}
-        <button
-          type="button"
-          className="btn btn-outline btn-error"
-          onClick={() => {
-            if (configurable instanceof Rule) {
-              setGrid(grid.removeRule(configurable));
-            } else if (configurable instanceof Symbol) {
-              setGrid(grid.removeSymbol(configurable));
-            } else if (configurable instanceof ControlLine) {
-              const musicGrid = grid.musicGrid.value;
-              if (!musicGrid) return;
-              const newLine = configurable.copyWith({
-                bpm: null,
-                pedal: null,
-                checkpoint: false,
-              });
-              if (newLine.isEmpty) {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.filter(
-                        line => line !== configurable
-                      ),
-                    })
-                  )
-                );
-              } else {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.map(line =>
-                        line === configurable ? newLine : line
-                      ),
-                    })
-                  )
-                );
-              }
-            } else if (configurable instanceof Row) {
-              const musicGrid = grid.musicGrid.value;
-              if (!musicGrid) return;
-              if (location?.type !== 'row') return;
-              const line = musicGrid.controlLines.find(
-                line => line.column === location.column
-              );
-              if (!line) return;
-              const newLine = line.copyWith({
-                rows: line.rows.map((row, i) =>
-                  i === location.row ? new Row(null, null) : row
-                ),
-              });
-              if (newLine.isEmpty) {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.filter(
-                        l => l.column !== line.column
-                      ),
-                    })
-                  )
-                );
-              } else {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.map(l =>
-                        l.column === line.column ? newLine : l
-                      ),
-                    })
-                  )
-                );
-              }
-            }
-            setLocation(undefined);
-            setRef(undefined);
-          }}
+        <div
+          className="tooltip tooltip-error tooltip-top"
+          data-tip="(backspace/del)"
         >
-          Delete
-        </button>
+          <button
+            type="button"
+            className="btn btn-outline btn-error"
+            onClick={deleteSymbol}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );

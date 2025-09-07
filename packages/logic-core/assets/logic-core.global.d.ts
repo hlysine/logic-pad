@@ -2518,6 +2518,7 @@ declare global {
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
+    private countForColor;
     countTiles(grid: GridData): {
       completed: number;
       possible: number;
@@ -2663,6 +2664,7 @@ declare global {
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
+    private countForColor;
     countTiles(grid: GridData): {
       completed: number;
       possible: number;

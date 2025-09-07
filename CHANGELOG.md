@@ -1,3 +1,9 @@
+# 7/9/2025
+
+**PREVIEW BRANCH**
+
+- Added tile counting overlay for focus and minesweeper symbols
+
 # 6/9/2025
 
 **PREVIEW BRANCH**

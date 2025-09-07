@@ -69,12 +69,10 @@ export default class MinesweeperSymbol extends NumberSymbol {
     return MinesweeperSymbol.EXAMPLE_GRID;
   }
 
-  public countTiles(grid: GridData): { completed: number; possible: number } {
-    if (Math.floor(this.x) !== this.x || Math.floor(this.y) !== this.y)
-      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
-    const color = grid.getTile(this.x, this.y).color;
-    if (color === Color.Gray)
-      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
+  private countForColor(
+    grid: GridData,
+    color: Color
+  ): { completed: number; possible: number } {
     let gray = 0;
     let opposite = 0;
     const visited: Position[] = [];
@@ -93,6 +91,21 @@ export default class MinesweeperSymbol extends NumberSymbol {
       }
     }
     return { completed: opposite, possible: opposite + gray };
+  }
+
+  public countTiles(grid: GridData): { completed: number; possible: number } {
+    if (Math.floor(this.x) !== this.x || Math.floor(this.y) !== this.y)
+      return { completed: 0, possible: Number.MAX_SAFE_INTEGER };
+    const color = grid.getTile(this.x, this.y).color;
+    if (color === Color.Gray) {
+      const dark = this.countForColor(grid, Color.Dark);
+      const light = this.countForColor(grid, Color.Light);
+      return {
+        completed: Math.min(dark.completed, light.completed),
+        possible: Math.max(dark.possible, light.possible),
+      };
+    }
+    return this.countForColor(grid, color);
   }
 
   public copyWith({

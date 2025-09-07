@@ -1,3 +1,7 @@
+# 0.15.2
+
+- Improved tile counting for focus and minesweeper symbols on gray tiles
+
 # 0.15.1
 
 - Fixed the cspuz solver reporting the same solution twice in some grids

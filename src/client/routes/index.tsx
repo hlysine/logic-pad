@@ -110,20 +110,28 @@ export const Route = createFileRoute('/')({
                     >
                       Create new puzzle
                     </Link>
-                    <Link
-                      type="button"
-                      to="/search"
-                      className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                    >
-                      Explore puzzles
-                    </Link>
-                    <Link
-                      type="button"
-                      to="/uploader"
-                      className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                    >
-                      Import puzzles
-                    </Link>
+                    {isOnline ? (
+                      <>
+                        <Link
+                          type="button"
+                          to="/search"
+                          className="btn btn-md lg:btn-lg btn-accent btn-outline"
+                        >
+                          Explore puzzles
+                        </Link>
+                        <Link
+                          type="button"
+                          to="/uploader"
+                          className="btn btn-md lg:btn-lg btn-accent btn-outline"
+                        >
+                          Import puzzles
+                        </Link>
+                      </>
+                    ) : (
+                      <div className="m-4 opacity-80">
+                        Go online for more features
+                      </div>
+                    )}
                   </div>
                   <Changelog />
                 </div>

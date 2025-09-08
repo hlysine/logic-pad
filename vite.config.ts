@@ -87,14 +87,18 @@ export default defineConfig({
         ],
       },
     }),
-    sentryVitePlugin({
-      org: 'lysine',
-      project: 'logic-pad',
-      telemetry: false,
-      release: {
-        name: commitHash,
-      },
-    }),
+    ...(process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryVitePlugin({
+            org: 'lysine',
+            project: 'logic-pad',
+            telemetry: false,
+            release: {
+              name: commitHash,
+            },
+          }),
+        ]
+      : []),
   ],
   server: {
     headers: {

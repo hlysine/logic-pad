@@ -5,9 +5,11 @@ import AlphaBadge from '../components/AlphaBadge';
 import { useMediaQuery } from 'react-responsive';
 import { RiMenu2Fill } from 'react-icons/ri';
 import PWAPrompt from '../components/PWAPrompt';
+import { useOnline } from '../contexts/OnlineContext';
 
 export const Route = createLazyFileRoute('/_layout')({
   component: memo(function Layout() {
+    const { isOnline } = useOnline();
     const isLargeMedia = useMediaQuery({ minWidth: 1024 });
     const navLinks = [
       <Link
@@ -17,21 +19,27 @@ export const Route = createLazyFileRoute('/_layout')({
       >
         Create
       </Link>,
-      <Link
-        key="search"
-        to="/search"
-        className="text-lg text-neutral-content flex items-center gap-2"
-      >
-        Explore
-      </Link>,
-      <Link
-        key="uploader"
-        to="/uploader"
-        className="text-lg text-neutral-content flex items-center gap-2"
-      >
-        Upload
-      </Link>,
     ];
+    if (isOnline) {
+      navLinks.push(
+        <Link
+          key="search"
+          to="/search"
+          className="text-lg text-neutral-content flex items-center gap-2"
+        >
+          Explore
+        </Link>
+      );
+      navLinks.push(
+        <Link
+          key="uploader"
+          to="/uploader"
+          className="text-lg text-neutral-content flex items-center gap-2"
+        >
+          Upload
+        </Link>
+      );
+    }
     return (
       <>
         <PWAPrompt />
@@ -49,6 +57,13 @@ export const Route = createLazyFileRoute('/_layout')({
                   {navLinks.map(link => (
                     <li key={link.key}>{link}</li>
                   ))}
+                  {!isOnline && (
+                    <li>
+                      <div className="opacity-80">
+                        Go online for more features
+                      </div>
+                    </li>
+                  )}
                 </ul>
               </div>
             )}
@@ -64,6 +79,9 @@ export const Route = createLazyFileRoute('/_layout')({
               Logic Pad
             </Link>
             {isLargeMedia && navLinks}
+            {isLargeMedia && !isOnline && (
+              <div className="opacity-80">Go online for more features</div>
+            )}
             <AlphaBadge />
           </div>
           <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />

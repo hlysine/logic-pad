@@ -85,9 +85,9 @@ const rethrowError = (error: AxiosError<ApiErrorResponse>) => {
 export const api = {
   isOnline: async () => {
     return await axios
-      .get('/')
-      .then(() => true)
-      .catch(() => false);
+      .get<{ version: string }>('/')
+      .then(res => res.data)
+      .catch(() => null);
   },
   signInWithOAuth: (provider: string, success: string, error: string) => {
     onlineSolveTracker.clearSolveRecords();

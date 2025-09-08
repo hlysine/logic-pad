@@ -7,6 +7,8 @@ import Loading from './Loading';
 import { Link, useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
 import { FaBan } from 'react-icons/fa';
+import { RiRefreshFill } from 'react-icons/ri';
+import { cleanReload } from './settings/ResetSite';
 
 export const avatarQueryOptions = (userId: string | null) =>
   queryOptions({
@@ -18,10 +20,21 @@ export const avatarQueryOptions = (userId: string | null) =>
 
 // million-ignore
 export default memo(function AccountControl() {
-  const { isOnline, me, isPending, refresh } = useOnline();
+  const { isOnline, versionMismatch, me, isPending, refresh } = useOnline();
   const location = useRouterState({ select: s => s.location });
   const avatarQuery = useQuery(avatarQueryOptions(me?.id ?? null));
   const detailsRef = useRef<HTMLDetailsElement>(null);
+  if (versionMismatch) {
+    return (
+      <div
+        className="btn btn-square btn-accent ms-4 px-4 flex-shrink-0 w-fit"
+        onClick={cleanReload}
+      >
+        <RiRefreshFill size={22} />
+        Update site
+      </div>
+    );
+  }
   if (!isOnline) {
     return (
       <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">

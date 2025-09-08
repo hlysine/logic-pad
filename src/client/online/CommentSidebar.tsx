@@ -35,11 +35,11 @@ export const CommentEntry = memo(function CommentEntry({
     },
     onMutate: async (variables: Parameters<typeof api.updateComment>) => {
       await queryClient.cancelQueries({
-        queryKey: ['puzzle', id, 'comments'],
+        queryKey: ['puzzle', id, 'comments', 'list'],
       });
       const previousContent = comment.content;
       queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-        ['puzzle', id, 'comments'],
+        ['puzzle', id, 'comments', 'list'],
         oldData => {
           if (oldData === undefined) return undefined;
           return {
@@ -63,7 +63,7 @@ export const CommentEntry = memo(function CommentEntry({
       toast.error(error.message);
       if (context)
         queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-          ['puzzle', id, 'comments'],
+          ['puzzle', id, 'comments', 'list'],
           oldData => {
             if (oldData === undefined) return undefined;
             return {
@@ -89,7 +89,7 @@ export const CommentEntry = memo(function CommentEntry({
         }) === 1
       )
         await queryClient.invalidateQueries({
-          queryKey: ['puzzle', id, 'comments'],
+          queryKey: ['puzzle', id, 'comments', 'list'],
         });
     },
   });
@@ -102,11 +102,20 @@ export const CommentEntry = memo(function CommentEntry({
       await queryClient.cancelQueries({
         queryKey: ['puzzle', id, 'comments'],
       });
+      const previousCount = queryClient.getQueryData<
+        Pick<ListResponse<Comment>, 'total'>
+      >(['puzzle', id, 'comments', 'count']);
+      queryClient.setQueryData<Pick<ListResponse<Comment>, 'total'>>(
+        ['puzzle', id, 'comments', 'count'],
+        old => ({
+          total: (old?.total ?? 1) - 1,
+        })
+      );
       const previousComments = queryClient.getQueryData<
         InfiniteData<ListResponse<Comment>>
-      >(['puzzle', id, 'comments'])!;
+      >(['puzzle', id, 'comments', 'list'])!;
       queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-        ['puzzle', id, 'comments'],
+        ['puzzle', id, 'comments', 'list'],
         oldData => {
           if (oldData === undefined) return undefined;
           return {
@@ -122,25 +131,31 @@ export const CommentEntry = memo(function CommentEntry({
           };
         }
       );
-      return { previousComments };
+      return { previousComments, previousCount };
     },
     onError(error, _variables, context) {
       toast.error(error.message);
-      if (context)
+      if (context) {
         queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-          ['puzzle', id, 'comments'],
+          ['puzzle', id, 'comments', 'list'],
           context.previousComments
         );
+        queryClient.setQueryData<Pick<ListResponse<Comment>, 'total'>>(
+          ['puzzle', id, 'comments', 'count'],
+          context.previousCount
+        );
+      }
     },
     async onSettled() {
       if (
         queryClient.isMutating({
           mutationKey: ['puzzle', id, 'comments', 'delete'],
         }) === 1
-      )
+      ) {
         await queryClient.invalidateQueries({
           queryKey: ['puzzle', id, 'comments'],
         });
+      }
     },
   });
 
@@ -228,12 +243,21 @@ export default memo(function CommentSidebar({
       await queryClient.cancelQueries({
         queryKey: ['puzzle', id, 'comments'],
       });
+      const previousCount = queryClient.getQueryData<
+        Pick<ListResponse<Comment>, 'total'>
+      >(['puzzle', id, 'comments', 'count']);
+      queryClient.setQueryData<Pick<ListResponse<Comment>, 'total'>>(
+        ['puzzle', id, 'comments', 'count'],
+        old => ({
+          total: (old?.total ?? 0) + 1,
+        })
+      );
       const previousComments = queryClient.getQueryData<
         InfiniteData<ListResponse<Comment>>
-      >(['puzzle', id, 'comments'])!;
+      >(['puzzle', id, 'comments', 'list'])!;
       const optimisticId = Math.random().toString(36).substring(2, 9);
       queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-        ['puzzle', id, 'comments'],
+        ['puzzle', id, 'comments', 'list'],
         {
           pageParams: [undefined, ...previousComments.pageParams],
           pages: [
@@ -254,13 +278,13 @@ export default memo(function CommentSidebar({
           ],
         }
       );
-      return { previousComments, optimisticId };
+      return { previousComments, optimisticId, previousCount };
     },
     onError(error, _variables, context) {
       toast.error(error.message);
-      if (context)
+      if (context) {
         queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-          ['puzzle', id, 'comments'],
+          ['puzzle', id, 'comments', 'list'],
           oldData => {
             if (oldData === undefined) return undefined;
             return {
@@ -277,10 +301,15 @@ export default memo(function CommentSidebar({
             };
           }
         );
+        queryClient.setQueryData<Pick<ListResponse<Comment>, 'total'>>(
+          ['puzzle', id, 'comments', 'count'],
+          context.previousCount
+        );
+      }
     },
     onSuccess(data, _variables, context) {
       queryClient.setQueryData<InfiniteData<ListResponse<Comment>>>(
-        ['puzzle', id, 'comments'],
+        ['puzzle', id, 'comments', 'list'],
         oldData => {
           if (oldData === undefined) return undefined;
           return {
@@ -302,10 +331,11 @@ export default memo(function CommentSidebar({
         queryClient.isMutating({
           mutationKey: ['puzzle', id, 'comments', 'add'],
         }) === 1
-      )
+      ) {
         await queryClient.invalidateQueries({
           queryKey: ['puzzle', id, 'comments'],
         });
+      }
     },
   });
   const textareaRef = useRef<HTMLTextAreaElement>(null);

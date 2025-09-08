@@ -6,7 +6,7 @@ import deferredRedirect from '../router/deferredRedirect.ts';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import { State } from '@logic-pad/core/index.ts';
 import onlineSolveTracker from '../router/onlineSolveTracker.ts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
 import { api, queryClient } from '../online/api.ts';
 import Loading from './Loading.tsx';
 import Difficulty from '../metadata/Difficulty.tsx';
@@ -103,6 +103,12 @@ const RatePuzzle = memo(function RatePuzzle({
   );
 });
 
+const commentCountQueryOptions = (puzzleId: string) =>
+  queryOptions({
+    queryKey: ['puzzle', puzzleId, 'comments', 'count'],
+    queryFn: () => api.countComments(puzzleId),
+  });
+
 const PuzzleCompleted = memo(function PuzzleCompleted({
   initialRating,
   openComments,
@@ -117,8 +123,7 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
   const { me } = useOnline();
   const { id } = useOnlinePuzzle();
   const commentCount = useQuery({
-    queryKey: ['puzzle', id, 'comments', 'count'],
-    queryFn: () => api.countComments(id!),
+    ...commentCountQueryOptions(id!),
     enabled: !!id && !!me,
   });
   useEffect(() => {
@@ -156,7 +161,7 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
           className="btn btn-primary w-full"
           onClick={() => setOpenComments(!openComments)}
         >
-          <FaComment /> View comments{' '}
+          <FaComment /> View comments
           {(commentCount.data?.total ?? 0) > 0 && (
             <span className="badge badge-sm border border-accent">
               {commentCount.data?.total}
@@ -198,6 +203,11 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
       document.removeEventListener('visibilitychange', eventHandler);
     };
   }, [id, isOnline, me]);
+
+  const commentCount = useQuery({
+    ...commentCountQueryOptions(id!),
+    enabled: !!id && !!me,
+  });
 
   const { state } = useGridState();
   const [openComments, setOpenComments] = useState(false);
@@ -242,6 +252,11 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
           onClick={() => setOpenComments(!openComments)}
         >
           <FaComment />
+          {(commentCount.data?.total ?? 0) > 0 && (
+            <span className="badge badge-sm border border-accent">
+              {commentCount.data?.total}
+            </span>
+          )}
         </button>
       </div>
     );

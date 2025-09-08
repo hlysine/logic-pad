@@ -5,7 +5,7 @@ import {
   CollectionSearchParams,
   collectionSearchSchema,
 } from '../online/CollectionSearchQuery';
-import { router } from '../main';
+import { router } from '../router/router';
 import { zodValidator } from '@tanstack/zod-adapter';
 
 export const followedCollectionsInfiniteQueryOptions = (

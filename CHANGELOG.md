@@ -9,6 +9,7 @@
 - Fixed the comment sidebar being trapped in the "puzzle solved" box
 - Fixed perfection mode switch not working due to cached puzzle data
 - Fixed online metadata missing in perfection mode
+- Fixed pluralization of counts in various places
 
 # 7/9/2025
 

@@ -15,7 +15,7 @@ import RatedDifficulty from '../metadata/RatedDifficulty';
 import { api, ApiError, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
-import { toRelativeDate } from '../uiHelper';
+import { pluralize, toRelativeDate } from '../uiHelper';
 import CommentSidebar from '../online/CommentSidebar';
 
 // million-ignore
@@ -323,11 +323,12 @@ export default memo(function EditorOnlineTab() {
       <div className="flex gap-4 items-center">
         <div className="badge badge-lg badge-info p-4">Public</div>
         <span className="badge badge-lg p-4 badge-neutral">
-          <FaCheckSquare className="inline-block me-2" /> {data.solveCount}{' '}
-          solves
+          <FaCheckSquare className="inline-block me-2" />{' '}
+          {pluralize(data.solveCount)`solve``solves`}
         </span>
         <span className="badge badge-lg p-4 badge-neutral">
-          <FaHeart className="inline-block me-2" /> {data.loveCount} loves
+          <FaHeart className="inline-block me-2" />{' '}
+          {pluralize(data.loveCount)`love``loves`}
         </span>
       </div>
       <div>

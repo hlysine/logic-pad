@@ -5,7 +5,7 @@ import {
   puzzleSearchSchema,
 } from '../online/PuzzleSearchQuery';
 import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
-import { router } from '../main';
+import { router } from '../router/router';
 import toast from 'react-hot-toast';
 
 export const searchPuzzlesInfiniteQueryOptions = (

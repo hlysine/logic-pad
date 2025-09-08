@@ -14,7 +14,7 @@ import FrontPageLists from '../online/FrontPageLists';
 import PersonalFrontPageLists from '../online/PersonalFrontPageLists';
 import { useOnline } from '../contexts/OnlineContext';
 import Footer from '../components/Footer';
-import { router } from '../main';
+import { router } from '../router/router';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;

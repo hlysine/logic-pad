@@ -6,7 +6,7 @@ import {
 } from '../online/CollectionSearchQuery';
 import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
-import { router } from '../main';
+import { router } from '../router/router';
 
 export const myCollectionsInfiniteQueryOptions = (
   search: CollectionSearchParams

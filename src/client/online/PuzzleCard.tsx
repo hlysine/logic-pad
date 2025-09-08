@@ -186,13 +186,13 @@ export default memo(function PuzzleCard({
               <span className="flex items-center">
                 <FaCheckSquare className="me-2" /> {puzzle.solveCount}
                 <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                  solves
+                  {puzzle.solveCount === 1 ? 'solve' : 'solves'}
                 </span>
               </span>
               <span className="flex items-center">
                 <FaHeart className="me-2" /> {puzzle.loveCount}
                 <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                  loves
+                  {puzzle.loveCount === 1 ? 'love' : 'loves'}
                 </span>
               </span>
             </div>

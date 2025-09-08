@@ -13,7 +13,7 @@ import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
 import { useOnline } from '../contexts/OnlineContext';
 import { ResourceStatus } from './data';
-import { router } from '../main';
+import { router } from '../router/router';
 
 export interface CollectionSidebarProps {
   collectionId: string | null;

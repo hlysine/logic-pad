@@ -3,7 +3,7 @@ import { useGrid } from '../../contexts/GridContext';
 import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
 import { useNavigate } from '@tanstack/react-router';
 import { FaStarHalfAlt } from 'react-icons/fa';
-import { router } from '../../main';
+import { router } from '../../router/router';
 
 export default memo(function SolveModeButton() {
   const { grid } = useGrid();

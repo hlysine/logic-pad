@@ -54,6 +54,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function pluralize(count: number) {
+  return (strings1: TemplateStringsArray, count1?: number) => {
+    return (strings2: TemplateStringsArray, count2?: number) => {
+      const singular =
+        count2 === 1 || (count1 !== undefined && count1 !== 1)
+          ? strings2
+          : strings1;
+      const plural = singular === strings1 ? strings2 : strings1;
+      const strings = count === 1 ? singular : plural;
+      if (strings.length === 1) return `${count} ${strings[0].trim()}`;
+      return strings[0] + count + strings[1];
+    };
+  };
+}
+
 const epsilon = 0.001;
 
 export function eq(a: number, b: number) {

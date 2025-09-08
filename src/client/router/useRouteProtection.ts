@@ -3,7 +3,7 @@ import { useOnline } from '../contexts/OnlineContext';
 import { useNavigate } from '@tanstack/react-router';
 import deferredRedirect from './deferredRedirect';
 import toast from 'react-hot-toast';
-import { router } from '../main';
+import { router } from './router';
 
 export const useRouteProtection = (level: 'online' | 'login') => {
   const { isOnline, me, isPending } = useOnline();

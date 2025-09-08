@@ -2,17 +2,14 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { SpeedInsights } from '@vercel/speed-insights/react';
-import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { routeTree } from './router/routeTree.gen';
-import NotFound from './router/NotFound';
+import { RouterProvider } from '@tanstack/react-router';
 import { themeKey } from './contexts/ThemeContext.tsx';
 import { cleanReload } from './components/settings/ResetSite.tsx';
 import { QueryClientProvider } from '@tanstack/react-query';
 import OnlineContext from './contexts/OnlineContext.tsx';
 import { queryClient } from './online/api.ts';
 import { useSettings } from './contexts/SettingsContext.tsx';
-import Loading from './components/Loading.tsx';
-import Error from './router/Error.tsx';
+import { router } from './router/router.tsx';
 
 import('@sentry/react').then(Sentry => {
   Sentry.init({
@@ -25,23 +22,6 @@ import('@sentry/react').then(Sentry => {
 // load the selected theme early to avoid flicker
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
 document.documentElement.dataset.theme = savedTheme;
-
-export const router = createRouter({
-  routeTree,
-  defaultNotFoundComponent: NotFound,
-  defaultErrorComponent: Error,
-  defaultPendingComponent: () => <Loading />,
-  defaultPreload: 'intent',
-  defaultPreloadStaleTime: 1000 * 60 * 5,
-  defaultPendingMs: 500,
-  defaultPendingMinMs: 0,
-});
-
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
 
 function Redirector() {
   if (window.location.host === import.meta.env.VITE_LEGACY_URL) {

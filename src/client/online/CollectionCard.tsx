@@ -47,7 +47,7 @@ export default memo(function CollectionCard({
               <span className="flex items-center">
                 <TbLayoutGrid className="me-2" /> {collection.puzzleCount}
                 <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                  puzzles
+                  {collection.puzzleCount === 1 ? 'puzzle' : 'puzzles'}
                 </span>
               </span>
             )}
@@ -55,7 +55,7 @@ export default memo(function CollectionCard({
               <span className="flex items-center">
                 <FaUser className="me-2" /> {collection.followCount}
                 <span className="hidden [.wrapper:hover_&]:inline-block ms-1">
-                  follows
+                  {collection.followCount === 1 ? 'follow' : 'follows'}
                 </span>
               </span>
             ) : (

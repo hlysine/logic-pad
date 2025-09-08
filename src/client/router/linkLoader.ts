@@ -6,7 +6,7 @@ import { array } from '@logic-pad/core/data/dataHelper';
 import { Puzzle } from '@logic-pad/core/data/puzzle';
 import { defaultGrid } from '../contexts/GridContext';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { router } from '../main';
+import { router } from './router';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',

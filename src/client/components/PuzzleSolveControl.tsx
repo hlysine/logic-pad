@@ -16,7 +16,7 @@ import { useReducedMotion } from '../contexts/SettingsContext.tsx';
 import { PuzzleFull } from '../online/data.ts';
 import CommentSidebar from '../online/CommentSidebar.tsx';
 import { FaComment } from 'react-icons/fa';
-import { router } from '../main.tsx';
+import { router } from '../router/router';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();

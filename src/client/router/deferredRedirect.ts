@@ -1,5 +1,5 @@
 import { NavigateOptions } from '@tanstack/react-router';
-import { router } from '../main';
+import { router } from './router';
 
 class DeferredRedirect {
   set(location: NavigateOptions) {

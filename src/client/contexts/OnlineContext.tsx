@@ -7,7 +7,7 @@ import semverSatisfies from 'semver/functions/satisfies';
 import toast from 'react-hot-toast';
 import { cleanReload } from '../components/settings/ResetSite';
 import deferredRedirect from '../router/deferredRedirect';
-import { router } from '../main';
+import { router } from '../router/router';
 
 const defaultOnline = true;
 const apiVersionRange = '1.x';

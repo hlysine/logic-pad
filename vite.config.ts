@@ -115,6 +115,7 @@ export default defineConfig({
         rewrite: path => path.replace(/^\/api/, ''),
       },
     },
+    port: 5173,
     open: true,
   },
   preview: {
@@ -130,7 +131,7 @@ export default defineConfig({
       },
     },
     port: 5173,
-    open: true,
+    open: false,
   },
   optimizeDeps: {
     exclude: ['@logic-pad/core', 'logic-pad-solver-core'],

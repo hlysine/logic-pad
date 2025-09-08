@@ -5,6 +5,9 @@ import { UserBrief } from '../online/data';
 import { useSettings } from './SettingsContext';
 import semverSatisfies from 'semver/functions/satisfies';
 import toast from 'react-hot-toast';
+import { cleanReload } from '../components/settings/ResetSite';
+import deferredRedirect from '../router/deferredRedirect';
+import { router } from '../main';
 
 const defaultOnline = true;
 const apiVersionRange = '1.x';
@@ -83,14 +86,44 @@ export default memo(function OnlineContext({
 
   useEffect(() => {
     if (onlineResult.versionMismatch) {
-      const toastId = toast.error(
-        'This web app is out of date. Please update to go online.'
+      const reloadData = sessionStorage.getItem('versionMismatchReload');
+      const reloadCount = reloadData ? parseInt(reloadData, 10) : 0;
+      if (reloadCount >= 2) {
+        console.error(
+          `Version mismatch ${onlineQuery.data!.version} != ${apiVersionRange} - max reloads reached`
+        );
+        const toastId = toast.error(
+          'This web app is out of date. Please update to go online.'
+        );
+        return () => {
+          toast.dismiss(toastId);
+        };
+      } else {
+        console.warn(
+          `Version mismatch ${onlineQuery.data!.version} != ${apiVersionRange} - reload page attempt ${reloadCount + 1}`
+        );
+        sessionStorage.setItem(
+          'versionMismatchReload',
+          (reloadCount + 1).toString()
+        );
+        if (reloadCount === 0) {
+          console.warn(
+            `Version mismatch ${onlineQuery.data!.version} != ${apiVersionRange} - redirect set to ${router.state.location.href}`
+          );
+          deferredRedirect.set(router.state.location);
+        }
+        cleanReload();
+      }
+    } else if (onlineQuery.data && onlineResult.isOnline) {
+      console.info(
+        `Version up to date ${onlineQuery.data.version} == ${apiVersionRange}`
       );
-      return () => {
-        toast.dismiss(toastId);
-      };
+      if (sessionStorage.getItem('versionMismatchReload')) {
+        sessionStorage.removeItem('versionMismatchReload');
+        deferredRedirect.execute();
+      }
     }
-  }, [onlineResult.versionMismatch]);
+  }, [onlineResult.versionMismatch, onlineQuery.data, onlineResult.isOnline]);
 
   const meQuery = useQuery({
     queryKey: ['me'],

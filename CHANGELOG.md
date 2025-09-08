@@ -7,6 +7,8 @@
   - Online mode is not allowed unless the site is up to date with the server
 - Added a comment count indicator in the "View comments" button
 - Fixed the comment sidebar being trapped in the "puzzle solved" box
+- Fixed perfection mode switch not working due to cached puzzle data
+- Fixed online metadata missing in perfection mode
 
 # 7/9/2025
 

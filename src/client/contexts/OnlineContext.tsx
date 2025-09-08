@@ -93,7 +93,7 @@ export default memo(function OnlineContext({
           `Version mismatch ${onlineQuery.data!.version} != ${apiVersionRange} - max reloads reached`
         );
         const toastId = toast.error(
-          'This web app is out of date. Please update to go online.'
+          'This version is out of date, but automatically updates have failed.'
         );
         return () => {
           toast.dismiss(toastId);

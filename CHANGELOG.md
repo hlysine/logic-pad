@@ -1,3 +1,11 @@
+# 8/9/2025
+
+**PREVIEW BRANCH**
+
+- Further improvement to site updater
+  - Site updates are now applied automatically if indicated by the server
+  - Online mode is not allowed unless the site is up to date with the server
+
 # 7/9/2025
 
 **PREVIEW BRANCH**

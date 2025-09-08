@@ -50,7 +50,6 @@ export default memo(function SolveScreen({
               )}
             </GridConsumer>
           </div>
-          <OnlineMetadata />
           <GridConsumer>
             {({ grid }) => (
               <InstructionPartOutlet
@@ -59,6 +58,7 @@ export default memo(function SolveScreen({
               />
             )}
           </GridConsumer>
+          <OnlineMetadata />
           <div className="flex gap-1">
             <PuzzleLoveButton />
             <Suspense fallback={<Loading className="w-12 h-12" />}>

@@ -16,6 +16,7 @@ import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
 import PuzzleEditButton from '../components/quickActions/PuzzleEditButton';
 import PuzzleSolveControl from '../components/PuzzleSolveControl';
 import Loading from '../components/Loading';
+import OnlineMetadata from '../metadata/OnlineMetadata';
 
 const SharePuzzleImage = lazy(
   () => import('../components/quickActions/SharePuzzleImage')
@@ -65,6 +66,7 @@ export default memo(function PerfectionScreen({
                 />
               )}
             </GridConsumer>
+            <OnlineMetadata />
             <div className="flex gap-1">
               <PuzzleLoveButton />
               <Suspense fallback={<Loading className="w-12 h-12" />}>

@@ -114,6 +114,13 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
+  const { me } = useOnline();
+  const { id } = useOnlinePuzzle();
+  const commentCount = useQuery({
+    queryKey: ['puzzle', id, 'comments', 'count'],
+    queryFn: () => api.countComments(id!),
+    enabled: !!id && !!me,
+  });
   useEffect(() => {
     if (!panelRef.current) return;
     if (reducedMotion) return;
@@ -149,7 +156,12 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
           className="btn btn-primary w-full"
           onClick={() => setOpenComments(!openComments)}
         >
-          <FaComment /> View comments
+          <FaComment /> View comments{' '}
+          {(commentCount.data?.total ?? 0) > 0 && (
+            <span className="badge badge-sm border border-accent">
+              {commentCount.data?.total}
+            </span>
+          )}
         </button>
       </div>
     </div>

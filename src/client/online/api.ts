@@ -411,6 +411,12 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  countComments: async (puzzleId: string) => {
+    return await axios
+      .get<Pick<ListResponse<Comment>, 'total'>>(`/comments/${puzzleId}/count`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
   listComments: async (
     puzzleId: string,
     cursorBefore?: string,

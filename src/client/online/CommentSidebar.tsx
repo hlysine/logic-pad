@@ -2,6 +2,7 @@ import { memo, useId, useRef, useState } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import {
   InfiniteData,
+  infiniteQueryOptions,
   useInfiniteQuery,
   useMutation,
 } from '@tanstack/react-query';
@@ -198,6 +199,15 @@ export interface CommentSidebarProps {
   onClose?: () => void;
 }
 
+export const commentListQueryOptions = (puzzleId: string) =>
+  infiniteQueryOptions({
+    ...bidirectionalInfiniteQuery(
+      ['puzzle', puzzleId, 'comments', 'list'],
+      (cursorBefore, cursorAfter) =>
+        api.listComments(puzzleId!, cursorBefore, cursorAfter)
+    ),
+  });
+
 export default memo(function CommentSidebar({
   open,
   onClose,
@@ -206,11 +216,7 @@ export default memo(function CommentSidebar({
   const { me } = useOnline();
   const { id } = useOnlinePuzzle();
   const commentList = useInfiniteQuery({
-    ...bidirectionalInfiniteQuery(
-      ['puzzle', id, 'comments'],
-      (cursorBefore, cursorAfter) =>
-        api.listComments(id!, cursorBefore, cursorAfter)
-    ),
+    ...commentListQueryOptions(id!),
     enabled: !!id && !!me && open,
   });
   const addComment = useMutation({
@@ -332,14 +338,14 @@ export default memo(function CommentSidebar({
           onClick={onClose}
         ></label>
         <div className="h-full w-full pointer-events-none flex justify-end">
-          <div className="h-full w-[350px] max-w-full shrink-0 grow-0 flex flex-col items-center pt-4 pb-2 gap-4 bg-neutral text-neutral-content self-stretch pointer-events-auto">
+          <div className="h-full w-[360px] max-w-full shrink-0 grow-0 flex flex-col items-center pt-4 pb-2 gap-4 bg-neutral text-neutral-content self-stretch pointer-events-auto">
             <div className="text-accent text-sm uppercase self-start mx-4">
               Comments
             </div>
             {commentList.isPending ? (
               <Loading />
             ) : (
-              <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-2 scrollbar-stable">
+              <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 scrollbar-stable">
                 <div className="flex flex-col-reverse w-full">
                   {commentList.data?.pages.flatMap(page =>
                     page.results.map(comment => (

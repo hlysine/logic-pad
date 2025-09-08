@@ -30,9 +30,11 @@ export const router = createRouter({
   routeTree,
   defaultNotFoundComponent: NotFound,
   defaultErrorComponent: Error,
+  defaultPendingComponent: () => <Loading />,
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 1000 * 60 * 5,
-  defaultPendingComponent: () => <Loading />,
+  defaultPendingMs: 500,
+  defaultPendingMinMs: 0,
 });
 
 declare module '@tanstack/react-router' {

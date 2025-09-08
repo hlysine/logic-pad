@@ -187,7 +187,7 @@ export default memo(function EditorTour({ setEditorTab }: EditorTourProps) {
         },
       ],
       ease: 'inOutSine',
-      onPause: () => {
+      onComplete: () => {
         const elements = document.querySelectorAll(step.target);
         for (const element of elements) {
           (element as HTMLElement).style.removeProperty('transform');

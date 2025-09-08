@@ -122,7 +122,9 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
       translateY: [50, 0],
       duration: 300,
       ease: 'outExpo',
-      onPause: () => panelRef.current?.style.removeProperty('transform'),
+      onComplete: () => {
+        panelRef.current?.style.removeProperty('transform');
+      },
     });
     return () => {
       animation.cancel();

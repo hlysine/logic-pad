@@ -18,7 +18,7 @@ export const Route = createLazyFileRoute('/_layout/perfection/$puzzleId')({
     const { data } = useSuspenseQuery(
       puzzleSolveQueryOptions(Route.useParams().puzzleId)
     );
-    const result = useOnlineLinkLoader(data, {
+    const result = useOnlineLinkLoader('perfection-online', data, {
       modifyPuzzle: puzzle => {
         puzzle.grid = puzzle.grid.withRules(rules => [
           new PerfectionRule(),

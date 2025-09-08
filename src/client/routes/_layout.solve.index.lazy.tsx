@@ -7,7 +7,7 @@ import MainContext from '../router/MainContext';
 
 export const Route = createLazyFileRoute('/_layout/solve/')({
   component: memo(function SolveMode() {
-    const result = useLinkLoader({ allowEmpty: false });
+    const result = useLinkLoader('solve-offline', { allowEmpty: false });
 
     return (
       <MainContext

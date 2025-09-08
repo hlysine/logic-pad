@@ -8,7 +8,7 @@ import MainContext from '../router/MainContext';
 
 export const Route = createLazyFileRoute('/_layout/perfection/')({
   component: memo(function PerfectionMode() {
-    const result = useLinkLoader({
+    const result = useLinkLoader('perfection-offline', {
       allowEmpty: false,
       modifyPuzzle: puzzle => {
         puzzle.grid = puzzle.grid.withRules(rules => [

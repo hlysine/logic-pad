@@ -25,6 +25,7 @@ interface OnlineLinkLoaderParams {
 }
 
 export default function useOnlineLinkLoader(
+  id: string,
   puzzle: PuzzleFull,
   {
     solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
@@ -32,7 +33,7 @@ export default function useOnlineLinkLoader(
   }: OnlineLinkLoaderParams = {}
 ): OnlineLinkLoaderResult {
   const result = useSuspenseQuery({
-    queryKey: ['puzzle', 'decode', puzzle.id],
+    queryKey: ['puzzle', 'decode', puzzle.id, id],
     queryFn: async () => {
       const result = {
         originalData: puzzle.data,

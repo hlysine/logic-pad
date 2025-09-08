@@ -48,7 +48,7 @@ export const Route = createFileRoute('/')({
   component: memo(function Home() {
     const navigate = useNavigate();
     const { isOnline, me } = useOnline();
-    useLinkLoader({ cleanUrl: true, allowEmpty: true });
+    useLinkLoader('index', { cleanUrl: true, allowEmpty: true });
     useEffect(() => {
       let toastId: string | undefined;
       void (async () => {

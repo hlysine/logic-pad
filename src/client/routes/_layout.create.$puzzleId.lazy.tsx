@@ -15,7 +15,7 @@ export const Route = createLazyFileRoute('/_layout/create/$puzzleId')({
     const { data } = useSuspenseQuery(
       puzzleEditQueryOptions(Route.useParams().puzzleId)
     );
-    const result = useOnlineLinkLoader(data, {
+    const result = useOnlineLinkLoader('create-online', data, {
       solutionHandling: SolutionHandling.LoadVisible,
     });
 

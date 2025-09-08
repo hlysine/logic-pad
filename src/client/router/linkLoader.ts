@@ -64,16 +64,19 @@ interface LinkLoaderParams {
   modifyPuzzle?: (puzzle: Puzzle) => Puzzle;
 }
 
-export default function useLinkLoader({
-  cleanUrl = false,
-  solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
-  allowEmpty = true,
-  modifyPuzzle = puzzle => puzzle,
-}: LinkLoaderParams = {}): LinkLoaderResult {
+export default function useLinkLoader(
+  id: string,
+  {
+    cleanUrl = false,
+    solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
+    allowEmpty = true,
+    modifyPuzzle = puzzle => puzzle,
+  }: LinkLoaderParams = {}
+): LinkLoaderResult {
   const params = useMemo(() => router.state.location.search, []);
   const navigate = useNavigate();
   const result = useSuspenseQuery({
-    queryKey: ['puzzle', 'decode-local', params],
+    queryKey: ['puzzle', 'decode-local', params, id],
     queryFn: async () => {
       const result = {
         originalParams: params,

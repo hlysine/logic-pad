@@ -3,6 +3,7 @@
 **PREVIEW BRANCH**
 
 - Added a front page button to open a random puzzle
+- Added puzzle publish date display
 - Fixed pagination for solved puzzles collection
 
 # 8/9/2025

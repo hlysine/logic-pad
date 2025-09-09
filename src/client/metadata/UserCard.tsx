@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { avatarQueryOptions } from '../components/AccountControl';
 import Loading from '../components/Loading';
 import { FaCheckSquare, FaEdit } from 'react-icons/fa';
-import { useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 
 export interface UserCardProps {
   user?: UserBrief | null;
@@ -22,8 +22,6 @@ export default memo(function UserCard({
 }: UserCardProps) {
   responsive ??= true;
   name ??= user?.name;
-
-  const navigate = useNavigate();
   const avatarQuery = useQuery(avatarQueryOptions(user?.id ?? null));
 
   const tooltipContent = user ? (
@@ -67,22 +65,16 @@ export default memo(function UserCard({
 
   return (
     <div className="relative w-fit">
-      <button
+      <Link
+        to={user ? '/profile/' + user.id : undefined}
         className={cn(
           'badge badge-secondary rounded-lg flex-shrink-0 peer',
           responsive ? 'lg:badge-lg' : 'badge-lg',
           className
         )}
-        onClick={async () => {
-          if (user) {
-            await navigate({
-              to: '/profile/' + user.id,
-            });
-          }
-        }}
       >
         {name}
-      </button>
+      </Link>
       {tooltipContent}
     </div>
   );

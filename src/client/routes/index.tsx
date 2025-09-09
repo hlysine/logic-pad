@@ -146,7 +146,7 @@ export const Route = createFileRoute('/')({
                       <Link
                         type="button"
                         to="/search"
-                        className="btn btn-md lg:btn-lg btn-accent btn-outline bg-base-100/10"
+                        className="btn btn-md lg:btn-lg btn-accent btn-outline"
                       >
                         Explore puzzles
                       </Link>

@@ -1,5 +1,5 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router';
-import { Suspense, lazy, memo, useEffect } from 'react';
+import { Suspense, lazy, memo, useEffect, useState } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
 import Changelog from '../components/Changelog';
 import Loading from '../components/Loading';
@@ -15,6 +15,7 @@ import PersonalFrontPageLists from '../online/PersonalFrontPageLists';
 import { useOnline } from '../contexts/OnlineContext';
 import Footer from '../components/Footer';
 import { router } from '../router/router';
+import { api } from '../online/api';
 
 const FrontPageGrid = lazy(async () => {
   const Grid = (await import('../grid/Grid')).default;
@@ -42,6 +43,36 @@ const FrontPageGrid = lazy(async () => {
       );
     }),
   };
+});
+
+const RandomPuzzle = memo(function RandomPuzzle() {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  if (loading) {
+    return <Loading className="bg-base-100/10" />;
+  }
+
+  return (
+    <button
+      className="btn btn-ghost bg-base-100/10"
+      onClick={async () => {
+        setLoading(true);
+        try {
+          const { id } = await api.getRandomPuzzle();
+          await navigate({ to: `/solve/${id}` });
+        } catch (ex) {
+          if (ex instanceof Error) {
+            toast.error(ex.message);
+          }
+        } finally {
+          setLoading(false);
+        }
+      }}
+    >
+      I'm feeling lucky
+    </button>
+  );
 });
 
 export const Route = createFileRoute('/')({
@@ -102,37 +133,46 @@ export const Route = createFileRoute('/')({
                   <span className="text-xl lg:text-2xl">
                     A modern, open-source web app for grid-based puzzles.
                   </span>
-                  <div className="flex flex-wrap gap-4 items-center mt-4">
-                    <Link
-                      type="button"
-                      to="/create"
-                      className="btn btn-md lg:btn-lg btn-accent"
-                    >
-                      Create new puzzle
-                    </Link>
-                    {isOnline ? (
-                      <>
-                        <Link
-                          type="button"
-                          to="/search"
-                          className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                        >
-                          Explore puzzles
-                        </Link>
-                        <Link
-                          type="button"
-                          to="/uploader"
-                          className="btn btn-md lg:btn-lg btn-accent btn-outline"
-                        >
-                          Import puzzles
-                        </Link>
-                      </>
-                    ) : (
+
+                  {isOnline ? (
+                    <div className="grid grid-cols-2 w-fit flex-wrap gap-4 items-center mt-8">
+                      <Link
+                        type="button"
+                        to="/create"
+                        className="btn btn-md lg:btn-lg btn-accent"
+                      >
+                        Create new puzzle
+                      </Link>
+                      <Link
+                        type="button"
+                        to="/search"
+                        className="btn btn-md lg:btn-lg btn-accent btn-outline bg-base-100/10"
+                      >
+                        Explore puzzles
+                      </Link>
+                      <Link
+                        type="button"
+                        to="/uploader"
+                        className="btn btn-ghost bg-base-100/10"
+                      >
+                        Bulk-import puzzles
+                      </Link>
+                      <RandomPuzzle />
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap gap-4 items-center mt-8">
+                      <Link
+                        type="button"
+                        to="/create"
+                        className="btn btn-md lg:btn-lg btn-accent"
+                      >
+                        Create new puzzle
+                      </Link>
                       <div className="m-4 opacity-80">
                         Go online for more features
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                   <Changelog />
                 </div>
               </div>

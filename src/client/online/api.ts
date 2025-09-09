@@ -277,6 +277,12 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
+  getRandomPuzzle: async () => {
+    return await axios
+      .get<{ id: string }>(`/puzzle/random`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
   listMyPuzzles: async (
     query: PrivatePuzzleSearchParams,
     cursorBefore?: string,

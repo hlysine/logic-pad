@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Difficulty from './Difficulty';
 import Markdown from '../components/Markdown';
-import { cn } from '../uiHelper.ts';
+import { cn, toRelativeDate } from '../uiHelper.ts';
 import UserCard from './UserCard.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 import DocumentTitle from '../components/DocumentTitle.tsx';
@@ -38,7 +38,14 @@ export default memo(function Metadata({
       >
         {metadata.title}
       </h1>
-      <UserCard user={puzzle?.creator} name={metadata.author} />
+      <div className="flex gap-2 flex-wrap items-center">
+        <UserCard user={puzzle?.creator} name={metadata.author} />
+        {puzzle?.publishedAt && (
+          <span className="opacity-80">
+            {toRelativeDate(new Date(puzzle.publishedAt))}
+          </span>
+        )}
+      </div>
       {!simplified && (
         <div className="overflow-y-auto">
           <Markdown className={responsive ? 'lg:text-lg' : 'text-lg'}>

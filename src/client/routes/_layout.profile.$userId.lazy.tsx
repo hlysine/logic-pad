@@ -114,7 +114,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               scrollable={false}
               className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
               onExpand={
-                userDetail!.createdPuzzlesCollection
+                userDetail?.createdPuzzlesCollection
                   ? async () => {
                       if (userDetail!.createdPuzzlesCollection)
                         await navigate({

@@ -25,11 +25,7 @@ export const Route = createLazyFileRoute('/_layout/solve/$puzzleId')({
       >
         <SolveScreen
           quickActions={[<PerfectionModeButton key="-perfectionModeButton" />]}
-          topLeft={
-            search.collection && (
-              <CollectionSidebar collectionId={search.collection} />
-            )
-          }
+          topLeft={<CollectionSidebar collectionId={search.collection} />}
         />
       </MainContext>
     );

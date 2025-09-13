@@ -1,3 +1,12 @@
+# 13/9/2025
+
+**PREVIEW BRANCH**
+
+- Added puzzles series, a special type of collection where
+  - All puzzles are created by the collection owner
+  - Each puzzle can only belong to one series
+  - You can easily navigate to the corresponding series when viewing a puzzle
+
 # 9/9/2025
 
 **PREVIEW BRANCH**

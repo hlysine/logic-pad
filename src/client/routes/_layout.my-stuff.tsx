@@ -16,6 +16,7 @@ import Loading from '../components/Loading';
 const NewCollectionModal = memo(function NewCollectionModal() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [isSeries, setIsSeries] = useState(false);
   const navigate = useNavigate();
 
   const createCollection = useMutation({
@@ -61,6 +62,23 @@ const NewCollectionModal = memo(function NewCollectionModal() {
             onChange={e => setDescription(e.target.value)}
           ></textarea>
         </label>
+        <div className="form-control">
+          <label className="label cursor-pointer gap-4">
+            <div className="flex flex-col">
+              <span className="label-text">This is a puzzle series</span>
+              <span className="label-text opacity-80">
+                A puzzle series contains puzzles made by you which should be
+                solved in order
+              </span>
+            </div>
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={isSeries}
+              onChange={e => setIsSeries(e.target.checked)}
+            />
+          </label>
+        </div>
         {createCollection.isPending ? (
           <Loading />
         ) : (
@@ -69,7 +87,9 @@ const NewCollectionModal = memo(function NewCollectionModal() {
               'btn btn-primary',
               title.length === 0 && 'btn-disabled'
             )}
-            onClick={() => createCollection.mutate([title, description])}
+            onClick={() =>
+              createCollection.mutate([title, isSeries, description])
+            }
           >
             Create
           </button>

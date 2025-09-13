@@ -327,10 +327,15 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  createCollection: async (title: string, description?: string) => {
+  createCollection: async (
+    title: string,
+    isSeries: boolean,
+    description?: string
+  ) => {
     return await axios
       .post<{ id: string }>(`/collection/create`, {
         title,
+        isSeries,
         description,
       })
       .then(res => res.data)
@@ -340,13 +345,15 @@ export const api = {
     collectionId: string,
     title?: string,
     description?: string,
-    status?: ResourceStatus
+    status?: ResourceStatus,
+    isSeries?: boolean
   ) => {
     await axios
       .put<CollectionBrief>(`/collection/${collectionId}`, {
         title,
         description,
         status,
+        isSeries,
       })
       .catch(rethrowError);
   },

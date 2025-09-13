@@ -38,6 +38,7 @@ export interface PuzzleBrief extends ResourceResponse {
   description: string;
   designDifficulty: number;
   ratedDifficulty: number[];
+  inSeries: boolean | null;
   solveCount: number;
   loveCount: number;
   types: PuzzleType[];
@@ -57,6 +58,7 @@ export interface CollectionBrief extends ResourceResponse {
   creator: UserBrief;
   autoPopulate: string | null;
   modifiedAt: string;
+  isSeries: boolean;
 }
 
 export interface Comment extends ResourceResponse {
@@ -97,6 +99,7 @@ export interface UserDetail {
 
 export interface PuzzleFull extends PuzzleBrief {
   data: string;
+  series: CollectionBrief | null;
 }
 
 export interface FrontPage {

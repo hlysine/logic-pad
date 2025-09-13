@@ -4,8 +4,10 @@ import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
   FaCheck,
   FaChevronDown,
+  FaExchangeAlt,
+  FaListOl,
+  FaListUl,
   FaPlus,
-  FaThList,
   FaTrash,
   FaUser,
 } from 'react-icons/fa';
@@ -48,11 +50,13 @@ import {
 
 interface CollectionPuzzlesProps {
   collectionId: string;
+  isSeries: boolean;
   editable: boolean;
 }
 
 const CollectionPuzzles = memo(function CollectionPuzzles({
   collectionId,
+  isSeries,
   editable,
 }: CollectionPuzzlesProps) {
   const navigate = useNavigate();
@@ -186,6 +190,14 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
             )}
             <AddPuzzleModal
               ref={addPuzzleModalRef}
+              modifyParams={
+                isSeries
+                  ? p => ({
+                      ...p,
+                      q: `${p.q ?? ''} creator=${me?.id} series=null`,
+                    })
+                  : undefined
+              }
               onSubmit={async puzzles => {
                 await addToCollection.mutateAsync([collectionId, puzzles]);
               }}
@@ -367,8 +379,17 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
     return (
       <ResponsiveLayout>
         <div className="flex items-center text-3xl mt-8 flex-wrap gap-4 justify-between">
-          <div className="flex items-center">
-            <FaThList className="inline-block me-4 shrink-0" />
+          <div
+            className={cn(
+              'flex items-center',
+              collectionBrief.isSeries && 'text-accent font-semibold'
+            )}
+          >
+            {collectionBrief.isSeries ? (
+              <FaListOl className="inline-block me-4 shrink-0" />
+            ) : (
+              <FaListUl className="inline-block me-4 shrink-0" />
+            )}
             <EditableField
               initialValue={collectionBrief.title}
               editable={collectionBrief.creator.id === me?.id}
@@ -382,8 +403,35 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
             />
           </div>
           {collectionBrief.creator.id === me?.id && (
-            <div className="flex justify-end items-center bg-base-100 rounded-lg overflow-hidden ps-2 shrink-0">
-              <div className="form-control me-2">
+            <div className="flex justify-end items-center bg-base-100 rounded-lg overflow-hidden shrink-0">
+              <button
+                className={cn(
+                  'tooltip tooltip-right btn rounded-none',
+                  collectionBrief.isSeries
+                    ? 'btn-ghost bg-base-300 text-base-content tooltip-info'
+                    : 'btn-accent tooltip-accent'
+                )}
+                data-tip={
+                  collectionBrief.isSeries
+                    ? 'Convert to collection'
+                    : 'Convert to puzzle series'
+                }
+                onClick={async () => {
+                  await updateCollection.mutateAsync([
+                    params.collectionId,
+                    undefined,
+                    undefined,
+                    undefined,
+                    !collectionBrief.isSeries,
+                  ]);
+                  await queryClient.invalidateQueries({
+                    queryKey: ['collection', params.collectionId, 'puzzles'],
+                  });
+                }}
+              >
+                <FaExchangeAlt />
+              </button>
+              <div className="form-control mx-2">
                 <label className="label cursor-pointer flex gap-2">
                   <span className="label-text">Public collection</span>
                   <input
@@ -499,6 +547,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         <div className="divider" />
         <CollectionPuzzles
           collectionId={params.collectionId}
+          isSeries={collectionBrief.isSeries}
           editable={
             collectionBrief.creator.id === me?.id &&
             collectionBrief.autoPopulate === null

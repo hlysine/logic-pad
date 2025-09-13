@@ -1,4 +1,4 @@
-import { memo, useImperativeHandle, useState } from 'react';
+import { memo, useImperativeHandle, useMemo, useState } from 'react';
 import PuzzleSearchQuery, {
   PublicPuzzleSearchParams,
 } from '../online/PuzzleSearchQuery';
@@ -9,16 +9,22 @@ import toast from 'react-hot-toast';
 
 export interface AddPuzzlesModalProps {
   ref: React.Ref<{ open: () => void }>;
+  modifyParams?: (params: PublicPuzzleSearchParams) => PublicPuzzleSearchParams;
   onSubmit: (puzzles: string[]) => void;
 }
 
 export default memo(function AddPuzzlesModal({
   ref,
+  modifyParams,
   onSubmit,
 }: AddPuzzlesModalProps) {
   const [params, setParams] = useState<PublicPuzzleSearchParams>({});
   const [open, setOpen] = useState(false);
   const [selectedPuzzles, setSelectedPuzzles] = useState<string[]>([]);
+  const finalParams = useMemo(
+    () => modifyParams?.(params) ?? params,
+    [modifyParams, params]
+  );
 
   useImperativeHandle(ref, () => ({
     open: () => {
@@ -68,7 +74,7 @@ export default memo(function AddPuzzlesModal({
           />
           <div className="divider" />
           <PuzzleSearchResults
-            params={params}
+            params={finalParams}
             onClick={puzzle => {
               setSelectedPuzzles(selectedPuzzles => {
                 if (selectedPuzzles.includes(puzzle.id)) {

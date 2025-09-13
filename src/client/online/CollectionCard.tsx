@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { CollectionBrief, ResourceStatus } from './data';
-import { FaEyeSlash, FaThList, FaUser } from 'react-icons/fa';
+import { FaEyeSlash, FaListOl, FaListUl, FaUser } from 'react-icons/fa';
 import { cn } from '../uiHelper';
 import { TbLayoutGrid } from 'react-icons/tb';
 
@@ -27,12 +27,17 @@ export default memo(function CollectionCard({
         role="button"
         onClick={onClick}
       >
-        <FaThList size={36} className="shrink-0" />
+        {collection.isSeries ? (
+          <FaListOl size={36} className="shrink-0 text-accent" />
+        ) : (
+          <FaListUl size={36} className="shrink-0" />
+        )}
         <div className="flex flex-col">
           <h2
             className={cn(
               'text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis',
-              expandable && '[.wrapper:hover_&]:whitespace-normal'
+              expandable && '[.wrapper:hover_&]:whitespace-normal',
+              collection.isSeries && 'text-accent'
             )}
           >
             {collection.title.length === 0

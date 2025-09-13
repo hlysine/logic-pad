@@ -1,6 +1,12 @@
 import { memo, ReactNode, useMemo } from 'react';
 import { PuzzleBrief, ResourceStatus } from './data';
-import { FaCheckSquare, FaEyeSlash, FaHeart, FaMusic } from 'react-icons/fa';
+import {
+  FaCheckSquare,
+  FaEyeSlash,
+  FaHeart,
+  FaListOl,
+  FaMusic,
+} from 'react-icons/fa';
 import { PiCheckerboardFill } from 'react-icons/pi';
 import { TbLayoutGridRemove, TbLayoutGrid } from 'react-icons/tb';
 import { PuzzleType } from '@logic-pad/core/index';
@@ -170,6 +176,9 @@ export default memo(function PuzzleCard({
               expandable && '[.wrapper:hover_&]:whitespace-normal'
             )}
           >
+            {puzzle.inSeries && (
+              <FaListOl size={14} className="inline text-accent" />
+            )}{' '}
             {puzzle.title.length === 0 ? 'Untitled Puzzle' : puzzle.title}
           </h2>
           <div className="badge badge-neutral bg-neutral/40 badge-md mt-1">

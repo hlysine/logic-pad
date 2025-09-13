@@ -430,7 +430,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
                     });
                   }}
                 >
-                  <FaExchangeAlt />
+                  <FaExchangeAlt size={16} />
                 </button>
               )}
               <div className="form-control mx-2">
@@ -465,7 +465,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
                     ).showModal()
                   }
                 >
-                  <FaTrash />
+                  <FaTrash size={16} />
                 </button>
               )}
               <dialog id="deleteCollectionModal" className="modal">
@@ -515,7 +515,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         <div className="flex gap-4 items-center flex-wrap">
           {collectionBrief.status === ResourceStatus.Public && (
             <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
-              <FaUser className="inline-block me-2" />
+              <FaUser className="inline-block me-2" size={14} />
               {collectionBrief.followCount} follows
             </span>
           )}

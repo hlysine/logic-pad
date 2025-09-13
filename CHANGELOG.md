@@ -6,6 +6,8 @@
   - All puzzles are created by the collection owner
   - Each puzzle can only belong to one series
   - You can easily navigate to the corresponding series when viewing a puzzle
+- "I'm feeling lucky" no longer picks puzzles made by the same user
+- Fixed profile page showing all solved puzzles as being created by the user
 
 # 9/9/2025
 

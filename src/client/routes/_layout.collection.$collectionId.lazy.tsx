@@ -404,33 +404,35 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
           </div>
           {collectionBrief.creator.id === me?.id && (
             <div className="flex justify-end items-center bg-base-100 rounded-lg overflow-hidden shrink-0">
-              <button
-                className={cn(
-                  'tooltip tooltip-right btn rounded-none',
-                  collectionBrief.isSeries
-                    ? 'btn-ghost bg-base-300 text-base-content tooltip-info'
-                    : 'btn-accent tooltip-accent'
-                )}
-                data-tip={
-                  collectionBrief.isSeries
-                    ? 'Convert to collection'
-                    : 'Convert to puzzle series'
-                }
-                onClick={async () => {
-                  await updateCollection.mutateAsync([
-                    params.collectionId,
-                    undefined,
-                    undefined,
-                    undefined,
-                    !collectionBrief.isSeries,
-                  ]);
-                  await queryClient.invalidateQueries({
-                    queryKey: ['collection', params.collectionId, 'puzzles'],
-                  });
-                }}
-              >
-                <FaExchangeAlt />
-              </button>
+              {collectionBrief.autoPopulate === null && (
+                <button
+                  className={cn(
+                    'tooltip tooltip-right btn rounded-none',
+                    collectionBrief.isSeries
+                      ? 'btn-ghost bg-base-300 text-base-content tooltip-info'
+                      : 'btn-accent tooltip-accent'
+                  )}
+                  data-tip={
+                    collectionBrief.isSeries
+                      ? 'Convert to collection'
+                      : 'Convert to puzzle series'
+                  }
+                  onClick={async () => {
+                    await updateCollection.mutateAsync([
+                      params.collectionId,
+                      undefined,
+                      undefined,
+                      undefined,
+                      !collectionBrief.isSeries,
+                    ]);
+                    await queryClient.invalidateQueries({
+                      queryKey: ['collection', params.collectionId, 'puzzles'],
+                    });
+                  }}
+                >
+                  <FaExchangeAlt />
+                </button>
+              )}
               <div className="form-control mx-2">
                 <label className="label cursor-pointer flex gap-2">
                   <span className="label-text">Public collection</span>

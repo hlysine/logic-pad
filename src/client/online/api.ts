@@ -87,7 +87,12 @@ export const api = {
     return await axios
       .get<{ version: string }>('/')
       .then(res => res.data)
-      .catch(() => null);
+      .catch((err: AxiosError) => {
+        if (err.status === 503) {
+          toast.error('The server is in maintenance. Please try again later.');
+        }
+        return null;
+      });
   },
   signInWithOAuth: (provider: string, success: string, error: string) => {
     onlineSolveTracker.clearSolveRecords();

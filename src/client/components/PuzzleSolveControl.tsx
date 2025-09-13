@@ -17,6 +17,7 @@ import { PuzzleFull } from '../online/data.ts';
 import CommentSidebar from '../online/CommentSidebar.tsx';
 import { FaComment } from 'react-icons/fa';
 import { router } from '../router/router';
+import { count } from '../uiHelper.ts';
 
 const SolveTrackerAnonymous = memo(function SolveTracker() {
   const { isOnline, me } = useOnline();
@@ -164,7 +165,7 @@ const PuzzleCompleted = memo(function PuzzleCompleted({
           <FaComment /> View comments
           {(commentCount.data?.total ?? 0) > 0 && (
             <span className="badge badge-sm border border-accent">
-              {commentCount.data?.total}
+              {count(commentCount.data?.total)}
             </span>
           )}
         </button>
@@ -254,7 +255,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
           <FaComment />
           {(commentCount.data?.total ?? 0) > 0 && (
             <span className="badge badge-sm border border-accent">
-              {commentCount.data?.total}
+              {count(commentCount.data?.total)}
             </span>
           )}
         </button>

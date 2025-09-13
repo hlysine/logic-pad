@@ -69,6 +69,15 @@ export function pluralize(count: number) {
   };
 }
 
+/**
+ * Maximum count from database is 5000. Display "5000+" for anything above that.
+ * @param count
+ */
+export function count(count: number | null | undefined, max = 5000) {
+  if (count === null || count === undefined) return '';
+  return count >= max ? `${max}+` : count.toString();
+}
+
 const epsilon = 0.001;
 
 export function eq(a: number, b: number) {

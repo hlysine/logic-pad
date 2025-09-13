@@ -5,6 +5,7 @@ import { cn } from '../../client/uiHelper.ts';
 import { useOnline } from '../contexts/OnlineContext.tsx';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
 import UserCard from '../metadata/UserCard.tsx';
+import { Link } from '@tanstack/react-router';
 
 // million-ignore
 export default memo(function MetadataEditor() {
@@ -43,6 +44,18 @@ export default memo(function MetadataEditor() {
           onChange={e => setMetadata({ ...metadata, title: e.target.value })}
         />
       </label>
+      {isOnline && !!id && puzzle?.series && (
+        <div className="text-sm opacity-80 ms-2">
+          Part of the{' '}
+          <Link
+            to={'/collection/' + puzzle.series.id}
+            className="link link-accent"
+          >
+            {puzzle.series.title}
+          </Link>{' '}
+          series
+        </div>
+      )}
       {isOnline && (!!id || !!me) ? (
         <label className="form-control">
           <div className="label">

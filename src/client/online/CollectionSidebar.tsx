@@ -216,7 +216,7 @@ export default memo(function CollectionSidebar({
           <Link
             to={'/solve/' + puzzle.id}
             search={{ collection: puzzle.series.id }}
-            className="link link-primary"
+            className="link link-accent"
           >
             {puzzle.series.title.length === 0
               ? 'Untitled Collection'

@@ -1,3 +1,11 @@
+# 14/9/2025
+
+**PREVIEW BRANCH**
+
+- Added notifications for
+  - New comments on your puzzles
+  - New puzzles from collections you follow
+
 # 13/9/2025
 
 **PREVIEW BRANCH**

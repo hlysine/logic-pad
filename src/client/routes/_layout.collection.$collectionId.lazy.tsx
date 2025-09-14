@@ -25,7 +25,7 @@ import {
   collectionQueryOptions,
 } from './_layout.collection.$collectionId';
 import UserCard from '../metadata/UserCard';
-import { cn, toRelativeDate } from '../uiHelper';
+import { cn, pluralize, toRelativeDate } from '../uiHelper';
 import CollectionFollowButton from '../online/CollectionFollowButton';
 import { CollectionBrief, PuzzleBrief, ResourceStatus } from '../online/data';
 import { api, queryClient } from '../online/api';
@@ -516,7 +516,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
           {collectionBrief.status === ResourceStatus.Public && (
             <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
               <FaUser className="inline-block me-2" size={14} />
-              {collectionBrief.followCount} follows
+              {pluralize(collectionBrief.followCount)`follow``follows`}
             </span>
           )}
           <span className="opacity-80">

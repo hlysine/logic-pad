@@ -2,7 +2,7 @@
   @apply leading-normal;
 }
 
-.markdown p {
+.markdown p:not(:first-child) {
   @apply mt-2;
 }
 

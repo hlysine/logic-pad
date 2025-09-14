@@ -14,6 +14,7 @@ import {
   UserDetail,
   FrontPage,
   Comment,
+  Notification,
 } from './data';
 import {
   DataTag,
@@ -431,7 +432,7 @@ export const api = {
   },
   countComments: async (puzzleId: string) => {
     return await axios
-      .get<Pick<ListResponse<Comment>, 'total'>>(`/comments/${puzzleId}/count`)
+      .get<Pick<ListResponse<Comment>, 'total'>>(`/comment/${puzzleId}/count`)
       .then(res => res.data)
       .catch(rethrowError);
   },
@@ -441,7 +442,7 @@ export const api = {
     cursorAfter?: string
   ) => {
     return await axios
-      .get<ListResponse<Comment>>(`/comments/${puzzleId}`, {
+      .get<ListResponse<Comment>>(`/comment/${puzzleId}`, {
         params: { cursorBefore, cursorAfter },
       })
       .then(res => res.data)
@@ -449,17 +450,41 @@ export const api = {
   },
   createComment: async (puzzleId: string, content: string) => {
     return await axios
-      .post<{ id: string }>(`/comments/${puzzleId}`, { content })
+      .post<{ id: string }>(`/comment/${puzzleId}`, { content })
       .then(res => res.data)
       .catch(rethrowError);
   },
   updateComment: async (commentId: string, content: string) => {
     await axios
-      .put<Comment>(`/comments/${commentId}`, { content })
+      .put<Comment>(`/comment/${commentId}`, { content })
       .catch(rethrowError);
   },
   deleteComment: async (commentId: string) => {
-    await axios.delete(`/comments/${commentId}`).catch(rethrowError);
+    await axios.delete(`/comment/${commentId}`).catch(rethrowError);
+  },
+  getNotifications: async (cursorBefore?: string, cursorAfter?: string) => {
+    return await axios
+      .get<ListResponse<Notification>>(`/notification`, {
+        params: { cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  countNotifications: async () => {
+    return await axios
+      .get<Pick<ListResponse<Notification>, 'total'>>(`/notification/count`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  markNotificationRead: async (notificationIds: string[]) => {
+    await axios
+      .put(`/notification/read`, { notificationIds })
+      .catch(rethrowError);
+  },
+  deleteNotifications: async (notificationIds: string[]) => {
+    await axios
+      .post(`/notification/delete`, { notificationIds })
+      .catch(rethrowError);
   },
 };
 

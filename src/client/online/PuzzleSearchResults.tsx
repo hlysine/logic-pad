@@ -5,7 +5,16 @@ import Loading from '../components/Loading';
 import PuzzleCard from './PuzzleCard';
 import { PublicPuzzleSearchParams } from './PuzzleSearchQuery';
 import { PuzzleBrief } from './data';
-import { searchPuzzlesInfiniteQueryOptions } from '../routes/_layout.search.puzzles';
+import { bidirectionalInfiniteQuery, api } from './api';
+
+export const searchPuzzlesInfiniteQueryOptions = (
+  search: PublicPuzzleSearchParams
+) =>
+  bidirectionalInfiniteQuery(
+    ['puzzle', 'search', search],
+    (cursorBefore, cursorAfter) =>
+      api.searchPuzzles(search, cursorBefore, cursorAfter)
+  );
 
 export interface PuzzleSearchResultsProps {
   params: PublicPuzzleSearchParams;

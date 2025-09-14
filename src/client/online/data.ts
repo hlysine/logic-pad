@@ -13,6 +13,13 @@ export enum FeedbackType {
   Report = 'report',
 }
 
+export enum NotificationType {
+  CollectionActivity = 'collectionActivity',
+  CommentActivity = 'commentActivity',
+  Account = 'account',
+  System = 'system',
+}
+
 export interface ResourceResponse {
   id: string;
   createdAt: string;
@@ -78,6 +85,15 @@ export interface Completion extends ResourceResponse {
 export interface Identity extends ResourceResponse {
   provider: string;
   email: string;
+}
+
+export interface Notification extends ResourceResponse {
+  user: string;
+  target: string | null;
+  source: string | null;
+  message: string;
+  type: NotificationType;
+  read: boolean;
 }
 
 export interface PuzzleLove {

@@ -4,18 +4,10 @@ import {
   PublicPuzzleSearchParams,
   puzzleSearchSchema,
 } from '../online/PuzzleSearchQuery';
-import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
+import { queryClient } from '../online/api';
 import { router } from '../router/router';
 import toast from 'react-hot-toast';
-
-export const searchPuzzlesInfiniteQueryOptions = (
-  search: PublicPuzzleSearchParams
-) =>
-  bidirectionalInfiniteQuery(
-    ['puzzle', 'search', search],
-    (cursorBefore, cursorAfter) =>
-      api.searchPuzzles(search, cursorBefore, cursorAfter)
-  );
+import { searchPuzzlesInfiniteQueryOptions } from '../online/PuzzleSearchResults';
 
 export const Route = createFileRoute('/_layout/search/puzzles')({
   validateSearch: zodValidator(puzzleSearchSchema),

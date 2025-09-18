@@ -1,3 +1,7 @@
+# 0.15.3
+
+- Fixed validation for diagonal lotus at tile corners
+
 # 0.15.2
 
 - Improved tile counting for focus and minesweeper symbols on gray tiles

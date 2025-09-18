@@ -293,15 +293,44 @@ export default abstract class DirectionLinkerSymbol extends Symbol {
         ),
       ];
     } else if (
-      (this.linkedDirections[Direction.Up] === Direction.Left &&
-        this.linkedDirections[Direction.Left] === Direction.Up) ||
-      (this.linkedDirections[Direction.Up] === Direction.Right &&
-        this.linkedDirections[Direction.Right] === Direction.Up)
+      this.linkedDirections[Direction.Up] === Direction.Left &&
+      this.linkedDirections[Direction.Left] === Direction.Up
     ) {
       return [
         makeTurtle(
           { x: x - 0.5, y: y - 0.5 },
           { x: x - 0.5, y: y - 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x - 0.5, y: y + 0.5 },
+          { x: x + 0.5, y: y - 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x + 0.5, y: y + 0.5 },
+          { x: x + 0.5, y: y + 0.5 },
+          grid
+        ),
+      ];
+    } else if (
+      this.linkedDirections[Direction.Up] === Direction.Right &&
+      this.linkedDirections[Direction.Right] === Direction.Up
+    ) {
+      return [
+        makeTurtle(
+          { x: x + 0.5, y: y - 0.5 },
+          { x: x + 0.5, y: y - 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x - 0.5, y: y - 0.5 },
+          { x: x + 0.5, y: y + 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x - 0.5, y: y + 0.5 },
+          { x: x - 0.5, y: y + 0.5 },
           grid
         ),
       ];

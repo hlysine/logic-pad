@@ -1,3 +1,9 @@
+# 18/9/2025
+
+**PREVIEW BRANCH**
+
+- Fixed validation for diagonal lotus at tile corners
+
 # 14/9/2025
 
 **PREVIEW BRANCH**

@@ -10,8 +10,8 @@ import ResponsiveLayout from '../components/ResponsiveLayout';
 import { avatarQueryOptions } from '../components/AccountControl';
 import toast from 'react-hot-toast';
 import Loading from '../components/Loading';
-import { FaCheckSquare, FaEdit } from 'react-icons/fa';
-import { toRelativeDate } from '../uiHelper';
+import { FaCheckSquare, FaEdit, FaUser } from 'react-icons/fa';
+import { pluralize, toRelativeDate } from '../uiHelper';
 import CollectionFollowButton from '../online/CollectionFollowButton';
 import { useOnline } from '../contexts/OnlineContext';
 import HorizontalScroller from '../components/HorizontalScroller';
@@ -71,6 +71,12 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                   <FaEdit />
                   Created {userBrief.createCount}
                 </div>
+                {userDetail && (
+                  <div className="badge py-1 px-4 h-fit w-fit flex gap-1 whitespace-nowrap">
+                    <FaUser />
+                    {pluralize(userDetail.followCount)`follower``followers`}
+                  </div>
+                )}
               </div>
               <div className="flex gap-4 mt-2">
                 <div className="opacity-80">

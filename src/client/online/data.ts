@@ -106,6 +106,7 @@ export interface CollectionFollow {
 
 export interface UserDetail {
   accessedAt: string;
+  followCount: number;
   solvedPuzzlesCollection: string | null;
   createdPuzzlesCollection: string | null;
   createdPuzzles: PuzzleBrief[];

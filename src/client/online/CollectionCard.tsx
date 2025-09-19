@@ -1,8 +1,9 @@
 import { memo } from 'react';
-import { CollectionBrief, ResourceStatus } from './data';
+import { AutoCollection, CollectionBrief, ResourceStatus } from './data';
 import { FaEyeSlash, FaListOl, FaListUl, FaUser } from 'react-icons/fa';
 import { cn } from '../uiHelper';
 import { TbLayoutGrid } from 'react-icons/tb';
+import Avatar from './Avatar';
 
 export interface CollectionCardProps {
   collection: CollectionBrief;
@@ -27,7 +28,13 @@ export default memo(function CollectionCard({
         role="button"
         onClick={onClick}
       >
-        {collection.isSeries ? (
+        {collection.autoPopulate === AutoCollection.CreatedPuzzles ? (
+          <Avatar
+            userId={collection.creator.id}
+            username={collection.creator.name}
+            className="w-[36px] h-[36px] shrink-0"
+          />
+        ) : collection.isSeries ? (
           <FaListOl size={36} className="shrink-0 text-accent" />
         ) : (
           <FaListUl size={36} className="shrink-0" />

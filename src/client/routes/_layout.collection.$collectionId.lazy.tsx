@@ -27,7 +27,12 @@ import {
 import UserCard from '../metadata/UserCard';
 import { cn, pluralize, toRelativeDate } from '../uiHelper';
 import CollectionFollowButton from '../online/CollectionFollowButton';
-import { CollectionBrief, PuzzleBrief, ResourceStatus } from '../online/data';
+import {
+  AutoCollection,
+  CollectionBrief,
+  PuzzleBrief,
+  ResourceStatus,
+} from '../online/data';
 import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 import { useOnline } from '../contexts/OnlineContext';
@@ -47,6 +52,7 @@ import {
   SortableContext,
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
+import Avatar from '../online/Avatar';
 
 interface CollectionPuzzlesProps {
   collectionId: string;
@@ -385,10 +391,16 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
               collectionBrief.isSeries && 'text-accent font-semibold'
             )}
           >
-            {collectionBrief.isSeries ? (
-              <FaListOl className="inline-block me-4 shrink-0" />
+            {collectionBrief.autoPopulate === AutoCollection.CreatedPuzzles ? (
+              <Avatar
+                userId={collectionBrief.creator.id}
+                username={collectionBrief.creator.name}
+                className="w-[32px] h-[32px] inline-block aspect-square me-4 shrink-0"
+              />
+            ) : collectionBrief.isSeries ? (
+              <FaListOl size={32} className="inline-block me-4 shrink-0" />
             ) : (
-              <FaListUl className="inline-block me-4 shrink-0" />
+              <FaListUl size={32} className="inline-block me-4 shrink-0" />
             )}
             <EditableField
               initialValue={collectionBrief.title}

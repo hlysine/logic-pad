@@ -7,7 +7,6 @@ import {
   userDetailQueryOptions,
 } from './_layout.profile.$userId';
 import ResponsiveLayout from '../components/ResponsiveLayout';
-import { avatarQueryOptions } from '../components/AccountControl';
 import toast from 'react-hot-toast';
 import Loading from '../components/Loading';
 import { FaCheckSquare, FaEdit, FaUser } from 'react-icons/fa';
@@ -17,13 +16,13 @@ import { useOnline } from '../contexts/OnlineContext';
 import HorizontalScroller from '../components/HorizontalScroller';
 import PuzzleCard from '../online/PuzzleCard';
 import CollectionCard from '../online/CollectionCard';
+import Avatar from '../online/Avatar';
 
 export const Route = createLazyFileRoute('/_layout/profile/$userId')({
   component: memo(function ProfilePage() {
     useRouteProtection('online');
     const navigate = useNavigate();
     const { me } = useOnline();
-    const avatarQuery = useQuery(avatarQueryOptions(Route.useParams().userId));
     const { data: userBrief } = useSuspenseQuery(
       userBriefQueryOptions(Route.useParams().userId)
     );
@@ -46,15 +45,11 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
       <ResponsiveLayout>
         <div className="flex flex-col gap-4 w-full max-w-[800px] self-center mt-8">
           <div className="flex gap-8 items-start flex-wrap">
-            {avatarQuery.isSuccess ? (
-              <img
-                src={avatarQuery.data ?? undefined}
-                alt={`${userBrief.name}'s avatar`}
-                className="w-24 h-24 mt-4 rounded-full"
-              />
-            ) : (
-              <Loading className="w-24 h-24 mt-4" />
-            )}
+            <Avatar
+              userId={userBrief.id}
+              username={userBrief.name}
+              className="w-24 h-24"
+            />
             <div className="flex flex-col gap-1 flex-1 min-w-[320px]">
               <span className="text-3xl font-bold">{userBrief.name}</span>
               {userBrief.title && (
@@ -112,7 +107,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
         </div>
         <div className="divider" />
         {isPending ? (
-          <Loading />
+          <Loading className="h-20" />
         ) : (
           <>
             <HorizontalScroller

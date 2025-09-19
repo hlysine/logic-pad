@@ -2,27 +2,18 @@ import { memo, useRef } from 'react';
 import { useOnline } from '../contexts/OnlineContext';
 import { IoCloudOffline } from 'react-icons/io5';
 import { api } from '../online/api';
-import { queryOptions, useQuery } from '@tanstack/react-query';
 import Loading from './Loading';
 import { Link, useRouterState } from '@tanstack/react-router';
 import deferredRedirect from '../router/deferredRedirect';
 import { FaBan } from 'react-icons/fa';
 import { RiRefreshFill } from 'react-icons/ri';
 import { cleanReload } from './settings/ResetSite';
-
-export const avatarQueryOptions = (userId: string | null) =>
-  queryOptions({
-    queryKey: ['avatar', userId],
-    queryFn: () => (userId ? api.getAvatar(userId) : null),
-    enabled: !!userId,
-    staleTime: Infinity,
-  });
+import Avatar from '../online/Avatar';
 
 // million-ignore
 export default memo(function AccountControl() {
   const { isOnline, versionMismatch, me, isPending, refresh } = useOnline();
   const location = useRouterState({ select: s => s.location });
-  const avatarQuery = useQuery(avatarQueryOptions(me?.id ?? null));
   const detailsRef = useRef<HTMLDetailsElement>(null);
   if (versionMismatch) {
     return (
@@ -79,15 +70,7 @@ export default memo(function AccountControl() {
   return (
     <details ref={detailsRef} className="dropdown dropdown-end">
       <summary className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
-        {avatarQuery.isSuccess ? (
-          <img
-            src={avatarQuery.data ?? undefined}
-            alt={`${me.name}'s avatar`}
-            className="w-8 h-8 rounded-full"
-          />
-        ) : (
-          <Loading className="w-8 h-8" />
-        )}
+        <Avatar userId={me.id} username={me.name} className="w-8 h-8" />
         {me.name}
       </summary>
       <ul className="menu dropdown-content bg-base-300 text-base-content rounded-box z-50 w-52 mt-2 p-2 shadow-lg">

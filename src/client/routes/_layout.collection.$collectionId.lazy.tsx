@@ -234,7 +234,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   }}
                 >
                   <FaTrash size={16} />
-                  Delete puzzles
+                  Remove selected
                 </button>
               </>
             )}

@@ -1,3 +1,13 @@
+# 19/9/2025
+
+**PREVIEW BRANCH**
+
+- Added support for user mentions in comments
+  - Type `@` followed by the username to mention a user
+  - Mentioned users will receive a notification
+- Profile page optimizations and UI improvements
+- The user avatar is now shown for a user's "created puzzles" collection
+
 # 18/9/2025
 
 **PREVIEW BRANCH**

@@ -15,6 +15,7 @@ import {
   FrontPage,
   Comment,
   Notification,
+  UserAutocomplete,
 } from './data';
 import {
   DataTag,
@@ -408,6 +409,14 @@ export const api = {
     return await axios
       .get<ListResponse<CollectionBrief>>(`/user/me/collections`, {
         params: { ...query, cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  userAutocomplete: async (q: string) => {
+    return await axios
+      .get<UserAutocomplete[]>(`/user/autocomplete`, {
+        params: { q },
       })
       .then(res => res.data)
       .catch(rethrowError);

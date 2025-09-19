@@ -27,7 +27,6 @@ export default memo(function CollectionSidebar({
   const { me } = useOnline();
   const { id, puzzle } = useOnlinePuzzle();
   collectionId ??= puzzle?.series?.id;
-  console.log('collection', collectionId);
   const collection = useQuery({
     ...collectionQueryOptions(collectionId!),
     enabled: !!collectionId,

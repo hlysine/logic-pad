@@ -188,7 +188,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
 
   useEffect(() => {
     const eventHandler = () => {
-      console.log('Event triggered');
+      console.log('Visibility changed');
       if (document.visibilityState === 'hidden') {
         msElapsedTime.current += Date.now() - activeStartTick.current;
         if (id) onlineSolveTracker.sendSolving(id, msElapsedTime.current);
@@ -197,10 +197,8 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
         activeStartTick.current = Date.now();
       }
     };
-    console.log('Adding event listener');
     document.addEventListener('visibilitychange', eventHandler, false);
     return () => {
-      console.log('Removing event listener');
       document.removeEventListener('visibilitychange', eventHandler);
     };
   }, [id, isOnline, me]);

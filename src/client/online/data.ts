@@ -104,6 +104,11 @@ export interface CollectionFollow {
   followed: boolean;
 }
 
+export interface UserAutocomplete {
+  id: string;
+  name: string;
+}
+
 export interface UserDetail {
   accessedAt: string;
   followCount: number;

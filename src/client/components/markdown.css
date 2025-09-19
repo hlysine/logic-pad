@@ -39,7 +39,11 @@
 }
 
 .markdown .spoiler:not(.spoiler-reveal) {
-  @apply bg-base-300 text-transparent select-none;
+  @apply bg-base-300 text-transparent select-none border-0;
+}
+
+.markdown .spoiler:not(.spoiler-reveal) * {
+  @apply !bg-base-300 !text-transparent !select-none !border-0 !rounded-md;
 }
 
 .markdown blockquote {

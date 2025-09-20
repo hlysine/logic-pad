@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { ConfigType, ComparisonConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
 import { COMPARISONS, Comparison } from '@logic-pad/core/data/primitives';
+import ConfigItem from './ConfigItem';
 
 export interface ComparisonConfigProps {
   configurable: Configurable;
@@ -30,8 +31,7 @@ export default memo(function ComparisonConfig({
     config.field as keyof typeof configurable
   ] as unknown as Comparison;
   return (
-    <div className="flex p-2 gap-4 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <select
         className="select select-bordered w-36"
         value={value}
@@ -45,7 +45,7 @@ export default memo(function ComparisonConfig({
           </option>
         ))}
       </select>
-    </div>
+    </ConfigItem>
   );
 });
 

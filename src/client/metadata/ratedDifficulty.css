@@ -1,0 +1,12 @@
+.animate-grow {
+  animation: grow 0.3s ease-out forwards;
+}
+
+@keyframes grow {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}

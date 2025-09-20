@@ -12,6 +12,12 @@ export default class MysteryRule
   extends Rule
   implements FinalValidationHandler, GridChangeHandler, GridResizeHandler
 {
+  public readonly title = 'Alternate Solution';
+
+  public get configExplanation() {
+    return 'You may use multiple instances of this rule to provide multiple alternate solutions.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['.']).addSymbol(
       new CustomTextSymbol('', GridData.create([]), 0, 0, '?')
@@ -25,6 +31,8 @@ export default class MysteryRule
       resizable: false,
       field: 'solution',
       description: 'Solution',
+      explanation:
+        'The alternate solution to the puzzle. Does not need to satisfy puzzle rules / symbols.',
       configurable: true,
     },
     {
@@ -32,6 +40,7 @@ export default class MysteryRule
       default: true,
       field: 'visible',
       description: 'Visible',
+      explanation: 'Display this rule to the player.',
       configurable: true,
     },
   ]);

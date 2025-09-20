@@ -10,237 +10,621 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './../routes/__root'
+import { Route as AuthRouteImport } from './../routes/auth'
+import { Route as IndexRouteImport } from './../routes/index'
+import { Route as OauthCallbackRouteImport } from './../routes/oauth.callback'
+import { Route as LayoutSettingsRouteImport } from './../routes/_layout.settings'
+import { Route as LayoutSearchRouteImport } from './../routes/_layout.search'
+import { Route as LayoutRulesRouteImport } from './../routes/_layout.rules'
+import { Route as LayoutPrivacyPolicyRouteImport } from './../routes/_layout.privacy-policy'
+import { Route as LayoutMyStuffRouteImport } from './../routes/_layout.my-stuff'
+import { Route as LayoutMyFollowsRouteImport } from './../routes/_layout.my-follows'
+import { Route as LayoutSolveIndexRouteImport } from './../routes/_layout.solve.index'
+import { Route as LayoutSearchIndexRouteImport } from './../routes/_layout.search.index'
+import { Route as LayoutPerfectionIndexRouteImport } from './../routes/_layout.perfection.index'
+import { Route as LayoutMyStuffIndexRouteImport } from './../routes/_layout.my-stuff.index'
+import { Route as LayoutCreateIndexRouteImport } from './../routes/_layout.create.index'
+import { Route as LayoutSolvePuzzleIdRouteImport } from './../routes/_layout.solve.$puzzleId'
+import { Route as LayoutSearchPuzzlesRouteImport } from './../routes/_layout.search.puzzles'
+import { Route as LayoutSearchCollectionsRouteImport } from './../routes/_layout.search.collections'
+import { Route as LayoutProfileUserIdRouteImport } from './../routes/_layout.profile.$userId'
+import { Route as LayoutPerfectionPuzzleIdRouteImport } from './../routes/_layout.perfection.$puzzleId'
+import { Route as LayoutMyStuffPuzzlesRouteImport } from './../routes/_layout.my-stuff.puzzles'
+import { Route as LayoutMyStuffCollectionsRouteImport } from './../routes/_layout.my-stuff.collections'
+import { Route as LayoutCreatePuzzleIdRouteImport } from './../routes/_layout.create.$puzzleId'
+import { Route as LayoutCollectionCollectionIdRouteImport } from './../routes/_layout.collection.$collectionId'
 
-import { Route as rootRoute } from './../routes/__root'
-import { Route as IndexImport } from './../routes/index'
-import { Route as ContextLayoutSolveImport } from './../routes/_context._layout.solve'
-import { Route as ContextLayoutPerfectionImport } from './../routes/_context._layout.perfection'
-import { Route as ContextLayoutCreateImport } from './../routes/_context._layout.create'
+const LayoutLazyRouteImport = createFileRoute('/_layout')()
+const LayoutUploaderLazyRouteImport = createFileRoute('/_layout/uploader')()
 
-// Create Virtual Routes
-
-const ContextLazyImport = createFileRoute('/_context')()
-const ContextLayoutLazyImport = createFileRoute('/_context/_layout')()
-
-// Create/Update Routes
-
-const ContextLazyRoute = ContextLazyImport.update({
-  id: '/_context',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./../routes/_context.lazy').then((d) => d.Route))
-
-const IndexRoute = IndexImport.update({
+const LayoutLazyRoute = LayoutLazyRouteImport.update({
+  id: '/_layout',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./../routes/_layout.lazy').then((d) => d.Route))
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const ContextLayoutLazyRoute = ContextLayoutLazyImport.update({
-  id: '/_layout',
-  getParentRoute: () => ContextLazyRoute,
+const LayoutUploaderLazyRoute = LayoutUploaderLazyRouteImport.update({
+  id: '/uploader',
+  path: '/uploader',
+  getParentRoute: () => LayoutLazyRoute,
 } as any).lazy(() =>
-  import('./../routes/_context._layout.lazy').then((d) => d.Route),
+  import('./../routes/_layout.uploader.lazy').then((d) => d.Route),
 )
-
-const ContextLayoutSolveRoute = ContextLayoutSolveImport.update({
-  id: '/solve',
-  path: '/solve',
-  getParentRoute: () => ContextLayoutLazyRoute,
+const OauthCallbackRoute = OauthCallbackRouteImport.update({
+  id: '/oauth/callback',
+  path: '/oauth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => LayoutLazyRoute,
 } as any).lazy(() =>
-  import('./../routes/_context._layout.solve.lazy').then((d) => d.Route),
+  import('./../routes/_layout.settings.lazy').then((d) => d.Route),
 )
-
-const ContextLayoutPerfectionRoute = ContextLayoutPerfectionImport.update({
-  id: '/perfection',
-  path: '/perfection',
-  getParentRoute: () => ContextLayoutLazyRoute,
+const LayoutSearchRoute = LayoutSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => LayoutLazyRoute,
+} as any)
+const LayoutRulesRoute = LayoutRulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
+  getParentRoute: () => LayoutLazyRoute,
+} as any)
+const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => LayoutLazyRoute,
+} as any)
+const LayoutMyStuffRoute = LayoutMyStuffRouteImport.update({
+  id: '/my-stuff',
+  path: '/my-stuff',
+  getParentRoute: () => LayoutLazyRoute,
+} as any)
+const LayoutMyFollowsRoute = LayoutMyFollowsRouteImport.update({
+  id: '/my-follows',
+  path: '/my-follows',
+  getParentRoute: () => LayoutLazyRoute,
 } as any).lazy(() =>
-  import('./../routes/_context._layout.perfection.lazy').then((d) => d.Route),
+  import('./../routes/_layout.my-follows.lazy').then((d) => d.Route),
 )
-
-const ContextLayoutCreateRoute = ContextLayoutCreateImport.update({
-  id: '/create',
-  path: '/create',
-  getParentRoute: () => ContextLayoutLazyRoute,
+const LayoutSolveIndexRoute = LayoutSolveIndexRouteImport.update({
+  id: '/solve/',
+  path: '/solve/',
+  getParentRoute: () => LayoutLazyRoute,
 } as any).lazy(() =>
-  import('./../routes/_context._layout.create.lazy').then((d) => d.Route),
+  import('./../routes/_layout.solve.index.lazy').then((d) => d.Route),
 )
+const LayoutSearchIndexRoute = LayoutSearchIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutSearchRoute,
+} as any)
+const LayoutPerfectionIndexRoute = LayoutPerfectionIndexRouteImport.update({
+  id: '/perfection/',
+  path: '/perfection/',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.perfection.index.lazy').then((d) => d.Route),
+)
+const LayoutMyStuffIndexRoute = LayoutMyStuffIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutMyStuffRoute,
+} as any)
+const LayoutCreateIndexRoute = LayoutCreateIndexRouteImport.update({
+  id: '/create/',
+  path: '/create/',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.create.index.lazy').then((d) => d.Route),
+)
+const LayoutSolvePuzzleIdRoute = LayoutSolvePuzzleIdRouteImport.update({
+  id: '/solve/$puzzleId',
+  path: '/solve/$puzzleId',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.solve.$puzzleId.lazy').then((d) => d.Route),
+)
+const LayoutSearchPuzzlesRoute = LayoutSearchPuzzlesRouteImport.update({
+  id: '/puzzles',
+  path: '/puzzles',
+  getParentRoute: () => LayoutSearchRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.search.puzzles.lazy').then((d) => d.Route),
+)
+const LayoutSearchCollectionsRoute = LayoutSearchCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => LayoutSearchRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.search.collections.lazy').then((d) => d.Route),
+)
+const LayoutProfileUserIdRoute = LayoutProfileUserIdRouteImport.update({
+  id: '/profile/$userId',
+  path: '/profile/$userId',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.profile.$userId.lazy').then((d) => d.Route),
+)
+const LayoutPerfectionPuzzleIdRoute =
+  LayoutPerfectionPuzzleIdRouteImport.update({
+    id: '/perfection/$puzzleId',
+    path: '/perfection/$puzzleId',
+    getParentRoute: () => LayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./../routes/_layout.perfection.$puzzleId.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const LayoutMyStuffPuzzlesRoute = LayoutMyStuffPuzzlesRouteImport.update({
+  id: '/puzzles',
+  path: '/puzzles',
+  getParentRoute: () => LayoutMyStuffRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.my-stuff.puzzles.lazy').then((d) => d.Route),
+)
+const LayoutMyStuffCollectionsRoute =
+  LayoutMyStuffCollectionsRouteImport.update({
+    id: '/collections',
+    path: '/collections',
+    getParentRoute: () => LayoutMyStuffRoute,
+  } as any).lazy(() =>
+    import('./../routes/_layout.my-stuff.collections.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+const LayoutCreatePuzzleIdRoute = LayoutCreatePuzzleIdRouteImport.update({
+  id: '/create/$puzzleId',
+  path: '/create/$puzzleId',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.create.$puzzleId.lazy').then((d) => d.Route),
+)
+const LayoutCollectionCollectionIdRoute =
+  LayoutCollectionCollectionIdRouteImport.update({
+    id: '/collection/$collectionId',
+    path: '/collection/$collectionId',
+    getParentRoute: () => LayoutLazyRoute,
+  } as any).lazy(() =>
+    import('./../routes/_layout.collection.$collectionId.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/my-follows': typeof LayoutMyFollowsRoute
+  '/my-stuff': typeof LayoutMyStuffRouteWithChildren
+  '/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/rules': typeof LayoutRulesRoute
+  '/search': typeof LayoutSearchRouteWithChildren
+  '/settings': typeof LayoutSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
+  '/uploader': typeof LayoutUploaderLazyRoute
+  '/collection/$collectionId': typeof LayoutCollectionCollectionIdRoute
+  '/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
+  '/my-stuff/collections': typeof LayoutMyStuffCollectionsRoute
+  '/my-stuff/puzzles': typeof LayoutMyStuffPuzzlesRoute
+  '/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
+  '/profile/$userId': typeof LayoutProfileUserIdRoute
+  '/search/collections': typeof LayoutSearchCollectionsRoute
+  '/search/puzzles': typeof LayoutSearchPuzzlesRoute
+  '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
+  '/create': typeof LayoutCreateIndexRoute
+  '/my-stuff/': typeof LayoutMyStuffIndexRoute
+  '/perfection': typeof LayoutPerfectionIndexRoute
+  '/search/': typeof LayoutSearchIndexRoute
+  '/solve': typeof LayoutSolveIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/my-follows': typeof LayoutMyFollowsRoute
+  '/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/rules': typeof LayoutRulesRoute
+  '/settings': typeof LayoutSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
+  '/uploader': typeof LayoutUploaderLazyRoute
+  '/collection/$collectionId': typeof LayoutCollectionCollectionIdRoute
+  '/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
+  '/my-stuff/collections': typeof LayoutMyStuffCollectionsRoute
+  '/my-stuff/puzzles': typeof LayoutMyStuffPuzzlesRoute
+  '/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
+  '/profile/$userId': typeof LayoutProfileUserIdRoute
+  '/search/collections': typeof LayoutSearchCollectionsRoute
+  '/search/puzzles': typeof LayoutSearchPuzzlesRoute
+  '/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
+  '/create': typeof LayoutCreateIndexRoute
+  '/my-stuff': typeof LayoutMyStuffIndexRoute
+  '/perfection': typeof LayoutPerfectionIndexRoute
+  '/search': typeof LayoutSearchIndexRoute
+  '/solve': typeof LayoutSolveIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/_layout': typeof LayoutLazyRouteWithChildren
+  '/_layout/my-follows': typeof LayoutMyFollowsRoute
+  '/_layout/my-stuff': typeof LayoutMyStuffRouteWithChildren
+  '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/_layout/rules': typeof LayoutRulesRoute
+  '/_layout/search': typeof LayoutSearchRouteWithChildren
+  '/_layout/settings': typeof LayoutSettingsRoute
+  '/oauth/callback': typeof OauthCallbackRoute
+  '/_layout/uploader': typeof LayoutUploaderLazyRoute
+  '/_layout/collection/$collectionId': typeof LayoutCollectionCollectionIdRoute
+  '/_layout/create/$puzzleId': typeof LayoutCreatePuzzleIdRoute
+  '/_layout/my-stuff/collections': typeof LayoutMyStuffCollectionsRoute
+  '/_layout/my-stuff/puzzles': typeof LayoutMyStuffPuzzlesRoute
+  '/_layout/perfection/$puzzleId': typeof LayoutPerfectionPuzzleIdRoute
+  '/_layout/profile/$userId': typeof LayoutProfileUserIdRoute
+  '/_layout/search/collections': typeof LayoutSearchCollectionsRoute
+  '/_layout/search/puzzles': typeof LayoutSearchPuzzlesRoute
+  '/_layout/solve/$puzzleId': typeof LayoutSolvePuzzleIdRoute
+  '/_layout/create/': typeof LayoutCreateIndexRoute
+  '/_layout/my-stuff/': typeof LayoutMyStuffIndexRoute
+  '/_layout/perfection/': typeof LayoutPerfectionIndexRoute
+  '/_layout/search/': typeof LayoutSearchIndexRoute
+  '/_layout/solve/': typeof LayoutSolveIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/my-follows'
+    | '/my-stuff'
+    | '/privacy-policy'
+    | '/rules'
+    | '/search'
+    | '/settings'
+    | '/oauth/callback'
+    | '/uploader'
+    | '/collection/$collectionId'
+    | '/create/$puzzleId'
+    | '/my-stuff/collections'
+    | '/my-stuff/puzzles'
+    | '/perfection/$puzzleId'
+    | '/profile/$userId'
+    | '/search/collections'
+    | '/search/puzzles'
+    | '/solve/$puzzleId'
+    | '/create'
+    | '/my-stuff/'
+    | '/perfection'
+    | '/search/'
+    | '/solve'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/auth'
+    | '/my-follows'
+    | '/privacy-policy'
+    | '/rules'
+    | '/settings'
+    | '/oauth/callback'
+    | '/uploader'
+    | '/collection/$collectionId'
+    | '/create/$puzzleId'
+    | '/my-stuff/collections'
+    | '/my-stuff/puzzles'
+    | '/perfection/$puzzleId'
+    | '/profile/$userId'
+    | '/search/collections'
+    | '/search/puzzles'
+    | '/solve/$puzzleId'
+    | '/create'
+    | '/my-stuff'
+    | '/perfection'
+    | '/search'
+    | '/solve'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/_layout'
+    | '/_layout/my-follows'
+    | '/_layout/my-stuff'
+    | '/_layout/privacy-policy'
+    | '/_layout/rules'
+    | '/_layout/search'
+    | '/_layout/settings'
+    | '/oauth/callback'
+    | '/_layout/uploader'
+    | '/_layout/collection/$collectionId'
+    | '/_layout/create/$puzzleId'
+    | '/_layout/my-stuff/collections'
+    | '/_layout/my-stuff/puzzles'
+    | '/_layout/perfection/$puzzleId'
+    | '/_layout/profile/$userId'
+    | '/_layout/search/collections'
+    | '/_layout/search/puzzles'
+    | '/_layout/solve/$puzzleId'
+    | '/_layout/create/'
+    | '/_layout/my-stuff/'
+    | '/_layout/perfection/'
+    | '/_layout/search/'
+    | '/_layout/solve/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
+  LayoutLazyRoute: typeof LayoutLazyRouteWithChildren
+  OauthCallbackRoute: typeof OauthCallbackRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_layout': {
+      id: '/_layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof LayoutLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_context': {
-      id: '/_context'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof ContextLazyImport
-      parentRoute: typeof rootRoute
+    '/_layout/uploader': {
+      id: '/_layout/uploader'
+      path: '/uploader'
+      fullPath: '/uploader'
+      preLoaderRoute: typeof LayoutUploaderLazyRouteImport
+      parentRoute: typeof LayoutLazyRoute
     }
-    '/_context/_layout': {
-      id: '/_context/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof ContextLayoutLazyImport
-      parentRoute: typeof ContextLazyImport
+    '/oauth/callback': {
+      id: '/oauth/callback'
+      path: '/oauth/callback'
+      fullPath: '/oauth/callback'
+      preLoaderRoute: typeof OauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_context/_layout/create': {
-      id: '/_context/_layout/create'
-      path: '/create'
-      fullPath: '/create'
-      preLoaderRoute: typeof ContextLayoutCreateImport
-      parentRoute: typeof ContextLayoutLazyImport
+    '/_layout/settings': {
+      id: '/_layout/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof LayoutSettingsRouteImport
+      parentRoute: typeof LayoutLazyRoute
     }
-    '/_context/_layout/perfection': {
-      id: '/_context/_layout/perfection'
-      path: '/perfection'
-      fullPath: '/perfection'
-      preLoaderRoute: typeof ContextLayoutPerfectionImport
-      parentRoute: typeof ContextLayoutLazyImport
+    '/_layout/search': {
+      id: '/_layout/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof LayoutSearchRouteImport
+      parentRoute: typeof LayoutLazyRoute
     }
-    '/_context/_layout/solve': {
-      id: '/_context/_layout/solve'
+    '/_layout/rules': {
+      id: '/_layout/rules'
+      path: '/rules'
+      fullPath: '/rules'
+      preLoaderRoute: typeof LayoutRulesRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/privacy-policy': {
+      id: '/_layout/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof LayoutPrivacyPolicyRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/my-stuff': {
+      id: '/_layout/my-stuff'
+      path: '/my-stuff'
+      fullPath: '/my-stuff'
+      preLoaderRoute: typeof LayoutMyStuffRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/my-follows': {
+      id: '/_layout/my-follows'
+      path: '/my-follows'
+      fullPath: '/my-follows'
+      preLoaderRoute: typeof LayoutMyFollowsRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/solve/': {
+      id: '/_layout/solve/'
       path: '/solve'
       fullPath: '/solve'
-      preLoaderRoute: typeof ContextLayoutSolveImport
-      parentRoute: typeof ContextLayoutLazyImport
+      preLoaderRoute: typeof LayoutSolveIndexRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/search/': {
+      id: '/_layout/search/'
+      path: '/'
+      fullPath: '/search/'
+      preLoaderRoute: typeof LayoutSearchIndexRouteImport
+      parentRoute: typeof LayoutSearchRoute
+    }
+    '/_layout/perfection/': {
+      id: '/_layout/perfection/'
+      path: '/perfection'
+      fullPath: '/perfection'
+      preLoaderRoute: typeof LayoutPerfectionIndexRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/my-stuff/': {
+      id: '/_layout/my-stuff/'
+      path: '/'
+      fullPath: '/my-stuff/'
+      preLoaderRoute: typeof LayoutMyStuffIndexRouteImport
+      parentRoute: typeof LayoutMyStuffRoute
+    }
+    '/_layout/create/': {
+      id: '/_layout/create/'
+      path: '/create'
+      fullPath: '/create'
+      preLoaderRoute: typeof LayoutCreateIndexRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/solve/$puzzleId': {
+      id: '/_layout/solve/$puzzleId'
+      path: '/solve/$puzzleId'
+      fullPath: '/solve/$puzzleId'
+      preLoaderRoute: typeof LayoutSolvePuzzleIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/search/puzzles': {
+      id: '/_layout/search/puzzles'
+      path: '/puzzles'
+      fullPath: '/search/puzzles'
+      preLoaderRoute: typeof LayoutSearchPuzzlesRouteImport
+      parentRoute: typeof LayoutSearchRoute
+    }
+    '/_layout/search/collections': {
+      id: '/_layout/search/collections'
+      path: '/collections'
+      fullPath: '/search/collections'
+      preLoaderRoute: typeof LayoutSearchCollectionsRouteImport
+      parentRoute: typeof LayoutSearchRoute
+    }
+    '/_layout/profile/$userId': {
+      id: '/_layout/profile/$userId'
+      path: '/profile/$userId'
+      fullPath: '/profile/$userId'
+      preLoaderRoute: typeof LayoutProfileUserIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/perfection/$puzzleId': {
+      id: '/_layout/perfection/$puzzleId'
+      path: '/perfection/$puzzleId'
+      fullPath: '/perfection/$puzzleId'
+      preLoaderRoute: typeof LayoutPerfectionPuzzleIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/my-stuff/puzzles': {
+      id: '/_layout/my-stuff/puzzles'
+      path: '/puzzles'
+      fullPath: '/my-stuff/puzzles'
+      preLoaderRoute: typeof LayoutMyStuffPuzzlesRouteImport
+      parentRoute: typeof LayoutMyStuffRoute
+    }
+    '/_layout/my-stuff/collections': {
+      id: '/_layout/my-stuff/collections'
+      path: '/collections'
+      fullPath: '/my-stuff/collections'
+      preLoaderRoute: typeof LayoutMyStuffCollectionsRouteImport
+      parentRoute: typeof LayoutMyStuffRoute
+    }
+    '/_layout/create/$puzzleId': {
+      id: '/_layout/create/$puzzleId'
+      path: '/create/$puzzleId'
+      fullPath: '/create/$puzzleId'
+      preLoaderRoute: typeof LayoutCreatePuzzleIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
+    }
+    '/_layout/collection/$collectionId': {
+      id: '/_layout/collection/$collectionId'
+      path: '/collection/$collectionId'
+      fullPath: '/collection/$collectionId'
+      preLoaderRoute: typeof LayoutCollectionCollectionIdRouteImport
+      parentRoute: typeof LayoutLazyRoute
     }
   }
 }
 
-// Create and export the route tree
-
-interface ContextLayoutLazyRouteChildren {
-  ContextLayoutCreateRoute: typeof ContextLayoutCreateRoute
-  ContextLayoutPerfectionRoute: typeof ContextLayoutPerfectionRoute
-  ContextLayoutSolveRoute: typeof ContextLayoutSolveRoute
+interface LayoutMyStuffRouteChildren {
+  LayoutMyStuffCollectionsRoute: typeof LayoutMyStuffCollectionsRoute
+  LayoutMyStuffPuzzlesRoute: typeof LayoutMyStuffPuzzlesRoute
+  LayoutMyStuffIndexRoute: typeof LayoutMyStuffIndexRoute
 }
 
-const ContextLayoutLazyRouteChildren: ContextLayoutLazyRouteChildren = {
-  ContextLayoutCreateRoute: ContextLayoutCreateRoute,
-  ContextLayoutPerfectionRoute: ContextLayoutPerfectionRoute,
-  ContextLayoutSolveRoute: ContextLayoutSolveRoute,
+const LayoutMyStuffRouteChildren: LayoutMyStuffRouteChildren = {
+  LayoutMyStuffCollectionsRoute: LayoutMyStuffCollectionsRoute,
+  LayoutMyStuffPuzzlesRoute: LayoutMyStuffPuzzlesRoute,
+  LayoutMyStuffIndexRoute: LayoutMyStuffIndexRoute,
 }
 
-const ContextLayoutLazyRouteWithChildren =
-  ContextLayoutLazyRoute._addFileChildren(ContextLayoutLazyRouteChildren)
-
-interface ContextLazyRouteChildren {
-  ContextLayoutLazyRoute: typeof ContextLayoutLazyRouteWithChildren
-}
-
-const ContextLazyRouteChildren: ContextLazyRouteChildren = {
-  ContextLayoutLazyRoute: ContextLayoutLazyRouteWithChildren,
-}
-
-const ContextLazyRouteWithChildren = ContextLazyRoute._addFileChildren(
-  ContextLazyRouteChildren,
+const LayoutMyStuffRouteWithChildren = LayoutMyStuffRoute._addFileChildren(
+  LayoutMyStuffRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof ContextLayoutLazyRouteWithChildren
-  '/create': typeof ContextLayoutCreateRoute
-  '/perfection': typeof ContextLayoutPerfectionRoute
-  '/solve': typeof ContextLayoutSolveRoute
+interface LayoutSearchRouteChildren {
+  LayoutSearchCollectionsRoute: typeof LayoutSearchCollectionsRoute
+  LayoutSearchPuzzlesRoute: typeof LayoutSearchPuzzlesRoute
+  LayoutSearchIndexRoute: typeof LayoutSearchIndexRoute
 }
 
-export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof ContextLayoutLazyRouteWithChildren
-  '/create': typeof ContextLayoutCreateRoute
-  '/perfection': typeof ContextLayoutPerfectionRoute
-  '/solve': typeof ContextLayoutSolveRoute
+const LayoutSearchRouteChildren: LayoutSearchRouteChildren = {
+  LayoutSearchCollectionsRoute: LayoutSearchCollectionsRoute,
+  LayoutSearchPuzzlesRoute: LayoutSearchPuzzlesRoute,
+  LayoutSearchIndexRoute: LayoutSearchIndexRoute,
 }
 
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_context': typeof ContextLazyRouteWithChildren
-  '/_context/_layout': typeof ContextLayoutLazyRouteWithChildren
-  '/_context/_layout/create': typeof ContextLayoutCreateRoute
-  '/_context/_layout/perfection': typeof ContextLayoutPerfectionRoute
-  '/_context/_layout/solve': typeof ContextLayoutSolveRoute
+const LayoutSearchRouteWithChildren = LayoutSearchRoute._addFileChildren(
+  LayoutSearchRouteChildren,
+)
+
+interface LayoutLazyRouteChildren {
+  LayoutMyFollowsRoute: typeof LayoutMyFollowsRoute
+  LayoutMyStuffRoute: typeof LayoutMyStuffRouteWithChildren
+  LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
+  LayoutRulesRoute: typeof LayoutRulesRoute
+  LayoutSearchRoute: typeof LayoutSearchRouteWithChildren
+  LayoutSettingsRoute: typeof LayoutSettingsRoute
+  LayoutUploaderLazyRoute: typeof LayoutUploaderLazyRoute
+  LayoutCollectionCollectionIdRoute: typeof LayoutCollectionCollectionIdRoute
+  LayoutCreatePuzzleIdRoute: typeof LayoutCreatePuzzleIdRoute
+  LayoutPerfectionPuzzleIdRoute: typeof LayoutPerfectionPuzzleIdRoute
+  LayoutProfileUserIdRoute: typeof LayoutProfileUserIdRoute
+  LayoutSolvePuzzleIdRoute: typeof LayoutSolvePuzzleIdRoute
+  LayoutCreateIndexRoute: typeof LayoutCreateIndexRoute
+  LayoutPerfectionIndexRoute: typeof LayoutPerfectionIndexRoute
+  LayoutSolveIndexRoute: typeof LayoutSolveIndexRoute
 }
 
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/create' | '/perfection' | '/solve'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/create' | '/perfection' | '/solve'
-  id:
-    | '__root__'
-    | '/'
-    | '/_context'
-    | '/_context/_layout'
-    | '/_context/_layout/create'
-    | '/_context/_layout/perfection'
-    | '/_context/_layout/solve'
-  fileRoutesById: FileRoutesById
+const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
+  LayoutMyFollowsRoute: LayoutMyFollowsRoute,
+  LayoutMyStuffRoute: LayoutMyStuffRouteWithChildren,
+  LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
+  LayoutRulesRoute: LayoutRulesRoute,
+  LayoutSearchRoute: LayoutSearchRouteWithChildren,
+  LayoutSettingsRoute: LayoutSettingsRoute,
+  LayoutUploaderLazyRoute: LayoutUploaderLazyRoute,
+  LayoutCollectionCollectionIdRoute: LayoutCollectionCollectionIdRoute,
+  LayoutCreatePuzzleIdRoute: LayoutCreatePuzzleIdRoute,
+  LayoutPerfectionPuzzleIdRoute: LayoutPerfectionPuzzleIdRoute,
+  LayoutProfileUserIdRoute: LayoutProfileUserIdRoute,
+  LayoutSolvePuzzleIdRoute: LayoutSolvePuzzleIdRoute,
+  LayoutCreateIndexRoute: LayoutCreateIndexRoute,
+  LayoutPerfectionIndexRoute: LayoutPerfectionIndexRoute,
+  LayoutSolveIndexRoute: LayoutSolveIndexRoute,
 }
 
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ContextLazyRoute: typeof ContextLazyRouteWithChildren
-}
+const LayoutLazyRouteWithChildren = LayoutLazyRoute._addFileChildren(
+  LayoutLazyRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ContextLazyRoute: ContextLazyRouteWithChildren,
+  AuthRoute: AuthRoute,
+  LayoutLazyRoute: LayoutLazyRouteWithChildren,
+  OauthCallbackRoute: OauthCallbackRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_context"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_context": {
-      "filePath": "_context.lazy.tsx",
-      "children": [
-        "/_context/_layout"
-      ]
-    },
-    "/_context/_layout": {
-      "filePath": "_context._layout.lazy.tsx",
-      "parent": "/_context",
-      "children": [
-        "/_context/_layout/create",
-        "/_context/_layout/perfection",
-        "/_context/_layout/solve"
-      ]
-    },
-    "/_context/_layout/create": {
-      "filePath": "_context._layout.create.tsx",
-      "parent": "/_context/_layout"
-    },
-    "/_context/_layout/perfection": {
-      "filePath": "_context._layout.perfection.tsx",
-      "parent": "/_context/_layout"
-    },
-    "/_context/_layout/solve": {
-      "filePath": "_context._layout.solve.tsx",
-      "parent": "/_context/_layout"
-    }
-  }
-}
-ROUTE_MANIFEST_END */

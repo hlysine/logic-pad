@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { ConfigType, NullableBooleanConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
 import { FaTrashCan } from 'react-icons/fa6';
+import ConfigItem from './ConfigItem';
 
 export interface NullableBooleanConfigProps {
   configurable: Configurable;
@@ -19,8 +20,7 @@ export default memo(function BooleanConfig({
     config.field as keyof typeof configurable
   ] as unknown as boolean | null;
   return (
-    <div className="flex p-2 gap-4 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       {value === null ? (
         <button
           type="button"
@@ -60,7 +60,7 @@ export default memo(function BooleanConfig({
           />
         </div>
       )}
-    </div>
+    </ConfigItem>
   );
 });
 

@@ -13,7 +13,7 @@ export default abstract class EventIteratingSolver extends Solver {
       const worker = this.createWorker();
       worker.terminate();
       return Promise.resolve(true);
-    } catch (ex) {
+    } catch (_ex) {
       return Promise.resolve(false);
     }
   }

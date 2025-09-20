@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { cn } from '../../client/uiHelper.ts';
 import GridData from '@logic-pad/core/data/grid';
 
@@ -40,33 +40,31 @@ export default memo(function GridSizeEditor({
   size,
 }: GridSizeEditorProps) {
   size = size ?? 'md';
-  const [width, setWidth] = useState(grid.width);
-  const [height, setHeight] = useState(grid.height);
+  const widthRef = useRef<HTMLInputElement>(null);
+  const heightRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setWidth(grid.width);
-    setHeight(grid.height);
+    if (widthRef.current) widthRef.current.value = grid.width.toString();
+    if (heightRef.current) heightRef.current.value = grid.height.toString();
   }, [grid]);
 
   return (
-    <>
+    <div className="flex flex-col gap-2 tour-grid-size-editor">
       <div className="flex gap-2">
         <label className="form-control w-full max-w-xs">
           <div className="label">
             <span className="label-text">Width</span>
           </div>
           <input
+            ref={widthRef}
             type="number"
             min="0"
             step={1}
+            defaultValue={grid.width}
             className={cn(
               'input input-bordered w-full max-w-xs min-w-0',
               getInputSize(size)
             )}
-            value={width}
-            onChange={e => {
-              setWidth(Math.max(0, +e.target.value));
-            }}
           />
         </label>
         <label className="form-control w-full max-w-xs">
@@ -74,34 +72,37 @@ export default memo(function GridSizeEditor({
             <span className="label-text">Height</span>
           </div>
           <input
+            ref={heightRef}
             type="number"
             min="0"
             step={1}
+            defaultValue={grid.height}
             className={cn(
               'input input-bordered w-full max-w-xs min-w-0',
               getInputSize(size)
             )}
-            value={height}
-            onChange={e => {
-              setHeight(Math.max(0, +e.target.value));
-            }}
           />
         </label>
       </div>
       <button
         type="button"
-        className={cn(
-          'btn btn-outline btn-info',
-          (grid.width > width || grid.height > height) && 'btn-error',
-          getButtonSize(size)
-        )}
-        disabled={grid.width === width && grid.height === height}
+        className={cn('btn btn-outline btn-info', getButtonSize(size))}
         onClick={() => {
-          setGrid(grid.resize(width, height));
+          if (
+            widthRef.current?.reportValidity() &&
+            heightRef.current?.reportValidity()
+          ) {
+            setGrid(
+              grid.resize(
+                widthRef.current?.valueAsNumber ?? 0,
+                heightRef.current?.valueAsNumber ?? 0
+              )
+            );
+          }
         }}
       >
         Resize
       </button>
-    </>
+    </div>
   );
 });

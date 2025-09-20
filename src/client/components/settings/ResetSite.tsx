@@ -10,8 +10,7 @@ export async function cleanReload() {
       })
     );
   } finally {
-    // @ts-expect-error - for the few browsers that still support this option
-    window.location.reload(true);
+    window.location.href = new URL(window.location.href).origin;
   }
 }
 

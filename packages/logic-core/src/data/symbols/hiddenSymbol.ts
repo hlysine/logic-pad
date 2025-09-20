@@ -9,6 +9,12 @@ export default class HiddenSymbol
   extends Symbol
   implements SymbolDisplayHandler
 {
+  public readonly title = 'Hidden Symbol Marker';
+
+  public get configExplanation() {
+    return 'Other symbols in the same location will be hidden until this tile is colored correctly.';
+  }
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -29,6 +35,8 @@ export default class HiddenSymbol
       default: false,
       field: 'revealLocation',
       description: 'Reveal symbol location',
+      explanation:
+        'Whether to show this symbol when the tile is not yet colored correctly.',
       configurable: true,
     },
   ]);

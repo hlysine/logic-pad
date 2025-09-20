@@ -1,10 +1,10 @@
-import { createContext, memo, useCallback, useContext, useState } from 'react';
+import { createContext, memo, useCallback, use, useState } from 'react';
 import { Color } from '@logic-pad/core/data/primitives';
 import { GridContext } from './GridContext.tsx';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 
-type Presets = { name: string; symbol: Symbol }[];
+export type Presets = { name: string; symbol: Symbol }[];
 
 interface ToolboxContext {
   toolId: string | null;
@@ -60,7 +60,7 @@ function loadPresets(): Presets {
   }));
 }
 
-const context = createContext<ToolboxContext>({
+const Context = createContext<ToolboxContext>({
   toolId: null,
   name: null,
   description: null,
@@ -72,10 +72,10 @@ const context = createContext<ToolboxContext>({
 });
 
 export const useToolbox = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const ToolboxConsumer = context.Consumer;
+export const ToolboxConsumer = Context.Consumer;
 
 export default memo(function ToolboxContext({
   children,
@@ -111,7 +111,7 @@ export default memo(function ToolboxContext({
   );
 
   return (
-    <context.Provider
+    <Context
       value={{
         toolId,
         name,
@@ -124,6 +124,6 @@ export default memo(function ToolboxContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

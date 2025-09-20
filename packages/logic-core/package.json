@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.11.4",
+  "version": "0.15.3",
   "type": "module",
   "files": [
     "dist",
@@ -43,7 +43,7 @@
   "scripts": {
     "build": "rimraf dist/ && bun run codegen && bunx --bun tsc && bun run typegen",
     "lint": "cd ../../ && eslint ./packages/logic-core --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "codegen": "bun ./scripts/genEntry.ts && bun ./scripts/genImports.ts",
+    "codegen": "bun ./scripts/genImports.ts && bun ./scripts/genEntry.ts",
     "typegen": "bun ./scripts/genTypes.ts",
     "prepublishOnly": "bun run build"
   },
@@ -51,38 +51,21 @@
     "bun": ">=1.1.0"
   },
   "dependencies": {
-    "base64-arraybuffer": "^1.0.2",
     "compression-streams-polyfill": "^0.1.7",
-    "dedent": "^1.5.3",
     "event-iterator": "^2.0.0",
-    "events": "^3.3.0",
     "grilops": "^0.1.2",
-    "lodash": "^4.17.21",
     "logic-pad-solver-core": "^0.1.2",
     "z3-solver": "^4.13.0",
-    "zod": "^3.24.1"
+    "zod": "^4.0.17"
   },
   "devDependencies": {
-    "@types/bun": "^1.0.12",
-    "@types/dts-bundle": "^0.0.35",
-    "@types/lodash": "^4.17.0",
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
+    "@types/bun": "^1.2.20",
+    "@types/glob": "^9.0.0",
     "dts-bundle-generator": "^9.5.1",
-    "eslint": "^8.57.0",
-    "eslint-config-import": "^0.13.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^16.6.2",
-    "eslint-plugin-prettier": "^5.1.3",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-standard": "^5.0.0",
-    "fast-glob": "^3.3.2",
-    "prettier": "^3.2.5",
-    "rimraf": "^5.0.5",
-    "typescript": "^5.4.5"
+    "fast-glob": "^3.3.3",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.9.2"
   },
   "trustedDependencies": [
     "esbuild"

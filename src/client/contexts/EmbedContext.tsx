@@ -1,34 +1,42 @@
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, memo, use, useEffect, useState } from 'react';
 
 interface Features {
   instructions: boolean;
   metadata: boolean;
   checklist: boolean;
+  saveControl: boolean;
+  preview: boolean;
 }
 
 interface EmbedContext {
   features: Features;
   embedChildren: string[];
   setFeatures: (value: Features) => void;
-  setEmbedChildren: (value: string[]) => void;
+  setEmbedChildren: (
+    value: string[] | ((children: string[]) => string[])
+  ) => void;
+  isTopLevel: boolean;
 }
 
-const context = createContext<EmbedContext>({
+const Context = createContext<EmbedContext>({
   features: {
     instructions: true,
     metadata: true,
     checklist: true,
+    saveControl: true,
+    preview: true,
   },
   embedChildren: [],
   setFeatures: () => {},
   setEmbedChildren: () => {},
+  isTopLevel: true,
 });
 
 export const useEmbed = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const EmbedConsumer = context.Consumer;
+export const EmbedConsumer = Context.Consumer;
 
 export default memo(function EmbedContext({
   name,
@@ -44,33 +52,33 @@ export default memo(function EmbedContext({
       instructions: true,
       metadata: true,
       checklist: true,
+      saveControl: true,
+      preview: true,
     }
   );
-  const { embedChildren, setEmbedChildren } = useEmbed();
+  const { setEmbedChildren } = useEmbed();
   const [embedChildrenOnSelf, setEmbedChildrenOnSelf] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!embedChildren.includes(name)) {
-      setEmbedChildren([...embedChildren, name]);
-    }
+    const currentName = name;
+    setEmbedChildren(children => [...children, currentName]);
     return () => {
-      if (embedChildren.includes(name)) {
-        setEmbedChildren(embedChildren.filter(k => k !== name));
-      }
+      setEmbedChildren(children => children.filter(k => k !== currentName));
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <context.Provider
+    <Context
       value={{
         features,
         setFeatures,
         embedChildren: embedChildrenOnSelf,
         setEmbedChildren: setEmbedChildrenOnSelf,
+        isTopLevel: embedChildrenOnSelf.length === 0,
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

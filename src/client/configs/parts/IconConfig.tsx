@@ -2,6 +2,7 @@ import { memo, useEffect, useState } from 'react';
 import { ConfigType, IconConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
 import Autocomplete from '../../components/Autocomplete';
+import ConfigItem from './ConfigItem';
 
 export interface IconConfigProps {
   configurable: Configurable;
@@ -34,8 +35,7 @@ export default memo(function IconConfig({
     config.field as keyof typeof configurable
   ] as unknown as string;
   return (
-    <div className="flex p-2 gap-4 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <Autocomplete
         className="grow"
         items={iconList}
@@ -44,7 +44,7 @@ export default memo(function IconConfig({
           setConfig?.(config.field, e);
         }}
       />
-    </div>
+    </ConfigItem>
   );
 });
 

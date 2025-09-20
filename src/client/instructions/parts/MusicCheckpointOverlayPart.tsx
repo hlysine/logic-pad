@@ -2,10 +2,11 @@ import { PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
   instance as musicGridInstance,
 } from '@logic-pad/core/data/rules/musicGridRule';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, use, useEffect, useMemo, useState } from 'react';
 import { FaPlay } from 'react-icons/fa6';
 import GridOverlay from '../../grid/GridOverlay';
-import { playbackState } from './instruments';
+
+const instrumentsImport = import('./instruments');
 
 export interface MusicCheckpointOverlayPartProps {
   instruction: MusicGridRule;
@@ -14,6 +15,7 @@ export interface MusicCheckpointOverlayPartProps {
 export default memo(function MusicOverlayPart({
   instruction,
 }: MusicCheckpointOverlayPartProps) {
+  const instruments = use(instrumentsImport);
   const checkpointLines = useMemo(
     () => instruction.controlLines.filter(line => line.checkpoint),
     [instruction.controlLines]
@@ -24,7 +26,8 @@ export default memo(function MusicOverlayPart({
     if (!checkpointLines.find(line => line.column === activeCheckpoint)) {
       setActiveCheckpoint(0);
     }
-    playbackState.checkpoint = activeCheckpoint;
+    instruments.playbackState.checkpoint = activeCheckpoint;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkpointLines, activeCheckpoint]);
 
   if (checkpointLines.length === 0) return null;

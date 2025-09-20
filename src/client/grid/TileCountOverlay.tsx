@@ -13,6 +13,12 @@ import { mousePosition } from '../../client/uiHelper.ts';
 import ViewpointSymbol, {
   instance as viewpointInstance,
 } from '@logic-pad/core/data/symbols/viewpointSymbol';
+import FocusSymbol, {
+  instance as focusInstance,
+} from '@logic-pad/core/data/symbols/focusSymbol';
+import MinesweeperSymbol, {
+  instance as minesweeperInstance,
+} from '@logic-pad/core/data/symbols/minesweeperSymbol';
 import { move } from '@logic-pad/core/data/dataHelper';
 
 export interface TileCountOverlayProps {
@@ -57,6 +63,32 @@ function canvasTextBox(
   else ctx.fillText(text, x - textWidth + PADDING, y + PADDING);
 }
 
+function canvasGradientLine(
+  ctx: CanvasRenderingContext2D,
+  startX: number,
+  startY: number,
+  endX: number,
+  endY: number,
+  stroke:
+    | string
+    | CanvasGradient
+    | CanvasPattern
+    | ((gradient: CanvasGradient) => void)
+) {
+  if (typeof stroke === 'function') {
+    const gradient = ctx?.createLinearGradient(startX, startY, endX, endY);
+    stroke(gradient!);
+    stroke = gradient!;
+  }
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(startX, startY);
+  ctx.lineTo(endX, endY);
+  ctx.stroke();
+}
+
 export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
   const { theme } = useTheme();
   const canvasRef = useRef<RawCanvasRef>(null);
@@ -88,6 +120,7 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
       keydown: true,
       keyup: true,
       preventDefault: true,
+      useKey: true,
     },
     [canvasRef, tileSize]
   );
@@ -147,65 +180,45 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
             start1.x = position.x * tileSize;
             start1.y = position.y * tileSize;
             end1.x = position.x * tileSize;
-            end1.y = Math.max(
-              0,
-              position.y * tileSize - localMaxSize * tileSize
-            );
-            start2.x = position.x * tileSize + tileSize;
+            end1.y = Math.max(0, position.y - localMaxSize) * tileSize;
+            start2.x = (position.x + 1) * tileSize;
             start2.y = position.y * tileSize;
-            end2.x = position.x * tileSize + tileSize;
-            end2.y = Math.max(
-              0,
-              position.y * tileSize - localMaxSize * tileSize
-            );
+            end2.x = (position.x + 1) * tileSize;
+            end2.y = Math.max(0, position.y - localMaxSize) * tileSize;
             break;
           case Direction.Down:
             start1.x = position.x * tileSize;
-            start1.y = position.y * tileSize + tileSize;
+            start1.y = (position.y + 1) * tileSize;
             end1.x = position.x * tileSize;
-            end1.y = Math.min(
-              grid.height * tileSize,
-              position.y * tileSize + tileSize + localMaxSize * tileSize
-            );
-            start2.x = position.x * tileSize + tileSize;
-            start2.y = position.y * tileSize + tileSize;
-            end2.x = position.x * tileSize + tileSize;
-            end2.y = Math.min(
-              grid.height * tileSize,
-              position.y * tileSize + tileSize + localMaxSize * tileSize
-            );
+            end1.y =
+              Math.min(grid.height, position.y + 1 + localMaxSize) * tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = (position.x + 1) * tileSize;
+            end2.y =
+              Math.min(grid.height, position.y + 1 + localMaxSize) * tileSize;
             break;
           case Direction.Left:
             start1.x = position.x * tileSize;
             start1.y = position.y * tileSize;
-            end1.x = Math.max(
-              0,
-              position.x * tileSize - localMaxSize * tileSize
-            );
+            end1.x = Math.max(0, position.x - localMaxSize) * tileSize;
             end1.y = position.y * tileSize;
             start2.x = position.x * tileSize;
-            start2.y = position.y * tileSize + tileSize;
-            end2.x = Math.max(
-              0,
-              position.x * tileSize - localMaxSize * tileSize
-            );
-            end2.y = position.y * tileSize + tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = Math.max(0, position.x - localMaxSize) * tileSize;
+            end2.y = (position.y + 1) * tileSize;
             break;
           case Direction.Right:
-            start1.x = position.x * tileSize + tileSize;
+            start1.x = (position.x + 1) * tileSize;
             start1.y = position.y * tileSize;
-            end1.x = Math.min(
-              grid.width * tileSize,
-              position.x * tileSize + tileSize + localMaxSize * tileSize
-            );
+            end1.x =
+              Math.min(grid.width, position.x + 1 + localMaxSize) * tileSize;
             end1.y = position.y * tileSize;
-            start2.x = position.x * tileSize + tileSize;
-            start2.y = position.y * tileSize + tileSize;
-            end2.x = Math.min(
-              grid.width * tileSize,
-              position.x * tileSize + tileSize + localMaxSize * tileSize
-            );
-            end2.y = position.y * tileSize + tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x =
+              Math.min(grid.width, position.x + 1 + localMaxSize) * tileSize;
+            end2.y = (position.y + 1) * tileSize;
             break;
         }
         const gradient = ctx?.createLinearGradient(
@@ -223,17 +236,8 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
           1,
           `${accentColor.substring(0, accentColor.length - 1)}/0)`
         );
-        ctx.strokeStyle = gradient!;
-        ctx.lineWidth = 5;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        ctx.moveTo(start1.x, start1.y);
-        ctx.lineTo(end1.x, end1.y);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(start2.x, start2.y);
-        ctx.lineTo(end2.x, end2.y);
-        ctx.stroke();
+        canvasGradientLine(ctx, start1.x, start1.y, end1.x, end1.y, gradient!);
+        canvasGradientLine(ctx, start2.x, start2.y, end2.x, end2.y, gradient!);
       }
 
       canvasTextBox(
@@ -245,44 +249,267 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
         accentColor,
         30
       );
-    } else {
+      return;
+    }
+
+    const focus = grid.symbols
+      .get(focusInstance.id)
+      ?.find(
+        sym =>
+          Math.floor(sym.x) === position.x && Math.floor(sym.y) === position.y
+      ) as FocusSymbol | undefined;
+
+    if (focus) {
       const textX =
         position.x < 2
           ? position.x * tileSize + tileSize + PADDING
           : position.x * tileSize - PADDING;
       const textY = position.y * tileSize;
 
-      const positions: Position[] = [];
-      grid.iterateArea(
-        position,
-        t => t.exists && t.color === tile.color,
-        (_, x, y) => {
-          positions.push({ x, y });
+      const count = focus.countTiles(grid);
+      for (const direction of DIRECTIONS) {
+        const start1 = { x: 0, y: 0 };
+        const start2 = { x: 0, y: 0 };
+        const end1 = { x: 0, y: 0 };
+        const end2 = { x: 0, y: 0 };
+        switch (direction) {
+          case Direction.Up:
+            start1.x = position.x * tileSize;
+            start1.y = position.y * tileSize;
+            end1.x = position.x * tileSize;
+            end1.y = Math.max(0, position.y - 1) * tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = position.y * tileSize;
+            end2.x = (position.x + 1) * tileSize;
+            end2.y = Math.max(0, position.y - 1) * tileSize;
+            break;
+          case Direction.Down:
+            start1.x = position.x * tileSize;
+            start1.y = (position.y + 1) * tileSize;
+            end1.x = position.x * tileSize;
+            end1.y = Math.min(grid.height, position.y + 2) * tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = (position.x + 1) * tileSize;
+            end2.y = Math.min(grid.height, position.y + 2) * tileSize;
+            break;
+          case Direction.Left:
+            start1.x = position.x * tileSize;
+            start1.y = position.y * tileSize;
+            end1.x = Math.max(0, position.x - 1) * tileSize;
+            end1.y = position.y * tileSize;
+            start2.x = position.x * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = Math.max(0, position.x - 1) * tileSize;
+            end2.y = (position.y + 1) * tileSize;
+            break;
+          case Direction.Right:
+            start1.x = (position.x + 1) * tileSize;
+            start1.y = position.y * tileSize;
+            end1.x = Math.min(grid.width, position.x + 2) * tileSize;
+            end1.y = position.y * tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = Math.min(grid.width, position.x + 2) * tileSize;
+            end2.y = (position.y + 1) * tileSize;
+            break;
         }
-      );
-
-      positions.forEach(({ x, y }) => {
-        ctx.fillStyle = accentColor;
-        ctx.globalAlpha = 0.5;
-        ctx.fillRect(
-          Math.floor(x * tileSize),
-          Math.floor(y * tileSize),
-          Math.floor((x + 1) * tileSize) - Math.floor(x * tileSize),
-          Math.floor((y + 1) * tileSize) - Math.floor(y * tileSize)
+        const gradient = ctx?.createLinearGradient(
+          start1.x,
+          start1.y,
+          end1.x,
+          end1.y
         );
-        ctx.globalAlpha = 1;
-      });
+        gradient?.addColorStop(0, accentColor);
+        gradient?.addColorStop(
+          2 / 3,
+          `${accentColor.substring(0, accentColor.length - 1)}/0)`
+        );
+        gradient?.addColorStop(
+          1,
+          `${accentColor.substring(0, accentColor.length - 1)}/0)`
+        );
+        canvasGradientLine(ctx, start1.x, start1.y, end1.x, end1.y, gradient!);
+        canvasGradientLine(ctx, start2.x, start2.y, end2.x, end2.y, gradient!);
+      }
 
       canvasTextBox(
         ctx,
         textX,
         textY,
         position.x < 2 ? 'left' : 'right',
-        `${positions.length}`,
+        `${count.completed}/${count.possible === Number.MAX_SAFE_INTEGER ? '?' : count.possible}`,
         accentColor,
         30
       );
+      return;
     }
+
+    const minesweeper = grid.symbols
+      .get(minesweeperInstance.id)
+      ?.find(
+        sym =>
+          Math.floor(sym.x) === position.x && Math.floor(sym.y) === position.y
+      ) as MinesweeperSymbol | undefined;
+
+    if (minesweeper) {
+      const textX =
+        position.x < 2
+          ? position.x * tileSize + tileSize + PADDING
+          : position.x * tileSize - PADDING;
+      const textY = position.y * tileSize;
+
+      const count = minesweeper.countTiles(grid);
+      for (const direction of DIRECTIONS) {
+        const start1 = { x: 0, y: 0 };
+        const start2 = { x: 0, y: 0 };
+        const startCenter = { x: 0, y: 0 };
+        const end1 = { x: 0, y: 0 };
+        const end2 = { x: 0, y: 0 };
+        const endCenter = { x: 0, y: 0 };
+        switch (direction) {
+          case Direction.Up:
+            start1.x = position.x * tileSize;
+            start1.y = Math.max(0, position.y - 1) * tileSize;
+            end1.x = Math.max(0, position.x - 1) * tileSize;
+            end1.y = Math.max(0, position.y - 1) * tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = Math.max(0, position.y - 1) * tileSize;
+            end2.x = Math.min(grid.width, position.x + 2) * tileSize;
+            end2.y = Math.max(0, position.y - 1) * tileSize;
+            startCenter.x = position.x * tileSize;
+            startCenter.y = Math.max(0, position.y - 1) * tileSize;
+            endCenter.x = (position.x + 1) * tileSize;
+            endCenter.y = Math.max(0, position.y - 1) * tileSize;
+            break;
+          case Direction.Down:
+            start1.x = position.x * tileSize;
+            start1.y = Math.min(grid.height, position.y + 2) * tileSize;
+            end1.x = Math.max(0, position.x - 1) * tileSize;
+            end1.y = Math.min(grid.height, position.y + 2) * tileSize;
+            start2.x = (position.x + 1) * tileSize;
+            start2.y = Math.min(grid.height, position.y + 2) * tileSize;
+            end2.x = Math.min(grid.width, position.x + 2) * tileSize;
+            end2.y = Math.min(grid.height, position.y + 2) * tileSize;
+            startCenter.x = position.x * tileSize;
+            startCenter.y = Math.min(grid.height, position.y + 2) * tileSize;
+            endCenter.x = (position.x + 1) * tileSize;
+            endCenter.y = Math.min(grid.height, position.y + 2) * tileSize;
+            break;
+          case Direction.Left:
+            start1.x = Math.max(0, position.x - 1) * tileSize;
+            start1.y = position.y * tileSize;
+            end1.x = Math.max(0, position.x - 1) * tileSize;
+            end1.y = Math.max(0, position.y - 1) * tileSize;
+            start2.x = Math.max(0, position.x - 1) * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = Math.max(0, position.x - 1) * tileSize;
+            end2.y = Math.min(grid.height, position.y + 2) * tileSize;
+            startCenter.x = Math.max(0, position.x - 1) * tileSize;
+            startCenter.y = position.y * tileSize;
+            endCenter.x = Math.max(0, position.x - 1) * tileSize;
+            endCenter.y = (position.y + 1) * tileSize;
+            break;
+          case Direction.Right:
+            start1.x = Math.min(grid.width, position.x + 2) * tileSize;
+            start1.y = position.y * tileSize;
+            end1.x = Math.min(grid.width, position.x + 2) * tileSize;
+            end1.y = Math.max(0, position.y - 1) * tileSize;
+            start2.x = Math.min(grid.width, position.x + 2) * tileSize;
+            start2.y = (position.y + 1) * tileSize;
+            end2.x = Math.min(grid.width, position.x + 2) * tileSize;
+            end2.y = Math.min(grid.height, position.y + 2) * tileSize;
+            startCenter.x = Math.min(grid.width, position.x + 2) * tileSize;
+            startCenter.y = position.y * tileSize;
+            endCenter.x = Math.min(grid.width, position.x + 2) * tileSize;
+            endCenter.y = (position.y + 1) * tileSize;
+            break;
+        }
+        const gradientFunc = (g: CanvasGradient) => {
+          g.addColorStop(0, accentColor);
+          g.addColorStop(
+            2 / 3,
+            `${accentColor.substring(0, accentColor.length - 1)}/0)`
+          );
+          g.addColorStop(
+            1,
+            `${accentColor.substring(0, accentColor.length - 1)}/0)`
+          );
+        };
+        canvasGradientLine(
+          ctx,
+          start1.x,
+          start1.y,
+          end1.x,
+          end1.y,
+          gradientFunc
+        );
+        canvasGradientLine(
+          ctx,
+          start2.x,
+          start2.y,
+          end2.x,
+          end2.y,
+          gradientFunc
+        );
+        canvasGradientLine(
+          ctx,
+          startCenter.x,
+          startCenter.y,
+          endCenter.x,
+          endCenter.y,
+          accentColor
+        );
+      }
+
+      canvasTextBox(
+        ctx,
+        textX,
+        textY,
+        position.x < 2 ? 'left' : 'right',
+        `${count.completed}/${count.possible === Number.MAX_SAFE_INTEGER ? '?' : count.possible}`,
+        accentColor,
+        30
+      );
+      return;
+    }
+
+    const textX =
+      position.x < 2
+        ? position.x * tileSize + tileSize + PADDING
+        : position.x * tileSize - PADDING;
+    const textY = position.y * tileSize;
+
+    const positions: Position[] = [];
+    grid.iterateArea(
+      position,
+      t => t.exists && t.color === tile.color,
+      (_, x, y) => {
+        positions.push({ x, y });
+      }
+    );
+
+    positions.forEach(({ x, y }) => {
+      ctx.fillStyle = accentColor;
+      ctx.globalAlpha = 0.5;
+      ctx.fillRect(
+        Math.floor(x * tileSize),
+        Math.floor(y * tileSize),
+        Math.floor((x + 1) * tileSize) - Math.floor(x * tileSize),
+        Math.floor((y + 1) * tileSize) - Math.floor(y * tileSize)
+      );
+      ctx.globalAlpha = 1;
+    });
+
+    canvasTextBox(
+      ctx,
+      textX,
+      textY,
+      position.x < 2 ? 'left' : 'right',
+      `${positions.length}`,
+      accentColor,
+      30
+    );
   }, [grid, position, accentColor, tileSize]);
 
   return (

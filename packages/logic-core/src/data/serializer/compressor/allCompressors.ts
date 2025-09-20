@@ -5,7 +5,7 @@ import DeflateCompressor from './deflateCompressor.js';
 
 const allCompressors = new Map<string, CompressorBase>();
 
-function register<T extends CompressorBase>(prototype: T) {
+function register(prototype: CompressorBase) {
   allCompressors.set(prototype.id, prototype);
 }
 
@@ -36,7 +36,7 @@ class MasterCompressor extends CompressorBase {
   }
 
   public async decompress(input: string): Promise<string> {
-    const match = input.match(/^([^_]+?)_(.+)$/);
+    const match = /^([^_]+?)_(.+)$/.exec(input);
     let compressorId: string;
     let compressed: string;
     if (match) {

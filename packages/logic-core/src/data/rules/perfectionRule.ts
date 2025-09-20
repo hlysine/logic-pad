@@ -18,6 +18,12 @@ export default class PerfectionRule
   extends Rule
   implements SetGridHandler, FinalValidationHandler
 {
+  public readonly title = 'Perfection';
+
+  public get configExplanation() {
+    return 'You should allow players to enable perfection mode themselves instead of enforcing this rule.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['w']).addSymbol(
       new CustomIconSymbol('', GridData.create(['w']), 0, 0, 'MdStars')

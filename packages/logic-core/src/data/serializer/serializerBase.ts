@@ -3,7 +3,7 @@ import GridConnections from '../gridConnections.js';
 import Rule from '../rules/rule.js';
 import TileData from '../tile.js';
 import Symbol from '../symbols/symbol.js';
-import { Puzzle } from '../puzzle.js';
+import { Puzzle, PuzzleData } from '../puzzle.js';
 import GridZones from '../gridZones.js';
 
 export default abstract class SerializerBase {
@@ -32,6 +32,8 @@ export default abstract class SerializerBase {
   public abstract parseSymbols(input: string): Map<string, Symbol[]>;
   public abstract stringifyGrid(grid: GridData): string;
   public abstract parseGrid(input: string): GridData;
+  public abstract stringifyGridWithSolution(puzzle: PuzzleData): string;
+  public abstract parseGridWithSolution(input: string): PuzzleData;
   public abstract stringifyPuzzle(puzzle: Puzzle): string;
   public abstract parsePuzzle(input: string): Puzzle;
 }

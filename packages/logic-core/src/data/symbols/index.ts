@@ -3,7 +3,7 @@ import * as symbols from './symbols.gen.js';
 
 const allSymbols = new Map<string, Symbol>();
 
-function register<T extends Symbol>(prototype: T) {
+function register(prototype: Symbol) {
   allSymbols.set(prototype.id, prototype);
 }
 

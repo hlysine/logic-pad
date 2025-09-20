@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, use, useState } from 'react';
 import GridData from '@logic-pad/core/data/grid';
 import Rule from '@logic-pad/core/data/rules/rule';
 import Symbol from '@logic-pad/core/data/symbols/symbol';
@@ -102,7 +102,7 @@ interface ConfigContext {
   setRef: (value: React.RefObject<HTMLElement> | undefined) => void;
 }
 
-const context = createContext<ConfigContext>({
+const Context = createContext<ConfigContext>({
   location: undefined,
   ref: undefined,
   setLocation: () => {},
@@ -110,10 +110,10 @@ const context = createContext<ConfigContext>({
 });
 
 export const useConfig = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const ConfigConsumer = context.Consumer;
+export const ConfigConsumer = Context.Consumer;
 
 export default memo(function ConfigContext({
   children,
@@ -128,7 +128,7 @@ export default memo(function ConfigContext({
   );
 
   return (
-    <context.Provider
+    <Context
       value={{
         location,
         ref,
@@ -137,6 +137,6 @@ export default memo(function ConfigContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

@@ -1,9 +1,10 @@
-import { memo, useMemo } from 'react';
+import { memo, Suspense, useMemo } from 'react';
 import { PartPlacement } from './parts/types';
 import { PartComponent, allParts } from './parts';
 import Instruction from '@logic-pad/core/data/instruction';
 import GridData from '@logic-pad/core/data/grid';
 import { useInstructionParts } from '../contexts/InstructionPartsContext';
+import Loading from '../components/Loading';
 
 interface InstructionPartsContextOutlet {
   placement: PartPlacement;
@@ -56,7 +57,9 @@ export default memo(function InstructionPartOutlet({
   return (
     <>
       {components.map(([Component, data], i) => (
-        <Component key={i} instruction={data} />
+        <Suspense key={i} fallback={<Loading />}>
+          <Component instruction={data} />
+        </Suspense>
       ))}
       <InstructionPartsContextOutlet placement={placement} />
     </>

@@ -6,9 +6,12 @@ import DirectionLinkerSymbol, {
 } from './directionLinkerSymbol.js';
 
 export default class LotusSymbol extends DirectionLinkerSymbol {
-  private static readonly linkedDirectionsFromOrientation: {
-    [key in Orientation]: DirectionLinkerMap;
-  } = {
+  public readonly title = 'Lotus';
+
+  private static readonly linkedDirectionsFromOrientation: Record<
+    Orientation,
+    DirectionLinkerMap
+  > = {
     [Orientation.Up]: {
       [Direction.Left]: Direction.Right,
       [Direction.Up]: Direction.Up,

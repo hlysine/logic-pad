@@ -179,7 +179,7 @@ export default memo(function WrapAroundOverlayPart({
       setTileConfig({
         width: grid.width,
         height: grid.height,
-        tileSize: computeTileSize(grid, responsiveScale),
+        tileSize: computeTileSize(grid, responsiveScale, true),
       });
     window.addEventListener('resize', resizeHandler);
     resizeHandler();

@@ -12,6 +12,8 @@ import RegionShapeRule from './regionShapeRule.js';
 import { SearchVariant } from './rule.js';
 
 export default class ContainsShapeRule extends RegionShapeRule {
+  public readonly title = 'Areas Contain Pattern';
+
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
     GridData.create(['nnnnn', 'nnnnn', 'wwwwn', 'nnnnn', 'nnnnn'])
   );
@@ -30,11 +32,13 @@ export default class ContainsShapeRule extends RegionShapeRule {
       configurable: true,
     },
     {
-      type: ConfigType.Tile,
+      type: ConfigType.Shape,
       default: ContainsShapeRule.EXAMPLE_GRID_LIGHT,
       resizable: true,
       field: 'pattern',
       description: 'Pattern',
+      explanation:
+        'The pattern to be contained. Must only include tiles of the selected color.',
       configurable: true,
     },
   ]);
@@ -94,6 +98,9 @@ export default class ContainsShapeRule extends RegionShapeRule {
     });
     const width = maxX - minX + 1;
     const height = maxY - minY + 1;
+    if (!Number.isFinite(width) || !Number.isFinite(height)) {
+      return GridData.create(0, 0);
+    }
     const tiles = array(width, height, (x, y) => {
       const tile = this.pattern.getTile(x + minX, y + minY);
       if (!tile.exists || tile.color !== Color.Gray) return tile;

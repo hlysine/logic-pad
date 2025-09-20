@@ -10,7 +10,7 @@ export default memo(function CustomIconTool() {
     <SymbolTool
       name="Custom Icon"
       order={302}
-      hotkey="shift+2"
+      hotkey="extraSymbols-3"
       defaultHidden={true}
       sample={sample}
       component={CustomIconSymbol}

@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, use, useState } from 'react';
 import GridData from '@logic-pad/core/data/grid';
 
 interface EditContext {
@@ -10,7 +10,7 @@ interface EditContext {
   clearHistory: (grid: GridData) => void;
 }
 
-const context = createContext<EditContext>({
+const Context = createContext<EditContext>({
   undoStack: [],
   redoStack: [],
   undo: () => undefined,
@@ -20,19 +20,21 @@ const context = createContext<EditContext>({
 });
 
 export const useEdit = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const EditConsumer = context.Consumer;
+export const EditConsumer = Context.Consumer;
 
 export default memo(function EditContext({
   children,
+  initialGrid = null,
 }: {
   children: React.ReactNode;
+  initialGrid?: GridData | null;
 }) {
   const [undoStack, setUndoStack] = useState<GridData[]>([]);
   const [redoStack, setRedoStack] = useState<GridData[]>([]);
-  const [lastGrid, setLastGrid] = useState<GridData | null>(null);
+  const [lastGrid, setLastGrid] = useState<GridData | null>(initialGrid);
 
   const addToUndoStack = (grid: GridData) => {
     setUndoStack(stack => {
@@ -84,7 +86,7 @@ export default memo(function EditContext({
   };
 
   return (
-    <context.Provider
+    <Context
       value={{
         undoStack,
         redoStack,
@@ -95,6 +97,6 @@ export default memo(function EditContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

@@ -41,8 +41,7 @@ export default class FocusBTModule extends BTModule {
     if (same > this.instr.number || same + gray < this.instr.number)
       return false;
 
-    if (!this.cachedCheckResult)
-      this.cachedCheckResult = this.buildCheckAndRating(grid);
+    this.cachedCheckResult ??= this.buildCheckAndRating(grid);
 
     return this.cachedCheckResult;
   }

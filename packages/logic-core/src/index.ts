@@ -19,8 +19,8 @@ import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import GridZones from './data/gridZones.js';
 import Instruction from './data/instruction.js';
-import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, WRAPPINGS, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
-import { MetadataSchema, PuzzleSchema } from './data/puzzle.js';
+import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, PuzzleType, State, WRAPPINGS, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
+import { MetadataSchema, PuzzleSchema, getPuzzleTypes, puzzleEquals, validatePuzzleChecklist } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
@@ -46,12 +46,14 @@ import UniqueShapeRule from './data/rules/uniqueShapeRule.js';
 import WrapAroundRule from './data/rules/wrapAroundRule.js';
 import { Serializer } from './data/serializer/allSerializers.js';
 import { Compressor } from './data/serializer/compressor/allCompressors.js';
+import ChecksumCompressor from './data/serializer/compressor/checksumCompressor.js';
 import CompressorBase from './data/serializer/compressor/compressorBase.js';
 import DeflateCompressor from './data/serializer/compressor/deflateCompressor.js';
 import GzipCompressor from './data/serializer/compressor/gzipCompressor.js';
 import StreamCompressor from './data/serializer/compressor/streamCompressor.js';
 import SerializerBase from './data/serializer/serializerBase.js';
-import SerializerV0 from './data/serializer/serializer_v0.js';
+import SerializerChecksum from './data/serializer/serializer_checksum.js';
+import SerializerV0, { OFFSETS, orientationChars } from './data/serializer/serializer_v0.js';
 import { getShapeVariants, normalizeShape, positionsToShape, sanitizePatternGrid, shapeEquals, tilesToShape } from './data/shapes.js';
 import { allSolvers } from './data/solver/allSolvers.js';
 import AutoSolver from './data/solver/auto/autoSolver.js';
@@ -154,6 +156,7 @@ export {
   Mode,
   ORIENTATIONS,
   Orientation,
+  PuzzleType,
   State,
   WRAPPINGS,
   Wrapping,
@@ -161,6 +164,9 @@ export {
   orientationToggle,
   MetadataSchema,
   PuzzleSchema,
+  getPuzzleTypes,
+  puzzleEquals,
+  validatePuzzleChecklist,
   BanPatternRule,
   CellCountPerZoneRule,
   CellCountRule,
@@ -187,12 +193,16 @@ export {
   WrapAroundRule,
   Serializer,
   Compressor,
+  ChecksumCompressor,
   CompressorBase,
   DeflateCompressor,
   GzipCompressor,
   StreamCompressor,
   SerializerBase,
+  SerializerChecksum,
   SerializerV0,
+  OFFSETS,
+  orientationChars,
   getShapeVariants,
   normalizeShape,
   positionsToShape,

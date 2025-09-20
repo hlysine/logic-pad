@@ -3,7 +3,7 @@ import * as modules from './modules.gen.js';
 
 const allZ3Modules = new Map<string, Z3Module>();
 
-function register<T extends Z3Module>(prototype: T) {
+function register(prototype: Z3Module) {
   allZ3Modules.set(prototype.id, prototype);
 }
 

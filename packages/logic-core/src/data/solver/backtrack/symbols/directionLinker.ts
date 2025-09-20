@@ -41,8 +41,7 @@ export default abstract class DirectionLinkerBTModule extends BTModule {
   }
 
   public checkGlobal(grid: BTGridData): CheckResult | false {
-    if (this.initialPositions === null)
-      this.initialPositions = this.getInitialPositions();
+    this.initialPositions ??= this.getInitialPositions();
 
     const tilesNeedCheck = IntArray2D.create(grid.width, grid.height);
     const ratings: Rating[] = [];

@@ -2,13 +2,14 @@ import { InstructionPartProps, PartPlacement, PartSpec } from './types';
 import MusicGridRule, {
   instance as musicGridInstance,
 } from '@logic-pad/core/data/rules/musicGridRule';
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import * as Tone from 'tone';
+import { memo, use, useEffect, useMemo, useRef, useState } from 'react';
 import { useGrid } from '../../contexts/GridContext.tsx';
 import GridCanvasOverlay, { RawCanvasRef } from '../../grid/GridCanvasOverlay';
 import { useTheme } from '../../contexts/ThemeContext.tsx';
-import { playbackState } from './instruments.ts';
 import { Color } from '@logic-pad/core/data/primitives';
+
+const ToneImport = import('tone');
+const instrumentsImport = import('./instruments.ts');
 
 const BLEED = 5;
 
@@ -40,14 +41,16 @@ function interpolateTrackPosition(
 export default memo(function MusicOverlayPart({
   instruction,
 }: MusicOverlayPartProps) {
+  const Tone = use(ToneImport);
+  const { playbackState } = use(instrumentsImport);
   const { grid } = useGrid();
   const canvasRef = useRef<RawCanvasRef>(null);
   const [tileSize, setTileSize] = useState(0);
   const targetRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
-  const [targetPosition, setTargetPosition] = useState(0);
   const tileAnimations = useRef<number[][]>([]);
   const prevPosition = useRef(-1);
+  const targetPosition = useRef(0);
 
   useEffect(() => {
     tileAnimations.current = Array.from({ length: grid.height }, () =>
@@ -78,7 +81,10 @@ export default memo(function MusicOverlayPart({
     return () => {
       Tone.getTransport().off('stop', handler);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const shouldUpdatePosition = useRef<boolean>(false);
 
   useEffect(() => {
     const handle = Tone.getTransport().scheduleRepeat(
@@ -140,7 +146,8 @@ export default memo(function MusicOverlayPart({
               ? infoColor
               : accentColor;
             ctx.stroke();
-            setTargetPosition(position);
+            targetPosition.current = position;
+            shouldUpdatePosition.current = true;
           }
         }, time);
       },
@@ -150,11 +157,26 @@ export default memo(function MusicOverlayPart({
     return () => {
       Tone.getTransport().clear(handle);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [grid, instruction, infoColor, accentColor, tileSize]);
 
   useEffect(() => {
-    targetRef.current?.scrollIntoView({ behavior: 'instant' });
-  }, [targetPosition]);
+    const handle = setInterval(() => {
+      if (
+        Tone.getTransport().state === 'started' &&
+        targetRef.current &&
+        shouldUpdatePosition.current
+      ) {
+        targetRef.current.style.left = `${targetPosition.current}em`;
+        targetRef.current.scrollIntoView({ behavior: 'instant' });
+        shouldUpdatePosition.current = false;
+      }
+    }, 1000 / 30);
+    return () => {
+      clearInterval(handle);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <GridCanvasOverlay
@@ -167,7 +189,6 @@ export default memo(function MusicOverlayPart({
       <div
         ref={targetRef}
         className="absolute w-48 h-0 opacity-0 -top-12 xl:top-1/2"
-        style={{ left: `${targetPosition}em` }}
       ></div>
     </GridCanvasOverlay>
   );

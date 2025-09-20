@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { RefObject, memo, useRef } from 'react';
 import {
   getConfigurableLocation,
   useConfig,
@@ -20,8 +20,9 @@ export default memo(function EditTarget({ configurable }: EditTargetProps) {
       ref={divRef}
       className="absolute inset-0 cursor-pointer"
       onPointerDown={() => {
+        if (!divRef.current) return;
         setLocation(getConfigurableLocation(grid, configurable as Symbol));
-        setRef(divRef);
+        setRef(divRef as RefObject<HTMLDivElement>);
       }}
     ></div>
   );

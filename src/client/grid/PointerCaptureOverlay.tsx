@@ -3,7 +3,15 @@ import { Color } from '@logic-pad/core/data/primitives';
 import mouseContext from './MouseContext';
 import { cn } from '../uiHelper';
 
+type Bleed = {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+};
+
 export interface PointerCaptureOverlayProps {
+  ref?: React.Ref<HTMLDivElement>;
   width: number;
   height: number;
   colorMap: (x: number, y: number, color: Color) => boolean;
@@ -19,7 +27,8 @@ export interface PointerCaptureOverlayProps {
   step?: number;
   onPointerUp?: (color: Color) => void;
   onPointerMove?: (x: number, y: number) => void;
-  bleed?: number | { top: number; right: number; bottom: number; left: number };
+  onPointerLeave?: () => void;
+  bleed?: number | Bleed;
   children?: React.ReactNode;
   className?: string;
 }
@@ -35,7 +44,39 @@ function opposite(color: Color) {
   }
 }
 
+export const getPointerLocation = (
+  element: HTMLDivElement,
+  clientX: number,
+  clientY: number,
+  width: number,
+  height: number,
+  step: number,
+  bleed: Bleed
+) => {
+  const rect = element.getBoundingClientRect();
+  const widthUnit = rect.width / (width + bleed.left + bleed.right);
+  const heightUnit = rect.height / (height + bleed.top + bleed.bottom);
+  rect.x += bleed.left * widthUnit;
+  rect.y += bleed.top * heightUnit;
+  rect.width -= (bleed.left + bleed.right) * widthUnit;
+  rect.height -= (bleed.top + bleed.bottom) * heightUnit;
+  const x =
+    Math.floor(
+      (((clientX - rect.left) / rect.width) * width -
+        (step === 0.5 ? 0.25 : 0)) /
+        step
+    ) * step;
+  const y =
+    Math.floor(
+      (((clientY - rect.top) / rect.height) * height -
+        (step === 0.5 ? 0.25 : 0)) /
+        step
+    ) * step;
+  return { x, y };
+};
+
 export default memo(function PointerCaptureOverlay({
+  ref,
   width,
   height,
   colorMap,
@@ -45,6 +86,7 @@ export default memo(function PointerCaptureOverlay({
   step,
   onPointerUp,
   onPointerMove,
+  onPointerLeave,
   bleed,
   children,
   className,
@@ -58,27 +100,16 @@ export default memo(function PointerCaptureOverlay({
 
   const prevCoord = useRef({ x: -1, y: -1 });
 
-  const getPointerLocation = (e: React.PointerEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const widthUnit = rect.width / (width + bleed.left + bleed.right);
-    const heightUnit = rect.height / (height + bleed.top + bleed.bottom);
-    rect.x += bleed.left * widthUnit;
-    rect.y += bleed.top * heightUnit;
-    rect.width -= (bleed.left + bleed.right) * widthUnit;
-    rect.height -= (bleed.top + bleed.bottom) * heightUnit;
-    const x =
-      Math.floor(
-        (((e.clientX - rect.left) / rect.width) * width -
-          (step === 0.5 ? 0.25 : 0)) /
-          step
-      ) * step;
-    const y =
-      Math.floor(
-        (((e.clientY - rect.top) / rect.height) * height -
-          (step === 0.5 ? 0.25 : 0)) /
-          step
-      ) * step;
-    return { x, y };
+  const getPointerPosition = (e: React.PointerEvent<HTMLDivElement>) => {
+    return getPointerLocation(
+      e.currentTarget,
+      e.clientX,
+      e.clientY,
+      width,
+      height,
+      step,
+      bleed
+    );
   };
 
   const getPointerColor = (x: number, y: number, targetColor: Color) => {
@@ -88,6 +119,7 @@ export default memo(function PointerCaptureOverlay({
 
   return (
     <div
+      ref={ref}
       className={cn('absolute', className)}
       style={useMemo(
         () => ({
@@ -104,7 +136,7 @@ export default memo(function PointerCaptureOverlay({
           if (!targetColor) {
             mouseContext.setColor(null, false);
           } else {
-            const { x, y } = getPointerLocation(e);
+            const { x, y } = getPointerPosition(e);
             const currentColor = getPointerColor(x, y, targetColor);
             if (currentColor !== Color.Gray) targetColor = Color.Gray;
             mouseContext.setColor(
@@ -113,7 +145,13 @@ export default memo(function PointerCaptureOverlay({
                 targetColor !== Color.Gray &&
                 getPointerColor(x, y, opposite(targetColor)) !== Color.Gray
             );
-            onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
+            onTileClick?.(
+              x,
+              y,
+              currentColor,
+              targetColor,
+              mouseContext.getModifier(e.ctrlKey || e.metaKey)
+            );
           }
         }
       }}
@@ -123,16 +161,22 @@ export default memo(function PointerCaptureOverlay({
         if (e.pointerType !== 'mouse') {
           let targetColor = mouseContext.getColorForButtons(1);
           if (targetColor) {
-            const { x, y } = getPointerLocation(e);
+            const { x, y } = getPointerPosition(e);
             const currentColor = getPointerColor(x, y, targetColor);
             if (targetColor === currentColor) targetColor = Color.Gray;
-            onTileClick?.(x, y, currentColor, targetColor, e.ctrlKey);
+            onTileClick?.(
+              x,
+              y,
+              currentColor,
+              targetColor,
+              mouseContext.getModifier(e.ctrlKey || e.metaKey)
+            );
           }
         }
         onPointerUp?.(color);
       }}
       onPointerMove={e => {
-        const hoverLocation = getPointerLocation(e);
+        const hoverLocation = getPointerPosition(e);
         onPointerMove?.(hoverLocation.x, hoverLocation.y);
         if (!allowDrag) return;
         const targetColor = mouseContext.getColorForButtons(e.buttons);
@@ -144,7 +188,7 @@ export default memo(function PointerCaptureOverlay({
         ) {
           mouseContext.setColor(null, false);
         } else {
-          const { x, y } = getPointerLocation(e);
+          const { x, y } = getPointerPosition(e);
           const currentColor = getPointerColor(x, y, targetColor);
 
           if (x === prevCoord.current.x && y === prevCoord.current.y) return;
@@ -157,10 +201,19 @@ export default memo(function PointerCaptureOverlay({
             oppositeColor === Color.Gray ||
             mouseContext.replacing
           )
-            onTileClick(x, y, currentColor, mouseContext.color, e.ctrlKey);
+            onTileClick(
+              x,
+              y,
+              currentColor,
+              mouseContext.color,
+              mouseContext.getModifier(e.ctrlKey || e.metaKey)
+            );
         }
       }}
-      onPointerLeave={() => (prevCoord.current = { x: -1, y: -1 })}
+      onPointerLeave={() => {
+        prevCoord.current = { x: -1, y: -1 };
+        onPointerLeave?.();
+      }}
     >
       {children}
     </div>

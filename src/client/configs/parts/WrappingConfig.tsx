@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { ConfigType, WrappingConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
 import { WRAPPINGS, Wrapping } from '@logic-pad/core/data/primitives';
+import ConfigItem from './ConfigItem';
 
 export interface WrappingConfigProps {
   configurable: Configurable;
@@ -32,8 +33,7 @@ export default memo(function WrappingConfig({
     config.field as keyof typeof configurable
   ] as unknown as Wrapping;
   return (
-    <div className="flex p-2 gap-4 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <select
         className="select select-bordered w-36"
         value={value}
@@ -47,7 +47,7 @@ export default memo(function WrappingConfig({
           </option>
         ))}
       </select>
-    </div>
+    </ConfigItem>
   );
 });
 

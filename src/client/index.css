@@ -3,13 +3,7 @@
 @tailwind utilities;
 
 :root {
-  font-family:
-    Palatino,
-    Palatino Linotype,
-    Palatino LT STD,
-    Book Antiqua,
-    Georgia,
-    serif;
+  @apply font-serif;
   line-height: 1.5;
   font-weight: 400;
   margin: 0;
@@ -21,6 +15,44 @@
   font-smooth: always;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.tour-target {
+  position: relative;
+}
+
+.absolute.tour-target {
+  position: absolute;
+}
+
+@keyframes translucent-pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0;
+  }
+  0% {
+    opacity: 0.5;
+  }
+}
+.animate-translucent-pulse {
+  animation: translucent-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.tour-target::after {
+  @apply -inset-1 rounded-sm pointer-events-none z-10 border-2 border-accent animate-translucent-pulse bg-base-content/20;
+  position: absolute;
+  opacity: 0.5;
+  content: '';
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-stable {
+  scrollbar-gutter: stable;
 }
 
 * {
@@ -73,8 +105,9 @@ summary::marker {
 .grid-glow {
   --tw-shadow: 0px 0px 300px 300px rgba(0, 0, 0, 0.3);
   --tw-shadow-colored: 0px 0px 300px 300px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  box-shadow:
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
 }
 
 .mask-fade-l {

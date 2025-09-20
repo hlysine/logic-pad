@@ -12,6 +12,7 @@ import {
   Wrapping,
 } from './primitives.js';
 import { ControlLine } from './rules/musicControlLine.js';
+import { normalizeShape, shapeEquals, tilesToShape } from './shapes.js';
 
 export enum ConfigType {
   Boolean = 'boolean',
@@ -27,6 +28,7 @@ export enum ConfigType {
   Orientation = 'orientation',
   OrientationToggle = 'orientationToggle',
   Tile = 'tile',
+  Shape = 'shape',
   Grid = 'grid',
   NullableGrid = 'nullableGrid',
   Icon = 'icon',
@@ -39,6 +41,7 @@ export interface Config<T> {
   readonly type: ConfigType;
   readonly field: string;
   readonly description: string;
+  readonly explanation?: string;
   readonly default: T;
   readonly configurable: boolean;
 }
@@ -105,6 +108,11 @@ export interface TileConfig extends Config<GridData> {
   readonly resizable: boolean;
 }
 
+export interface ShapeConfig extends Config<GridData> {
+  readonly type: ConfigType.Shape;
+  readonly resizable: boolean;
+}
+
 export interface GridConfig extends Config<GridData> {
   readonly type: ConfigType.Grid;
 }
@@ -144,6 +152,7 @@ export type AnyConfig =
   | OrientationConfig
   | OrientationToggleConfig
   | TileConfig
+  | ShapeConfig
   | GridConfig
   | NullableGridConfig
   | IconConfig
@@ -172,6 +181,11 @@ export function configEquals<C extends AnyConfig>(
   }
   if (type === ConfigType.Tile || type === ConfigType.Grid) {
     return (a as GridData).equals(b as GridData);
+  }
+  if (type === ConfigType.Shape) {
+    const aShape = normalizeShape(tilesToShape((a as GridData).tiles));
+    const bShape = normalizeShape(tilesToShape((b as GridData).tiles));
+    return shapeEquals(aShape, bShape);
   }
   if (type === ConfigType.NullableGrid) {
     if (a === null && b === null) return true;

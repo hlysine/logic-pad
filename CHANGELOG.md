@@ -1,3 +1,219 @@
+# 19/9/2025
+
+**PREVIEW BRANCH**
+
+- Added support for user mentions in comments
+  - Type `@` followed by the username to mention a user
+  - Mentioned users will receive a notification
+- Profile page optimizations and UI improvements
+- The user avatar is now shown for a user's "created puzzles" collection
+
+# 18/9/2025
+
+**PREVIEW BRANCH**
+
+- Fixed validation for diagonal lotus at tile corners
+
+# 14/9/2025
+
+**PREVIEW BRANCH**
+
+- Added notifications for
+  - New comments on your puzzles
+  - New puzzles from collections you follow
+
+# 13/9/2025
+
+**PREVIEW BRANCH**
+
+- Added puzzles series, a special type of collection where
+  - All puzzles are created by the collection owner
+  - Each puzzle can only belong to one series
+  - You can easily navigate to the corresponding series when viewing a puzzle
+- "I'm feeling lucky" no longer picks puzzles made by the same user
+- Fixed profile page showing all solved puzzles as being created by the user
+
+# 9/9/2025
+
+**PREVIEW BRANCH**
+
+- Added a front page button to open a random puzzle
+- Added puzzle publish date display
+- Fixed pagination for solved puzzles collection
+
+# 8/9/2025
+
+**PREVIEW BRANCH**
+
+- Further improvement to site updater
+  - Site updates are now applied automatically if indicated by the server
+  - Online mode is not allowed unless the site is up to date with the server
+- Added a comment count indicator in the "View comments" button
+- Fixed the comment sidebar being trapped in the "puzzle solved" box
+- Fixed perfection mode switch not working due to cached puzzle data
+- Fixed online metadata missing in perfection mode
+- Fixed pluralization of counts in various places
+
+# 7/9/2025
+
+**PREVIEW BRANCH**
+
+- Added tile counting overlay for focus and minesweeper symbols
+
+# 6/9/2025
+
+**PREVIEW BRANCH**
+
+- Improved the symbol insertion cursor to indicate current action
+- Added shortcuts to close the config popup and to delete the selected item
+- Added shortcuts to set direction-related configs
+- Added shortcuts to select preset tools
+- Preset tools can now be re-ordered via drag-and-drop
+- Added a new site config to set keyboard layout for toolbox shortcuts
+- Mouse clicks on the grid are now blocked when the config popup is open
+
+# 4/9/2025
+
+**PREVIEW BRANCH**
+
+- Fixed alternate solution logic in cspuz solver
+- Added Sentry logging to the client and the API server
+- Updated the privacy policy to reflect the use of Sentry
+
+# 2/9/2025
+
+**PREVIEW BRANCH**
+
+- Added a dedicated page for followed collections
+- Expanded the front page and profile page to include 2 rows of items
+- Added bulk puzzle deletion in My stuff page
+- Optimized data loading in Search and My stuff pages
+- Optimized data loading in collection page after editing collection details
+- Fixed draggable cards not responding to clicks
+- Fixed cards not being draggable on touch screens
+
+# 1/9/2025
+
+**PREVIEW BRANCH**
+
+- Added a toggle for flood fill on touch screens
+- Updated the design of private puzzle/collection cards
+- Reworked the site updater for future updates
+  - Every browser tab of Logic Pad now preserves its own state when the update is being applied
+  - Accepting the update prompt no longer triggers exit confirmation dialogs
+  - The update prompt is now available in all pages except the uploader, where updating may cause data loss
+
+# 31/8/2025
+
+**PREVIEW BRANCH**
+
+- Added a guided tour of the editor for new users
+- Improved checksum detection for pattern rules
+- Fixed some color themes having invisible text
+
+# 26/8/2025
+
+**PREVIEW BRANCH**
+
+- The editor now selects the color tool by default
+- Added a cursor for symbol insertion
+- Added a name and explanation for each symbol / rule
+- Added expandable explanation for symbol / rule config fields
+- Fixed modifier hotkeys
+- Fixed music grids passing puzzle checklist with no solution provided
+- Fixed exit blocker in puzzle editor not respecting site settings
+- Fixed instruction overflow causing the accent bar to be cut off
+
+# 25/8/2025
+
+**PREVIEW BRANCH**
+
+- Fixed uploader failing due to server rate limit
+
+# 24/8/2025
+
+**PREVIEW BRANCH**
+
+- Added support for drag-and-drop reordering of puzzles in collections
+- Added footer with rules and privacy policy
+- Layout fixes for mobile
+- Improved the exit blocking dialog to only show when necessary
+- Search queries are now reserved for logged in users only to prevent abuse
+
+# 23/8/2025
+
+**PREVIEW BRANCH**
+
+- Added additional dialog text for explanation when puzzle checklist is failing
+- Added puzzle checksum detection
+- Fixed back navigation lock in sign in page
+- Clicking on a private puzzle that you own now directs you to the editor
+
+# 22/8/2025
+
+**PREVIEW BRANCH**
+
+- Added puzzle uploader
+  - Paste offline puzzle links to publish them in bulk
+  - You can perform last-minute edits and verify solutions with solvers before upload
+- Added puzzle comments
+  - Leave comments that are visible to all signed-in users
+  - You are free to edit and delete your comments
+- Fixed the auto solver not reporting solution uniqueness
+- Fixed the cspuz solver not reporting solution uniqueness for underclued puzzles
+- Fixed the config popup losing focus when a full-screen modal is open
+- Fixed page suspense not working in Firefox
+
+# 19/8/2025
+
+**PREVIEW BRANCH**
+
+- Added collections - group puzzles into a playlist for easy access
+  - You are free to create, modify and delete any of your collections
+  - Opening a puzzle from a collection creates a sidebar where you can quickly switch to other puzzles in the same collection
+  - Every user has collections for created, loved and solved puzzles, with their contents being updated automatically
+  - Following a user follows their "Created puzzles" collection
+- Added profile page
+- Added puzzle and collection lists in the front page
+- Fixed identity association - you can now sign in to the same Logic Pad account with accounts of different emails
+- Improved grid resize algorithm for mobile and tablet screens
+
+# 15/8/2025
+
+**PREVIEW BRANCH**
+
+- Fixed route protection redirecting incorrectly
+- Added "any" option to search filters and optimized search UI
+- Added search UI to my-stuff page
+- Added a section in settings to manage account providers
+
+# 14/8/2025
+
+**PREVIEW BRANCH**
+
+- You can now change your username in /settings
+- Certain pages now redirect to home page when you are not online/signed in
+- Fixed config popup not working for symbols
+- Fixed hotkeys not working in certain keyboard layouts
+- Implemented online perfection mode
+- Fixed difficulty ratings interfering with each other
+- Improved grid resizing logic to account for wrap-around grids
+
+# 13/8/2025
+
+**PREVIEW BRANCH**
+
+- First preview for Logic Pad online mode
+  - Sign in/sign up with your Google or Discord account
+  - Upload and publish your puzzles
+  - Solve online puzzles and give them loves and ratings
+  - Search for online puzzles with queries and filters
+  - Access your own puzzles in the "My Stuff" page
+- Updated multiple core dependencies
+- Reworked page loading flow and suspension
+- Added an option to use sans-serif font
+- Added an option to disable all online features
+
 # 30/7/2025
 
 - Fixed incorrect validation on galaxy symbols (solvers are unaffected)

@@ -3,9 +3,7 @@ import GridData from '../grid.js';
 import { Color, Direction, Position, State } from '../primitives.js';
 import Symbol from './symbol.js';
 
-export type DirectionLinkerMap = {
-  [key in Direction]: Direction;
-};
+export type DirectionLinkerMap = Record<Direction, Direction>;
 
 type Turtle = {
   pos1: Position;
@@ -30,7 +28,7 @@ function makeTurtle(pos1: Position, pos2: Position, grid: GridData): Turtle {
   };
 }
 
-export default class DirectionLinkerSymbol extends Symbol {
+export default abstract class DirectionLinkerSymbol extends Symbol {
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -220,10 +218,6 @@ export default class DirectionLinkerSymbol extends Symbol {
     return grayFound ? State.Incomplete : State.Satisfied;
   }
 
-  public copyWith({ x, y }: { x?: number; y?: number }): this {
-    return new DirectionLinkerSymbol(x ?? this.x, y ?? this.y) as this;
-  }
-
   private getInitialCheckedCouples(
     x: number,
     y: number,
@@ -299,15 +293,44 @@ export default class DirectionLinkerSymbol extends Symbol {
         ),
       ];
     } else if (
-      (this.linkedDirections[Direction.Up] === Direction.Left &&
-        this.linkedDirections[Direction.Left] === Direction.Up) ||
-      (this.linkedDirections[Direction.Up] === Direction.Right &&
-        this.linkedDirections[Direction.Right] === Direction.Up)
+      this.linkedDirections[Direction.Up] === Direction.Left &&
+      this.linkedDirections[Direction.Left] === Direction.Up
     ) {
       return [
         makeTurtle(
           { x: x - 0.5, y: y - 0.5 },
           { x: x - 0.5, y: y - 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x - 0.5, y: y + 0.5 },
+          { x: x + 0.5, y: y - 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x + 0.5, y: y + 0.5 },
+          { x: x + 0.5, y: y + 0.5 },
+          grid
+        ),
+      ];
+    } else if (
+      this.linkedDirections[Direction.Up] === Direction.Right &&
+      this.linkedDirections[Direction.Right] === Direction.Up
+    ) {
+      return [
+        makeTurtle(
+          { x: x + 0.5, y: y - 0.5 },
+          { x: x + 0.5, y: y - 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x - 0.5, y: y - 0.5 },
+          { x: x + 0.5, y: y + 0.5 },
+          grid
+        ),
+        makeTurtle(
+          { x: x - 0.5, y: y + 0.5 },
+          { x: x - 0.5, y: y + 0.5 },
           grid
         ),
       ];

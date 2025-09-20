@@ -23,7 +23,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
       <input
         id={`three-pane-${id}`}
         type="checkbox"
-        className="drawer-toggle"
+        className="drawer-toggle three-pane-checkbox"
       />
       <div className="drawer-content flex justify-center items-center h-fit min-h-full lg:h-full flex-col lg:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
         <label

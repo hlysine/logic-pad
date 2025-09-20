@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { useGrid } from '../contexts/GridContext';
-import { useEdit } from '../contexts/EditContext';
+import { useLayoutEffect, useMemo } from 'react';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
-import { useNavigate } from '@tanstack/react-router';
+import { NavigateOptions, useNavigate } from '@tanstack/react-router';
 import { array } from '@logic-pad/core/data/dataHelper';
-import { useGridState } from '../contexts/GridStateContext';
 import { Puzzle } from '@logic-pad/core/data/puzzle';
+import { defaultGrid } from '../contexts/GridContext';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { router } from './router';
 
 export enum SolutionHandling {
   LoadVisible = 'visible',
@@ -30,18 +30,19 @@ export const validateSearch = (
   search: Record<string, unknown>
 ): PuzzleParams => {
   return {
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     d: search.d ? String(search.d) : undefined,
+    // eslint-disable-next-line @typescript-eslint/no-base-to-string
     loader: search.loader ? validateLoader(String(search.loader)) : undefined,
   };
 };
 
-export interface LinkLoaderProps {
-  params: PuzzleParams;
-}
-
 interface LinkLoaderResult {
   originalParams: PuzzleParams;
   solutionStripped: boolean;
+  puzzleId: string | null;
+  initialPuzzle: Puzzle;
+  redirect?: NavigateOptions;
 }
 
 interface LinkLoaderParams {
@@ -64,25 +65,26 @@ interface LinkLoaderParams {
 }
 
 export default function useLinkLoader(
-  params: PuzzleParams,
+  id: string,
   {
     cleanUrl = false,
     solutionHandling: solutionBehavior = SolutionHandling.LoadHidden,
     allowEmpty = true,
     modifyPuzzle = puzzle => puzzle,
   }: LinkLoaderParams = {}
-): LinkLoaderResult | undefined {
-  const { setGrid, setMetadata } = useGrid();
-  const { clearHistory } = useEdit();
-  const { setRevealSpoiler } = useGridState();
-  const navigate = useNavigate({ from: '/solve' });
-  const [result, setResult] = useState<LinkLoaderResult | undefined>(undefined);
-  useEffect(() => {
-    void (async () => {
+): LinkLoaderResult {
+  const params = useMemo(() => router.state.location.search, []);
+  const navigate = useNavigate();
+  const result = useSuspenseQuery({
+    queryKey: ['puzzle', 'decode-local', params, id],
+    queryFn: async () => {
       const result = {
         originalParams: params,
         solutionStripped: false,
+        puzzleId: null,
+        redirect: undefined as NavigateOptions | undefined,
       };
+      let initialPuzzle: Puzzle;
       if (params.d) {
         const behavior = params.loader ?? solutionBehavior;
         const decompressed = await Compressor.decompress(params.d);
@@ -95,24 +97,54 @@ export default function useLinkLoader(
             if (tile.fixed) return tile;
             return tile.withColor(solution.getTile(x, y).color);
           });
-          setGrid(grid.withTiles(tiles), null);
+          const newGrid = grid.withTiles(tiles);
+          initialPuzzle = {
+            ...metadata,
+            grid: newGrid,
+            solution: null,
+          };
         } else if (behavior === SolutionHandling.LoadHidden) {
-          setGrid(grid, solution);
+          initialPuzzle = {
+            ...metadata,
+            grid,
+            solution,
+          };
         } else {
           result.solutionStripped = solution !== null && grid.requireSolution();
-          setGrid(grid, null);
+          initialPuzzle = {
+            ...metadata,
+            grid,
+            solution: null,
+          };
         }
-        setMetadata(metadata);
-        setRevealSpoiler(false);
-        clearHistory(grid);
-        if (cleanUrl) await navigate({ search: {} });
-      } else if (!allowEmpty) {
-        await navigate({ to: '/' });
+        if (cleanUrl) {
+          result.redirect = { search: {}, ignoreBlocker: true };
+        }
+      } else {
+        if (!allowEmpty) {
+          result.redirect = { to: '/', ignoreBlocker: true };
+        }
+        initialPuzzle = {
+          title: '',
+          author: '',
+          description: '',
+          difficulty: 1,
+          grid: defaultGrid,
+          solution: null,
+        };
       }
-      setResult(result);
-    })();
-
+      return {
+        ...result,
+        initialPuzzle,
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+  });
+  useLayoutEffect(() => {
+    if (result.data.redirect) {
+      void navigate(result.data.redirect);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params]);
-  return result;
+  }, []);
+  return result.data;
 }

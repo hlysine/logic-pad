@@ -1,4 +1,6 @@
 import GridData from './grid.js';
+import GridConnections from './gridConnections.js';
+import GridZones from './gridZones.js';
 import { Color, Position } from './primitives.js';
 import TileData from './tile.js';
 
@@ -63,6 +65,12 @@ function recenterShape(shape: Shape): Shape {
   }
   shape.width = maxX - minX + 1;
   shape.height = maxY - minY + 1;
+  if (!Number.isFinite(shape.width)) {
+    shape.width = 0;
+  }
+  if (!Number.isFinite(shape.height)) {
+    shape.height = 0;
+  }
   return shape;
 }
 
@@ -173,5 +181,7 @@ export function sanitizePatternGrid(
       // strip all symbols and rules
       .withRules([])
       .withSymbols(new Map())
+      .withConnections(new GridConnections())
+      .withZones(new GridZones())
   );
 }

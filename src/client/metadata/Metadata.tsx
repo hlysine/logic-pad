@@ -1,11 +1,11 @@
 import { memo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
-import { FiExternalLink } from 'react-icons/fi';
 import Difficulty from './Difficulty';
-import DocumentTitle from '../components/DocumentTitle';
 import Markdown from '../components/Markdown';
-import { useGridState } from '../contexts/GridStateContext.tsx';
-import { cn } from '../uiHelper.ts';
+import { cn, toRelativeDate } from '../uiHelper.ts';
+import UserCard from './UserCard.tsx';
+import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext.tsx';
+import DocumentTitle from '../components/DocumentTitle.tsx';
 
 export interface MetadataProps {
   simplified?: boolean;
@@ -19,12 +19,17 @@ export default memo(function Metadata({
   simplified = simplified ?? false;
   responsive = responsive ?? true;
   const { metadata } = useGrid();
-  const { revealSpoiler } = useGridState();
+  const { puzzle } = useOnlinePuzzle();
 
   return (
     <div className="flex flex-col gap-4 text-neutral-content">
       <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
-      <Difficulty value={metadata.difficulty} />
+      <div
+        className="tooltip tooltip-info tooltip-right w-fit"
+        data-tip={`Design difficulty: ${metadata.difficulty}`}
+      >
+        <Difficulty value={metadata.difficulty} />
+      </div>
       <h1
         className={cn(
           'flex-shrink-0',
@@ -33,36 +38,17 @@ export default memo(function Metadata({
       >
         {metadata.title}
       </h1>
-      <div
-        className={cn(
-          'badge badge-secondary  rounded-lg flex-shrink-0',
-          responsive ? 'lg:badge-lg' : 'badge-lg'
-        )}
-      >
-        {metadata.author}
-      </div>
-      {!simplified && metadata.link.trim().length > 0 && (
-        <a
-          className={cn(
-            'btn btn-ghost justify-start flex-nowrap flex flex-shrink-0',
-            responsive ? 'btn-sm lg:btn-md' : 'btn-md'
-          )}
-          href={metadata.link}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <span className="whitespace-nowrap text-ellipsis grow overflow-x-clip">
-            {metadata.link}
+      <div className="flex gap-2 flex-wrap items-center">
+        <UserCard user={puzzle?.creator} name={metadata.author} />
+        {puzzle?.publishedAt && (
+          <span className="opacity-80">
+            {toRelativeDate(new Date(puzzle.publishedAt))}
           </span>
-          <FiExternalLink size={24} />
-        </a>
-      )}
+        )}
+      </div>
       {!simplified && (
         <div className="overflow-y-auto">
-          <Markdown
-            revealSpoiler={revealSpoiler}
-            className={responsive ? 'lg:text-lg' : 'text-lg'}
-          >
+          <Markdown className={responsive ? 'lg:text-lg' : 'text-lg'}>
             {metadata.description}
           </Markdown>
         </div>

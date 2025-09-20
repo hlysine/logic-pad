@@ -47,6 +47,11 @@ onmessage = e => {
 
   postSolution(grid, solverResult);
 
+  if (isUnderclued) {
+    postMessage(null);
+    return;
+  }
+
   // Make use of the underclued mode to determine solution uniqueness
   if (solverResult !== null && !('error' in solverResult) && !isUnderclued) {
     const undercluedResult = solveLogicPad(puzzleData, true);
@@ -68,7 +73,7 @@ onmessage = e => {
           if (color !== null) {
             puzzleData.tiles[y][x].fixed = true;
             puzzleData.tiles[y][x].color = color;
-          } else if (!tweaked) {
+          } else if (!tweaked && puzzleData.tiles[y][x].exists) {
             const positions = grid.connections.getConnectedTiles({ x, y });
             const newColor = solverResult[y][x] === 'dark' ? 'light' : 'dark';
             positions.forEach(({ x: px, y: py }) => {

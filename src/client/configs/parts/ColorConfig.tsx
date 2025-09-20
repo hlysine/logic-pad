@@ -3,6 +3,7 @@ import { ColorConfig, ConfigType } from '@logic-pad/core/data/config';
 import { Color } from '@logic-pad/core/data/primitives';
 import { cn } from '../../../client/uiHelper.ts';
 import Configurable from '@logic-pad/core/data/configurable';
+import ConfigItem from './ConfigItem.tsx';
 
 export interface ColorConfigProps {
   configurable: Configurable;
@@ -51,8 +52,7 @@ export default memo(function ColorConfig({
     config.field as keyof typeof configurable
   ] as unknown as Color;
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <div className="flex gap-4">
         <ColorRadio
           value={value}
@@ -72,7 +72,7 @@ export default memo(function ColorConfig({
           color={Color.Light}
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

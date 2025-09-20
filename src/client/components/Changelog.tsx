@@ -78,7 +78,7 @@ const ChangelogButton = lazy(async () => {
 
 export default memo(function Changelog() {
   return (
-    <div className="min-h-48 w-full mt-16 shrink-0 flex flex-col items-stretch">
+    <div className="min-h-48 w-full mt-8 shrink-0 flex flex-col items-stretch">
       <Suspense fallback={<Loading />}>
         <ChangelogButton />
       </Suspense>

@@ -5,11 +5,13 @@ class MouseContext {
   color: Color | null;
   replacing: boolean;
   inverted: boolean;
+  modifierInverted: boolean;
 
   constructor() {
     this.color = null;
     this.replacing = false;
     this.inverted = settingsStore.get('flipPrimaryMouseButton');
+    this.modifierInverted = false;
   }
 
   setColor(color: Color | null, replacing: boolean) {
@@ -19,6 +21,10 @@ class MouseContext {
 
   setInverted(inverted: boolean) {
     this.inverted = inverted;
+  }
+
+  setModifierInverted(modifierInverted: boolean) {
+    this.modifierInverted = modifierInverted;
   }
 
   getColorForButtons(buttons: number) {
@@ -33,6 +39,13 @@ class MouseContext {
       default:
         return undefined;
     }
+  }
+
+  getModifier(ctrlKey: boolean) {
+    if (this.modifierInverted) {
+      ctrlKey = !ctrlKey;
+    }
+    return ctrlKey;
   }
 }
 

@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { RefObject, memo, useEffect, useRef, useState } from 'react';
 import { getConfigurable, useConfig } from '../contexts/ConfigContext.tsx';
 import Config from './parts/Config';
 import Rule from '@logic-pad/core/data/rules/rule';
@@ -9,12 +9,14 @@ import SupportLevel from '../components/SupportLevel';
 import { mousePosition } from '../../client/uiHelper.ts';
 import { useSolver } from '../contexts/SolverContext.tsx';
 import { ControlLine, Row } from '@logic-pad/core/data/rules/musicControlLine';
+import AnnotatedText from '../components/AnnotatedText.tsx';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 const gap = 8;
 
 function getPosition(
-  targetRef: React.RefObject<HTMLElement>,
-  boxRef: React.RefObject<HTMLElement>
+  targetRef: RefObject<HTMLElement>,
+  boxRef: RefObject<HTMLElement>
 ) {
   let targetRect = targetRef.current?.getBoundingClientRect();
   let boxRect = boxRef.current?.getBoundingClientRect();
@@ -64,6 +66,16 @@ function getPosition(
   return ret;
 }
 
+function containsPoint(element: HTMLElement, clientX: number, clientY: number) {
+  const rect = element.getBoundingClientRect();
+  return (
+    clientX >= rect.left &&
+    clientX <= rect.right &&
+    clientY >= rect.top &&
+    clientY <= rect.bottom
+  );
+}
+
 export default memo(function ConfigPopup() {
   const { location, ref, setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
@@ -85,24 +97,131 @@ export default memo(function ConfigPopup() {
     top: '',
   });
 
+  const deleteSymbol = () => {
+    if (configurable instanceof Rule) {
+      setGrid(grid.removeRule(configurable));
+    } else if (configurable instanceof Symbol) {
+      setGrid(grid.removeSymbol(configurable));
+    } else if (configurable instanceof ControlLine) {
+      const musicGrid = grid.musicGrid.value;
+      if (!musicGrid) return;
+      const newLine = configurable.copyWith({
+        bpm: null,
+        pedal: null,
+        checkpoint: false,
+      });
+      if (newLine.isEmpty) {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.filter(
+                line => line !== configurable
+              ),
+            })
+          )
+        );
+      } else {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.map(line =>
+                line === configurable ? newLine : line
+              ),
+            })
+          )
+        );
+      }
+    } else if (configurable instanceof Row) {
+      const musicGrid = grid.musicGrid.value;
+      if (!musicGrid) return;
+      if (location?.type !== 'row') return;
+      const line = musicGrid.controlLines.find(
+        line => line.column === location.column
+      );
+      if (!line) return;
+      const newLine = line.copyWith({
+        rows: line.rows.map((row, i) =>
+          i === location.row ? new Row(null, null) : row
+        ),
+      });
+      if (newLine.isEmpty) {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.filter(
+                l => l.column !== line.column
+              ),
+            })
+          )
+        );
+      } else {
+        setGrid(
+          grid.replaceRule(
+            musicGrid,
+            musicGrid.copyWith({
+              controlLines: musicGrid.controlLines.map(l =>
+                l.column === line.column ? newLine : l
+              ),
+            })
+          )
+        );
+      }
+    }
+    setLocation(undefined);
+    setRef(undefined);
+  };
+
+  useHotkeys('esc', () => {
+    setLocation(undefined);
+    setRef(undefined);
+  });
+
+  useHotkeys('backspace, delete', deleteSymbol, { preventDefault: true }, [
+    grid,
+    location,
+    configurable,
+  ]);
+
   useEffect(() => {
+    if (!location) return;
     const handleClick = (e: PointerEvent) => {
       if (
         !popupRef.current?.contains(e.target as Node) &&
-        !ref?.current?.contains(e.target as Node)
+        !(ref?.current && containsPoint(ref.current, e.clientX, e.clientY))
       ) {
-        setLocation(undefined);
-        setRef(undefined);
+        const symbolOverlay =
+          document.querySelector<HTMLElement>('.symbol-overlay');
+        if (
+          symbolOverlay &&
+          containsPoint(symbolOverlay, e.clientX, e.clientY)
+        ) {
+          e.stopImmediatePropagation();
+          e.stopPropagation();
+          e.preventDefault();
+        }
+        if (e.type === 'pointerup') {
+          setLocation(undefined);
+          setRef(undefined);
+        }
       }
     };
-    document.addEventListener('pointerdown', handleClick);
-    return () => document.removeEventListener('pointerdown', handleClick);
-  }, [setLocation, setRef, ref]);
+    document.addEventListener('pointerdown', handleClick, { capture: true });
+    document.addEventListener('pointerup', handleClick, { capture: true });
+    return () => {
+      document.removeEventListener('pointerdown', handleClick, {
+        capture: true,
+      });
+      document.removeEventListener('pointerup', handleClick, { capture: true });
+    };
+  }, [location, setLocation, setRef, ref]);
 
   useEffect(() => {
     const handler = () => {
       if (!ref || !popupRef.current) return;
-      const styles = getPosition(ref, popupRef);
+      const styles = getPosition(ref, popupRef as RefObject<HTMLDivElement>);
       if (!styles) return;
       popupRef.current.style.left = styles.left;
       popupRef.current.style.top = styles.top;
@@ -133,6 +252,12 @@ export default memo(function ConfigPopup() {
       ref={popupRef}
       style={popupLocation.current}
     >
+      <div className="text-accent text-xl font-semibold">
+        {configurable.title}
+      </div>
+      <AnnotatedText className="text-sm opacity-80 -mt-2 mb-2">
+        {configurable.configExplanation}
+      </AnnotatedText>
       {configs && configs.length > 0 ? (
         configs.map(config => (
           <Config
@@ -239,88 +364,18 @@ export default memo(function ConfigPopup() {
             </div>
           </div>
         )}
-        <button
-          type="button"
-          className="btn btn-outline btn-error"
-          onClick={() => {
-            if (configurable instanceof Rule) {
-              setGrid(grid.removeRule(configurable));
-            } else if (configurable instanceof Symbol) {
-              setGrid(grid.removeSymbol(configurable));
-            } else if (configurable instanceof ControlLine) {
-              const musicGrid = grid.musicGrid.value;
-              if (!musicGrid) return;
-              const newLine = configurable.copyWith({
-                bpm: null,
-                pedal: null,
-                checkpoint: false,
-              });
-              if (newLine.isEmpty) {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.filter(
-                        line => line !== configurable
-                      ),
-                    })
-                  )
-                );
-              } else {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.map(line =>
-                        line === configurable ? newLine : line
-                      ),
-                    })
-                  )
-                );
-              }
-            } else if (configurable instanceof Row) {
-              const musicGrid = grid.musicGrid.value;
-              if (!musicGrid) return;
-              if (location?.type !== 'row') return;
-              const line = musicGrid.controlLines.find(
-                line => line.column === location.column
-              );
-              if (!line) return;
-              const newLine = line.copyWith({
-                rows: line.rows.map((row, i) =>
-                  i === location.row ? new Row(null, null) : row
-                ),
-              });
-              if (newLine.isEmpty) {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.filter(
-                        l => l.column !== line.column
-                      ),
-                    })
-                  )
-                );
-              } else {
-                setGrid(
-                  grid.replaceRule(
-                    musicGrid,
-                    musicGrid.copyWith({
-                      controlLines: musicGrid.controlLines.map(l =>
-                        l.column === line.column ? newLine : l
-                      ),
-                    })
-                  )
-                );
-              }
-            }
-            setLocation(undefined);
-            setRef(undefined);
-          }}
+        <div
+          className="tooltip tooltip-error tooltip-top"
+          data-tip="(backspace/del)"
         >
-          Delete
-        </button>
+          <button
+            type="button"
+            className="btn btn-outline btn-error"
+            onClick={deleteSymbol}
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   );

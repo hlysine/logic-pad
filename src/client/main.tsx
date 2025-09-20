@@ -23,12 +23,15 @@ import('@sentry/react').then(Sentry => {
 const savedTheme = localStorage.getItem(themeKey) ?? 'dark';
 document.documentElement.dataset.theme = savedTheme;
 
+const redirectDomains = (
+  import.meta.env.VITE_LEGACY_URL as string | undefined
+)?.split(',');
+
 function Redirector() {
-  if (window.location.host === import.meta.env.VITE_LEGACY_URL) {
-    window.location.href = window.location.href.replace(
-      import.meta.env.VITE_LEGACY_URL as string,
-      import.meta.env.VITE_VERCEL_PROJECT_PRODUCTION_URL as string
-    );
+  if (redirectDomains?.includes(window.location.host)) {
+    const newUrl = new URL(window.location.href);
+    newUrl.host = import.meta.env.VITE_VERCEL_PROJECT_PRODUCTION_URL as string;
+    window.location.href = newUrl.toString();
   }
   return null;
 }

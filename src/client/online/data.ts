@@ -38,6 +38,11 @@ export interface UserBrief extends ResourceResponse {
   description: string;
   name: string;
   title: string | null;
+  supporter: number;
+}
+
+export interface MeBrief extends UserBrief {
+  supporterUntil: string | null;
 }
 
 export interface PuzzleBrief extends ResourceResponse {
@@ -132,4 +137,11 @@ export interface FrontPage {
 export interface ListResponse<T extends ResourceResponse> {
   total: number;
   results: T[];
+}
+
+export interface SupporterPrice {
+  priceId: string;
+  months: number;
+  price: number;
+  currency: string;
 }

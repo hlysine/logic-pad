@@ -16,6 +16,8 @@ import {
   Comment,
   Notification,
   UserAutocomplete,
+  SupporterPrice,
+  MeBrief,
 } from './data';
 import {
   DataTag,
@@ -126,7 +128,7 @@ export const api = {
   },
   getMe: async () => {
     return await axios
-      .get<UserBrief>('/user/me')
+      .get<MeBrief>('/user/me')
       .then(res => res.data)
       .catch(() => null);
   },
@@ -494,6 +496,22 @@ export const api = {
     await axios
       .post(`/notification/delete`, { notificationIds })
       .catch(rethrowError);
+  },
+  listSupporterPrices: async () => {
+    return await axios
+      .get<SupporterPrice[]>(`/payment/supporter/prices`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  checkoutSupporter: (price: string, success: string, error: string) => {
+    const url = new URL(
+      (import.meta.env.VITE_API_ENDPOINT as string) +
+        '/payment/supporter/checkout'
+    );
+    url.searchParams.set('priceId', price);
+    url.searchParams.set('success', success);
+    url.searchParams.set('error', error);
+    window.location.href = url.toString();
   },
 };
 

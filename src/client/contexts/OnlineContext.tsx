@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { createContext, memo, use, useEffect, useMemo } from 'react';
 import { api } from '../online/api';
-import { UserBrief } from '../online/data';
+import { MeBrief } from '../online/data';
 import { useSettings } from './SettingsContext';
 import semverSatisfies from 'semver/functions/satisfies';
 import toast from 'react-hot-toast';
@@ -24,7 +24,7 @@ export interface OnlineContext {
   /**
    * The current user, or null if not logged in or offline.
    */
-  me: UserBrief | null;
+  me: MeBrief | null;
   /**
    * Whether the online status or user data is currently being fetched.
    */

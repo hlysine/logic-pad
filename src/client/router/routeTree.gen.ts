@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './../routes/__root'
 import { Route as AuthRouteImport } from './../routes/auth'
 import { Route as IndexRouteImport } from './../routes/index'
 import { Route as OauthCallbackRouteImport } from './../routes/oauth.callback'
+import { Route as LayoutSupportRouteImport } from './../routes/_layout.support'
 import { Route as LayoutSettingsRouteImport } from './../routes/_layout.settings'
 import { Route as LayoutSearchRouteImport } from './../routes/_layout.search'
 import { Route as LayoutRulesRouteImport } from './../routes/_layout.rules'
@@ -64,6 +65,13 @@ const OauthCallbackRoute = OauthCallbackRouteImport.update({
   path: '/oauth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LayoutSupportRoute = LayoutSupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => LayoutLazyRoute,
+} as any).lazy(() =>
+  import('./../routes/_layout.support.lazy').then((d) => d.Route),
+)
 const LayoutSettingsRoute = LayoutSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -211,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/rules': typeof LayoutRulesRoute
   '/search': typeof LayoutSearchRouteWithChildren
   '/settings': typeof LayoutSettingsRoute
+  '/support': typeof LayoutSupportRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/uploader': typeof LayoutUploaderLazyRoute
   '/collection/$collectionId': typeof LayoutCollectionCollectionIdRoute
@@ -235,6 +244,7 @@ export interface FileRoutesByTo {
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/rules': typeof LayoutRulesRoute
   '/settings': typeof LayoutSettingsRoute
+  '/support': typeof LayoutSupportRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/uploader': typeof LayoutUploaderLazyRoute
   '/collection/$collectionId': typeof LayoutCollectionCollectionIdRoute
@@ -263,6 +273,7 @@ export interface FileRoutesById {
   '/_layout/rules': typeof LayoutRulesRoute
   '/_layout/search': typeof LayoutSearchRouteWithChildren
   '/_layout/settings': typeof LayoutSettingsRoute
+  '/_layout/support': typeof LayoutSupportRoute
   '/oauth/callback': typeof OauthCallbackRoute
   '/_layout/uploader': typeof LayoutUploaderLazyRoute
   '/_layout/collection/$collectionId': typeof LayoutCollectionCollectionIdRoute
@@ -291,6 +302,7 @@ export interface FileRouteTypes {
     | '/rules'
     | '/search'
     | '/settings'
+    | '/support'
     | '/oauth/callback'
     | '/uploader'
     | '/collection/$collectionId'
@@ -315,6 +327,7 @@ export interface FileRouteTypes {
     | '/privacy-policy'
     | '/rules'
     | '/settings'
+    | '/support'
     | '/oauth/callback'
     | '/uploader'
     | '/collection/$collectionId'
@@ -342,6 +355,7 @@ export interface FileRouteTypes {
     | '/_layout/rules'
     | '/_layout/search'
     | '/_layout/settings'
+    | '/_layout/support'
     | '/oauth/callback'
     | '/_layout/uploader'
     | '/_layout/collection/$collectionId'
@@ -403,6 +417,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/oauth/callback'
       preLoaderRoute: typeof OauthCallbackRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_layout/support': {
+      id: '/_layout/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof LayoutSupportRouteImport
+      parentRoute: typeof LayoutLazyRoute
     }
     '/_layout/settings': {
       id: '/_layout/settings'
@@ -586,6 +607,7 @@ interface LayoutLazyRouteChildren {
   LayoutRulesRoute: typeof LayoutRulesRoute
   LayoutSearchRoute: typeof LayoutSearchRouteWithChildren
   LayoutSettingsRoute: typeof LayoutSettingsRoute
+  LayoutSupportRoute: typeof LayoutSupportRoute
   LayoutUploaderLazyRoute: typeof LayoutUploaderLazyRoute
   LayoutCollectionCollectionIdRoute: typeof LayoutCollectionCollectionIdRoute
   LayoutCreatePuzzleIdRoute: typeof LayoutCreatePuzzleIdRoute
@@ -604,6 +626,7 @@ const LayoutLazyRouteChildren: LayoutLazyRouteChildren = {
   LayoutRulesRoute: LayoutRulesRoute,
   LayoutSearchRoute: LayoutSearchRouteWithChildren,
   LayoutSettingsRoute: LayoutSettingsRoute,
+  LayoutSupportRoute: LayoutSupportRoute,
   LayoutUploaderLazyRoute: LayoutUploaderLazyRoute,
   LayoutCollectionCollectionIdRoute: LayoutCollectionCollectionIdRoute,
   LayoutCreatePuzzleIdRoute: LayoutCreatePuzzleIdRoute,

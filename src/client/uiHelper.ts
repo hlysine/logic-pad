@@ -16,28 +16,29 @@ export function toRelativeDate(
   accuracy: 'second' | 'day' = 'second'
 ) {
   const msOffset = date.getTime() - Date.now();
-  if (-msOffset < 10 * 1000 && accuracy === 'second') {
-    return 'a few seconds ago';
-  } else if (-msOffset < 60 * 1000 && accuracy === 'second') {
+  const absOffset = Math.abs(msOffset);
+  if (absOffset < 10 * 1000 && accuracy === 'second') {
+    return msOffset < 0 ? 'a few seconds ago' : 'in a few seconds';
+  } else if (absOffset < 60 * 1000 && accuracy === 'second') {
     return relativeTimeFormat.format(Math.round(msOffset / 1000), 'second');
-  } else if (-msOffset < 60 * 60 * 1000 && accuracy === 'second') {
+  } else if (absOffset < 60 * 60 * 1000 && accuracy === 'second') {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60),
       'minute'
     );
-  } else if (-msOffset < 24 * 60 * 60 * 1000 && accuracy === 'second') {
+  } else if (absOffset < 24 * 60 * 60 * 1000 && accuracy === 'second') {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60 / 60),
       'hour'
     );
-  } else if (-msOffset < 24 * 60 * 60 * 1000) {
+  } else if (absOffset < 24 * 60 * 60 * 1000) {
     return 'today';
-  } else if (-msOffset < 30 * 24 * 60 * 60 * 1000) {
+  } else if (absOffset < 30 * 24 * 60 * 60 * 1000) {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60 / 60 / 24),
       'day'
     );
-  } else if (-msOffset < 365 * 24 * 60 * 60 * 1000) {
+  } else if (absOffset < 365 * 24 * 60 * 60 * 1000) {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60 / 60 / 24 / 30),
       'month'

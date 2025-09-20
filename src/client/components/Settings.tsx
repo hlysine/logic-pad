@@ -26,7 +26,7 @@ export default memo(function Settings() {
           ).showModal()
         }
       >
-        <IoSettingsOutline size={20} />
+        <IoSettingsOutline size={22} />
       </button>
       <dialog id="settingsModal" className="modal">
         <div className="modal-box max-h-[70vh]">

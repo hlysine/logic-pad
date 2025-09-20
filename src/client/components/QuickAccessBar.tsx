@@ -4,6 +4,8 @@ import Loading from './Loading';
 import Settings from './Settings.tsx';
 import AccountControl from './AccountControl.tsx';
 import Notifications from './Notifications.tsx';
+import { Link } from '@tanstack/react-router';
+import { FaHeart } from 'react-icons/fa';
 const ThemeSwitcher = lazy(() => import('./ThemeSwitcher'));
 
 export interface QuickAccessBarProps {
@@ -19,6 +21,12 @@ export default memo(function QuickAccessBar({
         <ThemeSwitcher />
       </Suspense>
       <Settings />
+      <Link
+        to="/support"
+        className="btn btn-square btn-ghost text-neutral-content"
+      >
+        <FaHeart size={22} />
+      </Link>
       <Notifications />
       <AccountControl />
     </div>

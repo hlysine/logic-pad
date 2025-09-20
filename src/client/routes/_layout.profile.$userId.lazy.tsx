@@ -132,9 +132,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                   key={puzzle.id}
                   puzzle={puzzle}
                   expandable={false}
-                  onClick={async () => {
-                    await navigate({ to: '/solve/' + puzzle.id });
-                  }}
+                  to="/solve/$puzzleId"
+                  params={{ puzzleId: puzzle.id }}
                 />
               ))}
             </HorizontalScroller>
@@ -156,9 +155,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                   key={collection.id}
                   collection={collection}
                   expandable={false}
-                  onClick={async () => {
-                    await navigate({ to: '/collection/' + collection.id });
-                  }}
+                  to="/collection/$collectionId"
+                  params={{ collectionId: collection.id }}
                 />
               ))}
             </HorizontalScroller>
@@ -179,9 +177,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                     key={puzzle.id}
                     puzzle={puzzle}
                     expandable={false}
-                    onClick={async () => {
-                      await navigate({ to: '/solve/' + puzzle.id });
-                    }}
+                    to="/solve/$puzzleId"
+                    params={{ puzzleId: puzzle.id }}
                   />
                 ))}
               </HorizontalScroller>

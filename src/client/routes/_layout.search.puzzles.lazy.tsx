@@ -36,7 +36,10 @@ export const Route = createLazyFileRoute('/_layout/search/puzzles')({
         <div className="divider m-0" />
         <PuzzleSearchResults
           params={search}
-          onClick={puzzle => navigate({ to: `/solve/${puzzle.id}` })}
+          to={puzzle => ({
+            to: '/solve/$puzzleId',
+            params: { puzzleId: puzzle.id },
+          })}
         />
       </>
     );

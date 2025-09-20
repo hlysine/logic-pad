@@ -107,7 +107,8 @@ export default memo(function CollectionSidebar({
             <div className="h-full w-[350px] max-w-full shrink-0 grow-0 flex flex-col items-center p-4 bg-neutral text-neutral-content self-stretch pointer-events-auto">
               <div className="flex flex-col gap-2 items-start w-full">
                 <Link
-                  to={'/collection/' + collectionId}
+                  to="/collection/$collectionId"
+                  params={{ collectionId }}
                   className="btn btn-ghost flex flex-col flex-nowrap gap-2 items-start text-start [&>*]:shrink-0 h-fit w-full px-2 -mx-2"
                 >
                   <div className="text-accent text-sm uppercase">
@@ -213,7 +214,8 @@ export default memo(function CollectionSidebar({
         <div className="text-sm opacity-80 mt-2">
           Also part of the{' '}
           <Link
-            to={'/solve/' + puzzle.id}
+            to="/solve/$puzzleId"
+            params={{ puzzleId: puzzle.id }}
             search={{ collection: puzzle.series.id }}
             className="link link-accent"
           >

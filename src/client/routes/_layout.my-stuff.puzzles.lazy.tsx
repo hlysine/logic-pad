@@ -102,28 +102,34 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
                 <PuzzleCard
                   key={puzzle.id}
                   puzzle={puzzle}
-                  onClick={async () => {
-                    if (selectedPuzzles !== null) {
-                      if (puzzle.status === ResourceStatus.Private) {
-                        setSelectedPuzzles(selection => {
-                          if (selection?.includes(puzzle.id)) {
-                            return selection.filter(id => id !== puzzle.id);
+                  to={
+                    selectedPuzzles === null ? '/create/$puzzleId' : undefined
+                  }
+                  params={
+                    selectedPuzzles === null
+                      ? { puzzleId: puzzle.id }
+                      : undefined
+                  }
+                  onClick={
+                    selectedPuzzles !== null
+                      ? async () => {
+                          if (puzzle.status === ResourceStatus.Private) {
+                            setSelectedPuzzles(selection => {
+                              if (selection?.includes(puzzle.id)) {
+                                return selection.filter(id => id !== puzzle.id);
+                              }
+                              if ((selection?.length ?? 0) >= 100) {
+                                toast.error(
+                                  'You can select up to 100 puzzles at a time'
+                                );
+                                return selection;
+                              }
+                              return [...(selection ?? []), puzzle.id];
+                            });
                           }
-                          if ((selection?.length ?? 0) >= 100) {
-                            toast.error(
-                              'You can select up to 100 puzzles at a time'
-                            );
-                            return selection;
-                          }
-                          return [...(selection ?? []), puzzle.id];
-                        });
-                      }
-                    } else {
-                      await navigate({
-                        to: `/create/${puzzle.id}`,
-                      });
-                    }
-                  }}
+                        }
+                      : undefined
+                  }
                 >
                   {selectedPuzzles !== null && (
                     <div

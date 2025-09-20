@@ -38,11 +38,8 @@ export const Route = createLazyFileRoute('/_layout/my-follows')({
                 <CollectionCard
                   key={collection.id}
                   collection={collection}
-                  onClick={async () => {
-                    await navigate({
-                      to: `/collection/${collection.id}`,
-                    });
-                  }}
+                  to="/collection/$collectionId"
+                  params={{ collectionId: collection.id }}
                 />
               ))
             )}

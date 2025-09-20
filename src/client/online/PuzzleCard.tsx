@@ -15,8 +15,9 @@ import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Link, LinkComponentProps } from '@tanstack/react-router';
 
-export interface PuzzleCardProps {
+export interface PuzzleCardProps extends Partial<LinkComponentProps> {
   puzzle: PuzzleBrief;
   expandable?: boolean;
   dragDroppable?: boolean;
@@ -135,11 +136,12 @@ export default memo(function PuzzleCard({
   puzzle,
   expandable = true,
   dragDroppable = false,
-  onClick,
   children,
+  ...props
 }: PuzzleCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: puzzle.id });
+  const RootComponent = props.to ? Link : 'a';
   return (
     <div
       ref={dragDroppable ? setNodeRef : null}
@@ -158,15 +160,16 @@ export default memo(function PuzzleCard({
         dragDroppable && 'touch-none'
       )}
     >
-      <div
+      <RootComponent
+        preloadDelay={1000}
         className={cn(
           'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all text-base-content',
           puzzle.status === ResourceStatus.Private
-            ? `bg-base-300/50 hover:bg-base-100/50`
+            ? `bg-base-300/50 hover:bg-base-100`
             : 'bg-base-300 hover:bg-base-100'
         )}
         role="button"
-        onClick={onClick}
+        {...props}
       >
         <PuzzleIcon types={puzzle.types} size={36} className="shrink-0" />
         <div className="flex flex-col">
@@ -215,7 +218,7 @@ export default memo(function PuzzleCard({
           )}
         </div>
         {children}
-      </div>
+      </RootComponent>
     </div>
   );
 });

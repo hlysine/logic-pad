@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo, ReactNode, useEffect, useRef, useState } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
@@ -65,7 +65,6 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
   isSeries,
   editable,
 }: CollectionPuzzlesProps) {
-  const navigate = useNavigate();
   const { me } = useOnline();
   const {
     data: puzzles,
@@ -254,31 +253,33 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
               key={puzzle.id}
               dragDroppable={editable}
               puzzle={puzzle}
-              onClick={async () => {
-                if (selectedPuzzles !== null) {
-                  setSelectedPuzzles(selection => {
-                    if (selection?.includes(puzzle.id)) {
-                      return selection.filter(id => id !== puzzle.id);
+              to={
+                selectedPuzzles === null
+                  ? puzzle.status === ResourceStatus.Private &&
+                    puzzle.creator.id === me?.id
+                    ? `/create/$puzzleId`
+                    : `/solve/$puzzleId`
+                  : undefined
+              }
+              params={{ puzzleId: puzzle.id }}
+              onClick={
+                selectedPuzzles !== null
+                  ? async () => {
+                      setSelectedPuzzles(selection => {
+                        if (selection?.includes(puzzle.id)) {
+                          return selection.filter(id => id !== puzzle.id);
+                        }
+                        if ((selection?.length ?? 0) >= 100) {
+                          toast.error(
+                            'You can select up to 100 puzzles at a time'
+                          );
+                          return selection;
+                        }
+                        return [...(selection ?? []), puzzle.id];
+                      });
                     }
-                    if ((selection?.length ?? 0) >= 100) {
-                      toast.error('You can select up to 100 puzzles at a time');
-                      return selection;
-                    }
-                    return [...(selection ?? []), puzzle.id];
-                  });
-                } else {
-                  await navigate({
-                    to:
-                      puzzle.status === ResourceStatus.Private &&
-                      puzzle.creator.id === me?.id
-                        ? `/create/${puzzle.id}`
-                        : `/solve/${puzzle.id}`,
-                    search: {
-                      collection: collectionId,
-                    },
-                  });
-                }
-              }}
+                  : undefined
+              }
             >
               {selectedPuzzles !== null && (
                 <div

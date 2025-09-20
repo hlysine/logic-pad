@@ -2,7 +2,6 @@ import { memo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
-import { useNavigate } from '@tanstack/react-router';
 import { CollectionSearchParams } from './CollectionSearchQuery';
 import CollectionCard from './CollectionCard';
 import { searchCollectionsInfiniteQueryOptions } from '../routes/_layout.search.collections';
@@ -14,7 +13,6 @@ export interface CollectionSearchResultsProps {
 export default memo(function CollectionSearchResults({
   params,
 }: CollectionSearchResultsProps) {
-  const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
     searchCollectionsInfiniteQueryOptions(params)
   );
@@ -27,11 +25,8 @@ export default memo(function CollectionSearchResults({
             <CollectionCard
               key={collection.id}
               collection={collection}
-              onClick={async () => {
-                await navigate({
-                  to: `/collection/${collection.id}`,
-                });
-              }}
+              to="/collection/$collectionId"
+              params={{ collectionId: collection.id }}
             />
           ))
         )}

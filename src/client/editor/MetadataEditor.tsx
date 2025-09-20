@@ -48,7 +48,8 @@ export default memo(function MetadataEditor() {
         <div className="text-sm opacity-80 ms-2">
           Part of the{' '}
           <Link
-            to={'/collection/' + puzzle.series.id}
+            to="/collection/$collectionId"
+            params={{ collectionId: puzzle.series.id }}
             className="link link-accent"
           >
             {puzzle.series.title}

@@ -6,6 +6,7 @@ import PuzzleCard from './PuzzleCard';
 import { PublicPuzzleSearchParams } from './PuzzleSearchQuery';
 import { PuzzleBrief } from './data';
 import { bidirectionalInfiniteQuery, api } from './api';
+import { ToOptions } from '@tanstack/react-router';
 
 export const searchPuzzlesInfiniteQueryOptions = (
   search: PublicPuzzleSearchParams
@@ -18,12 +19,14 @@ export const searchPuzzlesInfiniteQueryOptions = (
 
 export interface PuzzleSearchResultsProps {
   params: PublicPuzzleSearchParams;
-  onClick: (puzzle: PuzzleBrief) => void;
+  to?: (puzzle: PuzzleBrief) => ToOptions;
+  onClick?: (puzzle: PuzzleBrief) => void;
   puzzleCardChildren?: (puzzle: PuzzleBrief) => ReactNode;
 }
 
 export default memo(function PuzzleSearchResults({
   params,
+  to,
   onClick,
   puzzleCardChildren,
 }: PuzzleSearchResultsProps) {
@@ -40,6 +43,7 @@ export default memo(function PuzzleSearchResults({
               key={puzzle.id}
               puzzle={puzzle}
               onClick={() => onClick?.(puzzle)}
+              {...to?.(puzzle)}
             >
               {puzzleCardChildren?.(puzzle)}
             </PuzzleCard>

@@ -84,7 +84,12 @@ export default memo(function CollectionCard({
           </div>
         </div>
         {(collection.description?.length ?? 0) > 0 && (
-          <div className="hidden [.wrapper:hover_&]:block text-sm">
+          <div
+            className={cn(
+              'hidden text-sm',
+              expandable && '[.wrapper:hover_&]:block'
+            )}
+          >
             {collection.description.length > 120
               ? collection.description.slice(0, 120) + '...'
               : collection.description}

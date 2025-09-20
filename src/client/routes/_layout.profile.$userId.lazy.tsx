@@ -114,16 +114,14 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               title="Created puzzles"
               scrollable={false}
               className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
-              onExpand={
+              to={
                 userDetail?.createdPuzzlesCollection
-                  ? async () => {
-                      if (userDetail!.createdPuzzlesCollection)
-                        await navigate({
-                          to:
-                            '/collection/' +
-                            userDetail!.createdPuzzlesCollection,
-                        });
-                    }
+                  ? '/collection/$collectionId'
+                  : undefined
+              }
+              params={
+                userDetail?.createdPuzzlesCollection
+                  ? { collectionId: userDetail!.createdPuzzlesCollection }
                   : undefined
               }
             >
@@ -141,14 +139,8 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               title="Created collections"
               scrollable={false}
               className="flex-wrap box-content max-h-[calc(96px*2+1rem)] w-full"
-              onExpand={async () => {
-                await navigate({
-                  to: '/search/collections',
-                  search: {
-                    q: `creator=${userBrief.id}`,
-                  },
-                });
-              }}
+              to="/search/collections"
+              search={{ q: `creator=${userBrief.id}` }}
             >
               {userDetail!.createdCollections.map(collection => (
                 <CollectionCard
@@ -165,12 +157,16 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                 title="Solved puzzles"
                 scrollable={false}
                 className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
-                onExpand={async () => {
-                  if (userDetail.solvedPuzzlesCollection)
-                    await navigate({
-                      to: '/collection/' + userDetail.solvedPuzzlesCollection,
-                    });
-                }}
+                to={
+                  userDetail.solvedPuzzlesCollection
+                    ? '/collection/$collectionId'
+                    : undefined
+                }
+                params={
+                  userDetail.solvedPuzzlesCollection
+                    ? { collectionId: userDetail!.solvedPuzzlesCollection }
+                    : undefined
+                }
               >
                 {userDetail.solvedPuzzles.map(puzzle => (
                   <PuzzleCard

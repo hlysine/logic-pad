@@ -1,12 +1,12 @@
 import { memo, ReactNode } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import PuzzleCard from './PuzzleCard';
 import { PublicPuzzleSearchParams } from './PuzzleSearchQuery';
 import { PuzzleBrief } from './data';
 import { bidirectionalInfiniteQuery, api } from './api';
 import { ToOptions } from '@tanstack/react-router';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export const searchPuzzlesInfiniteQueryOptions = (
   search: PublicPuzzleSearchParams
@@ -51,12 +51,9 @@ export default memo(function PuzzleSearchResults({
         )}
       </div>
       {isFetching ? (
-        <Loading />
+        <Loading className="h-fit" />
       ) : hasNextPage ? (
-        <button className="btn" onClick={async () => await fetchNextPage()}>
-          Load more
-          <FaChevronDown />
-        </button>
+        <InfiniteScrollTrigger onLoadMore={async () => await fetchNextPage()} />
       ) : null}
     </div>
   );

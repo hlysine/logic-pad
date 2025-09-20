@@ -9,7 +9,6 @@ import { memo, useState } from 'react';
 import {
   FaBell,
   FaCheckDouble,
-  FaChevronDown,
   FaCog,
   FaComment,
   FaListUl,
@@ -26,6 +25,7 @@ import Markdown from './Markdown';
 import { cn, toRelativeDate } from '../uiHelper';
 import { Link } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
+import InfiniteScrollTrigger from './InfiniteScrollTrigger';
 
 const markAllAsRead = (notificationIds: string[]) =>
   mutationOptions({
@@ -278,12 +278,12 @@ export default memo(function Notifications() {
       </button>
       {expand && (
         <div className="absolute w-0 h-0 bottom-0 right-0">
-          <div className="z-50 fixed top-28 md:absolute md:top-2 right-0 flex flex-col items-center p-4 gap-2 max-w-[100vw] w-[500px] bg-base-100 shadow-lg rounded-xl min-h-52 max-h-[calc(100vh-10rem)]">
-            <div className="flex justify-between items-center w-full">
+          <div className="z-50 fixed top-28 md:absolute md:top-2 right-0 flex flex-col items-center p-4 gap-2 max-w-[100vw] w-[500px] bg-base-100 shadow-lg rounded-xl min-h-52 max-h-[calc(100vh-10rem)] overflow-y-auto infinite-scroll">
+            <div className="flex justify-between items-center self-stretch">
               <span className="text-secondary text-lg">Notifications</span>
               <div className="flex gap-2">
                 <div
-                  className="tooltip tooltip-info tooltip-bottom"
+                  className="tooltip tooltip-info tooltip-left"
                   data-tip="Mark all as read"
                 >
                   <button
@@ -301,7 +301,7 @@ export default memo(function Notifications() {
                   </button>
                 </div>
                 <div
-                  className="tooltip tooltip-info tooltip-bottom"
+                  className="tooltip tooltip-info tooltip-left"
                   data-tip="Delete all read"
                 >
                   <button
@@ -336,13 +336,10 @@ export default memo(function Notifications() {
             {notifications.isFetching ? (
               <Loading className="w-4 h-4" />
             ) : notifications.hasNextPage ? (
-              <button
-                className="btn"
-                onClick={async () => await notifications.fetchNextPage()}
-              >
-                Load more
-                <FaChevronDown />
-              </button>
+              <InfiniteScrollTrigger
+                onLoadMore={async () => await notifications.fetchNextPage()}
+                className="btn-sm"
+              />
             ) : null}
           </div>
         </div>

@@ -8,13 +8,13 @@ import {
 } from '@tanstack/react-query';
 import { api, bidirectionalInfiniteQuery, queryClient } from './api';
 import Loading from '../components/Loading';
-import { FaChevronUp } from 'react-icons/fa';
 import { Comment, ListResponse } from './data';
 import { useOnline } from '../contexts/OnlineContext';
 import toast from 'react-hot-toast';
 import CommentEntry from './CommentEntry';
 import CommentTextarea, { CommentTextareaRef } from './CommentTextarea';
 import { IoSend } from 'react-icons/io5';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export interface CommentSidebarProps {
   open: boolean;
@@ -26,7 +26,8 @@ export const commentListQueryOptions = (puzzleId: string) =>
     ...bidirectionalInfiniteQuery(
       ['puzzle', puzzleId, 'comments', 'list'],
       (cursorBefore, cursorAfter) =>
-        api.listComments(puzzleId!, cursorBefore, cursorAfter)
+        api.listComments(puzzleId!, cursorBefore, cursorAfter),
+      false
     ),
   });
 
@@ -168,41 +169,37 @@ export default memo(function CommentSidebar({
         <div className="h-full w-full pointer-events-none flex justify-end">
           {open && (
             <div className="h-full w-[360px] max-w-full shrink-0 grow-0 flex flex-col items-center pt-4 pb-2 gap-4 bg-neutral text-neutral-content self-stretch pointer-events-auto">
-              <div className="text-accent text-sm uppercase self-start mx-4">
+              <div className="text-accent text-sm uppercase self-start mx-4 shrink-0">
                 Comments
               </div>
               {commentList.isPending ? (
                 <Loading />
               ) : (
-                <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 scrollbar-stable">
-                  <div className="flex flex-col-reverse w-full">
-                    {commentList.data?.pages.flatMap(page =>
-                      page.results.map(comment => (
-                        <CommentEntry
-                          key={comment.id}
-                          comment={comment}
-                          onReply={(name, id) => {
-                            inputRef.current?.prependMention(name, id);
-                            inputRef.current?.focus();
-                          }}
-                        />
-                      ))
-                    )}
-                    {commentList.isFetchingNextPage ? (
-                      <Loading className="h-4 p-4 self-center" />
-                    ) : commentList.hasNextPage ? (
-                      <button
-                        className="btn btn-sm btn-neutral w-fit self-center"
-                        onClick={async () => await commentList.fetchNextPage()}
-                      >
-                        Load more
-                        <FaChevronUp />
-                      </button>
-                    ) : null}
-                  </div>
+                <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 flex flex-col-reverse scrollbar-stable [&>*]:shrink-0">
+                  {commentList.data?.pages.flatMap(page =>
+                    page.results.map(comment => (
+                      <CommentEntry
+                        key={comment.id}
+                        comment={comment}
+                        onReply={(name, id) => {
+                          inputRef.current?.prependMention(name, id);
+                          inputRef.current?.focus();
+                        }}
+                      />
+                    ))
+                  )}
+                  {commentList.isFetchingNextPage ? (
+                    <Loading className="h-4 p-4 self-center" />
+                  ) : commentList.hasNextPage ? (
+                    <InfiniteScrollTrigger
+                      onLoadMore={async () => await commentList.fetchNextPage()}
+                      direction="up"
+                      className="btn-sm btn-neutral w-fit self-center"
+                    />
+                  ) : null}
                 </div>
               )}
-              <div className="relative flex gap-2 items-center self-stretch mx-2">
+              <div className="relative flex gap-2 items-center self-stretch mx-2 shrink-0">
                 <CommentTextarea
                   ref={inputRef}
                   onPostComment={text => addComment.mutate([id, text])}

@@ -1,10 +1,10 @@
 import { memo } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { FaChevronDown } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import { CollectionSearchParams } from './CollectionSearchQuery';
 import CollectionCard from './CollectionCard';
 import { searchCollectionsInfiniteQueryOptions } from '../routes/_layout.search.collections';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export interface CollectionSearchResultsProps {
   params: CollectionSearchParams;
@@ -32,12 +32,9 @@ export default memo(function CollectionSearchResults({
         )}
       </div>
       {isFetching ? (
-        <Loading />
+        <Loading className="h-fit" />
       ) : hasNextPage ? (
-        <button className="btn" onClick={async () => await fetchNextPage()}>
-          Load more
-          <FaChevronDown />
-        </button>
+        <InfiniteScrollTrigger onLoadMore={async () => await fetchNextPage()} />
       ) : null}
     </div>
   );

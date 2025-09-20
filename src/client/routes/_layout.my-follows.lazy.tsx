@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
-import { FaChevronDown, FaFolder } from 'react-icons/fa';
+import { FaFolder } from 'react-icons/fa';
 import Loading from '../components/Loading';
 import { useRouteProtection } from '../router/useRouteProtection';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -8,6 +8,7 @@ import { followedCollectionsInfiniteQueryOptions } from './_layout.my-follows';
 import CollectionSearchQuery from '../online/CollectionSearchQuery';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import CollectionCard from '../online/CollectionCard';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export const Route = createLazyFileRoute('/_layout/my-follows')({
   component: memo(function Collection() {
@@ -45,12 +46,11 @@ export const Route = createLazyFileRoute('/_layout/my-follows')({
             )}
           </div>
           {isFetching ? (
-            <Loading />
+            <Loading className="h-fit" />
           ) : hasNextPage ? (
-            <button className="btn" onClick={async () => await fetchNextPage()}>
-              Load more
-              <FaChevronDown />
-            </button>
+            <InfiniteScrollTrigger
+              onLoadMore={async () => await fetchNextPage()}
+            />
           ) : null}
         </div>
       </ResponsiveLayout>

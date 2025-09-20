@@ -3,7 +3,6 @@ import { memo, ReactNode, useEffect, useRef, useState } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
   FaCheck,
-  FaChevronDown,
   FaExchangeAlt,
   FaListOl,
   FaListUl,
@@ -53,6 +52,7 @@ import {
   sortableKeyboardCoordinates,
 } from '@dnd-kit/sortable';
 import Avatar from '../online/Avatar';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 interface CollectionPuzzlesProps {
   collectionId: string;
@@ -302,12 +302,9 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
         )}
       </div>
       {isFetching ? (
-        <Loading />
+        <Loading className="h-fit" />
       ) : hasNextPage ? (
-        <button className="btn" onClick={async () => await fetchNextPage()}>
-          Load more
-          <FaChevronDown />
-        </button>
+        <InfiniteScrollTrigger onLoadMore={async () => await fetchNextPage()} />
       ) : null}
     </div>
   );

@@ -1,12 +1,12 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { memo } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Loading from '../components/Loading';
 import { useRouteProtection } from '../router/useRouteProtection';
 import CollectionSearchQuery from '../online/CollectionSearchQuery';
 import CollectionCard from '../online/CollectionCard';
 import { myCollectionsInfiniteQueryOptions } from './_layout.my-stuff.collections';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
   component: memo(function MyStuff() {
@@ -54,12 +54,11 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/collections')({
             )}
           </div>
           {isFetching ? (
-            <Loading />
+            <Loading className="h-fit" />
           ) : hasNextPage ? (
-            <button className="btn" onClick={async () => await fetchNextPage()}>
-              Load more
-              <FaChevronDown />
-            </button>
+            <InfiniteScrollTrigger
+              onLoadMore={async () => await fetchNextPage()}
+            />
           ) : null}
         </div>
       </>

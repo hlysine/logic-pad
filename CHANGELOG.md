@@ -2,6 +2,8 @@
 
 - Online features are now available at logic-pad.com
   - All dev.logic-pad.com links will redirect to the main site automatically
+- Convert important buttons to links for accessibility
+- Most infinite-scrolling lists now load the next page automatically
 
 # 19/9/2025
 

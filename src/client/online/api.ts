@@ -535,9 +535,11 @@ export const bidirectionalInfiniteQuery = <
         (!predictEndOfQuery &&
           !lastPageParams?.cursorAfter &&
           !lastPageParams?.cursorBefore)
-        ? {
-            cursorAfter: lastPage.results[lastPage.results.length - 1].id,
-          }
+        ? lastPage.results.length === 0
+          ? undefined
+          : {
+              cursorAfter: lastPage.results[lastPage.results.length - 1].id,
+            }
         : lastPageParams?.cursorBefore
           ? { cursorAfter: lastPageParams.cursorBefore }
           : undefined;
@@ -547,9 +549,11 @@ export const bidirectionalInfiniteQuery = <
         (!predictEndOfQuery &&
           !firstPageParams?.cursorAfter &&
           !firstPageParams?.cursorBefore)
-        ? {
-            cursorBefore: firstPage.results[0].id,
-          }
+        ? firstPage.results.length === 0
+          ? undefined
+          : {
+              cursorBefore: firstPage.results[0].id,
+            }
         : firstPageParams?.cursorAfter
           ? { cursorBefore: firstPageParams.cursorAfter }
           : undefined;

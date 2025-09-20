@@ -6,7 +6,6 @@ import { RiPlayList2Fill } from 'react-icons/ri';
 import { collectionQueryOptions } from '../routes/_layout.collection.$collectionId';
 import Loading from '../components/Loading';
 import { PuzzleIcon } from './PuzzleCard';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { Link, useNavigate } from '@tanstack/react-router';
 import UserCard from '../metadata/UserCard';
 import Difficulty from '../metadata/Difficulty';
@@ -14,6 +13,7 @@ import { cn } from '../uiHelper';
 import { useOnline } from '../contexts/OnlineContext';
 import { ResourceStatus } from './data';
 import { router } from '../router/router';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export interface CollectionSidebarProps {
   collectionId?: string | null;
@@ -124,15 +124,16 @@ export default memo(function CollectionSidebar({
               <div className="divider" />
               <div className="flex flex-col items-center w-full overflow-y-auto flex-1 [&>*]:shrink-0">
                 {puzzleList.isFetchingPreviousPage ? (
-                  <Loading className="h-4 p-4" />
+                  <Loading className="h-4 m-4 shrink-0" />
                 ) : puzzleList.hasPreviousPage ? (
-                  <button
-                    className="btn btn-sm btn-neutral w-fit"
-                    onClick={async () => await puzzleList.fetchPreviousPage()}
-                  >
-                    Load more
-                    <FaChevronUp />
-                  </button>
+                  <InfiniteScrollTrigger
+                    onLoadMore={async () =>
+                      await puzzleList.fetchPreviousPage()
+                    }
+                    autoTrigger={false}
+                    direction="up"
+                    className="btn-sm btn-neutral w-fit"
+                  />
                 ) : null}
                 {puzzleList.data?.pages.flatMap(page =>
                   page.results.map(puzzle => (
@@ -195,15 +196,12 @@ export default memo(function CollectionSidebar({
                   ))
                 )}
                 {puzzleList.isFetchingNextPage ? (
-                  <Loading className="h-4 p-4" />
+                  <Loading className="h-4 m-4 shrink-0" />
                 ) : puzzleList.hasNextPage ? (
-                  <button
-                    className="btn btn-sm btn-neutral w-fit"
-                    onClick={async () => await puzzleList.fetchNextPage()}
-                  >
-                    Load more
-                    <FaChevronDown />
-                  </button>
+                  <InfiniteScrollTrigger
+                    onLoadMore={async () => await puzzleList.fetchNextPage()}
+                    className="btn-sm btn-neutral w-fit"
+                  />
                 ) : null}
               </div>
             </div>

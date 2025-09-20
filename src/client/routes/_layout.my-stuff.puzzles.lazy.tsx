@@ -1,6 +1,6 @@
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { memo, useState } from 'react';
-import { FaCheck, FaChevronDown, FaPlus, FaTrash } from 'react-icons/fa';
+import { FaCheck, FaPlus, FaTrash } from 'react-icons/fa';
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '../online/api';
 import PuzzleCard from '../online/PuzzleCard';
@@ -13,6 +13,7 @@ import { cn } from '../uiHelper';
 import { myPuzzlesInfiniteQueryOptions } from './_layout.my-stuff.puzzles';
 import { ResourceStatus } from '../online/data';
 import { FaXmark } from 'react-icons/fa6';
+import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
   component: memo(function MyStuff() {
@@ -154,12 +155,11 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
             )}
           </div>
           {isFetching ? (
-            <Loading />
+            <Loading className="h-fit" />
           ) : hasNextPage ? (
-            <button className="btn" onClick={async () => await fetchNextPage()}>
-              Load more
-              <FaChevronDown />
-            </button>
+            <InfiniteScrollTrigger
+              onLoadMore={async () => await fetchNextPage()}
+            />
           ) : null}
         </div>
       </>

@@ -1,3 +1,8 @@
+# 20/9/2025
+
+- Online features are now available at logic-pad.com
+  - All dev.logic-pad.com links will redirect to the main site automatically
+
 # 19/9/2025
 
 **PREVIEW BRANCH**

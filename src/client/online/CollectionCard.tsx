@@ -21,7 +21,7 @@ export default memo(function CollectionCard({
   return (
     <div className="w-[320px] h-[96px] hover:z-50 shrink-0 grow-0">
       <RootComponent
-        preloadDelay={1000}
+        preload={false}
         className={cn(
           'w-full h-full hover:h-fit flex flex-col gap-2 px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all text-base-content',
           collection.status === ResourceStatus.Private

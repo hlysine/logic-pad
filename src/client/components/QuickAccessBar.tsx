@@ -21,12 +21,17 @@ export default memo(function QuickAccessBar({
         <ThemeSwitcher />
       </Suspense>
       <Settings />
-      <Link
-        to="/support"
-        className="btn btn-square btn-ghost max-md:btn-sm text-neutral-content"
+      <div
+        className="tooltip tooltip-info tooltip-bottom"
+        data-tip="Support Logic Pad"
       >
-        <FaHeart size={22} />
-      </Link>
+        <Link
+          to="/support"
+          className="btn btn-square btn-ghost max-md:btn-sm text-neutral-content"
+        >
+          <FaHeart size={22} />
+        </Link>
+      </div>
       <Notifications />
       <AccountControl />
     </div>

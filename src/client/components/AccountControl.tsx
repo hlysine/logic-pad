@@ -9,6 +9,7 @@ import { FaBan } from 'react-icons/fa';
 import { RiRefreshFill } from 'react-icons/ri';
 import { cleanReload } from './settings/ResetSite';
 import Avatar from '../online/Avatar';
+import SupporterBadge from './SupporterBadge';
 
 // million-ignore
 export default memo(function AccountControl() {
@@ -71,7 +72,10 @@ export default memo(function AccountControl() {
     <details ref={detailsRef} className="dropdown dropdown-end">
       <summary className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
         <Avatar userId={me.id} username={me.name} className="w-8 h-8" />
-        {me.name}
+        <span>
+          {me.name}
+          <SupporterBadge supporter={me.supporter} />
+        </span>
       </summary>
       <ul className="menu dropdown-content bg-base-300 text-base-content rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
         <li>

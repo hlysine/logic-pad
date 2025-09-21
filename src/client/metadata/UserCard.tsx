@@ -4,6 +4,7 @@ import { UserBrief } from '../online/data';
 import { FaCheckSquare, FaEdit } from 'react-icons/fa';
 import { Link } from '@tanstack/react-router';
 import Avatar from '../online/Avatar';
+import SupporterBadge from '../components/SupporterBadge';
 
 export interface UserCardProps {
   user?: UserBrief | null;
@@ -27,7 +28,10 @@ export default memo(function UserCard({
         <div className="flex gap-4">
           <Avatar userId={user.id} username={user.name} className="w-16 h-16" />
           <div className="flex flex-col">
-            <span className="text-xl font-bold">{user.name}</span>
+            <span className="text-xl font-bold">
+              {user.name}
+              <SupporterBadge supporter={user.supporter} />
+            </span>
             {user.title && (
               <span className="text-sm text-accent font-semibold">
                 {user.title}
@@ -63,6 +67,7 @@ export default memo(function UserCard({
         )}
       >
         {name}
+        <SupporterBadge supporter={user?.supporter ?? 0} />
       </Link>
       {tooltipContent}
     </div>

@@ -5,6 +5,7 @@ import { cn } from '../uiHelper';
 import { TbLayoutGrid } from 'react-icons/tb';
 import Avatar from './Avatar';
 import { Link, LinkComponentProps } from '@tanstack/react-router';
+import SupporterBadge from '../components/SupporterBadge';
 
 export interface CollectionCardProps extends Partial<LinkComponentProps> {
   collection: CollectionBrief;
@@ -57,6 +58,7 @@ export default memo(function CollectionCard({
             </h2>
             <div className="badge badge-neutral bg-neutral/40 badge-md mt-1">
               {collection.creator.name}
+              <SupporterBadge supporter={collection.creator.supporter} />
             </div>
             <div className="flex gap-4 text-sm opacity-80 mt-2">
               {collection.puzzleCount !== null && (

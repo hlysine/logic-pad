@@ -19,7 +19,6 @@ export enum NotificationType {
   Account = 'account',
   System = 'system',
 }
-
 export interface ResourceResponse {
   id: string;
   createdAt: string;
@@ -144,4 +143,12 @@ export interface SupporterPrice {
   months: number;
   price: number;
   currency: string;
+}
+
+export interface PaymentHistory extends ResourceResponse {
+  user: string;
+  order: string;
+  currency: string;
+  amount: number;
+  items: string[];
 }

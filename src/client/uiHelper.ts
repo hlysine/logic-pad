@@ -38,7 +38,7 @@ export function toRelativeDate(
       Math.round(msOffset / 1000 / 60 / 60 / 24),
       'day'
     );
-  } else if (absOffset < 365 * 24 * 60 * 60 * 1000) {
+  } else if (absOffset < 365 * 24 * 60 * 60 * 1000 || msOffset > 0) {
     return relativeTimeFormat.format(
       Math.round(msOffset / 1000 / 60 / 60 / 24 / 30),
       'month'

@@ -18,6 +18,7 @@ import {
   UserAutocomplete,
   SupporterPrice,
   MeBrief,
+  PaymentHistory,
 } from './data';
 import {
   DataTag,
@@ -512,6 +513,14 @@ export const api = {
     url.searchParams.set('success', success);
     url.searchParams.set('error', error);
     window.location.href = url.toString();
+  },
+  listPaymentHistory: async (cursorBefore?: string, cursorAfter?: string) => {
+    return await axios
+      .get<ListResponse<PaymentHistory>>(`/payment/history`, {
+        params: { cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
   },
 };
 

@@ -16,6 +16,7 @@ import { cn } from '../uiHelper';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Link, LinkComponentProps } from '@tanstack/react-router';
+import SupporterBadge from '../components/SupporterBadge';
 
 export interface PuzzleCardProps extends Partial<LinkComponentProps> {
   puzzle: PuzzleBrief;
@@ -186,6 +187,7 @@ export default memo(function PuzzleCard({
           </h2>
           <div className="badge badge-neutral bg-neutral/40 badge-md mt-1">
             {puzzle.creator.name}
+            <SupporterBadge supporter={puzzle.creator.supporter} />
           </div>
           <div className="flex gap-2 mt-2 text-sm">
             <span>

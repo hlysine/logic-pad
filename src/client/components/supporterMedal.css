@@ -1,0 +1,13 @@
+.glow {
+  box-shadow: 0px 0px 200px 200px oklch(var(--a));
+}
+@keyframes ping-sm {
+  75%,
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+.animate-ping-sm {
+  animation: ping-sm 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}

@@ -17,6 +17,7 @@ import HorizontalScroller from '../components/HorizontalScroller';
 import PuzzleCard from '../online/PuzzleCard';
 import CollectionCard from '../online/CollectionCard';
 import Avatar from '../online/Avatar';
+import SupporterBadge from '../components/SupporterBadge';
 
 export const Route = createLazyFileRoute('/_layout/profile/$userId')({
   component: memo(function ProfilePage() {
@@ -51,7 +52,10 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               className="w-24 h-24"
             />
             <div className="flex flex-col gap-1 flex-1 min-w-[320px]">
-              <span className="text-3xl font-bold">{userBrief.name}</span>
+              <span className="text-3xl font-bold">
+                {userBrief.name}
+                <SupporterBadge tooltip supporter={userBrief.supporter} />
+              </span>
               {userBrief.title && (
                 <span className="text-accent font-semibold">
                   {userBrief.title}

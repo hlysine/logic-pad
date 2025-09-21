@@ -1,3 +1,8 @@
+# 21/9/2025
+
+- Added Different Count Per Zone rule
+  - Zones of the same size have different numbers of cells of a specified color
+
 # 20/9/2025
 
 - Online features are now available at logic-pad.com

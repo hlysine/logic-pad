@@ -1,3 +1,7 @@
+# 0.16.0
+
+- Added Different Count Per Zone rule
+
 # 0.15.3
 
 - Fixed validation for diagonal lotus at tile corners

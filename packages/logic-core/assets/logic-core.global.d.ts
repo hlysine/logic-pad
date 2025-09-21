@@ -1540,28 +1540,23 @@ declare global {
     copyWith({ pattern }: { pattern?: GridData }): this;
     withPattern(pattern: GridData): this;
   }
-  export declare class CellCountPerZoneRule extends Rule {
+  export interface Zone {
+    positions: Position$1[];
+    completed: number;
+    possible: number;
+  }
+  export type ZoneCounts = {
+    zones: Zone[];
+    complete: boolean;
+  };
+  export declare abstract class CellCountPerZoneRule extends Rule {
     readonly color: Color;
-    readonly title = 'Equal Count Per Zone';
     get configExplanation(): string;
-    private static readonly CONFIGS;
-    private static readonly EXAMPLE_GRID_LIGHT;
-    private static readonly EXAMPLE_GRID_DARK;
-    private static readonly EXAMPLE_GRID_GRAY;
-    private static readonly SEARCH_VARIANTS;
     /**
-     * **Zones of the same size have the same number of &lt;color&gt; cells.**
-     *
      * @param color - The color of the cells to count.
      */
     constructor(color: Color);
-    get id(): string;
-    get explanation(): string;
-    get configs(): readonly AnyConfig[] | null;
-    createExampleGrid(): GridData;
-    get searchVariants(): SearchVariant[];
-    validateGrid(grid: GridData): RuleState;
-    copyWith({ color }: { color?: Color }): this;
+    protected getZoneCounts(grid: GridData): ZoneCounts;
     withColor(color: Color): this;
   }
   export declare class CellCountRule extends Rule {
@@ -1683,6 +1678,28 @@ declare global {
       grid?: GridData;
     }): this;
     get validateWithSolution(): boolean;
+  }
+  export declare class DifferentCountPerZoneRule extends CellCountPerZoneRule {
+    readonly color: Color;
+    readonly title = 'Different Count Per Zone';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly EXAMPLE_GRID_GRAY;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Zones of the same size have different numbers of &lt;color&gt; cells.**
+     *
+     * @param color - The color of the cells to count.
+     */
+    constructor(color: Color);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color }: { color?: Color }): this;
   }
   export declare class ForesightRule extends Rule {
     readonly count: number;
@@ -1904,6 +1921,28 @@ declare global {
     copyWith({ color, size }: { color?: Color; size?: number }): this;
     withColor(color: Color): this;
     withSize(size: number): this;
+  }
+  export declare class SameCountPerZoneRule extends CellCountPerZoneRule {
+    readonly color: Color;
+    readonly title = 'Equal Count Per Zone';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly EXAMPLE_GRID_GRAY;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Zones of the same size have the same number of &lt;color&gt; cells.**
+     *
+     * @param color - The color of the cells to count.
+     */
+    constructor(color: Color);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color }: { color?: Color }): this;
   }
   export declare class SameShapeRule extends RegionShapeRule {
     readonly title = 'Same Shape Areas';

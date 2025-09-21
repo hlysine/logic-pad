@@ -28,6 +28,7 @@ import CompletePatternRule from './data/rules/completePatternRule.js';
 import ConnectAllRule from './data/rules/connectAllRule.js';
 import ContainsShapeRule from './data/rules/containsShapeRule.js';
 import CustomRule from './data/rules/customRule.js';
+import DifferentCountPerZoneRule from './data/rules/differentCountPerZoneRule.js';
 import ForesightRule from './data/rules/foresightRule.js';
 import { allRules } from './data/rules/index.js';
 import LyingSymbolRule from './data/rules/lyingSymbolRule.js';
@@ -39,6 +40,7 @@ import PerfectionRule from './data/rules/perfectionRule.js';
 import RegionAreaRule from './data/rules/regionAreaRule.js';
 import RegionShapeRule from './data/rules/regionShapeRule.js';
 import Rule from './data/rules/rule.js';
+import SameCountPerZoneRule from './data/rules/sameCountPerZoneRule.js';
 import SameShapeRule from './data/rules/sameShapeRule.js';
 import SymbolsPerRegionRule from './data/rules/symbolsPerRegionRule.js';
 import UndercluedRule from './data/rules/undercluedRule.js';
@@ -174,6 +176,7 @@ export {
   ConnectAllRule,
   ContainsShapeRule,
   CustomRule,
+  DifferentCountPerZoneRule,
   ForesightRule,
   allRules,
   LyingSymbolRule,
@@ -186,6 +189,7 @@ export {
   RegionAreaRule,
   RegionShapeRule,
   Rule,
+  SameCountPerZoneRule,
   SameShapeRule,
   SymbolsPerRegionRule,
   UndercluedRule,

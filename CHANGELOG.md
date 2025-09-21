@@ -2,6 +2,7 @@
 
 - Added Different Count Per Zone rule
   - Zones of the same size have different numbers of cells of a specified color
+- Added support page for Logic Pad Supporter program
 
 # 20/9/2025
 

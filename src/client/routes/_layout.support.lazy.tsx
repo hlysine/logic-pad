@@ -86,9 +86,9 @@ export const Route = createLazyFileRoute('/_layout/support')({
         )}
 
         {/* Quote Section */}
-        <div className="p-8 bg-base-200 text-base-content rounded-lg shadow">
+        <div className="p-8 bg-base-100 text-base-content rounded-lg shadow">
           <blockquote className="text-xl italic text-center leading-relaxed">
-            "Logic Pad is a project born out of love for the game{' '}
+            Logic Pad is a project born out of love for the game{' '}
             <a
               href="https://islandsofinsight.com"
               target="_blank"
@@ -101,7 +101,7 @@ export const Route = createLazyFileRoute('/_layout/support')({
             sustainable, I have created this supporter program that offers small
             perks to users who choose to support the site financially. Your
             support helps keep Logic Pad running and growing, and I am deeply
-            grateful for it."
+            grateful for it.
           </blockquote>
         </div>
 
@@ -115,7 +115,7 @@ export const Route = createLazyFileRoute('/_layout/support')({
               <div className="w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                 <span className="text-accent-content text-sm">✓</span>
               </div>
-              <span>Exclusive supporter badge next to your username</span>
+              <span>Animated supporter badge next to your username</span>
             </div>
           </div>
           <p className="text-sm text-base-content/70 mt-4 text-center">

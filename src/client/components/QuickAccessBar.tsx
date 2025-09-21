@@ -23,7 +23,7 @@ export default memo(function QuickAccessBar({
       <Settings />
       <Link
         to="/support"
-        className="btn btn-square btn-ghost text-neutral-content"
+        className="btn btn-square btn-ghost max-md:btn-sm text-neutral-content"
       >
         <FaHeart size={22} />
       </Link>

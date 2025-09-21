@@ -19,7 +19,7 @@ export default memo(function Settings() {
       <button
         type="button"
         aria-label="Open settings"
-        className="btn btn-ghost text-neutral-content"
+        className="btn btn-square btn-ghost max-md:btn-sm text-neutral-content"
         onClick={() =>
           (
             document.getElementById('settingsModal') as HTMLDialogElement

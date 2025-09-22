@@ -4,6 +4,8 @@ import { createGzip } from 'zlib';
 import { SitemapEntry } from '../client/online/data';
 import { api } from '../client/online/api';
 
+Object.assign(import.meta.env, process.env);
+
 export const isr = { expiration: 60 * 60 * 12 };
 
 export default async function handler(

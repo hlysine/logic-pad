@@ -13,6 +13,7 @@ export default async function handler(
   response: VercelResponse
 ) {
   response.setHeader('Content-Type', 'text/xml');
+  response.setHeader('Content-Encoding', 'gzip');
   response.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
   response.setHeader('X-Robots-Tag', 'index, follow');
 

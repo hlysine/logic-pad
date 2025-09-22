@@ -105,11 +105,11 @@ export const Route = createFileRoute('/')({
     }, []);
     return (
       <>
-        <div className="flex flex-col gap-4 items-stretch min-h-svh shrink-0">
+        <main className="flex flex-col gap-4 items-stretch min-h-svh shrink-0">
           <div className="flex flex-col shrink-0">
             <PWAPrompt />
             <QuickAccessBar className="justify-end px-8 py-2" />
-            <div className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
+            <section className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
               <div className="relative order-1 grow shrink self-stretch overflow-visible pointer-events-none -z-10 min-h-64 m-16">
                 <div className="absolute w-0 h-0 top-1/2 left-1/2 logo-glow fade-in-fast"></div>
                 <Suspense fallback={null}>
@@ -176,9 +176,9 @@ export const Route = createFileRoute('/')({
                   <Changelog />
                 </div>
               </div>
-            </div>
+            </section>
           </div>
-          <div className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center [&>*]:shrink-0">
+          <section className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center [&>*]:shrink-0">
             {isOnline && (
               <Suspense fallback={<Loading />}>
                 <FrontPageLists />
@@ -189,8 +189,8 @@ export const Route = createFileRoute('/')({
                 <PersonalFrontPageLists />
               </Suspense>
             )}
-          </div>
-        </div>
+          </section>
+        </main>
         <Footer />
       </>
     );

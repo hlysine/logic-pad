@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://logic-pad.com/sitemap.xml

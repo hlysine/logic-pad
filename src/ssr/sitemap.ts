@@ -5,7 +5,7 @@ import { SitemapEntry } from '../client/online/data';
 import { api, axios } from '../client/online/api';
 
 // TODO: A dirty hack to get around import.meta.env being undefined in vite-plugin-vercel v9
-axios.defaults.baseURL = process.env.VITE_API_ENDPOINT as string;
+axios.defaults.baseURL = process.env.VITE_API_ENDPOINT;
 
 export const isr = { expiration: 60 * 60 * 12 };
 
@@ -18,7 +18,9 @@ export default async function handler(
   response.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
   response.setHeader('X-Robots-Tag', 'index, follow');
 
-  const smStream = new SitemapStream({ hostname: 'https://example.com/' });
+  const smStream = new SitemapStream({
+    hostname: process.env.VITE_VERCEL_PROJECT_PRODUCTION_URL,
+  });
   const pipeline = smStream.pipe(createGzip());
 
   // pipe your entries or directly write them.

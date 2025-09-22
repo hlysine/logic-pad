@@ -76,7 +76,7 @@ export const queryClient = new QueryClient({
 });
 
 export const axios = axiosStatic.create({
-  baseURL: import.meta.env.VITE_API_ENDPOINT as string,
+  baseURL: import.meta.env?.VITE_API_ENDPOINT as string,
   withCredentials: true,
 });
 
@@ -103,7 +103,7 @@ export const api = {
   signInWithOAuth: (provider: string, success: string, error: string) => {
     onlineSolveTracker.clearSolveRecords();
     const url = new URL(
-      (import.meta.env.VITE_API_ENDPOINT as string) + '/auth/oauth/' + provider
+      (import.meta.env?.VITE_API_ENDPOINT as string) + '/auth/oauth/' + provider
     );
     url.searchParams.set('success', success);
     url.searchParams.set('error', error);
@@ -253,7 +253,7 @@ export const api = {
     };
     const blob = new Blob([JSON.stringify({ msTimeElapsed })], headers);
     return navigator.sendBeacon(
-      (import.meta.env.VITE_API_ENDPOINT as string) +
+      (import.meta.env?.VITE_API_ENDPOINT as string) +
         `/completion/${puzzleId}/solving`,
       blob
     );
@@ -507,7 +507,7 @@ export const api = {
   },
   checkoutSupporter: (price: string, success: string, error: string) => {
     const url = new URL(
-      (import.meta.env.VITE_API_ENDPOINT as string) +
+      (import.meta.env?.VITE_API_ENDPOINT as string) +
         '/payment/supporter/checkout'
     );
     url.searchParams.set('priceId', price);

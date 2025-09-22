@@ -2,9 +2,9 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { SitemapStream } from 'sitemap';
 import { createGzip } from 'zlib';
 import { SitemapEntry } from '../client/online/data';
-import { api } from '../client/online/api';
+import { api, axios } from '../client/online/api';
 
-Object.assign(import.meta.env, process.env);
+axios.defaults.baseURL = process.env.VITE_API_ENDPOINT as string;
 
 export const isr = { expiration: 60 * 60 * 12 };
 

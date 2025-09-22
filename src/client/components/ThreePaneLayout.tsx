@@ -19,7 +19,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
 }: ThreePaneLayoutComponentProps) {
   const id = useId();
   return (
-    <div className="drawer xl:drawer-open lg:h-dvh xl:h-full">
+    <main className="drawer xl:drawer-open lg:h-dvh xl:h-full">
       <input
         id={`three-pane-${id}`}
         type="checkbox"
@@ -56,7 +56,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 });
 
@@ -67,7 +67,7 @@ const FixedThreePaneLayout = memo(function FixedThreePaneLayout({
 }: ThreePaneLayoutComponentProps) {
   return (
     /* Large bottom padding in small screen to fit the floating toolbar */
-    <div className="flex flex-1 xl:h-full justify-center items-center flex-col xl:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
+    <main className="flex flex-1 xl:h-full justify-center items-center flex-col xl:flex-row gap-2 pt-8 pb-28 xl:pt-0 xl:pb-0">
       <div className="w-full max-w-[640px] xl:w-[320px] shrink-0 grow-0 xl:self-stretch flex flex-col p-4 gap-4 text-neutral-content justify-between order-0">
         {left}
       </div>
@@ -83,7 +83,7 @@ const FixedThreePaneLayout = memo(function FixedThreePaneLayout({
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 });
 

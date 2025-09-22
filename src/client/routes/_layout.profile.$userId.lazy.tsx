@@ -44,7 +44,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
 
     return (
       <ResponsiveLayout>
-        <div className="flex flex-col gap-4 w-full max-w-[800px] self-center mt-8">
+        <section className="flex flex-col gap-4 w-full max-w-[800px] self-center mt-8">
           <div className="flex gap-8 items-start flex-wrap">
             <Avatar
               userId={userBrief.id}
@@ -52,10 +52,10 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               className="w-24 h-24"
             />
             <div className="flex flex-col gap-1 flex-1 min-w-[320px]">
-              <span className="text-3xl font-bold">
+              <h1 className="text-3xl font-bold">
                 {userBrief.name}
                 <SupporterBadge tooltip supporter={userBrief.supporter} />
-              </span>
+              </h1>
               {userBrief.title && (
                 <span className="text-accent font-semibold">
                   {userBrief.title}
@@ -108,7 +108,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               )
             )}
           </div>
-        </div>
+        </section>
         <div className="divider" />
         {isPending ? (
           <Loading className="h-20" />

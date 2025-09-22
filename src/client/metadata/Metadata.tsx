@@ -22,7 +22,7 @@ export default memo(function Metadata({
   const { puzzle } = useOnlinePuzzle();
 
   return (
-    <div className="flex flex-col gap-4 text-neutral-content">
+    <section className="flex flex-col gap-4 text-neutral-content">
       <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
       <div
         className="tooltip tooltip-info tooltip-right w-fit"
@@ -53,6 +53,6 @@ export default memo(function Metadata({
           </Markdown>
         </div>
       )}
-    </div>
+    </section>
   );
 });

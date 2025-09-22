@@ -18,7 +18,7 @@ export default memo(function OnlineMetadata() {
   }
   return (
     <>
-      <div className="flex gap-2">
+      <aside className="flex gap-2">
         <span className="badge badge-ghost badge-lg p-4 bg-base-100 text-base-content border-0">
           <FaCheckSquare className="inline-block me-2" />
           {pluralize(puzzle.data!.solveCount)`solve``solves`}
@@ -27,7 +27,7 @@ export default memo(function OnlineMetadata() {
           <FaHeart className="inline-block me-2" />
           {pluralize(puzzle.data!.loveCount)`love``loves`}
         </span>
-      </div>
+      </aside>
       <RatedDifficulty
         key="ratedDifficulty"
         ratedDifficulty={puzzle.data!.ratedDifficulty}

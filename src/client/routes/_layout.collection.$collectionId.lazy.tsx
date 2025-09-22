@@ -383,7 +383,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
 
     return (
       <ResponsiveLayout>
-        <div className="flex items-center text-3xl mt-8 flex-wrap gap-4 justify-between">
+        <section className="flex items-center text-3xl mt-8 flex-wrap gap-4 justify-between">
           <div
             className={cn(
               'flex items-center',
@@ -521,7 +521,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
               </dialog>
             </div>
           )}
-        </div>
+        </section>
         <UserCard user={collectionBrief.creator} />
         <div className="flex gap-4 items-center flex-wrap">
           {collectionBrief.status === ResourceStatus.Public && (

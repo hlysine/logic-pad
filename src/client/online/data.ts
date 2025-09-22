@@ -152,3 +152,8 @@ export interface PaymentHistory extends ResourceResponse {
   amount: number;
   items: string[];
 }
+
+export interface SitemapEntry {
+  id: string;
+  updatedAt: string;
+}

@@ -7,6 +7,7 @@ import path from 'path';
 import { replaceCodePlugin } from 'vite-plugin-replace';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import { execSync } from 'child_process';
+import vercel from 'vite-plugin-vercel';
 
 const commitHash = execSync('git rev-parse HEAD').toString().trim();
 
@@ -42,8 +43,10 @@ export default defineConfig({
       routesDirectory: './src/client/routes',
       generatedRouteTree: './src/client/router/routeTree.gen.ts',
     }),
+    vercel(),
     VitePWA({
       registerType: 'prompt',
+      outDir: '.vercel/output/static',
       includeAssets: [
         'favicon.ico',
         '*.svg',
@@ -117,6 +120,24 @@ export default defineConfig({
     },
     port: 5173,
     open: true,
+  },
+  vercel: {
+    additionalEndpoints: [
+      {
+        source: './src/ssr/sitemap.ts',
+        destination: '/sitemap.xml',
+      },
+    ],
+    rewrites: [{ source: '/(.*)', destination: '/' }],
+    headers: [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
+        ],
+      },
+    ],
   },
   preview: {
     headers: {

@@ -19,6 +19,7 @@ import {
   SupporterPrice,
   MeBrief,
   PaymentHistory,
+  SitemapEntry,
 } from './data';
 import {
   DataTag,
@@ -517,6 +518,18 @@ export const api = {
   listPaymentHistory: async (cursorBefore?: string, cursorAfter?: string) => {
     return await axios
       .get<ListResponse<PaymentHistory>>(`/payment/history`, {
+        params: { cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  listSitemap: async (
+    resource: 'users' | 'puzzles' | 'collections',
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<SitemapEntry[]>(`/sitemap/${resource}`, {
         params: { cursorBefore, cursorAfter },
       })
       .then(res => res.data)

@@ -58,9 +58,11 @@
     "react-responsive": "^10.0.1",
     "remark-inline-spoiler": "^1.0.1",
     "semver": "^7.7.2",
+    "sitemap": "^8.0.0",
     "tailwind-merge": "<3",
     "tone": "<15",
     "z3-solver": "^4.15.2",
+    "zlib": "^1.0.5",
     "zod": "^4.0.17"
   },
   "devDependencies": {
@@ -73,6 +75,7 @@
     "@types/semver": "^7.7.1",
     "@typescript-eslint/eslint-plugin": "^8.44.0",
     "@typescript-eslint/parser": "^8.44.0",
+    "@vercel/node": "^5.3.23",
     "@vitejs/plugin-react": "<5",
     "autoprefixer": "^10.4.18",
     "caniuse-lite": "^1.0.30001733",
@@ -98,7 +101,8 @@
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-pwa": "^1.0.2",
     "vite-plugin-replace": "^0.1.1",
-    "vite-plugin-static-copy": "^3.1.1"
+    "vite-plugin-static-copy": "^3.1.1",
+    "vite-plugin-vercel": "^9.0.7"
   },
   "trustedDependencies": [
     "@vercel/speed-insights",

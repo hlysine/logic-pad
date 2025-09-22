@@ -262,6 +262,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   : undefined
               }
               params={{ puzzleId: puzzle.id }}
+              search={{ collection: collectionId }}
               onClick={
                 selectedPuzzles !== null
                   ? async () => {

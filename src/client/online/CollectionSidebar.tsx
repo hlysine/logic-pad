@@ -6,7 +6,7 @@ import { RiPlayList2Fill } from 'react-icons/ri';
 import { collectionQueryOptions } from '../routes/_layout.collection.$collectionId';
 import Loading from '../components/Loading';
 import { PuzzleIcon } from './PuzzleCard';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import UserCard from '../metadata/UserCard';
 import Difficulty from '../metadata/Difficulty';
 import { cn } from '../uiHelper';
@@ -23,7 +23,6 @@ export default memo(function CollectionSidebar({
   collectionId,
 }: CollectionSidebarProps) {
   const drawerId = useId();
-  const navigate = useNavigate();
   const { me } = useOnline();
   const { id, puzzle } = useOnlinePuzzle();
   collectionId ??= puzzle?.series?.id;
@@ -33,7 +32,7 @@ export default memo(function CollectionSidebar({
   });
   const puzzleList = useInfiniteQuery({
     ...bidirectionalInfiniteQuery(
-      ['collection', collectionId, 'puzzles', 'sidebar'],
+      ['collection', collectionId, 'puzzles', 'sidebar', puzzle?.id],
       (cursorBefore, cursorAfter) =>
         api.listCollectionPuzzles(collectionId!, cursorBefore, cursorAfter),
       false
@@ -119,7 +118,9 @@ export default memo(function CollectionSidebar({
                   <div className="text-2xl">{collection.data.title}</div>
                 </Link>
                 <UserCard user={collection.data.creator} />
-                <div>{collection.data.description}</div>
+                <div className="max-h-72 overflow-y-auto">
+                  {collection.data.description}
+                </div>
               </div>
               <div className="divider" />
               <div className="flex flex-col items-center w-full overflow-y-auto flex-1 [&>*]:shrink-0">
@@ -138,7 +139,7 @@ export default memo(function CollectionSidebar({
                 {puzzleList.data?.pages.flatMap(page =>
                   page.results.map(puzzle => (
                     <>
-                      <button
+                      <Link
                         key={puzzle.id}
                         className={cn(
                           'btn w-full h-fit flex flex-row flex-nowrap gap-2 py-2 items-center justify-start text-start wrapper',
@@ -147,23 +148,15 @@ export default memo(function CollectionSidebar({
                             puzzle.creator.id !== me?.id &&
                             'btn-disabled'
                         )}
-                        onClick={async () => {
-                          let newPath = router.state.location.pathname
-                            .split('/')
-                            .slice(0, -1)
-                            .join('/');
-                          if (
-                            puzzle.status === ResourceStatus.Private &&
-                            puzzle.creator.id === me?.id
-                          )
-                            newPath = '/create';
-                          await navigate({
-                            to: `${newPath}/${puzzle.id}`,
-                            search: {
-                              collection:
-                                router.state.location.search.collection,
-                            },
-                          });
+                        to={
+                          puzzle.status === ResourceStatus.Private &&
+                          puzzle.creator.id === me?.id
+                            ? '/create/$puzzleId'
+                            : '.'
+                        }
+                        params={{ puzzleId: puzzle.id }}
+                        search={{
+                          collection: router.state.location.search.collection,
                         }}
                       >
                         <PuzzleIcon
@@ -190,7 +183,7 @@ export default memo(function CollectionSidebar({
                             size="sm"
                           />
                         </div>
-                      </button>
+                      </Link>
                       <div className="divider m-0" />
                     </>
                   ))

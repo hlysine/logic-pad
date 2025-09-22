@@ -1,7 +1,6 @@
 import { Link, Outlet, createLazyFileRoute } from '@tanstack/react-router';
 import { memo } from 'react';
 import QuickAccessBar from '../components/QuickAccessBar';
-import AlphaBadge from '../components/AlphaBadge';
 import { useMediaQuery } from 'react-responsive';
 import { RiMenu2Fill } from 'react-icons/ri';
 import PWAPrompt from '../components/PWAPrompt';
@@ -82,7 +81,6 @@ export const Route = createLazyFileRoute('/_layout')({
             {isLargeMedia && !isOnline && (
               <div className="opacity-80">Go online for more features</div>
             )}
-            <AlphaBadge />
           </nav>
           <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />
         </header>

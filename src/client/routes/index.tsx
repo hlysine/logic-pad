@@ -9,7 +9,6 @@ import useLinkLoader from '../router/linkLoader';
 import PWAPrompt from '../components/PWAPrompt';
 import toast from 'react-hot-toast';
 import deferredRedirect from '../router/deferredRedirect';
-import AlphaBadge from '../components/AlphaBadge';
 import FrontPageLists from '../online/FrontPageLists';
 import PersonalFrontPageLists from '../online/PersonalFrontPageLists';
 import { useOnline } from '../contexts/OnlineContext';
@@ -128,7 +127,6 @@ export const Route = createFileRoute('/')({
                 <div className="flex flex-col gap-4">
                   <h1 className="text-accent text-4xl lg:text-6xl font-medium font-serif">
                     Logic Pad
-                    <AlphaBadge className="ms-4" />
                   </h1>
                   <span className="text-xl lg:text-2xl">
                     A modern, open-source web app for grid-based puzzles.

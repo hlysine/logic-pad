@@ -4,6 +4,7 @@ import { createGzip } from 'zlib';
 import { SitemapEntry } from '../client/online/data';
 import { api, axios } from '../client/online/api';
 
+// TODO: A dirty hack to get around import.meta.env being undefined in vite-plugin-vercel v9
 axios.defaults.baseURL = process.env.VITE_API_ENDPOINT as string;
 
 export const isr = { expiration: 60 * 60 * 12 };
@@ -41,7 +42,7 @@ export default async function handler(
       smStream.write({
         url: `/solve/${puzzle.id}`,
         lastmod: puzzle.updatedAt,
-        changefreq: 'monthly',
+        changefreq: 'weekly',
         priority: 0.6,
       });
       puzzleCount++;
@@ -61,7 +62,7 @@ export default async function handler(
       smStream.write({
         url: `/collection/${collection.id}`,
         lastmod: collection.updatedAt,
-        changefreq: 'monthly',
+        changefreq: 'weekly',
         priority: 0.5,
       });
       collectionCount++;
@@ -77,7 +78,7 @@ export default async function handler(
       smStream.write({
         url: `/user/${user.id}`,
         lastmod: user.updatedAt,
-        changefreq: 'monthly',
+        changefreq: 'weekly',
         priority: 0.4,
       });
       userCount++;

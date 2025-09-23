@@ -2,6 +2,8 @@
 
 - Added House symbol
   - Houses must connect to exactly one other house
+- When a number symbol is selected, you can now scroll to adjust its number
+- You can now use right click to delete symbols
 
 # 21/9/2025
 

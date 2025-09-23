@@ -22,6 +22,7 @@ import PointerCaptureOverlay, {
 import handleTileClick from '../grid/handleTileClick';
 import { SymbolProps } from '../symbols';
 import GridData from '@logic-pad/core/data/grid';
+import { NumberSymbol } from '@logic-pad/core/index.ts';
 
 export interface SymbolToolProps extends HTMLProps<HTMLDivElement> {
   name: string;
@@ -93,6 +94,16 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
         return false;
       }}
       onTileClick={(x, y, from, to) => {
+        if (to === Color.Light) {
+          setGrid(
+            grid.removeSymbolIf(
+              sym => sym.id === sample.id && eq(sym.x, x) && eq(sym.y, y)
+            )
+          );
+          setLocation(undefined);
+          setRef(undefined);
+          return;
+        }
         if (location) return;
         if (from === Color.Dark) {
           setLocation(
@@ -120,6 +131,20 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
       }}
       onPointerMove={(x, y) => setPosition({ x, y })}
       onPointerLeave={() => setPosition(null)}
+      onWheel={(x, y, delta) => {
+        if (!location) return;
+        if (location.type !== 'symbol') return;
+        const symbol = grid.symbols.get(location.id)?.at(location.index);
+        if (!symbol) return;
+        if (!eq(symbol.x, x) || !eq(symbol.y, y)) return;
+        if (!(symbol instanceof NumberSymbol)) return;
+        setGrid(
+          grid.replaceSymbol(
+            symbol,
+            symbol.withNumber(symbol.number + (delta > 0 ? -1 : 1))
+          )
+        );
+      }}
     >
       <div
         ref={cursorRef}
@@ -156,7 +181,7 @@ export default memo(function SymbolTool(props: SymbolToolProps) {
     <ToolboxItem
       id={id}
       name={name}
-      description="Left click to place a symbol. Click again to configure it."
+      description="Left click to place a symbol. Click again to configure it. Right click to remove."
       order={order}
       hotkey={hotkey}
       defaultHidden={defaultHidden}

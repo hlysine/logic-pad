@@ -28,6 +28,7 @@ export interface PointerCaptureOverlayProps {
   onPointerUp?: (color: Color) => void;
   onPointerMove?: (x: number, y: number) => void;
   onPointerLeave?: () => void;
+  onWheel?: (x: number, y: number, delta: number) => void;
   bleed?: number | Bleed;
   children?: React.ReactNode;
   className?: string;
@@ -87,6 +88,7 @@ export default memo(function PointerCaptureOverlay({
   onPointerUp,
   onPointerMove,
   onPointerLeave,
+  onWheel,
   bleed,
   children,
   className,
@@ -100,7 +102,9 @@ export default memo(function PointerCaptureOverlay({
 
   const prevCoord = useRef({ x: -1, y: -1 });
 
-  const getPointerPosition = (e: React.PointerEvent<HTMLDivElement>) => {
+  const getPointerPosition = (
+    e: React.PointerEvent<HTMLDivElement> | React.WheelEvent<HTMLDivElement>
+  ) => {
     return getPointerLocation(
       e.currentTarget,
       e.clientX,
@@ -213,6 +217,12 @@ export default memo(function PointerCaptureOverlay({
       onPointerLeave={() => {
         prevCoord.current = { x: -1, y: -1 };
         onPointerLeave?.();
+      }}
+      onWheel={e => {
+        if (onWheel) {
+          const { x, y } = getPointerPosition(e);
+          onWheel(x, y, e.deltaY);
+        }
       }}
     >
       {children}

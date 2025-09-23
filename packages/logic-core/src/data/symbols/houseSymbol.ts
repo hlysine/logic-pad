@@ -70,12 +70,10 @@ export default class HouseSymbol extends Symbol {
     const visited = array(grid.width, grid.height, () => false);
     const connected = array(grid.width, grid.height, () => false);
     const color = grid.getTile(thisX, thisY).color;
+    if (color === Color.Gray) return State.Incomplete;
     grid.iterateArea(
       { x: thisX, y: thisY },
-      tile =>
-        color === Color.Gray ||
-        tile.color === Color.Gray ||
-        tile.color === color,
+      tile => tile.color === Color.Gray || tile.color === color,
       (tile, x, y) => {
         visited[y][x] = true;
         if (tile.color === Color.Gray) complete = false;
@@ -98,10 +96,7 @@ export default class HouseSymbol extends Symbol {
         else if (visited[symbolY][symbolX]) possibleHouses++;
       }
     }
-    if (
-      color !== Color.Gray &&
-      (connectedHouses > 1 || connectedHouses + possibleHouses < 1)
-    ) {
+    if (connectedHouses > 1 || connectedHouses + possibleHouses < 1) {
       return State.Error;
     }
     return complete || (connectedHouses === 1 && possibleHouses === 0)

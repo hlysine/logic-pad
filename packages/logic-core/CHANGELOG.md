@@ -1,3 +1,7 @@
+# 0.17.1
+
+- Fixed house symbol showing success when on gray tiles
+
 # 0.17.0
 
 - Added house symbol

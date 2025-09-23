@@ -132,18 +132,19 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
       onPointerMove={(x, y) => setPosition({ x, y })}
       onPointerLeave={() => setPosition(null)}
       onWheel={(x, y, delta) => {
-        if (!location) return;
-        if (location.type !== 'symbol') return;
+        if (!location) return false;
+        if (location.type !== 'symbol') return false;
         const symbol = grid.symbols.get(location.id)?.at(location.index);
-        if (!symbol) return;
-        if (!eq(symbol.x, x) || !eq(symbol.y, y)) return;
-        if (!(symbol instanceof NumberSymbol)) return;
+        if (!symbol) return false;
+        if (!eq(symbol.x, x) || !eq(symbol.y, y)) return false;
+        if (!(symbol instanceof NumberSymbol)) return false;
         setGrid(
           grid.replaceSymbol(
             symbol,
             symbol.withNumber(symbol.number + (delta > 0 ? -1 : 1))
           )
         );
+        return true;
       }}
     >
       <div

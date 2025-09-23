@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef } from 'react';
 import { Color } from '@logic-pad/core/data/primitives';
 import mouseContext from './MouseContext';
 import { cn } from '../uiHelper';
@@ -11,7 +11,7 @@ type Bleed = {
 };
 
 export interface PointerCaptureOverlayProps {
-  ref?: React.Ref<HTMLDivElement>;
+  ref?: React.RefObject<HTMLDivElement | null>;
   width: number;
   height: number;
   colorMap: (x: number, y: number, color: Color) => boolean;
@@ -28,7 +28,7 @@ export interface PointerCaptureOverlayProps {
   onPointerUp?: (color: Color) => void;
   onPointerMove?: (x: number, y: number) => void;
   onPointerLeave?: () => void;
-  onWheel?: (x: number, y: number, delta: number) => void;
+  onWheel?: (x: number, y: number, delta: number) => boolean;
   bleed?: number | Bleed;
   children?: React.ReactNode;
   className?: string;
@@ -103,10 +103,14 @@ export default memo(function PointerCaptureOverlay({
   const prevCoord = useRef({ x: -1, y: -1 });
 
   const getPointerPosition = (
-    e: React.PointerEvent<HTMLDivElement> | React.WheelEvent<HTMLDivElement>
+    e:
+      | React.PointerEvent<HTMLDivElement>
+      | React.WheelEvent<HTMLDivElement>
+      | WheelEvent
   ) => {
+    if (!e.currentTarget) return { x: -1, y: -1 };
     return getPointerLocation(
-      e.currentTarget,
+      e.currentTarget as HTMLDivElement,
       e.clientX,
       e.clientY,
       width,
@@ -120,6 +124,20 @@ export default memo(function PointerCaptureOverlay({
     const currentColor = colorMap(x, y, targetColor) ? targetColor : Color.Gray;
     return currentColor;
   };
+
+  useEffect(() => {
+    if (onWheel) {
+      const handle = (e: WheelEvent) => {
+        const { x, y } = getPointerPosition(e);
+        if (onWheel(x, y, e.deltaY)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      };
+      ref?.current?.addEventListener('wheel', handle, { passive: false });
+      return () => ref?.current?.removeEventListener('wheel', handle);
+    }
+  }, [onWheel]);
 
   return (
     <div
@@ -217,12 +235,6 @@ export default memo(function PointerCaptureOverlay({
       onPointerLeave={() => {
         prevCoord.current = { x: -1, y: -1 };
         onPointerLeave?.();
-      }}
-      onWheel={e => {
-        if (onWheel) {
-          const { x, y } = getPointerPosition(e);
-          onWheel(x, y, e.deltaY);
-        }
       }}
     >
       {children}

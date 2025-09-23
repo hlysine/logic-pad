@@ -10,7 +10,7 @@ export default memo(function CustomTextTool() {
     <SymbolTool
       name="Custom Text"
       order={301}
-      hotkey="extraSymbols-2"
+      hotkey="extraSymbols-3"
       defaultHidden={true}
       sample={sample}
       component={CustomTextSymbol}

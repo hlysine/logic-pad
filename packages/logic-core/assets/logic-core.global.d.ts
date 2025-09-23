@@ -3083,6 +3083,26 @@ declare global {
     }): this;
     withRevealLocation(revealLocation: boolean): this;
   }
+  export declare class HouseSymbol extends Symbol$1 {
+    readonly x: number;
+    readonly y: number;
+    readonly title = 'House';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID;
+    /**
+     * **Houses must connect to exactly one other house**
+     *
+     * @param x - The x-coordinate of the symbol.
+     * @param y - The y-coordinate of the symbol.
+     */
+    constructor(x: number, y: number);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    validateSymbol(grid: GridData): State;
+    copyWith({ x, y }: { x?: number; y?: number }): this;
+  }
   export declare const allSymbols: Map<string, Symbol$1>;
   export declare function aggregateState(
     rules: readonly RuleState[],

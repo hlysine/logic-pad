@@ -106,6 +106,7 @@ import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol.js';
 import FocusSymbol from './data/symbols/focusSymbol.js';
 import GalaxySymbol from './data/symbols/galaxySymbol.js';
 import HiddenSymbol from './data/symbols/hiddenSymbol.js';
+import HouseSymbol from './data/symbols/houseSymbol.js';
 import { allSymbols } from './data/symbols/index.js';
 import LetterSymbol from './data/symbols/letterSymbol.js';
 import LotusSymbol from './data/symbols/lotusSymbol.js';
@@ -268,6 +269,7 @@ export {
   FocusSymbol,
   GalaxySymbol,
   HiddenSymbol,
+  HouseSymbol,
   allSymbols,
   LetterSymbol,
   LotusSymbol,

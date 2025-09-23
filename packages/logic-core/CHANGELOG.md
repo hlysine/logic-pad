@@ -1,3 +1,7 @@
+# 0.17.0
+
+- Added house symbol
+
 # 0.16.0
 
 - Added Different Count Per Zone rule

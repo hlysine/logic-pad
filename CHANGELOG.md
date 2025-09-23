@@ -1,3 +1,8 @@
+# 23/9/2025
+
+- Added House symbol
+  - Houses must connect to exactly one other house
+
 # 21/9/2025
 
 - Added Different Count Per Zone rule

@@ -3083,9 +3083,10 @@ declare global {
     }): this;
     withRevealLocation(revealLocation: boolean): this;
   }
-  export declare class HouseSymbol extends Symbol$1 {
+  export declare class HouseSymbol extends NumberSymbol {
     readonly x: number;
     readonly y: number;
+    readonly number: number;
     readonly title = 'House';
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
@@ -3094,14 +3095,26 @@ declare global {
      *
      * @param x - The x-coordinate of the symbol.
      * @param y - The y-coordinate of the symbol.
+     * @param number - The number of houses in this region.
      */
-    constructor(x: number, y: number);
+    constructor(x: number, y: number, number: number);
     get id(): string;
     get explanation(): string;
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
-    validateSymbol(grid: GridData): State;
-    copyWith({ x, y }: { x?: number; y?: number }): this;
+    countTiles(grid: GridData): {
+      completed: number;
+      possible: number;
+    };
+    copyWith({
+      x,
+      y,
+      number,
+    }: {
+      x?: number;
+      y?: number;
+      number?: number;
+    }): this;
   }
   export declare const allSymbols: Map<string, Symbol$1>;
   export declare function aggregateState(

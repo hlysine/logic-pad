@@ -1,3 +1,7 @@
+# 0.18.0
+
+- House symbols now have configurable numbers
+
 # 0.17.1
 
 - Fixed house symbol showing success when on gray tiles

@@ -1,3 +1,7 @@
+# 24/9/2025
+
+- House symbols now contains a number and can be affected by Off-by-X rule
+
 # 23/9/2025
 
 - Added House symbol

@@ -1,14 +1,14 @@
 import { memo } from 'react';
 import { cn } from '../uiHelper.ts';
 import HouseSymbolData from '@logic-pad/core/data/symbols/houseSymbol';
-import { FaHouse } from 'react-icons/fa6';
+import { BsHouse } from 'react-icons/bs';
 
 export interface HouseProps {
   textClass: string;
   symbol: HouseSymbolData;
 }
 
-export default memo(function HouseSymbol({ textClass }: HouseProps) {
+export default memo(function HouseSymbol({ textClass, symbol }: HouseProps) {
   return (
     <div
       className={cn(
@@ -16,8 +16,16 @@ export default memo(function HouseSymbol({ textClass }: HouseProps) {
         textClass
       )}
     >
-      <span className={cn('absolute m-auto text-[0.5em]', textClass)}>
-        <FaHouse />
+      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
+        <BsHouse />
+      </span>
+      <span
+        className={cn(
+          'absolute m-auto text-[0.4em] translate-y-[0.15em]',
+          textClass
+        )}
+      >
+        {symbol.number}
       </span>
     </div>
   );

@@ -1,26 +1,18 @@
 import { memo } from 'react';
-import { useGrid } from '../../contexts/GridContext';
-import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useRouterState } from '@tanstack/react-router';
 import { FaStarHalfAlt } from 'react-icons/fa';
-import { router } from '../../router/router';
 
 export default memo(function SolveModeButton() {
-  const { grid } = useGrid();
-  const navigate = useNavigate();
-  if (grid.findRule(r => r.id === musicGridInstance.id)) return null;
+  const pathname = useRouterState({ select: s => s.location.pathname });
+  const search = useRouterState({ select: s => s.location.search });
   return (
-    <button
+    <Link
+      to={pathname.replace('/perfection', '/solve')}
+      search={search}
       className="tooltip tooltip-info tooltip-right btn btn-md btn-ghost flex items-center w-fit focus:z-50"
-      data-tip="Switch to solve mode"
-      onClick={async () => {
-        await navigate({
-          to: router.state.location.pathname.replace('/perfection', '/solve'),
-          search: router.state.location.search,
-        });
-      }}
+      data-tip="Switch to perfection mode"
     >
       <FaStarHalfAlt size={24} />
-    </button>
+    </Link>
   );
 });

@@ -7,6 +7,15 @@ import { api, axios } from '../client/online/api';
 // TODO: A dirty hack to get around import.meta.env being undefined in vite-plugin-vercel v9
 axios.defaults.baseURL = process.env.VITE_API_ENDPOINT;
 
+const lastSitemapModification = new Date('2025-09-25T08:48:59Z');
+
+function lastMod(updatedAt: string) {
+  const updatedDate = new Date(updatedAt);
+  return updatedDate > lastSitemapModification
+    ? updatedAt
+    : lastSitemapModification.toISOString();
+}
+
 export const isr = { expiration: 60 * 60 * 12 };
 
 export default async function handler(
@@ -43,7 +52,7 @@ export default async function handler(
     for (const puzzle of puzzles) {
       smStream.write({
         url: `/solve/${puzzle.id}`,
-        lastmod: puzzle.updatedAt,
+        lastmod: lastMod(puzzle.updatedAt),
         changefreq: 'weekly',
         priority: 0.6,
       });
@@ -63,7 +72,7 @@ export default async function handler(
     for (const collection of collections) {
       smStream.write({
         url: `/collection/${collection.id}`,
-        lastmod: collection.updatedAt,
+        lastmod: lastMod(collection.updatedAt),
         changefreq: 'weekly',
         priority: 0.5,
       });
@@ -79,7 +88,7 @@ export default async function handler(
     for (const user of users) {
       smStream.write({
         url: `/profile/${user.id}`,
-        lastmod: user.updatedAt,
+        lastmod: lastMod(user.updatedAt),
         changefreq: 'weekly',
         priority: 0.4,
       });

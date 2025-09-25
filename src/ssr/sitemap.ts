@@ -78,7 +78,7 @@ export default async function handler(
     users = await api.listSitemap('users', undefined, users?.at(-1)?.id);
     for (const user of users) {
       smStream.write({
-        url: `/user/${user.id}`,
+        url: `/profile/${user.id}`,
         lastmod: user.updatedAt,
         changefreq: 'weekly',
         priority: 0.4,

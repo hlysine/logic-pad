@@ -13,6 +13,10 @@ import {
 import MultiEntrySymbol from './multiEntrySymbol.js';
 
 export default class MyopiaSymbol extends MultiEntrySymbol {
+  public get title() {
+    return this.diagonals ? 'Framed Myopia Arrow' : 'Myopia Arrow';
+  }
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -33,6 +37,8 @@ export default class MyopiaSymbol extends MultiEntrySymbol {
       default: false,
       field: 'diagonals',
       description: 'Include diagonal directions',
+      explanation:
+        'Whether to check diagonals as well. Must be enabled for diagonal arrows.',
       configurable: true,
     },
     {
@@ -40,6 +46,8 @@ export default class MyopiaSymbol extends MultiEntrySymbol {
       default: orientationToggle(Orientation.Up, Orientation.Right),
       field: 'directions',
       description: 'Directions',
+      explanation:
+        'The directions in which an arrow is pointing. A dot will be displayed if no arrows are present.',
       configurable: true,
     },
   ]);

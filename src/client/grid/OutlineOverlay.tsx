@@ -28,7 +28,7 @@ function positionsToGrid(positions: readonly Position[]) {
   return grid;
 }
 
-const BLEED = 5;
+const BLEED = 15;
 
 export default memo(function OutlineOverlay({
   positions,

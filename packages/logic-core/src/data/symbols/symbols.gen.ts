@@ -13,6 +13,7 @@ export { instance as DartSymbol } from './dartSymbol.js';
 export { instance as FocusSymbol } from './focusSymbol.js';
 export { instance as GalaxySymbol } from './galaxySymbol.js';
 export { instance as HiddenSymbol } from './hiddenSymbol.js';
+export { instance as HouseSymbol } from './houseSymbol.js';
 export { instance as LetterSymbol } from './letterSymbol.js';
 export { instance as LotusSymbol } from './lotusSymbol.js';
 export { instance as MinesweeperSymbol } from './minesweeperSymbol.js';

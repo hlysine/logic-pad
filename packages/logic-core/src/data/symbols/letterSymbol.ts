@@ -5,6 +5,8 @@ import { Color, State } from '../primitives.js';
 import Symbol from './symbol.js';
 
 export default class LetterSymbol extends Symbol {
+  public readonly title = 'Letter';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,
@@ -25,6 +27,7 @@ export default class LetterSymbol extends Symbol {
       default: 'A',
       field: 'letter',
       description: 'Letter',
+      explanation: 'Use single uppercase letters by convention.',
       configurable: true,
     },
   ]);

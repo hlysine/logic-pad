@@ -1,0 +1,24 @@
+.effect-shine {
+  mask-image: linear-gradient(
+    -75deg,
+    rgba(255, 255, 255, 1) 30%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 1) 70%
+  );
+  mask-size: 200%;
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  from {
+    mask-position: 150%;
+  }
+
+  to {
+    mask-position: -50%;
+  }
+}
+
+.effect-glow {
+  box-shadow: 0px 0px 1.2em 0.35em oklch(var(--a));
+}

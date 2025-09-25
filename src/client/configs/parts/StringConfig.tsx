@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { ConfigType, StringConfig } from '@logic-pad/core/data/config';
 import Configurable from '@logic-pad/core/data/configurable';
+import ConfigItem from './ConfigItem';
 
 export interface StringConfigProps {
   configurable: Configurable;
@@ -18,8 +19,7 @@ export default memo(function StringConfig({
     config.field as keyof typeof configurable
   ] as unknown as string;
   return (
-    <div className="flex p-2 gap-4 justify-between items-center">
-      <span>{config.description}</span>
+    <ConfigItem config={config}>
       <textarea
         placeholder={config.placeholder}
         className="textarea min-w-0 grow"
@@ -29,7 +29,7 @@ export default memo(function StringConfig({
           setConfig?.(config.field, e.target.value);
         }}
       />
-    </div>
+    </ConfigItem>
   );
 });
 

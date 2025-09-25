@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, use, useState } from 'react';
 import { Position } from '@logic-pad/core/data/primitives';
 
 interface SolvePathContext {
@@ -8,7 +8,7 @@ interface SolvePathContext {
   setVisualizeSolvePath: (visualizeSolvePath: boolean) => void;
 }
 
-const context = createContext<SolvePathContext>({
+const Context = createContext<SolvePathContext>({
   solvePath: [],
   setSolvePath: () => {},
   visualizeSolvePath: false,
@@ -16,10 +16,10 @@ const context = createContext<SolvePathContext>({
 });
 
 export const useSolvePath = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const SolvePathConsumer = context.Consumer;
+export const SolvePathConsumer = Context.Consumer;
 
 export interface SolvePathContextProps {
   children: React.ReactNode;
@@ -36,7 +36,7 @@ export default memo(function SolvePathContext({
   const [visualizeSolvePath, setVisualizeSolvePath] = useState<boolean>(false);
 
   return (
-    <context.Provider
+    <Context
       value={{
         solvePath: externalSolvePath ?? internalSolvePath,
         setSolvePath: setExternalSolvePath ?? setInternalSolvePath,
@@ -45,6 +45,6 @@ export default memo(function SolvePathContext({
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

@@ -7,6 +7,7 @@ import SolvePathEditorModal, {
   SolvePathEditorRef,
 } from './SolvePathEditorModal';
 import { useGrid } from '../../contexts/GridContext';
+import ConfigItem from './ConfigItem';
 
 export interface SolvePathConfigProps {
   configurable: Configurable;
@@ -27,8 +28,7 @@ export default memo(function SolvePathConfig({
   const editorRef = useRef<SolvePathEditorRef>(null);
 
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span className="flex-1">{config.description}</span>
+    <ConfigItem config={config}>
       <div className="flex flex-col gap-2">
         <button
           type="button"
@@ -44,7 +44,7 @@ export default memo(function SolvePathConfig({
           onChange={solvePath => setConfig?.(config.field, solvePath)}
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

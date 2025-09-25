@@ -10,7 +10,7 @@ export default memo(function FocusTool() {
     <SymbolTool
       name="Focus"
       order={202}
-      hotkey="alt+2"
+      hotkey="extraSymbols-1"
       defaultHidden={true}
       sample={sample}
       component={FocusSymbol}

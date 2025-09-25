@@ -3,6 +3,12 @@ import GridData from '../grid.js';
 import CustomSymbol from './customSymbol.js';
 
 export default class CustomIconSymbol extends CustomSymbol {
+  public readonly title = 'Custom Icon Symbol';
+
+  public get configExplanation() {
+    return 'A customizable symbol. Your provided solution may override auto-validation.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(GridData.create(5, 4));
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
@@ -26,6 +32,8 @@ export default class CustomIconSymbol extends CustomSymbol {
       placeholder: 'Enter description. Emphasize with *asterisks*.',
       field: 'description',
       description: 'Description',
+      explanation:
+        'A short descriptive text. Use *asterisks* to highlight keywords. Leave empty to hide the description.',
       configurable: true,
     },
     {
@@ -33,6 +41,7 @@ export default class CustomIconSymbol extends CustomSymbol {
       default: CustomIconSymbol.EXAMPLE_GRID,
       field: 'grid',
       description: 'Thumbnail Grid',
+      explanation: 'An example grid showing the symbol.',
       configurable: true,
     },
     {
@@ -40,6 +49,8 @@ export default class CustomIconSymbol extends CustomSymbol {
       default: 'MdQuestionMark',
       field: 'icon',
       description: 'Icon',
+      explanation:
+        'The icon displayed on the grid. All available icons at https://react-icons.github.io/react-icons/icons/md/',
       configurable: true,
     },
     {
@@ -47,6 +58,7 @@ export default class CustomIconSymbol extends CustomSymbol {
       default: 0,
       field: 'rotation',
       description: 'Rotation',
+      explanation: 'Rotate the symbol by the given degrees.',
       configurable: true,
     },
   ]);

@@ -5,6 +5,8 @@ import { Direction, DirectionToggle } from '@logic-pad/core/data/primitives';
 import { cn } from '../../../client/uiHelper.ts';
 import { FaArrowUp } from 'react-icons/fa';
 import { directionToRotation } from '@logic-pad/core/data/dataHelper';
+import ConfigItem from './ConfigItem.tsx';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export interface DirectionToggleConfigProps {
   configurable: Configurable;
@@ -54,10 +56,34 @@ export default memo(function DirectionToggleConfig({
   const value = configurable[
     config.field as keyof typeof configurable
   ] as unknown as DirectionToggle;
+
+  useHotkeys(
+    'up',
+    () => setConfig?.(config.field, { ...value, up: !value.up }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'down',
+    () => setConfig?.(config.field, { ...value, down: !value.down }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'left',
+    () => setConfig?.(config.field, { ...value, left: !value.left }),
+    [value, setConfig, config]
+  );
+  useHotkeys(
+    'right',
+    () => setConfig?.(config.field, { ...value, right: !value.right }),
+    [value, setConfig, config]
+  );
+
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span>{config.description}</span>
-      <div className="grid grid-cols-3 grid-rows-3">
+    <ConfigItem config={config}>
+      <div
+        className="grid grid-cols-3 grid-rows-3 tooltip tooltip-info tooltip-top"
+        data-tip="Keyboard arrow keys supported"
+      >
         <DirectionToggleRadio
           checked={value.up}
           setChecked={val => setConfig?.(config.field, { ...value, up: val })}
@@ -85,7 +111,7 @@ export default memo(function DirectionToggleConfig({
           className="col-start-2 row-start-3"
         />
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

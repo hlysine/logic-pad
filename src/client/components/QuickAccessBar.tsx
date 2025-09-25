@@ -1,8 +1,11 @@
 import { Suspense, lazy, memo } from 'react';
-import { FaGithub } from 'react-icons/fa';
 import { cn } from '../../client/uiHelper.ts';
 import Loading from './Loading';
 import Settings from './Settings.tsx';
+import AccountControl from './AccountControl.tsx';
+import Notifications from './Notifications.tsx';
+import { Link } from '@tanstack/react-router';
+import { FaHeart } from 'react-icons/fa';
 const ThemeSwitcher = lazy(() => import('./ThemeSwitcher'));
 
 export interface QuickAccessBarProps {
@@ -13,20 +16,24 @@ export default memo(function QuickAccessBar({
   className,
 }: QuickAccessBarProps) {
   return (
-    <div className={cn('flex items-center gap-1', className)}>
-      <Settings />
+    <nav className={cn('flex items-center gap-1 [&>*]:shrink-0', className)}>
       <Suspense fallback={<Loading className="w-24" />}>
         <ThemeSwitcher />
       </Suspense>
-      <a
-        className="btn btn-square"
-        aria-label="GitHub repository"
-        href="https://github.com/hlysine/logic-pad"
-        target="_blank"
-        rel="noreferrer"
+      <Settings />
+      <div
+        className="tooltip tooltip-info tooltip-bottom"
+        data-tip="Support Logic Pad"
       >
-        <FaGithub size={24} />
-      </a>
-    </div>
+        <Link
+          to="/support"
+          className="btn btn-square btn-ghost max-md:btn-sm text-neutral-content"
+        >
+          <FaHeart size={22} />
+        </Link>
+      </div>
+      <Notifications />
+      <AccountControl />
+    </nav>
   );
 });

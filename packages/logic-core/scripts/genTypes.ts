@@ -13,7 +13,7 @@ await $`rm ${generatedPath}`.nothrow();
 try {
   // bundle the data types into one file
   console.log('Bundling types...');
-  await $`bunx --bun dts-bundle-generator -o ${generatedPath} ${entryPath} --no-check`.throws(
+  await $`bunx --bun dts-bundle-generator -o ${generatedPath} ${entryPath} --no-check --verbose`.throws(
     true
   );
 

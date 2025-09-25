@@ -1,4 +1,4 @@
-import { createContext, memo, useContext, useState } from 'react';
+import { createContext, memo, use, useState } from 'react';
 import Solver from '@logic-pad/core/data/solver/solver';
 
 interface SolverContext {
@@ -6,16 +6,16 @@ interface SolverContext {
   setSolver: (value: Solver) => void;
 }
 
-const context = createContext<SolverContext>({
+const Context = createContext<SolverContext>({
   solver: null,
   setSolver: () => {},
 });
 
 export const useSolver = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const SolverConsumer = context.Consumer;
+export const SolverConsumer = Context.Consumer;
 
 export default memo(function SolverContext({
   children,
@@ -25,13 +25,13 @@ export default memo(function SolverContext({
   const [solver, setSolver] = useState<Solver | null>(null);
 
   return (
-    <context.Provider
+    <Context
       value={{
         solver,
         setSolver,
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

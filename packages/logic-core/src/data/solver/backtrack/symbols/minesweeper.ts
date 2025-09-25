@@ -42,8 +42,7 @@ export default class MinesweeperBTModule extends BTModule {
     if (opposite > this.instr.number || opposite + gray < this.instr.number)
       return false;
 
-    if (!this.cachedCheckResult)
-      this.cachedCheckResult = this.buildCheckAndRating(grid);
+    this.cachedCheckResult ??= this.buildCheckAndRating(grid);
 
     return this.cachedCheckResult;
   }

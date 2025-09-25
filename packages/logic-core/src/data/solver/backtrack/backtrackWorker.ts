@@ -246,7 +246,7 @@ function getNextTile(
         pos = { x, y };
       }
 
-      if (!fallback) fallback = { x, y };
+      fallback ??= { x, y };
     }
   }
 

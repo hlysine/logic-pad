@@ -1,3 +1,97 @@
+# 0.18.0
+
+- House symbols now have configurable numbers
+
+# 0.17.1
+
+- Fixed house symbol showing success when on gray tiles
+
+# 0.17.0
+
+- Added house symbol
+
+# 0.16.0
+
+- Added Different Count Per Zone rule
+
+# 0.15.3
+
+- Fixed validation for diagonal lotus at tile corners
+
+# 0.15.2
+
+- Improved tile counting for focus and minesweeper symbols on gray tiles
+
+# 0.15.1
+
+- Fixed the cspuz solver reporting the same solution twice in some grids
+- Use custom directives for code mods
+
+# 0.15.0
+
+- Split tile config type into tile and shape
+- Checksum serialization improvements
+
+# 0.14.0
+
+- Added name and explanation for every `Configurable`
+- Added explanation for every config field
+
+# 0.13.4
+
+- Strip solution in checksum
+- Append checksum version to hash
+
+# 0.13.3
+
+- Fix crash in checksum serializer
+
+# 0.13.1
+
+- Trim and lower-case all strings in the checksum serializer
+
+# 0.13.0
+
+- Added checksum serializer and compressor
+
+# 0.12.6
+
+- Remove unused dependencies and update others
+
+# 0.12.5
+
+- Add puzzle equality check
+
+# 0.12.4
+
+- Add new checklist item for valid grid dimension
+
+# 0.12.3
+
+- Implement puzzle checklist logic
+
+# 0.12.2
+
+- getPuzzleTypes now only require GridData as parameter
+
+# 0.12.1
+
+- Expose grid with solution serialization publicly
+
+# 0.12.0
+
+- Removed "link" attribute from puzzle metadata
+- Added helper functions for online mode
+
+# 0.11.4
+
+- Fixed incorrect validation on galaxy symbols (solvers are unaffected)
+
+# 0.11.3
+
+- Fixed out-of-bounds grid zones
+- Fixed music grid track defaulting to a gray grid
+
 # 0.11.2
 
 - Fixed myopia not being satisfied when placed near the edge of the grid

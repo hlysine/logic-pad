@@ -5,6 +5,7 @@ import { Color } from '@logic-pad/core/data/primitives';
 import Grid from '../../grid/Grid';
 import GridData from '@logic-pad/core/data/grid';
 import GridSizeEditor from '../../editor/GridSizeEditor';
+import ConfigItem from './ConfigItem';
 
 export interface TileConfigProps {
   configurable: Configurable;
@@ -21,8 +22,7 @@ export default memo(function TileConfig({
     config.field as keyof typeof configurable
   ] as unknown as GridData;
   return (
-    <div className="flex p-2 justify-between items-center">
-      <span className="flex-1">{config.description}</span>
+    <ConfigItem config={config}>
       <div className="flex flex-col flex-[2] gap-2">
         {config.resizable && (
           <GridSizeEditor
@@ -61,7 +61,7 @@ export default memo(function TileConfig({
           }}
         ></Grid>
       </div>
-    </div>
+    </ConfigItem>
   );
 });
 

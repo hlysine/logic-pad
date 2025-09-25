@@ -58,7 +58,7 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-unnecessary-condition': 'off',
     '@typescript-eslint/class-literal-property-style': 'off',
-    '@typescript-eslint/ban-types': ['error', { types: { Symbol: false } }],
+    '@typescript-eslint/no-wrapper-object-types': 'off',
     '@typescript-eslint/no-confusing-void-expression': 'off',
     '@typescript-eslint/no-empty-function': 'off',
     'no-use-before-define': 'off',
@@ -69,7 +69,19 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
-      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      {
+        args: 'all',
+        argsIgnorePattern: '^_',
+        caughtErrors: 'all',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      },
+    ],
+    '@typescript-eslint/no-unused-expressions': [
+      'error',
+      { ignoreDirectives: true },
     ],
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/unified-signatures': 'off',
@@ -95,5 +107,8 @@ module.exports = {
       },
     ],
     'import/no-unresolved': ['error', { ignore: ['^virtual:'] }],
+    '@typescript-eslint/only-throw-error': 'off',
+    '@typescript-eslint/unbound-method': 'off',
+    'react/prop-types': 'off',
   },
 };

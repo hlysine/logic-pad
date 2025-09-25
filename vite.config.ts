@@ -1,11 +1,15 @@
-import million from 'million/compiler';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
-import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
+import { tanstackRouter } from '@tanstack/router-vite-plugin';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 import { replaceCodePlugin } from 'vite-plugin-replace';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { execSync } from 'child_process';
+import vercel from 'vite-plugin-vercel';
+
+const commitHash = execSync('git rev-parse HEAD').toString().trim();
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,28 +24,29 @@ export default defineConfig({
           src: 'node_modules/z3-solver/build/z3-built.wasm',
           dest: 'assets',
         },
-        {
-          src: 'node_modules/z3-solver/build/z3-built.worker.js',
-          dest: 'assets',
-        },
       ],
     }),
     replaceCodePlugin({
       replacements: [
         {
-          from: 'Worker.js', // 'js' extension is required when @logic-pad/core is compiled by tsc
-          to: 'Worker.ts', // but vite uses 'ts' extension for worker imports
+          from: /['"]vite-apply-code-mod['"].*/s,
+          to: (source: string) => {
+            // 'js' extension is required when @logic-pad/core is compiled by tsc
+            // but vite uses 'ts' extension for worker imports
+            return source.replaceAll('Worker.js', 'Worker.ts');
+          },
         },
       ],
     }),
-    million.vite({ auto: true, telemetry: false }),
     react(),
-    TanStackRouterVite({
+    tanstackRouter({
       routesDirectory: './src/client/routes',
       generatedRouteTree: './src/client/router/routeTree.gen.ts',
     }),
+    vercel(),
     VitePWA({
       registerType: 'prompt',
+      outDir: '.vercel/output/static',
       includeAssets: [
         'favicon.ico',
         '*.svg',
@@ -52,6 +57,7 @@ export default defineConfig({
       ],
       workbox: {
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
+        navigateFallbackDenylist: [/^\/api/, /^\/robots.txt/, /^\/sitemap.xml/],
       },
       manifest: {
         name: 'Logic Pad',
@@ -84,6 +90,18 @@ export default defineConfig({
         ],
       },
     }),
+    ...(process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryVitePlugin({
+            org: 'lysine',
+            project: 'logic-pad',
+            telemetry: false,
+            release: {
+              name: commitHash,
+            },
+          }),
+        ]
+      : []),
   ],
   server: {
     headers: {
@@ -93,6 +111,48 @@ export default defineConfig({
     fs: {
       allow: [searchForWorkspaceRoot(process.cwd()), './', '../logic-core'], // allow serving files from the logic-core package for local testing
     },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
+    port: 5173,
+    open: true,
+  },
+  vercel: {
+    additionalEndpoints: [
+      {
+        source: './src/ssr/sitemap.ts',
+        destination: '/sitemap.xml',
+      },
+    ],
+    rewrites: [{ source: '/(.*)', destination: '/' }],
+    headers: [
+      {
+        source: '/(.*)',
+        headers: [
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+          { key: 'Cross-Origin-Embedder-Policy', value: 'require-corp' },
+        ],
+      },
+    ],
+  },
+  preview: {
+    headers: {
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, ''),
+      },
+    },
+    port: 5173,
+    open: false,
   },
   optimizeDeps: {
     exclude: ['@logic-pad/core', 'logic-pad-solver-core'],
@@ -115,5 +175,11 @@ export default defineConfig({
         ),
       },
     ],
+  },
+  build: {
+    sourcemap: true,
+  },
+  define: {
+    'import.meta.env.VITE_PACKAGE_VERSION': JSON.stringify(commitHash),
   },
 });

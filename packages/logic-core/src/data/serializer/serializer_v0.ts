@@ -4,7 +4,14 @@ import Rule from '../rules/rule.js';
 import TileData from '../tile.js';
 import Symbol from '../symbols/symbol.js';
 import Instruction from '../instruction.js';
-import { AnyConfig, ConfigType } from '../config.js';
+import {
+  AnyConfig,
+  ConfigType,
+  IconConfig,
+  NullableNoteConfig,
+  NullableNumberConfig,
+  OrientationConfig,
+} from '../config.js';
 import {
   Color,
   Comparison,
@@ -23,18 +30,18 @@ import { array, escape, unescape } from '../dataHelper.js';
 import { allRules } from '../rules/index.js';
 import { allSymbols } from '../symbols/index.js';
 import SerializerBase from './serializerBase.js';
-import { Puzzle, PuzzleMetadata } from '../puzzle.js';
+import { Puzzle, PuzzleData, PuzzleMetadata } from '../puzzle.js';
 import { ControlLine, Row } from '../rules/musicControlLine.js';
 import GridZones from '../gridZones.js';
 
-const OFFSETS = [
+export const OFFSETS = [
   { x: 0, y: -1 },
   { x: -1, y: 0 },
   { x: 1, y: 0 },
   { x: 0, y: 1 },
 ];
 
-const orientationChars = {
+export const orientationChars = {
   [Orientation.Up]: 'u',
   [Orientation.UpRight]: 'x',
   [Orientation.Right]: 'r',
@@ -46,7 +53,7 @@ const orientationChars = {
 };
 
 export default class SerializerV0 extends SerializerBase {
-  public readonly version = 0;
+  public readonly version = 0 as number;
 
   public stringifyTile(tile: TileData): string {
     if (!tile.exists) return '.';
@@ -100,7 +107,7 @@ export default class SerializerV0 extends SerializerBase {
         case 'r':
           rows.push(
             ...value.split(',').map(row => {
-              const match = row.match(/^v([\d.]*?)n(.*)$/);
+              const match = /^v([\d.]*?)n(.*)$/.exec(row);
               if (!match) return new Row(null, null);
               const [, velocity, note] = match;
               return new Row(
@@ -132,7 +139,9 @@ export default class SerializerV0 extends SerializerBase {
         return (
           config.field +
           '=' +
-          String(instruction[config.field as keyof Instruction])
+          (instruction[
+            config.field as keyof Instruction
+          ] as OrientationConfig['default'])
         );
       case ConfigType.NullableBoolean:
         return (
@@ -150,7 +159,11 @@ export default class SerializerV0 extends SerializerBase {
           '=' +
           (instruction[config.field as keyof Instruction] === null
             ? ''
-            : String(instruction[config.field as keyof Instruction]))
+            : String(
+                instruction[
+                  config.field as keyof Instruction
+                ] as NullableNumberConfig['default']
+              ))
         );
       case ConfigType.DirectionToggle:
         return (
@@ -187,7 +200,11 @@ export default class SerializerV0 extends SerializerBase {
         return (
           config.field +
           '=' +
-          escape(String(instruction[config.field as keyof Instruction]))
+          escape(
+            instruction[
+              config.field as keyof Instruction
+            ] as IconConfig['default']
+          )
         );
       case ConfigType.NullableNote:
         return (
@@ -196,10 +213,17 @@ export default class SerializerV0 extends SerializerBase {
           escape(
             instruction[config.field as keyof Instruction] === null
               ? ''
-              : escape(String(instruction[config.field as keyof Instruction]))
+              : escape(
+                  String(
+                    instruction[
+                      config.field as keyof Instruction
+                    ] as NullableNoteConfig['default']
+                  )
+                )
           )
         );
       case ConfigType.Tile:
+      case ConfigType.Shape:
       case ConfigType.Grid:
         return (
           config.field +
@@ -304,6 +328,7 @@ export default class SerializerV0 extends SerializerBase {
       case ConfigType.Icon:
         return [config.field, unescape(value)];
       case ConfigType.Tile:
+      case ConfigType.Shape:
       case ConfigType.Grid:
         return [config.field, this.parseGrid(unescape(value))];
       case ConfigType.NullableGrid:
@@ -558,7 +583,7 @@ export default class SerializerV0 extends SerializerBase {
     );
   }
 
-  public stringifyPuzzle(puzzle: Puzzle): string {
+  public stringifyGridWithSolution(puzzle: PuzzleData): string {
     let grid = puzzle.grid;
     if (puzzle.solution !== null) {
       const tiles = array(puzzle.grid.width, puzzle.grid.height, (x, y) => {
@@ -575,26 +600,42 @@ export default class SerializerV0 extends SerializerBase {
       });
       grid = puzzle.grid.copyWith({ tiles });
     }
+    return this.stringifyGrid(grid);
+  }
+
+  public parseGridWithSolution(input: string): PuzzleData {
+    const grid = this.parseGrid(input);
+    const reset = grid.resetTiles();
+    return {
+      grid: reset,
+      solution: grid.colorEquals(reset) ? null : grid,
+    };
+  }
+
+  public stringifyPuzzle(puzzle: Puzzle): string {
     return JSON.stringify({
       title: puzzle.title,
-      grid: this.stringifyGrid(grid),
+      grid: this.stringifyGridWithSolution(puzzle),
       difficulty: puzzle.difficulty,
-      link: puzzle.link,
       author: puzzle.author,
       description: puzzle.description,
     });
   }
 
   public parsePuzzle(input: string): Puzzle {
-    const { grid: gridString, ...metadata } = JSON.parse(
-      input
-    ) as PuzzleMetadata & { grid: string };
-    const grid = this.parseGrid(gridString);
-    const reset = grid.resetTiles();
+    const {
+      grid: gridString,
+      title,
+      author,
+      description,
+      difficulty,
+    } = JSON.parse(input) as PuzzleMetadata & { grid: string };
     return {
-      ...metadata,
-      grid: reset,
-      solution: grid.colorEquals(reset) ? null : grid,
+      title,
+      author,
+      description,
+      difficulty,
+      ...this.parseGridWithSolution(gridString),
     };
   }
 }

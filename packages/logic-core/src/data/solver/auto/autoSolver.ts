@@ -83,11 +83,14 @@ export default class AutoSolver extends Solver {
     solver: Solver,
     grid: GridData,
     progress: GridData,
-    abortSignal?: AbortSignal | undefined
+    abortSignal?: AbortSignal
   ): AsyncGenerator<GridData | null> {
     for await (const updatedGrid of solver.solve(progress, abortSignal)) {
       if (abortSignal?.aborted) return;
-      if (!updatedGrid) return updatedGrid;
+      if (!updatedGrid) {
+        yield updatedGrid;
+        return;
+      }
       yield this.fillSolution(grid, updatedGrid);
     }
   }
@@ -104,7 +107,7 @@ export default class AutoSolver extends Solver {
 
   public async *solve(
     grid: GridData,
-    abortSignal?: AbortSignal | undefined
+    abortSignal?: AbortSignal
   ): AsyncGenerator<GridData | null> {
     if (
       !!grid.findRule(r => AutoSolver.nonAdditiveInstructions.has(r.id)) ||

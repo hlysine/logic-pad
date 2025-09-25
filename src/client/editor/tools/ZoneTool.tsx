@@ -56,7 +56,7 @@ export default memo(function ZoneTool() {
       order={304}
       name="Define zones"
       description="Left click a gap to add an edge. Right click to remove."
-      hotkey="shift+4"
+      hotkey="extraSymbols-5"
       defaultHidden={true}
       gridOverlay={<ZoneToolOverlay />}
       onTileClick={null}

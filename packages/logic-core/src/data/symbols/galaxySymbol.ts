@@ -4,6 +4,8 @@ import { Direction, State } from '../primitives.js';
 import DirectionLinkerSymbol from './directionLinkerSymbol.js';
 
 export default class GalaxySymbol extends DirectionLinkerSymbol {
+  public readonly title = 'Galaxy';
+
   private static readonly linkedDirections = {
     [Direction.Left]: Direction.Right,
     [Direction.Up]: Direction.Down,

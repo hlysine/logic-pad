@@ -1,6 +1,6 @@
 import { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { createContext, memo, useContext, useEffect, useState } from 'react';
+import { createContext, memo, use, useEffect, useState } from 'react';
 
 export const themeKey = 'theme';
 
@@ -44,16 +44,16 @@ interface ThemeContext {
   setTheme: (value: string) => void;
 }
 
-const context = createContext<ThemeContext>({
+const Context = createContext<ThemeContext>({
   theme: localStorage.getItem(themeKey) ?? 'dark',
   setTheme: () => {},
 });
 
 export const useTheme = () => {
-  return useContext(context);
+  return use(Context);
 };
 
-export const ThemeConsumer = context.Consumer;
+export const ThemeConsumer = Context.Consumer;
 
 export default memo(function ThemeContext({
   children,
@@ -85,13 +85,13 @@ export default memo(function ThemeContext({
   }, [theme, monaco]);
 
   return (
-    <context.Provider
+    <Context
       value={{
         theme,
         setTheme,
       }}
     >
       {children}
-    </context.Provider>
+    </Context>
   );
 });

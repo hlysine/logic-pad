@@ -19,8 +19,8 @@ import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import GridZones from './data/gridZones.js';
 import Instruction from './data/instruction.js';
-import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, State, WRAPPINGS, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
-import { MetadataSchema, PuzzleSchema } from './data/puzzle.js';
+import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, PuzzleType, State, WRAPPINGS, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
+import { MetadataSchema, PuzzleSchema, getPuzzleTypes, puzzleEquals, validatePuzzleChecklist } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
@@ -28,6 +28,7 @@ import CompletePatternRule from './data/rules/completePatternRule.js';
 import ConnectAllRule from './data/rules/connectAllRule.js';
 import ContainsShapeRule from './data/rules/containsShapeRule.js';
 import CustomRule from './data/rules/customRule.js';
+import DifferentCountPerZoneRule from './data/rules/differentCountPerZoneRule.js';
 import ForesightRule from './data/rules/foresightRule.js';
 import { allRules } from './data/rules/index.js';
 import LyingSymbolRule from './data/rules/lyingSymbolRule.js';
@@ -39,6 +40,7 @@ import PerfectionRule from './data/rules/perfectionRule.js';
 import RegionAreaRule from './data/rules/regionAreaRule.js';
 import RegionShapeRule from './data/rules/regionShapeRule.js';
 import Rule from './data/rules/rule.js';
+import SameCountPerZoneRule from './data/rules/sameCountPerZoneRule.js';
 import SameShapeRule from './data/rules/sameShapeRule.js';
 import SymbolsPerRegionRule from './data/rules/symbolsPerRegionRule.js';
 import UndercluedRule from './data/rules/undercluedRule.js';
@@ -46,12 +48,14 @@ import UniqueShapeRule from './data/rules/uniqueShapeRule.js';
 import WrapAroundRule from './data/rules/wrapAroundRule.js';
 import { Serializer } from './data/serializer/allSerializers.js';
 import { Compressor } from './data/serializer/compressor/allCompressors.js';
+import ChecksumCompressor from './data/serializer/compressor/checksumCompressor.js';
 import CompressorBase from './data/serializer/compressor/compressorBase.js';
 import DeflateCompressor from './data/serializer/compressor/deflateCompressor.js';
 import GzipCompressor from './data/serializer/compressor/gzipCompressor.js';
 import StreamCompressor from './data/serializer/compressor/streamCompressor.js';
 import SerializerBase from './data/serializer/serializerBase.js';
-import SerializerV0 from './data/serializer/serializer_v0.js';
+import SerializerChecksum from './data/serializer/serializer_checksum.js';
+import SerializerV0, { OFFSETS, orientationChars } from './data/serializer/serializer_v0.js';
 import { getShapeVariants, normalizeShape, positionsToShape, sanitizePatternGrid, shapeEquals, tilesToShape } from './data/shapes.js';
 import { allSolvers } from './data/solver/allSolvers.js';
 import AutoSolver from './data/solver/auto/autoSolver.js';
@@ -102,6 +106,7 @@ import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol.js';
 import FocusSymbol from './data/symbols/focusSymbol.js';
 import GalaxySymbol from './data/symbols/galaxySymbol.js';
 import HiddenSymbol from './data/symbols/hiddenSymbol.js';
+import HouseSymbol from './data/symbols/houseSymbol.js';
 import { allSymbols } from './data/symbols/index.js';
 import LetterSymbol from './data/symbols/letterSymbol.js';
 import LotusSymbol from './data/symbols/lotusSymbol.js';
@@ -154,6 +159,7 @@ export {
   Mode,
   ORIENTATIONS,
   Orientation,
+  PuzzleType,
   State,
   WRAPPINGS,
   Wrapping,
@@ -161,6 +167,9 @@ export {
   orientationToggle,
   MetadataSchema,
   PuzzleSchema,
+  getPuzzleTypes,
+  puzzleEquals,
+  validatePuzzleChecklist,
   BanPatternRule,
   CellCountPerZoneRule,
   CellCountRule,
@@ -168,6 +177,7 @@ export {
   ConnectAllRule,
   ContainsShapeRule,
   CustomRule,
+  DifferentCountPerZoneRule,
   ForesightRule,
   allRules,
   LyingSymbolRule,
@@ -180,6 +190,7 @@ export {
   RegionAreaRule,
   RegionShapeRule,
   Rule,
+  SameCountPerZoneRule,
   SameShapeRule,
   SymbolsPerRegionRule,
   UndercluedRule,
@@ -187,12 +198,16 @@ export {
   WrapAroundRule,
   Serializer,
   Compressor,
+  ChecksumCompressor,
   CompressorBase,
   DeflateCompressor,
   GzipCompressor,
   StreamCompressor,
   SerializerBase,
+  SerializerChecksum,
   SerializerV0,
+  OFFSETS,
+  orientationChars,
   getShapeVariants,
   normalizeShape,
   positionsToShape,
@@ -254,6 +269,7 @@ export {
   FocusSymbol,
   GalaxySymbol,
   HiddenSymbol,
+  HouseSymbol,
   allSymbols,
   LetterSymbol,
   LotusSymbol,

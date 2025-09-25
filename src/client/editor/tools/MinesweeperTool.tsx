@@ -10,7 +10,7 @@ export default memo(function MinesweeperTool() {
     <SymbolTool
       name="Minesweeper"
       order={201}
-      hotkey="alt+1"
+      hotkey="extraSymbols-0"
       defaultHidden={true}
       sample={sample}
       component={MinesweeperSymbol}

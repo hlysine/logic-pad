@@ -2,12 +2,18 @@ import { AnyConfig, ConfigType } from '../config.js';
 import Configurable from '../configurable.js';
 
 export class Row extends Configurable {
+  public readonly title = 'Music Grid - Row';
+
+  public readonly configExplanation =
+    'Configure the playback settings from this tile onwards.';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.NullableNote,
       default: 'C4',
       field: 'note',
       description: 'Note',
+      explanation: 'The musical note or sample to play.',
       configurable: true,
     },
     {
@@ -18,6 +24,7 @@ export class Row extends Configurable {
       step: 0.2,
       field: 'velocity',
       description: 'Velocity',
+      explanation: 'For piano notes, how hard the note is played.',
       configurable: true,
     },
   ]);
@@ -58,6 +65,11 @@ export class Row extends Configurable {
 }
 
 export class ControlLine extends Configurable {
+  public readonly title = 'Music Grid - Control Line';
+
+  public readonly configExplanation =
+    'Configure the playback settings from this point onwards.';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.NullableNumber,
@@ -66,6 +78,7 @@ export class ControlLine extends Configurable {
       max: 1000,
       field: 'bpm',
       description: 'BPM',
+      explanation: 'Beats per minute for the playback.',
       configurable: true,
     },
     {
@@ -73,6 +86,8 @@ export class ControlLine extends Configurable {
       default: false,
       field: 'pedal',
       description: 'Pedal',
+      explanation:
+        'For piano notes, whether the pedal is pressed to sustain the sound.',
       configurable: true,
     },
     {
@@ -80,6 +95,7 @@ export class ControlLine extends Configurable {
       default: false,
       field: 'checkpoint',
       description: 'Checkpoint',
+      explanation: 'Whether players can start playback from this position.',
       configurable: true,
     },
   ]);

@@ -16,9 +16,9 @@ import {
 } from '@dnd-kit/core';
 import {
   arrayMove,
+  rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import RuleData from '@logic-pad/core/data/rules/rule';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.ts';
@@ -34,6 +34,7 @@ function Title({ children }: { children: React.ReactNode }) {
 export interface InstructionListProps {
   editable?: boolean;
   responsive?: boolean;
+  className?: string;
 }
 
 interface SortableItem {
@@ -44,6 +45,7 @@ interface SortableItem {
 export default memo(function InstructionList({
   editable,
   responsive,
+  className,
 }: InstructionListProps) {
   editable = editable ?? false;
   responsive = responsive ?? true;
@@ -154,7 +156,11 @@ export default memo(function InstructionList({
   }, [filteredRules, grid, responsive, symbolMergeMap, symbolSortOrder]);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
@@ -180,10 +186,7 @@ export default memo(function InstructionList({
         }
       }}
     >
-      <SortableContext
-        items={filteredRules}
-        strategy={verticalListSortingStrategy}
-      >
+      <SortableContext items={filteredRules} strategy={rectSortingStrategy}>
         {children}
       </SortableContext>
     </DndContext>
@@ -192,53 +195,59 @@ export default memo(function InstructionList({
   return (
     <div
       className={cn(
-        'flex flex-col items-end justify-start self-stretch overflow-y-auto py-[1px] relative',
-        responsive
-          ? 'w-[320px] sm:w-[640px] lg:w-[320px] lg:left-2'
-          : 'w-[320px] left-2'
+        'overflow-y-auto scrollbar-thin relative flex justify-end',
+        responsive ? 'lg:left-2' : 'left-2',
+        className
       )}
     >
-      {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
-      {filteredRules.length > 0 && <Title>Rules</Title>}
-      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
-        {(editable ? wrapWithDraggable : (t: React.ReactNode) => t)(
-          filteredRules.map(({ rule, id }, i) => (
-            <Instruction
-              key={id}
-              editable={editable}
-              id={id}
-              instruction={rule}
-              state={state?.rules[i]?.state}
-              className={cn(
-                'self-stretch',
-                rule.visibleWhenSolving || 'opacity-60'
-              )}
-              size={responsive ? 'responsive' : large ? 'lg' : 'sm'}
-            >
-              {editable && <EditTarget configurable={rule} />}
-            </Instruction>
-          ))
+      <div
+        className={cn(
+          'flex flex-col items-end justify-start self-stretch py-[1px]',
+          responsive ? 'w-[320px] sm:w-[640px] lg:w-[320px]' : 'w-[320px]'
         )}
-      </div>
-      {hasSymbols && <Title>Symbols</Title>}
-      <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
-        {symbolSortOrder.flatMap(key => {
-          const value = symbolMergeMap.get(key)!;
-          return value.map(
-            (group, i) =>
-              grid.symbols.get(key)![group[0]].explanation.length > 0 && (
-                <Instruction
-                  id={i}
-                  editable={false}
-                  key={key + group[0].toString()}
-                  instruction={grid.symbols.get(key)![group[0]]}
-                  state={symbolStateMap.get(key)?.[i]}
-                  className={cn('self-stretch')}
-                  size={responsive ? 'responsive' : large ? 'lg' : 'sm'}
-                />
-              )
-          );
-        })}
+      >
+        {/* Dirty 1px vertical padding to hide the 1px overflow that comes from nowhere */}
+        {filteredRules.length > 0 && <Title>Rules</Title>}
+        <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
+          {(editable ? wrapWithDraggable : (t: React.ReactNode) => t)(
+            filteredRules.map(({ rule, id }, i) => (
+              <Instruction
+                key={id}
+                editable={editable}
+                id={id}
+                instruction={rule}
+                state={state?.rules[i]?.state}
+                className={cn(
+                  'self-stretch',
+                  rule.visibleWhenSolving || 'opacity-60'
+                )}
+                size={responsive ? 'responsive' : large ? 'lg' : 'sm'}
+              >
+                {editable && <EditTarget configurable={rule} />}
+              </Instruction>
+            ))
+          )}
+        </div>
+        {hasSymbols && <Title>Symbols</Title>}
+        <div className="flex flex-row lg:flex-col flex-wrap lg:flex-nowrap shrink-0 justify-end items-center">
+          {symbolSortOrder.flatMap(key => {
+            const value = symbolMergeMap.get(key)!;
+            return value.map(
+              (group, i) =>
+                grid.symbols.get(key)![group[0]].explanation.length > 0 && (
+                  <Instruction
+                    id={i}
+                    editable={false}
+                    key={key + group[0].toString()}
+                    instruction={grid.symbols.get(key)![group[0]]}
+                    state={symbolStateMap.get(key)?.[i]}
+                    className={cn('self-stretch')}
+                    size={responsive ? 'responsive' : large ? 'lg' : 'sm'}
+                  />
+                )
+            );
+          })}
+        </div>
       </div>
     </div>
   );

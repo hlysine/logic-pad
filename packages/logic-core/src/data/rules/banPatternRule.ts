@@ -11,17 +11,21 @@ import {
 import Rule, { SearchVariant } from './rule.js';
 
 export default class BanPatternRule extends Rule {
+  public readonly title = 'Ban Pattern';
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['nnnnn', 'nnnnn', 'wwwwn', 'nnnnn', 'nnnnn'])
   );
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
-      type: ConfigType.Tile,
+      type: ConfigType.Shape,
       default: BanPatternRule.EXAMPLE_GRID,
       resizable: true,
       field: 'pattern',
       description: 'Pattern',
+      explanation:
+        'The pattern to be banned. Can be a mix of dark and light tiles.',
       configurable: true,
     },
   ]);
@@ -71,6 +75,9 @@ export default class BanPatternRule extends Rule {
     });
     const width = maxX - minX + 1;
     const height = maxY - minY + 1;
+    if (!Number.isFinite(width) || !Number.isFinite(height)) {
+      return GridData.create(0, 0);
+    }
     const tiles = array(width, height, (x, y) => {
       const tile = this.pattern.getTile(x + minX, y + minY);
       if (!tile.exists || tile.color !== Color.Gray) return tile;

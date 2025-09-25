@@ -20,6 +20,16 @@ export enum MajorRule {
   WrapAround = 'wrap_around',
 }
 
+/**
+ * General puzzle types for categorization. One puzzle can have multiple types.
+ */
+export enum PuzzleType {
+  Logic = 'logic',
+  Underclued = 'underclued',
+  Pattern = 'pattern',
+  Music = 'music',
+}
+
 export enum State {
   /**
    * Describes the violation of a rule.
@@ -113,7 +123,7 @@ export const DIRECTIONS: readonly Direction[] = [
   Direction.Right,
 ];
 
-export type DirectionMap<T> = { [key in Direction]: T };
+export type DirectionMap<T> = Record<Direction, T>;
 
 export type DirectionToggle = Readonly<DirectionMap<boolean>>;
 
@@ -152,7 +162,7 @@ export const ORIENTATIONS: readonly Orientation[] = [
   Orientation.UpLeft,
 ];
 
-export type OrientationMap<T> = { [key in Orientation]: T };
+export type OrientationMap<T> = Record<Orientation, T>;
 
 export type OrientationToggle = Readonly<OrientationMap<boolean>>;
 

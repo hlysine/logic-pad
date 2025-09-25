@@ -73,6 +73,7 @@ export default memo(function Instruction({
       {...(editable ? listeners : {})}
       className={cn(
         'flex flex-col w-[320px] items-stretch shrink-0',
+        editable && 'touch-none',
         className
       )}
     >
@@ -96,7 +97,7 @@ export default memo(function Instruction({
         ></div>
         <div
           className={cn(
-            'text-center py-1 px-4 flex grow justify-center items-center text-neutral-content',
+            'text-center py-1 px-2 flex grow justify-center items-center text-neutral-content',
             responsive
               ? 'text-sm lg:text-base'
               : large
@@ -104,7 +105,7 @@ export default memo(function Instruction({
                 : 'text-sm'
           )}
         >
-          <AnnotatedText text={instruction.explanation} />
+          <AnnotatedText>{instruction.explanation}</AnnotatedText>
         </div>
         <div
           className={cn(

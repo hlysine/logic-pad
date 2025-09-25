@@ -3,7 +3,7 @@ import * as rules from './rules.gen.js';
 
 const allRules = new Map<string, Rule>();
 
-function register<T extends Rule>(prototype: T) {
+function register(prototype: Rule) {
   allRules.set(prototype.id, prototype);
 }
 

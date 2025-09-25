@@ -10,7 +10,7 @@ export default memo(function ResizeColumnTool() {
       order={4}
       name="Resize column"
       description="Click between tiles to insert. Click on tiles to remove."
-      hotkey="f"
+      hotkey="tools-3"
       gridOverlay={<ResizeToolOverlay direction="column" />}
       onTileClick={null}
     >

@@ -22,6 +22,8 @@ import EventIteratingSolver from '../eventIteratingSolver.js';
 import GridData from '../../grid.js';
 import { Color } from '../../primitives.js';
 
+('vite-apply-code-mod');
+
 export default class CspuzSolver extends EventIteratingSolver {
   private static readonly supportedInstrs = [
     minesweeperInstance.id,
@@ -105,7 +107,7 @@ export default class CspuzSolver extends EventIteratingSolver {
         abortController.abort();
       }
       return true;
-    } catch (ex) {
+    } catch (_ex) {
       return false;
     }
   }

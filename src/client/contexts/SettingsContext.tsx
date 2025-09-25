@@ -8,6 +8,12 @@ export const SiteSettingsSchema = z.object({
   flipPrimaryMouseButton: z.boolean().default(false),
   visualizeWrapArounds: z.boolean().default(true),
   showMoreTools: z.boolean().default(false),
+  offlineMode: z.boolean().default(false),
+  sansSerifFont: z.boolean().default(false),
+  runEditorTour: z.boolean().default(true),
+  keyboardLayout: z
+    .enum(['qwerty', 'azerty', 'dvorak', 'colemak'])
+    .default('qwerty'),
 });
 
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;
@@ -68,8 +74,8 @@ class SettingsStore {
     return this.settings[key];
   }
 
-  public getSubscriber<const T extends keyof SiteSettings>(
-    key: T
+  public getSubscriber(
+    key: keyof SiteSettings
   ): (listener: () => void) => () => void {
     return this.subscriptions[key].subscribe;
   }

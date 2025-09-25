@@ -24,6 +24,12 @@ export default class MusicGridRule
   extends Rule
   implements GridChangeHandler, SetGridHandler, GridResizeHandler
 {
+  public readonly title = 'Music Grid';
+
+  public get configExplanation() {
+    return 'Solve the grid by listening to the solution being played back.';
+  }
+
   private static readonly EXAMPLE_GRID = Object.freeze(
     GridData.create(['.']).addSymbol(
       new CustomIconSymbol('', GridData.create([]), 0, 0, 'MdMusicNote')
@@ -41,7 +47,12 @@ export default class MusicGridRule
     {
       type: ConfigType.NullableGrid,
       default: null,
-      nonNullDefault: GridData.create(5, 4).addRule(
+      nonNullDefault: GridData.create([
+        'wwwww',
+        'wwwww',
+        'wwwww',
+        'wwwww',
+      ]).addRule(
         new MusicGridRule(
           [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
           null
@@ -49,6 +60,7 @@ export default class MusicGridRule
       ),
       field: 'track',
       description: 'Track',
+      explanation: 'If set, this grid will be played instead of the solution.',
       configurable: true,
     },
     {
@@ -56,6 +68,8 @@ export default class MusicGridRule
       default: true,
       field: 'normalizeVelocity',
       description: 'Normalize Velocity',
+      explanation:
+        'Whether to adjust note velocities by their pitch such that every note has the same perceived loudness.',
       configurable: true,
     },
   ]);

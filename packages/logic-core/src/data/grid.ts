@@ -568,12 +568,12 @@ export default class GridData {
           return rule.onGridResize(this, 'insert', 'column', index);
         else return rule;
       })
-      .filter(rule => rule !== null) as Rule[];
+      .filter(rule => rule !== null);
     const symbols = new Map<string, Symbol[]>();
     for (const [id, symbolList] of this.symbols) {
       const newList = symbolList
         .map(symbol => symbol.onGridResize(this, 'insert', 'column', index))
-        .filter(symbol => symbol !== null) as Symbol[];
+        .filter(symbol => symbol !== null);
       if (newList.length > 0) symbols.set(id, newList);
     }
     return this.copyWith({
@@ -606,12 +606,12 @@ export default class GridData {
           return rule.onGridResize(this, 'insert', 'row', index);
         else return rule;
       })
-      .filter(rule => rule !== null) as Rule[];
+      .filter(rule => rule !== null);
     const symbols = new Map<string, Symbol[]>();
     for (const [id, symbolList] of this.symbols) {
       const newList = symbolList
         .map(symbol => symbol.onGridResize(this, 'insert', 'row', index))
-        .filter(symbol => symbol !== null) as Symbol[];
+        .filter(symbol => symbol !== null);
       if (newList.length > 0) symbols.set(id, newList);
     }
     return this.copyWith({
@@ -642,12 +642,12 @@ export default class GridData {
           return rule.onGridResize(this, 'remove', 'column', index);
         else return rule;
       })
-      .filter(rule => rule !== null) as Rule[];
+      .filter(rule => rule !== null);
     const symbols = new Map<string, Symbol[]>();
     for (const [id, symbolList] of this.symbols) {
       const newList = symbolList
         .map(symbol => symbol.onGridResize(this, 'remove', 'column', index))
-        .filter(symbol => symbol !== null) as Symbol[];
+        .filter(symbol => symbol !== null);
       if (newList.length > 0) symbols.set(id, newList);
     }
     return this.copyWith({
@@ -678,12 +678,12 @@ export default class GridData {
           return rule.onGridResize(this, 'remove', 'row', index);
         else return rule;
       })
-      .filter(rule => rule !== null) as Rule[];
+      .filter(rule => rule !== null);
     const symbols = new Map<string, Symbol[]>();
     for (const [id, symbolList] of this.symbols) {
       const newList = symbolList
         .map(symbol => symbol.onGridResize(this, 'remove', 'row', index))
-        .filter(symbol => symbol !== null) as Symbol[];
+        .filter(symbol => symbol !== null);
       if (newList.length > 0) symbols.set(id, newList);
     }
     return this.copyWith({
@@ -1210,11 +1210,7 @@ export default class GridData {
    * @param color The color of the tile. If undefined, all colors are included.
    * @returns The count of tiles that satisfy the given conditions.
    */
-  public getTileCount(
-    exists: boolean,
-    fixed?: boolean | undefined,
-    color?: Color | undefined
-  ) {
+  public getTileCount(exists: boolean, fixed?: boolean, color?: Color) {
     let count = 0;
     this.forEach(tile => {
       if (tile.exists !== exists) return;

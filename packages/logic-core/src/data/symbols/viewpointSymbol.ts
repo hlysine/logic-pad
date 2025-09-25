@@ -5,6 +5,8 @@ import { Color, DIRECTIONS, Position } from '../primitives.js';
 import NumberSymbol from './numberSymbol.js';
 
 export default class ViewpointSymbol extends NumberSymbol {
+  public readonly title = 'Viewpoint Number';
+
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.Number,

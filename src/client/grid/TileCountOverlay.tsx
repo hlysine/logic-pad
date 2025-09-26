@@ -518,7 +518,7 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
       width={grid.width}
       height={grid.height}
       bleed={BLEED}
-      onResize={size => setTileSize(size)}
+      onResize={setTileSize}
     ></GridCanvasOverlay>
   );
 });

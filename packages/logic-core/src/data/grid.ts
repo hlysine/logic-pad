@@ -131,7 +131,9 @@ export default class GridData {
     connections?: GridConnections,
     zones?: GridZones,
     symbols?: ReadonlyMap<string, readonly Symbol[]>,
-    rules?: readonly Rule[]
+    rules?: readonly Rule[],
+    sanitize?: boolean,
+    triggerEvents?: boolean
   ): GridData;
 
   public static create(
@@ -141,37 +143,55 @@ export default class GridData {
     connections?: GridConnections,
     zones?: GridZones,
     symbols?: ReadonlyMap<string, readonly Symbol[]>,
-    rules?: readonly Rule[]
+    rules?: readonly Rule[],
+    sanitize?: boolean,
+    triggerEvents?: boolean
   ): GridData {
     if (typeof arrayOrWidth === 'number') {
       const newSymbols = symbols
-        ? GridData.deduplicateSymbols(symbols)
+        ? sanitize
+          ? GridData.deduplicateSymbols(symbols)
+          : new Map(
+              [...symbols.entries()].map(([id, list]) => [id, list.slice()])
+            )
         : new Map<string, Symbol[]>();
       // do not deduplicate all rules because it makes for bad editor experience
-      const newRules = rules ? GridData.deduplicateSingletonRules(rules) : [];
+      const newRules = rules
+        ? sanitize
+          ? GridData.deduplicateSingletonRules(rules)
+          : rules.slice()
+        : [];
       const newGrid = new GridData(
         arrayOrWidth,
         height!,
         tiles,
         connections
-          ? GridConnections.validateEdges(connections, arrayOrWidth, height!)
-          : connections,
-        zones ? GridZones.validateEdges(zones, arrayOrWidth, height!) : zones,
+          ? sanitize
+            ? GridConnections.validateEdges(connections, arrayOrWidth, height!)
+            : connections
+          : undefined,
+        zones
+          ? sanitize
+            ? GridZones.validateEdges(zones, arrayOrWidth, height!)
+            : zones
+          : undefined,
         newSymbols,
         newRules
       );
-      newSymbols.forEach(list => {
-        list.forEach((sym, i) => {
-          if (handlesGridChange(sym)) {
-            list[i] = sym.onGridChange(newGrid);
+      if (triggerEvents) {
+        newSymbols.forEach(list => {
+          list.forEach((sym, i) => {
+            if (handlesGridChange(sym)) {
+              list[i] = sym.onGridChange(newGrid);
+            }
+          });
+        });
+        newRules.forEach((rule, i) => {
+          if (handlesGridChange(rule)) {
+            newRules[i] = rule.onGridChange(newGrid);
           }
         });
-      });
-      newRules.forEach((rule, i) => {
-        if (handlesGridChange(rule)) {
-          newRules[i] = rule.onGridChange(newGrid);
-        }
-      });
+      }
       return newGrid;
     } else {
       const tiles = GridData.createTiles(arrayOrWidth);
@@ -184,23 +204,27 @@ export default class GridData {
    * @param param0 The properties to modify.
    * @returns The new grid with the modified properties.
    */
-  public copyWith({
-    width,
-    height,
-    tiles,
-    connections,
-    zones,
-    symbols,
-    rules,
-  }: {
-    width?: number;
-    height?: number;
-    tiles?: readonly (readonly TileData[])[];
-    connections?: GridConnections;
-    zones?: GridZones;
-    symbols?: ReadonlyMap<string, readonly Symbol[]>;
-    rules?: readonly Rule[];
-  }): GridData {
+  public copyWith(
+    {
+      width,
+      height,
+      tiles,
+      connections,
+      zones,
+      symbols,
+      rules,
+    }: {
+      width?: number;
+      height?: number;
+      tiles?: readonly (readonly TileData[])[];
+      connections?: GridConnections;
+      zones?: GridZones;
+      symbols?: ReadonlyMap<string, readonly Symbol[]>;
+      rules?: readonly Rule[];
+    },
+    sanitize = true,
+    triggerEvents = true
+  ): GridData {
     return GridData.create(
       width ?? this.width,
       height ?? this.height,
@@ -208,42 +232,9 @@ export default class GridData {
       connections ?? this.connections,
       zones ?? this.zones,
       symbols ?? this.symbols,
-      rules ?? this.rules
-    );
-  }
-
-  /**
-   * Copy the current grid while modifying the provided properties.
-   * Skip sanitization and event triggering for performance.
-   *
-   * @param param0 The properties to modify.
-   * @returns The new grid with the modified properties.
-   */
-  public fastCopyWith({
-    width,
-    height,
-    tiles,
-    connections,
-    zones,
-    symbols,
-    rules,
-  }: {
-    width?: number;
-    height?: number;
-    tiles?: readonly (readonly TileData[])[];
-    connections?: GridConnections;
-    zones?: GridZones;
-    symbols?: ReadonlyMap<string, readonly Symbol[]>;
-    rules?: readonly Rule[];
-  }): GridData {
-    return new GridData(
-      width ?? this.width,
-      height ?? this.height,
-      tiles ?? this.tiles,
-      connections ?? this.connections,
-      zones ?? this.zones,
-      symbols ?? this.symbols,
-      rules ?? this.rules
+      rules ?? this.rules,
+      sanitize,
+      triggerEvents
     );
   }
 
@@ -930,7 +921,7 @@ export default class GridData {
         tiles[y][x] = tile.withColor(to);
       }
     );
-    return this.copyWith({ tiles });
+    return this.copyWith({ tiles }, false);
   }
 
   /**
@@ -942,15 +933,18 @@ export default class GridData {
    * @returns The new grid with all tiles filled with the new color.
    */
   public floodFillAll(from: Color, to: Color, allowFixed: boolean): GridData {
-    return this.copyWith({
-      tiles: this.tiles.map(row =>
-        row.map(tile =>
-          tile.color === from && (allowFixed || !tile.fixed)
-            ? tile.withColor(to)
-            : tile
-        )
-      ),
-    });
+    return this.copyWith(
+      {
+        tiles: this.tiles.map(row =>
+          row.map(tile =>
+            tile.color === from && (allowFixed || !tile.fixed)
+              ? tile.withColor(to)
+              : tile
+          )
+        ),
+      },
+      false
+    );
   }
 
   /**
@@ -984,7 +978,7 @@ export default class GridData {
       return tile;
     });
     if (!changed) return this;
-    let newGrid = this.copyWith({ tiles: newTiles });
+    let newGrid = this.copyWith({ tiles: newTiles }, false);
     this.symbols.forEach(list => {
       list.forEach(symbol => {
         if (handlesSetGrid(symbol)) {

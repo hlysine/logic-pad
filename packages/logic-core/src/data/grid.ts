@@ -148,18 +148,38 @@ export default class GridData {
     triggerEvents?: boolean
   ): GridData {
     if (typeof arrayOrWidth === 'number') {
+      let hasGridChangeSymbols = false;
+      let hasGridChangeRules = false;
+      if (triggerEvents) {
+        symbols?.forEach(list => {
+          list.forEach(sym => {
+            if (handlesGridChange(sym)) {
+              hasGridChangeSymbols = true;
+            }
+          });
+        });
+        rules?.forEach(rule => {
+          if (handlesGridChange(rule)) {
+            hasGridChangeRules = true;
+          }
+        });
+      }
       const newSymbols = symbols
         ? sanitize
           ? GridData.deduplicateSymbols(symbols)
-          : new Map(
-              [...symbols.entries()].map(([id, list]) => [id, list.slice()])
-            )
+          : triggerEvents && hasGridChangeSymbols
+            ? new Map(
+                [...symbols.entries()].map(([id, list]) => [id, list.slice()])
+              )
+            : symbols
         : new Map<string, Symbol[]>();
       // do not deduplicate all rules because it makes for bad editor experience
       const newRules = rules
         ? sanitize
           ? GridData.deduplicateSingletonRules(rules)
-          : rules.slice()
+          : triggerEvents && hasGridChangeRules
+            ? rules.slice()
+            : rules
         : [];
       const newGrid = new GridData(
         arrayOrWidth,
@@ -182,13 +202,13 @@ export default class GridData {
         newSymbols.forEach(list => {
           list.forEach((sym, i) => {
             if (handlesGridChange(sym)) {
-              list[i] = sym.onGridChange(newGrid);
+              (list as Symbol[])[i] = sym.onGridChange(newGrid);
             }
           });
         });
         newRules.forEach((rule, i) => {
           if (handlesGridChange(rule)) {
-            newRules[i] = rule.onGridChange(newGrid);
+            (newRules as Rule[])[i] = rule.onGridChange(newGrid);
           }
         });
       }

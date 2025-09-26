@@ -1,3 +1,7 @@
+# 26/9/2025
+
+- Optimized rendering for Viewpoint, Lotus, Minesweeper and Focus symbols by using pre-rendered SVGs
+
 # 24/9/2025
 
 - House symbols now contains a number and can be affected by Off-by-X rule

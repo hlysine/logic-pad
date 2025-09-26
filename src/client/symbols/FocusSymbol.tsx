@@ -1,12 +1,6 @@
 import { memo } from 'react';
 import { cn } from '../uiHelper.ts';
 import FocusSymbolData from '@logic-pad/core/data/symbols/focusSymbol';
-import {
-  FiChevronDown,
-  FiChevronLeft,
-  FiChevronRight,
-  FiChevronUp,
-} from 'react-icons/fi';
 
 export interface FocusProps {
   textClass: string;
@@ -21,21 +15,19 @@ export default memo(function FocusSymbol({ textClass, symbol }: FocusProps) {
         textClass
       )}
     >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 500 500"
+        className="absolute m-auto"
+      >
+        <path
+          d="M 134.338 429.32 L 134.339 366.634 L 71.651 366.635 C 66.405 366.634 62.151 362.381 62.151 357.135 C 62.151 351.888 66.405 347.635 71.651 347.634 L 143.839 347.634 C 146.358 347.635 148.774 348.635 150.556 350.417 C 152.338 352.199 153.339 354.615 153.339 357.135 L 153.338 429.322 C 153.338 434.568 149.084 438.821 143.837 438.821 C 138.59 438.821 134.338 434.567 134.338 429.32 Z M 70.68 134.338 L 133.366 134.339 L 133.365 71.651 C 133.366 66.405 137.62 62.151 142.866 62.151 C 148.112 62.151 152.366 66.405 152.366 71.651 L 152.366 143.839 C 152.366 146.358 151.365 148.774 149.583 150.556 C 147.801 152.338 145.385 153.338 142.865 153.338 L 70.678 153.338 C 65.432 153.338 61.179 149.084 61.179 143.837 C 61.179 138.59 65.433 134.338 70.68 134.338 Z M 429.32 365.662 L 366.635 365.662 L 366.635 428.349 C 366.635 433.595 362.381 437.849 357.135 437.849 C 351.888 437.849 347.635 433.595 347.634 428.349 L 347.634 356.162 C 347.635 353.642 348.635 351.226 350.417 349.444 C 352.199 347.662 354.615 346.662 357.135 346.662 L 429.322 346.662 C 434.568 346.662 438.821 350.916 438.821 356.163 C 438.821 361.41 434.567 365.662 429.32 365.662 Z M 365.662 70.68 L 365.662 133.366 L 428.349 133.365 C 433.595 133.366 437.849 137.62 437.849 142.866 C 437.849 148.112 433.595 152.366 428.349 152.366 L 356.162 152.366 C 353.642 152.366 351.226 151.365 349.444 149.583 C 347.662 147.801 346.662 145.385 346.662 142.865 L 346.662 70.678 C 346.662 65.432 350.916 61.179 356.163 61.179 C 361.41 61.179 365.662 65.433 365.662 70.68 Z"
+          fill="currentColor"
+        ></path>
+      </svg>
       <span className={cn('absolute m-auto text-[0.6em]', textClass)}>
         {symbol.number}
       </span>
-      <div className="absolute top-[0.05em] right-[0.05em] rotate-45">
-        <FiChevronDown size={'0.4em'} />
-      </div>
-      <div className="absolute top-[0.05em] left-[0.05em] rotate-45">
-        <FiChevronRight size={'0.4em'} />
-      </div>
-      <div className="absolute bottom-[0.05em] right-[0.05em] rotate-45">
-        <FiChevronLeft size={'0.4em'} />
-      </div>
-      <div className="absolute bottom-[0.05em] left-[0.05em] rotate-45">
-        <FiChevronUp size={'0.4em'} />
-      </div>
     </div>
   );
 });

@@ -1,3 +1,7 @@
+# 0.19.0
+
+- New `copyWith` API to skip sanitization or event triggering
+
 # 0.18.0
 
 - House symbols now have configurable numbers

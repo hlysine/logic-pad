@@ -773,54 +773,36 @@ declare global {
       connections?: GridConnections,
       zones?: GridZones,
       symbols?: ReadonlyMap<string, readonly Symbol$1[]>,
-      rules?: readonly Rule[]
+      rules?: readonly Rule[],
+      sanitize?: boolean,
+      triggerEvents?: boolean
     ): GridData;
     /**
      * Copy the current grid while modifying the provided properties.
      * @param param0 The properties to modify.
      * @returns The new grid with the modified properties.
      */
-    copyWith({
-      width,
-      height,
-      tiles,
-      connections,
-      zones,
-      symbols,
-      rules,
-    }: {
-      width?: number;
-      height?: number;
-      tiles?: readonly (readonly TileData[])[];
-      connections?: GridConnections;
-      zones?: GridZones;
-      symbols?: ReadonlyMap<string, readonly Symbol$1[]>;
-      rules?: readonly Rule[];
-    }): GridData;
-    /**
-     * Copy the current grid while modifying the provided properties.
-     * Skip sanitization and event triggering for performance.
-     *
-     * @param param0 The properties to modify.
-     * @returns The new grid with the modified properties.
-     */
-    fastCopyWith({
-      width,
-      height,
-      tiles,
-      connections,
-      zones,
-      symbols,
-      rules,
-    }: {
-      width?: number;
-      height?: number;
-      tiles?: readonly (readonly TileData[])[];
-      connections?: GridConnections;
-      zones?: GridZones;
-      symbols?: ReadonlyMap<string, readonly Symbol$1[]>;
-      rules?: readonly Rule[];
-    }): GridData;
+    copyWith(
+      {
+        width,
+        height,
+        tiles,
+        connections,
+        zones,
+        symbols,
+        rules,
+      }: {
+        width?: number;
+        height?: number;
+        tiles?: readonly (readonly TileData[])[];
+        connections?: GridConnections;
+        zones?: GridZones;
+        symbols?: ReadonlyMap<string, readonly Symbol$1[]>;
+        rules?: readonly Rule[];
+      },
+      sanitize?: boolean,
+      triggerEvents?: boolean
+    ): GridData;
     toArrayCoordinates(x: number, y: number): Position$1;
     isPositionValid(x: number, y: number): boolean;
     /**

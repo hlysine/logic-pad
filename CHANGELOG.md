@@ -1,6 +1,7 @@
 # 26/9/2025
 
 - Optimized rendering for Viewpoint, Lotus, Minesweeper and Focus symbols by using pre-rendered SVGs
+- Optimized symbol rendering on very large grids
 
 # 24/9/2025
 

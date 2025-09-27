@@ -48,7 +48,8 @@ export default memo(function CollectionCard({
             <h2
               className={cn(
                 'text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis',
-                expandable && '[.wrapper:hover_&]:whitespace-normal',
+                expandable &&
+                  '[.wrapper:hover_&]:whitespace-normal [.wrapper:hover_&]:break-words',
                 collection.isSeries && 'text-accent'
               )}
             >

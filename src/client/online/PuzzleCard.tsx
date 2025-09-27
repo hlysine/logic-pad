@@ -177,7 +177,8 @@ export default memo(function PuzzleCard({
           <h2
             className={cn(
               'text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis',
-              expandable && '[.wrapper:hover_&]:whitespace-normal'
+              expandable &&
+                '[.wrapper:hover_&]:whitespace-normal [.wrapper:hover_&]:break-words'
             )}
           >
             {puzzle.inSeries && (

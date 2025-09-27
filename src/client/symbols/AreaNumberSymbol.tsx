@@ -18,7 +18,13 @@ export default memo(function AreaNumberSymbol({
         textClass
       )}
     >
-      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
+      <span
+        className={cn(
+          'absolute m-auto',
+          textClass,
+          String(symbol.number).length >= 3 ? 'text-[0.55em]' : 'text-[0.75em]'
+        )}
+      >
         {symbol.number}
       </span>
     </div>

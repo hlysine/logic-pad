@@ -102,7 +102,7 @@ export default memo(function MainGrid({
     {
       scaleBounds: { min: 2 ** -2, max: 2 ** 2 },
       pinchOnWheel: false,
-      rubberband: true,
+      rubberband: false,
       pointer: { touch: true },
       from: [scale, 0],
       preventDefault: true,

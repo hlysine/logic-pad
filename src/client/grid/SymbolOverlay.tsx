@@ -123,7 +123,7 @@ function computeSymbolStates(
   ) as (SymbolDisplayHandler & Rule)[];
   grid.symbols.forEach(symbolList => {
     symbolList.forEach((symbol, i) => {
-      const symbolKey = `${symbol.id}(${symbol.x},${symbol.y})`;
+      const symbolKey = `${symbol.id}-${i}`;
       if (!symbol.visibleWhenSolving && !editable) {
         manager.set(symbolKey, null);
         return;
@@ -163,12 +163,13 @@ function computeSymbolStates(
 
 const SymbolWrapper = memo(function SymbolWrapper({
   symbol,
+  symbolKey,
   manager,
 }: {
   symbol: SymbolData;
+  symbolKey: string;
   manager: SymbolStateManager;
 }) {
-  const symbolKey = `${symbol.id}(${symbol.x},${symbol.y})`;
   const className = useSyncExternalStore(
     useMemo(
       () => (listener: () => void) => manager.subscribe(symbolKey, listener),
@@ -192,11 +193,12 @@ const SymbolList = memo(function SymbolList({
   const symbolNodes = useMemo(() => {
     const nodes: ReactNode[] = [];
     symbols.forEach(symbolList => {
-      symbolList.forEach(symbol => {
+      symbolList.forEach((symbol, i) => {
         nodes.push(
           <SymbolWrapper
-            key={`${symbol.id}(${symbol.x},${symbol.y})`}
+            key={`${symbol.id}-${i}`}
             symbol={symbol}
+            symbolKey={`${symbol.id}-${i}`}
             manager={manager}
           />
         );

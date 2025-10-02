@@ -1,3 +1,7 @@
+# 2/10/2025
+
+- Improved validation error messages to be more user-friendly
+
 # 26/9/2025
 
 - Optimized rendering for Viewpoint, Lotus, Minesweeper and Focus symbols by using pre-rendered SVGs

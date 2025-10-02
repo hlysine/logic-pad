@@ -1,3 +1,7 @@
+# 0.19.1
+
+- Improved puzzle object validation to output user-friendly messages
+
 # 0.19.0
 
 - New `copyWith` API to skip sanitization or event triggering

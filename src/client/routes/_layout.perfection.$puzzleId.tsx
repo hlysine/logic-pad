@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_layout/perfection/$puzzleId')({
   remountDeps: ({ params }) => params.puzzleId,
   validateSearch: zodValidator(
     z.object({
-      collection: z.string().optional(),
+      collection: z.string().min(1).optional().catch(undefined),
     })
   ),
   loader: async ({ params }) => {

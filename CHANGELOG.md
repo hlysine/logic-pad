@@ -1,3 +1,10 @@
+# 4/10/2025
+
+- You can now add private puzzles to private collections
+  - All puzzles must be public for a collection to become public
+- Optimized the random puzzle algorithm
+- Fixed puzzle cards being clicked when using drag-and-drop
+
 # 2/10/2025
 
 - Improved validation error messages to be more user-friendly

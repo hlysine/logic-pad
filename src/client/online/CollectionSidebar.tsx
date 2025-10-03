@@ -1,4 +1,4 @@
-import { memo, useEffect, useId } from 'react';
+import React, { memo, useEffect, useId } from 'react';
 import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { api, bidirectionalInfiniteQuery } from './api';
@@ -138,7 +138,7 @@ export default memo(function CollectionSidebar({
                 ) : null}
                 {puzzleList.data?.pages.flatMap(page =>
                   page.results.map(puzzle => (
-                    <>
+                    <React.Fragment key={puzzle.id}>
                       <Link
                         key={puzzle.id}
                         className={cn(
@@ -185,7 +185,7 @@ export default memo(function CollectionSidebar({
                         </div>
                       </Link>
                       <div className="divider m-0" />
-                    </>
+                    </React.Fragment>
                   ))
                 )}
                 {puzzleList.isFetchingNextPage ? (

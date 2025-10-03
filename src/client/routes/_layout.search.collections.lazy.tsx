@@ -33,7 +33,7 @@ export const Route = createLazyFileRoute('/_layout/search/collections')({
           onChange={async params => await navigate({ search: params })}
         />
         <div className="divider m-0" />
-        <CollectionSearchResults params={search} />
+        <CollectionSearchResults params={search} searchType="public" />
       </>
     );
   }),

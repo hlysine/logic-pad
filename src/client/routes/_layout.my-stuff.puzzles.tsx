@@ -4,18 +4,10 @@ import {
   PrivatePuzzleSearchParams,
   privatePuzzleSearchSchema,
 } from '../online/PuzzleSearchQuery';
-import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
+import { queryClient } from '../online/api';
 import { router } from '../router/router';
 import toast from 'react-hot-toast';
-
-export const myPuzzlesInfiniteQueryOptions = (
-  search: PrivatePuzzleSearchParams
-) =>
-  bidirectionalInfiniteQuery(
-    ['user', 'me', 'puzzles', search],
-    (cursorBefore, cursorAfter) =>
-      api.listMyPuzzles(search, cursorBefore, cursorAfter)
-  );
+import { searchOwnPuzzlesInfiniteQueryOptions } from '../online/PuzzleSearchResults';
 
 export const Route = createFileRoute('/_layout/my-stuff/puzzles')({
   validateSearch: zodValidator(privatePuzzleSearchSchema),
@@ -23,7 +15,7 @@ export const Route = createFileRoute('/_layout/my-stuff/puzzles')({
     try {
       await Promise.all([
         queryClient.ensureInfiniteQueryData(
-          myPuzzlesInfiniteQueryOptions(
+          searchOwnPuzzlesInfiniteQueryOptions(
             router.state.location.search as PrivatePuzzleSearchParams
           )
         ),

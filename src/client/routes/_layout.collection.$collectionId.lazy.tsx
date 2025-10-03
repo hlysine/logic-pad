@@ -36,7 +36,7 @@ import { api, queryClient } from '../online/api';
 import toast from 'react-hot-toast';
 import { useOnline } from '../contexts/OnlineContext';
 import EditableField from '../components/EditableField';
-import AddPuzzleModal from '../online/AddPuzzleModal';
+import AddPuzzlesModal from '../online/AddPuzzlesModal';
 import { BiSolidSelectMultiple } from 'react-icons/bi';
 import {
   DndContext,
@@ -56,12 +56,14 @@ import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 
 interface CollectionPuzzlesProps {
   collectionId: string;
+  status: ResourceStatus;
   isSeries: boolean;
   editable: boolean;
 }
 
 const CollectionPuzzles = memo(function CollectionPuzzles({
   collectionId,
+  status,
   isSeries,
   editable,
 }: CollectionPuzzlesProps) {
@@ -129,7 +131,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
       });
     },
   });
-  const addPuzzleModalRef = useRef<{ open: () => void }>(null);
+  const addPuzzlesModalRef = useRef<{ open: () => void }>(null);
   const [selectedPuzzles, setSelectedPuzzles] = useState<string[] | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -187,14 +189,15 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
             ) : (
               <button
                 className="btn"
-                onClick={() => addPuzzleModalRef.current?.open()}
+                onClick={() => addPuzzlesModalRef.current?.open()}
               >
                 <FaPlus size={16} />
                 Add puzzles
               </button>
             )}
-            <AddPuzzleModal
-              ref={addPuzzleModalRef}
+            <AddPuzzlesModal
+              ref={addPuzzlesModalRef}
+              searchType={status === ResourceStatus.Public ? 'public' : 'all'}
               modifyParams={
                 isSeries
                   ? p => ({
@@ -375,7 +378,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
       },
       async onSuccess() {
         await queryClient.invalidateQueries({
-          queryKey: ['user', 'me', 'collections', {}],
+          queryKey: ['collection', 'search-own', {}],
         });
         await navigate({ to: '/my-stuff/collections' });
       },
@@ -560,6 +563,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         <div className="divider" />
         <CollectionPuzzles
           collectionId={params.collectionId}
+          status={collectionBrief.status}
           isSeries={collectionBrief.isSeries}
           editable={
             collectionBrief.creator.id === me?.id &&

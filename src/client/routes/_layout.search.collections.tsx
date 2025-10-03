@@ -4,18 +4,10 @@ import {
   CollectionSearchParams,
   collectionSearchSchema,
 } from '../online/CollectionSearchQuery';
-import { api, bidirectionalInfiniteQuery, queryClient } from '../online/api';
+import { queryClient } from '../online/api';
 import { router } from '../router/router';
 import toast from 'react-hot-toast';
-
-export const searchCollectionsInfiniteQueryOptions = (
-  search: CollectionSearchParams
-) =>
-  bidirectionalInfiniteQuery(
-    ['collection', 'search', search],
-    (cursorBefore, cursorAfter) =>
-      api.searchCollections(search, cursorBefore, cursorAfter)
-  );
+import { searchCollectionsInfiniteQueryOptions } from '../online/CollectionSearchResults';
 
 export const Route = createFileRoute('/_layout/search/collections')({
   validateSearch: zodValidator(collectionSearchSchema),

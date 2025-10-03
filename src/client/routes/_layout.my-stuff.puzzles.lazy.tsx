@@ -10,10 +10,10 @@ import PuzzleSearchQuery from '../online/PuzzleSearchQuery';
 import toast from 'react-hot-toast';
 import { BiSolidSelectMultiple } from 'react-icons/bi';
 import { cn } from '../uiHelper';
-import { myPuzzlesInfiniteQueryOptions } from './_layout.my-stuff.puzzles';
 import { ResourceStatus } from '../online/data';
 import { FaXmark } from 'react-icons/fa6';
 import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
+import { searchOwnPuzzlesInfiniteQueryOptions } from '../online/PuzzleSearchResults';
 
 export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
   component: memo(function MyStuff() {
@@ -21,7 +21,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
     const navigate = Route.useNavigate();
     const search = Route.useSearch();
     const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery(
-      myPuzzlesInfiniteQueryOptions(search)
+      searchOwnPuzzlesInfiniteQueryOptions(search)
     );
     const deletePuzzles = useMutation({
       mutationFn: (variables: Parameters<typeof api.deletePuzzles>) => {
@@ -32,7 +32,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
       },
       async onSuccess(data) {
         await queryClient.invalidateQueries({
-          queryKey: ['user', 'me', 'puzzles'],
+          queryKey: ['puzzle', 'search-own'],
         });
         toast.success(`Successfully deleted ${data.deleted.length} puzzles`);
       },
@@ -61,7 +61,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
         </div>
         <PuzzleSearchQuery
           params={search}
-          publicPuzzlesOnly={false}
+          searchType="own"
           onChange={async params => await navigate({ search: params })}
         />
         <div className="flex gap-4 items-center w-full justify-end shrink-0">

@@ -288,21 +288,33 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  getRandomPuzzle: async () => {
-    return await axios
-      .get<{ id: string }>(`/puzzle/random`)
-      .then(res => res.data)
-      .catch(rethrowError);
-  },
-  listMyPuzzles: async (
+  searchMyPuzzles: async (
     query: PrivatePuzzleSearchParams,
     cursorBefore?: string,
     cursorAfter?: string
   ) => {
     return await axios
-      .get<ListResponse<PuzzleBrief>>(`/user/me/puzzles`, {
+      .get<ListResponse<PuzzleBrief>>(`/puzzle/search/own`, {
         params: { ...query, cursorBefore, cursorAfter },
       })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  searchAllPuzzles: async (
+    query: PrivatePuzzleSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<ListResponse<PuzzleBrief>>(`/puzzle/search/all`, {
+        params: { ...query, cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  getRandomPuzzle: async () => {
+    return await axios
+      .get<{ id: string }>(`/puzzle/random`)
       .then(res => res.data)
       .catch(rethrowError);
   },
@@ -405,13 +417,25 @@ export const api = {
       .then(res => res.data)
       .catch(rethrowError);
   },
-  listMyCollections: async (
+  searchMyCollections: async (
     query: CollectionSearchParams,
     cursorBefore?: string,
     cursorAfter?: string
   ) => {
     return await axios
-      .get<ListResponse<CollectionBrief>>(`/user/me/collections`, {
+      .get<ListResponse<CollectionBrief>>(`/collection/search/own`, {
+        params: { ...query, cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  searchAllCollections: async (
+    query: CollectionSearchParams,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<ListResponse<CollectionBrief>>(`/collection/search/all`, {
         params: { ...query, cursorBefore, cursorAfter },
       })
       .then(res => res.data)

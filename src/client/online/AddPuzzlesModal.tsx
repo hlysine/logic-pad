@@ -1,24 +1,29 @@
-import { memo, useImperativeHandle, useMemo, useState } from 'react';
+import { useImperativeHandle, useMemo, useState } from 'react';
 import PuzzleSearchQuery, {
-  PublicPuzzleSearchParams,
-} from '../online/PuzzleSearchQuery';
-import PuzzleSearchResults from '../online/PuzzleSearchResults';
+  PuzzleSearchParams,
+  SearchType,
+} from './PuzzleSearchQuery';
+import PuzzleSearchResults from './PuzzleSearchResults';
 import { cn } from '../uiHelper';
 import { FaPlus } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 
-export interface AddPuzzlesModalProps {
+export interface AddPuzzlesModalProps<Search extends SearchType> {
   ref: React.Ref<{ open: () => void }>;
-  modifyParams?: (params: PublicPuzzleSearchParams) => PublicPuzzleSearchParams;
+  searchType: Search;
+  modifyParams?: (
+    params: PuzzleSearchParams<Search>
+  ) => PuzzleSearchParams<Search>;
   onSubmit: (puzzles: string[]) => void;
 }
 
-export default memo(function AddPuzzlesModal({
+export default function AddPuzzlesModal<Search extends SearchType>({
   ref,
+  searchType,
   modifyParams,
   onSubmit,
-}: AddPuzzlesModalProps) {
-  const [params, setParams] = useState<PublicPuzzleSearchParams>({});
+}: AddPuzzlesModalProps<Search>) {
+  const [params, setParams] = useState<PuzzleSearchParams<Search>>({});
   const [open, setOpen] = useState(false);
   const [selectedPuzzles, setSelectedPuzzles] = useState<string[]>([]);
   const finalParams = useMemo(
@@ -69,12 +74,13 @@ export default memo(function AddPuzzlesModal({
           </div>
           <PuzzleSearchQuery
             params={params}
-            publicPuzzlesOnly={true}
+            searchType={searchType}
             onChange={setParams}
           />
           <div className="divider" />
           <PuzzleSearchResults
             params={finalParams}
+            searchType={searchType}
             onClick={puzzle => {
               setSelectedPuzzles(selectedPuzzles => {
                 if (selectedPuzzles.includes(puzzle.id)) {
@@ -114,4 +120,4 @@ export default memo(function AddPuzzlesModal({
       </form>
     </dialog>
   );
-});
+}

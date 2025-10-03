@@ -5,6 +5,8 @@ import { z } from 'zod';
 import { useOnline } from '../contexts/OnlineContext';
 import { cn } from '../uiHelper';
 
+export type SearchType = 'public' | 'own' | 'all';
+
 export const puzzleSearchSchema = z.object({
   q: z.string().optional().catch(undefined),
   type: z
@@ -57,9 +59,10 @@ export type PublicPuzzleSearchParams = z.infer<typeof puzzleSearchSchema>;
 export type PrivatePuzzleSearchParams = z.infer<
   typeof privatePuzzleSearchSchema
 >;
-export type PuzzleSearchParams<Public extends boolean> = Public extends true
-  ? PublicPuzzleSearchParams
-  : PrivatePuzzleSearchParams;
+export type PuzzleSearchParams<Search extends SearchType> =
+  Search extends 'public'
+    ? PublicPuzzleSearchParams
+    : PrivatePuzzleSearchParams;
 
 type FilterOption = {
   id: string;
@@ -258,26 +261,26 @@ const orderings = [
   },
 ] as const;
 
-export interface PuzzleSearchQueryProps<Public extends boolean> {
-  params: PuzzleSearchParams<Public>;
+export interface PuzzleSearchQueryProps<Search extends SearchType> {
+  params: PuzzleSearchParams<Search>;
   /**
    * Sorting by published date is only possible for public puzzles.
    */
-  publicPuzzlesOnly: Public;
-  onChange: (params: PuzzleSearchParams<Public>) => void;
+  searchType: Search;
+  onChange: (params: PuzzleSearchParams<Search>) => void;
 }
 
-export default function PuzzleSearchQuery<Public extends boolean>({
+export default function PuzzleSearchQuery<Search extends SearchType>({
   params,
-  publicPuzzlesOnly,
+  searchType,
   onChange,
-}: PuzzleSearchQueryProps<Public>) {
+}: PuzzleSearchQueryProps<Search>) {
   const { me } = useOnline();
   const [displayParams, setDisplayParams] =
-    useState<PuzzleSearchParams<Public>>(params);
+    useState<PuzzleSearchParams<Search>>(params);
   const updateParams = useMemo(() => {
     const debouncedUpdate = debounce(
-      (newParams: PuzzleSearchParams<Public>) => {
+      (newParams: PuzzleSearchParams<Search>) => {
         if (!me) {
           onChange({});
         } else {
@@ -287,7 +290,7 @@ export default function PuzzleSearchQuery<Public extends boolean>({
       500,
       { trailing: true }
     );
-    return (newParams: PuzzleSearchParams<Public>) => {
+    return (newParams: PuzzleSearchParams<Search>) => {
       setDisplayParams(newParams);
       debouncedUpdate(newParams);
     };
@@ -348,7 +351,7 @@ export default function PuzzleSearchQuery<Public extends boolean>({
                     updateParams(
                       option.applyFilter(
                         displayParams
-                      ) as PuzzleSearchParams<Public>
+                      ) as PuzzleSearchParams<Search>
                     )
                   }
                 >
@@ -362,7 +365,7 @@ export default function PuzzleSearchQuery<Public extends boolean>({
         <div className="flex gap-4 mt-2 flex-wrap">
           {orderings
             .filter(ordering =>
-              publicPuzzlesOnly
+              searchType === 'public'
                 ? ordering.id !== 'created'
                 : ordering.id !== 'published'
             )
@@ -377,7 +380,7 @@ export default function PuzzleSearchQuery<Public extends boolean>({
                   !me && 'btn-disabled'
                 )}
                 onClick={() => {
-                  let newParams: PuzzleSearchParams<Public>;
+                  let newParams: PuzzleSearchParams<Search>;
                   if (displayParams.sort === `${ordering.id}-asc`) {
                     newParams = { ...displayParams, sort: undefined };
                   } else if (displayParams.sort === `${ordering.id}-desc`) {

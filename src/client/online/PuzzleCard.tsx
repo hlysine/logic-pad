@@ -140,8 +140,14 @@ export default memo(function PuzzleCard({
   children,
   ...props
 }: PuzzleCardProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: puzzle.id });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: puzzle.id });
   const RootComponent = props.to ? Link : 'a';
   return (
     <div
@@ -167,7 +173,8 @@ export default memo(function PuzzleCard({
           'relative w-full h-full hover:h-fit flex gap-4 items-center px-4 py-2 rounded-xl shadow-md wrapper hover:shadow-xl transition-all text-base-content',
           puzzle.status === ResourceStatus.Private
             ? `bg-base-300/50 hover:bg-base-100`
-            : 'bg-base-300 hover:bg-base-100'
+            : 'bg-base-300 hover:bg-base-100',
+          isDragging && 'pointer-events-none'
         )}
         role="button"
         {...props}

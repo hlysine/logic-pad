@@ -9,7 +9,7 @@ export interface RatedDifficultyProps {
   className?: string;
 }
 
-function medianFromHistogram(ratedDifficulty: number[]) {
+export function medianFromHistogram(ratedDifficulty: number[]) {
   const total = ratedDifficulty.reduce((acc, val) => acc + val, 0);
   const half = total / 2;
 

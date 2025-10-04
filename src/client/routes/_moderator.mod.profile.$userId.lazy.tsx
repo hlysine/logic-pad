@@ -12,6 +12,9 @@ import UserRestrictions from '../online/moderator/UserRestrictions';
 import ModMessagePrompt, {
   PromptHandle,
 } from '../online/moderator/ModMessagePrompt';
+import UserPuzzles from '../online/moderator/UserPuzzles';
+import UserCollections from '../online/moderator/UserCollections';
+import UserComments from '../online/moderator/UserComments';
 
 export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
   component: memo(function RouteComponent() {
@@ -25,12 +28,12 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
 
     return (
       <div className="flex flex-col bg-base-100 flex-1 self-stretch text-sm font-sans">
-        <div className="text-xs bg-error text-error-content text-center">
+        <div className="text-xs bg-error text-error-content text-center shrink-0">
           All moderator actions are logged and auditable.
         </div>
         <ModMessagePrompt ref={promptRef} />
-        <div className="flex flex-col flex-1 self-stretch p-4">
-          <div className="flex gap-8 items-start flex-wrap">
+        <div className="flex flex-col flex-1 self-stretch px-4 pt-4">
+          <div className="flex gap-8 items-start flex-wrap shrink-0">
             <Avatar
               userId={userBrief.id}
               username={userBrief.name}
@@ -101,7 +104,12 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
             </div>
             <UserRestrictions userId={userId} promptHandle={promptRef} />
           </div>
-          <div className="divider" />
+          <div className="divider shrink-0" />
+          <div className="flex-1 flex gap-8 justify-start items-stretch overflow-x-auto">
+            <UserPuzzles userId={userId} />
+            <UserCollections userId={userId} />
+            <UserComments userId={userId} />
+          </div>
         </div>
       </div>
     );

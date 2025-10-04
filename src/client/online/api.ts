@@ -22,6 +22,7 @@ import {
   SitemapEntry,
   UserAccount,
   UserRestrictions,
+  ModComment,
 } from './data';
 import {
   DataTag,
@@ -582,6 +583,18 @@ export const api = {
       .put<UserRestrictions>(`/moderation/user/${userId}/restrictions`, {
         restrictions,
         message,
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modListComments: async (
+    userId: string,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<ListResponse<ModComment>>(`/moderation/user/${userId}/comments`, {
+        params: { cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);

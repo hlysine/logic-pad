@@ -175,3 +175,14 @@ export interface UserRestrictions {
   collections: string | null;
   ratings: string | null;
 }
+
+export interface ModComment extends ResourceResponse {
+  puzzle: {
+    id: string;
+    createdAt: string;
+    updatedAt: string;
+    title: string;
+  };
+  creatorId: string;
+  content: string;
+}

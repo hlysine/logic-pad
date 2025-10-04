@@ -4,6 +4,7 @@
   - All puzzles must be public for a collection to become public
 - Optimized the random puzzle algorithm
 - Fixed puzzle cards being clicked when using drag-and-drop
+- Improve loading animation in some areas for stable page layout
 
 # 2/10/2025
 

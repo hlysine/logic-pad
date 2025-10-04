@@ -20,14 +20,13 @@ export const Route = createFileRoute('/_layout/collection/$collectionId')({
   remountDeps: ({ params }) => params.collectionId,
   loader: async ({ params }) => {
     try {
-      await Promise.all([
-        queryClient.ensureQueryData(
-          collectionQueryOptions(params.collectionId)
-        ),
-        queryClient.ensureInfiniteQueryData(
-          collectionInfiniteQueryOptions(params.collectionId)
-        ),
-      ]);
+      await queryClient.ensureQueryData(
+        collectionQueryOptions(params.collectionId)
+      );
+      // we can render the page and suspend while waiting for this
+      void queryClient.ensureInfiniteQueryData(
+        collectionInfiniteQueryOptions(params.collectionId)
+      );
     } catch (error) {
       toast.error((error as Error).message);
       throw redirect({

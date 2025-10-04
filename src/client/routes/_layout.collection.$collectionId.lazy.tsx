@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { memo, ReactNode, useEffect, useRef, useState } from 'react';
+import { memo, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
   FaCheck,
@@ -53,6 +53,7 @@ import {
 } from '@dnd-kit/sortable';
 import Avatar from '../online/Avatar';
 import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
+import Skeleton from '../components/Skeleton';
 
 interface CollectionPuzzlesProps {
   collectionId: string;
@@ -561,15 +562,34 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
           )}
         </div>
         <div className="divider" />
-        <CollectionPuzzles
-          collectionId={params.collectionId}
-          status={collectionBrief.status}
-          isSeries={collectionBrief.isSeries}
-          editable={
-            collectionBrief.creator.id === me?.id &&
-            collectionBrief.autoPopulate === null
+        <Suspense
+          fallback={
+            <div className="flex flex-col gap-4 items-center">
+              {collectionBrief.creator.id === me?.id &&
+                collectionBrief.autoPopulate === null && (
+                  <div className="flex gap-4 items-center w-full justify-end shrink-0">
+                    <Skeleton className="w-28 h-12" />
+                    <Skeleton className="w-28 h-12" />
+                  </div>
+                )}
+              <div className="flex flex-wrap gap-4 justify-center">
+                {Array.from({ length: 3 }, (_, i) => (
+                  <Skeleton key={i} className="w-[320px] h-[116px]" />
+                ))}
+              </div>
+            </div>
           }
-        />
+        >
+          <CollectionPuzzles
+            collectionId={params.collectionId}
+            status={collectionBrief.status}
+            isSeries={collectionBrief.isSeries}
+            editable={
+              collectionBrief.creator.id === me?.id &&
+              collectionBrief.autoPopulate === null
+            }
+          />
+        </Suspense>
       </ResponsiveLayout>
     );
   }),

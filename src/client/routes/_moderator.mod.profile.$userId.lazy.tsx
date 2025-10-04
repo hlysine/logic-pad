@@ -2,13 +2,16 @@ import { createLazyFileRoute, Link } from '@tanstack/react-router';
 import { useRouteProtection } from '../router/useRouteProtection';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { userBriefQueryOptions } from './_layout.profile.$userId';
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import { toRelativeDate } from '../uiHelper';
 import Avatar from '../online/Avatar';
 import SupporterBadge from '../components/SupporterBadge';
 import { FaCheckSquare, FaEdit } from 'react-icons/fa';
 import { userAccountQueryOptions } from './_moderator.mod.profile.$userId';
 import UserRestrictions from '../online/moderator/UserRestrictions';
+import ModMessagePrompt, {
+  PromptHandle,
+} from '../online/moderator/ModMessagePrompt';
 
 export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
   component: memo(function RouteComponent() {
@@ -16,6 +19,7 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
     const userId = Route.useParams().userId;
     const { data: userBrief } = useSuspenseQuery(userBriefQueryOptions(userId));
     const { data: userAccount } = useQuery(userAccountQueryOptions(userId));
+    const promptRef = useRef<PromptHandle>(null);
 
     if (!userBrief) return null;
 
@@ -24,6 +28,7 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
         <div className="text-xs bg-error text-error-content text-center">
           All moderator actions are logged and auditable.
         </div>
+        <ModMessagePrompt ref={promptRef} />
         <div className="flex flex-col flex-1 self-stretch p-4">
           <div className="flex gap-8 items-start flex-wrap">
             <Avatar
@@ -94,7 +99,7 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
                 <div className="skeleton h-5 w-96 mt-2"></div>
               )}
             </div>
-            <UserRestrictions userId={userId} />
+            <UserRestrictions userId={userId} promptHandle={promptRef} />
           </div>
           <div className="divider" />
         </div>

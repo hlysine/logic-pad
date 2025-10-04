@@ -575,11 +575,13 @@ export const api = {
   },
   modUpdateRestrictions: async (
     userId: string,
-    restrictions: Partial<UserRestrictions>
+    restrictions: Partial<UserRestrictions>,
+    message: string | null
   ) => {
     return await axios
       .put<UserRestrictions>(`/moderation/user/${userId}/restrictions`, {
-        ...restrictions,
+        restrictions,
+        message,
       })
       .then(res => res.data)
       .catch(rethrowError);

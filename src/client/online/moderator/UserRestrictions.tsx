@@ -1,9 +1,10 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, RefObject, useEffect, useState } from 'react';
 import { userRestrictionsQueryOptions } from '../../routes/_moderator.mod.profile.$userId';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { api, queryClient } from '../api';
 import toast from 'react-hot-toast';
 import { cn } from '../../uiHelper';
+import { modPrompt, PromptHandle } from './ModMessagePrompt';
 
 const RestrictionEntry = memo(function RestrictionEntry({
   label,
@@ -48,10 +49,12 @@ const RestrictionEntry = memo(function RestrictionEntry({
 
 export interface UserRestrictionsProps {
   userId: string;
+  promptHandle: RefObject<PromptHandle | null>;
 }
 
 export default memo(function UserRestrictions({
   userId,
+  promptHandle,
 }: UserRestrictionsProps) {
   const { data: userRestrictions } = useQuery(
     userRestrictionsQueryOptions(userId)
@@ -106,7 +109,13 @@ export default memo(function UserRestrictions({
             'btn btn-xs btn-primary w-full mt-2',
             saveRestrictions.isPending && 'btn-disabled'
           )}
-          onClick={() => saveRestrictions.mutate([userId, newRestrictions])}
+          onClick={() =>
+            modPrompt(promptHandle)
+              .then(message =>
+                saveRestrictions.mutate([userId, newRestrictions, message])
+              )
+              .catch(() => {})
+          }
         >
           {saveRestrictions.isPending ? 'Saving...' : 'Save'}
         </button>

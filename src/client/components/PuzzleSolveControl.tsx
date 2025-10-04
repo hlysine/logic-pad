@@ -7,7 +7,7 @@ import { useGridState } from '../contexts/GridStateContext.tsx';
 import { State } from '@logic-pad/core/index.ts';
 import onlineSolveTracker from '../router/onlineSolveTracker.ts';
 import { queryOptions, useMutation, useQuery } from '@tanstack/react-query';
-import { api, queryClient } from '../online/api.ts';
+import { api, ApiError, queryClient } from '../online/api.ts';
 import Loading from './Loading.tsx';
 import Difficulty from '../metadata/Difficulty.tsx';
 import toast from 'react-hot-toast';
@@ -80,7 +80,12 @@ const RatePuzzle = memo(function RatePuzzle({
       toast.error(error.message);
       if (context) setRating(context.rating);
     },
-    retry: 5,
+    retry: (retryCount, error) => {
+      if (error instanceof ApiError && error.status === 403) {
+        return false;
+      }
+      return retryCount < 4;
+    },
     retryDelay: retryCount =>
       Math.min(1000 * 2 ** Math.max(0, retryCount - 1), 5000),
   });

@@ -20,6 +20,8 @@ import {
   MeBrief,
   PaymentHistory,
   SitemapEntry,
+  UserAccount,
+  UserRestrictions,
 } from './data';
 import {
   DataTag,
@@ -555,6 +557,29 @@ export const api = {
     return await axios
       .get<SitemapEntry[]>(`/sitemap/${resource}`, {
         params: { cursorBefore, cursorAfter },
+      })
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modGetAccount: async (userId: string) => {
+    return await axios
+      .get<UserAccount>(`/moderation/user/${userId}`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modGetRestrictions: async (userId: string) => {
+    return await axios
+      .get<UserRestrictions>(`/moderation/user/${userId}/restrictions`)
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modUpdateRestrictions: async (
+    userId: string,
+    restrictions: Partial<UserRestrictions>
+  ) => {
+    return await axios
+      .put<UserRestrictions>(`/moderation/user/${userId}/restrictions`, {
+        ...restrictions,
       })
       .then(res => res.data)
       .catch(rethrowError);

@@ -9,7 +9,7 @@ import {
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import toast from 'react-hot-toast';
 import Loading from '../components/Loading';
-import { FaCheckSquare, FaEdit, FaUser } from 'react-icons/fa';
+import { FaCheckSquare, FaEdit, FaShieldAlt, FaUser } from 'react-icons/fa';
 import { pluralize, toRelativeDate } from '../uiHelper';
 import CollectionFollowButton from '../online/CollectionFollowButton';
 import { useOnline } from '../contexts/OnlineContext';
@@ -24,11 +24,10 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
     useRouteProtection('online');
     const navigate = useNavigate();
     const { me } = useOnline();
-    const { data: userBrief } = useSuspenseQuery(
-      userBriefQueryOptions(Route.useParams().userId)
-    );
+    const userId = Route.useParams().userId;
+    const { data: userBrief } = useSuspenseQuery(userBriefQueryOptions(userId));
     const { data: userDetail, isPending } = useQuery(
-      userDetailQueryOptions(Route.useParams().userId)
+      userDetailQueryOptions(userId)
     );
 
     useEffect(() => {
@@ -184,6 +183,20 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
               </HorizontalScroller>
             )}
           </>
+        )}
+        {me?.labels.includes('moderator') && (
+          <div
+            className="tooltip tooltip-error tooltip-left fixed bottom-4 right-4"
+            data-tip="Mod view"
+          >
+            <Link
+              to="/mod/profile/$userId"
+              params={{ userId }}
+              className="btn btn-circle btn-error shadow-xl"
+            >
+              <FaShieldAlt size={22} />
+            </Link>
+          </div>
         )}
       </ResponsiveLayout>
     );

@@ -42,6 +42,7 @@ export interface UserBrief extends ResourceResponse {
 
 export interface MeBrief extends UserBrief {
   supporterUntil: string | null;
+  labels: string[];
 }
 
 export interface PuzzleBrief extends ResourceResponse {
@@ -156,4 +157,21 @@ export interface PaymentHistory extends ResourceResponse {
 export interface SitemapEntry {
   id: string;
   updatedAt: string;
+}
+
+export interface UserAccount {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  registeredAt: string;
+  accessedAt: string;
+  labels: string[];
+  status: boolean;
+}
+
+export interface UserRestrictions {
+  comments: string | null;
+  puzzles: string | null;
+  collections: string | null;
+  ratings: string | null;
 }

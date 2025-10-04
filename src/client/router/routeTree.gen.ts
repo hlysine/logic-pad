@@ -35,6 +35,7 @@ import { Route as LayoutMyStuffPuzzlesRouteImport } from './../routes/_layout.my
 import { Route as LayoutMyStuffCollectionsRouteImport } from './../routes/_layout.my-stuff.collections'
 import { Route as LayoutCreatePuzzleIdRouteImport } from './../routes/_layout.create.$puzzleId'
 import { Route as LayoutCollectionCollectionIdRouteImport } from './../routes/_layout.collection.$collectionId'
+import { Route as ModeratorModProfileUserIdRouteImport } from './../routes/_moderator.mod.profile.$userId'
 
 const LayoutLazyRouteImport = createFileRoute('/_layout')()
 const LayoutUploaderLazyRouteImport = createFileRoute('/_layout/uploader')()
@@ -209,6 +210,16 @@ const LayoutCollectionCollectionIdRoute =
       (d) => d.Route,
     ),
   )
+const ModeratorModProfileUserIdRoute =
+  ModeratorModProfileUserIdRouteImport.update({
+    id: '/_moderator/mod/profile/$userId',
+    path: '/mod/profile/$userId',
+    getParentRoute: () => rootRouteImport,
+  } as any).lazy(() =>
+    import('./../routes/_moderator.mod.profile.$userId.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -236,6 +247,7 @@ export interface FileRoutesByFullPath {
   '/perfection': typeof LayoutPerfectionIndexRoute
   '/search/': typeof LayoutSearchIndexRoute
   '/solve': typeof LayoutSolveIndexRoute
+  '/mod/profile/$userId': typeof ModeratorModProfileUserIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -261,6 +273,7 @@ export interface FileRoutesByTo {
   '/perfection': typeof LayoutPerfectionIndexRoute
   '/search': typeof LayoutSearchIndexRoute
   '/solve': typeof LayoutSolveIndexRoute
+  '/mod/profile/$userId': typeof ModeratorModProfileUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -290,6 +303,7 @@ export interface FileRoutesById {
   '/_layout/perfection/': typeof LayoutPerfectionIndexRoute
   '/_layout/search/': typeof LayoutSearchIndexRoute
   '/_layout/solve/': typeof LayoutSolveIndexRoute
+  '/_moderator/mod/profile/$userId': typeof ModeratorModProfileUserIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -319,6 +333,7 @@ export interface FileRouteTypes {
     | '/perfection'
     | '/search/'
     | '/solve'
+    | '/mod/profile/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -344,6 +359,7 @@ export interface FileRouteTypes {
     | '/perfection'
     | '/search'
     | '/solve'
+    | '/mod/profile/$userId'
   id:
     | '__root__'
     | '/'
@@ -372,6 +388,7 @@ export interface FileRouteTypes {
     | '/_layout/perfection/'
     | '/_layout/search/'
     | '/_layout/solve/'
+    | '/_moderator/mod/profile/$userId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -379,6 +396,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   LayoutLazyRoute: typeof LayoutLazyRouteWithChildren
   OauthCallbackRoute: typeof OauthCallbackRoute
+  ModeratorModProfileUserIdRoute: typeof ModeratorModProfileUserIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -565,6 +583,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutCollectionCollectionIdRouteImport
       parentRoute: typeof LayoutLazyRoute
     }
+    '/_moderator/mod/profile/$userId': {
+      id: '/_moderator/mod/profile/$userId'
+      path: '/mod/profile/$userId'
+      fullPath: '/mod/profile/$userId'
+      preLoaderRoute: typeof ModeratorModProfileUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -647,6 +672,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   LayoutLazyRoute: LayoutLazyRouteWithChildren,
   OauthCallbackRoute: OauthCallbackRoute,
+  ModeratorModProfileUserIdRoute: ModeratorModProfileUserIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -56,6 +56,7 @@ export default defineConfig({
         'assets/z3-built.worker.js',
       ],
       workbox: {
+        globIgnores: ['**\/node_modules\/**\/*', '**\/_moderator*'],
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
         navigateFallbackDenylist: [/^\/api/, /^\/robots.txt/, /^\/sitemap.xml/],
       },

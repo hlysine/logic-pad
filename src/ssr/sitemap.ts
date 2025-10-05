@@ -7,7 +7,7 @@ import { api, axios } from '../client/online/api';
 // TODO: A dirty hack to get around import.meta.env being undefined in vite-plugin-vercel v9
 axios.defaults.baseURL = process.env.VITE_API_ENDPOINT;
 
-const lastSitemapModification = new Date('2025-09-25T08:48:59Z');
+const lastSitemapModification = new Date('2025-10-05T03:48:59Z');
 
 function lastMod(updatedAt: string) {
   const updatedDate = new Date(updatedAt);

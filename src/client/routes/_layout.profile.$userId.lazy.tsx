@@ -80,7 +80,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                 <div className="opacity-80">
                   Joined {toRelativeDate(new Date(userBrief.createdAt))}
                 </div>
-                {userDetail && (
+                {userDetail?.accessedAt && (
                   <div className="opacity-80">
                     Last active{' '}
                     {toRelativeDate(new Date(userDetail.accessedAt), 'day')}

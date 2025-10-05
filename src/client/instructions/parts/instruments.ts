@@ -312,7 +312,9 @@ export function encodeImmediate(
         }
         const time = `+${(((endPos.x + 1) / 2 - x / 2) * 120 * 120) / Tone.getTransport().bpm.value / bpm}`;
         if (row.note in drum) {
-          drum[row.note as keyof typeof drum].stop(time);
+          // do nothing for the moment
+          // TODO: consider pedal state?
+          // drum[row.note as keyof typeof drum].stop(time);
         } else {
           targetPiano.keyUp({
             note: row.note,

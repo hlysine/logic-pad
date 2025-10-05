@@ -1,3 +1,8 @@
+# 5/10/2025
+
+- Drum samples are no longer cut off when the BPM is high
+- Fixed music grid sometimes crashing when resizing the grid
+
 # 4/10/2025
 
 - You can now add private puzzles to private collections

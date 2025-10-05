@@ -58,6 +58,8 @@ const MusicControls = lazy(async function () {
         if (
           previousGrid.current &&
           !previousGrid.current.colorEquals(grid) &&
+          previousGrid.current.width === grid.width &&
+          previousGrid.current.height === grid.height &&
           playState === 'none'
         ) {
           playImmediate(grid, previousGrid.current, instruction);

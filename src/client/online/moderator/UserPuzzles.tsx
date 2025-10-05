@@ -10,6 +10,7 @@ import Difficulty from '../../metadata/Difficulty';
 import { count, toRelativeDate } from '../../uiHelper';
 import Skeleton from '../../components/Skeleton';
 import { medianFromHistogram } from '../../metadata/RatedDifficulty';
+import { Link } from '@tanstack/react-router';
 
 const UserPuzzle = memo(function UserPuzzle({
   puzzle,
@@ -18,7 +19,11 @@ const UserPuzzle = memo(function UserPuzzle({
 }) {
   return (
     <div className="flex flex-col items-start self-stretch gap-1 shrink-0">
-      <h3 className="text-lg">
+      <Link
+        to="/solve/$puzzleId"
+        params={{ puzzleId: puzzle.id }}
+        className="text-lg"
+      >
         {puzzle.inSeries && (
           <FaListOl size={14} className="inline text-accent" />
         )}{' '}
@@ -27,7 +32,7 @@ const UserPuzzle = memo(function UserPuzzle({
         ) : (
           puzzle.title
         )}
-      </h3>
+      </Link>
       <div className="text-xs opacity-80 flex flex-wrap gap-2">
         <span>Created {toRelativeDate(new Date(puzzle.createdAt))}</span>
         <span>Updated {toRelativeDate(new Date(puzzle.updatedAt))}</span>

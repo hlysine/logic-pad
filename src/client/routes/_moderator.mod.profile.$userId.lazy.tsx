@@ -15,6 +15,8 @@ import ModMessagePrompt, {
 import UserPuzzles from '../online/moderator/UserPuzzles';
 import UserCollections from '../online/moderator/UserCollections';
 import UserComments from '../online/moderator/UserComments';
+import UserModerations from '../online/moderator/UserModerations';
+import UserStatus from '../online/moderator/UserStatus';
 
 export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
   component: memo(function RouteComponent() {
@@ -93,21 +95,33 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
                   <div className="opacity-80">
                     updated {toRelativeDate(new Date(userAccount.updatedAt))}
                   </div>
-                  <div className="opacity-80">
-                    accessed {toRelativeDate(new Date(userAccount.accessedAt))}
-                  </div>
+                  {userAccount.accessedAt && (
+                    <div className="opacity-80">
+                      accessed{' '}
+                      {toRelativeDate(new Date(userAccount.accessedAt))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="skeleton h-5 w-96 mt-2"></div>
               )}
             </div>
             <UserRestrictions userId={userId} promptHandle={promptRef} />
+            <UserStatus
+              userId={userId}
+              status={userAccount?.status}
+              promptHandle={promptRef}
+            />
           </div>
           <div className="divider shrink-0" />
           <div className="flex-1 flex gap-8 justify-start items-stretch overflow-x-auto">
             <UserPuzzles userId={userId} />
             <UserCollections userId={userId} />
             <UserComments userId={userId} />
+            <UserModerations userId={userId} type="received" />
+            {userAccount?.labels.includes('moderator') && (
+              <UserModerations userId={userId} type="given" />
+            )}
           </div>
         </div>
       </div>

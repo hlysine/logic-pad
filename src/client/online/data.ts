@@ -115,7 +115,7 @@ export interface UserAutocomplete {
 }
 
 export interface UserDetail {
-  accessedAt: string;
+  accessedAt: string | null;
   followCount: number;
   solvedPuzzlesCollection: string | null;
   createdPuzzlesCollection: string | null;
@@ -164,7 +164,7 @@ export interface UserAccount {
   createdAt: string;
   updatedAt: string;
   registeredAt: string;
-  accessedAt: string;
+  accessedAt: string | null;
   labels: string[];
   status: boolean;
 }
@@ -185,4 +185,20 @@ export interface ModComment extends ResourceResponse {
   };
   creatorId: string;
   content: string;
+}
+
+export interface ReceivedModeration extends ResourceResponse {
+  moderator: UserBrief;
+  action: string;
+  target: string;
+  description: string;
+  message: string | null;
+}
+
+export interface GivenModeration extends ResourceResponse {
+  user: UserBrief;
+  action: string;
+  target: string;
+  description: string;
+  message: string | null;
 }

@@ -23,6 +23,8 @@ import {
   UserAccount,
   UserRestrictions,
   ModComment,
+  ReceivedModeration,
+  GivenModeration,
 } from './data';
 import {
   DataTag,
@@ -577,7 +579,7 @@ export const api = {
   modUpdateRestrictions: async (
     userId: string,
     restrictions: Partial<UserRestrictions>,
-    message: string | null
+    message: string
   ) => {
     return await axios
       .put<UserRestrictions>(`/moderation/user/${userId}/restrictions`, {
@@ -597,6 +599,48 @@ export const api = {
         params: { cursorBefore, cursorAfter },
       })
       .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modListReceivedModerations: async (
+    userId: string,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<ListResponse<ReceivedModeration>>(
+        `/moderation/user/${userId}/moderations/received`,
+        {
+          params: { cursorBefore, cursorAfter },
+        }
+      )
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modListGivenModerations: async (
+    userId: string,
+    cursorBefore?: string,
+    cursorAfter?: string
+  ) => {
+    return await axios
+      .get<ListResponse<GivenModeration>>(
+        `/moderation/user/${userId}/moderations/given`,
+        {
+          params: { cursorBefore, cursorAfter },
+        }
+      )
+      .then(res => res.data)
+      .catch(rethrowError);
+  },
+  modUpdateAccountStatus: async (
+    userId: string,
+    status: boolean,
+    message: string
+  ) => {
+    await axios
+      .put(`/moderation/user/${userId}/status`, {
+        status,
+        message,
+      })
       .catch(rethrowError);
   },
 };

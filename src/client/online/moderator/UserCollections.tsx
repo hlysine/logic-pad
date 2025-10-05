@@ -9,6 +9,7 @@ import { CollectionSearchParams } from '../CollectionSearchQuery';
 import { searchCollectionsInfiniteQueryOptions } from '../CollectionSearchResults';
 import { TbLayoutGrid } from 'react-icons/tb';
 import Skeleton from '../../components/Skeleton';
+import { Link } from '@tanstack/react-router';
 
 const UserCollection = memo(function UserCollection({
   collection,
@@ -17,7 +18,11 @@ const UserCollection = memo(function UserCollection({
 }) {
   return (
     <div className="flex flex-col items-start self-stretch gap-1 shrink-0">
-      <h3 className="text-lg">
+      <Link
+        to="/collection/$collectionId"
+        params={{ collectionId: collection.id }}
+        className="text-lg"
+      >
         {collection.isSeries && (
           <FaListOl size={14} className="inline text-accent" />
         )}{' '}
@@ -26,7 +31,7 @@ const UserCollection = memo(function UserCollection({
         ) : (
           collection.title
         )}
-      </h3>
+      </Link>
       <div className="text-xs opacity-80 flex flex-wrap gap-2">
         <span>Created {toRelativeDate(new Date(collection.createdAt))}</span>
         <span>Updated {toRelativeDate(new Date(collection.updatedAt))}</span>

@@ -77,9 +77,12 @@ export default memo(function UserRestrictions({
     onError(error) {
       toast.error(error.message);
     },
-    async onSuccess() {
-      await queryClient.invalidateQueries({
+    onSuccess() {
+      void queryClient.invalidateQueries({
         queryKey: ['profile', userId, 'restrictions'],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: ['profile', userId, 'mod-moderations'],
       });
     },
   });

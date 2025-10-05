@@ -14,6 +14,7 @@ export default memo(function KeyboardLayoutDropdown() {
           <select
             className="select select-bordered"
             value={keyboardLayout}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             onChange={e => setKeyboardLayout(e.currentTarget.value as any)}
           >
             <option value="qwerty">Qwerty</option>

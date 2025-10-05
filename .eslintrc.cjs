@@ -79,10 +79,7 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
-    '@typescript-eslint/no-unused-expressions': [
-      'error',
-      { ignoreDirectives: true },
-    ],
+    '@typescript-eslint/no-unused-expressions': ['error'],
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@typescript-eslint/unified-signatures': 'off',
     '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
@@ -110,5 +107,6 @@ module.exports = {
     '@typescript-eslint/only-throw-error': 'off',
     '@typescript-eslint/unbound-method': 'off',
     'react/prop-types': 'off',
+    'no-labels': ['error', { allowLoop: true }],
   },
 };

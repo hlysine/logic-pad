@@ -22,6 +22,7 @@ import EventIteratingSolver from '../eventIteratingSolver.js';
 import GridData from '../../grid.js';
 import { Color } from '../../primitives.js';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 ('vite-apply-code-mod');
 
 export default class CspuzSolver extends EventIteratingSolver {

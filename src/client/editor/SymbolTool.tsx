@@ -58,7 +58,7 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
         !!grid.symbols
           .get(sample.id)
           ?.find(n => eq(n.x, position.x) && eq(n.y, position.y))),
-    [grid, sample.id, position, cursorPosition]
+    [location, position, grid.symbols, sample.id]
   );
 
   useEffect(() => {

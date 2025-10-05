@@ -47,15 +47,14 @@ export const Route = createLazyFileRoute('/_moderator/mod/profile/$userId')({
               >
                 {userBrief.name}
                 <SupporterBadge tooltip supporter={userBrief.supporter} />
-                {userAccount &&
-                  userAccount.labels.map(label => (
-                    <span
-                      key={label}
-                      className="badge badge-info badge-sm inline-block py-1 px-2 ms-2 h-fit w-fit whitespace-nowrap align-middle capitalize"
-                    >
-                      {label}
-                    </span>
-                  ))}
+                {userAccount?.labels.map(label => (
+                  <span
+                    key={label}
+                    className="badge badge-info badge-sm inline-block py-1 px-2 ms-2 h-fit w-fit whitespace-nowrap align-middle capitalize"
+                  >
+                    {label}
+                  </span>
+                ))}
               </Link>
               {userBrief.title && (
                 <span className="text-accent font-semibold">

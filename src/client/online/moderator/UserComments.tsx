@@ -10,7 +10,7 @@ import { api, bidirectionalInfiniteQuery } from '../api';
 import Markdown from '../../components/Markdown';
 
 const UserComment = memo(function UserComment({
-  comment: comment,
+  comment,
 }: {
   comment: ModComment;
 }) {

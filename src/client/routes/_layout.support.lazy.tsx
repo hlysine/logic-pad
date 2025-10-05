@@ -34,11 +34,12 @@ export const Route = createLazyFileRoute('/_layout/support')({
     });
     useEffect(() => {
       if (successAlert) {
-        navigate({
+        void navigate({
           to: '.',
           hash: '',
         });
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -93,6 +94,7 @@ export const Route = createLazyFileRoute('/_layout/support')({
               href="https://islandsofinsight.com"
               target="_blank"
               className="link"
+              rel="noreferrer"
             >
               Islands of Insight
             </a>
@@ -165,7 +167,7 @@ export const Route = createLazyFileRoute('/_layout/support')({
                   Expiration Notifications
                 </h3>
                 <p className="text-base-content/80">
-                  You'll receive in-site notifications when your supporter
+                  You&apos;ll receive in-site notifications when your supporter
                   status is about to expire.
                 </p>
               </div>

@@ -65,7 +65,7 @@ export function pluralize(count: number) {
       const plural = singular === strings1 ? strings2 : strings1;
       const strings = count === 1 ? singular : plural;
       if (strings.length === 1) return `${count} ${strings[0].trim()}`;
-      return strings[0] + count + strings[1];
+      return strings[0] + count.toString() + strings[1];
     };
   };
 }

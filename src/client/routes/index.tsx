@@ -69,7 +69,7 @@ const RandomPuzzle = memo(function RandomPuzzle() {
         }
       }}
     >
-      I'm feeling lucky
+      I&apos;m feeling lucky
     </button>
   );
 });

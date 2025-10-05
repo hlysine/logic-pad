@@ -26,7 +26,7 @@ export const commentListQueryOptions = (puzzleId: string) =>
     ...bidirectionalInfiniteQuery(
       ['puzzle', puzzleId, 'comments', 'list'],
       (cursorBefore, cursorAfter) =>
-        api.listComments(puzzleId!, cursorBefore, cursorAfter),
+        api.listComments(puzzleId, cursorBefore, cursorAfter),
       false
     ),
   });

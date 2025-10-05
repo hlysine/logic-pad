@@ -77,7 +77,7 @@ function canvasGradientLine(
 ) {
   if (typeof stroke === 'function') {
     const gradient = ctx?.createLinearGradient(startX, startY, endX, endY);
-    stroke(gradient!);
+    stroke(gradient);
     stroke = gradient!;
   }
   ctx.strokeStyle = stroke;
@@ -236,8 +236,8 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
           1,
           `${accentColor.substring(0, accentColor.length - 1)}/0)`
         );
-        canvasGradientLine(ctx, start1.x, start1.y, end1.x, end1.y, gradient!);
-        canvasGradientLine(ctx, start2.x, start2.y, end2.x, end2.y, gradient!);
+        canvasGradientLine(ctx, start1.x, start1.y, end1.x, end1.y, gradient);
+        canvasGradientLine(ctx, start2.x, start2.y, end2.x, end2.y, gradient);
       }
 
       canvasTextBox(
@@ -329,8 +329,8 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
           1,
           `${accentColor.substring(0, accentColor.length - 1)}/0)`
         );
-        canvasGradientLine(ctx, start1.x, start1.y, end1.x, end1.y, gradient!);
-        canvasGradientLine(ctx, start2.x, start2.y, end2.x, end2.y, gradient!);
+        canvasGradientLine(ctx, start1.x, start1.y, end1.x, end1.y, gradient);
+        canvasGradientLine(ctx, start2.x, start2.y, end2.x, end2.y, gradient);
       }
 
       canvasTextBox(

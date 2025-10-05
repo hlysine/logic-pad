@@ -113,7 +113,7 @@ export const Route = createLazyFileRoute('/_layout/my-stuff/puzzles')({
                   }
                   onClick={
                     selectedPuzzles !== null
-                      ? async () => {
+                      ? () => {
                           if (puzzle.status === ResourceStatus.Private) {
                             setSelectedPuzzles(selection => {
                               if (selection?.includes(puzzle.id)) {

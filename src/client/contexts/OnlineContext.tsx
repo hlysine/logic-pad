@@ -112,7 +112,7 @@ export default memo(function OnlineContext({
           );
           deferredRedirect.set(router.state.location);
         }
-        cleanReload();
+        void cleanReload();
       }
     } else if (onlineQuery.data && onlineResult.isOnline) {
       console.info(
@@ -120,7 +120,7 @@ export default memo(function OnlineContext({
       );
       if (sessionStorage.getItem('versionMismatchReload')) {
         sessionStorage.removeItem('versionMismatchReload');
-        deferredRedirect.execute();
+        void deferredRedirect.execute();
       }
     }
   }, [onlineResult.versionMismatch, onlineQuery.data, onlineResult.isOnline]);

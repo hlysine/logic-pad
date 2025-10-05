@@ -1,4 +1,10 @@
-import { memo, useImperativeHandle, useRef, useState } from 'react';
+import {
+  memo,
+  useCallback,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { MentionsInput, Mention } from 'react-mentions';
 import { api } from './api';
 import debounce from 'lodash/debounce';
@@ -23,16 +29,16 @@ const debouncedUserAutocomplete = debounce(api.userAutocomplete, 500, {
 export default memo(function CommentTextarea({
   ref,
   defaultValue,
-  onPostComment: onPostComment,
+  onPostComment,
 }: CommentTextareaProps) {
   const [content, setContent] = useState(defaultValue ?? '');
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const sendComment = () => {
+  const sendComment = useCallback(() => {
     if (content.length > 0) {
       onPostComment?.(content.trim());
     }
     setContent('');
-  };
+  }, [content, onPostComment]);
   useImperativeHandle(
     ref,
     () => ({
@@ -49,7 +55,7 @@ export default memo(function CommentTextarea({
         inputRef.current?.focus();
       },
     }),
-    [content]
+    [sendComment]
   );
 
   return (
@@ -82,14 +88,16 @@ export default memo(function CommentTextarea({
               callback([]);
               return;
             }
-            debouncedUserAutocomplete(query).then(users =>
-              callback(
-                users.map(u => ({
-                  id: u.id,
-                  display: u.name,
-                }))
+            debouncedUserAutocomplete(query)
+              .then(users =>
+                callback(
+                  users.map(u => ({
+                    id: u.id,
+                    display: u.name,
+                  }))
+                )
               )
-            );
+              .catch(() => callback([]));
           }}
           markup="[@__display__](/profile/__id__)"
         />

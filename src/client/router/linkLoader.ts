@@ -137,7 +137,6 @@ export default function useLinkLoader(
         ...result,
         initialPuzzle,
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
   });
   useLayoutEffect(() => {

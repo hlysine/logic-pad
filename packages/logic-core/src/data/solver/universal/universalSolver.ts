@@ -1,6 +1,7 @@
 import { instance as undercluedInstance } from '../../rules/undercluedRule.js';
 import EventIteratingSolver from '../eventIteratingSolver.js';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 ('vite-apply-code-mod');
 
 export default class UniversalSolver extends EventIteratingSolver {

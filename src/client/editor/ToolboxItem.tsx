@@ -6,14 +6,15 @@ import { GridContext } from '../contexts/GridContext.tsx';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { SiteSettings, useSettings } from '../contexts/SettingsContext.tsx';
 
-type HotkeyLayout = {
-  [layout in SiteSettings['keyboardLayout']]: {
+type HotkeyLayout = Record<
+  SiteSettings['keyboardLayout'],
+  {
     tools: string[];
     baseSymbols: string[];
     extraSymbols: string[];
     customSymbols: string[];
-  };
-};
+  }
+>;
 
 const symbolsKeys = {
   baseSymbols: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],

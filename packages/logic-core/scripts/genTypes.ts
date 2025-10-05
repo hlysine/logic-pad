@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { $, ShellError } from 'bun';
+import { $ } from 'bun';
 
 const entryPath = 'src/index.ts';
 const generatedPath = 'assets/logic-core.global.d.ts';
@@ -45,7 +45,7 @@ try {
   await $`bunx prettier --write ${generatedPath}`;
 } catch (err) {
   console.error(err);
-  if (err instanceof ShellError) {
+  if (err instanceof $.ShellError) {
     console.error(err.stderr);
   }
 }

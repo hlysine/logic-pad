@@ -17,6 +17,7 @@ import { instance as viewpointInstance } from '../../symbols/viewpointSymbol.js'
 import { instance as connectAllInstance } from '../../rules/connectAllRule.js';
 import EventIteratingSolver from '../eventIteratingSolver.js';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 ('vite-apply-code-mod');
 
 export default class BacktrackSolver extends EventIteratingSolver {

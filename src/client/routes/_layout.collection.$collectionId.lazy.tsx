@@ -269,7 +269,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
               search={{ collection: collectionId }}
               onClick={
                 selectedPuzzles !== null
-                  ? async () => {
+                  ? () => {
                       setSelectedPuzzles(selection => {
                         if (selection?.includes(puzzle.id)) {
                           return selection.filter(id => id !== puzzle.id);

@@ -97,7 +97,7 @@ export default memo(function UserRestrictions({
         <RestrictionEntry
           key={key}
           label={key}
-          value={value}
+          value={value as string | null}
           onChange={newValue => {
             setNewRestrictions(prev => ({ ...prev, [key]: newValue }));
           }}

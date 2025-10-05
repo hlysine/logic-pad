@@ -120,7 +120,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
           }
           params={
             userDetail?.createdPuzzlesCollection
-              ? { collectionId: userDetail!.createdPuzzlesCollection }
+              ? { collectionId: userDetail.createdPuzzlesCollection }
               : undefined
           }
         >
@@ -171,7 +171,7 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
             }
             params={
               userDetail.solvedPuzzlesCollection
-                ? { collectionId: userDetail!.solvedPuzzlesCollection }
+                ? { collectionId: userDetail.solvedPuzzlesCollection }
                 : undefined
             }
           >

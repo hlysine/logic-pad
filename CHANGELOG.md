@@ -1,3 +1,9 @@
+# 7/10/2025
+
+- Added support for more instruments in music grids
+  - Added violin, xylophone, acoustic guitar, electric guitar, flute and trumpet
+  - Only the necessary instruments are loaded when playing a music grid
+
 # 5/10/2025
 
 - Drum samples are no longer cut off when the BPM is high

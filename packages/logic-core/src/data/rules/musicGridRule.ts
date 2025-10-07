@@ -15,15 +15,15 @@ import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import { ControlLine, Row } from './musicControlLine.js';
 import Rule, { SearchVariant } from './rule.js';
 
-const DEFAULT_SCALLE = [
-  new Row('C5', Instrument.Violin, null),
-  new Row('B4', Instrument.Violin, null),
-  new Row('A4', Instrument.Violin, null),
-  new Row('G4', Instrument.Violin, null),
-  new Row('F4', Instrument.Violin, null),
-  new Row('E4', Instrument.Violin, null),
-  new Row('D4', Instrument.Violin, null),
-  new Row('C4', Instrument.Violin, null),
+const DEFAULT_SCALE = [
+  new Row('C5', Instrument.Piano, null),
+  new Row('B4', Instrument.Piano, null),
+  new Row('A4', Instrument.Piano, null),
+  new Row('G4', Instrument.Piano, null),
+  new Row('F4', Instrument.Piano, null),
+  new Row('E4', Instrument.Piano, null),
+  new Row('D4', Instrument.Piano, null),
+  new Row('C4', Instrument.Piano, null),
 ];
 
 export default class MusicGridRule
@@ -45,7 +45,7 @@ export default class MusicGridRule
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
     {
       type: ConfigType.ControlLines,
-      default: [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
+      default: [new ControlLine(0, 120, false, false, DEFAULT_SCALE)],
       field: 'controlLines',
       description: 'Control Lines',
       configurable: false,
@@ -60,7 +60,7 @@ export default class MusicGridRule
         'wwwww',
       ]).addRule(
         new MusicGridRule(
-          [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
+          [new ControlLine(0, 120, false, false, DEFAULT_SCALE)],
           null
         )
       ),
@@ -82,7 +82,7 @@ export default class MusicGridRule
 
   private static readonly SEARCH_VARIANTS = [
     new MusicGridRule(
-      [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
+      [new ControlLine(0, 120, false, false, DEFAULT_SCALE)],
       null
     ).searchVariant(),
   ];
@@ -296,6 +296,6 @@ export default class MusicGridRule
 }
 
 export const instance = new MusicGridRule(
-  [new ControlLine(0, 120, false, false, DEFAULT_SCALLE)],
+  [new ControlLine(0, 120, false, false, DEFAULT_SCALE)],
   null
 );

@@ -3,6 +3,7 @@
 - Added support for more instruments in music grids
   - Added violin, xylophone, acoustic guitar, electric guitar, flute and trumpet
   - Only the necessary instruments are loaded when playing a music grid
+- Invalid note names in music grids no longer crash the site
 
 # 5/10/2025
 

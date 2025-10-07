@@ -31,7 +31,7 @@ letters.forEach(letter => {
     });
   });
 });
-const noteNames = [...pitches, ...drumSamples];
+export const noteNames = [...pitches, ...drumSamples];
 
 // million-ignore
 export default memo(function NullableNoteConfig({

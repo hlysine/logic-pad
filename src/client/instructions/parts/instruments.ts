@@ -9,6 +9,7 @@ import {
   isDrumSample,
 } from '@logic-pad/core/data/primitives';
 import { sampleLibrary } from './tonejsInstruments';
+import { noteNames } from '../../configs/parts/NullableNoteConfig';
 
 type EventData =
   | { type: 'pedal'; value: boolean }
@@ -272,6 +273,7 @@ export function encodePlayback(
         tile.color === Color.Dark &&
         !grid.connections.hasEdge({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
+        if (!noteNames.includes(row.note)) return;
         addEvent(x / 2, {
           type: 'keydown',
           value: row.note,
@@ -450,6 +452,7 @@ export function encodeImmediate(
     }
     rows.forEach((row, y) => {
       if (row.note === null || row.velocity === null) return;
+      if (!noteNames.includes(row.note)) return;
       if (remainingPolyphony <= 0) return;
       const tile = grid.getTile(x, y);
       const oldTile = oldGrid.getTile(x, y);

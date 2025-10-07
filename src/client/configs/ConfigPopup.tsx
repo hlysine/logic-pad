@@ -190,7 +190,7 @@ export default memo(function ConfigPopup() {
     const handleClick = (e: PointerEvent) => {
       if (
         !popupRef.current?.contains(e.target as Node) &&
-        !(ref?.current && containsPoint(ref.current, e.clientX, e.clientY))
+        !(!ref?.current || containsPoint(ref.current, e.clientX, e.clientY))
       ) {
         const symbolOverlay =
           document.querySelector<HTMLElement>('.symbol-overlay');

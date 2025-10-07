@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useRef } from 'react';
 import ToolboxItem from '../../editor/ToolboxItem';
 import { PartPlacement, PartSpec } from './types';
 import { instance as musicGridInstance } from '@logic-pad/core/data/rules/musicGridRule';
@@ -11,13 +11,14 @@ import {
   getConfigurableLocation,
   useConfig,
 } from '../../contexts/ConfigContext.tsx';
-import { mousePosition } from '../../../client/uiHelper.ts';
 import { IoMusicalNote } from 'react-icons/io5';
 
 const NoteOverlay = memo(function NoteOverlay() {
   const { setLocation, setRef } = useConfig();
   const { grid, setGrid } = useGrid();
   const musicGrid = grid.musicGrid.value;
+  const noteOverlayRef = useRef<Map<string, HTMLDivElement | null>>(null);
+
   if (!musicGrid) return null;
   return (
     <>
@@ -41,9 +42,7 @@ const NoteOverlay = memo(function NoteOverlay() {
           if (from === Color.Dark) {
             setLocation(getConfigurableLocation(grid, line.rows[y], line));
             setRef({
-              current: document
-                .elementsFromPoint(mousePosition.clientX, mousePosition.clientY)
-                .find(e => e.classList.contains('logic-tile')) as HTMLElement,
+              current: (noteOverlayRef.current?.get(`${x}-${y}`) ?? undefined)!,
             });
           } else {
             const line = musicGrid.controlLines.find(line => line.column === x);
@@ -100,8 +99,16 @@ const NoteOverlay = memo(function NoteOverlay() {
               (row, idx) =>
                 (row.note !== null || row.velocity !== null) && (
                   <div
+                    ref={el => {
+                      noteOverlayRef.current ??= new Map();
+                      const map = noteOverlayRef.current;
+                      map.set(`${line.column}-${idx}`, el);
+                      return () => {
+                        map.delete(`${line.column}-${idx}`);
+                      };
+                    }}
                     key={`${line.column}-${idx}`}
-                    className="absolute h-[1em] w-[1em] bg-gradient-to-r from-secondary from-5% via-20% via-secondary/20 to-secondary/0"
+                    className="absolute h-[1em] w-[1em] bg-gradient-to-r from-secondary from-5% via-20% via-secondary/20 to-secondary/0 edit-target"
                     style={{ left: `${line.column}em`, top: `${idx}em` }}
                   >
                     {row.note !== null && (

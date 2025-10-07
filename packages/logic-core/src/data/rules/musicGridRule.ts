@@ -4,20 +4,26 @@ import { GridResizeHandler } from '../events/onGridResize.js';
 import { SetGridHandler } from '../events/onSetGrid.js';
 import GridData from '../grid.js';
 import { resize } from '../dataHelper.js';
-import { Color, MajorRule, RuleState, State } from '../primitives.js';
+import {
+  Color,
+  Instrument,
+  MajorRule,
+  RuleState,
+  State,
+} from '../primitives.js';
 import CustomIconSymbol from '../symbols/customIconSymbol.js';
 import { ControlLine, Row } from './musicControlLine.js';
 import Rule, { SearchVariant } from './rule.js';
 
 const DEFAULT_SCALLE = [
-  new Row('C5', null),
-  new Row('B4', null),
-  new Row('A4', null),
-  new Row('G4', null),
-  new Row('F4', null),
-  new Row('E4', null),
-  new Row('D4', null),
-  new Row('C4', null),
+  new Row('C5', Instrument.Violin, null),
+  new Row('B4', Instrument.Violin, null),
+  new Row('A4', Instrument.Violin, null),
+  new Row('G4', Instrument.Violin, null),
+  new Row('F4', Instrument.Violin, null),
+  new Row('E4', Instrument.Violin, null),
+  new Row('D4', Instrument.Violin, null),
+  new Row('C4', Instrument.Violin, null),
 ];
 
 export default class MusicGridRule
@@ -147,7 +153,7 @@ export default class MusicGridRule
       .filter(line => line.column < newGrid.width)
       .map(line =>
         line.withRows(
-          resize(line.rows, newGrid.height, () => new Row(null, null))
+          resize(line.rows, newGrid.height, () => new Row(null, null, null))
         )
       );
     return this.copyWith({ controlLines });
@@ -164,7 +170,7 @@ export default class MusicGridRule
         return this.copyWith({
           controlLines: this.controlLines.map(line => {
             const rows = line.rows.slice();
-            rows.splice(index, 0, new Row(null, null));
+            rows.splice(index, 0, new Row(null, null, null));
             return line.withRows(rows);
           }),
         });
@@ -257,10 +263,13 @@ export default class MusicGridRule
         const note = lines
           .map(l => l.rows[idx]?.note)
           .reduce((a, b) => b ?? a, null);
+        const instrument = lines
+          .map(l => l.rows[idx]?.instrument)
+          .reduce((a, b) => b ?? a, null);
         const velocity = lines
           .map(l => l.rows[idx]?.velocity)
           .reduce((a, b) => b ?? a, null);
-        return new Row(note, velocity);
+        return new Row(note, instrument, velocity);
       }
     );
     const bpm = lines.map(l => l.bpm).reduce((a, b) => b ?? a, null);

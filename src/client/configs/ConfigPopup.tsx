@@ -143,7 +143,7 @@ export default memo(function ConfigPopup() {
       if (!line) return;
       const newLine = line.copyWith({
         rows: line.rows.map((row, i) =>
-          i === location.row ? new Row(null, null) : row
+          i === location.row ? new Row(null, null, null) : row
         ),
       });
       if (newLine.isEmpty) {

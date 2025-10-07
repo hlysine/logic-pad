@@ -31,7 +31,9 @@ const NoteOverlay = memo(function NoteOverlay() {
             line =>
               line.column === x &&
               !!line.rows[y] &&
-              (line.rows[y].note !== null || line.rows[y].velocity !== null)
+              (line.rows[y].note !== null ||
+                line.rows[y].instrument !== null ||
+                line.rows[y].velocity !== null)
           );
         }}
         onTileClick={(x, y, from, _to) => {
@@ -57,10 +59,14 @@ const NoteOverlay = memo(function NoteOverlay() {
                       false,
                       Array.from(
                         { length: grid.height },
-                        () => new Row(null, null)
+                        () => new Row(null, null, null)
                       ).map((r, idx) =>
                         idx === y
-                          ? r.copyWith({ note: 'C4', velocity: null })
+                          ? r.copyWith({
+                              note: 'C4',
+                              instrument: null,
+                              velocity: null,
+                            })
                           : r
                       )
                     )
@@ -74,7 +80,7 @@ const NoteOverlay = memo(function NoteOverlay() {
                   musicGrid.setControlLine(
                     line.copyWith({
                       rows: line.rows.map((r, idx) =>
-                        idx === y ? new Row('C4', null) : r
+                        idx === y ? new Row('C4', null, null) : r
                       ),
                     })
                   )
@@ -103,8 +109,13 @@ const NoteOverlay = memo(function NoteOverlay() {
                         {row.note}
                       </div>
                     )}
+                    {row.instrument !== null && (
+                      <div className="badge badge-secondary absolute left-[0.33em] top-[3.4em] text-[0.13em] h-[1.3em] pr-[0.4em] rounded-l-none rounded-r-[1em] whitespace-nowrap pl-0">
+                        {row.instrument}
+                      </div>
+                    )}
                     {row.velocity !== null && (
-                      <div className="badge badge-secondary absolute left-[0.33em] top-[2.33em] text-[0.20em] h-[1.3em] pr-[0.4em] rounded-l-none rounded-r-[1em] whitespace-nowrap pl-0">
+                      <div className="badge badge-secondary absolute left-[0.33em] top-[3.7em] text-[0.18em] h-[1.3em] pr-[0.4em] rounded-l-none rounded-r-[1em] whitespace-nowrap pl-0">
                         {row.velocity}
                       </div>
                     )}

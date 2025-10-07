@@ -2,14 +2,34 @@ import MusicGridRule from '@logic-pad/core/data/rules/musicGridRule';
 import { Piano } from '@hlysine/piano';
 import GridData from '@logic-pad/core/data/grid';
 import * as Tone from 'tone';
-import { Color } from '@logic-pad/core/data/primitives';
+import {
+  Color,
+  Instrument as InstrumentType,
+  DRUM_SAMPLES as DRUM_SAMPLES_RAW,
+  isDrumSample,
+} from '@logic-pad/core/data/primitives';
+import { sampleLibrary } from './tonejsInstruments';
 
 type EventData =
   | { type: 'pedal'; value: boolean }
-  | { type: 'keydown'; value: string; velocity: number }
-  | { type: 'keyup'; value: string }
+  | {
+      type: 'keydown';
+      value: string;
+      instrument: InstrumentType;
+      velocity: number;
+    }
+  | { type: 'keyup'; value: string; instrument: InstrumentType }
   | { type: 'bpm'; value: number }
   | { type: 'complete' };
+
+const tonejsInstruments = [
+  InstrumentType.Violin,
+  InstrumentType.Xylophone,
+  InstrumentType.GuitarAcoustic,
+  InstrumentType.GuitarElectric,
+  InstrumentType.Flute,
+  InstrumentType.Trumpet,
+] as const;
 
 export const playbackState = {
   /**
@@ -20,36 +40,101 @@ export const playbackState = {
   playback: undefined as CachedPlayback | undefined,
 };
 
-export const piano = new Piano({
-  release: false,
-  pedal: false,
-  velocities: 1,
-  maxPolyphony: 32,
-}).toDestination();
+class Loadable<T> {
+  public value: T | null = null;
+  public loader: () => Promise<T>;
 
-export const pianoImmediatePedal = new Piano({
-  release: false,
-  pedal: false,
-  velocities: 1,
-  maxPolyphony: 32,
-}).toDestination();
+  public constructor(loader: () => Promise<T>) {
+    this.loader = loader;
+  }
 
-export const pianoImmediate = new Piano({
-  release: false,
-  pedal: false,
-  velocities: 1,
-  maxPolyphony: 32,
-}).toDestination();
+  public async load() {
+    if (this.value) return this.value;
+    this.value = await this.loader();
+    return this.value;
+  }
 
-export const drum = {
-  snare: new Tone.Player('/samples/snare.wav').toDestination(),
-  kick: new Tone.Player('/samples/kick.wav').toDestination(),
-  hihat: new Tone.Player('/samples/hihat.wav').toDestination(),
-  'hihat-open': new Tone.Player('/samples/hihat-open.wav').toDestination(),
-  crash: new Tone.Player('/samples/crash.wav').toDestination(),
-  tom: new Tone.Player('/samples/tom.wav').toDestination(),
-  rim: new Tone.Player('/samples/rim.wav').toDestination(),
-};
+  public static from<T>(loader: () => Promise<T>) {
+    return new Loadable(loader);
+  }
+}
+
+function spinWaitAsync(predicate: () => boolean, interval = 100) {
+  return new Promise<void>(resolve => {
+    const handle = setInterval(() => {
+      if (predicate()) {
+        clearInterval(handle);
+        resolve();
+      }
+    }, interval);
+  });
+}
+
+export const instruments = {
+  piano: Loadable.from(async () => {
+    console.time('Loading piano samples');
+    const inst = {
+      regular: new Piano({
+        release: false,
+        pedal: false,
+        velocities: 1,
+        maxPolyphony: 32,
+      }).toDestination(),
+      immediate: new Piano({
+        release: false,
+        pedal: false,
+        velocities: 1,
+        maxPolyphony: 32,
+      }).toDestination(),
+      immediatePedal: new Piano({
+        release: false,
+        pedal: false,
+        velocities: 1,
+        maxPolyphony: 32,
+      }).toDestination(),
+    };
+    await Promise.all([
+      inst.regular.load(),
+      inst.immediate.load(),
+      inst.immediatePedal.load(),
+    ]);
+    console.timeEnd('Loading piano samples');
+    return inst;
+  }),
+  drum: Loadable.from(async () => {
+    console.time('Loading drum samples');
+    const inst: Record<(typeof DRUM_SAMPLES_RAW)[number], Tone.Player> = {
+      snare: new Tone.Player('/samples/snare.wav').toDestination(),
+      kick: new Tone.Player('/samples/kick.wav').toDestination(),
+      hihat: new Tone.Player('/samples/hihat.wav').toDestination(),
+      'hihat-open': new Tone.Player('/samples/hihat-open.wav').toDestination(),
+      crash: new Tone.Player('/samples/crash.wav').toDestination(),
+      tom: new Tone.Player('/samples/tom.wav').toDestination(),
+      rim: new Tone.Player('/samples/rim.wav').toDestination(),
+    };
+    await spinWaitAsync(() =>
+      Object.values(inst).every(player => player.loaded)
+    );
+    console.timeEnd('Loading drum samples');
+    return inst;
+  }),
+  ...(Object.fromEntries(
+    tonejsInstruments.map(instrument => [
+      instrument,
+      Loadable.from(async () => {
+        console.time(`Loading ${instrument} samples`);
+        const inst = sampleLibrary.load({
+          instruments: [instrument],
+        });
+        await spinWaitAsync(() => inst[instrument].loaded);
+        console.timeEnd(`Loading ${instrument} samples`);
+        return inst[instrument].toDestination();
+      }),
+    ])
+  ) as Record<(typeof tonejsInstruments)[number], Loadable<Tone.Sampler>>),
+} as const satisfies Record<InstrumentType, Loadable<any>>;
+
+export type Instrument = keyof typeof instruments;
 
 const c5Midi = Tone.Midi('C5').toMidi();
 const e4Midi = Tone.Midi('E4').toMidi();
@@ -59,11 +144,18 @@ const e2Midi = Tone.Midi('E2').toMidi();
 function normalizeVelocity(
   velocity: number,
   note: string,
+  instrument: InstrumentType,
   applyNormalization: boolean
 ): number {
   if (!applyNormalization) return velocity;
+
   // the default velocity is 0.5 but drum samples are louder so their base velocity is 0.7
-  if (note in drum) return (velocity - 0.7) * 20;
+  if (isDrumSample(note) || instrument === InstrumentType.Drum)
+    return (velocity - 0.7) * 20;
+
+  // other instruments do not need normalization
+  if (instrument !== InstrumentType.Piano) return velocity;
+
   const midi = Tone.Midi(note).toMidi();
   velocity += 0.2;
   if (midi > c5Midi) return velocity;
@@ -77,6 +169,51 @@ function normalizeVelocity(
   return velocity;
 }
 
+export function getInstrumentsUsed(instruction: MusicGridRule) {
+  const instruments = new Set<InstrumentType>();
+  const height = instruction.controlLines
+    .map(line => line.rows.length)
+    .reduce((a, b) => Math.max(a, b), 0);
+  const width =
+    instruction.controlLines
+      .map(line => line.column)
+      .reduce((a, b) => Math.max(a, b), 0) + 1;
+
+  const rows: {
+    note: string | null;
+    instrument: InstrumentType;
+  }[] = Array.from({ length: height }, () => ({
+    note: null,
+    instrument: InstrumentType.Piano,
+  }));
+
+  for (let x = 0; x < width; x++) {
+    const line = instruction.controlLines.find(line => line.column === x);
+    if (line) {
+      line.rows.forEach((row, j) => {
+        if (j >= rows.length) return;
+        if (row.note !== null) {
+          rows[j].note = row.note;
+        }
+        if (row.instrument !== null) {
+          rows[j].instrument = row.instrument;
+        }
+      });
+    }
+    rows.forEach(row => {
+      if (row.note && isDrumSample(row.note)) {
+        instruments.add(InstrumentType.Drum);
+      } else if (row.instrument) {
+        instruments.add(row.instrument);
+      } else if (row.note) {
+        instruments.add(InstrumentType.Piano);
+      }
+    });
+  }
+
+  return instruments;
+}
+
 export function encodePlayback(
   grid: GridData,
   musicGrid: MusicGridRule,
@@ -87,9 +224,11 @@ export function encodePlayback(
   let pedal = false;
   const rows: {
     note: string | null;
+    instrument: InstrumentType;
     velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
     note: null,
+    instrument: InstrumentType.Piano,
     velocity: 0.5,
   }));
   const events = new Map<Tone.Unit.Time, EventData[]>();
@@ -117,6 +256,9 @@ export function encodePlayback(
         if (row.note !== null) {
           rows[j].note = row.note;
         }
+        if (row.instrument !== null) {
+          rows[j].instrument = row.instrument;
+        }
         if (row.velocity !== null) {
           rows[j].velocity = row.velocity;
         }
@@ -133,6 +275,7 @@ export function encodePlayback(
         addEvent(x / 2, {
           type: 'keydown',
           value: row.note,
+          instrument: row.instrument,
           velocity: row.velocity,
         });
         let endPos = { x, y };
@@ -149,6 +292,7 @@ export function encodePlayback(
         addEvent((endPos.x + 1) / 2, {
           type: 'keyup',
           value: row.note,
+          instrument: row.instrument,
         });
       }
     });
@@ -168,42 +312,72 @@ export function encodePlayback(
             break;
           case 'pedal':
             if (event.value) {
-              piano.pedalDown({ time });
+              instruments.piano.value?.regular.pedalDown({ time });
             } else {
-              piano.pedalUp({ time });
+              instruments.piano.value?.regular.pedalUp({ time });
             }
             break;
           case 'keydown':
-            if (event.value in drum) {
-              drum[event.value as keyof typeof drum].volume.setValueAtTime(
+            if (
+              isDrumSample(event.value) ||
+              event.instrument === InstrumentType.Drum
+            ) {
+              instruments.drum.value?.[
+                event.value as keyof typeof instruments.drum.value
+              ]?.volume.setValueAtTime(
                 normalizeVelocity(
                   event.velocity,
                   event.value,
+                  event.instrument,
                   musicGrid.normalizeVelocity
                 ),
                 time
               );
-              drum[event.value as keyof typeof drum].start(time, 0);
-            } else {
-              piano.keyDown({
+              instruments.drum.value?.[
+                event.value as keyof typeof instruments.drum.value
+              ]?.start(time, 0);
+            } else if (event.instrument === InstrumentType.Piano) {
+              instruments.piano.value?.regular.keyDown({
                 note: event.value,
                 velocity: normalizeVelocity(
                   event.velocity,
                   event.value,
+                  event.instrument,
                   musicGrid.normalizeVelocity
                 ),
                 time,
               });
+            } else {
+              instruments[event.instrument]?.value?.triggerAttack(
+                event.value,
+                time,
+                normalizeVelocity(
+                  event.velocity,
+                  event.value,
+                  event.instrument,
+                  musicGrid.normalizeVelocity
+                )
+              );
             }
             break;
           case 'keyup':
-            if (event.value in drum) {
-              drum[event.value as keyof typeof drum].stop(time);
-            } else {
-              piano.keyUp({
+            if (
+              isDrumSample(event.value) ||
+              event.instrument === InstrumentType.Drum
+            ) {
+              instruments.drum.value?.[
+                event.value as keyof typeof instruments.drum.value
+              ].stop(time);
+            } else if (event.instrument === InstrumentType.Piano) {
+              instruments.piano.value?.regular.keyUp({
                 note: event.value,
                 time,
               });
+            } else {
+              instruments[event.instrument]?.value?.triggerRelease(
+                event.value,
+                time
+              );
             }
             break;
           case 'complete':
@@ -227,8 +401,11 @@ export function encodeImmediate(
   musicGrid: MusicGridRule
 ) {
   // set the piano to the correct state
-  pianoImmediate.pedalUp();
-  pianoImmediatePedal.pedalDown();
+  instruments.piano.value?.immediate.pedalUp();
+  instruments.piano.value?.immediatePedal.pedalDown();
+  tonejsInstruments.forEach(instrument =>
+    instruments[instrument]?.value?.releaseAll()
+  );
 
   // a small hack to hide the progress line if no grid is currently playing
   if (Tone.getTransport().state !== 'started')
@@ -241,9 +418,11 @@ export function encodeImmediate(
   let pedal = false;
   const rows: {
     note: string | null;
+    instrument: InstrumentType;
     velocity: number | null;
   }[] = Array.from({ length: grid.height }, () => ({
     note: null,
+    instrument: InstrumentType.Piano,
     velocity: 0.5,
   }));
 
@@ -261,6 +440,9 @@ export function encodeImmediate(
         if (row.note !== null) {
           rows[j].note = row.note;
         }
+        if (row.instrument !== null) {
+          rows[j].instrument = row.instrument;
+        }
         if (row.velocity !== null) {
           rows[j].velocity = row.velocity;
         }
@@ -277,26 +459,45 @@ export function encodeImmediate(
         (!oldTile.exists || oldTile.color !== Color.Dark) &&
         !grid.connections.hasEdge({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
-        const targetPiano = pedal ? pianoImmediatePedal : pianoImmediate;
-        if (row.note in drum) {
-          drum[row.note as keyof typeof drum].volume.setValueAtTime(
+        const targetPiano = pedal
+          ? instruments.piano.value?.immediatePedal
+          : instruments.piano.value?.immediate;
+        if (isDrumSample(row.note) || row.instrument === InstrumentType.Drum) {
+          instruments.drum.value?.[
+            row.note as keyof typeof instruments.drum.value
+          ].volume.setValueAtTime(
             normalizeVelocity(
               row.velocity,
               row.note,
+              row.instrument,
               musicGrid.normalizeVelocity
             ),
-            0
+            Tone.immediate()
           );
-          drum[row.note as keyof typeof drum].start(0, 0);
-        } else {
-          targetPiano.keyDown({
+          instruments.drum.value?.[
+            row.note as keyof typeof instruments.drum.value
+          ].start(0, 0);
+        } else if (row.instrument === InstrumentType.Piano) {
+          targetPiano?.keyDown({
             note: row.note,
             velocity: normalizeVelocity(
               row.velocity,
               row.note,
+              row.instrument,
               musicGrid.normalizeVelocity
             ),
           });
+        } else {
+          instruments[row.instrument]?.value?.triggerAttack(
+            row.note,
+            Tone.immediate(),
+            normalizeVelocity(
+              row.velocity,
+              row.note,
+              row.instrument,
+              musicGrid.normalizeVelocity
+            )
+          );
         }
         remainingPolyphony--;
         let endPos = { x, y };
@@ -311,16 +512,18 @@ export function encodeImmediate(
           endPos = { x: endPos.x + 1, y: endPos.y };
         }
         const time = `+${(((endPos.x + 1) / 2 - x / 2) * 120 * 120) / Tone.getTransport().bpm.value / bpm}`;
-        if (row.note in drum) {
+        if (isDrumSample(row.note) || row.instrument === InstrumentType.Drum) {
           // do nothing for the moment
           // TODO: consider pedal state?
           // drum[row.note as keyof typeof drum].stop(time);
-        } else {
-          targetPiano.keyUp({
+        } else if (row.instrument === InstrumentType.Piano) {
+          targetPiano?.keyUp({
             note: row.note,
             velocity: row.velocity,
             time,
           });
+        } else {
+          instruments[row.instrument]?.value?.triggerRelease(row.note, time);
         }
       }
     });
@@ -341,7 +544,10 @@ export function playGrid(
 ): CachedPlayback {
   playbackState.isSolution = isSolution;
   Tone.getTransport().stop();
-  piano.stopAll();
+  instruments.piano.value?.regular.stopAll();
+  tonejsInstruments.forEach(instrument =>
+    instruments[instrument]?.value?.releaseAll()
+  );
   if (!cache?.grid?.equals(grid)) {
     cache?.cleanUp?.();
     cache = {
@@ -359,9 +565,9 @@ export function playGrid(
     .filter(line => line.column <= playbackState.checkpoint)
     .reduce((a, b) => b.pedal ?? a, false);
   if (pedal) {
-    piano.pedalDown();
+    instruments.piano.value?.regular.pedalDown();
   } else {
-    piano.pedalUp();
+    instruments.piano.value?.regular.pedalUp();
   }
   return cache;
 }
@@ -379,5 +585,8 @@ export function cleanUp(cache?: CachedPlayback) {
   cache?.cleanUp();
   if (cache) cache.grid = null;
   Tone.getTransport().stop();
-  piano.stopAll();
+  instruments.piano.value?.regular.stopAll();
+  tonejsInstruments.forEach(instrument =>
+    instruments[instrument]?.value?.releaseAll()
+  );
 }

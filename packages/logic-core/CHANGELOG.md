@@ -1,3 +1,7 @@
+# 0.20.0
+
+- Added support for more instruments in music grids
+
 # 0.19.1
 
 - Improved puzzle object validation to output user-friendly messages

@@ -146,6 +146,27 @@ declare global {
     Solve = 'solve',
     Perfection = 'perfection',
   }
+  export declare enum Instrument {
+    Piano = 'piano',
+    Drum = 'drum',
+    Violin = 'violin',
+    Xylophone = 'xylophone',
+    GuitarAcoustic = 'guitar-acoustic',
+    GuitarElectric = 'guitar-electric',
+    Flute = 'flute',
+    Trumpet = 'trumpet',
+  }
+  export declare const INSTRUMENTS: readonly Instrument[];
+  export declare const DRUM_SAMPLES: readonly [
+    'snare',
+    'kick',
+    'hihat',
+    'hihat-open',
+    'crash',
+    'tom',
+    'rim',
+  ];
+  export declare function isDrumSample(note: string): boolean;
   export declare class GridZones {
     readonly edges: readonly Edge[];
     constructor(edges?: readonly Edge[]);
@@ -491,6 +512,12 @@ declare global {
      */
     readonly note: string | null;
     /**
+     * The instrument to play the note with, or null to keep the current instrument from the previous control line.
+     * If this is null from the first control line, the instrument will be "piano".
+     * This has no effect if the current note is a drum sample.
+     */
+    readonly instrument: Instrument | null;
+    /**
      * The velocity to play the note at, or null to keep the current velocity from the previous control line.
      * Ranges from 0 to 1
      */
@@ -506,6 +533,12 @@ declare global {
        */
       note: string | null,
       /**
+       * The instrument to play the note with, or null to keep the current instrument from the previous control line.
+       * If this is null from the first control line, the instrument will be "piano".
+       * This has no effect if the current note is a drum sample.
+       */
+      instrument: Instrument | null,
+      /**
        * The velocity to play the note at, or null to keep the current velocity from the previous control line.
        * Ranges from 0 to 1
        */
@@ -514,9 +547,11 @@ declare global {
     get configs(): readonly AnyConfig[] | null;
     copyWith({
       note,
+      instrument,
       velocity,
     }: {
       note?: string | null;
+      instrument?: Instrument | null;
       velocity?: number | null;
     }): this;
   }
@@ -1219,6 +1254,7 @@ declare global {
     Icon = 'icon',
     ControlLines = 'controlLines',
     NullableNote = 'nullableNote',
+    NullableInstrument = 'nullableInstrument',
     SolvePath = 'solvePath',
   }
   export interface Config<T> {
@@ -1298,6 +1334,9 @@ declare global {
   export interface NullableNoteConfig extends Config<string | null> {
     readonly type: ConfigType.NullableNote;
   }
+  export interface NullableInstrumentConfig extends Config<Instrument | null> {
+    readonly type: ConfigType.NullableInstrument;
+  }
   export interface SolvePathConfig extends Config<Position$1[]> {
     readonly type: ConfigType.SolvePath;
   }
@@ -1321,6 +1360,7 @@ declare global {
     | IconConfig
     | ControlLinesConfig
     | NullableNoteConfig
+    | NullableInstrumentConfig
     | SolvePathConfig;
   /**
    * Compare two config values for equality, using an appropriate method for the config type.

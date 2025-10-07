@@ -19,7 +19,7 @@ import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
 import GridZones from './data/gridZones.js';
 import Instruction from './data/instruction.js';
-import { COMPARISONS, Color, Comparison, DIRECTIONS, Direction, MajorRule, Mode, ORIENTATIONS, Orientation, PuzzleType, State, WRAPPINGS, Wrapping, directionToggle, orientationToggle } from './data/primitives.js';
+import { COMPARISONS, Color, Comparison, DIRECTIONS, DRUM_SAMPLES, Direction, INSTRUMENTS, Instrument, MajorRule, Mode, ORIENTATIONS, Orientation, PuzzleType, State, WRAPPINGS, Wrapping, directionToggle, isDrumSample, orientationToggle } from './data/primitives.js';
 import { MetadataSchema, PuzzleSchema, getPuzzleTypes, puzzleEquals, validatePuzzleChecklist } from './data/puzzle.js';
 import BanPatternRule from './data/rules/banPatternRule.js';
 import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
@@ -154,7 +154,10 @@ export {
   Color,
   Comparison,
   DIRECTIONS,
+  DRUM_SAMPLES,
   Direction,
+  INSTRUMENTS,
+  Instrument,
   MajorRule,
   Mode,
   ORIENTATIONS,
@@ -164,6 +167,7 @@ export {
   WRAPPINGS,
   Wrapping,
   directionToggle,
+  isDrumSample,
   orientationToggle,
   MetadataSchema,
   PuzzleSchema,

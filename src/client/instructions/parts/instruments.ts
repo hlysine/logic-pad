@@ -159,20 +159,25 @@ function normalizeVelocity(
   if (isDrumSample(note) || instrument === InstrumentType.Drum)
     return (velocity - 0.7) * 20;
 
-  // other instruments do not need normalization
-  if (instrument !== InstrumentType.Piano) return velocity;
+  if (instrument === InstrumentType.Piano) {
+    const midi = Tone.Midi(note).toMidi();
+    velocity += 0.2;
+    if (midi > c5Midi) return velocity;
+    velocity -= 0.2;
+    if (midi > e4Midi) return velocity;
+    velocity -= 0.05;
+    if (midi > e3Midi) return velocity;
+    velocity -= 0.03;
+    if (midi > e2Midi) return velocity;
+    velocity -= 0.01;
+    return velocity;
+  }
 
-  const midi = Tone.Midi(note).toMidi();
-  velocity += 0.2;
-  if (midi > c5Midi) return velocity;
-  velocity -= 0.2;
-  if (midi > e4Midi) return velocity;
-  velocity -= 0.05;
-  if (midi > e3Midi) return velocity;
-  velocity -= 0.03;
-  if (midi > e2Midi) return velocity;
-  velocity -= 0.01;
-  return velocity;
+  if (velocity < 0.4) {
+    return velocity / 2 + 0.05;
+  } else {
+    return velocity - 0.195;
+  }
 }
 
 export function getInstrumentsUsed(instruction: MusicGridRule) {

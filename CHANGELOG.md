@@ -5,6 +5,7 @@
   - Only the necessary instruments are loaded when playing a music grid
 - Invalid note names in music grids no longer crash the site
 - Fixed config popup disappearing in music grids when using the canvas grid renderer
+- Tweaked random time and frequency offset in music grids
 
 # 5/10/2025
 

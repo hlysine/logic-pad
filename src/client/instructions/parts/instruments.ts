@@ -398,7 +398,7 @@ export function encodePlayback(
     },
     [...events.entries()]
   ).start(0);
-  notes.humanize = true;
+  notes.humanize = '0.01n';
 
   // return clean-up function
   return () => {

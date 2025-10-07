@@ -18,8 +18,9 @@ type EventData =
       value: string;
       instrument: InstrumentType;
       velocity: number;
+      seed: number;
     }
-  | { type: 'keyup'; value: string; instrument: InstrumentType }
+  | { type: 'keyup'; value: string; instrument: InstrumentType; seed: number }
   | { type: 'bpm'; value: number }
   | { type: 'complete' };
 
@@ -69,6 +70,10 @@ function spinWaitAsync(predicate: () => boolean, interval = 100) {
       }
     }, interval);
   });
+}
+
+function detune(note: string, seed: number) {
+  return Tone.Midi(note).toFrequency() * (1 + (seed - 0.5) * 0.007);
 }
 
 export const instruments = {
@@ -274,11 +279,13 @@ export function encodePlayback(
         !grid.connections.hasEdge({ x1: x, y1: y, x2: x - 1, y2: y })
       ) {
         if (!noteNames.includes(row.note)) return;
+        const seed = Math.random();
         addEvent(x / 2, {
           type: 'keydown',
           value: row.note,
           instrument: row.instrument,
           velocity: row.velocity,
+          seed,
         });
         let endPos = { x, y };
         while (
@@ -295,6 +302,7 @@ export function encodePlayback(
           type: 'keyup',
           value: row.note,
           instrument: row.instrument,
+          seed,
         });
       }
     });
@@ -351,7 +359,7 @@ export function encodePlayback(
               });
             } else {
               instruments[event.instrument]?.value?.triggerAttack(
-                event.value,
+                detune(event.value, event.seed),
                 time,
                 normalizeVelocity(
                   event.velocity,
@@ -377,7 +385,7 @@ export function encodePlayback(
               });
             } else {
               instruments[event.instrument]?.value?.triggerRelease(
-                event.value,
+                detune(event.value, event.seed),
                 time
               );
             }
@@ -390,6 +398,7 @@ export function encodePlayback(
     },
     [...events.entries()]
   ).start(0);
+  notes.humanize = true;
 
   // return clean-up function
   return () => {

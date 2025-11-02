@@ -2,16 +2,19 @@ import { memo, RefObject, useImperativeHandle, useState } from 'react';
 import { cn } from '../../uiHelper';
 
 export type PromptHandle = {
-  prompt: () => Promise<string>;
+  prompt: (description: string) => Promise<string>;
 };
 
-export async function modPrompt(handle: RefObject<PromptHandle | null>) {
+export async function modPrompt(
+  handle: RefObject<PromptHandle | null>,
+  description: string
+) {
   if (!handle.current) {
-    const result = window.prompt('Message to user:');
+    const result = window.prompt(`Message to user:\n\n${description}`);
     if (!result) throw new Error('Prompt cancelled');
     return result;
   }
-  return await handle.current.prompt();
+  return await handle.current.prompt(description);
 }
 
 export interface ModMessagePromptProps {
@@ -23,10 +26,12 @@ export default memo(function ModMessagePrompt({ ref }: ModMessagePromptProps) {
     resolve: (message: string) => void;
     reject: () => void;
   } | null>(null);
+  const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
 
   useImperativeHandle(ref, () => ({
-    prompt: () => {
+    prompt: (description: string) => {
+      setDescription(description);
       return new Promise((resolve, reject) => setHandle({ resolve, reject }));
     },
   }));
@@ -41,7 +46,8 @@ export default memo(function ModMessagePrompt({ ref }: ModMessagePromptProps) {
           <div className="modal-box">
             <h3 className="font-bold text-lg">Message to user</h3>
             <p className="py-4">
-              The user will receive an account notification with this message.
+              If possible, the user will receive an account notification with
+              this message.
             </p>
             <textarea
               className="textarea textarea-bordered w-full"
@@ -49,10 +55,7 @@ export default memo(function ModMessagePrompt({ ref }: ModMessagePromptProps) {
               value={message}
               onChange={e => setMessage(e.target.value)}
             />
-            <div className="alert my-4">
-              Please describe your action and the reason for doing so. This
-              message will be logged along with your moderation action.
-            </div>
+            <div className="alert my-4 text-sm">{description}</div>
             <div className="modal-action">
               <button
                 className="btn"

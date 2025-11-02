@@ -113,7 +113,10 @@ export default memo(function UserRestrictions({
             saveRestrictions.isPending && 'btn-disabled'
           )}
           onClick={() =>
-            modPrompt(promptHandle)
+            modPrompt(
+              promptHandle,
+              "Modifying user's restrictions. Please explain why this action is being taken. This message will be logged with the action."
+            )
               .then(message =>
                 saveRestrictions.mutate([userId, newRestrictions, message])
               )

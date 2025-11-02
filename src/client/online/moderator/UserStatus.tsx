@@ -59,7 +59,10 @@ export default memo(function UserStatus({
           status ? 'btn-error' : 'btn-success'
         )}
         onClick={() =>
-          modPrompt(promptHandle)
+          modPrompt(
+            promptHandle,
+            'Blocked accounts cannot receive account notifications, but please explain why this action is being taken. This message will be logged with the action.'
+          )
             .then(message => updateStatus.mutate([userId, !status, message]))
             .catch(() => {})
         }

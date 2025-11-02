@@ -1,3 +1,7 @@
+# 2/11/2025
+
+- Fixed broken canvas render in huge grids by lowering DPI
+
 # 7/10/2025
 
 - Added support for more instruments in music grids

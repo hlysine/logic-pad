@@ -108,7 +108,9 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
     e => {
       if (!canvasRef.current) return;
       if (e.type === 'keydown') {
-        const rect = canvasRef.current.canvas.getBoundingClientRect();
+        const rect =
+          canvasRef.current.canvas.parentElement!.getBoundingClientRect(); // We need to get the container size, not the canvas size due to CSS scaling
+        const tileSize = rect.width / grid.width;
         const x = Math.floor((mousePosition.clientX - rect.left) / tileSize);
         const y = Math.floor((mousePosition.clientY - rect.top) / tileSize);
         setPosition({ x, y });
@@ -122,7 +124,7 @@ export default memo(function TileCountOverlay({ grid }: TileCountOverlayProps) {
       preventDefault: true,
       useKey: true,
     },
-    [canvasRef, tileSize]
+    [canvasRef, grid.width, grid.height]
   );
 
   useEffect(() => {

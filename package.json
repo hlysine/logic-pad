@@ -35,6 +35,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "animejs": "^4.1.2",
     "axios": "^1.11.0",
+    "canvas-size": "^2.0.0",
     "clsx": "^2.1.1",
     "compression-streams-polyfill": "^0.1.7",
     "event-iterator": "^2.0.0",
@@ -68,6 +69,7 @@
   "devDependencies": {
     "@tanstack/router-vite-plugin": "^1.131.2",
     "@types/bun": "^1.2.19",
+    "@types/canvas-size": "^1.2.2",
     "@types/lodash": "^4.17.20",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",

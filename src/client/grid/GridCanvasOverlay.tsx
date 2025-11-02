@@ -8,8 +8,7 @@ import {
   useState,
 } from 'react';
 import GridOverlay from './GridOverlay';
-
-const MAX_SIZE = 5000;
+import { useMaxCanvasSize } from './canvasHelper';
 
 export interface RawCanvasRef {
   canvas: HTMLCanvasElement;
@@ -40,6 +39,7 @@ export default memo(function GridCanvasOverlay({
   ref,
 }: GridCanvasOverlayProps) {
   bleed ??= 0;
+  const maxSize = useMaxCanvasSize();
   const overlayRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [renderInfo, setRenderInfo] = useState<RenderInfo>({
@@ -69,14 +69,14 @@ export default memo(function GridCanvasOverlay({
     if (newSize <= 0) return;
     let scale = 1;
     let bleededScale = 1;
-    if (width * newSize > MAX_SIZE || height * newSize > MAX_SIZE) {
+    if (width * newSize > maxSize || height * newSize > maxSize) {
       scale = Math.min(
-        MAX_SIZE / (width * newSize),
-        MAX_SIZE / (height * newSize)
+        maxSize / (width * newSize),
+        maxSize / (height * newSize)
       );
       bleededScale = Math.min(
-        (MAX_SIZE + bleed * 2) / (width * newSize + bleed * 2),
-        (MAX_SIZE + bleed * 2) / (height * newSize + bleed * 2)
+        (maxSize + bleed * 2) / (width * newSize + bleed * 2),
+        (maxSize + bleed * 2) / (height * newSize + bleed * 2)
       );
     }
     setRenderInfo({ tileSize: newSize, scale, bleededScale });

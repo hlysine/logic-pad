@@ -7,8 +7,7 @@ import { useTheme } from '../../contexts/ThemeContext.tsx';
 import { ColorInfo, clearTile, renderTile } from './tile';
 import GridData from '@logic-pad/core/data/grid';
 import TileConnections from '@logic-pad/core/data/tileConnections';
-
-const MAX_SIZE = 5000;
+import { useMaxCanvasSize } from '../canvasHelper.ts';
 
 interface GridRenderData {
   grid: GridData;
@@ -26,6 +25,8 @@ export default memo(function Grid({
   children,
   className,
 }: GridProps) {
+  const maxSize = useMaxCanvasSize();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const canvasCtx = useRef<CanvasRenderingContext2D | null>(null);
   const prevData = useRef<GridRenderData | null>(null);
@@ -65,14 +66,14 @@ export default memo(function Grid({
   );
 
   const scale = useMemo(() => {
-    if (grid.width * size <= MAX_SIZE && grid.height * size <= MAX_SIZE) {
+    if (grid.width * size <= maxSize && grid.height * size <= maxSize) {
       return 1;
     }
     return Math.min(
-      MAX_SIZE / (grid.width * size),
-      MAX_SIZE / (grid.height * size)
+      maxSize / (grid.width * size),
+      maxSize / (grid.height * size)
     );
-  }, [grid.width, grid.height, size]);
+  }, [grid.width, grid.height, size, maxSize]);
 
   useEffect(() => {
     canvasCtx.current ??= canvasRef.current?.getContext('2d') ?? null;

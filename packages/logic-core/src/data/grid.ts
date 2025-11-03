@@ -779,7 +779,7 @@ export default class GridData {
    */
   public iterateArea<T>(
     position: Position,
-    predicate: (tile: TileData) => boolean,
+    predicate: (tile: TileData, logicalX: number, logicalY: number) => boolean,
     callback: (
       tile: TileData,
       x: number,
@@ -790,7 +790,7 @@ export default class GridData {
     visited: boolean[][] = array(this.width, this.height, () => false)
   ): T | undefined {
     const tile = this.getTile(position.x, position.y);
-    if (!tile.exists || !predicate(tile)) {
+    if (!tile.exists || !predicate(tile, position.x, position.y)) {
       return;
     }
     const stack = [position];
@@ -807,7 +807,8 @@ export default class GridData {
         const next = { x: x + offset.x, y: y + offset.y };
         if (this.isPositionValid(next.x, next.y)) {
           const nextTile = this.getTile(next.x, next.y);
-          if (nextTile.exists && predicate(nextTile)) stack.push(next);
+          if (nextTile.exists && predicate(nextTile, next.x, next.y))
+            stack.push(next);
         }
       }
     }
@@ -828,7 +829,7 @@ export default class GridData {
   public iterateDirection<T>(
     position: Position,
     direction: Direction | Orientation,
-    predicate: (tile: TileData) => boolean,
+    predicate: (tile: TileData, logicalX: number, logicalY: number) => boolean,
     callback: (
       tile: TileData,
       x: number,
@@ -841,7 +842,8 @@ export default class GridData {
     return this.iterateDirectionAll(
       position,
       direction,
-      tile => tile.exists && predicate(tile),
+      (tile, logicalX, logicalY) =>
+        tile.exists && predicate(tile, logicalX, logicalY),
       callback,
       visited
     );
@@ -862,7 +864,7 @@ export default class GridData {
   public iterateDirectionAll<T>(
     position: Position,
     direction: Direction | Orientation,
-    predicate: (tile: TileData) => boolean,
+    predicate: (tile: TileData, logicalX: number, logicalY: number) => boolean,
     callback: (
       tile: TileData,
       x: number,
@@ -880,13 +882,72 @@ export default class GridData {
       }
       visited[arrPos.y][arrPos.x] = true;
       const tile = this.getTile(current.x, current.y);
-      if (!predicate(tile)) {
+      if (!predicate(tile, arrPos.x, arrPos.y)) {
         break;
       }
       const ret = callback(tile, arrPos.x, arrPos.y, current.x, current.y);
       if (ret !== undefined) return ret;
       current = move(current, direction);
     }
+  }
+
+  /**
+   * Reduce the grid by zones defined in the GridZones.
+   *
+   * @param reducer The reducer function to apply to each zone.
+   * @param initializer The initializer function to create the initial value for each zone.
+   * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
+   * @returns An array of reduced values, one for each zone.
+   */
+  public reduceByZone<T>(
+    reducer: (
+      acc: T,
+      tile: TileData,
+      x: number,
+      y: number,
+      logicalX: number,
+      logicalY: number
+    ) => T,
+    initializer: () => T,
+    visited: boolean[][] = array(this.width, this.height, () => false)
+  ) {
+    const zones: T[] = [];
+    while (true) {
+      const seed = this.find((tile, x, y) => tile.exists && !visited[y][x]);
+      if (!seed) break;
+      let zone = initializer();
+      const stack = [seed];
+      while (stack.length > 0) {
+        const { x, y } = stack.pop()!;
+        const { x: arrX, y: arrY } = this.toArrayCoordinates(x, y);
+        if (visited[arrY][arrX]) continue;
+        visited[arrY][arrX] = true;
+        zone = reducer(zone, this.getTile(arrX, arrY), arrX, arrY, x, y);
+        for (const offset of NEIGHBOR_OFFSETS) {
+          const next = this.toArrayCoordinates(x + offset.x, y + offset.y);
+          if (
+            !this.zones.edges.some(e => {
+              const { x: x1, y: y1 } = this.toArrayCoordinates(e.x1, e.y1);
+              const { x: x2, y: y2 } = this.toArrayCoordinates(e.x2, e.y2);
+              return (
+                (x1 === arrX &&
+                  y1 === arrY &&
+                  x2 === next.x &&
+                  y2 === next.y) ||
+                (x2 === arrX && y2 === arrY && x1 === next.x && y1 === next.y)
+              );
+            })
+          ) {
+            const nextTile = this.getTile(next.x, next.y);
+            if (nextTile.exists) {
+              stack.push(next);
+            }
+          }
+        }
+      }
+      zones.push(zone);
+    }
+    return zones;
   }
 
   /**

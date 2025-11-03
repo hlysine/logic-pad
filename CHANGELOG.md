@@ -1,6 +1,9 @@
 # 3/11/2025
 
+- Added Connect Zones rule to connect colored cells within each zone separately
+- Added Exact Count Per Zone rule to specify exact number of colored cells in each zone
 - Oversized grids are now validated in the background
+- Optimized validation performance for Connect All rule
 
 # 2/11/2025
 

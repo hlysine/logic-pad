@@ -1,3 +1,9 @@
+# 0.22.0
+
+- Added Connect Zones rule to connect colored cells within each zone separately
+- Added Exact Count Per Zone rule to specify exact number of colored cells in each zone
+- Optimized validation performance for Connect All rule
+
 # 0.21.0
 
 - Added support for async grid validation with web workers

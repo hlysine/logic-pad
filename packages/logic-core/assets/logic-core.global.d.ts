@@ -1036,7 +1036,11 @@ declare global {
      */
     iterateArea<T>(
       position: Position$1,
-      predicate: (tile: TileData) => boolean,
+      predicate: (
+        tile: TileData,
+        logicalX: number,
+        logicalY: number
+      ) => boolean,
       callback: (
         tile: TileData,
         x: number,
@@ -1061,7 +1065,11 @@ declare global {
     iterateDirection<T>(
       position: Position$1,
       direction: Direction | Orientation,
-      predicate: (tile: TileData) => boolean,
+      predicate: (
+        tile: TileData,
+        logicalX: number,
+        logicalY: number
+      ) => boolean,
       callback: (
         tile: TileData,
         x: number,
@@ -1086,7 +1094,11 @@ declare global {
     iterateDirectionAll<T>(
       position: Position$1,
       direction: Direction | Orientation,
-      predicate: (tile: TileData) => boolean,
+      predicate: (
+        tile: TileData,
+        logicalX: number,
+        logicalY: number
+      ) => boolean,
       callback: (
         tile: TileData,
         x: number,
@@ -1096,6 +1108,26 @@ declare global {
       ) => T | undefined,
       visited?: boolean[][]
     ): T | undefined;
+    /**
+     * Reduce the grid by zones defined in the GridZones.
+     *
+     * @param reducer The reducer function to apply to each zone.
+     * @param initializer The initializer function to create the initial value for each zone.
+     * @param visited A 2D array to keep track of visited tiles. This array is modified by the function.
+     * @returns An array of reduced values, one for each zone.
+     */
+    reduceByZone<T>(
+      reducer: (
+        acc: T,
+        tile: TileData,
+        x: number,
+        y: number,
+        logicalX: number,
+        logicalY: number
+      ) => T,
+      initializer: () => T,
+      visited?: boolean[][]
+    ): T[];
     /**
      * Check if every tile in the grid is filled with a color other than gray.
      *
@@ -1628,6 +1660,28 @@ declare global {
     copyWith({ color }: { color?: Color }): this;
     withColor(color: Color): this;
   }
+  export declare class CollectZonesRule extends Rule {
+    readonly color: Color;
+    readonly title = 'Connect Zones';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Connect all &lt;color&gt; cells in each zone**
+     *
+     * @param color - The color of the cells to connect.
+     */
+    constructor(color: Color);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color }: { color?: Color }): this;
+    withColor(color: Color): this;
+  }
   export type ShapeRegions = {
     regions: {
       positions: Position$1[];
@@ -1722,6 +1776,30 @@ declare global {
     get searchVariants(): SearchVariant[];
     validateGrid(grid: GridData): RuleState;
     copyWith({ color }: { color?: Color }): this;
+  }
+  export declare class ExactCountPerZoneRule extends CellCountPerZoneRule {
+    readonly color: Color;
+    readonly count: number;
+    readonly title = 'Exact Count Per Zone';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly EXAMPLE_GRID_GRAY;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **Each zone has &lt;count&gt; &lt;color&gt; cells.**
+     *
+     * @param color - The color of the cells to count.
+     * @param count - The exact count of the cells in each zone.
+     */
+    constructor(color: Color, count: number);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color, count }: { color?: Color; count?: number }): this;
   }
   export declare class ForesightRule extends Rule {
     readonly count: number;

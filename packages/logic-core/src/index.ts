@@ -119,6 +119,7 @@ import ViewpointSymbol from './data/symbols/viewpointSymbol.js';
 import TileData from './data/tile.js';
 import TileConnections from './data/tileConnections.js';
 import validateGrid, { aggregateState, applyFinalOverrides } from './data/validate.js';
+import { GridValidator } from './data/validateAsync.js';
 
 export {
   ConfigType,
@@ -288,4 +289,5 @@ export {
   validateGrid,
   aggregateState,
   applyFinalOverrides,
+  GridValidator,
 };

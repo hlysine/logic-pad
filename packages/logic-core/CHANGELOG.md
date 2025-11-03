@@ -1,3 +1,7 @@
+# 0.21.0
+
+- Added support for async grid validation with web workers
+
 # 0.20.0
 
 - Added support for more instruments in music grids

@@ -1,3 +1,7 @@
+# 3/11/2025
+
+- Oversized grids are now validated in the background
+
 # 2/11/2025
 
 - Fixed broken canvas render in huge grids by lowering DPI

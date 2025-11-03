@@ -1,5 +1,10 @@
-import { memo, useState } from 'react';
-import { FiCornerUpLeft, FiCornerUpRight, FiRefreshCcw } from 'react-icons/fi';
+import { memo, useState, useSyncExternalStore } from 'react';
+import {
+  FiCheck,
+  FiCornerUpLeft,
+  FiCornerUpRight,
+  FiRefreshCcw,
+} from 'react-icons/fi';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { useHotkeys } from 'react-hotkeys-hook';
@@ -11,10 +16,32 @@ import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompre
 import GridData from '@logic-pad/core/data/grid';
 import { IoMdColorFill } from 'react-icons/io';
 import mouseContext from '../grid/MouseContext.tsx';
+import { useGridState } from '../contexts/GridStateContext.tsx';
+import Loading from './Loading.tsx';
 
 export interface EditControlsProps {
   onReset?: () => void;
 }
+
+const ValidatorStatus = memo(function ValidatorStatus() {
+  const { gridValidator } = useGridState();
+  const isLoading = useSyncExternalStore(
+    gridValidator.subscribeToLoad,
+    gridValidator.isLoading
+  );
+  return (
+    <div
+      className="tooltip tooltip-info tooltip-top h-12 w-12 px-2 flex items-center justify-center"
+      data-tip={isLoading ? 'Validating...' : 'Validated'}
+    >
+      {isLoading ? (
+        <Loading className="px-1 rounded-box" />
+      ) : (
+        <FiCheck size={20} className="rounded-box" />
+      )}
+    </div>
+  );
+});
 
 const EditControls = memo(function EditControls({
   onReset,
@@ -66,6 +93,7 @@ const EditControls = memo(function EditControls({
 
   return (
     <div className="flex flex-wrap shrink-0 items-center bg-base-100 shadow-md text-base-content rounded-box fixed bottom-2 z-40 left-2 right-28 xl:static xl:shadow-md">
+      <ValidatorStatus />
       <ul className="menu menu-horizontal shrink-0 justify-center flex-1 gap-2">
         <li className={cn(undoStack.length === 0 && 'disabled')}>
           <a

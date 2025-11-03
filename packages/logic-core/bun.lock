@@ -7,6 +7,7 @@
         "compression-streams-polyfill": "^0.1.7",
         "event-iterator": "^2.0.0",
         "grilops": "^0.1.2",
+        "lodash": "^4.17.21",
         "logic-pad-solver-core": "^0.1.2",
         "z3-solver": "^4.13.0",
         "zod": "^4.0.17",
@@ -14,6 +15,7 @@
       "devDependencies": {
         "@types/bun": "^1.2.20",
         "@types/glob": "^9.0.0",
+        "@types/lodash": "^4.17.20",
         "dts-bundle-generator": "^9.5.1",
         "fast-glob": "^3.3.3",
         "prettier": "^3.6.2",
@@ -38,6 +40,8 @@
     "@types/bun": ["@types/bun@1.2.20", "", { "dependencies": { "bun-types": "1.2.20" } }, "sha512-dX3RGzQ8+KgmMw7CsW4xT5ITBSCrSbfHc36SNT31EOUg/LA9JWq0VDdEXDRSe1InVWpd2yLUM1FUF/kEOyTzYA=="],
 
     "@types/glob": ["@types/glob@9.0.0", "", { "dependencies": { "glob": "*" } }, "sha512-00UxlRaIUvYm4R4W9WYkN8/J+kV8fmOQ7okeH6YFtGWFMt3odD45tpG5yA5wnL7HE6lLgjaTW5n14ju2hl2NNA=="],
+
+    "@types/lodash": ["@types/lodash@4.17.20", "", {}, "sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA=="],
 
     "@types/node": ["@types/node@24.2.1", "", { "dependencies": { "undici-types": "~7.10.0" } }, "sha512-DRh5K+ka5eJic8CjH7td8QpYEV6Zo10gfRkjHCO3weqZHWDtAaSTFtl4+VMqOJ4N5jcuhZ9/l+yy8rVgw7BQeQ=="],
 
@@ -104,6 +108,8 @@
     "isexe": ["isexe@2.0.0", "", {}, "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="],
 
     "jackspeak": ["jackspeak@4.1.1", "", { "dependencies": { "@isaacs/cliui": "^8.0.2" } }, "sha512-zptv57P3GpL+O0I7VdMJNBZCu+BPHVQUk55Ft8/QCJjTVxrnJHuVuX/0Bl2A6/+2oyR/ZMEuFKwmzqqZ/U5nPQ=="],
+
+    "lodash": ["lodash@4.17.21", "", {}, "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="],
 
     "logic-pad-solver-core": ["logic-pad-solver-core@0.1.2", "", {}, "sha512-Gp90UL7UJ3Sw1CXETQIpktCjmXVy+sebXRhoF7LQZBVsSHfdQ5BhKpxOjVfxoAhKseLtP0DRte5+LnN+hVh4IA=="],
 

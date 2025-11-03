@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "type": "module",
   "files": [
     "dist",
@@ -54,6 +54,7 @@
     "compression-streams-polyfill": "^0.1.7",
     "event-iterator": "^2.0.0",
     "grilops": "^0.1.2",
+    "lodash": "^4.17.21",
     "logic-pad-solver-core": "^0.1.2",
     "z3-solver": "^4.13.0",
     "zod": "^4.0.17"
@@ -61,6 +62,7 @@
   "devDependencies": {
     "@types/bun": "^1.2.20",
     "@types/glob": "^9.0.0",
+    "@types/lodash": "^4.17.20",
     "dts-bundle-generator": "^9.5.1",
     "fast-glob": "^3.3.3",
     "prettier": "^3.6.2",

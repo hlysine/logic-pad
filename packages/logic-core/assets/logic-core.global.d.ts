@@ -3153,6 +3153,21 @@ declare global {
     grid: GridData,
     solution: GridData | null
   ): GridState;
+  export declare class GridValidator {
+    private worker;
+    private stateListeners;
+    private loadListeners;
+    private readonly validateGridDebounced;
+    readonly validateGrid: (grid: GridData, solution: GridData | null) => void;
+    private readonly notifyState;
+    readonly subscribeToState: (
+      listener: (state: GridState) => void
+    ) => () => void;
+    private readonly notifyLoad;
+    readonly subscribeToLoad: (listener: () => void) => () => void;
+    readonly isLoading: () => boolean;
+    readonly delete: () => void;
+  }
 
   export { Symbol$1 as Symbol, escape$1 as escape, unescape$1 as unescape };
 

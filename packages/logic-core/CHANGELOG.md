@@ -1,3 +1,7 @@
+# 0.22.1
+
+- Fixed typo and example grid in Connect Zones rule
+
 # 0.22.0
 
 - Added Connect Zones rule to connect colored cells within each zone separately

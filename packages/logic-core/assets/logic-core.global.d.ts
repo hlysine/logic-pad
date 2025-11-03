@@ -1660,7 +1660,7 @@ declare global {
     copyWith({ color }: { color?: Color }): this;
     withColor(color: Color): this;
   }
-  export declare class CollectZonesRule extends Rule {
+  export declare class ConnectZonesRule extends Rule {
     readonly color: Color;
     readonly title = 'Connect Zones';
     private static readonly CONFIGS;

@@ -10,7 +10,7 @@ export { instance as BanPatternRule } from './banPatternRule.js';
 export { instance as CellCountRule } from './cellCountRule.js';
 export { instance as CompletePatternRule } from './completePatternRule.js';
 export { instance as ConnectAllRule } from './connectAllRule.js';
-export { instance as CollectZonesRule } from './connectZonesRule.js';
+export { instance as ConnectZonesRule } from './connectZonesRule.js';
 export { instance as ContainsShapeRule } from './containsShapeRule.js';
 export { instance as CustomRule } from './customRule.js';
 export { instance as DifferentCountPerZoneRule } from './differentCountPerZoneRule.js';

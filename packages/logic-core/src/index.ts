@@ -26,7 +26,7 @@ import CellCountPerZoneRule from './data/rules/cellCountPerZoneRule.js';
 import CellCountRule from './data/rules/cellCountRule.js';
 import CompletePatternRule from './data/rules/completePatternRule.js';
 import ConnectAllRule from './data/rules/connectAllRule.js';
-import CollectZonesRule from './data/rules/connectZonesRule.js';
+import ConnectZonesRule from './data/rules/connectZonesRule.js';
 import ContainsShapeRule from './data/rules/containsShapeRule.js';
 import CustomRule from './data/rules/customRule.js';
 import DifferentCountPerZoneRule from './data/rules/differentCountPerZoneRule.js';
@@ -182,7 +182,7 @@ export {
   CellCountRule,
   CompletePatternRule,
   ConnectAllRule,
-  CollectZonesRule,
+  ConnectZonesRule,
   ContainsShapeRule,
   CustomRule,
   DifferentCountPerZoneRule,

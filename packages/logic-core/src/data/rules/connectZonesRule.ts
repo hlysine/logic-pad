@@ -3,8 +3,9 @@ import GridData from '../grid.js';
 import { array, minBy } from '../dataHelper.js';
 import { Color, Position, RuleState, State } from '../primitives.js';
 import Rule, { SearchVariant } from './rule.js';
+import GridZones from '../gridZones.js';
 
-export default class CollectZonesRule extends Rule {
+export default class ConnectZonesRule extends Rule {
   public readonly title = 'Connect Zones';
 
   private static readonly CONFIGS: readonly AnyConfig[] = Object.freeze([
@@ -19,16 +20,32 @@ export default class CollectZonesRule extends Rule {
   ]);
 
   private static readonly EXAMPLE_GRID_LIGHT = Object.freeze(
-    GridData.create(['bwwwb', 'bwbww', 'wwwbb', 'wbwww'])
+    GridData.create(['wbbwb', 'wbbwb', 'wbbww', 'wwbbb'])
+      .withZones(
+        new GridZones([
+          { x1: 2, y1: 1, x2: 2, y2: 2 },
+          { x1: 1, y1: 0, x2: 2, y2: 0 },
+          { x1: 1, y1: 1, x2: 2, y2: 1 },
+          { x1: 2, y1: 2, x2: 3, y2: 2 },
+          { x1: 2, y1: 3, x2: 3, y2: 3 },
+        ])
+      )
+      .addRule(new ConnectZonesRule(Color.Light))
   );
 
   private static readonly EXAMPLE_GRID_DARK = Object.freeze(
-    GridData.create(['wbbbw', 'wbwbb', 'bbbww', 'bwbbb'])
+    ConnectZonesRule.EXAMPLE_GRID_LIGHT.withTiles(tiles =>
+      tiles.map(row =>
+        row.map(tile =>
+          tile.withColor(tile.color === Color.Dark ? Color.Light : Color.Dark)
+        )
+      )
+    )
   );
 
   private static readonly SEARCH_VARIANTS = [
-    new CollectZonesRule(Color.Light).searchVariant(),
-    new CollectZonesRule(Color.Dark).searchVariant(),
+    new ConnectZonesRule(Color.Light).searchVariant(),
+    new ConnectZonesRule(Color.Dark).searchVariant(),
   ];
 
   /**
@@ -50,17 +67,17 @@ export default class CollectZonesRule extends Rule {
   }
 
   public get configs(): readonly AnyConfig[] | null {
-    return CollectZonesRule.CONFIGS;
+    return ConnectZonesRule.CONFIGS;
   }
 
   public createExampleGrid(): GridData {
     return this.color === Color.Light
-      ? CollectZonesRule.EXAMPLE_GRID_LIGHT
-      : CollectZonesRule.EXAMPLE_GRID_DARK;
+      ? ConnectZonesRule.EXAMPLE_GRID_LIGHT
+      : ConnectZonesRule.EXAMPLE_GRID_DARK;
   }
 
   public get searchVariants(): SearchVariant[] {
-    return CollectZonesRule.SEARCH_VARIANTS;
+    return ConnectZonesRule.SEARCH_VARIANTS;
   }
 
   public validateGrid(grid: GridData): RuleState {
@@ -121,7 +138,7 @@ export default class CollectZonesRule extends Rule {
   }
 
   public copyWith({ color }: { color?: Color }): this {
-    return new CollectZonesRule(color ?? this.color) as this;
+    return new ConnectZonesRule(color ?? this.color) as this;
   }
 
   public withColor(color: Color): this {
@@ -129,4 +146,4 @@ export default class CollectZonesRule extends Rule {
   }
 }
 
-export const instance = new CollectZonesRule(Color.Dark);
+export const instance = new ConnectZonesRule(Color.Dark);

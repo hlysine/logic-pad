@@ -1,7 +1,6 @@
 import { State } from '@logic-pad/core/data/primitives';
 import { memo, useMemo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
-import MultiEntrySymbol from '@logic-pad/core/data/symbols/multiEntrySymbol';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import Instruction from './Instruction';
 import EditTarget from './EditTarget';
@@ -22,6 +21,10 @@ import {
 } from '@dnd-kit/sortable';
 import RuleData from '@logic-pad/core/data/rules/rule';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.ts';
+import {
+  handlesSymbolMerge,
+  SymbolMergeHandler,
+} from '@logic-pad/core/data/events/onSymbolMerge.ts';
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
@@ -98,7 +101,7 @@ export default memo(function InstructionList({
     const map = new Map<string, number[][]>();
     for (const [key, value] of grid.symbols ?? []) {
       if (value.length === 0) continue;
-      if (!(value[0] instanceof MultiEntrySymbol)) {
+      if (!handlesSymbolMerge(value[0])) {
         map.set(key, [value.map((_, i) => i)]);
         continue;
       }
@@ -111,7 +114,7 @@ export default memo(function InstructionList({
         const index = map
           .get(key)!
           .findIndex(x =>
-            (value[x[0]] as MultiEntrySymbol).descriptionEquals(s)
+            (value[x[0]] as unknown as SymbolMergeHandler).descriptionEquals(s)
           );
         if (index === -1) {
           map.get(key)!.push([i]);

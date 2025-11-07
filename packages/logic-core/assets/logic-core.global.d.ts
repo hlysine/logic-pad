@@ -1448,6 +1448,16 @@ declare global {
   export declare function handlesSymbolDisplay<T extends Instruction>(
     val: T
   ): val is T & SymbolDisplayHandler;
+  export interface SymbolMergeHandler {
+    /**
+     * Determines if the description of two symbols can be merged when displayed in the UI.
+     * @param other The other symbol to compare against.
+     */
+    descriptionEquals(other: Symbol$1): boolean;
+  }
+  export declare function handlesSymbolMerge<T extends Instruction>(
+    val: T
+  ): val is T & SymbolMergeHandler;
   export interface SymbolValidationHandler {
     /**
      * Overrides the validation of symbols.
@@ -2641,17 +2651,23 @@ declare global {
       y: number
     ): Position$1 | null;
   }
-  export declare class FocusSymbol extends NumberSymbol {
-    readonly title = 'Focus Number';
+  export declare class FocusSymbol
+    extends NumberSymbol
+    implements SymbolMergeHandler
+  {
+    readonly deadEnd: boolean;
+    get title(): string;
     private static readonly CONFIGS;
     private static readonly EXAMPLE_GRID;
+    private static readonly EXAMPLE_GRID_DEAD_END;
     /**
      * **Focus Numbers count directly adjacent cells of the same color**
      * @param x - The x-coordinate of the symbol.
      * @param y - The y-coordinate of the symbol.
+     * @param deadEnd - Whether this Focus Number is a Dead End.
      * @param number - The focus number.
      */
-    constructor(x: number, y: number, number: number);
+    constructor(x: number, y: number, deadEnd: boolean, number: number);
     get id(): string;
     get placementStep(): number;
     get explanation(): string;
@@ -2662,16 +2678,20 @@ declare global {
       completed: number;
       possible: number;
     };
+    descriptionEquals(other: Symbol$1): boolean;
     copyWith({
       x,
       y,
+      deadEnd,
       number,
     }: {
       x?: number;
       y?: number;
+      deadEnd?: boolean;
       number?: number;
     }): this;
     withNumber(number: number): this;
+    withDeadEnd(deadEnd: boolean): this;
   }
   export declare class FocusBTModule extends BTModule {
     instr: FocusSymbol;
@@ -2826,15 +2846,10 @@ declare global {
     checkGlobal(grid: BTGridData): CheckResult | false;
     private buildCheckAndRating;
   }
-  export declare abstract class MultiEntrySymbol extends Symbol$1 {
-    /**
-     * Determines if the description of two MultiEntrySymbols can be merged when displayed in the UI.
-     * @param other - The other MultiEntrySymbol to compare to.
-     * @returns Whether the two MultiEntrySymbols have the same description.
-     */
-    descriptionEquals(other: Instruction): boolean;
-  }
-  export declare class MyopiaSymbol extends MultiEntrySymbol {
+  export declare class MyopiaSymbol
+    extends Symbol$1
+    implements SymbolMergeHandler
+  {
     readonly diagonals: boolean;
     readonly directions: OrientationToggle;
     get title(): 'Framed Myopia Arrow' | 'Myopia Arrow';
@@ -2860,6 +2875,7 @@ declare global {
     get configs(): readonly AnyConfig[] | null;
     createExampleGrid(): GridData;
     validateSymbol(grid: GridData): State;
+    descriptionEquals(other: Symbol$1): boolean;
     copyWith({
       x,
       y,
@@ -3030,7 +3046,10 @@ declare global {
     isInstructionSupported(instructionId: string): boolean;
     isGridSupported(grid: GridData): boolean;
   }
-  export declare abstract class CustomSymbol extends MultiEntrySymbol {
+  export declare abstract class CustomSymbol
+    extends Symbol$1
+    implements SymbolMergeHandler
+  {
     readonly description: string;
     readonly grid: GridData;
     /**
@@ -3046,6 +3065,7 @@ declare global {
     createExampleGrid(): GridData;
     validateSymbol(_grid: GridData): State;
     get validateWithSolution(): boolean;
+    descriptionEquals(other: Symbol$1): boolean;
     withDescription(description: string): this;
     withGrid(grid: GridData): this;
   }

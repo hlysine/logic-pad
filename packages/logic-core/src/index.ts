@@ -14,6 +14,7 @@ import { handlesGridChange } from './data/events/onGridChange.js';
 import { handlesGridResize } from './data/events/onGridResize.js';
 import { handlesSetGrid, invokeSetGrid } from './data/events/onSetGrid.js';
 import { handlesSymbolDisplay } from './data/events/onSymbolDisplay.js';
+import { handlesSymbolMerge } from './data/events/onSymbolMerge.js';
 import { handlesSymbolValidation } from './data/events/onSymbolValidation.js';
 import GridData, { NEIGHBOR_OFFSETS } from './data/grid.js';
 import GridConnections from './data/gridConnections.js';
@@ -113,7 +114,6 @@ import { allSymbols } from './data/symbols/index.js';
 import LetterSymbol from './data/symbols/letterSymbol.js';
 import LotusSymbol from './data/symbols/lotusSymbol.js';
 import MinesweeperSymbol from './data/symbols/minesweeperSymbol.js';
-import MultiEntrySymbol from './data/symbols/multiEntrySymbol.js';
 import MyopiaSymbol from './data/symbols/myopiaSymbol.js';
 import NumberSymbol from './data/symbols/numberSymbol.js';
 import Symbol from './data/symbols/symbol.js';
@@ -147,6 +147,7 @@ export {
   handlesSetGrid,
   invokeSetGrid,
   handlesSymbolDisplay,
+  handlesSymbolMerge,
   handlesSymbolValidation,
   GridData,
   NEIGHBOR_OFFSETS,
@@ -283,7 +284,6 @@ export {
   LetterSymbol,
   LotusSymbol,
   MinesweeperSymbol,
-  MultiEntrySymbol,
   MyopiaSymbol,
   NumberSymbol,
   Symbol,

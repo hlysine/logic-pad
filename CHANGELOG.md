@@ -1,3 +1,8 @@
+# 7/11/2025
+
+- Added Dead Ends variant to Focus Symbol
+  - Dead Ends are Focus Numbers of 1 that can stack with other symbols
+
 # 3/11/2025
 
 - Added Connect Zones rule to connect colored cells within each zone separately

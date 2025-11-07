@@ -1,3 +1,8 @@
+# 0.23.0
+
+- Refactored MultiEntrySymbol into an interface
+- Added Dead Ends as a variant of Focus Symbol
+
 # 0.22.1
 
 - Fixed typo and example grid in Connect Zones rule

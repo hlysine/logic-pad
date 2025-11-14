@@ -2,7 +2,7 @@ import { memo, useMemo, useState } from 'react';
 import ToolboxItem from '../ToolboxItem';
 import { useGrid } from '../../contexts/GridContext';
 import { TbClipboard } from 'react-icons/tb';
-import { Position } from '@logic-pad/core/data/primitives';
+import { Color, Position } from '@logic-pad/core/data/primitives';
 import { cn } from '../../uiHelper';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
@@ -11,6 +11,7 @@ import GridData from '@logic-pad/core/data/grid';
 import { FaPaste } from 'react-icons/fa';
 import debounce from 'lodash/debounce';
 import { useHotkeys } from 'react-hotkeys-hook';
+import mouseContext from '../../grid/MouseContext';
 
 export function ClipboardToolOverlay() {
   const { grid, setGrid } = useGrid();
@@ -88,6 +89,11 @@ export function ClipboardToolOverlay() {
     pasteGrid(firstPosition ?? currentPosition);
   });
 
+  useHotkeys('escape', () => {
+    setFirstPosition(null);
+    setCurrentPosition(null);
+  });
+
   return (
     <>
       <div
@@ -95,7 +101,16 @@ export function ClipboardToolOverlay() {
         onPointerEnter={async () => {
           await parseClipboard();
         }}
-        onPointerUp={async () => {
+        onPointerDown={async e => {
+          if (
+            mouseContext.getColorForButtons(
+              e.pointerType === 'mouse' ? e.buttons : 1
+            ) === Color.Light
+          ) {
+            setFirstPosition(null);
+            setCurrentPosition(null);
+            return;
+          }
           if (!currentPosition) return;
           if (!firstPosition) {
             setFirstPosition(currentPosition);
@@ -131,7 +146,7 @@ export function ClipboardToolOverlay() {
               left: `${firstPosition.x + 0.1}em`,
               top: `${firstPosition.y + 0.1}em`,
             }}
-            onPointerUp={e => {
+            onPointerDown={e => {
               e.stopPropagation();
               pasteGrid(firstPosition);
             }}

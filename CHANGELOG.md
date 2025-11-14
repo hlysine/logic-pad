@@ -1,3 +1,7 @@
+# 14/11/2025
+
+- Added the clipboard tool for copying and pasting grid areas and rules across pages
+
 # 7/11/2025
 
 - Added Dead Ends variant to Focus Symbol

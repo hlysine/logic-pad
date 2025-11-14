@@ -1,3 +1,7 @@
+# 0.23.1
+
+- Changed `GridData.pasteTiles` behavior to clear the affected area before pasting
+
 # 0.23.0
 
 - Refactored MultiEntrySymbol into an interface

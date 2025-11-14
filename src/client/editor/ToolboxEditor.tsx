@@ -29,7 +29,7 @@ export default memo(function ToolboxEditor() {
           <span
             className={cn(
               'inline-block text-sm h-0 transition-[height]',
-              description && 'h-[2.5em]'
+              description && 'h-[3.5em]'
             )}
           >
             {description}

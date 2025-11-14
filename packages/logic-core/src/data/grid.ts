@@ -1187,35 +1187,114 @@ export default class GridData {
         newTiles[origin.y + y][origin.x + x] = tile;
     });
     const connections = new GridConnections([
-      ...this.connections.edges,
-      ...grid.connections.edges.map(edge => ({
-        x1: edge.x1 + origin.x,
-        y1: edge.y1 + origin.y,
-        x2: edge.x2 + origin.x,
-        y2: edge.y2 + origin.y,
-      })),
+      ...this.connections.edges.filter(
+        edge =>
+          edge.x1 < origin.x ||
+          edge.y1 < origin.y ||
+          edge.x2 < origin.x ||
+          edge.y2 < origin.y ||
+          edge.x1 >= origin.x + grid.width ||
+          edge.y1 >= origin.y + grid.height ||
+          edge.x2 >= origin.x + grid.width ||
+          edge.y2 >= origin.y + grid.height
+      ),
+      ...grid.connections.edges
+        .map(edge => ({
+          x1: edge.x1 + origin.x,
+          y1: edge.y1 + origin.y,
+          x2: edge.x2 + origin.x,
+          y2: edge.y2 + origin.y,
+        }))
+        .filter(
+          edge =>
+            edge.x1 >= 0 &&
+            edge.y1 >= 0 &&
+            edge.x2 >= 0 &&
+            edge.y2 >= 0 &&
+            edge.x1 < this.width &&
+            edge.y1 < this.height &&
+            edge.x2 < this.width &&
+            edge.y2 < this.height
+        ),
     ]);
     const zones = new GridZones([
-      ...this.zones.edges,
-      ...grid.zones.edges.map(edge => ({
-        x1: edge.x1 + origin.x,
-        y1: edge.y1 + origin.y,
-        x2: edge.x2 + origin.x,
-        y2: edge.y2 + origin.y,
-      })),
+      ...this.zones.edges.filter(
+        edge =>
+          edge.x1 < origin.x ||
+          edge.y1 < origin.y ||
+          edge.x2 < origin.x ||
+          edge.y2 < origin.y ||
+          edge.x1 >= origin.x + grid.width ||
+          edge.y1 >= origin.y + grid.height ||
+          edge.x2 >= origin.x + grid.width ||
+          edge.y2 >= origin.y + grid.height
+      ),
+      ...grid.zones.edges
+        .map(edge => ({
+          x1: edge.x1 + origin.x,
+          y1: edge.y1 + origin.y,
+          x2: edge.x2 + origin.x,
+          y2: edge.y2 + origin.y,
+        }))
+        .filter(
+          edge =>
+            edge.x1 >= 0 &&
+            edge.y1 >= 0 &&
+            edge.x2 >= 0 &&
+            edge.y2 >= 0 &&
+            edge.x1 < this.width &&
+            edge.y1 < this.height &&
+            edge.x2 < this.width &&
+            edge.y2 < this.height
+        ),
     ]);
     const symbols = new Map(this.symbols);
     for (const [id, sourceList] of grid.symbols) {
-      const symbolList = sourceList.map(symbol =>
-        symbol.copyWith({ x: symbol.x + origin.x, y: symbol.y + origin.y })
-      );
+      const symbolList = sourceList
+        .filter(
+          symbol =>
+            symbol.x + origin.x >= 0 &&
+            symbol.y + origin.y >= 0 &&
+            symbol.x + origin.x < this.width &&
+            symbol.y + origin.y < this.height
+        )
+        .map(symbol =>
+          symbol.copyWith({ x: symbol.x + origin.x, y: symbol.y + origin.y })
+        );
       if (symbols.has(id)) {
-        symbols.set(id, [...symbols.get(id)!, ...symbolList]);
-      } else {
+        const newList = [
+          ...symbols
+            .get(id)!
+            .filter(
+              symbol =>
+                symbol.x < origin.x ||
+                symbol.y < origin.y ||
+                symbol.x >= origin.x + grid.width ||
+                symbol.y >= origin.y + grid.height
+            ),
+          ...symbolList,
+        ];
+        if (newList.length > 0) symbols.set(id, newList);
+        else symbols.delete(id);
+      } else if (symbolList.length > 0) {
         symbols.set(id, symbolList);
       }
     }
-    const rules = [...this.rules, ...grid.rules];
+    for (const id of [...symbols.keys()]) {
+      if (grid.symbols.has(id)) continue;
+      const newList = symbols
+        .get(id)!
+        .filter(
+          symbol =>
+            symbol.x < origin.x ||
+            symbol.y < origin.y ||
+            symbol.x >= origin.x + grid.width ||
+            symbol.y >= origin.y + grid.height
+        );
+      if (newList.length > 0) symbols.set(id, newList);
+      else symbols.delete(id);
+    }
+    const rules = GridData.deduplicateRules([...this.rules, ...grid.rules]);
     return this.copyWith({
       tiles: newTiles,
       connections,

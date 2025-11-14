@@ -20,7 +20,7 @@ export const Route = createFileRoute('/_layout/create/$puzzleId')({
     } catch (error) {
       toast.error((error as Error).message);
       throw redirect({
-        to: '/solve',
+        to: '/solve/$puzzleId',
         params: {
           puzzleId: params.puzzleId,
         },

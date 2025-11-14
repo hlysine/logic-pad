@@ -1,6 +1,7 @@
 # 14/11/2025
 
 - Added the clipboard tool for copying and pasting grid areas and rules across pages
+- Invalid create links now redirect to the solve page
 
 # 7/11/2025
 

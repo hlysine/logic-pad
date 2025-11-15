@@ -33,7 +33,7 @@ const UserMention = memo(function UserMention({
       target="_blank"
       rel="noreferrer"
       className={cn(
-        'bg-accent/10 border-b border-accent rounded-lg !no-underline',
+        'bg-accent/10 border-b border-accent rounded-lg no-underline!',
         isMe
           ? 'bg-accent text-accent-content'
           : 'bg-accent/10 text-neutral-content'
@@ -75,7 +75,7 @@ const MarkdownAsync = lazy(async () => {
         <MarkdownAsync
           className={cn(
             'spoiler',
-            revealSpoilers && 'spoiler-reveal !cursor-default'
+            revealSpoilers && 'spoiler-reveal cursor-default!'
           )}
           inline={true}
           onClickCapture={e => {

@@ -185,7 +185,7 @@ export default memo(function PuzzleCard({
             className={cn(
               'text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis',
               expandable &&
-                '[.wrapper:hover_&]:whitespace-normal [.wrapper:hover_&]:break-words'
+                '[.wrapper:hover_&]:whitespace-normal [.wrapper:hover_&]:wrap-break-word'
             )}
           >
             {puzzle.inSeries && (

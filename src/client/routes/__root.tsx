@@ -16,11 +16,11 @@ export const Route = createRootRoute({
               className: '!bg-base-100 !text-base-content',
               success: {
                 className:
-                  '!bg-base-100 !text-base-content !border !border-success/50',
+                  '!bg-base-100 !text-base-content border! !border-success/50',
               },
               error: {
                 className:
-                  '!bg-base-100 !text-base-content !border !border-error/50',
+                  '!bg-base-100 !text-base-content border! !border-error/50',
               },
             }}
           />

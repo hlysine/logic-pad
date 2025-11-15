@@ -108,7 +108,7 @@ const NoteOverlay = memo(function NoteOverlay() {
                       };
                     }}
                     key={`${line.column}-${idx}`}
-                    className="absolute h-[1em] w-[1em] bg-gradient-to-r from-secondary from-5% via-20% via-secondary/20 to-secondary/0 edit-target"
+                    className="absolute h-[1em] w-[1em] bg-linear-to-r from-secondary from-5% via-20% via-secondary/20 to-secondary/0 edit-target"
                     style={{ left: `${line.column}em`, top: `${idx}em` }}
                   >
                     {row.note !== null && (

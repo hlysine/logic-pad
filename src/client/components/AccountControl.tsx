@@ -19,7 +19,7 @@ export default memo(function AccountControl() {
   if (versionMismatch) {
     return (
       <div
-        className="btn btn-square btn-accent ms-4 px-4 flex-shrink-0 w-fit"
+        className="btn btn-square btn-accent ms-4 px-4 shrink-0 w-fit"
         onClick={cleanReload}
       >
         <RiRefreshFill size={22} />
@@ -29,14 +29,14 @@ export default memo(function AccountControl() {
   }
   if (!isOnline) {
     return (
-      <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">
+      <div className="btn btn-square btn-disabled ms-4 px-4 shrink-0 w-fit">
         <IoCloudOffline />
         Offline
       </div>
     );
   }
   if (isPending) {
-    <button className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
+    <button className="btn btn-square ms-4 px-4 shrink-0 w-fit">
       <Loading className="w-8 h-8" />
     </button>;
   }
@@ -46,7 +46,7 @@ export default memo(function AccountControl() {
       // users should sign in via the online panel instead
       return (
         <>
-          <div className="btn btn-square btn-disabled ms-4 px-4 flex-shrink-0 w-fit">
+          <div className="btn btn-square btn-disabled ms-4 px-4 shrink-0 w-fit">
             <FaBan />
             Not signed in
           </div>
@@ -56,7 +56,7 @@ export default memo(function AccountControl() {
     return (
       <>
         <button
-          className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit"
+          className="btn btn-square ms-4 px-4 shrink-0 w-fit"
           onClick={async () => {
             await deferredRedirect.setAndNavigate(location, {
               to: '/auth',
@@ -70,7 +70,7 @@ export default memo(function AccountControl() {
   }
   return (
     <details ref={detailsRef} className="dropdown dropdown-end">
-      <summary className="btn btn-square ms-4 px-4 flex-shrink-0 w-fit">
+      <summary className="btn btn-square ms-4 px-4 shrink-0 w-fit">
         <Avatar userId={me.id} username={me.name} className="w-8 h-8" />
         <span>
           {me.name}

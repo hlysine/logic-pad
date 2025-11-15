@@ -53,7 +53,7 @@ const UserCollection = memo(function UserCollection({
           </span>
         )}
       </div>
-      <div className="text-xs break-words">{collection.description}</div>
+      <div className="text-xs wrap-break-word">{collection.description}</div>
       <div className="divider my-0" />
     </div>
   );

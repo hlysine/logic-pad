@@ -36,7 +36,7 @@ const CopyLink = memo(function CopyLink() {
         <summary className="btn btn-sm btn-ghost">
           <FaLink size={20} />
         </summary>
-        <ul className="menu dropdown-content bg-base-300 rounded-box z-50 mb-2 w-52 p-2 shadow">
+        <ul className="menu dropdown-content bg-base-300 rounded-box z-50 mb-2 w-52 p-2 shadow-sm">
           <li>
             <a
               onClick={async () => {

@@ -160,7 +160,7 @@ export default memo(function CommentEntry({
   return (
     <div className="flex flex-col gap-1 comment-entry">
       <div className="flex gap-2 items-center">
-        <UserCard user={comment.creator} className="!badge-sm !py-2" />
+        <UserCard user={comment.creator} className="!badge-sm py-2!" />
         <div className="text-sm opacity-80">
           {toRelativeDate(new Date(comment.createdAt))}
         </div>
@@ -187,7 +187,7 @@ export default memo(function CommentEntry({
               }}
             />
           ) : (
-            <Markdown className="flex-1 break-words">
+            <Markdown className="flex-1 wrap-break-word">
               {comment.content}
             </Markdown>
           )}
@@ -213,7 +213,7 @@ export default memo(function CommentEntry({
           </button>
         </div>
       ) : (
-        <Markdown className="break-words">{comment.content}</Markdown>
+        <Markdown className="wrap-break-word">{comment.content}</Markdown>
       )}
       <div className="divider m-0 opacity-50" />
     </div>

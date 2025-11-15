@@ -159,7 +159,7 @@ export default memo(function CommentSidebar({
         checked={open}
         readOnly
       />
-      <div className="drawer-side !overflow-x-visible !overflow-y-visible z-50 h-full w-full">
+      <div className="drawer-side overflow-x-visible! overflow-y-visible! z-50 h-full w-full">
         <label
           htmlFor={`comment-sidebar-${drawerId}`}
           aria-label="Close sidebar"
@@ -175,7 +175,7 @@ export default memo(function CommentSidebar({
               {commentList.isPending ? (
                 <Loading />
               ) : (
-                <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 flex flex-col-reverse scrollbar-stable [&>*]:shrink-0">
+                <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 flex flex-col-reverse scrollbar-stable *:shrink-0">
                   {commentList.data?.pages.flatMap(page =>
                     page.results.map(comment => (
                       <CommentEntry

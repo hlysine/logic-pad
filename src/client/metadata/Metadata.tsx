@@ -32,7 +32,7 @@ export default memo(function Metadata({
       </div>
       <h1
         className={cn(
-          'flex-shrink-0 break-words',
+          'shrink-0 wrap-break-word',
           responsive ? 'text-3xl lg:text-4xl' : 'text-4xl'
         )}
       >

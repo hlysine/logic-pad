@@ -29,7 +29,7 @@ const UserComment = memo(function UserComment({
         <span>Created {toRelativeDate(new Date(comment.createdAt))}</span>
         <span>Updated {toRelativeDate(new Date(comment.updatedAt))}</span>
       </div>
-      <Markdown className="break-words text-sm">{comment.content}</Markdown>
+      <Markdown className="wrap-break-word text-sm">{comment.content}</Markdown>
       <div className="divider my-0" />
     </div>
   );

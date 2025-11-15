@@ -49,7 +49,7 @@ export default memo(function SupporterMedal({
           supporter >= 3 && 'hover:shadow-xl'
         )}
       >
-        <div ref={glowRef} className="glow absolute w-[1px] h-[1px]"></div>
+        <div ref={glowRef} className="glow absolute w-px h-px"></div>
         <div className="absolute bg-neutral inset-[2px] flex-1 rounded-full opacity-90 overflow-hidden"></div>
         <div className="absolute inset-[2px] flex-1 rounded-full opacity-90 overflow-hidden bg-accent/10"></div>
         <div className="absolute inset-8">

@@ -34,7 +34,7 @@ export default memo(function EditableField({
         ref={inputRef}
         contentEditable={editable && editing}
         className={cn(
-          'border-2 p-1 rounded border-transparent border-dashed',
+          'border-2 p-1 rounded-sm border-transparent border-dashed',
           editable && editing && 'border-base-100 min-w-24'
         )}
       ></div>

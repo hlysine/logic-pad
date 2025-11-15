@@ -68,7 +68,7 @@ const UserPuzzle = memo(function UserPuzzle({
           </span>
         </div>
       )}
-      <div className="text-xs break-words">{puzzle.description}</div>
+      <div className="text-xs wrap-break-word">{puzzle.description}</div>
       <div className="divider my-0" />
     </div>
   );

@@ -184,7 +184,7 @@ const ImageGenerator = memo(function ImageGenerator() {
   return (
     <div
       tabIndex={0}
-      className="dropdown-content flex flex-col bg-base-100 rounded-box z-[1] w-[320px] p-4 shadow mt-4 mb-4"
+      className="dropdown-content flex flex-col bg-base-100 rounded-box z-1 w-[320px] p-4 shadow-sm mt-4 mb-4"
     >
       <div className="overflow-hidden h-0 w-0 scale-50">
         <PuzzleImage

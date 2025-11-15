@@ -26,7 +26,7 @@ const ColorRadio = memo(function ColorRadio({
       type="radio"
       name="radio-dark"
       className={cn(
-        'appearance-none w-8 h-8 rounded checked:shadow-glow-md checked:shadow-accent checked:border-2 checked:border-accent',
+        'appearance-none w-8 h-8 rounded-sm checked:shadow-glow-md checked:shadow-accent checked:border-2 checked:border-accent',
         {
           'bg-gray-500': color === Color.Gray,
           'bg-white': color === Color.Light,

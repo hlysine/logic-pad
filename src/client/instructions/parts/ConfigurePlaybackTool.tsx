@@ -81,7 +81,7 @@ const PlaybackOverlay = memo(function PlaybackOverlay() {
               className="absolute top-0 h-[calc(100%+0.7em)] w-[1em] border-l-[0.1em] border-secondary"
               style={{ left: `${line.column}em` }}
             >
-              <div className="absolute inset-0 bottom-[0.7em] bg-gradient-to-r from-secondary via-20% via-secondary/20 to-secondary/0"></div>
+              <div className="absolute inset-0 bottom-[0.7em] bg-linear-to-r from-secondary via-20% via-secondary/20 to-secondary/0"></div>
               {line.checkpoint && (
                 <div className="badge badge-secondary absolute bottom-[3.2em] text-[0.15em] h-[1.3em] rounded-l-none whitespace-nowrap pl-0">
                   <IoMdFlag size="1.3em" />

@@ -176,7 +176,7 @@ export const Route = createFileRoute('/')({
               </div>
             </section>
           </div>
-          <section className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center [&>*]:shrink-0">
+          <section className="mt-8 px-8 pb-8 shrink-0 xl:px-32 flex flex-col gap-8 max-w-[calc(320px*4+3rem)] box-content self-center *:shrink-0">
             {isOnline && <FrontPageLists />}
             {isOnline && me && <PersonalFrontPageLists />}
           </section>

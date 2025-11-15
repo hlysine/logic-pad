@@ -67,6 +67,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.17",
     "@tanstack/router-vite-plugin": "^1.131.2",
     "@types/bun": "^1.2.19",
     "@types/canvas-size": "^1.2.2",
@@ -79,9 +80,8 @@
     "@typescript-eslint/parser": "^8.44.0",
     "@vercel/node": "^5.3.23",
     "@vitejs/plugin-react": "^5.1.0",
-    "autoprefixer": "^10.4.18",
     "caniuse-lite": "^1.0.30001733",
-    "daisyui": "<5",
+    "daisyui": "^5.5.4",
     "eslint": "<9",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
@@ -97,7 +97,7 @@
     "postcss": "^8.4.35",
     "prettier": "^3.6.2",
     "react-scan": "^0.4.3",
-    "tailwindcss": "<4",
+    "tailwindcss": "^4.1.17",
     "typescript": "^5.9.2",
     "vite": "^7.1.1",
     "vite-bundle-visualizer": "^1.2.1",

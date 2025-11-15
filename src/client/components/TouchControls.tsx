@@ -35,7 +35,7 @@ export default memo(function TouchControls() {
         className="tooltip tooltip-left xl:tooltip-top flex tooltip-info h-10"
         data-tip="Toggle primary color"
       >
-        <label className="swap swap-flip text-2xl xl:text-lg h-fit xl:h-auto shadow-xl xl:shadow-sm">
+        <label className="swap swap-flip text-2xl xl:text-lg h-fit xl:h-auto shadow-xl xl:shadow-xs">
           <input type="checkbox" checked={inverted} onChange={onSwitch} />
           <div className="swap-on bg-white text-black text-center flex justify-center items-center p-2 px-4 rounded-box w-24 h-24 xl:w-auto xl:h-auto">
             W

@@ -178,7 +178,7 @@ export default memo(function SourceCodeEditor({
             onMount={handleEditorDidMount}
           />
         </div>
-        <div className="dropdown-content inline-block !relative !inset-0 shadow-xl bg-base-300 text-base-content rounded-box z-10 ml-4 p-4 w-[400px] h-full overflow-y-auto">
+        <div className="dropdown-content inline-block relative! inset-0! shadow-xl bg-base-300 text-base-content rounded-box z-10 ml-4 p-4 w-[400px] h-full overflow-y-auto">
           <div className="flex flex-col flex-nowrap gap-2">
             <h3 className="text-lg text-base-content">Quick reference</h3>
             {examples.map(

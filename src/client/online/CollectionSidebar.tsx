@@ -96,7 +96,7 @@ export default memo(function CollectionSidebar({
             )}
           </div>
         </label>
-        <div className="drawer-side !overflow-x-visible !overflow-y-visible z-50 h-full w-full">
+        <div className="drawer-side overflow-x-visible! overflow-y-visible! z-50 h-full w-full">
           <label
             htmlFor={`collection-sidebar-${drawerId}`}
             aria-label="close sidebar"
@@ -108,7 +108,7 @@ export default memo(function CollectionSidebar({
                 <Link
                   to="/collection/$collectionId"
                   params={{ collectionId }}
-                  className="btn btn-ghost flex flex-col flex-nowrap gap-2 items-start text-start [&>*]:shrink-0 h-fit w-full px-2 -mx-2"
+                  className="btn btn-ghost flex flex-col flex-nowrap gap-2 items-start text-start *:shrink-0 h-fit w-full px-2 -mx-2"
                 >
                   <div className="text-accent text-sm uppercase">
                     {puzzle.series && puzzle.series.id === collectionId
@@ -123,7 +123,7 @@ export default memo(function CollectionSidebar({
                 </div>
               </div>
               <div className="divider" />
-              <div className="flex flex-col items-center w-full overflow-y-auto flex-1 [&>*]:shrink-0">
+              <div className="flex flex-col items-center w-full overflow-y-auto flex-1 *:shrink-0">
                 {puzzleList.isFetchingPreviousPage ? (
                   <Loading className="h-4 m-4 shrink-0" />
                 ) : puzzleList.hasPreviousPage ? (

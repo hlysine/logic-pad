@@ -1,6 +1,32 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin 'daisyui';
+
+@theme {
+  --shadow-glow-md: 0px 0px 15px -3px rgba(0, 0, 0, 0.3);
+  --shadow-glow-xl: 0px 0px 43px -3px rgba(0, 0, 0, 0.3);
+  --shadow-glow-3xl: 0px 0px 60px -3px rgba(0, 0, 0, 0.3);
+
+  --font-serif:
+    Palatino Linotype, Palatino, Palatino LT STD, Book Antiqua, Georgia, serif;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
 
 :root {
   @apply font-serif;
@@ -36,7 +62,7 @@
     opacity: 0.5;
   }
 }
-.animate-translucent-pulse {
+@utility animate-translucent-pulse {
   animation: translucent-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
@@ -53,7 +79,7 @@
 }
 
 .tour-target::after {
-  @apply -inset-1 rounded-sm pointer-events-none z-10 border-2;
+  @apply -inset-1 rounded-xs pointer-events-none z-10 border-2 border-accent animate-translucent-pulse bg-base-content/20;
   position: absolute;
   opacity: 0.5;
   content: '';

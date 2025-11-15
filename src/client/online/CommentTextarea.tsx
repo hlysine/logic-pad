@@ -59,7 +59,7 @@ export default memo(function CommentTextarea({
   );
 
   return (
-    <div className="flex-grow bg-base-100 focus-within:outline focus-within:outline-1 rounded-lg p-2">
+    <div className="grow bg-base-100 focus-within:outline-solid focus-within:outline-1 rounded-lg p-2">
       <MentionsInput
         value={content}
         inputRef={inputRef}
@@ -68,7 +68,7 @@ export default memo(function CommentTextarea({
         maxLength={5000}
         allowSpaceInQuery={true}
         forceSuggestionsAboveCursor={true}
-        className="bg-base-100 text-base-content h-24 focus:[&_textarea]:outline-none"
+        className="bg-base-100 text-base-content h-24 [&_textarea]:focus:outline-hidden"
         customSuggestionsContainer={children => (
           <div className="bg-base-300 text-base-content px-4">{children}</div>
         )}

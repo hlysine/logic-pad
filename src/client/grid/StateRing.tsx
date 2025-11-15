@@ -84,8 +84,8 @@ export default memo(function StateRing({
         'w-fit h-fit border-4 p-4 rounded-xl transition-all delay-150 duration-150 ease-out logic-animated',
         ringBorder(state.final),
         State.isSatisfied(state.final)
-          ? 'first:*:opacity-100 first:*:duration-[1.5s]'
-          : 'first:*:opacity-0 first:*:duration-[0.5s]',
+          ? '*:first:opacity-100 *:first:duration-[1.5s]'
+          : '*:first:opacity-0 *:first:duration-500',
         className
       )}
       {...rest}
@@ -93,7 +93,7 @@ export default memo(function StateRing({
       <div
         className={
           animated && !prefersReducedMotion && isTopLevel
-            ? 'block fixed inset-0 transition-all ease-out bg-radient-circle-c from-transparent to-success/5 z-[1000] pointer-events-none'
+            ? 'block fixed inset-0 transition-all ease-out bg-radient-circle-c from-transparent to-success/5 z-1000 pointer-events-none'
             : 'hidden'
         }
       ></div>

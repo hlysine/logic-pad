@@ -52,14 +52,14 @@ export default memo(function RatedDifficulty({
       />
       <div
         className={cn(
-          'collapse-title font-medium flex gap-2 items-center p-0 min-h-0 after:!top-3',
-          !collapsible && 'after:!hidden'
+          'collapse-title font-medium flex gap-2 items-center p-0 min-h-0 after:top-3!',
+          !collapsible && 'after:hidden!'
         )}
       >
         Rated difficulty:{' '}
         <Difficulty className="flex items-center" value={median} />
       </div>
-      <div className="collapse-content !p-0">
+      <div className="collapse-content p-0!">
         {median === 0 ? (
           <div className="opacity-50 my-4">No ratings yet</div>
         ) : (

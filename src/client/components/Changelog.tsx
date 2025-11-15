@@ -49,7 +49,7 @@ const ChangelogButton = lazy(async () => {
               <div className="flex-1"></div>
               <span className="opacity-80">View changelog &gt;&gt;</span>
             </div>
-            <div className="max-h-[5.5rem] text-ellipsis overflow-hidden">
+            <div className="max-h-22 text-ellipsis overflow-hidden">
               <Markdown>{changelogSections[0].content}</Markdown>
             </div>
           </button>

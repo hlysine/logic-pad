@@ -205,7 +205,7 @@ export default memo(function InstructionList({
     >
       <div
         className={cn(
-          'flex flex-col items-end justify-start self-stretch py-[1px]',
+          'flex flex-col items-end justify-start self-stretch py-px',
           responsive ? 'w-[320px] sm:w-[640px] lg:w-[320px]' : 'w-[320px]'
         )}
       >

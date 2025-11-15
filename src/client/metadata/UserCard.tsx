@@ -61,7 +61,7 @@ export default memo(function UserCard({
       <Link
         to={user ? '/profile/' + user.id : undefined}
         className={cn(
-          'badge badge-secondary rounded-lg flex-shrink-0 peer',
+          'badge badge-secondary rounded-lg shrink-0 peer',
           responsive ? 'lg:badge-lg' : 'badge-lg',
           className
         )}

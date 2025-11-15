@@ -44,10 +44,10 @@ export const Route = createLazyFileRoute('/_layout/support')({
 
     return (
       <ResponsiveLayout
-        className="gap-20 items-center !max-w-[900px]"
+        className="gap-20 items-center max-w-[900px]!"
         footer={<Footer />}
       >
-        <div className="flex self-stretch items-center flex-wrap justify-center mt-12 gap-8 [&>*]:shrink-0">
+        <div className="flex self-stretch items-center flex-wrap justify-center mt-12 gap-8 *:shrink-0">
           <div className="flex flex-col gap-8 flex-1 min-w-96">
             <div className="text-4xl text-accent">Supporting Logic Pad</div>
             <div className="text-lg">
@@ -87,7 +87,7 @@ export const Route = createLazyFileRoute('/_layout/support')({
         )}
 
         {/* Quote Section */}
-        <div className="p-8 bg-base-100 text-base-content rounded-lg shadow">
+        <div className="p-8 bg-base-100 text-base-content rounded-lg shadow-sm">
           <blockquote className="text-xl italic text-center leading-relaxed">
             Logic Pad is a project born out of love for the game{' '}
             <a

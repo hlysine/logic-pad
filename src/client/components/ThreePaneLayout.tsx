@@ -44,7 +44,7 @@ const CollapsibleThreePaneLayout = memo(function CollapsibleThreePaneLayout({
           </div>
         </div>
       </div>
-      <div className="drawer-side !overflow-x-visible !overflow-y-visible z-20 h-full w-full">
+      <div className="drawer-side overflow-x-visible! overflow-y-visible! z-20 h-full w-full">
         <label
           htmlFor={`three-pane-${id}`}
           aria-label="close sidebar"

@@ -24,7 +24,7 @@ export default memo(function MetadataEditor() {
   }, [isOnline, id, me, metadata, setMetadata, setLastSaved, lastSaved]);
 
   return (
-    <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col grow h-full gap-2 shadow tour-metadata-editor">
+    <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col grow h-full gap-2 shadow-sm tour-metadata-editor">
       <label className="form-control">
         <div className="label">
           <span className="label-text">Title</span>

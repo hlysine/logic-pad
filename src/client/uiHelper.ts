@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import toast from 'react-hot-toast';
 import { extendTailwindMerge } from 'tailwind-merge';
 
 const twMerge = extendTailwindMerge({
@@ -104,3 +105,31 @@ document.addEventListener('pointerleave', updateMousePosition);
 document.addEventListener('pointerenter', updateMousePosition);
 document.addEventListener('pointerover', updateMousePosition);
 document.addEventListener('pointerout', updateMousePosition);
+
+export const safeClipboard = {
+  writeText: async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      toast.error(
+        'Failed to write to clipboard. Please allow clipboard access.'
+      );
+    }
+  },
+  write: async (items: ClipboardItem[]) => {
+    try {
+      await navigator.clipboard.write(items);
+    } catch {
+      toast.error(
+        'Failed to write to clipboard. Please allow clipboard access.'
+      );
+    }
+  },
+  readText: async () => {
+    try {
+      return await navigator.clipboard.readText();
+    } catch {
+      return '';
+    }
+  },
+};

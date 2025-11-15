@@ -4,7 +4,7 @@ import { useOnlinePuzzle } from '../contexts/OnlinePuzzleContext';
 import { FaCloudUploadAlt, FaLink, FaSave } from 'react-icons/fa';
 import { memo, useEffect, useRef, useState } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
-import { cn } from '../uiHelper.ts';
+import { cn, safeClipboard } from '../uiHelper.ts';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers.ts';
 import { useMutation } from '@tanstack/react-query';
@@ -50,9 +50,9 @@ const CopyLink = memo(function CopyLink() {
                   url.searchParams.set('loader', 'visible');
                   url.searchParams.set('d', data);
                   url.pathname = '/create';
-                  await navigator.clipboard.writeText(url.href);
+                  await safeClipboard.writeText(url.href);
                 }
-                await navigator.clipboard.writeText(url.href);
+                await safeClipboard.writeText(url.href);
                 setTooltip('Copied!');
                 detailsRef.current!.open = false;
               }}
@@ -73,7 +73,7 @@ const CopyLink = memo(function CopyLink() {
                   url.searchParams.set('d', data);
                   url.pathname = '/solve';
                 }
-                await navigator.clipboard.writeText(url.href);
+                await safeClipboard.writeText(url.href);
                 setTooltip('Copied!');
                 detailsRef.current!.open = false;
               }}

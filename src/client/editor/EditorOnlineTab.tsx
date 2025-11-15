@@ -15,7 +15,7 @@ import RatedDifficulty from '../metadata/RatedDifficulty';
 import { api, ApiError, queryClient } from '../online/api';
 import { useNavigate } from '@tanstack/react-router';
 import toast from 'react-hot-toast';
-import { pluralize, toRelativeDate } from '../uiHelper';
+import { pluralize, safeClipboard, toRelativeDate } from '../uiHelper';
 import CommentSidebar from '../online/CommentSidebar';
 
 // million-ignore
@@ -347,7 +347,7 @@ export default memo(function EditorOnlineTab() {
         onClick={async () => {
           const url = new URL(window.location.href);
           url.pathname = '/solve/' + id;
-          await navigator.clipboard.writeText(url.href);
+          await safeClipboard.writeText(url.href);
           toast.success('Link copied!');
         }}
       >

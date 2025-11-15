@@ -1,7 +1,7 @@
 import { memo, Ref, useEffect, useMemo, useRef, useState } from 'react';
 import MainGrid from '../../grid/MainGrid';
 import InstructionList from '../../instructions/InstructionList';
-import { cn } from '../../uiHelper';
+import { cn, safeClipboard } from '../../uiHelper';
 import Metadata from '../../metadata/Metadata';
 import Loading from '../Loading';
 import html2canvas from 'html2canvas-pro';
@@ -43,7 +43,7 @@ const CopyImageButton = memo(function CopyImageButton({
           canvas.toBlob(async blob => {
             if (!blob) return;
             const item = new ClipboardItem({ 'image/png': blob });
-            await navigator.clipboard.write([item]);
+            await safeClipboard.write([item]);
             setTooltip('Copied!');
           });
         }}

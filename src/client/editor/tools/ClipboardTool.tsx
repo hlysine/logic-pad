@@ -10,7 +10,7 @@ import ToolboxItem from '../ToolboxItem';
 import { useGrid } from '../../contexts/GridContext';
 import { TbClipboard } from 'react-icons/tb';
 import { Color, Position } from '@logic-pad/core/data/primitives';
-import { cn } from '../../uiHelper';
+import { cn, safeClipboard } from '../../uiHelper';
 import { Serializer } from '@logic-pad/core/data/serializer/allSerializers';
 import { Compressor } from '@logic-pad/core/data/serializer/compressor/allCompressors';
 import toast from 'react-hot-toast';
@@ -121,14 +121,12 @@ export function ClipboardToolOverlay() {
   const parseClipboard = useMemo(
     () =>
       debounce(async () => {
-        const clipboardText = await navigator.clipboard.readText();
+        const clipboardText = await safeClipboard.readText();
         try {
           const decompressed = await Compressor.decompress(clipboardText);
           const gridData = Serializer.parseGrid(decompressed);
           setClipboardData(gridData);
-        } catch {
-          setClipboardData(null);
-        }
+        } catch {}
       }, 500),
     []
   );
@@ -176,7 +174,7 @@ export function ClipboardToolOverlay() {
         const data = await Compressor.compress(
           Serializer.stringifyGrid(newGrid)
         );
-        await navigator.clipboard.writeText(data);
+        await safeClipboard.writeText(data);
         toast.success(`Copied ${width * height} cells to clipboard`);
         copyOverlayRef.current?.setRect({ x: x1, y: y1, width, height });
         setFirstPosition(null);

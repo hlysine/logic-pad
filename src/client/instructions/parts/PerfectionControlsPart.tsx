@@ -12,6 +12,7 @@ import { useSolvePath } from '../../contexts/SolvePathContext';
 import { useDelta } from 'react-delta-hooks';
 import { RiErrorWarningFill } from 'react-icons/ri';
 import { useEmbed } from '../../contexts/EmbedContext';
+import { safeClipboard } from '../../uiHelper';
 
 export interface PerfectionControlsPartProps {
   instruction: PerfectionRule;
@@ -140,7 +141,7 @@ export default memo(function PerfectionControlsPart({
                   const output = solvePath
                     .map(({ x, y }) => `${x}:${y}`)
                     .join(', ');
-                  await navigator.clipboard.writeText(output);
+                  await safeClipboard.writeText(output);
                   setTooltip('Copied!');
                 }}
               >

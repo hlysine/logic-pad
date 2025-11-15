@@ -448,7 +448,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
                   <FaExchangeAlt size={16} />
                 </button>
               )}
-              <div className="form-control mx-2">
+              <fieldset className="fieldset mx-4">
                 <label className="label cursor-pointer flex gap-2">
                   <span className="label-text">Public collection</span>
                   <input
@@ -467,7 +467,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
                     }}
                   />
                 </label>
-              </div>
+              </fieldset>
               {collectionBrief.autoPopulate === null && (
                 <button
                   className="tooltip tooltip-error tooltip-left btn btn-error rounded-none"

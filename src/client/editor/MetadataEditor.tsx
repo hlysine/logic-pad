@@ -27,7 +27,7 @@ export default memo(function MetadataEditor() {
     <div className="bg-base-100 text-base-content rounded-2xl p-4 flex flex-col grow h-full gap-2 shadow-sm tour-metadata-editor">
       <fieldset className="fieldset">
         <div className="label justify-between">
-          <span className="text-base-content text-base">Title</span>
+          <span className="label-text">Title</span>
           <span className="text-base-content text-sm opacity-70 self-end">
             {metadata.title.length}/100
           </span>
@@ -57,14 +57,14 @@ export default memo(function MetadataEditor() {
       {isOnline && (!!id || !!me) ? (
         <fieldset className="fieldset">
           <div className="label">
-            <span className="text-base-content text-base">Author</span>
+            <span className="label-text">Author</span>
           </div>
           <UserCard user={puzzle?.creator ?? me} />
         </fieldset>
       ) : (
         <fieldset className="fieldset">
           <div className="label">
-            <span className="text-base-content text-base">Author</span>
+            <span className="label-text">Author</span>
           </div>
           <input
             type="text"
@@ -81,7 +81,7 @@ export default memo(function MetadataEditor() {
       )}
       <fieldset className="fieldset">
         <div className="label">
-          <span className="text-base-content text-base">Design difficulty</span>
+          <span className="label-text">Design difficulty</span>
         </div>
         <Difficulty
           value={metadata.difficulty}
@@ -90,7 +90,7 @@ export default memo(function MetadataEditor() {
       </fieldset>
       <fieldset className="fieldset flex-1 flex flex-col">
         <div className="label justify-between">
-          <span className="text-base-content text-base">Description</span>
+          <span className="label-text">Description</span>
           <span className="text-base-content text-sm opacity-70 self-end">
             {metadata.description.length}/500
           </span>

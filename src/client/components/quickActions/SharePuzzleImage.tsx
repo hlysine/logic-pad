@@ -196,9 +196,9 @@ const ImageGenerator = memo(function ImageGenerator() {
       </div>
       <div className="flex flex-col gap-4">
         {image}
-        <div className="form-control">
+        <fieldset className="fieldset">
           <label className="label w-full justify-between cursor-pointer">
-            <span>Reset grid</span>
+            <span className="label-text">Reset grid</span>
             <input
               type="checkbox"
               className="toggle"
@@ -206,10 +206,10 @@ const ImageGenerator = memo(function ImageGenerator() {
               onChange={e => setResetGrid(e.target.checked)}
             />
           </label>
-        </div>
-        <div className="form-control">
+        </fieldset>
+        <fieldset className="fieldset">
           <label className="label w-full justify-between cursor-pointer">
-            <span>Reset scale</span>
+            <span className="label-text">Reset scale</span>
             <input
               type="checkbox"
               className="toggle"
@@ -217,10 +217,10 @@ const ImageGenerator = memo(function ImageGenerator() {
               onChange={e => setResetScale(e.target.checked)}
             />
           </label>
-        </div>
-        <div className="form-control">
+        </fieldset>
+        <fieldset className="fieldset">
           <label className="label w-full justify-between cursor-pointer">
-            <span>Grid only</span>
+            <span className="label-text">Grid only</span>
             <input
               type="checkbox"
               className="toggle"
@@ -228,7 +228,7 @@ const ImageGenerator = memo(function ImageGenerator() {
               onChange={e => setGridOnly(e.target.checked)}
             />
           </label>
-        </div>
+        </fieldset>
         <CopyImageButton canvas={canvas} />
       </div>
     </div>

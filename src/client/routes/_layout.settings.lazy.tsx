@@ -74,8 +74,8 @@ const ProfileSettings = memo(function ProfileSettings() {
         </>
       }
     >
-      <label className="form-control w-full shrink-0">
-        <div className="label">
+      <fieldset className="fieldset w-full shrink-0">
+        <div className="label w-full justify-between items-center">
           <span className="label-text text-neutral-content text-lg">
             Username
           </span>
@@ -91,9 +91,9 @@ const ProfileSettings = memo(function ProfileSettings() {
           value={username}
           onChange={e => setUsername(e.target.value)}
         />
-      </label>
-      <label className="form-control w-full shrink-0">
-        <div className="label">
+      </fieldset>
+      <fieldset className="fieldset w-full shrink-0">
+        <div className="label w-full justify-between items-center">
           <span className="label-text text-neutral-content text-lg">
             Description
           </span>
@@ -108,7 +108,7 @@ const ProfileSettings = memo(function ProfileSettings() {
           value={description}
           onChange={e => setDescription(e.target.value)}
         />
-      </label>
+      </fieldset>
       {updateMe.isPending ? (
         <Loading className="self-end w-fit" />
       ) : (

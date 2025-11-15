@@ -10,9 +10,9 @@ export default memo(function ExitConfirmationToggle() {
       className="tooltip tooltip-info tooltip-bottom"
       data-tip="Whether Logic Pad should ask for confirmation before leaving the page"
     >
-      <div className="form-control">
+      <fieldset className="fieldset">
         <label className="label w-full justify-between cursor-pointer">
-          <span>Enable exit confirmations</span>
+          <span className="label-text">Enable exit confirmations</span>
           <input
             type="checkbox"
             className="toggle"
@@ -20,7 +20,7 @@ export default memo(function ExitConfirmationToggle() {
             onChange={e => setEnableExitConfirmation(e.currentTarget.checked)}
           />
         </label>
-      </div>
+      </fieldset>
     </div>
   );
 });

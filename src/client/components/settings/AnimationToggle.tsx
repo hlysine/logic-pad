@@ -16,9 +16,9 @@ export default memo(function AnimationToggle() {
           : 'Toggle fancy animations'
       }
     >
-      <div className="form-control">
+      <fieldset className="fieldset">
         <label className="label w-full justify-between cursor-pointer">
-          <span>Enable fancy animations</span>
+          <span className="label-text">Enable fancy animations</span>
           <input
             type="checkbox"
             className="toggle"
@@ -27,7 +27,7 @@ export default memo(function AnimationToggle() {
             onChange={e => setEnableFancyAnimations(e.currentTarget.checked)}
           />
         </label>
-      </div>
+      </fieldset>
     </div>
   );
 });

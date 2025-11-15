@@ -8,9 +8,9 @@ export default memo(function KeyboardLayoutDropdown() {
       className="tooltip tooltip-info tooltip-bottom"
       data-tip="Select your keyboard layout for hotkeys"
     >
-      <div className="form-control">
+      <fieldset className="fieldset">
         <label className="label w-full justify-between cursor-pointer">
-          <span>Keyboard Layout</span>
+          <span className="label-text">Keyboard Layout</span>
           <select
             className="select select-md w-fit select-bordered"
             value={keyboardLayout}
@@ -23,7 +23,7 @@ export default memo(function KeyboardLayoutDropdown() {
             <option value="colemak">Colemak</option>
           </select>
         </label>
-      </div>
+      </fieldset>
     </div>
   );
 });

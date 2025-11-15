@@ -121,9 +121,11 @@ export default memo(function PerfectionControlsPart({
       )}
       <div className="grow-0 shrink-0 bg-primary/10 flex flex-col items-stretch gap-1">
         <div className="flex flex-col gap-4 justify-around mx-4 my-2 items-stretch">
-          <div className="form-control">
-            <label className="label cursor-pointer">
-              <span className="label-text">Visualize solve path</span>
+          <fieldset className="fieldset flex flex-col items-center">
+            <label className="label w-full justify-between cursor-pointer">
+              <span className="text-neutral-content text-base">
+                Visualize solve path
+              </span>
               <input
                 type="checkbox"
                 className="toggle"
@@ -148,7 +150,7 @@ export default memo(function PerfectionControlsPart({
                 Copy solve path
               </button>
             </div>
-          </div>
+          </fieldset>
         </div>
         <progress
           className="progress progress-primary"

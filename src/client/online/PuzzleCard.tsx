@@ -201,7 +201,7 @@ export default memo(function PuzzleCard({
             <span>
               {puzzle.width}&times;{puzzle.height}
             </span>
-            <Difficulty value={puzzle.designDifficulty} size="sm" />
+            <Difficulty value={puzzle.designDifficulty} size="xs" />
           </div>
           {puzzle.status === ResourceStatus.Public ? (
             <div className="flex gap-4 text-sm opacity-80">

@@ -9,10 +9,10 @@ export default memo(function KeyboardLayoutDropdown() {
       data-tip="Select your keyboard layout for hotkeys"
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Keyboard Layout</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Keyboard Layout</span>
           <select
-            className="select select-bordered"
+            className="select select-md w-fit select-bordered"
             value={keyboardLayout}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             onChange={e => setKeyboardLayout(e.currentTarget.value as any)}

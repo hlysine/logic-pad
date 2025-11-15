@@ -11,8 +11,8 @@ export default memo(function WrapAroundVisualizationToggle() {
       data-tip="Whether to visualize edges of wrap-around grids"
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Visualize wrap-around grids</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Visualize wrap-around grids</span>
           <input
             type="checkbox"
             className="toggle"

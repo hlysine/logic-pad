@@ -9,8 +9,8 @@ export default memo(function SansSerifToggle() {
       data-tip="Use a sans-serif font for the whole site"
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Sans-serif font</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Sans-serif font</span>
           <input
             type="checkbox"
             className="toggle"

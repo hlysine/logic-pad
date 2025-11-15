@@ -11,8 +11,8 @@ export default memo(function ExitConfirmationToggle() {
       data-tip="Whether Logic Pad should ask for confirmation before leaving the page"
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Enable exit confirmations</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Enable exit confirmations</span>
           <input
             type="checkbox"
             className="toggle"

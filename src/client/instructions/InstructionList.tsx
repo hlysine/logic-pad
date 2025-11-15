@@ -28,7 +28,7 @@ import {
 
 function Title({ children }: { children: React.ReactNode }) {
   return (
-    <div className="uppercase w-36 text-center bg-secondary bg-opacity-10 text-neutral-content mt-4 shrink-0">
+    <div className="uppercase w-36 text-center bg-secondary/10 text-neutral-content mt-4 shrink-0">
       {children}
     </div>
   );

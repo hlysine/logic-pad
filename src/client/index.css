@@ -63,12 +63,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.tour-target {
-  position: relative;
-}
-
-.absolute.tour-target {
-  position: absolute;
+@utility tour-target {
+  & {
+    position: relative;
+  }
+  &.absolute {
+    position: absolute;
+  }
 }
 
 @keyframes translucent-pulse {
@@ -94,29 +95,25 @@
     opacity: 0;
   }
 }
-.animate-fade-out {
+@utility animate-fade-out {
   animation: fade-out 0.5s ease-out 0s 1 forwards;
 }
 
-.tour-target::after {
-  @apply -inset-1 rounded-xs pointer-events-none z-10 border-2 border-accent animate-translucent-pulse bg-base-content/20;
-  position: absolute;
-  opacity: 0.5;
-  content: '';
+@utility tour-target {
+  &::after {
+    @apply -inset-1 rounded-xs pointer-events-none z-10 border-2 border-accent animate-translucent-pulse bg-base-content/20;
+    position: absolute;
+    opacity: 0.5;
+    content: '';
+  }
 }
 
-.scrollbar-thin {
+@utility scrollbar-thin {
   scrollbar-width: thin;
 }
 
-.scrollbar-stable {
+@utility scrollbar-stable {
   scrollbar-gutter: stable;
-}
-
-* {
-  min-width: 0;
-  min-height: 0;
-  image-rendering: crisp-edges;
 }
 
 summary::marker {
@@ -128,18 +125,12 @@ summary::marker {
   z-index: 100;
 }
 
-.logo-glow {
-  -webkit-box-shadow: 0px 0px 300px 200px rgba(218, 189, 117, 0.13);
-  -moz-box-shadow: 0px 0px 300px 200px rgba(218, 189, 117, 0.13);
-  box-shadow: 0px 0px 300px 200px rgba(218, 189, 117, 0.13);
-}
-
-.fade-in-slow {
+@utility fade-in-slow {
   opacity: 0;
   animation: fade-in 5s ease-out 0s 1 forwards;
 }
 
-.fade-in-fast {
+@utility fade-in-fast {
   opacity: 0;
   animation: fade-in 1s ease-out 0s 1 forwards;
 }
@@ -153,14 +144,21 @@ summary::marker {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .logo-glow {
-    opacity: 1;
-    animation: none;
+@utility logo-glow {
+  & {
+    -webkit-box-shadow: 0px 0px 300px 200px rgba(218, 189, 117, 0.13);
+    -moz-box-shadow: 0px 0px 300px 200px rgba(218, 189, 117, 0.13);
+    box-shadow: 0px 0px 300px 200px rgba(218, 189, 117, 0.13);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    & {
+      opacity: 1;
+      animation: none;
+    }
   }
 }
 
-.grid-glow {
+@utility grid-glow {
   --tw-shadow: 0px 0px 300px 300px rgba(0, 0, 0, 0.3);
   --tw-shadow-colored: 0px 0px 300px 300px var(--tw-shadow-color);
   box-shadow:
@@ -168,7 +166,7 @@ summary::marker {
     var(--tw-shadow);
 }
 
-.mask-fade-l {
+@utility mask-fade-l {
   mask-image: linear-gradient(
     to right,
     transparent,
@@ -176,7 +174,7 @@ summary::marker {
     rgba(0, 0, 0, 0.5)
   );
 }
-.mask-fade-r {
+@utility mask-fade-r {
   mask-image: linear-gradient(
     to left,
     transparent,
@@ -184,7 +182,7 @@ summary::marker {
     rgba(0, 0, 0, 0.5)
   );
 }
-.mask-fade-t {
+@utility mask-fade-t {
   mask-image: linear-gradient(
     to bottom,
     transparent,
@@ -192,7 +190,7 @@ summary::marker {
     rgba(0, 0, 0, 0.5)
   );
 }
-.mask-fade-b {
+@utility mask-fade-b {
   mask-image: linear-gradient(
     to top,
     transparent,

@@ -11,8 +11,8 @@ export default memo(function PrimaryMouseButtonToggle() {
       data-tip="Whether to use left click for light tiles (Reload to take effect)"
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Flip mouse buttons by default</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Flip mouse buttons by default</span>
           <input
             type="checkbox"
             className="toggle"

@@ -17,8 +17,8 @@ export default memo(function AnimationToggle() {
       }
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Enable fancy animations</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Enable fancy animations</span>
           <input
             type="checkbox"
             className="toggle"

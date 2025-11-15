@@ -65,9 +65,7 @@ function bg(color: Color) {
     case Color.Light:
       return cn('bg-white hover:bg-white');
     case Color.Gray:
-      return cn(
-        'bg-neutral-content bg-opacity-20 hover:bg-neutral-content hover:bg-opacity-20'
-      );
+      return cn('bg-neutral-content/20 hover:bg-neutral-content/20');
   }
 }
 
@@ -109,7 +107,7 @@ export default memo(function Tile({
               type="button"
               aria-label={`${data.color} tile`}
               className={cn(
-                'absolute btn no-animation transition-none duration-0 p-0 shadow-none min-h-0 text-[1em]',
+                'absolute btn animate-none transition-none duration-0 p-0 shadow-none min-h-0 text-[1em]',
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default',
                 fixable && data.fixed

@@ -197,8 +197,8 @@ const ImageGenerator = memo(function ImageGenerator() {
       <div className="flex flex-col gap-4">
         {image}
         <div className="form-control">
-          <label className="label cursor-pointer">
-            <span className="label-text">Reset grid</span>
+          <label className="label w-full justify-between cursor-pointer">
+            <span>Reset grid</span>
             <input
               type="checkbox"
               className="toggle"
@@ -208,8 +208,8 @@ const ImageGenerator = memo(function ImageGenerator() {
           </label>
         </div>
         <div className="form-control">
-          <label className="label cursor-pointer">
-            <span className="label-text">Reset scale</span>
+          <label className="label w-full justify-between cursor-pointer">
+            <span>Reset scale</span>
             <input
               type="checkbox"
               className="toggle"
@@ -219,8 +219,8 @@ const ImageGenerator = memo(function ImageGenerator() {
           </label>
         </div>
         <div className="form-control">
-          <label className="label cursor-pointer">
-            <span className="label-text">Grid only</span>
+          <label className="label w-full justify-between cursor-pointer">
+            <span>Grid only</span>
             <input
               type="checkbox"
               className="toggle"

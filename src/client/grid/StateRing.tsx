@@ -93,7 +93,7 @@ export default memo(function StateRing({
       <div
         className={
           animated && !prefersReducedMotion && isTopLevel
-            ? 'block fixed inset-0 transition-all ease-out bg-radient-circle-c from-transparent to-success/5 z-1000 pointer-events-none'
+            ? 'block fixed inset-0 transition-all ease-out bg-radial from-transparent to-success/5 z-1000 pointer-events-none'
             : 'hidden'
         }
       ></div>

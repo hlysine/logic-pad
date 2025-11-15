@@ -124,12 +124,12 @@ const EditControls = memo(function EditControls({
         </li>
       </ul>
       <div
-        className="tooltip tooltip-info tooltip-top h-full"
+        className="tooltip tooltip-info tooltip-top h-12"
         data-tip="Enable flood fill"
       >
         <button
           className={cn(
-            'btn h-full aspect-square px-2 rounded-box',
+            'btn h-12 aspect-square px-2 rounded-box',
             modifierInverted ? 'btn-accent' : 'btn-ghost'
           )}
           onClick={onSwitch}

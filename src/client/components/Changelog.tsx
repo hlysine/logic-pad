@@ -54,7 +54,7 @@ const ChangelogButton = lazy(async () => {
             </div>
           </button>
           <dialog id="changelogModal" className="modal">
-            <div className="modal-box text-base-content">
+            <div className="modal-box max-h-[80vh] text-base-content">
               <form method="dialog">
                 <button
                   aria-label="Close dialog"

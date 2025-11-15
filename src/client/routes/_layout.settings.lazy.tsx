@@ -86,7 +86,7 @@ const ProfileSettings = memo(function ProfileSettings() {
         <input
           type="text"
           placeholder="Type here"
-          className="input input-bordered text-base-content w-full"
+          className="input text-base-content w-full"
           maxLength={128}
           value={username}
           onChange={e => setUsername(e.target.value)}

@@ -23,7 +23,7 @@ const RestrictionEntry = memo(function RestrictionEntry({
           <>
             <input
               type="datetime-local"
-              className="input input-xs input-bordered w-fit max-w-xs"
+              className="input input-xs w-fit max-w-xs"
               value={new Date(value).toISOString().split('Z')[0]}
               onChange={e => onChange(new Date(e.target.value).toISOString())}
             />

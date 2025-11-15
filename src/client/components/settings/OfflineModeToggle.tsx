@@ -9,8 +9,8 @@ export default memo(function OfflineModeToggle() {
       data-tip="Disable all online features"
     >
       <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Offline mode</span>
+        <label className="label w-full justify-between cursor-pointer">
+          <span>Offline mode</span>
           <input
             type="checkbox"
             className="toggle"

@@ -146,7 +146,7 @@ export default memo(function ToolboxItem({
         type="button"
         aria-label={name}
         className={cn(
-          'btn text-xl p-0 w-12',
+          'btn text-xl p-0 w-12 h-12',
           toolId === id && 'btn-primary',
           buttonClassName
         )}

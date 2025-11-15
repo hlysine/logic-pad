@@ -25,9 +25,7 @@ export interface InstructionProps {
 function instructionBg(state: State) {
   switch (state) {
     case State.Satisfied:
-      return cn(
-        'bg-linear-to-r from-success/50 via-primary/10 to-primary/10'
-      );
+      return cn('bg-linear-to-r from-success/50 via-primary/10 to-primary/10');
     case State.Error:
       return cn('bg-linear-to-r from-error/50 via-primary/10 to-primary/10');
     default:

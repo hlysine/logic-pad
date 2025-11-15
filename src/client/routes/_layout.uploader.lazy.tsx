@@ -838,7 +838,7 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
         <textarea
           ref={textareaRef}
           placeholder="Paste puzzle links here"
-          className="textarea textarea-bordered bg-base-100 text-base-content whitespace-pre font-mono h-48"
+          className="textarea w-full bg-base-100 text-base-content whitespace-pre font-mono h-48"
         ></textarea>
         <button
           className="btn btn-primary"

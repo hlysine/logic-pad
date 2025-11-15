@@ -271,7 +271,7 @@ export default memo(function Notifications() {
       >
         <FaBell size={24} />
         {(notificationsCount.data?.total ?? 0) > 0 && (
-          <span className="badge badge-secondary absolute -top-1 -right-1">
+          <span className="badge badge-secondary badge-sm absolute -top-1 -right-1">
             {notificationsCount.data?.total}
           </span>
         )}

@@ -44,7 +44,10 @@ export default memo(function Difficulty({
         )}
         data-tip="Unrated"
       >
-        <BsQuestionCircleFill size={18} className="text-neutral-content" />
+        <BsQuestionCircleFill
+          size={18}
+          className="text-neutral-content bg-transparent"
+        />
       </div>
     );
   }

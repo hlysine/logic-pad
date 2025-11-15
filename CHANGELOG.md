@@ -1,5 +1,6 @@
 # 15/11/2025
 
+- Migrated to daisyUI v5 with tighter layout and color refresh
 - The source code of Logic Pad is now at [https://github.com/logic-pad](https://github.com/logic-pad)
 - Fixed clipboard tool on mobile and improve copy and paste visualization
 - The editor now falls back to its own clipboard if system clipboard access is denied

@@ -1,5 +1,5 @@
 import MusicGridRule from '@logic-pad/core/data/rules/musicGridRule';
-import { Piano } from '@hlysine/piano';
+import { Piano } from '@logic-pad/piano';
 import GridData from '@logic-pad/core/data/grid';
 import * as Tone from 'tone';
 import {

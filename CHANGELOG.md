@@ -1,3 +1,8 @@
+# 15/11/2025
+
+- The source code of Logic Pad is now at [https://github.com/logic-pad](https://github.com/logic-pad)
+- Fixed clipboard tool on mobile and improve copy and paste visualization
+
 # 14/11/2025
 
 - Added the clipboard tool for copying and pasting grid areas and rules across pages

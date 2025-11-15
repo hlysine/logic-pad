@@ -40,6 +40,18 @@
   animation: translucent-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.animate-fade-out {
+  animation: fade-out 0.5s ease-out 0s 1 forwards;
+}
+
 .tour-target::after {
   @apply -inset-1 rounded-sm pointer-events-none z-10 border-2 border-accent animate-translucent-pulse bg-base-content/20;
   position: absolute;

@@ -23,7 +23,7 @@
         "event-iterator": "^2.0.0",
         "events": "^3.3.0",
         "fuzzysort-esm": "^3.1.1",
-        "grilops": "^0.1.2",
+        "grilops": "^0.1.3",
         "html2canvas-pro": "^1.5.11",
         "lodash": "^4.17.21",
         "logic-pad-solver-core": "^0.1.2",
@@ -1164,7 +1164,7 @@
 
     "graphemer": ["graphemer@1.4.0", "", {}, "sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag=="],
 
-    "grilops": ["grilops@0.1.2", "", { "dependencies": { "z3-solver": "^4.13.0" } }, "sha512-UQCccyHmiVxLyGZJMVDajw7SsedZF2AYkPc2Kb4ox5Meu8+KX4sDUi1Be/f4lyz+INAoTazjHN+vtrf4ZJfb5g=="],
+    "grilops": ["grilops@0.1.3", "", { "dependencies": { "z3-solver": "^4.13.0" } }, "sha512-L1v0AiMgy9fgeQuT18bZVjJdcu5Yth9GpJrmH4+L7+hL36HDa5QQLJaPyqeZrFRv3sBuDOGeL4MNZ/RIp7JluQ=="],
 
     "has-bigints": ["has-bigints@1.1.0", "", {}, "sha512-R3pbpkcIqv2Pm3dUwgjclDRVmWpTJW2DcMzcIhEXEx1oh/CEMObMm3KLmRJOdvhM7o4uQBnwr8pzRK2sJWIqfg=="],
 

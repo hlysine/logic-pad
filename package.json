@@ -40,7 +40,7 @@
     "compression-streams-polyfill": "^0.1.7",
     "event-iterator": "^2.0.0",
     "events": "^3.3.0",
-    "fuzzysort-esm": "^3.0.1",
+    "fuzzysort-esm": "^3.1.1",
     "grilops": "^0.1.2",
     "html2canvas-pro": "^1.5.11",
     "lodash": "^4.17.21",

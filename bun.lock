@@ -22,7 +22,7 @@
         "compression-streams-polyfill": "^0.1.7",
         "event-iterator": "^2.0.0",
         "events": "^3.3.0",
-        "fuzzysort-esm": "^3.0.1",
+        "fuzzysort-esm": "^3.1.1",
         "grilops": "^0.1.2",
         "html2canvas-pro": "^1.5.11",
         "lodash": "^4.17.21",
@@ -1132,7 +1132,7 @@
 
     "functions-have-names": ["functions-have-names@1.2.3", "", {}, "sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ=="],
 
-    "fuzzysort-esm": ["fuzzysort-esm@3.0.1", "", {}, "sha512-oeqWJXE3cRYDXlb5iIi6u0C5oPoi1B1bHnGiCsoaZX6U9Qx3nkArz7aDNdWIpKPWmUHWCSyHwWXRq/hsBm+bEw=="],
+    "fuzzysort-esm": ["fuzzysort-esm@3.1.1", "", {}, "sha512-gBWVYCga5Lyg0+3Pc/FkQRNXhrznX/LqZViwpKr1FgRQwJdGPQmJfA6ZaSuAacDpKLnO27ff1sZnyHV0Ew8MfQ=="],
 
     "gensync": ["gensync@1.0.0-beta.2", "", {}, "sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg=="],
 

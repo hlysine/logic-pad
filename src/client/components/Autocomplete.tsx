@@ -42,7 +42,7 @@ export default memo(function Autocomplete({
           type="text"
           tabIndex={0}
           placeholder={placeholder}
-          className="input w-full max-w-xs"
+          className="input w-full max-w-xs text-base-content"
           value={value}
           onChange={e => onChange?.(e.target.value)}
           onKeyDown={e => {

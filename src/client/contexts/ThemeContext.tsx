@@ -19,6 +19,7 @@ export const SUPPORTED_THEMES = [
   ['garden', 'vs'],
   ['forest', 'hc-black'],
   ['aqua', 'Tomorrow-Night-Blue'],
+  ['sky', 'Tomorrow-Night-Blue'],
   ['lofi', 'hc-black'],
   ['pastel', 'GitHub'],
   ['fantasy', 'vs-dark'],

@@ -3,6 +3,11 @@
   themes: all;
 }
 @plugin 'daisyui/theme' {
+  name: 'dark';
+  --color-neutral: #343c47;
+  --color-secondary: #f254a0;
+}
+@plugin 'daisyui/theme' {
   name: 'light';
   --color-primary: #185abd;
   --color-primary-content: #ffffff;
@@ -19,6 +24,123 @@
   --color-error-content: #ffffff;
   --color-success-content: #ffffff;
   --color-info: #c2d5f2;
+}
+@plugin 'daisyui/theme' {
+  name: 'cupcake';
+  --color-neutral: #b3b3b3;
+  --color-neutral-content: #0f0f0f;
+  --color-secondary: #e882c2;
+  --color-accent: #7c592d;
+  --color-accent-content: #ffffff;
+  --color-error-content: #ffffff;
+}
+@plugin 'daisyui/theme' {
+  name: 'bumblebee';
+  --color-neutral: #bbb6b0;
+  --color-neutral-content: #1f1d1b;
+  --color-secondary: #f39347;
+  --color-error-content: #ffffff;
+}
+@plugin 'daisyui/theme' {
+  name: 'emerald';
+  --color-neutral: #8f9aae;
+  --color-accent: #c3533c;
+  --color-accent-content: #ffffff;
+  --color-error-content: #ffffff;
+}
+@plugin 'daisyui/theme' {
+  name: 'corporate';
+  --color-neutral: #848484;
+  --color-accent: #00574f;
+  --color-error-content: #ffffff;
+}
+@plugin 'daisyui/theme' {
+  name: 'valentine';
+  --color-neutral: #cc4b77;
+  --color-info: #00bccf;
+  --color-accent: #50b2de;
+}
+@plugin 'daisyui/theme' {
+  name: 'garden';
+  --color-neutral: #433719;
+}
+@plugin "daisyui/theme" {
+  name: 'sky';
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(0.5971 0.1367 240.11);
+  --color-base-200: oklch(0.5653 0.1367 240.11);
+  --color-base-300: oklch(0.5267 0.1367 240.11);
+  --color-base-content: oklch(0.9 0.058 230.902);
+  --color-primary: oklch(0.85661 0.144 198.645);
+  --color-primary-content: oklch(0.40124 0.068 197.603);
+  --color-secondary: oklch(0.60682 0.108 309.782);
+  --color-secondary-content: oklch(0.96 0.016 293.756);
+  --color-accent: oklch(0.93426 0.102 94.555);
+  --color-accent-content: oklch(0.18685 0.02 94.555);
+  --color-neutral: oklch(0.6869 0.1367 240.11);
+  --color-neutral-content: #fff;
+  --color-info: oklch(0.4139 0.215 262.88);
+  --color-info-content: oklch(98% 0.01 220);
+  --color-success: oklch(0.87705 0.169 149.213);
+  --color-success-content: oklch(0.1479 0.038 27.33);
+  --color-warning: oklch(80% 0.25 80);
+  --color-warning-content: oklch(20% 0.05 80);
+  --color-error: oklch(0.8072 0.19 27.33);
+  --color-error-content: #fff;
+
+  /* border radius */
+  --radius-selector: 2rem;
+  --radius-field: 2rem;
+  --radius-box: 1rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
+@plugin 'daisyui/theme' {
+  name: 'lofi';
+  --color-neutral: #b9b9b9;
+  --color-neutral-content: #000000;
+  --color-info: oklch(0.7047 0.103 205.9);
+}
+@plugin 'daisyui/theme' {
+  name: 'pastel';
+  --color-neutral: oklch(0.6751 0.046 257.417);
+  --color-neutral-content: oklch(0.9421 0.013 255.508);
+  --color-info: oklch(0.76 0.127 207.078);
+  --color-accent: oklch(0.8056 0.093 164.15);
+}
+@plugin 'daisyui/theme' {
+  name: 'fantasy';
+  --color-neutral: oklch(0.4852 0.029 256.847);
+}
+@plugin 'daisyui/theme' {
+  name: 'cmyk';
+  --color-neutral: oklch(0.4555 0 0);
+  --color-accent: oklch(0.7967 0.1686 105.306);
+}
+@plugin 'daisyui/theme' {
+  name: 'lemonade';
+  --color-accent: oklch(0.7611 0.1773 100.73);
+}
+@plugin 'daisyui/theme' {
+  name: 'coffee';
+  --color-neutral: oklch(0.2567 0.015 326.261);
+}
+@plugin 'daisyui/theme' {
+  name: 'winter';
+  --color-neutral: oklch(0.7107 0.063 257.651);
+  --color-neutral-content: oklch(0.95 0.01 255);
+  --color-accent-content: #fff;
 }
 
 @theme {

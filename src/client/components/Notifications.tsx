@@ -277,7 +277,7 @@ export default memo(function Notifications() {
         )}
       </button>
       {expand && (
-        <div className="absolute w-0 h-0 bottom-0 right-0">
+        <div className="absolute w-0 h-0 bottom-0 right-0 text-base-content">
           <div className="z-50 fixed top-28 md:absolute md:top-2 right-0 flex flex-col items-center p-4 gap-2 max-w-[100vw] w-[500px] bg-base-100 shadow-lg rounded-xl min-h-52 max-h-[calc(100vh-10rem)] overflow-y-auto infinite-scroll">
             <div className="flex justify-between items-center self-stretch">
               <span className="text-secondary text-lg">Notifications</span>

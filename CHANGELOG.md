@@ -1,6 +1,7 @@
 # 16/11/2025
 
 - Added [Terms of Service](/terms)
+- Switched from Vercel Speed Insights to Sentry for anonymous performance monitoring. See updated [Privacy Policy](/privacy-policy) for details.
 
 # 15/11/2025
 

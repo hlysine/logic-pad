@@ -1,6 +1,6 @@
 # Logic Pad Privacy Policy
 
-**Last Updated:** August 24, 2025
+**Last Updated:** November 16, 2025
 
 ---
 
@@ -27,8 +27,7 @@ We collect a very small amount of information, which falls into two categories:
 * **Session Information:** We use a single, first-party cookie on your device. Its only purpose is to keep you logged in so you don't have to sign in every time you visit. It does not track you across other websites.
 * **Anonymous Analytics:** We want to understand how our site is performing and how many people are visiting. We use some privacy-focused tools for this:
     * **Cloudflare Web Analytics:** This service gives us basic traffic data (e.g., how many people visited today) without using any cookies or tracking individual users.
-    * **Vercel Speed Insights:** This tool helps us measure the performance of our website to make it faster. It does not collect any personal or user-related information.
-    * **Sentry:** This service automatically collects error reports from our website. This helps us identify and fix issues quickly. The information collected may include technical details about your device and browser, but it does not include personal information like your name, email address or IP address.
+    * **Sentry:** This service automatically collects error reports and performance data from our website. This helps us identify and fix issues quickly. The information collected may include technical details about your device and browser, but it does not include personal information like your name, email address or IP address.
 
 
 

@@ -1,6 +1,6 @@
 # Logic Pad Terms of Service
 
-**Effective Date:** November 16, 2025
+**Last Updated:** November 16, 2025
 
 These Terms of Service ("Terms") govern your access to and use of the Logic Pad website and web application (the "Service"), which is operated by Logic Pad ("we," "us," or "our"). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the terms, you must not use the Service.
 

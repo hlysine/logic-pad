@@ -132,9 +132,9 @@ export default defineConfig([
       'no-use-before-define': 'off',
       'no-void': 'off',
       'prettier/prettier': 'error',
-      'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
+      'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/refs': 'off',
-      'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+      'react-hooks/rules-of-hooks': 'error',
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/static-components': 'off',
       'react/prop-types': 'off',

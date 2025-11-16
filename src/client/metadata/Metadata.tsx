@@ -48,7 +48,9 @@ export default memo(function Metadata({
       </div>
       {!simplified && (
         <div className="overflow-y-auto">
-          <Markdown className={responsive ? 'lg:text-lg' : 'text-lg'}>
+          <Markdown
+            className={cn('max-w-full', responsive ? 'lg:prose-lg' : '')}
+          >
             {metadata.description}
           </Markdown>
         </div>

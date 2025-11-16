@@ -10,7 +10,6 @@ import { cn } from '../../client/uiHelper.ts';
 import Loading from './Loading';
 import type { Options } from 'react-markdown';
 import { spoilerPlugin } from 'remark-inline-spoiler';
-import './markdown.css';
 import { useOnline } from '../contexts/OnlineContext.tsx';
 
 export interface MarkdownProps extends Readonly<Options> {
@@ -127,7 +126,7 @@ const MarkdownAsync = lazy(async () => {
         return (
           <span
             className={cn(
-              'markdown',
+              'prose max-w-full',
               className,
               (!!onClick || !!onClickCapture) && 'cursor-pointer'
             )}
@@ -145,7 +144,7 @@ const MarkdownAsync = lazy(async () => {
         return (
           <div
             className={cn(
-              'markdown',
+              'prose max-w-full',
               className,
               (!!onClick || !!onClickCapture) && 'cursor-pointer'
             )}

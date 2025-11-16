@@ -1,3 +1,7 @@
+# 16/11/2025
+
+- Added [Terms of Service](/terms)
+
 # 15/11/2025
 
 - Migrated to daisyUI v5 with tighter layout and color refresh

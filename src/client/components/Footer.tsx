@@ -24,6 +24,9 @@ export default memo(function Footer() {
           <Link to="/rules" className="link link-hover">
             Rules
           </Link>
+          <Link to="/terms" className="link link-hover">
+            Terms
+          </Link>
           <Link to="/privacy-policy" className="link link-hover">
             Privacy policy
           </Link>

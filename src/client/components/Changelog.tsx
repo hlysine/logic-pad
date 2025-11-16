@@ -50,7 +50,9 @@ const ChangelogButton = lazy(async () => {
               <span className="opacity-80">View changelog &gt;&gt;</span>
             </div>
             <div className="max-h-22 text-ellipsis overflow-hidden">
-              <Markdown>{changelogSections[0].content}</Markdown>
+              <Markdown className="prose-sm prose-h1:text-lg">
+                {changelogSections[0].content}
+              </Markdown>
             </div>
           </button>
           <dialog id="changelogModal" className="modal">
@@ -64,7 +66,9 @@ const ChangelogButton = lazy(async () => {
                 </button>
               </form>
               <h3 className="font-bold text-2xl">Changelog</h3>
-              <Markdown>{changelogText!}</Markdown>
+              <Markdown className="prose-sm prose-h1:text-lg">
+                {changelogText!}
+              </Markdown>
             </div>
             <form method="dialog" className="modal-backdrop">
               <button aria-label="Close dialog">close</button>

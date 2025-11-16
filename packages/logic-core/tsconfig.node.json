@@ -3,12 +3,17 @@
     "composite": true,
     "skipLibCheck": true,
     "module": "ESNext",
-    "lib": ["ES2021"],
+    "lib": [
+      "ES2021"
+    ],
     "target": "ES2021",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true
   },
-  "include": [".eslintrc.cjs", "scripts", "assets"]
+  "include": [
+    "scripts",
+    "assets"
+  ]
 }

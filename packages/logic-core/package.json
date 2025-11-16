@@ -42,7 +42,6 @@
   },
   "scripts": {
     "build": "rimraf dist/ && bun run codegen && bunx --bun tsc && bun run typegen",
-    "lint": "cd ../../ && eslint ./packages/logic-core --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "codegen": "bun ./scripts/genImports.ts && bun ./scripts/genEntry.ts",
     "typegen": "bun ./scripts/genTypes.ts",
     "prepublishOnly": "bun run build"

@@ -1,6 +1,6 @@
 import { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
-import { createContext, memo, use, useEffect, useState } from 'react';
+import React, { createContext, memo, use, useEffect, useState } from 'react';
 
 export const themeKey = 'theme';
 

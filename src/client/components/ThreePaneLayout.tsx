@@ -1,4 +1,4 @@
-import { memo, useId } from 'react';
+import React, { memo, useId } from 'react';
 import './threePaneLayout.css';
 import { IoMenu } from 'react-icons/io5';
 

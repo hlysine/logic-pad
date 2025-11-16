@@ -10,7 +10,7 @@ import { PartPlacement } from '../instructions/parts/types';
 import Metadata from '../metadata/Metadata';
 import { Mode, Position } from '@logic-pad/core/data/primitives';
 import ModeVariantLoader from '../router/ModeVariantLoader';
-import { lazy, memo, Suspense } from 'react';
+import React, { lazy, memo, Suspense } from 'react';
 import DocumentTitle from '../components/DocumentTitle';
 import PuzzleLoveButton from '../components/quickActions/PuzzleLoveButton';
 import PuzzleEditButton from '../components/quickActions/PuzzleEditButton';

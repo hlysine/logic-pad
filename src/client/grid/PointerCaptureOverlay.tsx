@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Color } from '@logic-pad/core/data/primitives';
 import mouseContext from './MouseContext';
 import { cn } from '../uiHelper';

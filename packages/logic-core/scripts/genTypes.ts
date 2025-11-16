@@ -1,5 +1,3 @@
-#!/usr/bin/env bun
-
 import { $ } from 'bun';
 
 const entryPath = 'src/index.ts';

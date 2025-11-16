@@ -1,5 +1,5 @@
 import { State } from '@logic-pad/core/data/primitives';
-import { memo, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { useGrid } from '../contexts/GridContext.tsx';
 import { useGridState } from '../contexts/GridStateContext.tsx';
 import Instruction from './Instruction';

@@ -31,6 +31,6 @@ export const Route = createFileRoute('/oauth/callback')({
     }
     try {
       await api.callbackOAuth(userId, secret);
-    } catch (_ex) {}
+    } catch {}
   },
 });

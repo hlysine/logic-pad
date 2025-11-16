@@ -1,4 +1,4 @@
-import { memo, RefObject, useImperativeHandle, useState } from 'react';
+import React, { memo, RefObject, useImperativeHandle, useState } from 'react';
 import { cn } from '../../uiHelper';
 
 export type PromptHandle = {

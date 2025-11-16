@@ -1,4 +1,4 @@
-import { useImperativeHandle, useMemo, useState } from 'react';
+import React, { useImperativeHandle, useMemo, useState } from 'react';
 import PuzzleSearchQuery, {
   PuzzleSearchParams,
   SearchType,

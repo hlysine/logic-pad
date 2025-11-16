@@ -9,7 +9,6 @@ import pluginPrettier from 'eslint-plugin-prettier';
 import pluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import { importX as pluginImport } from 'eslint-plugin-import-x';
 import pluginNode from 'eslint-plugin-n';
-// import pluginReactRefresh from 'eslint-plugin-react-refresh';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 
 export default defineConfig([
@@ -51,7 +50,6 @@ export default defineConfig([
       pluginReact.configs.flat['jsx-runtime'],
       reactHooks.configs.flat.recommended,
       pluginPrettierRecommended,
-      // pluginReactRefresh.configs.vite,
     ],
     languageOptions: {
       parser: tsParser,
@@ -62,6 +60,11 @@ export default defineConfig([
         ...globals.es2020,
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
     },
     settings: {
@@ -85,6 +88,8 @@ export default defineConfig([
     rules: {
       'prettier/prettier': 'error',
       'no-void': 'off',
+      'no-redeclare': 'off',
+      'no-empty': ['error', { allowEmptyCatch: true }],
       'import-x/named': 'off',
       'import-x/default': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
@@ -141,6 +146,9 @@ export default defineConfig([
       '@typescript-eslint/unbound-method': 'off',
       'react/prop-types': 'off',
       'no-labels': ['error', { allowLoop: true }],
+      'react-hooks/refs': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/static-components': 'warn',
     },
   },
   {
@@ -160,6 +168,10 @@ export default defineConfig([
         ...globals.node,
         Bun: 'readonly',
       },
+    },
+    rules: {
+      'n/no-process-exit': 'off',
+      'n/no-missing-import': 'off',
     },
   },
 ]);

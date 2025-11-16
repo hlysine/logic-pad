@@ -2,7 +2,7 @@ import InstructionList from '../instructions/InstructionList';
 import { EditorEditControls } from '../components/EditControls';
 import { GridConsumer } from '../contexts/GridContext';
 import InstructionSearch from '../instructions/InstructionSearch';
-import { memo, useRef, useState } from 'react';
+import React, { memo, useRef, useState } from 'react';
 import ThreePaneLayout from '../components/ThreePaneLayout';
 import TouchControls from '../components/TouchControls';
 import ConfigContext from '../contexts/ConfigContext';

@@ -47,7 +47,8 @@
     "prepublishOnly": "bun run build"
   },
   "engines": {
-    "bun": ">=1.1.0"
+    "bun": ">=1.1.0",
+    "node": ">=23.11.0"
   },
   "dependencies": {
     "compression-streams-polyfill": "^0.1.7",

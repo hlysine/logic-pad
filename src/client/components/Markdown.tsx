@@ -1,4 +1,11 @@
-import { ReactNode, Suspense, lazy, memo, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  Suspense,
+  lazy,
+  memo,
+  useMemo,
+  useState,
+} from 'react';
 import { cn } from '../../client/uiHelper.ts';
 import Loading from './Loading';
 import type { Options } from 'react-markdown';

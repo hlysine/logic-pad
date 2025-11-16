@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 import { FaSearch, FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { z } from 'zod';

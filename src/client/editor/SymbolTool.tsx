@@ -1,4 +1,4 @@
-import {
+import React, {
   HTMLProps,
   memo,
   RefObject,
@@ -166,9 +166,9 @@ const SymbolToolOverlay = memo(function SymbolToolOverlay({
 });
 
 export default memo(function SymbolTool(props: SymbolToolProps) {
-  let {
+  let { id } = props;
+  const {
     name,
-    id,
     hotkey,
     sample,
     onNewSymbol,

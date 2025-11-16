@@ -1,4 +1,4 @@
-import { createContext, memo, use, useEffect, useState } from 'react';
+import React, { createContext, memo, use, useEffect, useState } from 'react';
 import GridData from '@logic-pad/core/data/grid';
 import { useEdit } from './EditContext.tsx';
 import { PuzzleMetadata } from '@logic-pad/core/data/puzzle';

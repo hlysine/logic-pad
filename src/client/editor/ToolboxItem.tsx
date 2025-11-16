@@ -1,4 +1,4 @@
-import { HTMLProps, memo, useEffect, useMemo } from 'react';
+import React, { HTMLProps, memo, useEffect, useMemo } from 'react';
 import { useToolbox } from '../contexts/ToolboxContext.tsx';
 import { cn } from '../../client/uiHelper.ts';
 import { Color } from '@logic-pad/core/data/primitives';

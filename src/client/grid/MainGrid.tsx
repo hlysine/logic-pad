@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import StateRing from './StateRing.tsx';
 import { useGrid } from '../contexts/GridContext.tsx';
 import Grid from './Grid';

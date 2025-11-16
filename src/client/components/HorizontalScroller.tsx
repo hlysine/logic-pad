@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { cn } from '../uiHelper';
 import { IoChevronForward } from 'react-icons/io5';
 import { BsChevronCompactRight } from 'react-icons/bs';

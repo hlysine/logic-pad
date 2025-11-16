@@ -1,4 +1,4 @@
-import { memo, Ref, useEffect, useId } from 'react';
+import React, { memo, Ref, useEffect, useId } from 'react';
 import { cn } from '../uiHelper.ts';
 import { State } from '@logic-pad/core/data/primitives';
 import { animate, stagger } from 'animejs';

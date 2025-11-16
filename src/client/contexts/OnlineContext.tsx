@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { createContext, memo, use, useEffect, useMemo } from 'react';
+import React, { createContext, memo, use, useEffect, useMemo } from 'react';
 import { api } from '../online/api';
 import { MeBrief } from '../online/data';
 import { useSettings } from './SettingsContext';

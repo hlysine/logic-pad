@@ -189,6 +189,7 @@ const SolveTrackerSignedIn = memo(function SolveTracker() {
   });
 
   const msElapsedTime = useRef<number>(0);
+  // eslint-disable-next-line react-hooks/purity
   const activeStartTick = useRef<number>(Date.now());
 
   useEffect(() => {

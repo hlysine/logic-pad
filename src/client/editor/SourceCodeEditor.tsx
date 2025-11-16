@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { editor } from 'monaco-editor';
 import { Puzzle, PuzzleSchema } from '@logic-pad/core/data/puzzle';

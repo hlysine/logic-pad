@@ -35,7 +35,6 @@ export default abstract class StreamCompressor extends CompressorBase {
 
   public async decompress(input: string): Promise<string> {
     await ensureCompressionStream();
-    // eslint-disable-next-line @typescript-eslint/no-deprecated
     const bytes = Uint8Array.from(atob(input), c => c.charCodeAt(0));
     const cs = new DecompressionStream(this.algorithm);
     const writer = cs.writable.getWriter();

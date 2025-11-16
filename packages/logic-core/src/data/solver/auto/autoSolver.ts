@@ -98,7 +98,6 @@ export default class AutoSolver extends Solver {
   private async solveOne(
     generator: AsyncGenerator<GridData | null>
   ): Promise<GridData | null> {
-    // eslint-disable-next-line no-unreachable-loop
     for await (const grid of generator) {
       return grid;
     }

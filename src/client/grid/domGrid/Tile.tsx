@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import TileData from '@logic-pad/core/data/tile';
 import { cn } from '../../../client/uiHelper.ts';
 import mouseContext from '../MouseContext';
@@ -111,7 +111,8 @@ export default memo(function Tile({
                 bg(data.color),
                 editable ? 'cursor-pointer' : 'cursor-default',
                 fixable && data.fixed
-                  ? ((fixed = true), `tile-fixed ${fixedClass}`)
+                  ? // eslint-disable-next-line react-hooks/immutability
+                    ((fixed = true), `tile-fixed ${fixedClass}`)
                   : 'border-0'
               )}
               tabIndex={

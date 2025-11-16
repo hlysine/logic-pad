@@ -20,26 +20,29 @@ export default memo(function Footer() {
             See LICENSE for details
           </a>
         </p>
+        <nav className="grid grid-flow-col gap-8">
+          <Link to="/rules" className="link link-hover">
+            Rules
+          </Link>
+          <Link to="/privacy-policy" className="link link-hover">
+            Privacy policy
+          </Link>
+          <a
+            className="link link-hover"
+            href="https://github.com/hlysine/logic-pad"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Source code
+          </a>
+          <a
+            className="link link-hover"
+            href="mailto:logic-pad@googlegroups.com"
+          >
+            Email
+          </a>
+        </nav>
       </aside>
-      <nav className="grid grid-flow-col gap-8">
-        <Link to="/rules" className="link link-hover">
-          Rules
-        </Link>
-        <Link to="/privacy-policy" className="link link-hover">
-          Privacy policy
-        </Link>
-        <a
-          className="link link-hover"
-          href="https://github.com/hlysine/logic-pad"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Source code
-        </a>
-        <a className="link link-hover" href="mailto:logic-pad@googlegroups.com">
-          Email
-        </a>
-      </nav>
     </footer>
   );
 });

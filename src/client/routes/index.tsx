@@ -54,7 +54,7 @@ const RandomPuzzle = memo(function RandomPuzzle() {
 
   return (
     <button
-      className="btn btn-ghost bg-base-100/10"
+      className="btn btn-ghost h-fit py-1 md:py-2 bg-base-100/10"
       onClick={async () => {
         setLoading(true);
         try {
@@ -137,21 +137,21 @@ export const Route = createFileRoute('/')({
                       <Link
                         type="button"
                         to="/create"
-                        className="btn btn-md lg:btn-lg btn-accent"
+                        className="btn btn-md h-fit py-1 md:btn-lg md:py-4 md:px-6 btn-accent"
                       >
                         Create new puzzle
                       </Link>
                       <Link
                         type="button"
                         to="/search"
-                        className="btn btn-md lg:btn-lg btn-accent btn-outline"
+                        className="btn btn-md h-fit py-1 md:btn-lg md:py-4 md:px-6 btn-accent btn-outline"
                       >
                         Explore puzzles
                       </Link>
                       <Link
                         type="button"
                         to="/uploader"
-                        className="btn btn-ghost bg-base-100/10"
+                        className="btn btn-ghost h-fit py-1 md:py-2 bg-base-100/10"
                       >
                         Bulk-import puzzles
                       </Link>
@@ -162,7 +162,7 @@ export const Route = createFileRoute('/')({
                       <Link
                         type="button"
                         to="/create"
-                        className="btn btn-md lg:btn-lg btn-accent"
+                        className="btn btn-md h-fit py-1 md:btn-lg md:py-4 md:px-6 btn-accent"
                       >
                         Create new puzzle
                       </Link>

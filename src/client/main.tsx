@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 import { RouterProvider } from '@tanstack/react-router';
 import { themeKey } from './contexts/ThemeContext.tsx';
 import { cleanReload } from './components/settings/ResetSite.tsx';
@@ -17,6 +16,8 @@ import('@sentry/react')
       dsn: import.meta.env.VITE_SENTRY_DSN as string,
       tunnel: (import.meta.env.VITE_API_ENDPOINT as string) + '/sentry',
       release: import.meta.env.VITE_PACKAGE_VERSION as string,
+      integrations: [Sentry.browserTracingIntegration()],
+      tracesSampleRate: 1,
     });
   })
   .catch(console.log);
@@ -87,7 +88,6 @@ ReactDOM.createRoot(document.getElementById('app')!).render(
           >
             {/* For canvas components to retrieve this color */}
           </div>
-          <SpeedInsights />
           <RouterProvider router={router} />
         </>
       </OnlineContext>

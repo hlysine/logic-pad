@@ -33,7 +33,6 @@
     "@tanstack/react-router-devtools": "^1.131.2",
     "@tanstack/zod-adapter": "^1.131.7",
     "@use-gesture/react": "^10.3.1",
-    "@vercel/speed-insights": "^1.2.0",
     "animejs": "^4.1.2",
     "axios": "^1.11.0",
     "canvas-size": "^2.0.0",
@@ -108,7 +107,6 @@
     "vite-plugin-vercel": "^9.0.7"
   },
   "trustedDependencies": [
-    "@vercel/speed-insights",
     "esbuild",
     "unrs-resolver"
   ]

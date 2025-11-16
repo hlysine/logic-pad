@@ -11,6 +11,7 @@
     "strict": true
   },
   "include": [
+    "eslint.config.ts",
     "vite.config.ts",
     "tailwind.config.ts",
     "postcss.config.js"

@@ -6,7 +6,7 @@
   "homepage": "https://logic-pad.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hlysine/logic-pad.git"
+    "url": "https://github.com/logic-pad/logic-pad.git"
   },
   "license": "AGPL-3.0-only",
   "scripts": {

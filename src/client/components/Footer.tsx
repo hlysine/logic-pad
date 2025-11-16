@@ -13,7 +13,7 @@ export default memo(function Footer() {
           Copyright © {new Date().getFullYear()} -{' '}
           <a
             className="link link-hover"
-            href="https://github.com/hlysine/logic-pad"
+            href="https://github.com/logic-pad/logic-pad"
             target="_blank"
             rel="noreferrer"
           >
@@ -32,7 +32,7 @@ export default memo(function Footer() {
           </Link>
           <a
             className="link link-hover"
-            href="https://github.com/hlysine/logic-pad"
+            href="https://github.com/logic-pad"
             target="_blank"
             rel="noreferrer"
           >

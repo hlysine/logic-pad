@@ -6,10 +6,10 @@
     "dist",
     "assets"
   ],
-  "homepage": "https://github.com/hlysine/logic-pad",
+  "homepage": "https://github.com/logic-pad/logic-pad",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hlysine/logic-pad.git"
+    "url": "https://github.com/logic-pad/logic-pad.git"
   },
   "keywords": [
     "logic",

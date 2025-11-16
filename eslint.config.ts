@@ -146,9 +146,9 @@ export default defineConfig([
       '@typescript-eslint/unbound-method': 'off',
       'react/prop-types': 'off',
       'no-labels': ['error', { allowLoop: true }],
-      'react-hooks/refs': 'warn',
-      'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/static-components': 'warn',
+      'react-hooks/refs': 'off',
+      'react-hooks/set-state-in-effect': 'off',
+      'react-hooks/static-components': 'off',
     },
   },
   {

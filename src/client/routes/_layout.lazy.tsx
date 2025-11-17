@@ -5,6 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { RiMenu2Fill } from 'react-icons/ri';
 import PWAPrompt from '../components/PWAPrompt';
 import { useOnline } from '../contexts/OnlineContext';
+import NavigationSkip from '../components/NavigationSkip';
 
 export const Route = createLazyFileRoute('/_layout')({
   component: memo(function Layout() {
@@ -42,13 +43,7 @@ export const Route = createLazyFileRoute('/_layout')({
     return (
       <>
         <PWAPrompt />
-        <a
-          role="button"
-          href="#main-content"
-          className="sr-only focus:fixed focus:top-0 focus:left-0 focus:z-50"
-        >
-          Skip navigation bar
-        </a>
+        <NavigationSkip />
         <header className="flex shrink-0 flex-wrap justify-between items-center lg:gap-4 px-8 py-2">
           <nav className="flex xl:basis-[320px] flex-wrap grow shrink items-center gap-8 lg:gap-12">
             {!isLargeMedia && (
@@ -91,9 +86,12 @@ export const Route = createLazyFileRoute('/_layout')({
           </nav>
           <QuickAccessBar className="xl:basis-[320px] grow shrink justify-end" />
         </header>
-        <a id="main-content" tabIndex={-1} className="sr-only">
-          Start of main content
-        </a>
+        <span
+          id="main-content"
+          tabIndex={-1}
+          className="sr-only"
+          aria-label="Start of main content"
+        ></span>
         <Outlet />
       </>
     );

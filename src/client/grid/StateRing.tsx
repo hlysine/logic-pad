@@ -88,6 +88,8 @@ export default memo(function StateRing({
           : '*:first:opacity-0 *:first:duration-500',
         className
       )}
+      role="main"
+      aria-label={`Grid state: ${state.final}`}
       {...rest}
     >
       <div

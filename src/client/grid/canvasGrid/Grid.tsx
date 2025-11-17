@@ -128,7 +128,24 @@ export default memo(function Grid({
           [scale]
         )}
         className="absolute inset-0"
-      />
+      >
+        {`Grid with ${grid.width} by ${grid.height} tiles.`}
+        {grid.tiles
+          .map(
+            (row, line) =>
+              `Row ${line + 1}: ${row
+                .map(tile => {
+                  if (!tile.exists) return 'empty';
+                  if (tile.fixed) {
+                    return tile.color.toUpperCase();
+                  } else {
+                    return tile.color.toLowerCase();
+                  }
+                })
+                .join(' ')}`
+          )
+          .join('\n')}
+      </canvas>
       <PointerCaptureOverlay
         width={grid.width}
         height={grid.height}

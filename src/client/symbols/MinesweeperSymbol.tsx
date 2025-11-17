@@ -22,6 +22,7 @@ export default memo(function MinesweeperSymbol({
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 500 500"
         className="absolute m-auto"
+        aria-hidden="true"
       >
         <path
           fillRule="evenodd"
@@ -31,8 +32,14 @@ export default memo(function MinesweeperSymbol({
         ></path>
       </svg>
 
-      <span className={cn('absolute m-auto text-[0.6em]', textClass)}>
+      <span
+        className={cn('absolute m-auto text-[0.6em]', textClass)}
+        aria-hidden="true"
+      >
         {symbol.number}
+      </span>
+      <span className="sr-only">
+        {`Minesweeper number ${symbol.number} at (${symbol.x}, ${symbol.y})`}
       </span>
     </div>
   );

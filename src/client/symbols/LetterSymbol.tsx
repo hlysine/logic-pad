@@ -15,8 +15,14 @@ export default memo(function LetterSymbol({ textClass, symbol }: LetterProps) {
         textClass
       )}
     >
-      <span className={cn('absolute m-auto text-[0.75em]', textClass)}>
+      <span
+        className={cn('absolute m-auto text-[0.75em]', textClass)}
+        aria-hidden="true"
+      >
         {symbol.letter}
+      </span>
+      <span className="sr-only">
+        {`Letter ${symbol.letter} at (${symbol.x}, ${symbol.y})`}
       </span>
     </div>
   );

@@ -38,9 +38,13 @@ export default memo(function CustomTextSymbol({
           textClass
         )}
         style={textStyle}
+        aria-hidden="true"
       >
         {symbol.text}
       </pre>
+      <span className="sr-only">
+        {`Custom text ${symbol.text} at (${symbol.x}, ${symbol.y})`}
+      </span>
     </div>
   );
 });

@@ -7,7 +7,7 @@ import { api, axios } from '../client/online/api';
 // TODO: A dirty hack to get around import.meta.env being undefined in vite-plugin-vercel v9
 axios.defaults.baseURL = process.env.VITE_API_ENDPOINT;
 
-const lastSitemapModification = new Date('2025-10-05T03:48:59Z');
+const lastSitemapModification = new Date('2025-11-17T03:48:59Z');
 
 function lastMod(updatedAt: string) {
   const updatedDate = new Date(updatedAt);
@@ -38,6 +38,7 @@ export default async function handler(
   smStream.write({ url: '/search/puzzles', changefreq: 'hourly', priority: 1 });
   smStream.write({ url: '/uploader', changefreq: 'monthly', priority: 0.3 });
   smStream.write({ url: '/rules', changefreq: 'monthly', priority: 0.2 });
+  smStream.write({ url: '/terms', changefreq: 'monthly', priority: 0.2 });
   smStream.write({
     url: '/privacy-policy',
     changefreq: 'monthly',

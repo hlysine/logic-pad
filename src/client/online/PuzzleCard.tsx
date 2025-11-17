@@ -177,10 +177,16 @@ export default memo(function PuzzleCard({
           isDragging && 'pointer-events-none'
         )}
         role="button"
+        aria-label={`${puzzle.title} by ${puzzle.creator.name}; Types ${puzzle.types.join(', ')}; Difficulty ${puzzle.designDifficulty};  Size ${puzzle.width} by ${puzzle.height};  ${puzzle.solveCount} solves,  ${puzzle.loveCount} loves`}
         {...props}
       >
-        <PuzzleIcon types={puzzle.types} size={36} className="shrink-0" />
-        <div className="flex flex-col">
+        <PuzzleIcon
+          types={puzzle.types}
+          size={36}
+          className="shrink-0"
+          aria-hidden="true"
+        />
+        <div className="flex flex-col" aria-hidden="true">
           <h2
             className={cn(
               'text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis',
@@ -198,9 +204,7 @@ export default memo(function PuzzleCard({
             <SupporterBadge supporter={puzzle.creator.supporter} />
           </div>
           <div className="flex gap-2 mt-2 text-sm">
-            <span>
-              {puzzle.width}&times;{puzzle.height}
-            </span>
+            {puzzle.width} &times; {puzzle.height}
             <Difficulty value={puzzle.designDifficulty} size="xs" />
           </div>
           {puzzle.status === ResourceStatus.Public ? (

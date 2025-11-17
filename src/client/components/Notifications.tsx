@@ -222,6 +222,7 @@ const NotificationEntry = memo(function NotificationEntry({
           e.preventDefault();
           deleteNotification.mutate();
         }}
+        aria-label="Delete notification"
       >
         <FaTrash size={16} />
       </button>
@@ -268,6 +269,11 @@ export default memo(function Notifications() {
       <button
         className="btn btn-square btn-ghost max-md:btn-sm text-neutral-content"
         onClick={() => setExpand(v => !v)}
+        aria-label={
+          expand
+            ? 'Close notifications'
+            : `${notificationsCount.data?.total ?? 0} new notifications`
+        }
       >
         <FaBell size={24} />
         {(notificationsCount.data?.total ?? 0) > 0 && (

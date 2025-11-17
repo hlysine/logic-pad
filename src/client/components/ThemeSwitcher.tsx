@@ -28,6 +28,8 @@ export default memo(function ThemeSwitcher() {
       <ul
         tabIndex={0}
         className="dropdown-content z-50 p-2 shadow-2xl bg-base-300 text-base-content rounded-box w-52 max-h-[calc(100dvh-200px)] overflow-y-auto"
+        aria-label="Themes"
+        role="listbox"
       >
         {SUPPORTED_THEMES.map(([themeChoice]) => (
           <li key={themeChoice}>
@@ -39,6 +41,7 @@ export default memo(function ThemeSwitcher() {
                 theme === themeChoice ? 'btn-primary' : 'btn-ghost'
               )}
               aria-label={themeChoice}
+              role="option"
               value={themeChoice}
               onChange={e => switchTheme(e.currentTarget.value)}
             />

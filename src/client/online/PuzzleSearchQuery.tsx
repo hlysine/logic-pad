@@ -321,7 +321,7 @@ export default function PuzzleSearchQuery<Search extends SearchType>({
             !me && 'input-disabled'
           )}
         >
-          <FaSearch />
+          <FaSearch aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
@@ -400,9 +400,9 @@ export default function PuzzleSearchQuery<Search extends SearchType>({
                 {ordering.text}
                 {displayParams.sort?.startsWith(`${ordering.id}-`) &&
                   (displayParams.sort.endsWith('-asc') ? (
-                    <FaChevronUp />
+                    <FaChevronUp aria-label="Ascending" />
                   ) : (
-                    <FaChevronDown />
+                    <FaChevronDown aria-label="Descending" />
                   ))}
               </button>
             ))}

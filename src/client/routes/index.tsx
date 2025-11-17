@@ -106,6 +106,13 @@ export const Route = createFileRoute('/')({
       <>
         <main className="flex flex-col gap-4 items-stretch min-h-svh shrink-0">
           <div className="flex flex-col shrink-0">
+            <a
+              role="button"
+              href="#main-content"
+              className="not-focus:sr-only focus:fixed focus:top-0 focus:left-0 focus:z-50"
+            >
+              Skip navigation bar
+            </a>
             <PWAPrompt />
             <QuickAccessBar className="justify-end px-8 py-2" />
             <section className="flex flex-col xl:flex-row grow gap-32 items-center justify-center p-16 z-10">
@@ -125,7 +132,10 @@ export const Route = createFileRoute('/')({
                   />
                 </div>
                 <div className="flex flex-col gap-4">
-                  <h1 className="text-accent text-4xl lg:text-6xl font-medium font-serif">
+                  <h1
+                    id="main-content"
+                    className="text-accent text-4xl lg:text-6xl font-medium font-serif"
+                  >
                     Logic Pad
                   </h1>
                   <span className="text-xl lg:text-2xl">

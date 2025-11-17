@@ -810,7 +810,7 @@ export const Route = createLazyFileRoute('/_layout/uploader')({
     return (
       <ResponsiveLayout>
         <div className="text-3xl mt-4">
-          <FaUpload className="inline-block me-4" />
+          <FaUpload className="inline-block me-4" aria-hidden="true" />
           Puzzle uploader
         </div>
         <div>

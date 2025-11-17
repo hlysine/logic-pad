@@ -88,7 +88,7 @@ export default memo(function CollectionSearchQuery({
             !me && 'input-disabled'
           )}
         >
-          <FaSearch />
+          <FaSearch aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
@@ -129,9 +129,9 @@ export default memo(function CollectionSearchQuery({
               {ordering.text}
               {displayParams.sort?.startsWith(`${ordering.id}-`) &&
                 (displayParams.sort.endsWith('-asc') ? (
-                  <FaChevronUp />
+                  <FaChevronUp aria-label="Ascending" />
                 ) : (
-                  <FaChevronDown />
+                  <FaChevronDown aria-label="Descending" />
                 ))}
             </button>
           ))}

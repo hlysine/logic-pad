@@ -35,9 +35,9 @@ const ValidatorStatus = memo(function ValidatorStatus() {
       data-tip={isLoading ? 'Validating...' : 'Validated'}
     >
       {isLoading ? (
-        <Loading className="px-1 rounded-box" />
+        <Loading className="px-1 rounded-box" aria-hidden="true" />
       ) : (
-        <FiCheck size={20} className="rounded-box" />
+        <FiCheck size={20} className="rounded-box" aria-hidden="true" />
       )}
     </div>
   );
@@ -98,6 +98,7 @@ const EditControls = memo(function EditControls({
         <li className={cn(undoStack.length === 0 && 'disabled')}>
           <a
             className="tooltip tooltip-info"
+            role="button"
             data-tip="Undo (Z)"
             onClick={undo}
           >
@@ -107,6 +108,7 @@ const EditControls = memo(function EditControls({
         <li>
           <a
             className="tooltip tooltip-info"
+            role="button"
             data-tip="Restart (R)"
             onClick={restart}
           >
@@ -116,6 +118,7 @@ const EditControls = memo(function EditControls({
         <li className={cn(redoStack.length === 0 && 'disabled')}>
           <a
             className="tooltip tooltip-info"
+            role="button"
             data-tip="Redo (Y)"
             onClick={redo}
           >

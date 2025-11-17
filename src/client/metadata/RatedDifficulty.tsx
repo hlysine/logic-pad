@@ -48,6 +48,7 @@ export default memo(function RatedDifficulty({
       <input
         type="checkbox"
         name="gui-editor-accordion"
+        aria-label="Toggle rated difficulty details"
         defaultChecked={!collapsible}
       />
       <div

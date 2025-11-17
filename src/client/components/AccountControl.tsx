@@ -20,6 +20,7 @@ export default memo(function AccountControl() {
     return (
       <div
         className="btn btn-square btn-accent ms-4 px-4 shrink-0 w-fit"
+        role="button"
         onClick={cleanReload}
       >
         <RiRefreshFill size={22} />
@@ -29,14 +30,20 @@ export default memo(function AccountControl() {
   }
   if (!isOnline) {
     return (
-      <div className="btn btn-square btn-disabled ms-4 px-4 shrink-0 w-fit">
+      <div
+        className="btn btn-square btn-disabled ms-4 px-4 shrink-0 w-fit"
+        role="button"
+      >
         <IoCloudOffline />
         Offline
       </div>
     );
   }
   if (isPending) {
-    <button className="btn btn-square ms-4 px-4 shrink-0 w-fit">
+    <button
+      className="btn btn-square ms-4 px-4 shrink-0 w-fit"
+      aria-label="Loading"
+    >
       <Loading className="w-8 h-8" />
     </button>;
   }
@@ -46,7 +53,10 @@ export default memo(function AccountControl() {
       // users should sign in via the online panel instead
       return (
         <>
-          <div className="btn btn-square btn-disabled ms-4 px-4 shrink-0 w-fit">
+          <div
+            className="btn btn-square btn-disabled ms-4 px-4 shrink-0 w-fit"
+            role="button"
+          >
             <FaBan />
             Not signed in
           </div>
@@ -70,41 +80,57 @@ export default memo(function AccountControl() {
   }
   return (
     <details ref={detailsRef} className="dropdown dropdown-end">
-      <summary className="btn btn-square ms-4 px-4 shrink-0 w-fit">
-        <Avatar userId={me.id} username={me.name} className="w-8 h-8" />
-        <span>
+      <summary
+        className="btn btn-square ms-4 px-4 shrink-0 w-fit"
+        role="button"
+        aria-label="Account menu"
+      >
+        <Avatar
+          userId={me.id}
+          username={me.name}
+          className="w-8 h-8"
+          aria-hidden="true"
+        />
+        <span aria-hidden="true">
           {me.name}
           <SupporterBadge supporter={me.supporter} />
         </span>
       </summary>
-      <ul className="menu dropdown-content bg-base-300 text-base-content rounded-box z-50 w-52 mt-2 p-2 shadow-lg">
-        <li>
+      <ul
+        className="menu dropdown-content bg-base-300 text-base-content rounded-box z-50 w-52 mt-2 p-2 shadow-lg"
+        role="menu"
+      >
+        <li role="presentation">
           <Link
             to="/profile/$userId"
+            role="menuitem"
             params={{ userId: me.id }}
             onClick={() => (detailsRef.current!.open = false)}
           >
             Profile
           </Link>
         </li>
-        <li>
+        <li role="presentation">
           <Link
             to="/my-stuff"
+            role="menuitem"
             onClick={() => (detailsRef.current!.open = false)}
           >
             My stuff
           </Link>
         </li>
-        <li>
+        <li role="presentation">
           <Link
             to="/settings"
+            role="menuitem"
             onClick={() => (detailsRef.current!.open = false)}
           >
             Settings
           </Link>
         </li>
-        <li>
+        <li role="presentation">
           <a
+            role="menuitem"
             onClick={async () => {
               await api.logout();
               await refresh();

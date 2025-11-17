@@ -46,7 +46,7 @@ export default memo(function Difficulty({
       >
         <BsQuestionCircleFill
           size={18}
-          aria-current="true"
+          aria-hidden="true"
           className="text-neutral-content bg-transparent"
         />
       </div>
@@ -60,12 +60,16 @@ export default memo(function Difficulty({
         className,
         'flex items-center'
       )}
+      role="radiogroup"
+      aria-label={readonly ? `Difficulty rating: ${value}` : undefined}
     >
       {[
         <input
           key={-1}
           type="radio"
           name={`difficulty-rating-${radioId}`}
+          aria-hidden={readonly ? 'true' : undefined}
+          aria-label="Remove rating"
           className="rating-hidden pointer-events-none hidden"
           checked={value === 0}
           readOnly={true}
@@ -74,6 +78,8 @@ export default memo(function Difficulty({
           <input
             key={i}
             type="radio"
+            aria-hidden={readonly ? 'true' : undefined}
+            aria-label={`Rate difficulty ${i + 1 + (readonly && value > 5 ? 5 : 0)}`}
             name={`difficulty-rating-${radioId}`}
             className={cn(
               'mask mask-circle bg-accent scale-[0.8]',

@@ -2,6 +2,8 @@
 
 - Updated the design of Dead Ends to be compatible with viewpoints and consistent with Focus numbers
 - Updated solvers to indicate underclued grids with no deducible tiles
+- Automatic collections no longer appear on the front page
+  - If set to public, these collections will appear in your profile page instead
 - Newest puzzles and collections on the front page are now cached
   - New updates may be delayed by up to 5 minutes
 

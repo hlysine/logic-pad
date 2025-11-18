@@ -100,44 +100,46 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
             {isPending ? (
               <Skeleton className="h-12 w-28" />
             ) : (
-              userDetail?.createdPuzzlesCollection && (
+              userDetail?.createdPuzzles && (
                 <CollectionFollowButton
-                  collectionId={userDetail.createdPuzzlesCollection}
+                  collectionId={userDetail.createdPuzzles.id}
                 />
               )
             )}
           </div>
         </section>
         <div className="divider" />
-        <HorizontalScroller
-          title="Created puzzles"
-          scrollable={false}
-          className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
-          to={
-            userDetail?.createdPuzzlesCollection
-              ? '/collection/$collectionId'
-              : undefined
-          }
-          params={
-            userDetail?.createdPuzzlesCollection
-              ? { collectionId: userDetail.createdPuzzlesCollection }
-              : undefined
-          }
-        >
-          {isPending
-            ? Array.from({ length: 8 }, (_, i) => (
-                <Skeleton key={i} className="w-[320px] h-[116px]" />
-              ))
-            : userDetail!.createdPuzzles.map(puzzle => (
-                <PuzzleCard
-                  key={puzzle.id}
-                  puzzle={puzzle}
-                  expandable={false}
-                  to="/solve/$puzzleId"
-                  params={{ puzzleId: puzzle.id }}
-                />
-              ))}
-        </HorizontalScroller>
+        {(isPending || userDetail?.createdPuzzles) && (
+          <HorizontalScroller
+            title="Created puzzles"
+            scrollable={false}
+            className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
+            to={
+              userDetail?.createdPuzzles?.id
+                ? '/collection/$collectionId'
+                : undefined
+            }
+            params={
+              userDetail?.createdPuzzles?.id
+                ? { collectionId: userDetail?.createdPuzzles.id }
+                : undefined
+            }
+          >
+            {isPending
+              ? Array.from({ length: 8 }, (_, i) => (
+                  <Skeleton key={i} className="w-[320px] h-[116px]" />
+                ))
+              : userDetail?.createdPuzzles?.data.map(puzzle => (
+                  <PuzzleCard
+                    key={puzzle.id}
+                    puzzle={puzzle}
+                    expandable={false}
+                    to="/solve/$puzzleId"
+                    params={{ puzzleId: puzzle.id }}
+                  />
+                ))}
+          </HorizontalScroller>
+        )}
         <HorizontalScroller
           title="Created collections"
           scrollable={false}
@@ -159,23 +161,34 @@ export const Route = createLazyFileRoute('/_layout/profile/$userId')({
                 />
               ))}
         </HorizontalScroller>
+        {userDetail?.lovedPuzzles && (
+          <HorizontalScroller
+            title="Loved puzzles"
+            scrollable={false}
+            className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
+            to="/collection/$collectionId"
+            params={{ collectionId: userDetail.lovedPuzzles.id }}
+          >
+            {userDetail.lovedPuzzles.data.map(puzzle => (
+              <PuzzleCard
+                key={puzzle.id}
+                puzzle={puzzle}
+                expandable={false}
+                to="/solve/$puzzleId"
+                params={{ puzzleId: puzzle.id }}
+              />
+            ))}
+          </HorizontalScroller>
+        )}
         {userDetail?.solvedPuzzles && (
           <HorizontalScroller
             title="Solved puzzles"
             scrollable={false}
             className="flex-wrap box-content max-h-[calc(116px*2+1rem)] w-full"
-            to={
-              userDetail.solvedPuzzlesCollection
-                ? '/collection/$collectionId'
-                : undefined
-            }
-            params={
-              userDetail.solvedPuzzlesCollection
-                ? { collectionId: userDetail.solvedPuzzlesCollection }
-                : undefined
-            }
+            to="/collection/$collectionId"
+            params={{ collectionId: userDetail.solvedPuzzles.id }}
           >
-            {userDetail.solvedPuzzles.map(puzzle => (
+            {userDetail.solvedPuzzles.data.map(puzzle => (
               <PuzzleCard
                 key={puzzle.id}
                 puzzle={puzzle}

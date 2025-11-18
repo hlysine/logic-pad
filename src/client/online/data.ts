@@ -114,14 +114,18 @@ export interface UserAutocomplete {
   name: string;
 }
 
+export interface PuzzleSection {
+  id: string;
+  data: PuzzleBrief[];
+}
+
 export interface UserDetail {
   accessedAt: string | null;
   followCount: number;
-  solvedPuzzlesCollection: string | null;
-  createdPuzzlesCollection: string | null;
-  createdPuzzles: PuzzleBrief[];
+  solvedPuzzles: PuzzleSection | null;
+  createdPuzzles: PuzzleSection | null;
+  lovedPuzzles: PuzzleSection | null;
   createdCollections: CollectionBrief[];
-  solvedPuzzles: PuzzleBrief[] | null;
 }
 
 export interface PuzzleFull extends PuzzleBrief {

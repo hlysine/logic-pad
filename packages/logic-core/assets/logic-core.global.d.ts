@@ -2333,6 +2333,9 @@ declare global {
      * first iteration indicates that the grid is unsolvable. Yielding `null` on the second iteration indicates that the
      * solution is unique.
      *
+     * If the solve finds the trivial solution of not filling any tiles, such as in the case of an underclued grid with
+     * too many alternate solutions, it must yield the solution instead of yielding `null`.
+     *
      * In the current UI implementation, the solver will be terminated after yielding `null`, or after 2 iterations if
      * `null` is never yielded. The solver should perform any necessary cleanup in the `finally` block of the generator.
      *

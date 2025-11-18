@@ -1,6 +1,7 @@
 # 18/11/2025
 
 - Updated the design of Dead Ends to be compatible with viewpoints and consistent with Focus numbers
+- Updated solvers to indicate underclued grids with no deducible tiles
 
 # 16/11/2025
 

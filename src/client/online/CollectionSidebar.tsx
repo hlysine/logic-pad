@@ -34,7 +34,12 @@ export default memo(function CollectionSidebar({
     ...bidirectionalInfiniteQuery(
       ['collection', collectionId, 'puzzles', 'sidebar', puzzle?.id],
       (cursorBefore, cursorAfter) =>
-        api.listCollectionPuzzles(collectionId!, cursorBefore, cursorAfter),
+        api.listCollectionPuzzles(
+          collectionId!,
+          undefined,
+          cursorBefore,
+          cursorAfter
+        ),
       false
     ),
     initialData: {
@@ -166,7 +171,7 @@ export default memo(function CollectionSidebar({
                             'shrink-0',
                             puzzle.id === id
                               ? ''
-                              : '!bg-neutral [.wrapper:hover_&]:!bg-base-content/0 transition-colors [.wrapper:hover_&]:transition-none'
+                              : 'bg-neutral! [.wrapper:hover_&]:bg-base-content/0! transition-colors [.wrapper:hover_&]:transition-none'
                           )}
                         />
                         <div className="flex flex-col items-start gap-2">

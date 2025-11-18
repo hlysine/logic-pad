@@ -1,8 +1,14 @@
-import { createLazyFileRoute } from '@tanstack/react-router';
+import {
+  createLazyFileRoute,
+  useNavigate,
+  useSearch,
+} from '@tanstack/react-router';
 import { memo, ReactNode, Suspense, useEffect, useRef, useState } from 'react';
 import ResponsiveLayout from '../components/ResponsiveLayout';
 import {
   FaCheck,
+  FaChevronDown,
+  FaChevronUp,
   FaExchangeAlt,
   FaListOl,
   FaListUl,
@@ -56,25 +62,25 @@ import InfiniteScrollTrigger from '../components/InfiniteScrollTrigger';
 import Skeleton from '../components/Skeleton';
 
 interface CollectionPuzzlesProps {
-  collectionId: string;
-  status: ResourceStatus;
-  isSeries: boolean;
+  collectionBrief: CollectionBrief;
   editable: boolean;
 }
 
 const CollectionPuzzles = memo(function CollectionPuzzles({
-  collectionId,
-  status,
-  isSeries,
+  collectionBrief,
   editable,
 }: CollectionPuzzlesProps) {
+  const { sort } = useSearch({ from: '/_layout/collection/$collectionId' });
+  const navigate = useNavigate({ from: '/collection/$collectionId' });
   const { me } = useOnline();
   const {
     data: puzzles,
     fetchNextPage,
     hasNextPage,
     isFetching,
-  } = useSuspenseInfiniteQuery(collectionInfiniteQueryOptions(collectionId));
+  } = useSuspenseInfiniteQuery(
+    collectionInfiniteQueryOptions(collectionBrief.id, sort)
+  );
   const [puzzleList, setPuzzleList] = useState<PuzzleBrief[]>(
     puzzles.pages.flatMap(p => p.results)
   );
@@ -82,13 +88,13 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
     setPuzzleList(puzzles.pages.flatMap(p => p.results));
   }, [puzzles]);
   const reorderCollection = useMutation({
-    mutationKey: ['collection', collectionId, 'reorder'],
+    mutationKey: ['collection', collectionBrief.id, 'reorder'],
     mutationFn: (variables: Parameters<typeof api.reorderCollection>) => {
       return api.reorderCollection(...variables);
     },
     onMutate: async () => {
       await queryClient.cancelQueries({
-        queryKey: ['collection', collectionId, 'puzzles'],
+        queryKey: ['collection', collectionBrief.id, 'puzzles'],
       });
     },
     onError(error) {
@@ -98,11 +104,11 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
     async onSettled() {
       if (
         queryClient.isMutating({
-          mutationKey: ['collection', collectionId, 'reorder'],
+          mutationKey: ['collection', collectionBrief.id, 'reorder'],
         }) === 1
       )
         await queryClient.invalidateQueries({
-          queryKey: ['collection', collectionId, 'puzzles'],
+          queryKey: ['collection', collectionBrief.id, 'puzzles'],
         });
     },
   });
@@ -115,7 +121,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
     },
     async onSuccess() {
       await queryClient.invalidateQueries({
-        queryKey: ['collection', collectionId],
+        queryKey: ['collection', collectionBrief.id],
       });
     },
   });
@@ -128,7 +134,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
     },
     async onSuccess() {
       await queryClient.invalidateQueries({
-        queryKey: ['collection', collectionId],
+        queryKey: ['collection', collectionBrief.id],
       });
     },
   });
@@ -161,7 +167,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
               newList.splice(replacingIndex, 0, moving);
               setPuzzleList(newList);
               reorderCollection.mutate([
-                collectionId,
+                collectionBrief.id,
                 active.id as string,
                 over.id as string,
               ]);
@@ -178,8 +184,35 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
   return (
     <div className="flex flex-col gap-4 items-center">
       <div className="flex gap-4 items-center w-full justify-end shrink-0">
+        <button
+          className="btn"
+          onClick={() =>
+            navigate({
+              search: {
+                sort:
+                  sort === 'desc' || (!sort && collectionBrief.autoPopulate)
+                    ? 'asc'
+                    : 'desc',
+              },
+            })
+          }
+        >
+          Sort collection
+          {sort === 'desc' || (!sort && collectionBrief.autoPopulate) ? (
+            <FaChevronUp aria-label="Descending" />
+          ) : (
+            <FaChevronDown aria-label="Ascending" />
+          )}
+        </button>
+        <div className="flex-1" />
+        <div>
+          {collectionBrief.autoPopulate
+            ? 'Automatic collection'
+            : `${collectionBrief.puzzleCount} puzzles`}
+        </div>
         {editable && (
           <>
+            <div className="flex-1" />
             <div>
               {reorderCollection.isPending
                 ? 'Reordering...'
@@ -198,9 +231,13 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
             )}
             <AddPuzzlesModal
               ref={addPuzzlesModalRef}
-              searchType={status === ResourceStatus.Public ? 'public' : 'all'}
+              searchType={
+                collectionBrief.status === ResourceStatus.Public
+                  ? 'public'
+                  : 'all'
+              }
               modifyParams={
-                isSeries
+                collectionBrief.isSeries
                   ? p => ({
                       ...p,
                       q: `${p.q ?? ''} creator=${me?.id} series=null`,
@@ -208,7 +245,10 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   : undefined
               }
               onSubmit={async puzzles => {
-                await addToCollection.mutateAsync([collectionId, puzzles]);
+                await addToCollection.mutateAsync([
+                  collectionBrief.id,
+                  puzzles,
+                ]);
               }}
             />
             <div className="divider divider-horizontal mx-0" />
@@ -235,7 +275,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   onClick={async () => {
                     if (selectedPuzzles.length > 0) {
                       await removeFromCollection.mutateAsync([
-                        collectionId,
+                        collectionBrief.id,
                         selectedPuzzles,
                       ]);
                     }
@@ -266,7 +306,7 @@ const CollectionPuzzles = memo(function CollectionPuzzles({
                   : undefined
               }
               params={{ puzzleId: puzzle.id }}
-              search={{ collection: collectionId }}
+              search={{ collection: collectionBrief.id }}
               onClick={
                 selectedPuzzles !== null
                   ? () => {
@@ -565,13 +605,17 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
         <Suspense
           fallback={
             <div className="flex flex-col gap-4 items-center">
-              {collectionBrief.creator.id === me?.id &&
-                collectionBrief.autoPopulate === null && (
-                  <div className="flex gap-4 items-center w-full justify-end shrink-0">
-                    <Skeleton className="w-28 h-12" />
-                    <Skeleton className="w-28 h-12" />
-                  </div>
-                )}
+              <div className="flex gap-4 items-center w-full justify-end shrink-0">
+                <Skeleton className="w-36 h-10" />
+                <div className="flex-1" />
+                {collectionBrief.creator.id === me?.id &&
+                  collectionBrief.autoPopulate === null && (
+                    <>
+                      <Skeleton className="w-28 h-10" />
+                      <Skeleton className="w-28 h-10" />
+                    </>
+                  )}
+              </div>
               <div className="flex flex-wrap gap-4 justify-center">
                 {Array.from({ length: 3 }, (_, i) => (
                   <Skeleton key={i} className="w-[320px] h-[116px]" />
@@ -581,9 +625,7 @@ export const Route = createLazyFileRoute('/_layout/collection/$collectionId')({
           }
         >
           <CollectionPuzzles
-            collectionId={params.collectionId}
-            status={collectionBrief.status}
-            isSeries={collectionBrief.isSeries}
+            collectionBrief={collectionBrief}
             editable={
               collectionBrief.creator.id === me?.id &&
               collectionBrief.autoPopulate === null

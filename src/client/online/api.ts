@@ -331,12 +331,13 @@ export const api = {
   },
   listCollectionPuzzles: async (
     collectionId: string,
+    sort?: 'asc' | 'desc',
     cursorBefore?: string,
     cursorAfter?: string
   ) => {
     return await axios
       .get<ListResponse<PuzzleBrief>>(`/collection/${collectionId}/puzzles`, {
-        params: { cursorBefore, cursorAfter },
+        params: { sort, cursorBefore, cursorAfter },
       })
       .then(res => res.data)
       .catch(rethrowError);

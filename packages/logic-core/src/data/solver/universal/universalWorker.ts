@@ -183,11 +183,11 @@ onmessage = e => {
   let count = 0;
 
   solve(grid, solution => {
-    if (solution) {
-      if (solution.resetTiles().colorEquals(solution)) {
-        solution = null;
-      }
-    }
+    // if (solution) {
+    //   if (solution.resetTiles().colorEquals(solution)) {
+    //     solution = null;
+    //   }
+    // }
     postMessage(solution ? Serializer.stringifyGrid(solution) : null);
 
     count += 1;

@@ -100,12 +100,8 @@ export default class CspuzSolver extends EventIteratingSolver {
 
   public async isEnvironmentSupported(): Promise<boolean> {
     try {
-      const abortController = new AbortController();
-      for await (const _ of this.solve(
-        GridData.create(['.']),
-        abortController.signal
-      )) {
-        abortController.abort();
+      for await (const _ of this.solve(GridData.create(['.']))) {
+        // do nothing
       }
       return true;
     } catch (_ex) {

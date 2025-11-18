@@ -1,3 +1,7 @@
+# 0.23.2
+
+- Solvers can now yield an empty solution for underclued grids instead of yielding null
+
 # 0.23.1
 
 - Changed `GridData.pasteTiles` behavior to clear the affected area before pasting

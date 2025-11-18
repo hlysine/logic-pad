@@ -1,3 +1,7 @@
+# 18/11/2025
+
+- Updated the design of Dead Ends to be compatible with viewpoints and consistent with Focus numbers
+
 # 16/11/2025
 
 - Improved markdown styling across the site

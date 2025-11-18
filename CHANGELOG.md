@@ -2,6 +2,8 @@
 
 - Updated the design of Dead Ends to be compatible with viewpoints and consistent with Focus numbers
 - Updated solvers to indicate underclued grids with no deducible tiles
+- Newest puzzles and collections on the front page are now cached
+  - New updates may be delayed by up to 5 minutes
 
 # 16/11/2025
 

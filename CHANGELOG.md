@@ -3,6 +3,7 @@
 - Added Hollow Letter symbol
 - Fixed `GridData.copyTiles` not shifting symbol positions
 - Fixed incorrect assumptions about symbols per region rule in the auto solver
+- Improved color contrast for color radio buttons
 
 # 18/11/2025
 

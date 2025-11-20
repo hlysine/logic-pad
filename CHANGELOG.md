@@ -1,3 +1,9 @@
+# 20/11/2025
+
+- Added Hollow Letter symbol
+- Fixed `GridData.copyTiles` not shifting symbol positions
+- Fixed incorrect assumptions about symbols per region rule in the auto solver
+
 # 18/11/2025
 
 - Updated the design of Dead Ends to be compatible with viewpoints and consistent with Focus numbers

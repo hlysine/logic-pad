@@ -1131,13 +1131,20 @@ export default class GridData {
     );
     const symbols = new Map<string, Symbol[]>();
     for (const [id, symbolList] of this.symbols) {
-      const newSymbolList = symbolList.filter(
-        symbol =>
-          symbol.x >= origin.x &&
-          symbol.y >= origin.y &&
-          symbol.x < origin.x + width &&
-          symbol.y < origin.y + height
-      );
+      const newSymbolList = symbolList
+        .filter(
+          symbol =>
+            symbol.x >= origin.x &&
+            symbol.y >= origin.y &&
+            symbol.x < origin.x + width &&
+            symbol.y < origin.y + height
+        )
+        .map(symbol =>
+          symbol.copyWith({
+            x: symbol.x - origin.x,
+            y: symbol.y - origin.y,
+          })
+        );
       if (newSymbolList.length > 0) symbols.set(id, newSymbolList);
     }
     return GridData.create(

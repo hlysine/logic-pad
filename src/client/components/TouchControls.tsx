@@ -28,7 +28,7 @@ export default memo(function TouchControls() {
           step={0.2}
           value={Math.log2(scale)}
           onChange={e => setScale(2 ** Number(e.currentTarget.value))}
-          className="range m-2"
+          className="range w-full m-2"
         />
       </div>
       <div

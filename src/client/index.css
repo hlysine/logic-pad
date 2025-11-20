@@ -143,6 +143,18 @@
   --color-neutral-content: oklch(0.95 0.01 255);
   --color-accent-content: #fff;
 }
+@plugin 'daisyui/theme' {
+  name: 'wireframe';
+  --color-accent: oklch(0.7 0 0);
+}
+@plugin 'daisyui/theme' {
+  name: 'black';
+  --color-accent: oklch(0.5178 0 0);
+}
+@plugin 'daisyui/theme' {
+  name: 'luxury';
+  --color-accent: oklch(0.4288 0.051 338.825);
+}
 
 @theme {
   --shadow-glow-md: 0px 0px 15px -3px rgba(0, 0, 0, 0.3);

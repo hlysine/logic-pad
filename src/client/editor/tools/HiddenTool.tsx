@@ -10,7 +10,7 @@ export default memo(function HiddenTool() {
     <SymbolTool
       name="Hidden"
       order={303}
-      hotkey="extraSymbols-4"
+      hotkey="extraSymbols-5"
       defaultHidden={true}
       sample={sample}
       component={HiddenSymbol}

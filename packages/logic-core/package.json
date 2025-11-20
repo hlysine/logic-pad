@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.23.2",
+  "version": "0.24.0",
   "type": "module",
   "files": [
     "dist",

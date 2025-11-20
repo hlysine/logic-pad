@@ -333,6 +333,13 @@ summary::marker {
   );
 }
 
+.x-text-outline {
+  -webkit-text-stroke: thin currentColor;
+  -webkit-text-fill-color: transparent;
+  text-stroke: thin currentColor;
+  text-fill-color: transparent;
+}
+
 .prose .spoiler {
   @apply rounded-md;
 }

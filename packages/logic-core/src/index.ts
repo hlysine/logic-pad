@@ -106,6 +106,7 @@ import CustomSymbol from './data/symbols/customSymbol.js';
 import CustomTextSymbol from './data/symbols/customTextSymbol.js';
 import DartSymbol from './data/symbols/dartSymbol.js';
 import DirectionLinkerSymbol from './data/symbols/directionLinkerSymbol.js';
+import EveryLetterSymbol from './data/symbols/everyLetterSymbol.js';
 import FocusSymbol from './data/symbols/focusSymbol.js';
 import GalaxySymbol from './data/symbols/galaxySymbol.js';
 import HiddenSymbol from './data/symbols/hiddenSymbol.js';
@@ -276,6 +277,7 @@ export {
   CustomTextSymbol,
   DartSymbol,
   DirectionLinkerSymbol,
+  EveryLetterSymbol,
   FocusSymbol,
   GalaxySymbol,
   HiddenSymbol,

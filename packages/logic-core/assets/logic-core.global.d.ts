@@ -3162,6 +3162,37 @@ declare global {
     withText(text: string): this;
     withRotation(rotation: number): this;
   }
+  export declare class EveryLetterSymbol extends Symbol$1 {
+    readonly x: number;
+    readonly y: number;
+    readonly letter: string;
+    readonly title = 'Hollow Letter';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID;
+    /**
+     * **Include each Hollow Letter once per region**
+     *
+     * @param x - The x-coordinate of the symbol.
+     * @param y - The y-coordinate of the symbol.
+     * @param letter - The letter of the symbol.
+     */
+    constructor(x: number, y: number, letter: string);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    validateSymbol(grid: GridData): State;
+    copyWith({
+      x,
+      y,
+      letter,
+    }: {
+      x?: number;
+      y?: number;
+      letter?: string;
+    }): this;
+    withLetter(letter: string): this;
+  }
   export declare class HiddenSymbol
     extends Symbol$1
     implements SymbolDisplayHandler

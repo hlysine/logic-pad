@@ -1,3 +1,9 @@
+# 0.24.0
+
+- Added Hollow Letter (`every_letter`) symbol
+- Fixed `GridData.copyTiles` not shifting symbol positions
+- Marked symbols per region rule as non-additive for the auto solver
+
 # 0.23.2
 
 - Solvers can now yield an empty solution for underclued grids instead of yielding null

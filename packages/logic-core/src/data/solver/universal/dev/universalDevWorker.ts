@@ -26,6 +26,7 @@ function getNextTile(
   grid: GridData,
   rawTiles: Color[][]
 ): [Position, Color] | undefined {
+  // TODO: optimize this with better heuristics
   for (let y = 0; y < grid.height; y++) {
     for (let x = 0; x < grid.width; x++) {
       const tile = grid.getTile(x, y);

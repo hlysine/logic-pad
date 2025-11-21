@@ -173,6 +173,7 @@ const results = positionals.map(name => ({
   solveSD: 0,
   unsupportedCount: 0,
   incorrectCount: 0,
+  timeoutCount: 0,
 }));
 
 for (let i = 0; i < benchmarkEntries[positionals[0]].length; i++) {
@@ -190,8 +191,10 @@ for (let i = 0; i < benchmarkEntries[positionals[0]].length; i++) {
         fastestSolveTime = entry.solveTime;
         fastestSolverIndex = j;
       }
-    } else {
+    } else if (!Number.isNaN(entry.solveTime)) {
       results[j].incorrectCount++;
+    } else {
+      results[j].timeoutCount++;
     }
   }
 
@@ -248,5 +251,6 @@ ${result.solver}:
     }
   Unsupported Puzzles: ${result.unsupportedCount}
   Incorrect Solutions: ${result.incorrectCount}
+  Timeouts:            ${result.timeoutCount}
 `);
 }

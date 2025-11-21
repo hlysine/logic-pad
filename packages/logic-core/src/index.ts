@@ -86,6 +86,7 @@ import CspuzSolver from './data/solver/cspuz/cspuzSolver.js';
 import { gridToJson } from './data/solver/cspuz/jsonify.js';
 import EventIteratingSolver from './data/solver/eventIteratingSolver.js';
 import Solver from './data/solver/solver.js';
+import UniversalDevSolver from './data/solver/universal/dev/universalDevSolver.js';
 import UniversalSolver from './data/solver/universal/universalSolver.js';
 import AreaNumberModule from './data/solver/z3/modules/areaNumberModule.js';
 import CellCountModule from './data/solver/z3/modules/cellCountModule.js';
@@ -257,6 +258,7 @@ export {
   gridToJson,
   EventIteratingSolver,
   Solver,
+  UniversalDevSolver,
   UniversalSolver,
   AreaNumberModule,
   CellCountModule,

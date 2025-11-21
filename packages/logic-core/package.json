@@ -45,7 +45,7 @@
     "codegen": "bun ./scripts/genImports.ts && bun ./scripts/genEntry.ts",
     "typegen": "bun ./scripts/genTypes.ts",
     "bench:prepare": "bun ./benchmark/prepareBench.ts",
-    "bench:run": "bun ./benchmark/runBench.ts",
+    "bench:run": "bun ./benchmark/runBench.ts universal universal_dev",
     "prepublishOnly": "bun run build"
   },
   "engines": {

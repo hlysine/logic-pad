@@ -68,7 +68,7 @@ export default memo(function CommentTextarea({
         maxLength={5000}
         allowSpaceInQuery={true}
         forceSuggestionsAboveCursor={true}
-        className="bg-base-100 text-base-content h-fit min-h-16 [&_textarea]:focus:outline-hidden"
+        className="bg-base-100 text-base-content text-sm h-fit min-h-12 [&_textarea]:focus:outline-hidden"
         customSuggestionsContainer={children => (
           <div className="bg-base-300 text-base-content px-4">{children}</div>
         )}

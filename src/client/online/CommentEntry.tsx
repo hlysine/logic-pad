@@ -213,13 +213,15 @@ export default memo(function CommentEntry({
               }}
             />
           ) : (
-            <Markdown className="flex-1 wrap-break-word">
+            <Markdown className="flex-1 wrap-break-word prose-sm">
               {comment.content}
             </Markdown>
           )}
         </div>
       ) : (
-        <Markdown className="wrap-break-word">{comment.content}</Markdown>
+        <Markdown className="wrap-break-word prose-sm">
+          {comment.content}
+        </Markdown>
       )}
       <div className="divider m-0 opacity-50" />
     </div>

@@ -1,3 +1,16 @@
+# 0.25.2
+
+- Fixed No Loops rule not satisfied in some cases
+
+# 0.25.1
+
+- Fixed package exports
+
+# 0.25.0
+
+- Added No Loops rule
+- Fixed solvers not aborting properly
+
 # 0.24.0
 
 - Added Hollow Letter (`every_letter`) symbol

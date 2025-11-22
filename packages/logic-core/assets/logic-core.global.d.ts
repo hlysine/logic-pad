@@ -1929,6 +1929,28 @@ declare global {
     withVisible(visible: boolean): this;
     static cleanSolution(solution: GridData, baseGrid?: GridData): GridData;
   }
+  export declare class NoLoopsRule extends Rule {
+    readonly color: Color;
+    readonly title = 'No Loops';
+    private static readonly CONFIGS;
+    private static readonly EXAMPLE_GRID_LIGHT;
+    private static readonly EXAMPLE_GRID_DARK;
+    private static readonly SEARCH_VARIANTS;
+    /**
+     * **No loops in &lt;color&gt; cells**
+     *
+     * @param color - The color of the cells to check.
+     */
+    constructor(color: Color);
+    get id(): string;
+    get explanation(): string;
+    get configs(): readonly AnyConfig[] | null;
+    createExampleGrid(): GridData;
+    get searchVariants(): SearchVariant[];
+    validateGrid(grid: GridData): RuleState;
+    copyWith({ color }: { color?: Color }): this;
+    withColor(color: Color): this;
+  }
   export declare class OffByXRule
     extends Rule
     implements SymbolValidationHandler

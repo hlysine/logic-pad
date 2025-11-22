@@ -158,9 +158,13 @@ export default memo(function CommentEntry({
   });
 
   return (
-    <div className="flex flex-col gap-1 comment-entry">
+    <div className="relative flex flex-col gap-1 comment-entry">
       <div className="flex gap-2 items-center">
-        <UserCard user={comment.creator} className="!badge-sm py-2!" />
+        <UserCard
+          user={comment.creator}
+          tooltip={false}
+          className="badge-sm! py-2!"
+        />
         <div className="text-sm opacity-80">
           {toRelativeDate(new Date(comment.createdAt))}
         </div>
@@ -171,6 +175,28 @@ export default memo(function CommentEntry({
           }}
         >
           <FaReply />
+        </button>
+      </div>
+      <div className="absolute right-2 top-0 bg-base-100 shadow-md rounded-md flex gap-1 [.comment-entry:hover_&]:opacity-100 opacity-0 transition-opacity">
+        <button
+          className="btn btn-ghost btn-sm shrink-0 px-2"
+          onClick={() => {
+            if (editing) {
+              inputRef.current?.sendComment();
+            } else {
+              setEditing(!editing);
+            }
+          }}
+        >
+          {editing ? <FaCheck /> : <FaEdit />}
+        </button>
+        <button
+          className="btn btn-ghost btn-sm shrink-0 px-2 text-error"
+          onClick={() => {
+            deleteComment.mutate([comment.id]);
+          }}
+        >
+          <FaTrash />
         </button>
       </div>
       {editable ? (
@@ -187,33 +213,15 @@ export default memo(function CommentEntry({
               }}
             />
           ) : (
-            <Markdown className="flex-1 wrap-break-word">
+            <Markdown className="flex-1 wrap-break-word prose-sm">
               {comment.content}
             </Markdown>
           )}
-          <button
-            className="btn btn-ghost btn-sm shrink-0 px-2 [.comment-entry:hover_&]:opacity-100 opacity-0 transition-opacity"
-            onClick={() => {
-              if (editing) {
-                inputRef.current?.sendComment();
-              } else {
-                setEditing(!editing);
-              }
-            }}
-          >
-            {editing ? <FaCheck /> : <FaEdit />}
-          </button>
-          <button
-            className="btn btn-ghost btn-sm shrink-0 px-2 text-error [.comment-entry:hover_&]:opacity-100 opacity-0 transition-opacity"
-            onClick={() => {
-              deleteComment.mutate([comment.id]);
-            }}
-          >
-            <FaTrash />
-          </button>
         </div>
       ) : (
-        <Markdown className="wrap-break-word">{comment.content}</Markdown>
+        <Markdown className="wrap-break-word prose-sm">
+          {comment.content}
+        </Markdown>
       )}
       <div className="divider m-0 opacity-50" />
     </div>

@@ -38,6 +38,7 @@ import LyingSymbolRule from './data/rules/lyingSymbolRule.js';
 import { ControlLine, Row } from './data/rules/musicControlLine.js';
 import MusicGridRule from './data/rules/musicGridRule.js';
 import MysteryRule from './data/rules/mysteryRule.js';
+import NoLoopsRule from './data/rules/noLoopsRule.js';
 import OffByXRule from './data/rules/offByXRule.js';
 import PerfectionRule from './data/rules/perfectionRule.js';
 import RegionAreaRule from './data/rules/regionAreaRule.js';
@@ -197,6 +198,7 @@ export {
   Row,
   MusicGridRule,
   MysteryRule,
+  NoLoopsRule,
   OffByXRule,
   PerfectionRule,
   RegionAreaRule,

@@ -1,3 +1,10 @@
+# 22/11/2025
+
+- Added No Loops rule
+- You can now filter collections by type
+- Fixed solvers not aborting properly
+- Improved comment sidebar UI
+
 # 20/11/2025
 
 - Added Hollow Letter symbol

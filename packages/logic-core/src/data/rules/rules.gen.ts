@@ -19,6 +19,7 @@ export { instance as ForesightRule } from './foresightRule.js';
 export { instance as LyingSymbolRule } from './lyingSymbolRule.js';
 export { instance as MusicGridRule } from './musicGridRule.js';
 export { instance as MysteryRule } from './mysteryRule.js';
+export { instance as NoLoopsRule } from './noLoopsRule.js';
 export { instance as OffByXRule } from './offByXRule.js';
 export { instance as PerfectionRule } from './perfectionRule.js';
 export { instance as RegionAreaRule } from './regionAreaRule.js';

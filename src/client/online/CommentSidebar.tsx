@@ -175,7 +175,7 @@ export default memo(function CommentSidebar({
               {commentList.isPending ? (
                 <Loading />
               ) : (
-                <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 flex flex-col-reverse scrollbar-stable *:shrink-0">
+                <div className="self-stretch overflow-y-auto overflow-x-hidden flex-1 ms-4 pr-2 flex flex-col-reverse scrollbar-thin *:shrink-0">
                   {commentList.data?.pages.flatMap(page =>
                     page.results.map(comment => (
                       <CommentEntry
@@ -205,7 +205,7 @@ export default memo(function CommentSidebar({
                   onPostComment={text => addComment.mutate([id, text])}
                 />
                 <div
-                  className="tooltip tooltip-info tooltip-left"
+                  className="tooltip tooltip-info tooltip-left shrink-0"
                   data-tip="Send (enter)"
                 >
                   <button

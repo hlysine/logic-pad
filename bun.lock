@@ -40,6 +40,7 @@
         "react-mentions": "^4.4.10",
         "react-responsive": "^10.0.1",
         "remark-inline-spoiler": "^1.0.1",
+        "retry-axios": "^4.0.1",
         "semver": "^7.7.2",
         "sitemap": "^8.0.0",
         "tailwind-merge": "<3",
@@ -1680,6 +1681,8 @@
     "resolve-from": ["resolve-from@5.0.0", "", {}, "sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw=="],
 
     "resolve-pkg-maps": ["resolve-pkg-maps@1.0.0", "", {}, "sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw=="],
+
+    "retry-axios": ["retry-axios@4.0.1", "", { "peerDependencies": { "axios": "*" } }, "sha512-IRU9UJ9P7BzW2tWGHT026I3GePfYQaJ6QAkC8QK1tum1BZyQ3LNeKihXKuqhv0eWaxJinXQ0PhfIX0aIj0b8Rw=="],
 
     "reusify": ["reusify@1.1.0", "", {}, "sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw=="],
 

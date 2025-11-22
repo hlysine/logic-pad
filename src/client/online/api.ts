@@ -1,3 +1,4 @@
+import * as rax from 'retry-axios';
 import axiosStatic, { AxiosError } from 'axios';
 import {
   Completion,
@@ -84,6 +85,16 @@ export const axios = axiosStatic.create({
   baseURL: import.meta.env?.VITE_API_ENDPOINT as string,
   withCredentials: true,
 });
+
+export const retryAxios = axiosStatic.create({
+  baseURL: import.meta.env?.VITE_API_ENDPOINT as string,
+  withCredentials: true,
+});
+retryAxios.defaults.raxConfig = {
+  retry: 3,
+  httpMethodsToRetry: ['GET', 'HEAD', 'OPTIONS', 'DELETE', 'PUT', 'POST'],
+};
+rax.attach(retryAxios);
 
 const rethrowError = (error: AxiosError<ApiErrorResponse>) => {
   if (error.response) {
@@ -247,7 +258,7 @@ export const api = {
       .catch(rethrowError);
   },
   completionBegin: async (puzzleId: string) => {
-    return await axios
+    return await retryAxios
       .post<Completion>(`/completion/${puzzleId}/begin`)
       .then(res => res.data)
       .catch(rethrowError);
@@ -264,14 +275,14 @@ export const api = {
     );
   },
   completionSolving: async (puzzleId: string, msTimeElapsed: number) => {
-    return await axios
+    return await retryAxios
       .post<Completion>(`/completion/${puzzleId}/solving`, { msTimeElapsed })
       .then(res => res.data)
       .catch(rethrowError);
   },
   completionComplete: async (puzzleId: string) => {
-    return await axios
-      .post<Completion>(`/completion/${puzzleId}/complete`)
+    return await retryAxios
+      .post<Completion>(`/completion/${puzzleId}/complete`, undefined, {})
       .then(res => res.data)
       .catch(rethrowError);
   },

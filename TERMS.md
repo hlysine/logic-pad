@@ -19,6 +19,8 @@ The Service supports two types of puzzles:
 
 Accessing the Logic Pad server using any clients, software, or means other than the **official Logic Pad web application** is **strictly prohibited**. Furthermore, any action intended to **exploit, spam, or attack the Logic Pad server** is prohibited and constitutes a material breach of these Terms.
 
+> If you have a legitimate proposal to access the Logic Pad server using other means, feel free to contact us at [logic-pad@googlegroups.com](mailto:logic-pad@googlegroups.com).
+
 ## **2. User Accounts and Registration**
 
 You may create an account using the provided sign-in methods. Accounts are provided free of charge.

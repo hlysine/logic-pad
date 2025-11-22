@@ -1,6 +1,6 @@
 {
   "name": "@logic-pad/core",
-  "version": "0.24.0",
+  "version": "0.25.2",
   "type": "module",
   "files": [
     "dist",
@@ -20,20 +20,19 @@
     "grid"
   ],
   "license": "AGPL-3.0-only",
-  "main": "./dist/logic-core.umd.cjs",
-  "module": "./dist/logic-core.js",
+  "module": "./dist/src/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.js"
     },
     "./data/*": {
-      "import": "./dist/data/*",
-      "require": "./dist/data/*"
+      "import": "./dist/src/data/*",
+      "require": "./dist/src/data/*"
     },
     "./polyfill/*": {
-      "import": "./dist/polyfill/*",
-      "require": "./dist/polyfill/*"
+      "import": "./dist/src/polyfill/*",
+      "require": "./dist/src/polyfill/*"
     },
     "./assets/*": {
       "import": "./assets/*",

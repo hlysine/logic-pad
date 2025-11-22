@@ -1,3 +1,8 @@
+# 22/11/2025
+
+- Added No Loops rule
+- Fixed solvers not aborting properly
+
 # 20/11/2025
 
 - Added Hollow Letter symbol

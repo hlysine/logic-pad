@@ -1,3 +1,8 @@
+# 0.25.0
+
+- Added No Loops rule
+- Fixed solvers not aborting properly
+
 # 0.24.0
 
 - Added Hollow Letter (`every_letter`) symbol

@@ -36,18 +36,12 @@ export default memo(function Difficulty({
   if (readonly && value === 0) {
     return (
       <div
-        className={cn(
-          'rating',
-          sizeToRating(size),
-          'tooltip tooltip-info w-fit tooltip-right',
-          className
-        )}
-        data-tip="Unrated"
+        className={cn('rating', sizeToRating(size), 'w-fit h-fit', className)}
       >
         <BsQuestionCircleFill
           size={18}
           aria-hidden="true"
-          className="text-neutral-content bg-transparent"
+          className="text-neutral-content opacity-100 bg-transparent"
         />
       </div>
     );

@@ -2,6 +2,7 @@
 
 - Added No Loops rule
 - Fixed solvers not aborting properly
+- Improved comment sidebar UI
 
 # 20/11/2025
 

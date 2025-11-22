@@ -205,7 +205,7 @@ export default memo(function CommentSidebar({
                   onPostComment={text => addComment.mutate([id, text])}
                 />
                 <div
-                  className="tooltip tooltip-info tooltip-left"
+                  className="tooltip tooltip-info tooltip-left shrink-0"
                   data-tip="Send (enter)"
                 >
                   <button

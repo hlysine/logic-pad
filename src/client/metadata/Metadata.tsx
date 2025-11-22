@@ -26,7 +26,11 @@ export default memo(function Metadata({
       <DocumentTitle>{metadata.title} - Logic Pad</DocumentTitle>
       <div
         className="tooltip tooltip-info tooltip-right w-fit"
-        data-tip={`Design difficulty: ${metadata.difficulty}`}
+        data-tip={
+          metadata.difficulty === 0
+            ? 'Unrated'
+            : `Design difficulty: ${metadata.difficulty}`
+        }
       >
         <Difficulty value={metadata.difficulty} />
       </div>

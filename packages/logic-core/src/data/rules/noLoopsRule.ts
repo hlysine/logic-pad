@@ -80,11 +80,12 @@ export default class NoLoopsRule extends Rule {
   }
 
   public validateGrid(grid: GridData): RuleState {
-    const visited = array(
-      grid.width,
-      grid.height,
-      (i, j) => !grid.getTile(i, j).exists
-    );
+    const visited = array(grid.width, grid.height, (i, j) => {
+      const tile = grid.getTile(i, j);
+      return (
+        !tile.exists || (tile.color !== this.color && tile.color !== Color.Gray)
+      );
+    });
     while (true) {
       const seed = grid.find(
         (tile, x, y) => !visited[y][x] && tile.color === this.color

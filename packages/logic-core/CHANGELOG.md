@@ -1,3 +1,7 @@
+# 0.25.1
+
+- Fixed package exports
+
 # 0.25.0
 
 - Added No Loops rule
